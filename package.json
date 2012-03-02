@@ -1,0 +1,23 @@
+{
+  "name": "nodegame-widgets",
+  "description": "nodegame-widgets: Collections of useful and reusable javascript / HTML code snippets to enhance nodegame-window capabilities.",
+  "version": "0.1.0",
+  "keywords": [ "nodegame", "window", "widgets" ],
+  "author": "Stefano Balietti <futur.dorko@gmail.com>",
+  "licenses": [
+    { "type": "MIT" }
+  ],
+  "dependencies": {
+    "nodegame-window": ">= 0.1.0"
+  },
+  "devDependencies": {
+    "mocha": ">= 0.3.0",
+    "should": ">= 0.5.1"
+  },
+  "engines": { "node":  ">=0.2.3" },
+  "main": "GameWindow.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodeGame/nodegame-widgets.git"
+  }
+}
