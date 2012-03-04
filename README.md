@@ -40,7 +40,7 @@ This can be either a string representation of one the widgets objects already in
 
 ### Second parameter: Root element
 
-This parameter is later passed to the ```append``` method of the widget. If no root element was specified, a root is automatically determined through ```node.window.getScreen```.
+This parameter is later passed to the ```append``` method of the widget. If no root element was specified, a root is automatically determined through ```node.window.getScreen```. This parameter is obviously absent in ```node.window.getWidget```.
 
 ### Third parameter: Options
 
