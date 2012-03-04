@@ -22,9 +22,14 @@
 	GameSummary.prototype.init = function () {};
 	
 	GameSummary.prototype.append = function (root) {
-		this.summaryDiv = node.window.addDiv(this.root);
+		this.summaryDiv = node.window.addDiv(root);
 		that.writeSummary();
+		this.root = root;
 		return root;
+	};
+	
+	GameSummary.prototype.getRoot = function () {
+		return this.root;
 	};
 	
 	GameSummary.prototype.writeSummary = function(idState,idSummary) {
