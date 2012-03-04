@@ -15,6 +15,7 @@
 	Controls.id = 'controls';
 	Controls.name = 'Controls'
 	Controls.version = '0.2';
+	Controls.description = 'Wraps a collection of user-inputs controls.'
 		
 	function Controls (options) {
 		this.options = options;

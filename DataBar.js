@@ -76,8 +76,8 @@
 		var PREFIX = 'in.';
 		
 		node.onPLIST( function(msg) {
-				node.window.populateRecipientSelector(that.recipient,msg.data);
-			}); 
+			node.window.populateRecipientSelector(that.recipient,msg.data);
+		}); 
 	};
 	
 })(node.window.widgets);

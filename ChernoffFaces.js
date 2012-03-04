@@ -1,11 +1,5 @@
 (function (exports, JSUS) {
-	/*!
-	 * ChernoffFaces
-	 * 
-	 * Parametrically display Chernoff Faces
-	 * 
-	 */
-		
+	
 	var Table = node.window.Table;
 	
 	/**
@@ -24,6 +18,7 @@
 	ChernoffFaces.id = 'ChernoffFaces';
 	ChernoffFaces.name = 'Chernoff Faces';
 	ChernoffFaces.version = '0.3';
+	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.'
 	
 	ChernoffFaces.dependencies = {
 		JSUS: {},
@@ -157,13 +152,8 @@
 		return true;
 	};
 	
-	/*!
-	* ChernoffFaces
-	* 
-	* Parametrically display Chernoff Faces
-	* 
-	*/
-	
+	// FacePainter
+	// The class that actually draws the faces on the Canvas
 	function FacePainter (canvas, settings) {
 			
 		this.canvas = new node.window.Canvas(canvas);

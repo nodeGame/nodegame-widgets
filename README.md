@@ -123,7 +123,7 @@ There is a set of methods that a widget *must* implement:
 
 |  **Method**  | **Meaning**                                                                                                                           |
 | -------------| --------------------------------------------------------------------------------------------------------------------------------------|
-| init         | Initialize the widget object, after the constructor has been called. This methods is called everytime a widget needs to be restarted. |
+| init         | Initialize the widget object, after the constructor has been called. This method is called everytime a widget needs to be restarted.  |
 | append       | Append the widget to a root element and returns it.                                                                                   |
 | getRoot      | Returns a pointer to the HTML root element. This is generally the element which gets highlighted if an error occurs.                  |
 

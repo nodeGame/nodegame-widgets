@@ -15,14 +15,16 @@
 	};
 	
 	function Wall (options) {
-		this.id = options.id;		
+		this.id = options.id || Wall.id;
+		this.name = options.name || this.name;
 		this.buffer = [];
 		this.counter = 0;
 
 		this.wall = node.window.getElement('pre', this.id);
 		
 		this.fieldset = {
-			legend: 'Game Log';	
+			legend: 'Game Log',
+			id: this.id
 		};
 	};
 	
