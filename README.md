@@ -6,7 +6,7 @@ Collections of useful and reusable javascript / HTML code snippets to enhance no
 
 ## Rationale
 
-Widgets are reusable functions with follow a number of conventions to be executed smoothly within nodeGame. They are thought to have something to do with the browser window, e.g. tabulate data, provide an interface to nodeGame routines, etc. If you are planning to extend the core functionalities of nodeGame, and write routines that do not immediately display something in the browser's window, then probably you want to write a nodeGame add on, rather than a widget.
+Widgets are reusable javacript functions that follow a number of conventions to be executed smoothly within the nodeGame environment. They must have something to do with the browser window, e.g. tabulate data, provide an interface to nodeGame routines, etc. If you are planning to extend the core functionalities of nodeGame, and write routines that do not immediately display something in the browser's window, then probably you want to write a nodeGame add on, rather than a widget.
 
 ## Usage: node.window.loadWidget
 
