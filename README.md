@@ -8,7 +8,7 @@ Collections of useful and reusable javascript / HTML code snippets to enhance no
 
 Widgets are reusable functions with follow a number of conventions to be executed smoothly within nodeGame. They are thought to have something to do with the browser window, e.g. tabulate data, provide an interface to nodeGame routines, etc. If you are planning to extend the core functionalities of nodeGame, and write routines that do not immediately display something in the browser's window, then probably you want to write a nodeGame add on, rather than a widget.
 
-## Usage
+## Usage: node.window.loadWidget
 
 Loading a widget from a nodeGame game is very easy:
 
@@ -85,13 +85,13 @@ In order to preserve encapsulation, a widget must be always wrapped in a self-ex
 ```js
 	(function (exports) {
 	
-	exports.myWidget = myWidget;
+		exports.myWidget = myWidget;
 	
-	function myWidget (options) {
-		// init
-	}
+		function myWidget (options) {
+	  		// init
+		}
 	
-	// More code here
+		// More code here
 	
 	})(node.window.widgets);
 ```
@@ -121,7 +121,7 @@ Widgets must define a number of constants describing their expected behavior, ve
 
 There is a set of methods that a widget must implement:
 
-|  method    |  meaning                                                                                                                              |
+|  *Method*  | *Meaning*                                                                                                                             |
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------|
 | init       | Initialize the widget object, after the constructor has been called. This methods is called everytime a widget needs to be restarted. |
 | append     | Append the widget to a root element and returns it.                                                                                   |
