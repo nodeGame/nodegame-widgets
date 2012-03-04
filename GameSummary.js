@@ -23,7 +23,7 @@
 	
 	GameSummary.prototype.append = function (root) {
 		this.summaryDiv = node.window.addDiv(root);
-		that.writeSummary();
+		this.writeSummary();
 		this.root = root;
 		return root;
 	};
