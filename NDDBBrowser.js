@@ -15,7 +15,8 @@
 	
 	NDDBBrowser.id = 'nddbbrowser';
 	NDDBBrowser.name = 'NDDBBrowser';
-	NDDBBrowser.version = '0.1';
+	NDDBBrowser.version = '0.1.1';
+	NDDBBrowser.description = 'Provides a very simple interface to control a NDDB istance.';
 	
 	NDDBBrowser.dependencies = {
 		JSUS: {},

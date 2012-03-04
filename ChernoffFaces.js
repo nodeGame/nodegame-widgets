@@ -49,7 +49,7 @@
 		this.controls = null;
 		
 		this.init(this.options);
-	};
+	}
 	
 	ChernoffFaces.prototype.init = function (options) {
 		var that = this;

@@ -1,9 +1,5 @@
 (function (exports) {
 	
-	/*!
-	 * GameBoard
-	 */ 
-	
 	exports.GameBoard = GameBoard;
 	
 	GameState = node.GameState;
@@ -11,7 +7,8 @@
 	
 	GameBoard.id = 'gboard';
 	GameBoard.name = 'GameBoard';
-	GameBoard.version = '0.3.1';
+	GameBoard.version = '0.3.2';
+	GameBoard.description = 'Offer a visual representation of the state of all players in the game.'
 	
 	function GameBoard (options) {
 		
@@ -22,14 +19,23 @@
 		
 		this.noPlayers = 'No players connected...';
 		
+		this.fieldset = {
+			legend: 'Game State'
+		}
 	}
 	
-	GameBoard.prototype.append = function(root) {
+	// TODO: Write a proper INIT method
+	GameBoard.prototype.init = function () {};
+	
+	GameBoard.prototype.getRoot = function() {
+		return this.root;
+	};
+	
+	GameBoard.prototype.append = function (root) {
 		this.root = root;
-		var fieldset = node.window.addFieldset(root, this.id + '_fieldset', 'Game State');
-		this.board = node.window.addDiv(fieldset,this.id);
+		this.board = node.window.addDiv(root, this.id);
 		this.updateBoard(node.game.pl);
-		
+		return root;
 	};
 	
 	GameBoard.prototype.listeners = function() {
@@ -45,11 +51,6 @@
 			that.updateBoard(node.game.pl);
 
 		});
-		
-//		node.onPLIST( function (msg) {
-//			node.log('I Updating Board ' + msg.text);
-//			that.updateBoard(msg.data);
-//		});
 	};
 	
 	GameBoard.prototype.updateBoard = function (pl) {
@@ -96,7 +97,6 @@
 				
 				that.board.innerHTML += line + pState +'\n<hr style="color: #CCC;"/>\n';
 			});
-			//this.board.innerHTML = pl.toString('<hr style="color: #CCC;"/>');
 		}
 		else {
 			that.board.innerHTML = that.noPlayers;

@@ -1,13 +1,5 @@
 (function (exports) {
 	
-	
-	/*
-	 * VisualState
-	 * 
-	 * Sends DATA msgs
-	 * 
-	 */
-	
 	exports.VisualState	= VisualState;
 	
 	GameState = node.GameState;
@@ -16,12 +8,14 @@
 	
 	VisualState.id = 'visualstate';
 	VisualState.name = 'Visual State';
-	VisualState.version = '0.2';
+	VisualState.version = '0.2.1';
+	VisualState.description = 'Visually display current, previous and next state of the game.'
 	
 	VisualState.dependencies = {
 		JSUS: {},
 		Table: {}
 	};
+	
 	
 	function VisualState (options) {
 		this.id = options.id;
@@ -34,16 +28,17 @@
 		//this.init(options);
 	};
 	
-	VisualState.prototype.init = function (options) {};
+	// TODO: Write a proper INIT method
+	VisualState.prototype.init = function () {};
+	
+	VisualState.prototype.getRoot = function () {
+		return this.root;
+	};
 	
 	VisualState.prototype.append = function (root, ids) {
 		var that = this;
 		var PREF = this.id + '_';
-		
-		var idFieldset = PREF + 'fieldset';
-		
 		root.appendChild(this.table.table);
-		
 		this.writeState();
 		return root;
 	};

@@ -1,49 +1,45 @@
 (function (exports) {
 	
-	/*
-	 * StateBar
-	 * 
-	 * Sends STATE msgs
-	 */
-	
 	// TODO: Introduce rules for update: other vs self
 	
 	exports.StateBar = StateBar;	
 	
 	StateBar.id = 'statebar';
 	StateBar.name = 'State Bar';
-	StateBar.version = '0.3';
+	StateBar.version = '0.3.1';
+	StateBar.description = 'Provides a simple interface to change the state of the game.'
 	
 	function StateBar (options) {
 		this.id = options.id;
 		
 		this.actionSel = null;
 		this.recipient = null;
-	}
+		
+		this.fieldset = {
+			legend: 'Change Game State'
+		};
+	};
 	
-	StateBar.prototype.append = function (root, ids) {
+	// TODO: Write a proper INIT method
+	StateBar.prototype.init = function () {};
+	
+	StateBar.prototype.getRoot = function () {
+		return this.root;
+	};
+	
+	StateBar.prototype.append = function (root) {
 		
 		var PREF = this.id + '_';
 		
-		var idFieldset = PREF + 'fieldset'; 
 		var idButton = PREF + 'sendButton';
 		var idStateSel = PREF + 'stateSel';
 		var idActionSel = PREF + 'actionSel';
 		var idRecipient = PREF + 'recipient'; 
-		
-		if (ids !== null && ids !== undefined) {
-			if (ids.hasOwnProperty('fieldset')) idFieldset = ids.fieldset;
-			if (ids.hasOwnProperty('button')) idButton = ids.button;
-			if (ids.hasOwnProperty('state')) idStateSel = ids.idStateSel;
-			if (ids.hasOwnProperty('action')) idActionSel = ids.idActionSel;
-			if (ids.hasOwnProperty('recipient')) idRecipient = ids.recipient;
-		}
-		
-		var fieldset 	= node.window.addFieldset(root, idFieldset, 'Change Game State');
-		var sendButton 	= node.window.addButton(fieldset, idButton);
-		var stateSel 	= node.window.addStateSelector(fieldset, idStateSel);
-		this.actionSel	= node.window.addActionSelector(fieldset, idActionSel);
-		this.recipient 	= node.window.addRecipientSelector(fieldset, idRecipient);
+				
+		var sendButton 	= node.window.addButton(root, idButton);
+		var stateSel 	= node.window.addStateSelector(root, idStateSel);
+		this.actionSel	= node.window.addActionSelector(root, idActionSel);
+		this.recipient 	= node.window.addRecipientSelector(root, idRecipient);
 		
 		var that = this;
 	
@@ -90,8 +86,9 @@
 				node.gsc.sendTXT('E: not valid state. Not sent');
 			}
 		};
-	
-		return fieldset;
+		
+		this.root = root;
+		return root;
 		
 	};
 	

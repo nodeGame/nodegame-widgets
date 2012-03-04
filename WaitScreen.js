@@ -1,18 +1,11 @@
 (function (exports) {
-	
 
-	/*
-	 * Wait Screen
-	 * 
-	 * Show a standard waiting screen
-	 * 
-	 */
-	
 	exports.WaitScreen = WaitScreen;
 	
 	WaitScreen.id = 'waiting';
 	WaitScreen.name = 'WaitingScreen';
-	WaitScreen.version = '0.3.1';
+	WaitScreen.version = '0.3.2';
+	WaitScreen.description = 'Show a standard waiting screen';
 	
 	function WaitScreen (options) {
 		this.id = options.id;
@@ -21,7 +14,16 @@
 		this.waitingDiv = null;
 	};
 	
-	WaitScreen.prototype.append = function (root, id) {};
+	// TODO: Write a proper init function
+	WaitScreen.prototype.init = function (options) {};	
+	
+	WaitScreen.prototype.append = function (root) {
+		return root;
+	};
+	
+	WaitScreen.prototype.getRoot = function () {
+		return this.waitingDiv;
+	};
 	
 	WaitScreen.prototype.listeners = function () {
 		var that = this;

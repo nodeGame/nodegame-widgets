@@ -26,18 +26,15 @@
 			legend: 'Game Log',
 			id: this.id
 		};
-	};
+	}
 	
 	Wall.prototype.init = function (options) {
-		var options || {};
+		var options = options || {};
 		this.counter = options.counter || this.counter;
 	};
 	
 	Wall.prototype.append = function (root) {
-//		var fieldset = node.window.addFieldset(root, this.id+'_fieldset', 'Game Log');
-//		var idLogDiv = id || this.id;
 		return root.appendChild(this.wall);
-		
 	};
 	
 	Wall.prototype.getRoot = function () {
@@ -46,7 +43,7 @@
 	
 	Wall.prototype.listeners = function() {
 		var that = this;	
-		node.on('LOG', function(msg) {
+		node.on('LOG', function (msg) {
 			that.debuffer();
 			that.write(msg);
 		});
@@ -54,7 +51,7 @@
 	
 	Wall.prototype.write = function (text) {
 		if (document.readyState !== 'complete') {
-	        this.buffer.push(s);
+			this.buffer.push(s);
 	    } else {
 	    	var mark = this.counter++ + ') ' + JSUS.getTime() + ' ';
 	    	this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;

@@ -1,29 +1,33 @@
 (function (exports) {
-	
 
-	/*
-	 * StateDisplay
-	 * 
-	 * Sends STATE msgs
-	 */
-	
 	exports.StateDisplay = StateDisplay;	
 	
 	StateDisplay.id = 'statedisplay';
 	StateDisplay.name = 'State Display';
-	StateDisplay.version = '0.3.1';
+	StateDisplay.version = '0.3.2';
+	StateDisplay.description = 'Display basic information about player\'s status.';
 	
 	function StateDisplay (options) {
 		
 		this.game = node.game;
 		this.id = options.id;
 		
-		this.fieldset = null;
+		this.fieldset = {
+			legend: 'Player Status'
+		};
+		
 		this.stateDiv = null;
-	}
+	};
+	
+	// TODO: Write a proper INIT method
+	StateDisplay.prototype.init = function () {};
+	
+	StateDisplay.prototype.getRoot = function () {
+		return this.root;
+	};
 	
 	
-	StateDisplay.prototype.append = function (root, ids) {
+	StateDisplay.prototype.append = function (root) {
 		var that = this;
 		var PREF = this.id + '_';
 		
@@ -31,16 +35,8 @@
 		var idPlayer = PREF + 'player';
 		var idState = PREF + 'state'; 
 		
-		if (ids !== null && ids !== undefined) {
-			if (ids.hasOwnProperty('fieldset')) idFieldset = ids.fieldset;
-			if (ids.hasOwnProperty('player')) idPlayer = ids.player;
-			if (ids.hasOwnProperty('state')) idState = ids.state;
-		}
 		
-		this.fieldset = node.window.addFieldset(root, idFieldset, 'Player Status');
-		
-		
-		this.playerDiv = node.window.addDiv(this.fieldset,idPlayer);
+		this.playerDiv = node.window.addDiv(root, idPlayer);
 		
 		var checkPlayerName = setInterval(function(idState,idPlayer){
 				if(that.game.player !== null){
@@ -49,7 +45,8 @@
 				}
 			},100);
 	
-		return this.fieldset;
+		this.root = root;
+		return root;
 		
 	};
 	

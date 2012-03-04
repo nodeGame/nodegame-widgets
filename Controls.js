@@ -29,7 +29,7 @@
 		this.changeEvent = this.id + '_change';
 		
 		this.init(options);
-	};
+	}
 
 	Controls.prototype.add = function (root, id, attributes) {
 		// TODO: node.window.addTextInput

@@ -44,7 +44,12 @@ This parameter is later passed to the ```append``` method of the widget. If no r
 
 ### Third parameter: Options
 
-This parameter is optional and its properties vary from widget to widget. Only the ```fieldset``` property is widget-independent. In fact, nodeGame can automatically wrap the widget into a fieldset object inside the browser window. There are several ways of obtaining this behavior. The easiest of which is to specify fieldset variable inside the contructor:
+This parameter is optional and its properties vary from widget to widget. Some are widget-independent.
+
+
+#### The Fieldset property
+
+nodeGame can automatically wrap the widget into a fieldset object inside the browser window. There are several ways of obtaining this behavior. The easiest of which is to specify fieldset variable inside the contructor:
 
 
 ```js
@@ -63,6 +68,19 @@ The same fieldset object in the example above can also be passed as one of the p
 
 ```js
 	var wall = node.window.loadWidget('Wall', root_element, {fieldset: false});
+```
+
+#### On event property
+
+A standard javascript event listener ('onclick', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'onload', 'onunload', and 'onmouseover') can be passed as parameter and it is added to the root element of the widget.
+
+```js
+		var options = {
+			onclick: function () { 
+				// do something
+			}
+		};
+	}
 ```
 
 

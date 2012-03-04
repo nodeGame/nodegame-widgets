@@ -1,50 +1,30 @@
 (function (exports) {
 
-	
-	/*!
-	 * GameSummary
-	 * 
-	 * Show Game Info
-	 */
-	
 	exports.GameSummary	= GameSummary;
 	
 	GameSummary.id = 'gamesummary';
 	GameSummary.name = 'Game Summary';
 	GameSummary.version = '0.3';
+	GameSummary.description = 'Show the general configuration options of the game.'
 	
 	function GameSummary(options) {
 		
 		this.game = node.game;
 		this.id = options.id;
 		
-		this.fieldset = null;
+		this.fieldset = {
+			legend: 'Game Summary'
+		};
 		this.summaryDiv = null;
-	}
+	};
 	
+	// TODO: Write a proper INIT method
+	GameSummary.prototype.init = function () {};
 	
-	GameSummary.prototype.append = function (root, ids) {
-		var that = this;
-		var PREF = this.id + '_';
-		
-		var idFieldset = PREF + 'fieldset';
-		var idSummary = PREF + 'player';
-		
-		if (ids !== null && ids !== undefined) {
-			if (ids.hasOwnProperty('fieldset')) idFieldset = ids.fieldset;
-			if (ids.hasOwnProperty('player')) idSummary = ids.player;
-		}
-		
-		this.fieldset = node.window.addFieldset(root, idFieldset, 'Game Summary');
-		
-		
-		this.summaryDiv = node.window.addDiv(this.fieldset,idSummary);
-		
-		
+	GameSummary.prototype.append = function (root) {
+		this.summaryDiv = node.window.addDiv(this.root);
 		that.writeSummary();
-			
-		return this.fieldset;
-		
+		return root;
 	};
 	
 	GameSummary.prototype.writeSummary = function(idState,idSummary) {

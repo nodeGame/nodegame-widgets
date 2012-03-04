@@ -1,11 +1,5 @@
 (function (exports) {
 	
-	/*!
-	 * NextPreviousState
-	 * 
-	 * Step back and forth in the gameState
-	 * 
-	 */
 	
 	// TODO: Introduce rules for update: other vs self
 	
@@ -13,29 +7,31 @@
 	
 	NextPreviousState.id = 'nextprevious';
 	NextPreviousState.name = 'Next,Previous State';
-	NextPreviousState.version = '0.3';
+	NextPreviousState.version = '0.3.1';
+	NextPreviousState.description = 'Adds two buttons to push forward or rewind the state of the game by one step.'
 		
 	function NextPreviousState(options) {
 		this.game = node.game;
-		this.id = options.id;
+		this.id = options.id || NextPreviousState.id;
+		
+		this.fieldset = {
+			legend: 'Rew-Fwd'
+		};
 	}
 	
-	NextPreviousState.prototype.append = function (root, ids) {
-		var PREF = this.id + '_';
+	// TODO: Write a proper INIT method
+	NextPreviousState.prototype.init = function () {};
+	
+	NextPreviousState.prototype.getRoot = function () {
+		return this.root;
+	};
+	
+	NextPreviousState.prototype.append = function (root) {
+		var idRew = this.id + '_button';
+		var idFwd = this.id + '_button';
 		
-		var idFieldset = PREF + 'fieldset'; 
-		var idFwd = PREF + 'sendButton';
-		var idRew = PREF + 'stateSel';
-		
-		if (ids !== null && ids !== undefined) {
-			if (ids.hasOwnProperty('fieldset')) idFieldset = ids.fieldset;
-			if (ids.hasOwnProperty('fwd')) idFwd = ids.fwd;
-			if (ids.hasOwnProperty('rew')) idRew = ids.rew;
-		}
-		
-		var fieldset 	= node.window.addFieldset(root, idFieldset, 'Rew-Fwd');
-		var rew 		= node.window.addButton(fieldset, idRew, '<<');
-		var fwd 		= node.window.addButton(fieldset, idFwd, '>>');
+		var rew = node.window.addButton(root, idRew, '<<');
+		var fwd = node.window.addButton(root, idFwd, '>>');
 		
 		
 		var that = this;
@@ -64,7 +60,8 @@
 			updateState(that.game.previous());
 		}
 		
-		return fieldset;
+		this.root = root;
+		return root;
 	};
 	
 	NextPreviousState.prototype.listeners = function () {}; 
