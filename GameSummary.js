@@ -22,9 +22,9 @@
 	GameSummary.prototype.init = function () {};
 	
 	GameSummary.prototype.append = function (root) {
+		this.root = root;
 		this.summaryDiv = node.window.addDiv(root);
 		this.writeSummary();
-		this.root = root;
 		return root;
 	};
 	
@@ -32,7 +32,7 @@
 		return this.root;
 	};
 	
-	GameSummary.prototype.writeSummary = function(idState,idSummary) {
+	GameSummary.prototype.writeSummary = function (idState, idSummary) {
 		var gName = document.createTextNode('Name: ' + this.game.name);
 		var gDescr = document.createTextNode('Descr: ' + this.game.description);
 		var gMinP = document.createTextNode('Min Pl.: ' + this.game.minPlayers);
@@ -46,7 +46,7 @@
 		this.summaryDiv.appendChild(document.createElement('br'));
 		this.summaryDiv.appendChild(gMaxP);
 		
-		node.window.addDiv(this.fieldset,this.summaryDiv,idSummary);
+		node.window.addDiv(this.root, this.summaryDiv, idSummary);
 	};
 	
 	GameSummary.prototype.listeners = function() {}; 
