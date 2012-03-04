@@ -119,14 +119,22 @@ Widgets must define a number of constants describing their expected behavior, ve
 	// More code here
 ```
 
-There is a set of methods that a widget must implement:
+There is a set of methods that a widget *must* implement:
 
-|  *Method*  | *Meaning*                                                                                                                             |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------|
-| init       | Initialize the widget object, after the constructor has been called. This methods is called everytime a widget needs to be restarted. |
-| append     | Append the widget to a root element and returns it.                                                                                   |
-| getRoot    | Returns a pointer to the HTML root element. This is generally the element which gets highlighted if an error occurs.                  |
-| listeners  | Define a battery of nodeGame event listeners. This method is called only once. Optional.                                              |
+|  **Method**  | **Meaning**                                                                                                                           |
+| -------------| --------------------------------------------------------------------------------------------------------------------------------------|
+| init         | Initialize the widget object, after the constructor has been called. This methods is called everytime a widget needs to be restarted. |
+| append       | Append the widget to a root element and returns it.                                                                                   |
+| getRoot      | Returns a pointer to the HTML root element. This is generally the element which gets highlighted if an error occurs.                  |
+
+
+Some others are *optional*, and nodeGame adds them, if they are missing.
+
+|  **Method**  | **Meaning**                                                                       |
+| -------------| ----------------------------------------------------------------------------------|
+| listeners    | Define a battery of nodeGame event listeners. This method is called only once.    |
+| getAllValues | If the widgets is storing values, this method is suppose to return them all.      |
+| highlight    | Highlight the widget in response to particular events.                            |
 
 
 ## License
