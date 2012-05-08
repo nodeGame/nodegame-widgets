@@ -200,6 +200,49 @@
 		return node.window.getSlider(id, attributes);
 	};
 	
+	// jQuerySlider
+    
+    jQuerySliderControls.prototype.__proto__ = Controls.prototype;
+    jQuerySliderControls.prototype.constructor = jQuerySliderControls;
+    
+    jQuerySliderControls.id = 'jqueryslidercontrols';
+    jQuerySliderControls.name = 'jQuery Slider Controls';
+    jQuerySliderControls.version = '0.2';
+    
+    jQuerySliderControls.dependencies = {
+        jQuery: {},
+        Controls: {},
+    };
+    
+    
+    function jQuerySliderControls (options) {
+        Controls.call(this, options);
+    };
+    
+    jQuerySliderControls.prototype.add = function (root, id, attributes) {
+        var div = jQuery('<div/>', {
+    	    id: id,
+    	}).slider();
+    	
+    	return slider.appendTo(root);
+    };
+    
+    jQuerySliderControls.prototype.getItem = function (id, attributes) {
+    	var div = jQuery('<div/>', {
+     	    id: id,
+     		}).slider();
+    	
+    	return slider;
+    };
+
+
+    ///////////////////////////
+
+	
+	
+	
+
+	
 	// Radio
 	
 	RadioControls.prototype.__proto__ = Controls.prototype;
