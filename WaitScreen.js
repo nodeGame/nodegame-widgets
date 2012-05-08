@@ -12,7 +12,7 @@
 		
 		this.text = 'Waiting for other players to be done...';
 		this.waitingDiv = null;
-	};
+	}
 	
 	// TODO: Write a proper init function
 	WaitScreen.prototype.init = function (options) {};	
@@ -44,7 +44,7 @@
 		node.on('LOADED', function(text) {
 			if (that.waitingDiv) {
 				
-				if (that.waitingDiv.style.display == ''){
+				if (that.waitingDiv.style.display === ''){
 					that.waitingDiv.style.display = 'none';
 				}
 			// TODO: Document.js add method to remove element
