@@ -10,6 +10,7 @@
 	
 	exports.Controls = Controls;	
 	exports.Controls.Slider = SliderControls;
+	exports.Controls.jQuerySlider = jQuerySliderControls;
 	exports.Controls.Radio	= RadioControls;
 	
 	Controls.id = 'controls';
@@ -220,7 +221,7 @@
     };
     
     jQuerySliderControls.prototype.add = function (root, id, attributes) {
-        var div = jQuery('<div/>', {
+        var slider = jQuery('<div/>', {
     	    id: id,
     	}).slider();
     	
@@ -228,7 +229,7 @@
     };
     
     jQuerySliderControls.prototype.getItem = function (id, attributes) {
-    	var div = jQuery('<div/>', {
+    	var slider = jQuery('<div/>', {
      	    id: id,
      		}).slider();
     	
