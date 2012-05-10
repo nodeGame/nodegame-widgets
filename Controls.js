@@ -207,8 +207,8 @@
     jQuerySliderControls.prototype.constructor = jQuerySliderControls;
     
     jQuerySliderControls.id = 'jqueryslidercontrols';
-    jQuerySliderControls.name = 'jQuery Slider Controls';
-    jQuerySliderControls.version = '0.2';
+    jQuerySliderControls.name = 'Experimental: jQuery Slider Controls';
+    jQuerySliderControls.version = '0.1';
     
     jQuerySliderControls.dependencies = {
         jQuery: {},
