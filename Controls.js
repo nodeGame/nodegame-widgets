@@ -208,7 +208,7 @@
     
     jQuerySliderControls.id = 'jqueryslidercontrols';
     jQuerySliderControls.name = 'Experimental: jQuery Slider Controls';
-    jQuerySliderControls.version = '0.1';
+    jQuerySliderControls.version = '0.13';
     
     jQuerySliderControls.dependencies = {
         jQuery: {},
@@ -225,7 +225,8 @@
     	    id: id,
     	}).slider();
     	
-    	return slider.appendTo(root);
+    	var s = slider.appendTo(root);
+    	return s[0];
     };
     
     jQuerySliderControls.prototype.getItem = function (id, attributes) {
