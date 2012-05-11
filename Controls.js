@@ -10,6 +10,7 @@
 	
 	exports.Controls = Controls;	
 	exports.Controls.Slider = SliderControls;
+	exports.Controls.jQuerySlider = jQuerySliderControls;
 	exports.Controls.Radio	= RadioControls;
 	
 	Controls.id = 'controls';
@@ -206,8 +207,8 @@
     jQuerySliderControls.prototype.constructor = jQuerySliderControls;
     
     jQuerySliderControls.id = 'jqueryslidercontrols';
-    jQuerySliderControls.name = 'jQuery Slider Controls';
-    jQuerySliderControls.version = '0.2';
+    jQuerySliderControls.name = 'Experimental: jQuery Slider Controls';
+    jQuerySliderControls.version = '0.13';
     
     jQuerySliderControls.dependencies = {
         jQuery: {},
@@ -220,15 +221,16 @@
     };
     
     jQuerySliderControls.prototype.add = function (root, id, attributes) {
-        var div = jQuery('<div/>', {
+        var slider = jQuery('<div/>', {
     	    id: id,
     	}).slider();
     	
-    	return slider.appendTo(root);
+    	var s = slider.appendTo(root);
+    	return s[0];
     };
     
     jQuerySliderControls.prototype.getItem = function (id, attributes) {
-    	var div = jQuery('<div/>', {
+    	var slider = jQuery('<div/>', {
      	    id: id,
      		}).slider();
     	
