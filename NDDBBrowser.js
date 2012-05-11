@@ -30,8 +30,8 @@
 		
 		this.commandsDiv = document.createElement('div');
 		this.id = options.id;
-		if ('undefined' !== this.id) {
-			this.commandsDiv.id = id;
+		if ('undefined' !== typeof this.id) {
+			this.commandsDiv.id = this.id;
 		}
 		
 		this.info = null;
