@@ -15,7 +15,7 @@
 	
 	NDDBBrowser.id = 'nddbbrowser';
 	NDDBBrowser.name = 'NDDBBrowser';
-	NDDBBrowser.version = '0.1.1';
+	NDDBBrowser.version = '0.1.2';
 	NDDBBrowser.description = 'Provides a very simple interface to control a NDDB istance.';
 	
 	NDDBBrowser.dependencies = {
@@ -26,9 +26,14 @@
 	
 	function NDDBBrowser (options) {
 		this.options = options;
-		this.id = options.id;
 		this.nddb = null;
+		
 		this.commandsDiv = document.createElement('div');
+		this.id = options.id;
+		if ('undefined' !== this.id) {
+			this.commandsDiv.id = id;
+		}
+		
 		this.info = null;
 		this.init(this.options);
 	};
