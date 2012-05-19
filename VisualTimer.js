@@ -22,7 +22,7 @@
 		
 		this.timerDiv = null; 	// the DIV in which to display the timer
 		this.root = null;		// the parent element
-		this.fieldset = { legend: 'Time to go',
+		this.fieldset = { legend: 'Time left',
 						  id: this.id + '_fieldset'
 		};
 		

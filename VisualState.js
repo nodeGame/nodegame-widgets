@@ -40,6 +40,7 @@
 		var PREF = this.id + '_';
 		root.appendChild(this.table.table);
 		this.writeState();
+		this.root = root;
 		return root;
 	};
 		
