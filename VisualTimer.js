@@ -117,7 +117,7 @@
 		
 		node.on('DONE', function() {
 			// TODO: This should be enabled again
-			//that.gameTimer.stop();
+			that.gameTimer.stop();
 			that.timerDiv.className = 'strike';
 		});
 	};
