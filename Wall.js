@@ -29,7 +29,7 @@
 	}
 	
 	Wall.prototype.init = function (options) {
-		var options = options || {};
+		options = options || {};
 		this.counter = options.counter || this.counter;
 	};
 	
@@ -52,12 +52,12 @@
 	Wall.prototype.write = function (text) {
 		if (document.readyState !== 'complete') {
 			this.buffer.push(s);
-	    } else {
+		} else {
 	    	var mark = this.counter++ + ') ' + JSUS.getTime() + ' ';
 	    	this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
-	    }  
+	    }
 	};
-	
+
 	Wall.prototype.debuffer = function () {
 		if (document.readyState === 'complete' && this.buffer.length > 0) {
 			for (var i=0; i < this.buffer.length; i++) {

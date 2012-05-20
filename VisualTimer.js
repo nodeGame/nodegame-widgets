@@ -30,7 +30,7 @@
 	};
 	
 	VisualTimer.prototype.init = function (options) {
-		var options = options || this.options;
+		options = options || this.options;
 		var that = this;
 		(function initHooks() {
 			if (options.hooks) {
@@ -56,8 +56,6 @@
 		else {
 			node.log('GameTimer object could not be initialized. VisualTimer will not work properly.', 'ERR');
 		}
-		
-		
 	};
 	
 	VisualTimer.prototype.getRoot = function () {
