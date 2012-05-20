@@ -7,7 +7,7 @@
 	VisualTimer.id = 'visualtimer';
 	VisualTimer.name = 'Visual Timer';
 	VisualTimer.version = '0.3.3';
-	VisualTimer.description = 'Display a timer for the game. Timer can trigger events. Only for countdown smaller than 1h.'
+	VisualTimer.description = 'Display a timer for the game. Timer can trigger events. Only for countdown smaller than 1h.';
 	
 	VisualTimer.dependencies = {
 		GameTimer : {},
@@ -18,16 +18,17 @@
 		this.options = options;
 		this.id = options.id;
 
-		this.gameTimer = null
+		this.gameTimer = null;
 		
-		this.timerDiv = null; 	// the DIV in which to display the timer
+		this.timerDiv = null;	// the DIV in which to display the timer
 		this.root = null;		// the parent element
-		this.fieldset = { legend: 'Time left',
-						  id: this.id + '_fieldset'
+		this.fieldset = {
+						legend: 'Time left',
+						id: this.id + '_fieldset'
 		};
 		
 		this.init(this.options);
-	};
+	}
 	
 	VisualTimer.prototype.init = function (options) {
 		options = options || this.options;
@@ -56,6 +57,8 @@
 		else {
 			node.log('GameTimer object could not be initialized. VisualTimer will not work properly.', 'ERR');
 		}
+		
+		
 	};
 	
 	VisualTimer.prototype.getRoot = function () {
