@@ -53,9 +53,9 @@
 		if (document.readyState !== 'complete') {
 			this.buffer.push(s);
 		} else {
-	    	var mark = this.counter++ + ') ' + JSUS.getTime() + ' ';
-	    	this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
-	    }
+			var mark = this.counter++ + ') ' + JSUS.getTime() + ' ';
+			this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
+		}
 	};
 
 	Wall.prototype.debuffer = function () {
