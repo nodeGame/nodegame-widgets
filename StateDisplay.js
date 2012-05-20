@@ -20,7 +20,7 @@
 		
 		this.root = null;
 		this.table = new Table();
-	};
+	}
 	
 	// TODO: Write a proper INIT method
 	StateDisplay.prototype.init = function () {};

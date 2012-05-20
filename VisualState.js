@@ -9,7 +9,7 @@
 	VisualState.id = 'visualstate';
 	VisualState.name = 'Visual State';
 	VisualState.version = '0.2.1';
-	VisualState.description = 'Visually display current, previous and next state of the game.'
+	VisualState.description = 'Visually display current, previous and next state of the game.';
 	
 	VisualState.dependencies = {
 		JSUS: {},
@@ -26,7 +26,7 @@
 		this.root = null;		// the parent element
 		this.table = new Table();
 		//this.init(options);
-	};
+	}
 	
 	// TODO: Write a proper INIT method
 	VisualState.prototype.init = function () {};
@@ -40,7 +40,6 @@
 		var PREF = this.id + '_';
 		root.appendChild(this.table.table);
 		this.writeState();
-		this.root = root;
 		return root;
 	};
 		
@@ -59,14 +58,14 @@
 		var miss = '-';
 		
 		if (node.game && node.game.gameState) {
-			var state = this.gameLoop.getName(node.game.gameState) || miss;
-			var pr = this.gameLoop.getName(node.game.previous()) || miss;
-			var nx = this.gameLoop.getName(node.game.next()) || miss;
+			state = this.gameLoop.getName(node.game.gameState) || miss;
+			pr = this.gameLoop.getName(node.game.previous()) || miss;
+			nx = this.gameLoop.getName(node.game.next()) || miss;
 		}
 		else {
-			var state = 'Uninitialized';
-			var pr = miss;
-			var nx = miss;
+			state = 'Uninitialized';
+			pr = miss;
+			nx = miss;
 		}
 		this.table.clear(true);
 
