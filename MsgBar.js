@@ -143,7 +143,7 @@
 			node.window.getElementById(this.id + '_session').value = node.gsc.gmg.session;
 		}
 		
-		node.window.getElementById(this.id + '_state').value = JSON.stringify(node.state());
+		node.window.getElementById(this.id + '_state').value = JSON.stringify(node.state);
 		node.window.getElementById(this.id + '_action').value = this.actionSel.value;
 		node.window.getElementById(this.id + '_target').value = this.targetSel.value;
 		
