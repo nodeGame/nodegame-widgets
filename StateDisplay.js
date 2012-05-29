@@ -39,7 +39,7 @@
 		var idState = PREF + 'state'; 
 			
 		var checkPlayerName = setInterval(function(idState,idPlayer){
-			if (node.game.player !== null){
+			if (node.player !== null){
 				clearInterval(checkPlayerName);
 				that.updateAll();
 			}
@@ -53,9 +53,9 @@
 	
 	StateDisplay.prototype.updateAll = function() {
 		this.table.clear(true);
-		this.table.addRow(['Name: ', node.game.player.name]);
+		this.table.addRow(['Name: ', node.player.name]);
 		this.table.addRow(['State: ', new GameState(node.game.gameState).toString()]);
-		this.table.addRow(['Id: ', node.game.player.id]);
+		this.table.addRow(['Id: ', node.player.id]);
 		this.table.parse();
 		
 	};
