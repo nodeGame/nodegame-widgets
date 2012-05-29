@@ -4,10 +4,10 @@
 	var PlayerList = node.PlayerList;
 	
 	/*!
-	 * GameTable
-	 * 
-	 * Show the memory state of the game
-	 */
+	* GameTable
+	* 
+	* Show the memory state of the game
+	*/
 	
 	exports.GameTable = GameTable;
 	
@@ -25,7 +25,7 @@
 		this.name = options.name || GameTable.name;
 		
 		this.fieldset = { legend: this.name,
-				  		  id: this.id + '_fieldset'
+							id: this.id + '_fieldset'
 		};
 		
 		this.root = null;
@@ -33,7 +33,7 @@
 		this.plist = null;
 		
 		this.init(this.options);
-	};
+	}
 	
 	GameTable.prototype.init = function (options) {
 		
@@ -80,7 +80,7 @@
 		var that = this;
 		
 		node.onPLIST(function(msg) {	
-			if (msg.data.length == 0) return;
+			if (!msg.data.length) return;
 			
 			//var diff = JSUS.arrayDiff(msg.data,that.plist.db);
 			var plist = new PlayerList({}, msg.data);
@@ -107,13 +107,13 @@
 	
 	GameTable.prototype.addPlayer = function (player) {
 		this.plist.add(player);
-		var header = this.plist.map(function(el){return el.name});
+		var header = this.plist.map(function(el){return el.name;});
 		this.gtbl.setHeader(header);
 	};
 	
 	GameTable.prototype.addLeft = function (state, player) {
 		if (!state) return;
-		var state = new GameState(state);
+		state = new GameState(state);
 		if (!JSUS.in_array({content:state.toString(), type: 'left'}, this.gtbl.left)){
 			this.gtbl.add2Left(state.toString());
 		}

@@ -4,9 +4,9 @@
 	// TODO: handle different events, beside onchange
 	
 	/**
-	 * Controls
-	 * 
-	 */
+	* Controls
+	* 
+	*/
 	
 	exports.Controls = Controls;	
 	exports.Controls.Slider = SliderControls;
@@ -14,9 +14,9 @@
 	exports.Controls.Radio	= RadioControls;
 	
 	Controls.id = 'controls';
-	Controls.name = 'Controls'
+	Controls.name = 'Controls';
 	Controls.version = '0.2';
-	Controls.description = 'Wraps a collection of user-inputs controls.'
+	Controls.description = 'Wraps a collection of user-inputs controls.';
 		
 	function Controls (options) {
 		this.options = options;
@@ -71,7 +71,7 @@
 		if (this.options.submit) {
 			var idButton = 'submit_' + this.id;
 			if (this.options.submit.id) {
-				var idButton = this.options.submit.id;
+				idButton = this.options.submit.id;
 				delete this.options.submit.id;
 			}
 			this.submit = node.window.addButton(root, idButton, this.options.submit, this.options.attributes);
@@ -100,7 +100,7 @@
 				var attributes = this.features[key];
 				var id = key;
 				if (attributes.id) {
-					var id = attributes.id;
+					id = attributes.id;
 					delete attributes.id;
 				}
 							
@@ -191,7 +191,7 @@
 	
 	function SliderControls (options) {
 		Controls.call(this, options);
-	};
+	}
 	
 	SliderControls.prototype.add = function (root, id, attributes) {
 		return node.window.addSlider(root, id, attributes);
@@ -212,30 +212,30 @@
     
     jQuerySliderControls.dependencies = {
         jQuery: {},
-        Controls: {},
+        Controls: {}
     };
     
     
     function jQuerySliderControls (options) {
         Controls.call(this, options);
-    };
+    }
     
     jQuerySliderControls.prototype.add = function (root, id, attributes) {
         var slider = jQuery('<div/>', {
-    	    id: id,
-    	}).slider();
-    	
-    	var s = slider.appendTo(root);
-    	return s[0];
-    };
-    
-    jQuerySliderControls.prototype.getItem = function (id, attributes) {
-    	var slider = jQuery('<div/>', {
-     	    id: id,
-     		}).slider();
-    	
-    	return slider;
-    };
+			id: id
+		}).slider();
+	
+		var s = slider.appendTo(root);
+		return s[0];
+	};
+	
+	jQuerySliderControls.prototype.getItem = function (id, attributes) {
+		var slider = jQuery('<div/>', {
+			id: id
+			}).slider();
+		
+		return slider;
+	};
 
 
     ///////////////////////////
@@ -251,7 +251,7 @@
 	RadioControls.prototype.constructor = RadioControls;
 	
 	RadioControls.id = 'radiocontrols';
-	RadioControls.name = 'Radio Controls'
+	RadioControls.name = 'Radio Controls';
 	RadioControls.version = '0.1.1';
 	
 	RadioControls.dependencies = {
@@ -261,9 +261,9 @@
 	function RadioControls (options) {
 		Controls.call(this,options);
 		this.groupName = ('undefined' !== typeof options.name) ? options.name : 
-																 node.window.generateUniqueId(); 
+																node.window.generateUniqueId(); 
 		//alert(this.groupName);
-	};
+	}
 	
 	RadioControls.prototype.add = function (root, id, attributes) {
 		//console.log('ADDDING radio');

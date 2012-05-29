@@ -7,7 +7,7 @@
 	VisualTimer.id = 'visualtimer';
 	VisualTimer.name = 'Visual Timer';
 	VisualTimer.version = '0.3.3';
-	VisualTimer.description = 'Display a timer for the game. Timer can trigger events.'
+	VisualTimer.description = 'Display a timer for the game. Timer can trigger events. Only for countdown smaller than 1h.';
 	
 	VisualTimer.dependencies = {
 		GameTimer : {},
@@ -18,19 +18,20 @@
 		this.options = options;
 		this.id = options.id;
 
-		this.gameTimer = null
+		this.gameTimer = null;
 		
-		this.timerDiv = null; 	// the DIV in which to display the timer
+		this.timerDiv = null;	// the DIV in which to display the timer
 		this.root = null;		// the parent element
-		this.fieldset = { legend: 'Time to go',
-						  id: this.id + '_fieldset'
+		this.fieldset = {
+						legend: 'Time left',
+						id: this.id + '_fieldset'
 		};
 		
 		this.init(this.options);
-	};
+	}
 	
 	VisualTimer.prototype.init = function (options) {
-		var options = options || this.options;
+		options = options || this.options;
 		var that = this;
 		(function initHooks() {
 			if (options.hooks) {
@@ -73,12 +74,14 @@
 	
 	VisualTimer.prototype.updateDisplay = function () {
 		if (!this.gameTimer.milliseconds || this.gameTimer.milliseconds === 0) {
-			this.timerDiv.innerHTML = '0:0';
+			this.timerDiv.innerHTML = '00:00';
 			return;
 		}
 		var time = this.gameTimer.milliseconds - this.gameTimer.timePassed;
 		time = JSUS.parseMilliseconds(time);
-		this.timerDiv.innerHTML = time[2] + ':' + time[3];
+		var minutes = (time[2] < 10) ? '' + '0' + time[2] : time[2];
+		var seconds = (time[3] < 10) ? '' + '0' + time[3] : time[3];
+		this.timerDiv.innerHTML = minutes + ':' + seconds;
 	};
 	
 	VisualTimer.prototype.start = function() {
@@ -117,7 +120,7 @@
 		
 		node.on('DONE', function() {
 			// TODO: This should be enabled again
-			//that.gameTimer.stop();
+			that.gameTimer.stop();
 			that.timerDiv.className = 'strike';
 		});
 	};

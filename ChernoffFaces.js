@@ -3,8 +3,8 @@
 	var Table = node.window.Table;
 	
 	/**
-	 * Expose constructor
-	 */
+	* Expose constructor
+	*/
 	exports.ChernoffFaces = ChernoffFaces;
 	exports.ChernoffFaces.FaceVector = FaceVector;
 	exports.ChernoffFaces.FacePainter = FacePainter;
@@ -18,7 +18,7 @@
 	ChernoffFaces.id = 'ChernoffFaces';
 	ChernoffFaces.name = 'Chernoff Faces';
 	ChernoffFaces.version = '0.3';
-	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.'
+	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';
 	
 	ChernoffFaces.dependencies = {
 		JSUS: {},
@@ -34,8 +34,8 @@
 		this.root = options.root || document.createElement('div');
 		this.root.id = this.id;
 		
-		this.sc = node.window.getWidget('Controls.Slider'); 	// Slider Controls
-		this.fp = null; 	// Face Painter
+		this.sc = node.window.getWidget('Controls.Slider');	// Slider Controls
+		this.fp = null;	// Face Painter
 		this.canvas = null;
 		this.dims = null;	// width and height of the canvas
 
@@ -77,7 +77,7 @@
 			features: JSUS.mergeOnValue(FaceVector.defaults, this.features),
 			change: this.change,
 			fieldset: {id: this.id + '_controls_fieldest', 
-					   legend: this.controls.legend || 'Controls'
+						legend: this.controls.legend || 'Controls'
 			},
 			submit: 'Send'
 		};
@@ -160,7 +160,7 @@
 		
 		this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
 		this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
-	};
+	}
 	
 	//Draws a Chernoff face.
 	FacePainter.prototype.draw = function (face, x, y) {
@@ -171,8 +171,8 @@
 		
 		//console.log('Face Scale ' + face.scaleY + ' ' + face.scaleX );
 		
-		var x = x || this.canvas.centerX;
-		var y = y || this.canvas.centerY;
+		x = x || this.canvas.centerX;
+		y = y || this.canvas.centerY;
 		
 		this.drawHead(face, x, y);
 			
@@ -191,11 +191,11 @@
 	FacePainter.prototype.redraw = function (face, x, y) {
 		this.canvas.clear();
 		this.draw(face,x,y);
-	}
+	};
 	
 	FacePainter.prototype.scale = function (x, y) {
 		this.canvas.scale(this.scaleX, this.scaleY);
-	}
+	};
 	
 	// TODO: Improve. It eats a bit of the margins
 	FacePainter.prototype.fit2Canvas = function(face) {
@@ -204,29 +204,30 @@
 			return;
 		}
 		
+		var ration;
 		if (this.canvas.width > this.canvas.height) {
-			var ratio = this.canvas.width / face.head_radius * face.head_scale_x;
+			ratio = this.canvas.width / face.head_radius * face.head_scale_x;
 		}
 		else {
-			var ratio = this.canvas.height / face.head_radius * face.head_scale_y;
+			ratio = this.canvas.height / face.head_radius * face.head_scale_y;
 		}
 		
 		face.scaleX = ratio / 2;
 		face.scaleY = ratio / 2;
-	}
+	};
 	
 	FacePainter.prototype.drawHead = function (face, x, y) {
 		
 		var radius = face.head_radius;
 		
 		this.canvas.drawOval({
-					   x: x, 
-					   y: y,
-					   radius: radius,
-					   scale_x: face.head_scale_x,
-					   scale_y: face.head_scale_y,
-					   color: face.color,
-					   lineWidth: face.lineWidth
+						x: x, 
+						y: y,
+						radius: radius,
+						scale_x: face.head_scale_x,
+						scale_y: face.head_scale_y,
+						color: face.color,
+						lineWidth: face.lineWidth
 		});
 	};
 	
@@ -257,7 +258,7 @@
 						color: face.color,
 						lineWidth: face.lineWidth
 		});
-	}
+	};
 	
 	FacePainter.prototype.drawPupils = function (face, x, y) {
 			
@@ -342,27 +343,27 @@
 		
 		var height = FacePainter.computeFaceOffset(face, face.mouth_height, y);
 		var startX = x - face.mouth_width / 2;
-	    var endX = x + face.mouth_width / 2;
+		var endX = x + face.mouth_width / 2;
 		
 		var top_y = height - face.mouth_top_y;
 		var bottom_y = height + face.mouth_bottom_y;
 		
 		// Upper Lip
 		this.canvas.ctx.moveTo(startX,height);
-	    this.canvas.ctx.quadraticCurveTo(x, top_y, endX, height);
-	    this.canvas.ctx.stroke();
+		this.canvas.ctx.quadraticCurveTo(x, top_y, endX, height);
+		this.canvas.ctx.stroke();
 		
-	    //Lower Lip
-	    this.canvas.ctx.moveTo(startX,height);
-	    this.canvas.ctx.quadraticCurveTo(x, bottom_y, endX, height);
-	    this.canvas.ctx.stroke();
-	   
+		//Lower Lip
+		this.canvas.ctx.moveTo(startX,height);
+		this.canvas.ctx.quadraticCurveTo(x, bottom_y, endX, height);
+		this.canvas.ctx.stroke();
+	
 	};	
 	
 	
 	//TODO Scaling ?
 	FacePainter.computeFaceOffset = function (face, offset, y) {
-		var y = y || 0;
+		y = y || 0;
 		//var pos = y - face.head_radius * face.scaleY + face.head_radius * face.scaleY * 2 * offset;
 		var pos = y - face.head_radius + face.head_radius * 2 * offset;
 		//console.log('POS: ' + pos);
@@ -370,7 +371,7 @@
 	};
 	
 	FacePainter.computeEyebrowOffset = function (face, y) {
-		var y = y || 0;
+		y = y || 0;
 		var eyemindistance = 2;
 		return FacePainter.computeFaceOffset(face, face.eye_height, y) - eyemindistance - face.eyebrow_eyedistance;
 	};
@@ -552,26 +553,26 @@
 	
 	//Constructs a random face vector.
 	FaceVector.random = function () {
-	  var out = {};
-	  for (var key in FaceVector.defaults) {
-	    if (FaceVector.defaults.hasOwnProperty(key)) {
-	      if (!JSUS.in_array(key,['color','lineWidth','scaleX','scaleY'])) {
-	        out[key] = FaceVector.defaults[key].min + Math.random() * FaceVector.defaults[key].max;
-	      }
-	    }
-	  }
-	  
-	  out.scaleX = 1;
-	  out.scaleY = 1;
-	  
-	  out.color = 'green';
-	  out.lineWidth = 1; 
-	  
-	  return new FaceVector(out);
+		var out = {};
+		for (var key in FaceVector.defaults) {
+			if (FaceVector.defaults.hasOwnProperty(key)) {
+				if (!JSUS.in_array(key,['color','lineWidth','scaleX','scaleY'])) {
+					out[key] = FaceVector.defaults[key].min + Math.random() * FaceVector.defaults[key].max;
+				}
+			}
+		}
+	
+		out.scaleX = 1;
+		out.scaleY = 1;
+		
+		out.color = 'green';
+		out.lineWidth = 1; 
+		
+		return new FaceVector(out);
 	};
 	
 	function FaceVector (faceVector) {
-		  var faceVector = faceVector || {};
+		faceVector = faceVector || {};
 
 		this.scaleX = faceVector.scaleX || 1;
 		this.scaleY = faceVector.scaleY || 1;
@@ -579,20 +580,20 @@
 
 		this.color = faceVector.color || 'green';
 		this.lineWidth = faceVector.lineWidth || 1;
-		  
-		  // Merge on key
-		 for (var key in FaceVector.defaults) {
-		   if (FaceVector.defaults.hasOwnProperty(key)){
-		     if (faceVector.hasOwnProperty(key)){
-		       this[key] = faceVector[key];
-		     }
-		     else {
-		       this[key] = FaceVector.defaults[key].value;
-		     }
-		   }
-		 }
-		  
-		};
+		
+		// Merge on key
+		for (var key in FaceVector.defaults) {
+			if (FaceVector.defaults.hasOwnProperty(key)){
+				if (faceVector.hasOwnProperty(key)){
+					this[key] = faceVector[key];
+				}
+				else {
+					this[key] = FaceVector.defaults[key].value;
+				}
+			}
+		}
+		
+	}
 
 	//Constructs a random face vector.
 	FaceVector.prototype.shuffle = function () {
@@ -634,7 +635,7 @@
 			if (this.hasOwnProperty(key)) {
 				out += key + ' ' + this[key];
 			}
-		};
+		}
 		return out;
 	};
 

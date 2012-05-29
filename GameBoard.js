@@ -8,7 +8,7 @@
 	GameBoard.id = 'gboard';
 	GameBoard.name = 'GameBoard';
 	GameBoard.version = '0.3.2';
-	GameBoard.description = 'Offer a visual representation of the state of all players in the game.'
+	GameBoard.description = 'Offer a visual representation of the state of all players in the game.';
 	
 	function GameBoard (options) {
 		
@@ -21,7 +21,7 @@
 		
 		this.fieldset = {
 			legend: 'Game State'
-		}
+		};
 	}
 	
 	// TODO: Write a proper INIT method
@@ -101,6 +101,6 @@
 		else {
 			that.board.innerHTML = that.noPlayers;
 		}
-	}
+	};
 	
 })(node.window.widgets);

@@ -1,11 +1,11 @@
 (function (exports) {
 
 	/*
-	 * NDDBBrowser
-	 * 
-	 * Sends DATA msgs
-	 * 
-	 */
+	* NDDBBrowser
+	* 
+	* Sends DATA msgs
+	* 
+	*/
 	
 	exports.NDDBBrowser = NDDBBrowser;
 	
@@ -36,7 +36,7 @@
 		
 		this.info = null;
 		this.init(this.options);
-	};
+	}
 	
 	NDDBBrowser.prototype.init = function (options) {
 		
@@ -47,7 +47,7 @@
 			node.window.addEventButton(id + '_GO_TO_NEXT', '>', this.commandsDiv, 'go_to_next');
 			node.window.addEventButton(id + '_GO_TO_LAST', '>>', this.commandsDiv, 'go_to_last');
 			node.window.addBreak(this.commandsDiv);
-		};
+		}
 		function addInfoBar() {
 			var span = this.commandsDiv.appendChild(document.createElement('span'));
 			return span;
@@ -104,7 +104,7 @@
 			else {
 				this.writeInfo('No element found');
 			}
-		};
+		}
 		
 		node.on(id + '_GO_TO_FIRST', function() {
 			var el = that.tm.pullTriggers(that.nddb.first());

@@ -8,7 +8,7 @@
 	NextPreviousState.id = 'nextprevious';
 	NextPreviousState.name = 'Next,Previous State';
 	NextPreviousState.version = '0.3.1';
-	NextPreviousState.description = 'Adds two buttons to push forward or rewind the state of the game by one step.'
+	NextPreviousState.description = 'Adds two buttons to push forward or rewind the state of the game by one step.';
 		
 	function NextPreviousState(options) {
 		this.game = node.game;
@@ -54,11 +54,11 @@
 		
 		fwd.onclick = function() {
 			updateState(that.game.next());
-		}
+		};
 			
 		rew.onclick = function() {
 			updateState(that.game.previous());
-		}
+		};
 		
 		this.root = root;
 		return root;

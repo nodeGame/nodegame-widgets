@@ -2,11 +2,11 @@
 	
 	
 	/*
-	 * EventButton
-	 * 
-	 * Sends DATA msgs
-	 * 
-	 */
+	* EventButton
+	* 
+	* Sends DATA msgs
+	* 
+	*/
 	
 	exports.EventButton	= EventButton;
 	
@@ -28,10 +28,10 @@
 		this.button = document.createElement('button');
 		this.callback = null;
 		this.init(this.options);
-	};
+	}
 	
 	EventButton.prototype.init = function (options) {
-		var options = options || this.options;
+		options = options || this.options;
 		this.button.id = options.id || this.id;
 		var text = options.text || this.text;
 		while (this.button.hasChildNodes()) {
@@ -49,7 +49,7 @@
 					ok = options.callback.call(node.game);
 				}
 				if (ok) node.emit(that.event);
-			}
+			};
 		}
 		
 //		// Emit DONE only if callback is successful
@@ -80,12 +80,12 @@
 	DoneButton.name = 'Done Button';
 	DoneButton.dependencies = {
 		EventButton: {}
-	}
+	};
 	
 	function DoneButton (options) {
 		options.event = 'DONE';
 		options.text = options.text || 'Done!';
 		EventButton.call(this, options);
-	};
+	}
 	
 })(node.window.widgets);

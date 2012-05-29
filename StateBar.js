@@ -7,7 +7,7 @@
 	StateBar.id = 'statebar';
 	StateBar.name = 'State Bar';
 	StateBar.version = '0.3.1';
-	StateBar.description = 'Provides a simple interface to change the state of the game.'
+	StateBar.description = 'Provides a simple interface to change the state of the game.';
 	
 	function StateBar (options) {
 		this.id = options.id;
@@ -18,7 +18,7 @@
 		this.fieldset = {
 			legend: 'Change Game State'
 		};
-	};
+	}
 	
 	// TODO: Write a proper INIT method
 	StateBar.prototype.init = function () {};
@@ -36,10 +36,10 @@
 		var idActionSel = PREF + 'actionSel';
 		var idRecipient = PREF + 'recipient'; 
 				
-		var sendButton 	= node.window.addButton(root, idButton);
-		var stateSel 	= node.window.addStateSelector(root, idStateSel);
-		this.actionSel	= node.window.addActionSelector(root, idActionSel);
-		this.recipient 	= node.window.addRecipientSelector(root, idRecipient);
+		var sendButton = node.window.addButton(root, idButton);
+		var stateSel = node.window.addStateSelector(root, idStateSel);
+		this.actionSel = node.window.addActionSelector(root, idActionSel);
+		this.recipient = node.window.addRecipientSelector(root, idRecipient);
 		
 		var that = this;
 	
@@ -64,21 +64,23 @@
 				var round = result[3] || 1;
 				console.log('Action: ' + that.actionSel.value + ' Parsed State: ' + result.join("|"));
 				
-				var state = new node.GameState({
+				state = new node.GameState({
 													state: state,
 													step: step,
 													round: round
 				});
 				
+				var stateEvent;
+				
 				// Self Update
 				if (to === 'ALL') {
-					var stateEvent = node.IN + node.actions.SAY + '.STATE';
+					stateEvent = node.IN + node.actions.SAY + '.STATE';
 					var stateMsg = node.gsc.gmg.createSTATE(stateEvent, state);
 					node.emit(stateEvent, stateMsg);
 				}
 				
 				// Update Others
-				var stateEvent = node.OUT + that.actionSel.value + '.STATE';
+				stateEvent = node.OUT + that.actionSel.value + '.STATE';
 				node.emit(stateEvent,state,to);
 			}
 			else {

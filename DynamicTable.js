@@ -2,14 +2,14 @@
 
 	var GameState = node.GameState;
 	var PlayerList = node.PlayerList;
-	var Table = node.window.Table
+	var Table = node.window.Table;
 	var HTMLRenderer = node.window.HTMLRenderer;
 	
 	/*!
-	 * DynamicTable
-	 * 
-	 * Show the memory state of the game
-	 */
+	* DynamicTable
+	* 
+	* Show the memory state of the game
+	*/
 	
 	DynamicTable.prototype = new Table();
 	DynamicTable.prototype.constructor = Table;	
@@ -28,18 +28,18 @@
 	
 	function DynamicTable (options, data) {
 		//JSUS.extend(node.window.Table,this);
-	    Table.call(this, options, data); 
+		Table.call(this, options, data);
 		this.options = options;
 		this.id = options.id;
 		this.name = options.name || 'Dynamic Table';
 		this.fieldset = { legend: this.name,
-				  		  id: this.id + '_fieldset'
+							id: this.id + '_fieldset'
 		};
 		
 		this.root = null;
 		this.bindings = {};
 		this.init(this.options);
-	};
+	}
 	
 	DynamicTable.prototype.init = function (options) {
 		this.options = options;
@@ -60,8 +60,9 @@
 			
 			if (bindings.x || bindings.y) {
 				// Cell
+				var func;
 				if (that.replace) {
-					var func = function (x, y) {
+					func = function (x, y) {
 						var found = that.get(x,y);
 						if (found.length !== 0) {
 							for (var ci=0; ci < found.length; ci++) {
@@ -69,26 +70,25 @@
 							}
 						}
 						else {
-							 var cell = bindings.cell.call(that, msg, new Table.Cell({x: x, y: y}));
-							 that.add(cell);
+							var cell = bindings.cell.call(that, msg, new Table.Cell({x: x, y: y}));
+							that.add(cell);
 						}
-					}
+					};
 				}
 				else {
-					var func = function (x, y) {
+					func = function (x, y) {
 						var cell = bindings.cell.call(that, msg, new Table.Cell({x: x, y: y}));
 						that.add(cell, x, y);
-					}
+					};
 				}
-	
 				
 				var x = bindings.x.call(that, msg);
 				var y = bindings.y.call(that, msg);
 				
 				if (x && y) {
 					
-					var x = (x instanceof Array) ? x : [x];
-					var y = (y instanceof Array) ? y : [y];
+					x = (x instanceof Array) ? x : [x];
+					y = (y instanceof Array) ? y : [y];
 					
 //					console.log('Bindings found:');
 //					console.log(x);
@@ -107,7 +107,7 @@
 			// Header
 			if (bindings.header) {
 				var h = bindings.header.call(that, msg);
-				var h = (h instanceof Array) ? h : [h];
+				h = (h instanceof Array) ? h : [h];
 				that.setHeader(h);
 			}
 			

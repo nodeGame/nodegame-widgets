@@ -2,10 +2,10 @@
 	
 
 	/*
-	 * ServerInfoDisplay
-	 * 
-	 * Sends STATE msgs
-	 */
+	* ServerInfoDisplay
+	* 
+	* Sends STATE msgs
+	*/
 	
 	exports.ServerInfoDisplay = ServerInfoDisplay;	
 		
@@ -18,7 +18,7 @@
 		this.id = options.id;
 		
 		this.fieldset = { legend: 'Server Info',
-				  		  id: this.id + '_fieldset'
+							id: this.id + '_fieldset'
 		};
 		
 		this.root = null;
@@ -43,7 +43,7 @@
 		this.button.appendChild(document.createTextNode('Refresh'));
 		this.button.onclick = function(){
 			that.getInfo();
-		}
+		};
 		this.root.appendChild(this.button);
 		this.getInfo();
 	};

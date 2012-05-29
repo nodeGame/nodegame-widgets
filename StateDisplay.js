@@ -1,23 +1,26 @@
 (function (exports) {
 
+	JSUS = node.JSUS;
+	Table = node.window.Table;
+	
 	exports.StateDisplay = StateDisplay;	
 	
 	StateDisplay.id = 'statedisplay';
 	StateDisplay.name = 'State Display';
-	StateDisplay.version = '0.3.2';
+	StateDisplay.version = '0.4';
 	StateDisplay.description = 'Display basic information about player\'s status.';
 	
 	function StateDisplay (options) {
 		
-		this.game = node.game;
 		this.id = options.id;
 		
 		this.fieldset = {
 			legend: 'Player Status'
 		};
 		
-		this.stateDiv = null;
-	};
+		this.root = null;
+		this.table = new Table();
+	}
 	
 	// TODO: Write a proper INIT method
 	StateDisplay.prototype.init = function () {};
@@ -34,45 +37,27 @@
 		var idFieldset = PREF + 'fieldset';
 		var idPlayer = PREF + 'player';
 		var idState = PREF + 'state'; 
-		
-		
-		this.playerDiv = node.window.addDiv(root, idPlayer);
-		
+			
 		var checkPlayerName = setInterval(function(idState,idPlayer){
-				if(that.game.player !== null){
-					clearInterval(checkPlayerName);
-					that.updateAll();
-				}
-			},100);
+			if (node.game.player !== null){
+				clearInterval(checkPlayerName);
+				that.updateAll();
+			}
+		}, 100);
 	
+		root.appendChild(this.table.table);
 		this.root = root;
 		return root;
 		
 	};
 	
-	StateDisplay.prototype.updateAll = function(idState,idPlayer) {
-		var pName = document.createTextNode('Name: ' + this.game.player.name);
-		var pId = document.createTextNode('Id: ' + this.game.player.id);
+	StateDisplay.prototype.updateAll = function() {
+		this.table.clear(true);
+		this.table.addRow(['Name: ', node.game.player.name]);
+		this.table.addRow(['State: ', new GameState(node.game.gameState).toString()]);
+		this.table.addRow(['Id: ', node.game.player.id]);
+		this.table.parse();
 		
-		this.playerDiv.appendChild(pName);
-		this.playerDiv.appendChild(document.createElement('br'));
-		this.playerDiv.appendChild(pId);
-		
-		this.stateDiv = node.window.addDiv(this.playerDiv,idState);
-		this.updateState(this.game.gameState);
-	};
-	
-	StateDisplay.prototype.updateState =  function(state) {
-		if (!state) return;
-		var that = this;
-		var checkStateDiv = setInterval(function(){
-			if(that.stateDiv){
-				clearInterval(checkStateDiv);
-				that.stateDiv.innerHTML = 'State: ' +  new GameState(state).toString() + '<br />';
-				// was
-				//that.stateDiv.innerHTML = 'State: ' +  GameState.stringify(state) + '<br />';
-			}
-		},100);
 	};
 	
 	StateDisplay.prototype.listeners = function () {
@@ -84,7 +69,8 @@
 		var OUT = node.OUT;
 		
 		node.on( 'STATECHANGE', function() {
-			that.updateState(node.game.gameState);
+			that.updateAll(node.game.gameState);
 		}); 
 	}; 
+	
 })(node.window.widgets);

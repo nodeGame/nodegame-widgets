@@ -17,10 +17,10 @@
 		
 		this.fieldset = {
 			legend: 'Send DATA to players'
-		}
+		};
 		
 		this.recipient = null;
-	};
+	}
 	
 	DataBar.prototype.init = function (options) {};
 	

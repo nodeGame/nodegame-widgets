@@ -5,7 +5,7 @@
 	GameSummary.id = 'gamesummary';
 	GameSummary.name = 'Game Summary';
 	GameSummary.version = '0.3';
-	GameSummary.description = 'Show the general configuration options of the game.'
+	GameSummary.description = 'Show the general configuration options of the game.';
 	
 	function GameSummary(options) {
 		
@@ -16,7 +16,7 @@
 			legend: 'Game Summary'
 		};
 		this.summaryDiv = null;
-	};
+	}
 	
 	// TODO: Write a proper INIT method
 	GameSummary.prototype.init = function () {};
