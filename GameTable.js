@@ -46,11 +46,11 @@
 		}, node.game.memory.db);
 		
 		
-		this.gtbl.set('state', GameState.compare);
+		this.gtbl.c('state', GameState.compare);
 		
 		this.gtbl.setLeft([]);
 		
-//		if (this.gtbl.size() === 0) {
+//		if (this.gtbl.length === 0) {
 //			this.gtbl.table.appendChild(document.createTextNode('Empty table'));
 //		}
 		

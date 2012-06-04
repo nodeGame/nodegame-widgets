@@ -7,7 +7,7 @@
 	
 	StateDisplay.id = 'statedisplay';
 	StateDisplay.name = 'State Display';
-	StateDisplay.version = '0.4';
+	StateDisplay.version = '0.4.1';
 	StateDisplay.description = 'Display basic information about player\'s status.';
 	
 	function StateDisplay (options) {
@@ -54,7 +54,7 @@
 	StateDisplay.prototype.updateAll = function() {
 		this.table.clear(true);
 		this.table.addRow(['Name: ', node.player.name]);
-		this.table.addRow(['State: ', new GameState(node.game.gameState).toString()]);
+		this.table.addRow(['State: ', new GameState(node.state).toString()]);
 		this.table.addRow(['Id: ', node.player.id]);
 		this.table.parse();
 		
@@ -69,7 +69,7 @@
 		var OUT = node.OUT;
 		
 		node.on( 'STATECHANGE', function() {
-			that.updateAll(node.game.gameState);
+			that.updateAll(node.state);
 		}); 
 	}; 
 	

@@ -57,7 +57,7 @@
 		var that = this;
 		that.board.innerHTML = 'Updating...';
 		
-		if (pl.size() !== 0) {
+		if (pl.length) {
 			that.board.innerHTML = '';
 			pl.forEach( function(p) {
 				//node.log(p);

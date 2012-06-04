@@ -99,7 +99,7 @@
 		function notification (el, text) {
 			if (el) {
 				node.emit(id + '_GOT', el);
-				this.writeInfo((this.nddb.nddb_pointer + 1) + '/' + this.nddb.size());
+				this.writeInfo((this.nddb.nddb_pointer + 1) + '/' + this.nddb.length);
 			}
 			else {
 				this.writeInfo('No element found');
