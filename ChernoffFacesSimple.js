@@ -74,7 +74,7 @@
 		
 		var sc_options = {
 			id: 'cf_controls',
-			features: JSUS.mergeOnValue(FaceVector.defaults, this.features),
+			features: JSUS.mergeOnKey(FaceVector.defaults, this.features, 'value'),
 			change: this.change,
 			fieldset: {id: this.id + '_controls_fieldest', 
 					   legend: this.controls.legend || 'Controls'
