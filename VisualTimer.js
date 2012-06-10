@@ -107,8 +107,32 @@
 		node.on('LOADED', function() {
 			var timer = node.game.gameLoop.getAllParams(node.game.gameState).timer;
 			if (timer) {
+				timer = JSUS.clone(timer);
 				that.timerDiv.className = '';
-				var options = ('number' === typeof timer) ? {milliseconds: timer} : timer;
+				var options = {},
+					typeoftimer = typeof timer; 
+				switch (typeoftimer) {
+				
+					case 'number':
+						options.milliseconds = timer;
+						break;
+					case 'object':
+						options = timer;
+						break;
+					case 'function':
+						options.milliseconds = timer
+						break;
+					case 'string':
+						options.milliseconds = Number(timer);
+						break;
+				};
+			
+				if (!options.milliseconds) return;
+			
+				if ('function' === typeof options.milliseconds) {
+					options.milliseconds = options.milliseconds.call(node.game);
+				}
+				
 				if (!options.timeup) {
 					options.timeup = 'DONE';
 				}
