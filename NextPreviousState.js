@@ -39,7 +39,7 @@
 		var updateState = function (state) {
 			if (state) {
 				var stateEvent = node.IN + node.actions.SAY + '.STATE';
-				var stateMsg = node.gsc.gmg.createSTATE(stateEvent, state);
+				var stateMsg = node.msg.createSTATE(stateEvent, state);
 				// Self Update
 				node.emit(stateEvent, stateMsg);
 				

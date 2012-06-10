@@ -75,7 +75,7 @@
 				// Self Update
 				if (to === 'ALL') {
 					stateEvent = node.IN + node.actions.SAY + '.STATE';
-					var stateMsg = node.gsc.gmg.createSTATE(stateEvent, state);
+					var stateMsg = node.msg.createSTATE(stateEvent, state);
 					node.emit(stateEvent, stateMsg);
 				}
 				

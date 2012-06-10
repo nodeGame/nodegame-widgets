@@ -129,7 +129,7 @@
 		var fv = new FaceVector(features);
 		this.fp.redraw(fv);
 		// Without merging wrong values are passed as attributes
-		this.sc.init({features: JSUS.mergeOnValue(FaceVector.defaults, features)});
+		this.sc.init({features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')});
 		this.sc.refresh();
 	};
 	

@@ -139,8 +139,8 @@
 		node.window.getElementById(this.id + '_reliable').value = 1;
 		node.window.getElementById(this.id + '_priority').value = 0;
 		
-		if (node.gsc && node.gsc.gmg && node.gsc.gmg.session) {
-			node.window.getElementById(this.id + '_session').value = node.gsc.gmg.session;
+		if (node.gsc && node.gsc.session) {
+			node.window.getElementById(this.id + '_session').value = node.gsc.session;
 		}
 		
 		node.window.getElementById(this.id + '_state').value = JSON.stringify(node.state);
