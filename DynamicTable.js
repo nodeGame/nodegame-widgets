@@ -47,7 +47,7 @@
 		this.auto_update = ('undefined' !== typeof options.auto_update) ? options.auto_update : true;
 		this.replace = options.replace || false;
 		this.htmlRenderer = new HTMLRenderer({renderers: options.renderers});
-		this.set('state', GameState.compare);
+		this.c('state', GameState.compare);
 		this.setLeft([]);
 		this.parse(true);
 	};
