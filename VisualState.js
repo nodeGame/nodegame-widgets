@@ -57,8 +57,8 @@
 		
 		var miss = '-';
 		
-		if (node.game && node.game.gameState) {
-			state = this.gameLoop.getName(node.game.gameState) || miss;
+		if (node.game && node.game.state) {
+			state = this.gameLoop.getName(node.game.state) || miss;
 			pr = this.gameLoop.getName(node.game.previous()) || miss;
 			nx = this.gameLoop.getName(node.game.next()) || miss;
 		}
