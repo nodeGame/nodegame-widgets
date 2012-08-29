@@ -98,7 +98,7 @@
 
 			that.addLeft(msg.state, msg.from);
 			var x = that.player2x(msg.from);
-			var y = that.state2y(node.game.gameState);
+			var y = that.state2y(node.game.state, msg.text);
 			
 			that.gtbl.add(msg.data, x, y);
 			that.gtbl.parse(true);
