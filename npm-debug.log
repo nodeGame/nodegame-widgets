@@ -1,0 +1,131 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+info using npm@1.1.12
+info using node@v0.8.5
+verbose /usr/local/bin/node node symlink
+verbose config file /home/stefano/.npmrc
+verbose config file /usr/local/etc/npmrc
+verbose config file /usr/local/lib/node_modules/npm/npmrc
+verbose publish [ '.' ]
+verbose caching /var/www/nodegame-widgets/package.json
+verbose loadDefaults nodegame-widgets@1.2.2
+info prepublish nodegame-widgets@1.2.2
+verbose cache add [ '.', null ]
+silly cache add: name, spec, args [ undefined, '.', [ '.', null ] ]
+verbose parsed url { pathname: '.', path: '.', href: '.' }
+verbose caching package.json
+verbose loadDefaults nodegame-widgets@1.2.2
+verbose pack /var/www/nodegame-widgets
+verbose pack /var/www/nodegame-widgets /tmp/npm-1344797928572/1344797928572-0.23700512573122978/tmp.tgz
+silly makeList /var/www/nodegame-widgets
+verbose caching /var/www/nodegame-window/package.json
+verbose loadDefaults nodegame-window@0.2.11
+verbose doing fancy crap /var/www/nodegame-widgets/node_modules
+silly dir, dirLen [ '/var/www/nodegame-widgets', 26 ]
+verbose tarball /tmp/npm-1344797928572/1344797928572-0.23700512573122978/tmp.tgz
+verbose parent /var/www/nodegame-widgets
+verbose mkdir (expected) error ENOENT, stat '/tmp/npm-1344797928572/1344797928572-0.23700512573122978/package'
+verbose mkdir done: /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package 755
+verbose unpack_ uid, gid [ undefined, undefined ]
+verbose unpackTarget /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package
+silly gunzTarPerm modes [ '755', '644' ]
+silly modified mode [ 'WaitScreen.js', 436, 420 ]
+silly modified mode [ '.npmignore', 436, 420 ]
+silly modified mode [ 'NDDBBrowser.js', 436, 420 ]
+silly modified mode [ 'DataBar.js', 436, 420 ]
+silly modified mode [ 'ServerInfoDisplay.js', 436, 420 ]
+silly modified mode [ 'Controls.js', 436, 420 ]
+silly modified mode [ 'VisualState.js', 436, 420 ]
+silly modified mode [ 'package.json', 436, 420 ]
+silly modified mode [ 'StateDisplay.js', 436, 420 ]
+silly modified mode [ 'DynamicTable.js', 436, 420 ]
+silly modified mode [ 'GameBoard.js', 436, 420 ]
+silly modified mode [ 'README.md', 436, 420 ]
+silly modified mode [ 'ChernoffFacesSimple.js', 436, 420 ]
+silly modified mode [ 'EventButton.js', 436, 420 ]
+silly modified mode [ 'ChernoffFaces.js', 436, 420 ]
+silly modified mode [ 'GameSummary.js', 436, 420 ]
+silly modified mode [ 'MoneyTalks.js', 436, 420 ]
+silly modified mode [ 'MsgBar.js', 436, 420 ]
+silly modified mode [ 'VisualTimer.js', 436, 420 ]
+silly modified mode [ 'NextPreviousState.js', 436, 420 ]
+silly modified mode [ 'Wall.js', 436, 420 ]
+silly modified mode [ 'GameTable.js', 436, 420 ]
+silly modified mode [ 'StateBar.js', 436, 420 ]
+verbose gunzed /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package
+verbose caching /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package/package.json
+verbose loadDefaults nodegame-widgets@1.2.2
+verbose tarball contents [ 'tmp.tgz', 'package' ]
+verbose from cache /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package/package.json
+verbose pack /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package
+verbose pack /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package /home/stefano/.npm/nodegame-widgets/1.2.2/package.tgz
+silly makeList /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package
+silly dir, dirLen [ '/tmp/npm-1344797928572/1344797928572-0.23700512573122978/package',
+silly dir, dirLen   65 ]
+verbose tarball /home/stefano/.npm/nodegame-widgets/1.2.2/package.tgz
+verbose parent /tmp/npm-1344797928572/1344797928572-0.23700512573122978/package
+verbose mkdir (expected) error ENOENT, stat '/home/stefano/.npm/nodegame-widgets/1.2.2/package'
+verbose mkdir done: /home/stefano/.npm/nodegame-widgets/1.2.2/package 755
+verbose unpack_ uid, gid [ undefined, undefined ]
+verbose unpackTarget /home/stefano/.npm/nodegame-widgets/1.2.2/package
+silly gunzTarPerm modes [ '755', '644' ]
+verbose gunzed /home/stefano/.npm/nodegame-widgets/1.2.2/package
+verbose caching /home/stefano/.npm/nodegame-widgets/1.2.2/package/package.json
+verbose loadDefaults nodegame-widgets@1.2.2
+silly updated sha bytes 18236
+info shasum 1052c0adfd03efca20fd1b36b2f8d22c7cfadc23
+info shasum /home/stefano/.npm/nodegame-widgets/1.2.2/package.tgz
+verbose from cache /home/stefano/.npm/nodegame-widgets/1.2.2/package/package.json
+verbose chmod /home/stefano/.npm/nodegame-widgets/1.2.2/package.tgz 644
+verbose chown [ '/home/stefano/.npm/nodegame-widgets/1.2.2/package.tgz',
+verbose chown   1000,
+verbose chown   1000 ]
+silly publish { name: 'nodegame-widgets',
+silly publish   description: 'nodegame-widgets: Collections of useful and reusable javascript / HTML code snippets to enhance nodegame-window capabilities.',
+silly publish   version: '1.2.2',
+silly publish   keywords: [ 'nodegame', 'window', 'widgets' ],
+silly publish   author: { name: 'Stefano Balietti', email: 'futur.dorko@gmail.com' },
+silly publish   licenses: [ { type: 'MIT' } ],
+silly publish   dependencies: { 'nodegame-window': '>= 0.1.0' },
+silly publish   devDependencies: { mocha: '>= 0.3.0', should: '>= 0.5.1' },
+silly publish   engines: { node: '>=0.2.3' },
+silly publish   main: 'GameWindow.js',
+silly publish   repository: 
+silly publish    { type: 'git',
+silly publish      url: 'git://github.com/nodeGame/nodegame-widgets.git' },
+silly publish   _npmUser: { name: 'shakty', email: 'futur.dorko@gmail.com' },
+silly publish   _id: 'nodegame-widgets@1.2.2',
+silly publish   optionalDependencies: {},
+silly publish   _engineSupported: true,
+silly publish   _npmVersion: '1.1.12',
+silly publish   _nodeVersion: 'v0.8.5',
+silly publish   _defaultsLoaded: true,
+silly publish   dist: 
+silly publish    { shasum: '1052c0adfd03efca20fd1b36b2f8d22c7cfadc23',
+silly publish      tarball: 'http://registry.npmjs.org/nodegame-widgets/-/nodegame-widgets-1.2.2.tgz' } }
+verbose raw, before any munging nodegame-widgets
+verbose url resolving [ 'https://registry.npmjs.org/', './nodegame-widgets' ]
+verbose url resolved https://registry.npmjs.org/nodegame-widgets
+http PUT https://registry.npmjs.org/nodegame-widgets
+http 409 https://registry.npmjs.org/nodegame-widgets
+verbose raw, before any munging nodegame-widgets
+verbose url resolving [ 'https://registry.npmjs.org/', './nodegame-widgets' ]
+verbose url resolved https://registry.npmjs.org/nodegame-widgets
+http GET https://registry.npmjs.org/nodegame-widgets
+http 200 https://registry.npmjs.org/nodegame-widgets
+info Already published nodegame-widgets@1.2.2
+verbose uploading bin dists []
+ERR! publish fail Cannot publish over existing version.
+ERR! publish fail Bump the 'version' field, set the --force flag, or
+ERR! publish fail     npm unpublish 'nodegame-widgets@1.2.2'
+ERR! publish fail and try again
+ERR! 
+ERR! System Linux 3.0.0-12-generic-pae
+ERR! command "node" "/usr/local/bin/npm" "publish"
+ERR! cwd /var/www/nodegame-widgets
+ERR! node -v v0.8.5
+ERR! npm -v 1.1.12
+ERR! code EPUBLISHCONFLICT
+ERR! message publish fail
+ERR! errno {}
+verbose exit [ 1, true ]
