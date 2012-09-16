@@ -15,7 +15,7 @@
     "should": ">= 0.5.1"
   },
   "engines": { "node":  ">=0.2.3" },
-  "main": "GameWindow.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/nodeGame/nodegame-widgets.git"
