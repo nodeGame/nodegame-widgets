@@ -12,7 +12,6 @@
 	
 	function MsgBar (options) {
 		
-		this.game = node.game;
 		this.id = options.id;
 		
 		this.recipient = null;
@@ -133,7 +132,7 @@
 	};
 	
 	MsgBar.prototype.addStub = function () {
-		node.window.getElementById(this.id + '_from').value = this.game.player.id;
+		node.window.getElementById(this.id + '_from').value = (node.player) ? node.player.id : 'undefined';
 		node.window.getElementById(this.id + '_to').value = this.recipient.value;
 		node.window.getElementById(this.id + '_forward').value = 0;
 		node.window.getElementById(this.id + '_reliable').value = 1;
