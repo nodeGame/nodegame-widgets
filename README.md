@@ -1,6 +1,7 @@
 # nodegame-widgets
 
 Collections of useful and reusable javascript / HTML code snippets for nodegame-window.
+
 ---
 
 ## Usage: node.window.loadWidget
