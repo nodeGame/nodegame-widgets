@@ -1,12 +1,7 @@
 # nodegame-widgets
 
-Collections of useful and reusable javascript / HTML code snippets to enhance nodegame-window capabilities
-
+Collections of useful and reusable javascript / HTML code snippets for nodegame-window.
 ---
-
-## Rationale
-
-Widgets are reusable javacript functions that follow a number of conventions to be executed smoothly within the nodeGame environment. They must have something to do with the browser window, e.g. tabulate data, provide an interface to nodeGame routines, etc. If you are planning to extend the core functionalities of nodeGame, and write routines that do not immediately display something in the browser's window, then probably you want to write a nodeGame add on, rather than a widget.
 
 ## Usage: node.window.loadWidget
 
@@ -154,6 +149,42 @@ Some others are *optional*, and nodeGame adds them, if they are missing.
 | getAllValues | If the widgets is storing values, this method is suppose to return them all.      |
 | highlight    | Highlight the widget in response to particular events.                            |
 
+
+## Build
+
+You can create a custom nodegame-window build using the make.js file in the bin directory.
+
+```javascript
+node make.js build -a // Full build, about 43Kb minified
+node make.js build -w msgbar,visualstate -o mywidgets.js // about 4Kb minified
+```
+
+## Make help
+
+  Usage: make.js [options] [command]
+
+  Commands:
+
+    clean 
+    Removes all files from build folder
+    
+    build [options] [options]
+    Creates a custom build of nodegame-widgets.js
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+
+  Usage: build [options] [options]
+
+  Options:
+
+    -h, --help           output usage information
+    -l, --lib <items>    choose libraries to include
+    -A, --analyse        analyse build
+    -a, --all            full build of JSUS
+    -o, --output <file>  
 
 ## License
 
