@@ -1,18 +1,18 @@
-(function (exports) {
+(function (node) {
 	
 
 	// TODO: handle different events, beside onchange
 	
-	/**
-	* Controls
-	* 
-	*/
+	// Registering constructor
 	
-	exports.Controls = Controls;	
-	exports.Controls.Slider = SliderControls;
-	exports.Controls.jQuerySlider = jQuerySliderControls;
-	exports.Controls.Radio	= RadioControls;
+	node.widgets.register('Controls', Controls);	
 	
+	Controls.Slider = SliderControls;
+	Controls.jQuerySlider = jQuerySliderControls;
+	Controls.Radio	= RadioControls;
+	
+	// Meta-data
+		
 	Controls.id = 'controls';
 	Controls.name = 'Controls';
 	Controls.version = '0.2';
@@ -309,4 +309,4 @@
 		return false;
 	};
 	
-})(node.window.widgets);
+})(node);

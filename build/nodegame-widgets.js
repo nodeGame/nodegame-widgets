@@ -25,14 +25,17 @@ function Widgets() {
  * 
  * Registered widgets can be loaded with Widgets.get or Widgets.append.
  * 
+ * @param {string} name The id under which registering the widget
  * @param {function} w The widget to add
- * @param {string} name Optional. The name under which register the widget
  * @return {boolean} TRUE, if registration is successful
  * 
  */
-Widgets.prototype.register = function (w, name) {
-	if ('function' !== typeof w) return false;
-	this.widgets[name] = name || JSUS.getFuncName(w);;
+Widgets.prototype.register = function (name, w) {
+	if ('function' !== typeof w || !name) {
+		node.err('Could not register widget: ' + name, 'nodegame-widgets');
+		return false;
+	}
+	this.widgets[name] = w;
 	return true;
 };
 
@@ -84,10 +87,6 @@ Widgets.prototype.get = function (w_str, options) {
 	node.log('nodeWindow: registering gadget ' + w.name + ' v.' +  w.version);
 	
 	if (! this.checkDependencies(w)) return false;
-	
-	var id = ('undefined' !== typeof options.id) ? options.id : w.id; 
-	options.id = this.generateUniqueId(id);
-	
 	
 	// Merging options with defaults
 	options = J.merge(w.defaults || {}, options);
@@ -220,6 +219,8 @@ node.widgets = new Widgets();
 // nodegame-widgets
 
 (function (node) {
+
+node.Widget = Widget;	
 	
 Widget.defaults;
 	
@@ -732,21 +733,21 @@ Widget.prototype.highlight = function () {};
 	}; 
 	
 })(node.window.widgets);
-(function (exports) {
+(function (node) {
 	
 
 	// TODO: handle different events, beside onchange
 	
-	/**
-	* Controls
-	* 
-	*/
+	// Registering constructor
 	
-	exports.Controls = Controls;	
-	exports.Controls.Slider = SliderControls;
-	exports.Controls.jQuerySlider = jQuerySliderControls;
-	exports.Controls.Radio	= RadioControls;
+	node.widgets.register('Controls', Controls);	
 	
+	Controls.Slider = SliderControls;
+	Controls.jQuerySlider = jQuerySliderControls;
+	Controls.Radio	= RadioControls;
+	
+	// Meta-data
+		
 	Controls.id = 'controls';
 	Controls.name = 'Controls';
 	Controls.version = '0.2';
@@ -1043,7 +1044,7 @@ Widget.prototype.highlight = function () {};
 		return false;
 	};
 	
-})(node.window.widgets);
+})(node);
 (function (exports) {
 	
 	exports.VisualState	= VisualState;
@@ -2181,34 +2182,39 @@ Widget.prototype.highlight = function () {};
 	}
 	
 })(node.window.widgets);
-(function (exports, JSUS) {
+(function (node) {
 	
-	var Table = node.window.Table;
+	var JSUS = node.JSUS,
+		Table = node.window.Table;
 	
-	/**
-	* Expose constructor
-	*/
-	exports.ChernoffFaces = ChernoffFaces;
-	exports.ChernoffFaces.FaceVector = FaceVector;
-	exports.ChernoffFaces.FacePainter = FacePainter;
+	// ## Register constructor
+	node.widgets.register('ChernoffFaces', ChernoffFaces);
+		
 	
+	// ## Defaults
 	
 	ChernoffFaces.defaults = {};
 	ChernoffFaces.defaults.canvas = {};
 	ChernoffFaces.defaults.canvas.width = 100;
 	ChernoffFaces.defaults.canvas.heigth = 100;
 	
+	// ## Meta-data
+	
 	ChernoffFaces.id = 'ChernoffFaces';
 	ChernoffFaces.name = 'Chernoff Faces';
 	ChernoffFaces.version = '0.3';
 	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';
 	
+	// ## Dependecies 
 	ChernoffFaces.dependencies = {
 		JSUS: {},
 		Table: {},
 		Canvas: {},
 		'Controls.Slider': {}
 	};
+	
+	ChernoffFaces.FaceVector = FaceVector;
+	ChernoffFaces.FacePainter = FacePainter;
 	
 	function ChernoffFaces (options) {
 		this.options = options;
@@ -2822,7 +2828,7 @@ Widget.prototype.highlight = function () {};
 		return out;
 	};
 
-})(node.window.widgets, node.JSUS);
+})(node);
 (function (exports) {
 
 	exports.GameSummary	= GameSummary;

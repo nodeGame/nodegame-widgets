@@ -1,31 +1,36 @@
-(function (exports, JSUS) {
+(function (node) {
 	
-	var Table = node.window.Table;
+	var JSUS = node.JSUS,
+		Table = node.window.Table;
 	
-	/**
-	* Expose constructor
-	*/
-	exports.ChernoffFaces = ChernoffFaces;
-	exports.ChernoffFaces.FaceVector = FaceVector;
-	exports.ChernoffFaces.FacePainter = FacePainter;
+	// ## Register constructor
+	node.widgets.register('ChernoffFaces', ChernoffFaces);
+		
 	
+	// ## Defaults
 	
 	ChernoffFaces.defaults = {};
 	ChernoffFaces.defaults.canvas = {};
 	ChernoffFaces.defaults.canvas.width = 100;
 	ChernoffFaces.defaults.canvas.heigth = 100;
 	
+	// ## Meta-data
+	
 	ChernoffFaces.id = 'ChernoffFaces';
 	ChernoffFaces.name = 'Chernoff Faces';
 	ChernoffFaces.version = '0.3';
 	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';
 	
+	// ## Dependecies 
 	ChernoffFaces.dependencies = {
 		JSUS: {},
 		Table: {},
 		Canvas: {},
 		'Controls.Slider': {}
 	};
+	
+	ChernoffFaces.FaceVector = FaceVector;
+	ChernoffFaces.FacePainter = FacePainter;
 	
 	function ChernoffFaces (options) {
 		this.options = options;
@@ -639,4 +644,4 @@
 		return out;
 	};
 
-})(node.window.widgets, node.JSUS);
+})(node);
