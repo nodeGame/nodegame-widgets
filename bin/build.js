@@ -24,20 +24,25 @@ function buildIt(options) {
 	console.log('Building nodegame-widgets v.' + version + ' with:');
 	
 	// Defining variables	
-	var rootDir = path.resolve(__dirname, '..') + '/';
-	var libDir = rootDir + 'lib/';
-	var distDir =  rootDir + 'build/';
+	var rootDir = path.resolve(__dirname, '..') + '/',
+		libDir = rootDir + 'lib/',
+		widgetsDir = rootDir + 'widgets/',
+		distDir =  rootDir + 'build/';
 	
 	var libs = {};
-	var files = fs.readdirSync(libDir);
+	var files = fs.readdirSync(widgetsDir);
 	for (var i in files) {
 		if (path.extname(files[i]) === '.js') {
 			var name = path.basename(files[i], '.js').toLowerCase();
-			libs[name] = libDir + files[i];
+			libs[name] = widgetsDir + files[i];
 		}
 	}
 	
-	var files = [];
+	// defaults
+	var files = [
+	   libDir + 'Widgets.js',
+	   libDir + 'Widget.js',
+	];
 
 	if (options.all) {
 		files = files.concat(J.obj2Array(libs));
