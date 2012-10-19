@@ -1,19 +1,18 @@
-(function (exports) {
+(function (node) {
 
-	var GameState = node.GameState;
-	var PlayerList = node.PlayerList;
+	var GameState = node.GameState,
+		PlayerList = node.PlayerList;
 	
-	/*!
-	* GameTable
-	* 
-	* Show the memory state of the game
-	*/
 	
-	exports.GameTable = GameTable;
+	node.widgets.register('GameTable', GameTable);
+	
+// ## Meta-data
 	
 	GameTable.id = 'gametable';
 	GameTable.name = 'Game Table';
 	GameTable.version = '0.2';
+	
+// ## Dependencies
 	
 	GameTable.dependencies = {
 		JSUS: {}
@@ -150,4 +149,4 @@
 	
 	
 
-})(node.window.widgets);
+})(node);

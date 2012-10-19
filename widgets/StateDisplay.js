@@ -1,9 +1,11 @@
-(function (exports) {
+(function (node) {
 
-	JSUS = node.JSUS;
-	Table = node.window.Table;
+	var JSUS = node.JSUS,
+		Table = node.window.Table;
 	
-	exports.StateDisplay = StateDisplay;	
+	node.widgets.register('StateDisplay', StateDisplay);	
+
+// ## Meta-data
 	
 	StateDisplay.id = 'statedisplay';
 	StateDisplay.name = 'State Display';
@@ -68,9 +70,9 @@
 		var IN =  node.IN;
 		var OUT = node.OUT;
 		
-		node.on( 'STATECHANGE', function() {
+		node.on('STATECHANGE', function() {
 			that.updateAll(node.state);
 		}); 
 	}; 
 	
-})(node.window.widgets);
+})(node);

@@ -1,10 +1,12 @@
-(function (exports) {
+(function (node) {
 
-	var GameMsg = node.GameMsg;
-	var Table = node.window.Table;
+	var GameMsg = node.GameMsg,
+		Table = node.window.Table;
 	
-	exports.MsgBar	= MsgBar;
+	node.widgets.register('MsgBar', MsgBar);
 		
+// ## Meta-data
+	
 	MsgBar.id = 'msgbar';
 	MsgBar.name = 'Msg Bar';
 	MsgBar.version = '0.4';
@@ -149,4 +151,4 @@
 		
 	};
 	
-})(node.window.widgets);
+})(node);

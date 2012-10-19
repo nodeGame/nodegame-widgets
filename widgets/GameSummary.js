@@ -1,6 +1,8 @@
-(function (exports) {
+(function (node) {
 
-	exports.GameSummary	= GameSummary;
+	node.widgets.register('GameSummary', GameSummary);
+	
+// ## Meta-data
 	
 	GameSummary.id = 'gamesummary';
 	GameSummary.name = 'Game Summary';
@@ -8,8 +10,6 @@
 	GameSummary.description = 'Show the general configuration options of the game.';
 	
 	function GameSummary(options) {
-		
-		this.game = node.game;
 		this.id = options.id;
 		
 		this.fieldset = {
@@ -33,10 +33,10 @@
 	};
 	
 	GameSummary.prototype.writeSummary = function (idState, idSummary) {
-		var gName = document.createTextNode('Name: ' + this.game.name);
-		var gDescr = document.createTextNode('Descr: ' + this.game.description);
-		var gMinP = document.createTextNode('Min Pl.: ' + this.game.minPlayers);
-		var gMaxP = document.createTextNode('Max Pl.: ' + this.game.maxPlayers);
+		var gName = document.createTextNode('Name: ' + node.game.name),
+			gDescr = document.createTextNode('Descr: ' + node.game.description),
+			gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
+			gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
 		
 		this.summaryDiv.appendChild(gName);
 		this.summaryDiv.appendChild(document.createElement('br'));
@@ -51,4 +51,4 @@
 	
 	GameSummary.prototype.listeners = function() {}; 
 
-})(node.window.widgets);
+})(node);

@@ -1,20 +1,17 @@
-(function (exports) {
+(function (node) {
+
+	var JSUS = node.JSUS;
+
+	node.widgets.register('EventButton', EventButton);
 	
-	
-	/*
-	* EventButton
-	* 
-	* Sends DATA msgs
-	* 
-	*/
-	
-	exports.EventButton	= EventButton;
-	
-	JSUS = node.JSUS;
+// ## Meta-data	
 	
 	EventButton.id = 'eventbutton';
 	EventButton.name = 'Event Button';
 	EventButton.version = '0.2';
+	
+// ## Dependencies
+	
 	EventButton.dependencies = {
 		JSUS: {}
 	};
@@ -68,16 +65,21 @@
 	
 	EventButton.prototype.listeners = function () {};
 		
-	// Done Button
-
-	exports.DoneButton = DoneButton;
+// # Done Button
+	
+	node.widgets.register('DoneButton', DoneButton);
 	
 	DoneButton.prototype.__proto__ = EventButton.prototype;
 	DoneButton.prototype.constructor = DoneButton;
+
+// ## Meta-data
 	
 	DoneButton.id = 'donebutton';
 	DoneButton.version = '0.1';
 	DoneButton.name = 'Done Button';
+	
+// ## Dependencies
+	
 	DoneButton.dependencies = {
 		EventButton: {}
 	};
@@ -88,4 +90,4 @@
 		EventButton.call(this, options);
 	}
 	
-})(node.window.widgets);
+})(node);

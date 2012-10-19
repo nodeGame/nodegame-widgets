@@ -1,14 +1,18 @@
-(function (exports) {
+(function (node) {
 	
-	exports.Wall = Wall;
+	node.widgets.register('Wall', Wall);
 	
 	var JSUS = node.JSUS;
+
+// ## Meta-data
 	
 	Wall.id = 'wall';
 	Wall.name = 'Wall';
 	Wall.version = '0.3';
 	Wall.description = 'Intercepts all LOG events and prints them ';
 	Wall.description += 'into a DIV element with an ordinal number and a timestamp.';
+
+// ## Dependencies
 	
 	Wall.dependencies = {
 		JSUS: {}
@@ -67,4 +71,4 @@
 		}
 	};
 	
-})(node.window.widgets);
+})(node);

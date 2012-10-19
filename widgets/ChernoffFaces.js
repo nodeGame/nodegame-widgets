@@ -3,7 +3,6 @@
 	var JSUS = node.JSUS,
 		Table = node.window.Table;
 	
-	// ## Register constructor
 	node.widgets.register('ChernoffFaces', ChernoffFaces);
 		
 	

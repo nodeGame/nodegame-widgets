@@ -3,8 +3,6 @@
 
 	// TODO: handle different events, beside onchange
 	
-	// Registering constructor
-	
 	node.widgets.register('Controls', Controls);	
 	
 	Controls.Slider = SliderControls;

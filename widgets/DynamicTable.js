@@ -1,20 +1,16 @@
-(function (exports) {
+(function (node) {
 
-	var GameState = node.GameState;
-	var PlayerList = node.PlayerList;
-	var Table = node.window.Table;
-	var HTMLRenderer = node.window.HTMLRenderer;
+	var GameState = node.GameState,
+		PlayerList = node.PlayerList,
+		Table = node.window.Table,
+		HTMLRenderer = node.window.HTMLRenderer;
 	
-	/*!
-	* DynamicTable
-	* 
-	* Show the memory state of the game
-	*/
+	node.widgets.register('DynamicTable', DynamicTable);
+	
 	
 	DynamicTable.prototype = new Table();
 	DynamicTable.prototype.constructor = Table;	
 	
-	exports.DynamicTable = DynamicTable;
 	
 	DynamicTable.id = 'dynamictable';
 	DynamicTable.name = 'Dynamic Table';
@@ -135,4 +131,4 @@
 	
 	DynamicTable.prototype.listeners = function () {}; 
 
-})(node.window.widgets);
+})(node);

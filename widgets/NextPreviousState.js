@@ -1,9 +1,11 @@
-(function (exports) {
+(function (node) {
 	
 	
 	// TODO: Introduce rules for update: other vs self
 	
-	exports.NextPreviousState =	NextPreviousState;
+	node.widgets.register('NextPreviousState', NextPreviousState);
+
+// ## Meta-data
 	
 	NextPreviousState.id = 'nextprevious';
 	NextPreviousState.name = 'Next,Previous State';
@@ -18,9 +20,6 @@
 			legend: 'Rew-Fwd'
 		};
 	}
-	
-	// TODO: Write a proper INIT method
-	NextPreviousState.prototype.init = function () {};
 	
 	NextPreviousState.prototype.getRoot = function () {
 		return this.root;
@@ -64,6 +63,4 @@
 		return root;
 	};
 	
-	NextPreviousState.prototype.listeners = function () {}; 
-
-})(node.window.widgets);
+})(node);

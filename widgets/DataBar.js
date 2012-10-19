@@ -1,7 +1,9 @@
-(function (exports) {
+(function (node) {
 	
-	exports.DataBar	= DataBar;
 	
+	node.widgets.register('DataBar', DataBar);
+	
+// ## Meta-data
 	DataBar.id = 'databar';
 	DataBar.name = 'Data Bar';
 	DataBar.version = '0.3';
@@ -57,8 +59,8 @@
 		var PREFIX = 'in.';
 		
 		node.onPLIST( function(msg) {
-			node.window.populateRecipientSelector(that.recipient,msg.data);
+			node.window.populateRecipientSelector(that.recipient, msg.data);
 		}); 
 	};
 	
-})(node.window.widgets);
+})(node);

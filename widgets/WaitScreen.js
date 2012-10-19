@@ -1,6 +1,8 @@
-(function (exports) {
+(function (node) {
 
-	exports.WaitScreen = WaitScreen;
+	node.widgets.register('WaitScreen', WaitScreen);
+	
+// ## Meta-data
 	
 	WaitScreen.id = 'waiting';
 	WaitScreen.name = 'WaitingScreen';
@@ -13,9 +15,6 @@
 		this.text = 'Waiting for other players to be done...';
 		this.waitingDiv = null;
 	}
-	
-	// TODO: Write a proper init function
-	WaitScreen.prototype.init = function (options) {};	
 	
 	WaitScreen.prototype.append = function (root) {
 		return root;
@@ -52,4 +51,4 @@
 		});
 		
 	}; 
-})(node.window.widgets);
+})(node);

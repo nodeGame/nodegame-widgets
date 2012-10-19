@@ -1,15 +1,19 @@
-(function (exports) {
+(function (node) {
 	
-	exports.VisualState	= VisualState;
+	node.widgets.register('VisualState', VisualState);
 	
-	GameState = node.GameState;
-	JSUS = node.JSUS;
-	Table = node.window.Table;
+	var GameState = node.GameState,
+		JSUS = node.JSUS,
+		Table = node.window.Table;
+	
+// ## Meta-data
 	
 	VisualState.id = 'visualstate';
 	VisualState.name = 'Visual State';
 	VisualState.version = '0.2.1';
 	VisualState.description = 'Visually display current, previous and next state of the game.';
+	
+// ## Dependencies
 	
 	VisualState.dependencies = {
 		JSUS: {},
@@ -79,4 +83,4 @@
 		this.table.parse();
 	};
 	
-})(node.window.widgets);
+})(node);

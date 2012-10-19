@@ -1,13 +1,17 @@
-(function (exports) {
+(function (node) {
 	
-	exports.VisualTimer	= VisualTimer;
+	node.widgets.register('VisualTimer', VisualTimer);
 	
-	JSUS = node.JSUS;
+	var JSUS = node.JSUS;
+	
+// ## Meta-data
 	
 	VisualTimer.id = 'visualtimer';
 	VisualTimer.name = 'Visual Timer';
 	VisualTimer.version = '0.3.3';
 	VisualTimer.description = 'Display a timer for the game. Timer can trigger events. Only for countdown smaller than 1h.';
+	
+// ## Dependencies
 	
 	VisualTimer.dependencies = {
 		GameTimer : {},
@@ -152,4 +156,4 @@
 		});
 	};
 	
-})(node.window.widgets);
+})(node);

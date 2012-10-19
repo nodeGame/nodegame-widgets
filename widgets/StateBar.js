@@ -1,8 +1,10 @@
-(function (exports) {
+(function (node) {
 	
 	// TODO: Introduce rules for update: other vs self
 	
-	exports.StateBar = StateBar;	
+	node.widgets.register('StateBar', StateBar);	
+	
+// ## Meta-data
 	
 	StateBar.id = 'statebar';
 	StateBar.name = 'State Bar';
@@ -19,9 +21,6 @@
 			legend: 'Change Game State'
 		};
 	}
-	
-	// TODO: Write a proper INIT method
-	StateBar.prototype.init = function () {};
 	
 	StateBar.prototype.getRoot = function () {
 		return this.root;
@@ -96,12 +95,10 @@
 	
 	StateBar.prototype.listeners = function () {
 		var that = this;
-		var say = node.actions.SAY + '.';
-		var set = node.actions.SET + '.';
-		var get = node.actions.GET + '.'; 
 		
-		node.onPLIST( function(msg) {
-			node.window.populateRecipientSelector(that.recipient,msg.data);
-		}); 
+		node.on('UPDATED_PLIST', function(msg) {
+			node.window.populateRecipientSelector(that.recipient, msg.data);
+		});
+		
 	}; 
-})(node.window.widgets);
+})(node);

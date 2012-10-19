@@ -1,9 +1,11 @@
-(function (exports) {
+(function (node) {
 	
-	exports.GameBoard = GameBoard;
+	node.widgets.register('GameBoard', GameBoard);
 	
-	GameState = node.GameState;
-	PlayerList = node.PlayerList;
+	var GameState = node.GameState,
+		PlayerList = node.PlayerList;
+	
+// ## Meta-data
 	
 	GameBoard.id = 'gboard';
 	GameBoard.name = 'GameBoard';
@@ -106,4 +108,4 @@
 		}
 	};
 	
-})(node.window.widgets);
+})(node);

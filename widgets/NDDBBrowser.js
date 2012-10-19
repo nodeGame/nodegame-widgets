@@ -1,22 +1,19 @@
-(function (exports) {
-
-	/*
-	* NDDBBrowser
-	* 
-	* Sends DATA msgs
-	* 
-	*/
+(function (node) {
 	
 	exports.NDDBBrowser = NDDBBrowser;
 	
-	JSUS = node.JSUS;
-	NDDB = node.NDDB;
-	TriggerManager = node.TriggerManager;
+	var JSUS = node.JSUS,
+		NDDB = node.NDDB,
+		TriggerManager = node.TriggerManager;
+	
+// ## Meta-data
 	
 	NDDBBrowser.id = 'nddbbrowser';
 	NDDBBrowser.name = 'NDDBBrowser';
 	NDDBBrowser.version = '0.1.2';
 	NDDBBrowser.description = 'Provides a very simple interface to control a NDDB istance.';
+	
+// ## Dependencies
 	
 	NDDBBrowser.dependencies = {
 		JSUS: {},
@@ -138,4 +135,4 @@
 	};
 	
 	
-})(node.window.widgets);
+})(node);

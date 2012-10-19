@@ -1,14 +1,9 @@
-(function (exports) {
+(function (node) {
 	
-
-	/*
-	* ServerInfoDisplay
-	* 
-	* Sends STATE msgs
-	*/
-	
-	exports.ServerInfoDisplay = ServerInfoDisplay;	
+	node.widgets.register('ServerInfoDisplay', ServerInfoDisplay);	
 		
+// ## Meta-data
+	
 	ServerInfoDisplay.id = 'serverinfodisplay';
 	ServerInfoDisplay.name = 'Server Info Display';
 	ServerInfoDisplay.version = '0.2';
@@ -79,4 +74,4 @@
 		});
 	}; 
 	
-})(node.window.widgets);
+})(node);

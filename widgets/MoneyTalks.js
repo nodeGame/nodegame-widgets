@@ -1,13 +1,17 @@
-(function (exports) {
+(function (node) {
 	
-	exports.MoneyTalks	= MoneyTalks;
+	node.widgets.register('MoneyTalks', MoneyTalks);
 	
-	JSUS = node.JSUS;
+	var JSUS = node.JSUS;
+	
+// ## Meta-data
 	
 	MoneyTalks.id = 'moneytalks';
 	MoneyTalks.name = 'Money talks';
 	MoneyTalks.version = '0.1.0';
 	MoneyTalks.description = 'Display the earnings of a player.';
+
+// ## Dependencies
 	
 	MoneyTalks.dependencies = {
 		JSUS: {},
@@ -67,4 +71,4 @@
 		this.spanMoney.innerHTML = this.money.toFixed(this.precision);
 	};
 	
-})(node.window.widgets);
+})(node);
