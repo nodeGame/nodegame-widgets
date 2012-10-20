@@ -3,35 +3,35 @@
 	var JSUS = node.JSUS,
 		Table = node.window.Table;
 	
-	node.widgets.register('ChernoffFaces', ChernoffFaces);
+	var widget = node.widgets.register('ChernoffFaces');
 		
+	console.log(widget);
 	
 	// ## Defaults
 	
-	ChernoffFaces.defaults = {};
-	ChernoffFaces.defaults.canvas = {};
-	ChernoffFaces.defaults.canvas.width = 100;
-	ChernoffFaces.defaults.canvas.heigth = 100;
+	widget.defaults.canvas = {};
+	widget.defaults.canvas.width = 100;
+	widget.defaults.canvas.heigth = 100;
 	
 	// ## Meta-data
 	
-	ChernoffFaces.id = 'ChernoffFaces';
-	ChernoffFaces.name = 'Chernoff Faces';
-	ChernoffFaces.version = '0.3';
-	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';
+	widget.id = 'ChernoffFaces';
+	widget.name = 'Chernoff Faces';
+	widget.version = '0.3';
+	widget.description = 'Display parametric data in the form of a Chernoff Face.';
 	
 	// ## Dependecies 
-	ChernoffFaces.dependencies = {
+	widget.dependencies = {
 		JSUS: {},
 		Table: {},
 		Canvas: {},
 		'Controls.Slider': {}
 	};
 	
-	ChernoffFaces.FaceVector = FaceVector;
-	ChernoffFaces.FacePainter = FacePainter;
+	widget.FaceVector = FaceVector;
+	widget.FacePainter = FacePainter;
 	
-	function ChernoffFaces (options) {
+	widget.constructor = function (options) {
 		this.options = options;
 		this.id = options.id;
 		this.table = new Table({id: 'cf_table'});
@@ -41,7 +41,6 @@
 		this.sc = node.window.getWidget('Controls.Slider');	// Slider Controls
 		this.fp = null;	// Face Painter
 		this.canvas = null;
-		this.dims = null;	// width and height of the canvas
 
 		this.change = 'CF_CHANGE';
 		var that = this;
@@ -55,7 +54,7 @@
 		this.init(this.options);
 	}
 	
-	ChernoffFaces.prototype.init = function (options) {
+	widget.init = function (options) {
 		var that = this;
 		this.id = options.id || this.id;
 		var PREF = this.id + '_';
@@ -66,13 +65,8 @@
 		
 		var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
 		var idButton = (options.idButton) ? options.idButton : PREF + 'button';
-
-		this.dims = {
-				width: (options.width) ? options.width : ChernoffFaces.defaults.canvas.width, 
-				height:(options.height) ? options.height : ChernoffFaces.defaults.canvas.heigth
-		};
 		
-		this.canvas = node.window.getCanvas(idCanvas, this.dims);
+		this.canvas = node.window.getCanvas(idCanvas, options.canvas);
 		this.fp = new FacePainter(this.canvas);		
 		this.fp.draw(new FaceVector(this.features));
 		
@@ -112,23 +106,17 @@
 		this.root.appendChild(this.table.table);
 	};
 	
-	ChernoffFaces.prototype.getRoot = function() {
-		return this.root;
-	};
-	
-	ChernoffFaces.prototype.getCanvas = function() {
+	widget.getCanvas = function() {
 		return this.canvas;
 	};
 	
-	ChernoffFaces.prototype.append = function (root) {
+	widget.append = function (root) {
 		root.appendChild(this.root);
 		this.table.parse();
 		return this.root;
 	};
 	
-	ChernoffFaces.prototype.listeners = function () {};
-	
-	ChernoffFaces.prototype.draw = function (features) {
+	widget.draw = function (features) {
 		if (!features) return;
 		var fv = new FaceVector(features);
 		this.fp.redraw(fv);
@@ -137,12 +125,12 @@
 		this.sc.refresh();
 	};
 	
-	ChernoffFaces.prototype.getAllValues = function() {
+	widget.getAllValues = function() {
 		//if (this.sc) return this.sc.getAllValues();
 		return this.fp.face;
 	};
 	
-	ChernoffFaces.prototype.randomize = function() {
+	widget.randomize = function() {
 		var fv = FaceVector.random();
 		this.fp.redraw(fv);
 	
@@ -156,14 +144,15 @@
 		return true;
 	};
 	
+	
 	// FacePainter
 	// The class that actually draws the faces on the Canvas
 	function FacePainter (canvas, settings) {
 			
 		this.canvas = new node.window.Canvas(canvas);
 		
-		this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
-		this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
+		this.scaleX = canvas.width / widget.defaults.canvas.width;
+		this.scaleY = canvas.height / widget.defaults.canvas.heigth;
 	}
 	
 	//Draws a Chernoff face.

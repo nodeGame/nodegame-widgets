@@ -1,6 +1,6 @@
 (function (node) {
 	
-	exports.NDDBBrowser = NDDBBrowser;
+	node.widgets.register('NDDBBrowser', NDDBBrowser);
 	
 	var JSUS = node.JSUS,
 		NDDB = node.NDDB,

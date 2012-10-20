@@ -12,6 +12,7 @@
 	
 function Widgets() {
 	this.widgets = {};
+	this.root = W.root;
 }
 
 /**
@@ -30,13 +31,13 @@ function Widgets() {
  * @return {boolean} TRUE, if registration is successful
  * 
  */
-Widgets.prototype.register = function (name, w) {
-	if ('function' !== typeof w || !name) {
+Widgets.prototype.register = function (name, prototype) {
+	if (!name) {
 		node.err('Could not register widget: ' + name, 'nodegame-widgets');
 		return false;
 	}
-	this.widgets[name] = w;
-	return true;
+	this.widgets[name] = (prototype) ? new prototype.constructor() : new node.Widget();
+	return this.widgets[name];
 };
 
 /**
@@ -84,19 +85,19 @@ Widgets.prototype.get = function (w_str, options) {
 		return;
 	}
 	
-	node.log('nodeWindow: registering gadget ' + w.name + ' v.' +  w.version);
+	node.log('nodeWindow: registering widget ' + w.name + ' v.' +  w.version);
 	
 	if (! this.checkDependencies(w)) return false;
 	
 	// Merging options with defaults
 	options = J.merge(w.defaults || {}, options);
-	w = new w(options);
-
+	
 	
 	try {
+		w.constructor(options);
 
 		// nodeGame listeners
-		w.listeners();
+		//w.listeners();
 		// user listeners
 		attachListeners(options, w);
 		}
@@ -137,24 +138,22 @@ Widgets.prototype.append = Widgets.prototype.add = function (w, root, options) {
 		if (!options) return root;
 		var idFieldset = options.id || w.id + '_fieldset';
 		var legend = options.legend || w.legend;
-		return that.addFieldset(root, idFieldset, legend, options.attributes);
+		return W.addFieldset(root, idFieldset, legend, options.attributes);
 	};
 	
 	
 	// Init default values
 	root = root || this.root;
 	options = options || {};
-	
 
-	// Check if it is a object (new gadget)
-	// If it is a string is the name of an existing gadget
+	// Check if it is a object (new widget)
+	// If it is a string is the name of an existing widget
 	// In this case a dependencies check is done
 	if ('object' !== typeof w) w = this.get(w, options);
 	if (!w) return false;	
 	
 	// options exists and options.fieldset exist
-	var fieldsetOptions = ('undefined' !== typeof options.fieldset) ? options.fieldset : w.fieldset; 
-	root = appendFieldset(root, fieldsetOptions, w);
+	root = appendFieldset(root, options.fieldset || w.defaults.fieldset, w);
 	w.append(root);
 
 	return w;
@@ -222,13 +221,24 @@ node.widgets = new Widgets();
 
 node.Widget = Widget;	
 	
-Widget.defaults;
-	
-function Widget() {}
+function Widget() {
+	this.root = null;
+}
+
+Widget.prototype.dependencies = {};
+
+Widget.prototype.defaults = {};
+
+Widget.prototype.defaults.fieldset = {
+	legend: 'Widget',
+};
+
 
 Widget.prototype.listeners = function () {};
 
-Widget.prototype.getRoot = function () {};
+Widget.prototype.getRoot = function () {
+	return this.root;
+};
 
 Widget.prototype.getValues = function () {};
 
@@ -248,9 +258,11 @@ Widget.prototype.highlight = function () {};
 	// Widgets works only in the browser environment.
 	('undefined' !== typeof node) ? node : module.parent.exports.node
 );
-(function (exports) {
+(function (node) {
 
-	exports.WaitScreen = WaitScreen;
+	node.widgets.register('WaitScreen', WaitScreen);
+	
+// ## Meta-data
 	
 	WaitScreen.id = 'waiting';
 	WaitScreen.name = 'WaitingScreen';
@@ -263,9 +275,6 @@ Widget.prototype.highlight = function () {};
 		this.text = 'Waiting for other players to be done...';
 		this.waitingDiv = null;
 	}
-	
-	// TODO: Write a proper init function
-	WaitScreen.prototype.init = function (options) {};	
 	
 	WaitScreen.prototype.append = function (root) {
 		return root;
@@ -302,7 +311,7 @@ Widget.prototype.highlight = function () {};
 		});
 		
 	}; 
-})(node.window.widgets);
+})(node);
 (function (exports) {
 	
 	exports.D3	= D3;
@@ -446,25 +455,22 @@ Widget.prototype.highlight = function () {};
 	};
 	
 })(node.window.widgets);
-(function (exports) {
-
-	/*
-	* NDDBBrowser
-	* 
-	* Sends DATA msgs
-	* 
-	*/
+(function (node) {
 	
-	exports.NDDBBrowser = NDDBBrowser;
+	node.widgets.register('NDDBBrowser', NDDBBrowser);
 	
-	JSUS = node.JSUS;
-	NDDB = node.NDDB;
-	TriggerManager = node.TriggerManager;
+	var JSUS = node.JSUS,
+		NDDB = node.NDDB,
+		TriggerManager = node.TriggerManager;
+	
+// ## Meta-data
 	
 	NDDBBrowser.id = 'nddbbrowser';
 	NDDBBrowser.name = 'NDDBBrowser';
 	NDDBBrowser.version = '0.1.2';
 	NDDBBrowser.description = 'Provides a very simple interface to control a NDDB istance.';
+	
+// ## Dependencies
 	
 	NDDBBrowser.dependencies = {
 		JSUS: {},
@@ -586,11 +592,13 @@ Widget.prototype.highlight = function () {};
 	};
 	
 	
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 	
-	exports.DataBar	= DataBar;
 	
+	node.widgets.register('DataBar', DataBar);
+	
+// ## Meta-data
 	DataBar.id = 'databar';
 	DataBar.name = 'Data Bar';
 	DataBar.version = '0.3';
@@ -646,22 +654,17 @@ Widget.prototype.highlight = function () {};
 		var PREFIX = 'in.';
 		
 		node.onPLIST( function(msg) {
-			node.window.populateRecipientSelector(that.recipient,msg.data);
+			node.window.populateRecipientSelector(that.recipient, msg.data);
 		}); 
 	};
 	
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 	
-
-	/*
-	* ServerInfoDisplay
-	* 
-	* Sends STATE msgs
-	*/
-	
-	exports.ServerInfoDisplay = ServerInfoDisplay;	
+	node.widgets.register('ServerInfoDisplay', ServerInfoDisplay);	
 		
+// ## Meta-data
+	
 	ServerInfoDisplay.id = 'serverinfodisplay';
 	ServerInfoDisplay.name = 'Server Info Display';
 	ServerInfoDisplay.version = '0.2';
@@ -732,19 +735,17 @@ Widget.prototype.highlight = function () {};
 		});
 	}; 
 	
-})(node.window.widgets);
+})(node);
 (function (node) {
 	
 
 	// TODO: handle different events, beside onchange
 	
-	// Registering constructor
+	var Controls = node.widgets.register('Controls');
+	var SliderControls = node.widgets.register('Controls.Slider', Controls);
+	var RadioControls = node.widgets.register('Controls.Radio', Controls);
+	var jQuerySliderControls = node.widgets.register('Controls.jQuerySlider', Controls);
 	
-	node.widgets.register('Controls', Controls);	
-	
-	Controls.Slider = SliderControls;
-	Controls.jQuerySlider = jQuerySliderControls;
-	Controls.Radio	= RadioControls;
 	
 	// Meta-data
 		
@@ -753,7 +754,7 @@ Widget.prototype.highlight = function () {};
 	Controls.version = '0.2';
 	Controls.description = 'Wraps a collection of user-inputs controls.';
 		
-	function Controls (options) {
+	Controls.constructor = function (options) {
 		this.options = options;
 		this.id = options.id;
 		this.root = null;
@@ -767,17 +768,17 @@ Widget.prototype.highlight = function () {};
 		this.init(options);
 	}
 
-	Controls.prototype.add = function (root, id, attributes) {
+	Controls.add = function (root, id, attributes) {
 		// TODO: node.window.addTextInput
 		//return node.window.addTextInput(root, id, attributes);
 	};
 	
-	Controls.prototype.getItem = function (id, attributes) {
+	Controls.getItem = function (id, attributes) {
 		// TODO: node.window.addTextInput
 		//return node.window.getTextInput(id, attributes);
 	};
 	
-	Controls.prototype.init = function (options) {
+	Controls.init = function (options) {
 
 		this.hasChanged = false; // TODO: should this be inherited?
 		if ('undefined' !== typeof options.change) {
@@ -797,7 +798,7 @@ Widget.prototype.highlight = function () {};
 		this.populate();
 	};
 	
-	Controls.prototype.append = function (root) {
+	Controls.append = function (root) {
 		this.root = root;
 		var toReturn = this.listRoot;
 		this.list.parse();
@@ -822,11 +823,11 @@ Widget.prototype.highlight = function () {};
 		return toReturn;
 	};
 	
-	Controls.prototype.parse = function() {
+	Controls.parse = function() {
 		return this.list.parse();
 	};
 	
-	Controls.prototype.populate = function () {
+	Controls.populate = function () {
 		var that = this;
 		
 		for (var key in this.features) {
@@ -860,7 +861,7 @@ Widget.prototype.highlight = function () {};
 		}
 	};
 	
-	Controls.prototype.listeners = function() {	
+	Controls.listeners = function() {	
 		var that = this;
 		// TODO: should this be inherited?
 		node.on(this.changeEvent, function(){
@@ -869,7 +870,7 @@ Widget.prototype.highlight = function () {};
 				
 	};
 
-	Controls.prototype.refresh = function() {
+	Controls.refresh = function() {
 		for (var key in this.features) {	
 			if (this.features.hasOwnProperty(key)) {
 				var el = node.window.getElementById(key);
@@ -887,7 +888,7 @@ Widget.prototype.highlight = function () {};
 		return true;
 	};
 	
-	Controls.prototype.getAllValues = function() {
+	Controls.getAllValues = function() {
 		var out = {};
 		for (var key in this.features) {	
 			if (this.features.hasOwnProperty(key)) {
@@ -904,7 +905,7 @@ Widget.prototype.highlight = function () {};
 		return out;
 	};
 	
-	Controls.prototype.highlight = function (code) {
+	Controls.highlight = function (code) {
 		return node.window.highlight(this.listRoot, code);
 	};
 	
@@ -912,8 +913,8 @@ Widget.prototype.highlight = function () {};
 	
 	// Slider 
 	
-	SliderControls.prototype.__proto__ = Controls.prototype;
-	SliderControls.prototype.constructor = SliderControls;
+	SliderControls.__proto__ = node.widgets.get('Controls');
+	//SliderControls.prototype.constructor = SliderControls;
 	
 	SliderControls.id = 'slidercontrols';
 	SliderControls.name = 'Slider Controls';
@@ -923,140 +924,138 @@ Widget.prototype.highlight = function () {};
 		Controls: {}
 	};
 	
-	
-	function SliderControls (options) {
+	SliderControls.constructor = function  (options) {
 		Controls.call(this, options);
 	}
 	
-	SliderControls.prototype.add = function (root, id, attributes) {
+	SliderControls.add = function (root, id, attributes) {
 		return node.window.addSlider(root, id, attributes);
 	};
 	
-	SliderControls.prototype.getItem = function (id, attributes) {
+	SliderControls.getItem = function (id, attributes) {
 		return node.window.getSlider(id, attributes);
 	};
 	
 	// jQuerySlider
-    
-    jQuerySliderControls.prototype.__proto__ = Controls.prototype;
-    jQuerySliderControls.prototype.constructor = jQuerySliderControls;
-    
-    jQuerySliderControls.id = 'jqueryslidercontrols';
-    jQuerySliderControls.name = 'Experimental: jQuery Slider Controls';
-    jQuerySliderControls.version = '0.13';
-    
-    jQuerySliderControls.dependencies = {
-        jQuery: {},
-        Controls: {}
-    };
-    
-    
-    function jQuerySliderControls (options) {
-        Controls.call(this, options);
-    }
-    
-    jQuerySliderControls.prototype.add = function (root, id, attributes) {
-        var slider = jQuery('<div/>', {
-			id: id
-		}).slider();
-	
-		var s = slider.appendTo(root);
-		return s[0];
-	};
-	
-	jQuerySliderControls.prototype.getItem = function (id, attributes) {
-		var slider = jQuery('<div/>', {
-			id: id
-			}).slider();
-		
-		return slider;
-	};
-
-
-    ///////////////////////////
-
-	
-	
-	
-
-	
-	// Radio
-	
-	RadioControls.prototype.__proto__ = Controls.prototype;
-	RadioControls.prototype.constructor = RadioControls;
-	
-	RadioControls.id = 'radiocontrols';
-	RadioControls.name = 'Radio Controls';
-	RadioControls.version = '0.1.1';
-	
-	RadioControls.dependencies = {
-		Controls: {}
-	};
-	
-	function RadioControls (options) {
-		Controls.call(this,options);
-		this.groupName = ('undefined' !== typeof options.name) ? options.name : 
-																node.window.generateUniqueId(); 
-		//alert(this.groupName);
-	}
-	
-	RadioControls.prototype.add = function (root, id, attributes) {
-		//console.log('ADDDING radio');
-		//console.log(attributes);
-		// add the group name if not specified
-		// TODO: is this a javascript bug?
-		if ('undefined' === typeof attributes.name) {
-//			console.log(this);
-//			console.log(this.name);
-//			console.log('MODMOD ' + this.name);
-			attributes.name = this.groupName;
-		}
-		//console.log(attributes);
-		return node.window.addRadioButton(root, id, attributes);	
-	};
-	
-	RadioControls.prototype.getItem = function (id, attributes) {
-		//console.log('ADDDING radio');
-		//console.log(attributes);
-		// add the group name if not specified
-		// TODO: is this a javascript bug?
-		if ('undefined' === typeof attributes.name) {
-//			console.log(this);
-//			console.log(this.name);
-//			console.log('MODMOD ' + this.name);
-			attributes.name = this.groupName;
-		}
-		//console.log(attributes);
-		return node.window.getRadioButton(id, attributes);	
-	};
-	
-	// Override getAllValues for Radio Controls
-	RadioControls.prototype.getAllValues = function() {
-		
-		for (var key in this.features) {
-			if (this.features.hasOwnProperty(key)) {
-				var el = node.window.getElementById(key);
-				if (el.checked) {
-					return el.value;
-				}
-			}
-		}
-		return false;
-	};
+//    
+//    jQuerySliderControls.prototype.__proto__ = Controls.prototype;
+//    //jQuerySliderControls.prototype.constructor = jQuerySliderControls;
+//    
+//    jQuerySliderControls.id = 'jqueryslidercontrols';
+//    jQuerySliderControls.name = 'Experimental: jQuery Slider Controls';
+//    jQuerySliderControls.version = '0.13';
+//    
+//    jQuerySliderControls.dependencies = {
+//        jQuery: {},
+//        Controls: {}
+//    };
+//    
+//    
+//    jQuerySliderControls.constructor = function  (options) {
+//        Controls.call(this, options);
+//    }
+//    
+//    jQuerySliderControls.add = function (root, id, attributes) {
+//        var slider = jQuery('<div/>', {
+//			id: id
+//		}).slider();
+//	
+//		var s = slider.appendTo(root);
+//		return s[0];
+//	};
+//	
+//	jQuerySliderControls.getItem = function (id, attributes) {
+//		var slider = jQuery('<div/>', {
+//			id: id
+//			}).slider();
+//		
+//		return slider;
+//	};
+//
+//
+//    ///////////////////////////
+//
+//	// Radio
+//	
+//	RadioControls.prototype.__proto__ = Controls.prototype;
+//	RadioControls.prototype.constructor = RadioControls;
+//	
+//	RadioControls.id = 'radiocontrols';
+//	RadioControls.name = 'Radio Controls';
+//	RadioControls.version = '0.1.1';
+//	
+//	RadioControls.dependencies = {
+//		Controls: {}
+//	};
+//	
+//	RadioControls.constructor = function  (options) {
+//		Controls.call(this,options);
+//		this.groupName = ('undefined' !== typeof options.name) ? options.name : 
+//																node.window.generateUniqueId(); 
+//		//alert(this.groupName);
+//	}
+//	
+//	RadioControls.add = function (root, id, attributes) {
+//		//console.log('ADDDING radio');
+//		//console.log(attributes);
+//		// add the group name if not specified
+//		// TODO: is this a javascript bug?
+//		if ('undefined' === typeof attributes.name) {
+////			console.log(this);
+////			console.log(this.name);
+////			console.log('MODMOD ' + this.name);
+//			attributes.name = this.groupName;
+//		}
+//		//console.log(attributes);
+//		return node.window.addRadioButton(root, id, attributes);	
+//	};
+//	
+//	RadioControls.getItem = function (id, attributes) {
+//		//console.log('ADDDING radio');
+//		//console.log(attributes);
+//		// add the group name if not specified
+//		// TODO: is this a javascript bug?
+//		if ('undefined' === typeof attributes.name) {
+////			console.log(this);
+////			console.log(this.name);
+////			console.log('MODMOD ' + this.name);
+//			attributes.name = this.groupName;
+//		}
+//		//console.log(attributes);
+//		return node.window.getRadioButton(id, attributes);	
+//	};
+//	
+//	// Override getAllValues for Radio Controls
+//	RadioControls.getAllValues = function() {
+//		
+//		for (var key in this.features) {
+//			if (this.features.hasOwnProperty(key)) {
+//				var el = node.window.getElementById(key);
+//				if (el.checked) {
+//					return el.value;
+//				}
+//			}
+//		}
+//		return false;
+//	};
 	
 })(node);
-(function (exports) {
+(function (node) {
 	
-	exports.VisualState	= VisualState;
+	node.widgets.register('VisualState', VisualState);
 	
-	GameState = node.GameState;
-	JSUS = node.JSUS;
-	Table = node.window.Table;
+	var GameState = node.GameState,
+		JSUS = node.JSUS,
+		Table = node.window.Table;
+	
+// ## Meta-data
 	
 	VisualState.id = 'visualstate';
 	VisualState.name = 'Visual State';
 	VisualState.version = '0.2.1';
 	VisualState.description = 'Visually display current, previous and next state of the game.';
+	
+// ## Dependencies
 	
 	VisualState.dependencies = {
 		JSUS: {},
@@ -1126,13 +1125,15 @@ Widget.prototype.highlight = function () {};
 		this.table.parse();
 	};
 	
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 
-	JSUS = node.JSUS;
-	Table = node.window.Table;
+	var JSUS = node.JSUS,
+		Table = node.window.Table;
 	
-	exports.StateDisplay = StateDisplay;	
+	node.widgets.register('StateDisplay', StateDisplay);	
+
+// ## Meta-data
 	
 	StateDisplay.id = 'statedisplay';
 	StateDisplay.name = 'State Display';
@@ -1197,29 +1198,25 @@ Widget.prototype.highlight = function () {};
 		var IN =  node.IN;
 		var OUT = node.OUT;
 		
-		node.on( 'STATECHANGE', function() {
+		node.on('STATECHANGE', function() {
 			that.updateAll(node.state);
 		}); 
 	}; 
 	
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 
-	var GameState = node.GameState;
-	var PlayerList = node.PlayerList;
-	var Table = node.window.Table;
-	var HTMLRenderer = node.window.HTMLRenderer;
+	var GameState = node.GameState,
+		PlayerList = node.PlayerList,
+		Table = node.window.Table,
+		HTMLRenderer = node.window.HTMLRenderer;
 	
-	/*!
-	* DynamicTable
-	* 
-	* Show the memory state of the game
-	*/
+	node.widgets.register('DynamicTable', DynamicTable);
+	
 	
 	DynamicTable.prototype = new Table();
 	DynamicTable.prototype.constructor = Table;	
 	
-	exports.DynamicTable = DynamicTable;
 	
 	DynamicTable.id = 'dynamictable';
 	DynamicTable.name = 'Dynamic Table';
@@ -1340,13 +1337,15 @@ Widget.prototype.highlight = function () {};
 	
 	DynamicTable.prototype.listeners = function () {}; 
 
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 	
-	exports.GameBoard = GameBoard;
+	node.widgets.register('GameBoard', GameBoard);
 	
-	GameState = node.GameState;
-	PlayerList = node.PlayerList;
+	var GameState = node.GameState,
+		PlayerList = node.PlayerList;
+	
+// ## Meta-data
 	
 	GameBoard.id = 'gboard';
 	GameBoard.name = 'GameBoard';
@@ -1449,7 +1448,7 @@ Widget.prototype.highlight = function () {};
 		}
 	};
 	
-})(node.window.widgets);
+})(node);
 (function (exports, JSUS) {
 	
 	var Table = node.window.Table;
@@ -2091,23 +2090,20 @@ Widget.prototype.highlight = function () {};
 	};
 
 })(node.window.widgets, node.JSUS);
-(function (exports) {
+(function (node) {
+
+	var JSUS = node.JSUS;
+
+	node.widgets.register('EventButton', EventButton);
 	
-	
-	/*
-	* EventButton
-	* 
-	* Sends DATA msgs
-	* 
-	*/
-	
-	exports.EventButton	= EventButton;
-	
-	JSUS = node.JSUS;
+// ## Meta-data	
 	
 	EventButton.id = 'eventbutton';
 	EventButton.name = 'Event Button';
 	EventButton.version = '0.2';
+	
+// ## Dependencies
+	
 	EventButton.dependencies = {
 		JSUS: {}
 	};
@@ -2161,16 +2157,21 @@ Widget.prototype.highlight = function () {};
 	
 	EventButton.prototype.listeners = function () {};
 		
-	// Done Button
-
-	exports.DoneButton = DoneButton;
+// # Done Button
+	
+	node.widgets.register('DoneButton', DoneButton);
 	
 	DoneButton.prototype.__proto__ = EventButton.prototype;
 	DoneButton.prototype.constructor = DoneButton;
+
+// ## Meta-data
 	
 	DoneButton.id = 'donebutton';
 	DoneButton.version = '0.1';
 	DoneButton.name = 'Done Button';
+	
+// ## Dependencies
+	
 	DoneButton.dependencies = {
 		EventButton: {}
 	};
@@ -2181,42 +2182,41 @@ Widget.prototype.highlight = function () {};
 		EventButton.call(this, options);
 	}
 	
-})(node.window.widgets);
+})(node);
 (function (node) {
 	
 	var JSUS = node.JSUS,
 		Table = node.window.Table;
 	
-	// ## Register constructor
-	node.widgets.register('ChernoffFaces', ChernoffFaces);
+	var widget = node.widgets.register('ChernoffFaces');
 		
+	console.log(widget);
 	
 	// ## Defaults
 	
-	ChernoffFaces.defaults = {};
-	ChernoffFaces.defaults.canvas = {};
-	ChernoffFaces.defaults.canvas.width = 100;
-	ChernoffFaces.defaults.canvas.heigth = 100;
+	widget.defaults.canvas = {};
+	widget.defaults.canvas.width = 100;
+	widget.defaults.canvas.heigth = 100;
 	
 	// ## Meta-data
 	
-	ChernoffFaces.id = 'ChernoffFaces';
-	ChernoffFaces.name = 'Chernoff Faces';
-	ChernoffFaces.version = '0.3';
-	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';
+	widget.id = 'ChernoffFaces';
+	widget.name = 'Chernoff Faces';
+	widget.version = '0.3';
+	widget.description = 'Display parametric data in the form of a Chernoff Face.';
 	
 	// ## Dependecies 
-	ChernoffFaces.dependencies = {
+	widget.dependencies = {
 		JSUS: {},
 		Table: {},
 		Canvas: {},
 		'Controls.Slider': {}
 	};
 	
-	ChernoffFaces.FaceVector = FaceVector;
-	ChernoffFaces.FacePainter = FacePainter;
+	widget.FaceVector = FaceVector;
+	widget.FacePainter = FacePainter;
 	
-	function ChernoffFaces (options) {
+	widget.constructor = function (options) {
 		this.options = options;
 		this.id = options.id;
 		this.table = new Table({id: 'cf_table'});
@@ -2226,7 +2226,6 @@ Widget.prototype.highlight = function () {};
 		this.sc = node.window.getWidget('Controls.Slider');	// Slider Controls
 		this.fp = null;	// Face Painter
 		this.canvas = null;
-		this.dims = null;	// width and height of the canvas
 
 		this.change = 'CF_CHANGE';
 		var that = this;
@@ -2240,7 +2239,7 @@ Widget.prototype.highlight = function () {};
 		this.init(this.options);
 	}
 	
-	ChernoffFaces.prototype.init = function (options) {
+	widget.init = function (options) {
 		var that = this;
 		this.id = options.id || this.id;
 		var PREF = this.id + '_';
@@ -2251,13 +2250,8 @@ Widget.prototype.highlight = function () {};
 		
 		var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
 		var idButton = (options.idButton) ? options.idButton : PREF + 'button';
-
-		this.dims = {
-				width: (options.width) ? options.width : ChernoffFaces.defaults.canvas.width, 
-				height:(options.height) ? options.height : ChernoffFaces.defaults.canvas.heigth
-		};
 		
-		this.canvas = node.window.getCanvas(idCanvas, this.dims);
+		this.canvas = node.window.getCanvas(idCanvas, options.canvas);
 		this.fp = new FacePainter(this.canvas);		
 		this.fp.draw(new FaceVector(this.features));
 		
@@ -2297,23 +2291,17 @@ Widget.prototype.highlight = function () {};
 		this.root.appendChild(this.table.table);
 	};
 	
-	ChernoffFaces.prototype.getRoot = function() {
-		return this.root;
-	};
-	
-	ChernoffFaces.prototype.getCanvas = function() {
+	widget.getCanvas = function() {
 		return this.canvas;
 	};
 	
-	ChernoffFaces.prototype.append = function (root) {
+	widget.append = function (root) {
 		root.appendChild(this.root);
 		this.table.parse();
 		return this.root;
 	};
 	
-	ChernoffFaces.prototype.listeners = function () {};
-	
-	ChernoffFaces.prototype.draw = function (features) {
+	widget.draw = function (features) {
 		if (!features) return;
 		var fv = new FaceVector(features);
 		this.fp.redraw(fv);
@@ -2322,12 +2310,12 @@ Widget.prototype.highlight = function () {};
 		this.sc.refresh();
 	};
 	
-	ChernoffFaces.prototype.getAllValues = function() {
+	widget.getAllValues = function() {
 		//if (this.sc) return this.sc.getAllValues();
 		return this.fp.face;
 	};
 	
-	ChernoffFaces.prototype.randomize = function() {
+	widget.randomize = function() {
 		var fv = FaceVector.random();
 		this.fp.redraw(fv);
 	
@@ -2341,14 +2329,15 @@ Widget.prototype.highlight = function () {};
 		return true;
 	};
 	
+	
 	// FacePainter
 	// The class that actually draws the faces on the Canvas
 	function FacePainter (canvas, settings) {
 			
 		this.canvas = new node.window.Canvas(canvas);
 		
-		this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
-		this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
+		this.scaleX = canvas.width / widget.defaults.canvas.width;
+		this.scaleY = canvas.height / widget.defaults.canvas.heigth;
 	}
 	
 	//Draws a Chernoff face.
@@ -2829,45 +2818,40 @@ Widget.prototype.highlight = function () {};
 	};
 
 })(node);
-(function (exports) {
+(function (node) {
 
-	exports.GameSummary	= GameSummary;
+	var widget = node.widgets.register('GameSummary');
 	
-	GameSummary.id = 'gamesummary';
-	GameSummary.name = 'Game Summary';
-	GameSummary.version = '0.3';
-	GameSummary.description = 'Show the general configuration options of the game.';
+
+// ## Defaults
 	
-	function GameSummary(options) {
-		
-		this.game = node.game;
-		this.id = options.id;
-		
-		this.fieldset = {
-			legend: 'Game Summary'
-		};
+	widget.defaults.fieldset = {
+		legend: 'Game Summary',
+	};
+	
+// ## Meta-data
+	
+	widget.id = 'gamesummary';
+	widget.name = 'Game Summary';
+	widget.version = '0.3';
+	widget.description = 'Show the general configuration options of the game.';
+	
+	widget.constructor = function (options) {
 		this.summaryDiv = null;
 	}
 	
-	// TODO: Write a proper INIT method
-	GameSummary.prototype.init = function () {};
-	
-	GameSummary.prototype.append = function (root) {
+	widget.append = function (root) {
 		this.root = root;
 		this.summaryDiv = node.window.addDiv(root);
 		this.writeSummary();
 		return root;
 	};
 	
-	GameSummary.prototype.getRoot = function () {
-		return this.root;
-	};
-	
-	GameSummary.prototype.writeSummary = function (idState, idSummary) {
-		var gName = document.createTextNode('Name: ' + this.game.name);
-		var gDescr = document.createTextNode('Descr: ' + this.game.description);
-		var gMinP = document.createTextNode('Min Pl.: ' + this.game.minPlayers);
-		var gMaxP = document.createTextNode('Max Pl.: ' + this.game.maxPlayers);
+	widget.writeSummary = function (idState, idSummary) {
+		var gName = document.createTextNode('Name: ' + node.game.name),
+			gDescr = document.createTextNode('Descr: ' + node.game.description),
+			gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
+			gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
 		
 		this.summaryDiv.appendChild(gName);
 		this.summaryDiv.appendChild(document.createElement('br'));
@@ -2879,20 +2863,22 @@ Widget.prototype.highlight = function () {};
 		
 		node.window.addDiv(this.root, this.summaryDiv, idSummary);
 	};
-	
-	GameSummary.prototype.listeners = function() {}; 
 
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 	
-	exports.MoneyTalks	= MoneyTalks;
+	node.widgets.register('MoneyTalks', MoneyTalks);
 	
-	JSUS = node.JSUS;
+	var JSUS = node.JSUS;
+	
+// ## Meta-data
 	
 	MoneyTalks.id = 'moneytalks';
 	MoneyTalks.name = 'Money talks';
 	MoneyTalks.version = '0.1.0';
 	MoneyTalks.description = 'Display the earnings of a player.';
+
+// ## Dependencies
 	
 	MoneyTalks.dependencies = {
 		JSUS: {},
@@ -2952,14 +2938,16 @@ Widget.prototype.highlight = function () {};
 		this.spanMoney.innerHTML = this.money.toFixed(this.precision);
 	};
 	
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 
-	var GameMsg = node.GameMsg;
-	var Table = node.window.Table;
+	var GameMsg = node.GameMsg,
+		Table = node.window.Table;
 	
-	exports.MsgBar	= MsgBar;
+	node.widgets.register('MsgBar', MsgBar);
 		
+// ## Meta-data
+	
 	MsgBar.id = 'msgbar';
 	MsgBar.name = 'Msg Bar';
 	MsgBar.version = '0.4';
@@ -3104,17 +3092,21 @@ Widget.prototype.highlight = function () {};
 		
 	};
 	
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 	
-	exports.VisualTimer	= VisualTimer;
+	node.widgets.register('VisualTimer', VisualTimer);
 	
-	JSUS = node.JSUS;
+	var JSUS = node.JSUS;
+	
+// ## Meta-data
 	
 	VisualTimer.id = 'visualtimer';
 	VisualTimer.name = 'Visual Timer';
 	VisualTimer.version = '0.3.3';
 	VisualTimer.description = 'Display a timer for the game. Timer can trigger events. Only for countdown smaller than 1h.';
+	
+// ## Dependencies
 	
 	VisualTimer.dependencies = {
 		GameTimer : {},
@@ -3259,13 +3251,15 @@ Widget.prototype.highlight = function () {};
 		});
 	};
 	
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 	
 	
 	// TODO: Introduce rules for update: other vs self
 	
-	exports.NextPreviousState =	NextPreviousState;
+	node.widgets.register('NextPreviousState', NextPreviousState);
+
+// ## Meta-data
 	
 	NextPreviousState.id = 'nextprevious';
 	NextPreviousState.name = 'Next,Previous State';
@@ -3280,9 +3274,6 @@ Widget.prototype.highlight = function () {};
 			legend: 'Rew-Fwd'
 		};
 	}
-	
-	// TODO: Write a proper INIT method
-	NextPreviousState.prototype.init = function () {};
 	
 	NextPreviousState.prototype.getRoot = function () {
 		return this.root;
@@ -3326,20 +3317,22 @@ Widget.prototype.highlight = function () {};
 		return root;
 	};
 	
-	NextPreviousState.prototype.listeners = function () {}; 
-
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 	
-	exports.Wall = Wall;
+	node.widgets.register('Wall', Wall);
 	
 	var JSUS = node.JSUS;
+
+// ## Meta-data
 	
 	Wall.id = 'wall';
 	Wall.name = 'Wall';
 	Wall.version = '0.3';
 	Wall.description = 'Intercepts all LOG events and prints them ';
 	Wall.description += 'into a DIV element with an ordinal number and a timestamp.';
+
+// ## Dependencies
 	
 	Wall.dependencies = {
 		JSUS: {}
@@ -3398,23 +3391,22 @@ Widget.prototype.highlight = function () {};
 		}
 	};
 	
-})(node.window.widgets);
-(function (exports) {
+})(node);
+(function (node) {
 
-	var GameState = node.GameState;
-	var PlayerList = node.PlayerList;
+	var GameState = node.GameState,
+		PlayerList = node.PlayerList;
 	
-	/*!
-	* GameTable
-	* 
-	* Show the memory state of the game
-	*/
 	
-	exports.GameTable = GameTable;
+	node.widgets.register('GameTable', GameTable);
+	
+// ## Meta-data
 	
 	GameTable.id = 'gametable';
 	GameTable.name = 'Game Table';
 	GameTable.version = '0.2';
+	
+// ## Dependencies
 	
 	GameTable.dependencies = {
 		JSUS: {}
@@ -3551,13 +3543,15 @@ Widget.prototype.highlight = function () {};
 	
 	
 
-})(node.window.widgets);
+})(node);
 
-(function (exports) {
+(function (node) {
 	
 	// TODO: Introduce rules for update: other vs self
 	
-	exports.StateBar = StateBar;	
+	node.widgets.register('StateBar', StateBar);	
+	
+// ## Meta-data
 	
 	StateBar.id = 'statebar';
 	StateBar.name = 'State Bar';
@@ -3574,9 +3568,6 @@ Widget.prototype.highlight = function () {};
 			legend: 'Change Game State'
 		};
 	}
-	
-	// TODO: Write a proper INIT method
-	StateBar.prototype.init = function () {};
 	
 	StateBar.prototype.getRoot = function () {
 		return this.root;
@@ -3651,12 +3642,10 @@ Widget.prototype.highlight = function () {};
 	
 	StateBar.prototype.listeners = function () {
 		var that = this;
-		var say = node.actions.SAY + '.';
-		var set = node.actions.SET + '.';
-		var get = node.actions.GET + '.'; 
 		
-		node.onPLIST( function(msg) {
-			node.window.populateRecipientSelector(that.recipient,msg.data);
-		}); 
+		node.on('UPDATED_PLIST', function(msg) {
+			node.window.populateRecipientSelector(that.recipient, msg.data);
+		});
+		
 	}; 
-})(node.window.widgets);
+})(node);
