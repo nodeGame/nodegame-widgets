@@ -55,7 +55,7 @@ Widget.prototype.highlight = function () {};
 	
 function Widgets() {
 	this.widgets = {};
-	this.root = node.window.root;
+	this.root = node.window.root || document.body;
 }
 
 /**
@@ -82,7 +82,7 @@ Widgets.prototype.register = function (name, w) {
 	
 	// Add default properties to widget prototype
 	for (var i in node.Widget.prototype) {
-		if (!w[i] && !w.prototype[i]) {
+		if (!w[i] && !w.prototype[i] && !(w.prototype.__proto__ && w.prototype.__proto__[i])) {
 			w.prototype[i] = J.clone(node.Widget.prototype[i]);
 		}
 	}
@@ -3668,10 +3668,10 @@ node.widgets = new Widgets();
 		
 		var PREF = this.id + '_';
 		
-		var idButton = PREF + 'sendButton';
-		var idStateSel = PREF + 'stateSel';
-		var idActionSel = PREF + 'actionSel';
-		var idRecipient = PREF + 'recipient'; 
+		var idButton = PREF + 'sendButton',
+			idStateSel = PREF + 'stateSel',
+			idActionSel = PREF + 'actionSel',
+			idRecipient = PREF + 'recipient'; 
 				
 		var sendButton = node.window.addButton(root, idButton);
 		var stateSel = node.window.addStateSelector(root, idStateSel);
@@ -3680,8 +3680,8 @@ node.widgets = new Widgets();
 		
 		var that = this;
 		
-		node.on('UPDATED_PLIST', function(msg) {
-			node.window.populateRecipientSelector(that.recipient, msg.data);
+		node.on('UPDATED_PLIST', function() {
+			node.window.populateRecipientSelector(that.recipient, node.game.pl);
 		});
 		
 		sendButton.onclick = function() {

@@ -4,6 +4,8 @@
 	node.widgets.register('D3', D3);
 	node.widgets.register('D3ts', D3ts);
 	
+	D3.prototype.__proto__ = node.Widget.prototype;
+	D3.prototype.constructor = D3;
 
 // ## Defaults
 	
