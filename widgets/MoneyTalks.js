@@ -4,9 +4,14 @@
 	
 	var JSUS = node.JSUS;
 	
+// ## Defaults
+	
+	MoneyTalks.defaults = {};
+	MoneyTalks.defaults.id = 'moneytalks';
+	MoneyTalks.defaults.fieldset = {legend: 'Earnings'};
+	
 // ## Meta-data
 	
-	MoneyTalks.id = 'moneytalks';
 	MoneyTalks.name = 'Money talks';
 	MoneyTalks.version = '0.1.0';
 	MoneyTalks.description = 'Display the earnings of a player.';
@@ -20,9 +25,7 @@
 	
 	function MoneyTalks (options) {
 		this.id = MoneyTalks.id;
-		
-		this.fieldset = {legend: 'Earnings'};
-		
+				
 		this.root = null;		// the parent element
 		
 		this.spanCurrency = document.createElement('span');

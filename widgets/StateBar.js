@@ -4,9 +4,14 @@
 	
 	node.widgets.register('StateBar', StateBar);	
 	
+// ## Defaults
+	
+	StateBar.defaults = {};
+	StateBar.defaults.id = 'statebar';
+	StateBar.defaults.fieldset = { legend: 'Change Game State' };	
+	
 // ## Meta-data
 	
-	StateBar.id = 'statebar';
 	StateBar.name = 'State Bar';
 	StateBar.version = '0.3.1';
 	StateBar.description = 'Provides a simple interface to change the state of the game.';
@@ -16,10 +21,6 @@
 		
 		this.actionSel = null;
 		this.recipient = null;
-		
-		this.fieldset = {
-			legend: 'Change Game State'
-		};
 	}
 	
 	StateBar.prototype.getRoot = function () {
@@ -30,10 +31,10 @@
 		
 		var PREF = this.id + '_';
 		
-		var idButton = PREF + 'sendButton';
-		var idStateSel = PREF + 'stateSel';
-		var idActionSel = PREF + 'actionSel';
-		var idRecipient = PREF + 'recipient'; 
+		var idButton = PREF + 'sendButton',
+			idStateSel = PREF + 'stateSel',
+			idActionSel = PREF + 'actionSel',
+			idRecipient = PREF + 'recipient'; 
 				
 		var sendButton = node.window.addButton(root, idButton);
 		var stateSel = node.window.addStateSelector(root, idStateSel);
@@ -41,7 +42,11 @@
 		this.recipient = node.window.addRecipientSelector(root, idRecipient);
 		
 		var that = this;
-	
+		
+		node.on('UPDATED_PLIST', function() {
+			node.window.populateRecipientSelector(that.recipient, node.game.pl);
+		});
+		
 		sendButton.onclick = function() {
 	
 			// Should be within the range of valid values
@@ -83,22 +88,13 @@
 				node.emit(stateEvent,state,to);
 			}
 			else {
-				console.log('Not valid state. Not sent.');
-				node.gsc.sendTXT('E: not valid state. Not sent');
+				node.err('Not valid state. Not sent.');
+				node.socket.sendTXT('E: not valid state. Not sent');
 			}
 		};
 		
 		this.root = root;
 		return root;
-		
 	};
 	
-	StateBar.prototype.listeners = function () {
-		var that = this;
-		
-		node.on('UPDATED_PLIST', function(msg) {
-			node.window.populateRecipientSelector(that.recipient, msg.data);
-		});
-		
-	}; 
 })(node);

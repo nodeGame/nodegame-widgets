@@ -4,9 +4,18 @@
 	node.widgets.register('D3', D3);
 	node.widgets.register('D3ts', D3ts);
 	
+
+// ## Defaults
+	
+	D3.defaults = {};
+	D3.defaults.id = 'D3';
+	D3.defaults.fieldset = {
+		legend: 'D3 plot'
+	};
+
+	
 // ## Meta-data
 	
-	D3.id = 'D3';
 	D3.name = 'D3';
 	D3.version = '0.1';
 	D3.description = 'Real time plots for nodeGame with d3.js';
@@ -16,13 +25,6 @@
 	D3.dependencies = {
 		d3: {},	
 		JSUS: {},
-	};
-
-// ## Defaults
-	
-	D3.defaults = {};
-	D3.defaults.fieldset = {
-		legend: 'D3 plot'
 	};
 	
 	function D3 (options) {

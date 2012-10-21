@@ -6,9 +6,17 @@
 	
 	node.widgets.register('GameTable', GameTable);
 	
+// ## Defaults
+	
+	GameTable.defaults = {};
+	GameTable.defaults.id = 'gametable';
+	GameTable.defaults.fieldset = { 
+			legend: 'Game Table',
+			id: 'gametable_fieldset'
+	};
+	
 // ## Meta-data
 	
-	GameTable.id = 'gametable';
 	GameTable.name = 'Game Table';
 	GameTable.version = '0.2';
 	
@@ -22,11 +30,7 @@
 		this.options = options;
 		this.id = options.id;
 		this.name = options.name || GameTable.name;
-		
-		this.fieldset = { legend: this.name,
-							id: this.id + '_fieldset'
-		};
-		
+				
 		this.root = null;
 		this.gtbl = null;
 		this.plist = null;
@@ -48,10 +52,6 @@
 		this.gtbl.c('state', GameState.compare);
 		
 		this.gtbl.setLeft([]);
-		
-//		if (this.gtbl.length === 0) {
-//			this.gtbl.table.appendChild(document.createTextNode('Empty table'));
-//		}
 		
 		this.gtbl.parse(true);
 	};

@@ -4,10 +4,17 @@
 	
 	var GameState = node.GameState,
 		PlayerList = node.PlayerList;
+
+// ## Defaults	
+	
+	GameBoard.defaults = {};
+	GameBoard.defaults.id = 'gboard';
+	GameBoard.defaults.fieldset = {
+			legend: 'Game State'
+	};
 	
 // ## Meta-data
 	
-	GameBoard.id = 'gboard';
 	GameBoard.name = 'GameBoard';
 	GameBoard.version = '0.3.2';
 	GameBoard.description = 'Offer a visual representation of the state of all players in the game.';
@@ -21,38 +28,21 @@
 		
 		this.noPlayers = 'No players connected...';
 		
-		this.fieldset = {
-			legend: 'Game State'
-		};
 	}
-	
-	// TODO: Write a proper INIT method
-	GameBoard.prototype.init = function () {};
-	
-	GameBoard.prototype.getRoot = function() {
-		return this.root;
-	};
 	
 	GameBoard.prototype.append = function (root) {
 		this.root = root;
 		this.board = node.window.addDiv(root, this.id);
 		this.updateBoard(node.game.pl);
-		return root;
-	};
-	
-	GameBoard.prototype.listeners = function() {
-		var that = this;
 		
-		var say = node.actions.SAY + '.';
-		var set = node.actions.SET + '.';
-		var get = node.actions.GET + '.'; 
-		
-		
+		var that = this;		
 		node.on('UPDATED_PLIST', function () {
 			node.log('I Updating Board');
 			that.updateBoard(node.game.pl);
 
 		});
+		
+		return root;
 	};
 	
 	GameBoard.prototype.updateBoard = function (pl) {

@@ -6,9 +6,17 @@
 		JSUS = node.JSUS,
 		Table = node.window.Table;
 	
+// ## Defaults
+	
+	VisualState.defaults = {};
+	VisualState.defaults.id = 'visualstate';
+	VisualState.defaults.fieldset = { 
+		legend: 'State',
+		id: 'visualstate_fieldset',
+	};	
+	
 // ## Meta-data
 	
-	VisualState.id = 'visualstate';
 	VisualState.name = 'Visual State';
 	VisualState.version = '0.2.1';
 	VisualState.description = 'Visually display current, previous and next state of the game.';
@@ -25,15 +33,9 @@
 		this.id = options.id;
 		this.gameLoop = node.game.gameLoop;
 		
-		this.fieldset = {legend: 'State'};
-		
 		this.root = null;		// the parent element
 		this.table = new Table();
-		//this.init(options);
 	}
-	
-	// TODO: Write a proper INIT method
-	VisualState.prototype.init = function () {};
 	
 	VisualState.prototype.getRoot = function () {
 		return this.root;

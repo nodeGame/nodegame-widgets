@@ -1,30 +1,25 @@
 (function (node) {
 	
-	
 	node.widgets.register('DataBar', DataBar);
 	
+// ## Defaults
+	DataBar.defaults = {};
+	DataBar.defaults.id = 'databar';
+	DataBar.defaults.fieldset = {	
+		legend: 'Send DATA to players'
+	};
+	
 // ## Meta-data
-	DataBar.id = 'databar';
 	DataBar.name = 'Data Bar';
 	DataBar.version = '0.3';
 	DataBar.description = 'Adds a input field to send DATA messages to the players';
 		
 	function DataBar (options) {
-		
-		this.game = node.game;
-		this.id = options.id || DataBar.id;
-		
 		this.bar = null;
 		this.root = null;
-		
-		this.fieldset = {
-			legend: 'Send DATA to players'
-		};
-		
 		this.recipient = null;
 	}
 	
-	DataBar.prototype.init = function (options) {};
 	
 	DataBar.prototype.append = function (root) {
 		
@@ -33,7 +28,7 @@
 		this.recipient = node.window.addRecipientSelector(root);
 		
 		var that = this;
-	
+		
 		sendButton.onclick = function() {
 			
 			var to = that.recipient.value;
@@ -50,17 +45,13 @@
 	//			}
 		};
 		
-		return root;
 		
-	};
-	
-	DataBar.prototype.listeners = function () {
-		var that = this;
-		var PREFIX = 'in.';
-		
-		node.onPLIST( function(msg) {
+		node.onPLIST(function (msg) {
 			node.window.populateRecipientSelector(that.recipient, msg.data);
 		}); 
+		
+		return root;
+		
 	};
 	
 })(node);

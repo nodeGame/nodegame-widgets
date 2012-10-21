@@ -7,13 +7,14 @@
 	
 	// ## Defaults
 	
+	ChernoffFaces.defaults = {};
+	ChernoffFaces.defaults.id = 'ChernoffFaces';
 	ChernoffFaces.defaults.canvas = {};
 	ChernoffFaces.defaults.canvas.width = 100;
 	ChernoffFaces.defaults.canvas.heigth = 100;
 	
 	// ## Meta-data
 	
-	ChernoffFaces.id = 'ChernoffFaces';
 	ChernoffFaces.name = 'Chernoff Faces';
 	ChernoffFaces.version = '0.3';
 	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';

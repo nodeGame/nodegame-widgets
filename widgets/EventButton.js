@@ -4,9 +4,14 @@
 
 	node.widgets.register('EventButton', EventButton);
 	
+// ## Defaults
+	
+	EventButton.defaults = {};
+	EventButton.defaults.id = 'eventbutton';
+	EventButton.defaults.fieldset = false;	
+	
 // ## Meta-data	
 	
-	EventButton.id = 'eventbutton';
 	EventButton.name = 'Event Button';
 	EventButton.version = '0.2';
 	

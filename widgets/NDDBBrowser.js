@@ -5,10 +5,15 @@
 	var JSUS = node.JSUS,
 		NDDB = node.NDDB,
 		TriggerManager = node.TriggerManager;
+
+// ## Defaults
+	
+	NDDBBrowser.defaults = {};
+	NDDBBrowser.defaults.id = 'nddbbrowser';
+	NDDBBrowser.defaults.fieldset = false;
 	
 // ## Meta-data
 	
-	NDDBBrowser.id = 'nddbbrowser';
 	NDDBBrowser.name = 'NDDBBrowser';
 	NDDBBrowser.version = '0.1.2';
 	NDDBBrowser.description = 'Provides a very simple interface to control a NDDB istance.';

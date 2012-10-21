@@ -3,10 +3,18 @@
 	node.widgets.register('VisualTimer', VisualTimer);
 	
 	var JSUS = node.JSUS;
+
+// ## Defaults
+	
+	VisualTimer.defaults = {};
+	VisualTimer.defaults.id = 'visualtimer';
+	VisualTimer.defaults.fieldset = {
+			legend: 'Time left',
+			id: 'visualtimer_fieldset',
+	};		
 	
 // ## Meta-data
 	
-	VisualTimer.id = 'visualtimer';
 	VisualTimer.name = 'Visual Timer';
 	VisualTimer.version = '0.3.3';
 	VisualTimer.description = 'Display a timer for the game. Timer can trigger events. Only for countdown smaller than 1h.';
@@ -26,10 +34,6 @@
 		
 		this.timerDiv = null;	// the DIV in which to display the timer
 		this.root = null;		// the parent element
-		this.fieldset = {
-						legend: 'Time left',
-						id: this.id + '_fieldset'
-		};
 		
 		this.init(this.options);
 	}

@@ -1,20 +1,24 @@
 (function (node) {
 	
 	node.widgets.register('ServerInfoDisplay', ServerInfoDisplay);	
-		
+
+// ## Defaults
+	
+	ServerInfoDisplay.defaults = {};
+	ServerInfoDisplay.defaults.id = 'serverinfodisplay';
+	ServerInfoDisplay.defaults.fieldset = {
+			legend: 'Server Info',
+			id: 'serverinfo_fieldset',
+	};		
+	
 // ## Meta-data
 	
-	ServerInfoDisplay.id = 'serverinfodisplay';
 	ServerInfoDisplay.name = 'Server Info Display';
-	ServerInfoDisplay.version = '0.2';
+	ServerInfoDisplay.version = '0.3';
 	
 	function ServerInfoDisplay (options) {	
-		this.game = node.game;
 		this.id = options.id;
 		
-		this.fieldset = { legend: 'Server Info',
-							id: this.id + '_fieldset'
-		};
 		
 		this.root = null;
 		this.div = document.createElement('div');

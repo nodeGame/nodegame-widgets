@@ -6,13 +6,13 @@
 // ## Defaults
 	
 	GameSummary.defaults = {};
+	GameSummary.defaults.id = 'gamesummary';
 	GameSummary.defaults.fieldset = {
 		legend: 'Game Summary',
 	};
 	
 // ## Meta-data
 	
-	GameSummary.id = 'gamesummary';
 	GameSummary.name = 'Game Summary';
 	GameSummary.version = '0.3';
 	GameSummary.description = 'Show the general configuration options of the game.';

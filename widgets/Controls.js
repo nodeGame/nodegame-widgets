@@ -5,13 +5,20 @@
 	
 	node.widgets.register('Controls', Controls);	
 	
+// ## Defaults
+	
+	var defaults = {
+			id: 'controls',
+	}
+	
+	Controls.defaults = defaults;
+	
 	Controls.Slider = SliderControls;
 	Controls.jQuerySlider = jQuerySliderControls;
 	Controls.Radio	= RadioControls;
 	
 	// Meta-data
-		
-	Controls.id = 'controls';
+	
 	Controls.name = 'Controls';
 	Controls.version = '0.2';
 	Controls.description = 'Wraps a collection of user-inputs controls.';

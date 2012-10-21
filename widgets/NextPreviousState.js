@@ -4,21 +4,21 @@
 	// TODO: Introduce rules for update: other vs self
 	
 	node.widgets.register('NextPreviousState', NextPreviousState);
-
+	
+// ## Defaults
+	
+	NextPreviousState.defaults = {};
+	NextPreviousState.defaults.id = 'nextprevious';
+	NextPreviousState.defaults.fieldset = { legend: 'Rew-Fwd' };		
+	
 // ## Meta-data
 	
-	NextPreviousState.id = 'nextprevious';
 	NextPreviousState.name = 'Next,Previous State';
 	NextPreviousState.version = '0.3.1';
 	NextPreviousState.description = 'Adds two buttons to push forward or rewind the state of the game by one step.';
 		
 	function NextPreviousState(options) {
-		this.game = node.game;
-		this.id = options.id || NextPreviousState.id;
-		
-		this.fieldset = {
-			legend: 'Rew-Fwd'
-		};
+		this.id = options.id;
 	}
 	
 	NextPreviousState.prototype.getRoot = function () {
@@ -52,11 +52,11 @@
 		};
 		
 		fwd.onclick = function() {
-			updateState(that.game.next());
+			updateState(node.game.next());
 		};
 			
 		rew.onclick = function() {
-			updateState(that.game.previous());
+			updateState(node.game.previous());
 		};
 		
 		this.root = root;

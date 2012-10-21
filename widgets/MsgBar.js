@@ -4,10 +4,15 @@
 		Table = node.window.Table;
 	
 	node.widgets.register('MsgBar', MsgBar);
-		
+
+// ## Defaults
+	
+	MsgBar.defaults = {};
+	MsgBar.defaults.id = 'msgbar';
+	MsgBar.defaults.fieldset = { legend: 'Send MSG' };	
+	
 // ## Meta-data
 	
-	MsgBar.id = 'msgbar';
 	MsgBar.name = 'Msg Bar';
 	MsgBar.version = '0.4';
 	MsgBar.description = 'Send a nodeGame message to players';
@@ -21,11 +26,7 @@
 		this.targetSel = null;
 		
 		this.table = new Table();
-		
-		this.fieldset = {
-			legend: 'Send MSG'
-		};
-		
+			
 		this.init();
 	}
 	

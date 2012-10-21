@@ -2,9 +2,14 @@
 
 	node.widgets.register('WaitScreen', WaitScreen);
 	
+// ## Defaults
+	
+	WaitScreen.defaults = {};
+	WaitScreen.defaults.id = 'waiting';
+	WaitScreen.defaults.fieldset = false;
+	
 // ## Meta-data
 	
-	WaitScreen.id = 'waiting';
 	WaitScreen.name = 'WaitingScreen';
 	WaitScreen.version = '0.3.2';
 	WaitScreen.description = 'Show a standard waiting screen';

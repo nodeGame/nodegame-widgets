@@ -4,9 +4,15 @@
 	
 	var JSUS = node.JSUS;
 
+// ## Defaults
+	
+	Wall.defaults = {};
+	Wall.defaults.id = 'wall';
+	Wall.defaults.fieldset = { legend: 'Game Log' };		
+	
 // ## Meta-data
 	
-	Wall.id = 'wall';
+
 	Wall.name = 'Wall';
 	Wall.version = '0.3';
 	Wall.description = 'Intercepts all LOG events and prints them ';
@@ -25,11 +31,6 @@
 		this.counter = 0;
 
 		this.wall = node.window.getElement('pre', this.id);
-		
-		this.fieldset = {
-			legend: 'Game Log',
-			id: this.id
-		};
 	}
 	
 	Wall.prototype.init = function (options) {

@@ -1,13 +1,18 @@
 (function (node) {
 
-	var JSUS = node.JSUS,
-		Table = node.window.Table;
+	var Table = node.window.Table,
+		GameState = node.GameState;
 	
 	node.widgets.register('StateDisplay', StateDisplay);	
 
+// ## Defaults
+	
+	StateDisplay.defaults = {};
+	StateDisplay.defaults.id = 'statedisplay';
+	StateDisplay.defaults.fieldset = { legend: 'State Display' };		
+	
 // ## Meta-data
 	
-	StateDisplay.id = 'statedisplay';
 	StateDisplay.name = 'State Display';
 	StateDisplay.version = '0.4.1';
 	StateDisplay.description = 'Display basic information about player\'s status.';
@@ -15,11 +20,7 @@
 	function StateDisplay (options) {
 		
 		this.id = options.id;
-		
-		this.fieldset = {
-			legend: 'Player Status'
-		};
-		
+				
 		this.root = null;
 		this.table = new Table();
 	}
