@@ -1,3 +1,46 @@
+// nodegame-widgets
+
+(function (node) {
+
+node.Widget = Widget;	
+	
+function Widget() {
+	this.root = null;
+}
+
+Widget.prototype.dependencies = {};
+
+Widget.prototype.defaults = {};
+
+Widget.prototype.defaults.fieldset = {
+	legend: 'Widget',
+};
+
+
+Widget.prototype.listeners = function () {};
+
+Widget.prototype.getRoot = function () {
+	return this.root;
+};
+
+Widget.prototype.getValues = function () {};
+
+Widget.prototype.append = function () {};
+
+Widget.prototype.init = function () {};
+
+Widget.prototype.getRoot = function () {};
+
+Widget.prototype.listeners = function () {};
+
+Widget.prototype.getAllValues = function () {};
+
+Widget.prototype.highlight = function () {};
+
+})(
+	// Widgets works only in the browser environment.
+	('undefined' !== typeof node) ? node : module.parent.exports.node
+);
 /**
  * 
  * # nodegame-widgets
@@ -12,7 +55,7 @@
 	
 function Widgets() {
 	this.widgets = {};
-	this.root = W.root;
+	this.root = node.window.root;
 }
 
 /**
@@ -20,23 +63,31 @@ function Widgets() {
  * 
  * Registers a new widget in the collection
  * 
- * The widget is registered under the name of its constructor.
- * Optionally, a second parameter can specify the name under which
- * registering the widget.
+ * A name and a prototype class must be provided. All properties
+ * that are presetn in `node.Widget`, but missing in the prototype
+ * are added. 
  * 
  * Registered widgets can be loaded with Widgets.get or Widgets.append.
  * 
  * @param {string} name The id under which registering the widget
  * @param {function} w The widget to add
- * @return {boolean} TRUE, if registration is successful
+ * @return {object|boolean} The registered widget, or FALSE if an error occurs
  * 
  */
-Widgets.prototype.register = function (name, prototype) {
-	if (!name) {
-		node.err('Could not register widget: ' + name, 'nodegame-widgets');
+Widgets.prototype.register = function (name, w) {
+	if (!name || !w) {
+		node.err('Could not register widget: ' + name, 'nodegame-widgets: ');
 		return false;
 	}
-	this.widgets[name] = (prototype) ? new prototype.constructor() : new node.Widget();
+	
+	// Add default properties to widget prototype
+	for (var i in node.Widget.prototype) {
+		if (!w[i] && !w.prototype[i]) {
+			w.prototype[i] = J.clone(node.Widget.prototype[i]);
+		}
+	}
+	
+	this.widgets[name] = w;
 	return this.widgets[name];
 };
 
@@ -78,33 +129,33 @@ Widgets.prototype.get = function (w_str, options) {
 		};
 	};
 	
-	var w = J.getNestedValue(w_str, this.widgets);
+	var wProto = J.getNestedValue(w_str, this.widgets);
+	var widget;
 	
-	if (!w) {
-		node.log('Widget ' + w_str + ' not found.', 'ERR');
+	if (!wProto) {
+		node.err('widget ' + w_str + ' not found.', 'node-widgets: ');
 		return;
 	}
 	
-	node.log('nodeWindow: registering widget ' + w.name + ' v.' +  w.version);
+	node.info('registering ' + wProto.name + ' v.' +  wProto.version, 'node-widgets: ');
 	
-	if (! this.checkDependencies(w)) return false;
+	if (!this.checkDependencies(wProto)) return false;
 	
 	// Merging options with defaults
-	options = J.merge(w.defaults || {}, options);
-	
+	options = J.merge(wProto.defaults || {}, options);
 	
 	try {
-		w.constructor(options);
-
-		// nodeGame listeners
-		//w.listeners();
+		widget = new wProto(options);
+		// Re-inject defaults
+		widget.defaults = options;
+		
 		// user listeners
-		attachListeners(options, w);
-		}
-		catch(e){
-			throw 'Error while loading widget ' + w.name + ': ' + e;
-		}
-	return w;
+		attachListeners(options, widget);
+	}
+	catch (e) {
+		throw 'Error while loading widget ' + widget.name + ': ' + e;
+	}
+	return widget;
 };
 
 /**
@@ -215,79 +266,37 @@ node.widgets = new Widgets();
 	('undefined' !== typeof window) ? window : module.parent.exports.window,
 	('undefined' !== typeof window) ? window.node : module.parent.exports.node
 );
-// nodegame-widgets
-
 (function (node) {
 
-node.Widget = Widget;	
-	
-function Widget() {
-	this.root = null;
-}
-
-Widget.prototype.dependencies = {};
-
-Widget.prototype.defaults = {};
-
-Widget.prototype.defaults.fieldset = {
-	legend: 'Widget',
-};
-
-
-Widget.prototype.listeners = function () {};
-
-Widget.prototype.getRoot = function () {
-	return this.root;
-};
-
-Widget.prototype.getValues = function () {};
-
-Widget.prototype.append = function () {};
-
-Widget.prototype.init = function () {};
-
-Widget.prototype.getRoot = function () {};
-
-Widget.prototype.listeners = function () {};
-
-Widget.prototype.getAllValues = function () {};
-
-Widget.prototype.highlight = function () {};
-
-})(
-	// Widgets works only in the browser environment.
-	('undefined' !== typeof node) ? node : module.parent.exports.node
-);
-(function (node) {
-
-	var widget = node.widgets.register('GameSummary');
+	node.widgets.register('GameSummary', GameSummary);
 	
 
 // ## Defaults
 	
-	widget.defaults.fieldset = {
+	GameSummary.defaults = {};
+	GameSummary.defaults.fieldset = {
 		legend: 'Game Summary',
 	};
 	
 // ## Meta-data
 	
-	widget.id = 'gamesummary';
-	widget.name = 'Game Summary';
-	widget.version = '0.3';
-	widget.description = 'Show the general configuration options of the game.';
+	GameSummary.id = 'gamesummary';
+	GameSummary.name = 'Game Summary';
+	GameSummary.version = '0.3';
+	GameSummary.description = 'Show the general configuration options of the game.';
 	
-	widget.constructor = function (options) {
+	function GameSummary (options) {
 		this.summaryDiv = null;
 	}
 	
-	widget.append = function (root) {
+	GameSummary.prototype.append = function (root) {
 		this.root = root;
 		this.summaryDiv = node.window.addDiv(root);
 		this.writeSummary();
 		return root;
 	};
 	
-	widget.writeSummary = function (idState, idSummary) {
+	GameSummary.prototype.writeSummary = function (idState, idSummary) {
 		var gName = document.createTextNode('Name: ' + node.game.name),
 			gDescr = document.createTextNode('Descr: ' + node.game.description),
 			gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),

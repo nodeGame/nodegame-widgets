@@ -40,8 +40,8 @@ function buildIt(options) {
 	
 	// defaults
 	var files = [
-	   libDir + 'Widgets.js',
-	   libDir + 'Widget.js',
+	             libDir + 'Widget.js',
+	             libDir + 'Widgets.js',
 	];
 
 	if (options.all) {

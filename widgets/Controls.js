@@ -3,11 +3,11 @@
 
 	// TODO: handle different events, beside onchange
 	
-	var Controls = node.widgets.register('Controls');
-	var SliderControls = node.widgets.register('Controls.Slider', Controls);
-	var RadioControls = node.widgets.register('Controls.Radio', Controls);
-	var jQuerySliderControls = node.widgets.register('Controls.jQuerySlider', Controls);
+	node.widgets.register('Controls', Controls);	
 	
+	Controls.Slider = SliderControls;
+	Controls.jQuerySlider = jQuerySliderControls;
+	Controls.Radio	= RadioControls;
 	
 	// Meta-data
 		
@@ -16,7 +16,7 @@
 	Controls.version = '0.2';
 	Controls.description = 'Wraps a collection of user-inputs controls.';
 		
-	Controls.constructor = function (options) {
+	function Controls (options) {
 		this.options = options;
 		this.id = options.id;
 		this.root = null;
@@ -30,17 +30,17 @@
 		this.init(options);
 	}
 
-	Controls.add = function (root, id, attributes) {
+	Controls.prototype.add = function (root, id, attributes) {
 		// TODO: node.window.addTextInput
 		//return node.window.addTextInput(root, id, attributes);
 	};
 	
-	Controls.getItem = function (id, attributes) {
+	Controls.prototype.getItem = function (id, attributes) {
 		// TODO: node.window.addTextInput
 		//return node.window.getTextInput(id, attributes);
 	};
 	
-	Controls.init = function (options) {
+	Controls.prototype.init = function (options) {
 
 		this.hasChanged = false; // TODO: should this be inherited?
 		if ('undefined' !== typeof options.change) {
@@ -60,7 +60,7 @@
 		this.populate();
 	};
 	
-	Controls.append = function (root) {
+	Controls.prototype.append = function (root) {
 		this.root = root;
 		var toReturn = this.listRoot;
 		this.list.parse();
@@ -85,11 +85,11 @@
 		return toReturn;
 	};
 	
-	Controls.parse = function() {
+	Controls.prototype.parse = function() {
 		return this.list.parse();
 	};
 	
-	Controls.populate = function () {
+	Controls.prototype.populate = function () {
 		var that = this;
 		
 		for (var key in this.features) {
@@ -123,7 +123,7 @@
 		}
 	};
 	
-	Controls.listeners = function() {	
+	Controls.prototype.listeners = function() {	
 		var that = this;
 		// TODO: should this be inherited?
 		node.on(this.changeEvent, function(){
@@ -132,7 +132,7 @@
 				
 	};
 
-	Controls.refresh = function() {
+	Controls.prototype.refresh = function() {
 		for (var key in this.features) {	
 			if (this.features.hasOwnProperty(key)) {
 				var el = node.window.getElementById(key);
@@ -150,7 +150,7 @@
 		return true;
 	};
 	
-	Controls.getAllValues = function() {
+	Controls.prototype.getAllValues = function() {
 		var out = {};
 		for (var key in this.features) {	
 			if (this.features.hasOwnProperty(key)) {
@@ -167,7 +167,7 @@
 		return out;
 	};
 	
-	Controls.highlight = function (code) {
+	Controls.prototype.highlight = function (code) {
 		return node.window.highlight(this.listRoot, code);
 	};
 	
@@ -175,8 +175,8 @@
 	
 	// Slider 
 	
-	SliderControls.__proto__ = node.widgets.get('Controls');
-	//SliderControls.prototype.constructor = SliderControls;
+	SliderControls.prototype.__proto__ = Controls.prototype;
+	SliderControls.prototype.constructor = SliderControls;
 	
 	SliderControls.id = 'slidercontrols';
 	SliderControls.name = 'Slider Controls';
@@ -186,119 +186,125 @@
 		Controls: {}
 	};
 	
-	SliderControls.constructor = function  (options) {
+	
+	function SliderControls (options) {
 		Controls.call(this, options);
 	}
 	
-	SliderControls.add = function (root, id, attributes) {
+	SliderControls.prototype.add = function (root, id, attributes) {
 		return node.window.addSlider(root, id, attributes);
 	};
 	
-	SliderControls.getItem = function (id, attributes) {
+	SliderControls.prototype.getItem = function (id, attributes) {
 		return node.window.getSlider(id, attributes);
 	};
 	
 	// jQuerySlider
-//    
-//    jQuerySliderControls.prototype.__proto__ = Controls.prototype;
-//    //jQuerySliderControls.prototype.constructor = jQuerySliderControls;
-//    
-//    jQuerySliderControls.id = 'jqueryslidercontrols';
-//    jQuerySliderControls.name = 'Experimental: jQuery Slider Controls';
-//    jQuerySliderControls.version = '0.13';
-//    
-//    jQuerySliderControls.dependencies = {
-//        jQuery: {},
-//        Controls: {}
-//    };
-//    
-//    
-//    jQuerySliderControls.constructor = function  (options) {
-//        Controls.call(this, options);
-//    }
-//    
-//    jQuerySliderControls.add = function (root, id, attributes) {
-//        var slider = jQuery('<div/>', {
-//			id: id
-//		}).slider();
-//	
-//		var s = slider.appendTo(root);
-//		return s[0];
-//	};
-//	
-//	jQuerySliderControls.getItem = function (id, attributes) {
-//		var slider = jQuery('<div/>', {
-//			id: id
-//			}).slider();
-//		
-//		return slider;
-//	};
-//
-//
-//    ///////////////////////////
-//
-//	// Radio
-//	
-//	RadioControls.prototype.__proto__ = Controls.prototype;
-//	RadioControls.prototype.constructor = RadioControls;
-//	
-//	RadioControls.id = 'radiocontrols';
-//	RadioControls.name = 'Radio Controls';
-//	RadioControls.version = '0.1.1';
-//	
-//	RadioControls.dependencies = {
-//		Controls: {}
-//	};
-//	
-//	RadioControls.constructor = function  (options) {
-//		Controls.call(this,options);
-//		this.groupName = ('undefined' !== typeof options.name) ? options.name : 
-//																node.window.generateUniqueId(); 
-//		//alert(this.groupName);
-//	}
-//	
-//	RadioControls.add = function (root, id, attributes) {
-//		//console.log('ADDDING radio');
-//		//console.log(attributes);
-//		// add the group name if not specified
-//		// TODO: is this a javascript bug?
-//		if ('undefined' === typeof attributes.name) {
-////			console.log(this);
-////			console.log(this.name);
-////			console.log('MODMOD ' + this.name);
-//			attributes.name = this.groupName;
-//		}
-//		//console.log(attributes);
-//		return node.window.addRadioButton(root, id, attributes);	
-//	};
-//	
-//	RadioControls.getItem = function (id, attributes) {
-//		//console.log('ADDDING radio');
-//		//console.log(attributes);
-//		// add the group name if not specified
-//		// TODO: is this a javascript bug?
-//		if ('undefined' === typeof attributes.name) {
-////			console.log(this);
-////			console.log(this.name);
-////			console.log('MODMOD ' + this.name);
-//			attributes.name = this.groupName;
-//		}
-//		//console.log(attributes);
-//		return node.window.getRadioButton(id, attributes);	
-//	};
-//	
-//	// Override getAllValues for Radio Controls
-//	RadioControls.getAllValues = function() {
-//		
-//		for (var key in this.features) {
-//			if (this.features.hasOwnProperty(key)) {
-//				var el = node.window.getElementById(key);
-//				if (el.checked) {
-//					return el.value;
-//				}
-//			}
-//		}
-//		return false;
-//	};
+    
+    jQuerySliderControls.prototype.__proto__ = Controls.prototype;
+    jQuerySliderControls.prototype.constructor = jQuerySliderControls;
+    
+    jQuerySliderControls.id = 'jqueryslidercontrols';
+    jQuerySliderControls.name = 'Experimental: jQuery Slider Controls';
+    jQuerySliderControls.version = '0.13';
+    
+    jQuerySliderControls.dependencies = {
+        jQuery: {},
+        Controls: {}
+    };
+    
+    
+    function jQuerySliderControls (options) {
+        Controls.call(this, options);
+    }
+    
+    jQuerySliderControls.prototype.add = function (root, id, attributes) {
+        var slider = jQuery('<div/>', {
+			id: id
+		}).slider();
+	
+		var s = slider.appendTo(root);
+		return s[0];
+	};
+	
+	jQuerySliderControls.prototype.getItem = function (id, attributes) {
+		var slider = jQuery('<div/>', {
+			id: id
+			}).slider();
+		
+		return slider;
+	};
+
+
+    ///////////////////////////
+
+	
+	
+	
+
+	
+	// Radio
+	
+	RadioControls.prototype.__proto__ = Controls.prototype;
+	RadioControls.prototype.constructor = RadioControls;
+	
+	RadioControls.id = 'radiocontrols';
+	RadioControls.name = 'Radio Controls';
+	RadioControls.version = '0.1.1';
+	
+	RadioControls.dependencies = {
+		Controls: {}
+	};
+	
+	function RadioControls (options) {
+		Controls.call(this,options);
+		this.groupName = ('undefined' !== typeof options.name) ? options.name : 
+																node.window.generateUniqueId(); 
+		//alert(this.groupName);
+	}
+	
+	RadioControls.prototype.add = function (root, id, attributes) {
+		//console.log('ADDDING radio');
+		//console.log(attributes);
+		// add the group name if not specified
+		// TODO: is this a javascript bug?
+		if ('undefined' === typeof attributes.name) {
+//			console.log(this);
+//			console.log(this.name);
+//			console.log('MODMOD ' + this.name);
+			attributes.name = this.groupName;
+		}
+		//console.log(attributes);
+		return node.window.addRadioButton(root, id, attributes);	
+	};
+	
+	RadioControls.prototype.getItem = function (id, attributes) {
+		//console.log('ADDDING radio');
+		//console.log(attributes);
+		// add the group name if not specified
+		// TODO: is this a javascript bug?
+		if ('undefined' === typeof attributes.name) {
+//			console.log(this);
+//			console.log(this.name);
+//			console.log('MODMOD ' + this.name);
+			attributes.name = this.groupName;
+		}
+		//console.log(attributes);
+		return node.window.getRadioButton(id, attributes);	
+	};
+	
+	// Override getAllValues for Radio Controls
+	RadioControls.prototype.getAllValues = function() {
+		
+		for (var key in this.features) {
+			if (this.features.hasOwnProperty(key)) {
+				var el = node.window.getElementById(key);
+				if (el.checked) {
+					return el.value;
+				}
+			}
+		}
+		return false;
+	};
 	
 })(node);

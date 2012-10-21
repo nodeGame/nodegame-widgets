@@ -3,35 +3,33 @@
 	var JSUS = node.JSUS,
 		Table = node.window.Table;
 	
-	var widget = node.widgets.register('ChernoffFaces');
-		
-	console.log(widget);
+	node.widgets.register('ChernoffFaces', ChernoffFaces);
 	
 	// ## Defaults
 	
-	widget.defaults.canvas = {};
-	widget.defaults.canvas.width = 100;
-	widget.defaults.canvas.heigth = 100;
+	ChernoffFaces.defaults.canvas = {};
+	ChernoffFaces.defaults.canvas.width = 100;
+	ChernoffFaces.defaults.canvas.heigth = 100;
 	
 	// ## Meta-data
 	
-	widget.id = 'ChernoffFaces';
-	widget.name = 'Chernoff Faces';
-	widget.version = '0.3';
-	widget.description = 'Display parametric data in the form of a Chernoff Face.';
+	ChernoffFaces.id = 'ChernoffFaces';
+	ChernoffFaces.name = 'Chernoff Faces';
+	ChernoffFaces.version = '0.3';
+	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';
 	
 	// ## Dependecies 
-	widget.dependencies = {
+	ChernoffFaces.dependencies = {
 		JSUS: {},
 		Table: {},
 		Canvas: {},
 		'Controls.Slider': {}
 	};
 	
-	widget.FaceVector = FaceVector;
-	widget.FacePainter = FacePainter;
+	ChernoffFaces.FaceVector = FaceVector;
+	ChernoffFaces.FacePainter = FacePainter;
 	
-	widget.constructor = function (options) {
+	function ChernoffFaces (options) {
 		this.options = options;
 		this.id = options.id;
 		this.table = new Table({id: 'cf_table'});
@@ -54,7 +52,7 @@
 		this.init(this.options);
 	}
 	
-	widget.init = function (options) {
+	ChernoffFaces.prototype.init = function (options) {
 		var that = this;
 		this.id = options.id || this.id;
 		var PREF = this.id + '_';
@@ -106,17 +104,17 @@
 		this.root.appendChild(this.table.table);
 	};
 	
-	widget.getCanvas = function() {
+	ChernoffFaces.prototype.getCanvas = function() {
 		return this.canvas;
 	};
 	
-	widget.append = function (root) {
+	ChernoffFaces.prototype.append = function (root) {
 		root.appendChild(this.root);
 		this.table.parse();
 		return this.root;
 	};
 	
-	widget.draw = function (features) {
+	ChernoffFaces.prototype.draw = function (features) {
 		if (!features) return;
 		var fv = new FaceVector(features);
 		this.fp.redraw(fv);
@@ -125,12 +123,12 @@
 		this.sc.refresh();
 	};
 	
-	widget.getAllValues = function() {
+	ChernoffFaces.prototype.getAllValues = function() {
 		//if (this.sc) return this.sc.getAllValues();
 		return this.fp.face;
 	};
 	
-	widget.randomize = function() {
+	ChernoffFaces.prototype.randomize = function() {
 		var fv = FaceVector.random();
 		this.fp.redraw(fv);
 	
@@ -151,8 +149,8 @@
 			
 		this.canvas = new node.window.Canvas(canvas);
 		
-		this.scaleX = canvas.width / widget.defaults.canvas.width;
-		this.scaleY = canvas.height / widget.defaults.canvas.heigth;
+		this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
+		this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
 	}
 	
 	//Draws a Chernoff face.

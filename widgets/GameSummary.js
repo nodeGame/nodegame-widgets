@@ -1,33 +1,34 @@
 (function (node) {
 
-	var widget = node.widgets.register('GameSummary');
+	node.widgets.register('GameSummary', GameSummary);
 	
 
 // ## Defaults
 	
-	widget.defaults.fieldset = {
+	GameSummary.defaults = {};
+	GameSummary.defaults.fieldset = {
 		legend: 'Game Summary',
 	};
 	
 // ## Meta-data
 	
-	widget.id = 'gamesummary';
-	widget.name = 'Game Summary';
-	widget.version = '0.3';
-	widget.description = 'Show the general configuration options of the game.';
+	GameSummary.id = 'gamesummary';
+	GameSummary.name = 'Game Summary';
+	GameSummary.version = '0.3';
+	GameSummary.description = 'Show the general configuration options of the game.';
 	
-	widget.constructor = function (options) {
+	function GameSummary (options) {
 		this.summaryDiv = null;
 	}
 	
-	widget.append = function (root) {
+	GameSummary.prototype.append = function (root) {
 		this.root = root;
 		this.summaryDiv = node.window.addDiv(root);
 		this.writeSummary();
 		return root;
 	};
 	
-	widget.writeSummary = function (idState, idSummary) {
+	GameSummary.prototype.writeSummary = function (idState, idSummary) {
 		var gName = document.createTextNode('Name: ' + node.game.name),
 			gDescr = document.createTextNode('Descr: ' + node.game.description),
 			gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
