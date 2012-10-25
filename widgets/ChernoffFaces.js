@@ -37,7 +37,7 @@
 		this.root = options.root || document.createElement('div');
 		this.root.id = this.id;
 		
-		this.sc = node.window.getWidget('Controls.Slider');	// Slider Controls
+		this.sc = node.widgets.get('Controls.Slider');	// Slider Controls
 		this.fp = null;	// Face Painter
 		this.canvas = null;
 
@@ -79,7 +79,7 @@
 			submit: 'Send'
 		};
 		
-		this.sc = node.window.getWidget('Controls.Slider', sc_options);
+		this.sc = node.widgets.get('Controls.Slider', sc_options);
 		
 		// Controls are always there, but may not be visible
 		if (this.controls) {
