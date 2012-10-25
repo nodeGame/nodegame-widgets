@@ -24,7 +24,7 @@
 	
 	
 	function MoneyTalks (options) {
-		this.id = MoneyTalks.id;
+		this.id = options.id || MoneyTalks.defaults.id;
 				
 		this.root = null;		// the parent element
 		
