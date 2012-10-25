@@ -19,7 +19,7 @@
 	ChernoffFaces.version = '0.3';
 	ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';
 	
-	// ## Dependecies 
+	// ## Dependencies 
 	ChernoffFaces.dependencies = {
 		JSUS: {},
 		Table: {},
