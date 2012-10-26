@@ -117,6 +117,13 @@ Widgets.prototype.get = function (w_str, options) {
 	options = options || {};
 	
 	
+	function createListenerFunction (w, e, l) {
+		if (!w || !e || !l) return;
+		w.getRoot()[e] = function() {
+			l.call(w); 
+		};
+	};
+	
 	function attachListeners (options, w) {
 		if (!options || !w) return;
 		var isEvent = false;
@@ -124,9 +131,7 @@ Widgets.prototype.get = function (w_str, options) {
 			if (options.hasOwnProperty(i)) {
 				isEvent = J.in_array(i, ['onclick', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'onload', 'onunload', 'onmouseover']);  
 				if (isEvent && 'function' === typeof options[i]) {
-					w.getRoot()[i] = function() {
-						options[i].call(w);
-					};
+					createListenerFunction(w, i, options[i]);
 				}
 			}			
 		};
