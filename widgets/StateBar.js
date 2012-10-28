@@ -38,7 +38,6 @@
 				
 		var sendButton = node.window.addButton(root, idButton);
 		var stateSel = node.window.addStateSelector(root, idStateSel);
-		this.actionSel = node.window.addActionSelector(root, idActionSel);
 		this.recipient = node.window.addRecipientSelector(root, idRecipient);
 		
 		var that = this;
@@ -57,6 +56,8 @@
 			//var parseState = /^\b\d+\.\b[\d+]?\b:[\d+)]?$/;
 			//var parseState = /^(\d+)$/;
 			//var parseState = /(\S+)?/;
+			
+			// STATE.STEP:ROUND
 			var parseState = /^(\d+)(?:\.(\d+))?(?::(\d+))?$/;
 			
 			var result = parseState.exec(stateSel.value);
@@ -84,8 +85,8 @@
 				}
 				
 				// Update Others
-				stateEvent = node.OUT + that.actionSel.value + '.STATE';
-				node.emit(stateEvent,state,to);
+				stateEvent = node.OUT + node.actions.SAY + '.STATE';
+				node.emit(stateEvent, state, to);
 			}
 			else {
 				node.err('Not valid state. Not sent.');

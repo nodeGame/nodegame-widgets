@@ -69,7 +69,13 @@
 	};
 	
 	MoneyTalks.prototype.update = function (amount) {
-		if ('number' !== typeof amount) return;
+		if ('number' !== typeof amount) {
+			// Try to parse strings
+			amount = parseInt(amount);
+			if (isNaN(n) || !isFinite(n)) {
+				return;
+			}
+		}
 		this.money += amount;
 		this.spanMoney.innerHTML = this.money.toFixed(this.precision);
 	};
