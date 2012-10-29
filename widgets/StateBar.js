@@ -49,35 +49,29 @@
 			// but we should add a check
 			var to = that.recipient.value;
 			
-			//var parseState = /(\d+)(?:\.(\d+))?(?::(\d+))?/;
-			//var parseState = /^\b\d+\.\b[\d+]?\b:[\d+)]?$/;
-			//var parseState = /^(\d+)$/;
-			//var parseState = /(\S+)?/;
-			
 			// STATE.STEP:ROUND
 			var parseState = /^(\d+)(?:\.(\d+))?(?::(\d+))?$/;
 			
 			var result = parseState.exec(stateSel.value);
-			
+			var state, step, round, stateEvent, stateMsg;
 			if (result !== null) {
 				// Note: not result[0]!
-				var state = result[1];
-				var step = result[2] || 1;
-				var round = result[3] || 1;
-				console.log('Parsed State: ' + result.join("|"));
+				state = result[1];
+				step = result[2] || 1;
+				round = result[3] || 1;
+				
+				node.log('Parsed State: ' + result.join("|"));
 				
 				state = new node.GameState({
-													state: state,
-													step: step,
-													round: round
+					state: state,
+					step: step,
+					round: round
 				});
-				
-				var stateEvent;
 				
 				// Self Update
 				if (to === 'ALL') {
 					stateEvent = node.IN + node.actions.SAY + '.STATE';
-					var stateMsg = node.msg.createSTATE(stateEvent, state);
+					stateMsg = node.msg.createSTATE(stateEvent, state);
 					node.emit(stateEvent, stateMsg);
 				}
 				

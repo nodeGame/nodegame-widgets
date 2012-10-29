@@ -23,32 +23,32 @@
 	
 	DataBar.prototype.append = function (root) {
 		
-		var sendButton = node.window.addButton(root);
-		var dataInput = node.window.addTextInput(root);
-		this.recipient = node.window.addRecipientSelector(root);
+		var sendButton, textInput, dataInput;
+		
+		sendButton = W.addButton(root);
+		textInput = W.addTextInput(root, 'data-bar-text');
+		dataInput = W.addTextInput(root, 'data-bar-data');
+		
+		this.recipient = W.addRecipientSelector(root);
 		
 		var that = this;
 		
 		sendButton.onclick = function() {
 			
-			var to = that.recipient.value;
-	
-			//try {
-				//var data = JSON.parse(dataInput.value);
-				data = dataInput.value;
-				console.log('Parsed Data: ' + JSON.stringify(data));
-				
-				node.emit(node.OUT + node.actions.SAY + '.DATA', data, to);
-	//			}
-	//			catch(e) {
-	//				console.log('Impossible to parse the data structure');
-	//			}
+			var to, data, text;
+			
+			to = that.recipient.value;
+			text = textInput.value;
+			data = dataInput.value;
+			
+			node.log('Parsed Data: ' + JSON.stringify(data));
+			
+			node.say(data, text, to);
 		};
 		
-		
-		node.onPLIST(function (msg) {
-			node.window.populateRecipientSelector(that.recipient, msg.data);
-		}); 
+		node.on('UPDATED_PLIST', function() {
+			node.window.populateRecipientSelector(that.recipient, node.game.pl);
+		});
 		
 		return root;
 		
