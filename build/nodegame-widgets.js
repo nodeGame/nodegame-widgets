@@ -1328,7 +1328,7 @@ node.widgets = new Widgets();
 	StateBar.description = 'Provides a simple interface to change the state of the game.';
 	
 	function StateBar (options) {
-		this.id = options.id;s
+		this.id = options.id;
 		this.recipient = null;
 	}
 	
