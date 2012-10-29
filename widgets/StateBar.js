@@ -17,9 +17,7 @@
 	StateBar.description = 'Provides a simple interface to change the state of the game.';
 	
 	function StateBar (options) {
-		this.id = options.id;
-		
-		this.actionSel = null;
+		this.id = options.id;s
 		this.recipient = null;
 	}
 	
@@ -33,7 +31,6 @@
 		
 		var idButton = PREF + 'sendButton',
 			idStateSel = PREF + 'stateSel',
-			idActionSel = PREF + 'actionSel',
 			idRecipient = PREF + 'recipient'; 
 				
 		var sendButton = node.window.addButton(root, idButton);
@@ -67,7 +64,7 @@
 				var state = result[1];
 				var step = result[2] || 1;
 				var round = result[3] || 1;
-				console.log('Action: ' + that.actionSel.value + ' Parsed State: ' + result.join("|"));
+				console.log('Parsed State: ' + result.join("|"));
 				
 				state = new node.GameState({
 													state: state,
