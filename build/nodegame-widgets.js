@@ -1328,9 +1328,7 @@ node.widgets = new Widgets();
 	StateBar.description = 'Provides a simple interface to change the state of the game.';
 	
 	function StateBar (options) {
-		this.id = options.id;
-		
-		this.actionSel = null;
+		this.id = options.id;s
 		this.recipient = null;
 	}
 	
@@ -1344,12 +1342,10 @@ node.widgets = new Widgets();
 		
 		var idButton = PREF + 'sendButton',
 			idStateSel = PREF + 'stateSel',
-			idActionSel = PREF + 'actionSel',
 			idRecipient = PREF + 'recipient'; 
 				
 		var sendButton = node.window.addButton(root, idButton);
 		var stateSel = node.window.addStateSelector(root, idStateSel);
-		this.actionSel = node.window.addActionSelector(root, idActionSel);
 		this.recipient = node.window.addRecipientSelector(root, idRecipient);
 		
 		var that = this;
@@ -1368,6 +1364,8 @@ node.widgets = new Widgets();
 			//var parseState = /^\b\d+\.\b[\d+]?\b:[\d+)]?$/;
 			//var parseState = /^(\d+)$/;
 			//var parseState = /(\S+)?/;
+			
+			// STATE.STEP:ROUND
 			var parseState = /^(\d+)(?:\.(\d+))?(?::(\d+))?$/;
 			
 			var result = parseState.exec(stateSel.value);
@@ -1377,7 +1375,7 @@ node.widgets = new Widgets();
 				var state = result[1];
 				var step = result[2] || 1;
 				var round = result[3] || 1;
-				console.log('Action: ' + that.actionSel.value + ' Parsed State: ' + result.join("|"));
+				console.log('Parsed State: ' + result.join("|"));
 				
 				state = new node.GameState({
 													state: state,
@@ -1395,8 +1393,8 @@ node.widgets = new Widgets();
 				}
 				
 				// Update Others
-				stateEvent = node.OUT + that.actionSel.value + '.STATE';
-				node.emit(stateEvent,state,to);
+				stateEvent = node.OUT + node.actions.SAY + '.STATE';
+				node.emit(stateEvent, state, to);
 			}
 			else {
 				node.err('Not valid state. Not sent.');
@@ -3141,7 +3139,13 @@ node.widgets = new Widgets();
 	};
 	
 	MoneyTalks.prototype.update = function (amount) {
-		if ('number' !== typeof amount) return;
+		if ('number' !== typeof amount) {
+			// Try to parse strings
+			amount = parseInt(amount);
+			if (isNaN(n) || !isFinite(n)) {
+				return;
+			}
+		}
 		this.money += amount;
 		this.spanMoney.innerHTML = this.money.toFixed(this.precision);
 	};
