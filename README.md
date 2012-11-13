@@ -4,20 +4,20 @@ Collections of useful and reusable javascript / HTML code snippets for nodegame-
 
 ---
 
-## Usage: node.window.loadWidget
+## Usage: node.widgets.append
 
 Loading a widget from a nodeGame game is very easy:
 
 ```js
 
 	var options = {};
-	var root = node.window.getElementById('myRoot');
+	var root = W.getElementById('myRoot');
 
-	var wall = node.window.loadWidget('Wall', root, options);
+	var wall = node.widgets.append('Wall', root, options);
 	
 	// or
 	
-	var wall = node.window.getWidget('Wall', options);
+	var wall = node.widgets.get('Wall', options);
 	
 	// some operations
 	
@@ -26,44 +26,26 @@ Loading a widget from a nodeGame game is very easy:
 	// or
 	
 	var myCustomWidget = new myCustomWidgets(options);
-	node.window.loadWidget(myCustomWidget, root);
+	node.widgets.append(myCustomWidget, root);
 	
 ```
 
 ### First parameter: Widget object or string
 
-This can be either a string representation of one the widgets objects already inside the node.window.widgets collections or a new object. In the latter case, the widget is added to the collection (if valid).
+This can be either a string representation of one the widgets objects already inside the node.widgets.widgets collections or a new object. In the latter case, the widget is added to the collection (if valid).
 
 ### Second parameter: Root element
 
-This parameter is later passed to the ```append``` method of the widget. If no root element was specified, a root is automatically determined through ```node.window.getScreen```. This parameter is obviously absent in ```node.window.getWidget```.
+This parameter is later passed to the ```append``` method of the widget. If no root element was specified, a root is automatically determined through ```node.window.getScreen```. This parameter is obviously absent in ```node.widgets.getWidget```.
 
 ### Third parameter: Options
 
 This parameter is optional and its properties vary from widget to widget. Some are widget-independent.
 
-
-#### The Fieldset property
-
-nodeGame can automatically wrap the widget into a fieldset object inside the browser window. There are several ways of obtaining this behavior. The easiest of which is to specify fieldset variable inside the contructor:
-
+The same fieldset object in the example above can also be passed as one of the properties of the ```options``` object in the ```node.widgets.append``` method. In this case, the latter has highest priority, and can override the fieldset settings of the constructor.
 
 ```js
-	
-	function myWidget (options) {
-		// some variables
-		
-		this.fieldset = {
-			legend: 'Some Text',
-			id: 'id'
-		};
-	}
-```
-
-The same fieldset object in the example above can also be passed as one of the properties of the ```options``` object in the ```node.window.loadWidget``` method. In this case, the latter has highest priority, and can override the fieldset settings of the constructor.
-
-```js
-	var wall = node.window.loadWidget('Wall', root_element, {fieldset: false});
+	var wall = node.widgets.append('Wall', root_element, {fieldset: false});
 ```
 
 #### On event property
@@ -80,9 +62,9 @@ A standard javascript event listener ('onclick', 'onfocus', 'onblur', 'onchange'
 ```
 
 
-## Anatomy of node.window.loadWidget
+## Anatomy of node.widgets.append
 
-Each time ```node.window.loadWidget``` is executed the following operations are performed:
+Each time ```node.widgets.append``` is executed the following operations are performed:
 
 1. Detect whether it is a string or an object
 2. Load it from the collection if it is a string
@@ -94,12 +76,13 @@ Each time ```node.window.loadWidget``` is executed the following operations are 
 
 ## How to write a nodeGame widget
 
-In order to preserve encapsulation, a widget must be always wrapped in a self-executing function, accepting one argument equal to ```node.window.widgets```.
+In order to preserve encapsulation, a widget should always be wrapped in a self-executing function.
 
 ```js
 	(function (exports) {
 	
-		exports.myWidget = myWidget;
+	  // register a widget to the global collection
+		node.widgets.register('myWidget', myWidget);
 	
 		function myWidget (options) {
 	  		// init
@@ -107,7 +90,7 @@ In order to preserve encapsulation, a widget must be always wrapped in a self-ex
 	
 		// More code here
 	
-	})(node.window.widgets);
+	})();
 ```
 
 Widgets must define a number of constants describing their expected behavior, version, dependencies and so on.
@@ -117,7 +100,14 @@ Widgets must define a number of constants describing their expected behavior, ve
 
 	// Encapsulated
 	
-	myWidget.id = 'myWidget';
+	myWidget.defaults = {};
+	myWidget.defaults.id = 'myWidget';
+	
+	myWidget.defaults.fieldset = { 
+    legend: 'Foo',
+    id: 'foo_fieldset',
+  };
+  
 	myWidget.name = 'my cool Widget';
 	myWidget.version = '0.3';
 	myWidget.description = 'This widget does cool stuff';

@@ -26,7 +26,9 @@
 		var sendButton, textInput, dataInput;
 		
 		sendButton = W.addButton(root);
+		W.writeln('Text');
 		textInput = W.addTextInput(root, 'data-bar-text');
+		W.writeln('Data');
 		dataInput = W.addTextInput(root, 'data-bar-data');
 		
 		this.recipient = W.addRecipientSelector(root);
