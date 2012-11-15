@@ -165,8 +165,8 @@ JSUS.format_string = function (string, args, root) {
 	};
 	
 	Chat.prototype.writeToTA = function (who, what) {
-		
-	
+//		J.format_string()
+//	
 	};
 	
 	Chat.prototype.listeners = function() {
