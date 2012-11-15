@@ -1,89 +1,3 @@
-
-/**
- * ### DOM.format_string
- * 
- * Splits a string into a series of _span_ elements
- * 
- * This methods permits to highlight special parts of a string by enclosing 
- * them in _span_ elements to which it is possible to associate a css class 
- * or id. Alternatively, it also possible to add in-line style. E.g.:
- * 
- * 	format_string('%sImportant!%s An error has occurred: %prefile not found%pre', {
- * 		'%pre': {
- * 			style: 'font-size: 12px; font-family: courier;'
- * 		},
- * 		'%s': {
- * 			id: 'myId',
- * 			'class': 'myClass',
- * 		},
- * 	}, document.body);
- * 
- * @param {string} string A text to transform
- * @param {object} args Optional. An object containing the spans to apply to the string
- * @param {Element} root Optional. An HTML element to which append the string. Defaults, a new _span_ element
- * 
- */
-JSUS.format_string = function (string, args, root) {
-	
-	var text, textNode, span, idx_start, idx_finish, idx_replace, idxs, spans = {};
-	
-	if (!args) {
-		return document.createTextNode(string);
-	}
-	
-	root = root || document.createElement('span');
-	
-	// Transform arguments before inserting them.
-	for (var key in args) {
-		if (args.hasOwnProperty(key)) {
-			span = W.getElement('span', null, args[key]);
-
-			idx_start = string.indexOf(key);
-			idx_replace = idx_start + key.length;
-			idx_finish = string.indexOf(key, idx_replace);
-
-			if ('undefined' === typeof idx_start || 'undefined' === typeof !idx_finish) {
-				JSUS.log('Error. Could not find key: ' + key);
-				return false;
-			}
-			
-			text = document.createTextNode(string.substring(idx_replace, idx_finish));
-			span.appendChild(text);
-
-			spans[idx_start] = {
-				span: span,
-				finish: idx_finish,
-				marker_length: key.length,
-			}
-			
-		}
-	  
-	}
-	
-	idxs = JSUS.keys(spans).sort(function(a,b){return a-b});
-	
-	
-	idx_start = -1;
-	for (var i = 0; i < idxs.length; i++) {
-		
-		// add fragments of string
-		if (idx_start !== idxs[i]-1) {
-			root.appendChild(document.createTextNode(string.substring(idx_start, idxs[i])));
-		}
-		
-		// add span
-		root.appendChild(spans[idxs[i]].span);
-		idx_start = spans[idxs[i]].finish + spans[idxs[i]].marker_length;
-	}
-	
-	// add the final part of the string
-	if (idx_start !== string.length) {
-		root.appendChild(document.createTextNode(string.substring(idx_start)));
-	}
-	
-	return root;
-}
-
 (function (node) {
 	
 	node.widgets.register('Chat', Chat);
@@ -140,6 +54,7 @@ JSUS.format_string = function (string, args, root) {
 	
 		this.mode = options.mode || Chat.defaults.mode;
 
+		this.recipient = W.getRecipientSelector();
 		this.submit = W.getEventButton(this.submit_event, this.submit_text, this.submit_id);
 		this.textarea = W.getElement('textarea', this.textarea_id)
 		this.chat = W.getElement('div', this.chat_id);
@@ -151,6 +66,7 @@ JSUS.format_string = function (string, args, root) {
 		root.appendChild(this.chat);
 		root.appendChild(this.textarea);
 		root.appendChild(this.submit);
+		root.appendChild(this.recipient);
 		return root;
 	};
 	
@@ -164,82 +80,45 @@ JSUS.format_string = function (string, args, root) {
 		return txt;
 	};
 	
-	Chat.prototype.writeToTA = function (who, what) {
-//		J.format_string()
-//	
-	};
-	
 	Chat.prototype.listeners = function() {
 		var that = this;	
-		node.on(this.chat_event, function (msg) {
-			var txt = document.createTextNode(that.readTA());
-			that.chat.appendChild(txt);
-		});
-	}; 
-	
-	Chat.prototype.write = function (text) {
-		if (document.readyState !== 'complete') {
-			this.buffer.push(s);
-		} else {
-			var mark = this.counter++ + ') ' + J.getTime() + ' ';
-			this.chat.innerHTML = mark + text + "\n" + this.chat.innerHTML;
-		}
+		
+	    node.on('UPDATED_PLIST', function() {
+		      W.populateRecipientSelector(that.recipient, node.game.pl);
+		    });
+		    
+	    node.on(this.chat_event, function () {
+	      var msg = that.readTA();
+	      var to = that.recipient.value;
+	      var args = {
+		        '%s': {
+		          'class': 'chat_me',
+		        },
+		        '%msg': {
+		          'class': 'chat_msg',
+		        },
+		        '!txt': msg,
+	      };
+	      J.sprintf('%sMe%s: %msg!txt%msg', args, that.chat);
+	      W.writeln('', that.chat);
+	      //node.say(this.chat_event, msg, to);
+	    });
+		    
+	    node.onDATA(this.chat_event, function (msg) {
+	    	var from = msg.from;
+	      var args = {
+		        '%s': {
+		          'class': 'chat_others',
+		        },
+		        '%msg': {
+		          'class': 'chat_msg',
+		        },
+		        '@txt': msg.data,
+	          '!from': msg.from,
+	      };
+	      J.sprintf('%s!from%s: %msg@txt%msg', args, that.chat);
+	      W.writeln('', that.chat);
+	    });
 	};
-
-	Chat.prototype.debuffer = function () {
-		if (document.readyState === 'complete' && this.buffer.length > 0) {
-			for (var i=0; i < this.buffer.length; i++) {
-				this.write(this.buffer[i]);
-			}
-			this.buffer = [];
-		}
-	};
-	
-	
-	function format_string(string, args) {
-		
-		var text, textNode, span, idx_start, idx_finish, idxs, spans = {};
-		
-		if (!args || !args.length) {
-			return document.createTextNode(string);
-		}
-		
-		
-		// Transform arguments before inserting them.
-		for (var key in args) {
-			if (args.hasOwnProperty(key)) {
-						
-				span = W.createElement('span', null, args[key]);
-				idx_start = string.indexOf(key);
-				idx_finish = string.indexOf(key, idx_start);
-				text = document.createTextNode(string.substring(idx_start, idx_finish));
-				span.appendChild(text);
-				spans[idx_start] = span;
-				
-			}
-		  
-		}
-		
-		idxs = J.keys(spans).sort(function(a,b){return a-b});
-		
-		// add the first part of the string
-		if (idxs[0] !== 0) {
-			textNode = document.createTextNode(string.substring(0, keys[0]));
-		}
-		else {
-			textNode = document.createTextNode();
-		}
-		
-		for (var i = 0; i < idxs.length; i++) {
-			textNode.appendChild(spans[idxs[i]]);
-		}
-		
-		// add the final part of the string
-		if (idxs[(idxs.length-1)] !== string.length) {
-			textNode.appendChild(document.createTextNode(string.substring(0, keys[0])));
-		}
-		
-		return textNode;
-	}
 	
 })(node);
