@@ -10,92 +10,118 @@
 	GameBoard.defaults = {};
 	GameBoard.defaults.id = 'gboard';
 	GameBoard.defaults.fieldset = {
-			legend: 'Game State'
+			legend: 'Game Board'
 	};
 	
 // ## Meta-data
 	
 	GameBoard.name = 'GameBoard';
-	GameBoard.version = '0.3.2';
+	GameBoard.version = '0.4.0';
 	GameBoard.description = 'Offer a visual representation of the state of all players in the game.';
 	
 	function GameBoard (options) {
 		
-		this.id = options.id;
+		this.id = options.id || GameBoard.defaults.id;
+		this.status_id = this.id + '_statusbar';
 		
 		this.board = null;
+		this.status = null;
 		this.root = null;
-		
-		this.noPlayers = 'No players connected...';
-		
+	
 	}
 	
 	GameBoard.prototype.append = function (root) {
 		this.root = root;
+		this.status = node.window.addDiv(root, this.status_id);
 		this.board = node.window.addDiv(root, this.id);
+		
 		this.updateBoard(node.game.pl);
 		
-		var that = this;		
-		node.on('UPDATED_PLIST', function () {
-			node.log('I Updating Board');
-			that.updateBoard(node.game.pl);
-
-		});
 		
 		return root;
 	};
 	
+	GameBoard.prototype.listeners = function() {
+		var that = this;		
+//		node.on('in.say.PCONNECT', function (msg) {
+//			that.addPlayerToBoard(msg.data);
+//		});
+//
+//		node.on('in.say.PDISCONNECT', function (msg) {
+//			that.removePlayerFromBoard(msg.data);
+//		});
+		
+		node.on('UPDATED_PLIST', function() {
+			that.updateBoard(node.game.pl);
+		});
+		
+	};
+	
+	GameBoard.prototype.printLine = function (p) {
+
+		var line = '[' + (p.name || p.id) + "]> \t"; 
+		
+		line += '(' +  p.state.round + ') ' + p.state.state + '.' + p.state.step; 
+		line += ' ';
+		
+		switch (p.state.is) {
+
+			case GameState.iss.UNKNOWN:
+				line += '(unknown)';
+				break;
+				
+			case GameState.iss.LOADING:
+				line += '(loading)';
+				break;
+				
+			case GameState.iss.LOADED:
+				line += '(loaded)';
+				break;
+				
+			case GameState.iss.PLAYING:
+				line += '(playing)';
+				break;
+			case GameState.iss.DONE:
+				line += '(done)';
+				break;		
+			default:
+				line += '('+p.state.is+')';
+				break;		
+		}
+		
+		if (p.state.paused) {
+			line += ' (P)';
+		}
+		
+		return line;
+	};
+	
+	GameBoard.prototype.printSeparator = function (p) {
+		return W.getElement('hr', null, {style: 'color: #CCC;'});
+	};
+	
+	
 	GameBoard.prototype.updateBoard = function (pl) {
 		var that = this;
-		that.board.innerHTML = 'Updating...';
+		
+		this.status.innerHTML = 'Updating...';
+		
+		var player, separator;
 		
 		if (pl.length) {
 			that.board.innerHTML = '';
 			pl.forEach( function(p) {
-				//node.log(p);
-				var pText = (p.name) ? p.id + "|" + p.name
-									 : p.id;
+				player = that.printLine(p);
 				
-				var line = '[' + pText + "]> \t"; 
+				W.write(player, that.board);
 				
-				var pState = '(' +  p.state.round + ') ' + p.state.state + '.' + p.state.step; 
-				pState += ' ';
-				
-				switch (p.state.is) {
-
-					case GameState.iss.UNKNOWN:
-						pState += '(unknown)';
-						break;
-						
-					case GameState.iss.LOADING:
-						pState += '(loading)';
-						break;
-						
-					case GameState.iss.LOADED:
-						pState += '(loaded)';
-						break;
-						
-					case GameState.iss.PLAYING:
-						pState += '(playing)';
-						break;
-					case GameState.iss.DONE:
-						pState += '(done)';
-						break;		
-					default:
-						pState += '('+p.state.is+')';
-						break;		
-				}
-				
-				if (p.state.paused) {
-					pState += ' (P)';
-				}
-				
-				that.board.innerHTML += line + pState +'\n<hr style="color: #CCC;"/>\n';
+				separator = that.printSeparator(p);
+				W.write(separator, that.board);
 			});
 		}
-		else {
-			that.board.innerHTML = that.noPlayers;
-		}
+		
+		
+		this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
 	};
 	
 })(node);
