@@ -62,6 +62,10 @@
 		this.textarea = W.getElement('textarea', this.textarea_id);
 		this.chat = W.getElement('div', this.chat_id);
 		
+		if ('undefined' !== typeof options.displayName) {
+			this.displayName = options.displayName;
+		}
+		
 		switch(this.mode) {
 		
 		case Chat.modes.RECEIVER_ONLY:
@@ -109,6 +113,12 @@
 		return txt;
 	};
 	
+	Chat.prototype.writeTA = function (string, args) {
+		J.sprintf(string, args, this.chat);
+	    W.writeln('', this.chat);
+	    this.chat.scrollTop = this.chat.scrollHeight;
+	};
+	
 	Chat.prototype.listeners = function() {
 		var that = this;	
 		    
@@ -126,10 +136,8 @@
 		        },
 		        '!txt': msg,
 	      };
-	      J.sprintf('%sMe%s: %msg!txt%msg', args, that.chat);
-	      W.writeln('', that.chat);
-	      
-	      node.say(msg, that.chat_event, to);
+	      that.writeTA('%sMe%s: %msg!txt%msg', args);
+	      node.say(msg.trim(), that.chat_event, to);
 	    });
 		  
 		if (this.mode === Chat.modes.MANY_TO_MANY) {
@@ -158,11 +166,11 @@
 		        '%msg': {
 		          'class': 'chat_msg',
 		        },
-		        '@txt': msg.data,
-	          '!from': msg.from,
+		        '!txt': msg.data,
+	            '!from': from,
 	      };
-	      J.sprintf('%s!from%s: %msg@txt%msg', args, that.chat);
-	      W.writeln('', that.chat);
+	    	
+	      that.writeTA('%s!from%s: %msg!txt%msg', args);
 	    });
 	};
 	
