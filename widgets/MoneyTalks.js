@@ -19,7 +19,7 @@
 // ## Dependencies
 	
 	MoneyTalks.dependencies = {
-		JSUS: {},
+		JSUS: {}
 	};
 	
 	

@@ -48,7 +48,7 @@
 		node.on('LOADED', function(text) {
 			if (that.waitingDiv) {
 				
-				if (that.waitingDiv.style.display === ''){
+				if (that.waitingDiv.style.display === '') {
 					that.waitingDiv.style.display = 'none';
 				}
 			// TODO: Document.js add method to remove element

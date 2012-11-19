@@ -134,7 +134,7 @@
 		        '%msg': {
 		          'class': 'chat_msg',
 		        },
-		        '!txt': msg,
+		        '!txt': msg
 	      };
 	      that.writeTA('%sMe%s: %msg!txt%msg', args);
 	      node.say(msg.trim(), that.chat_event, to);
@@ -167,7 +167,7 @@
 		          'class': 'chat_msg',
 		        },
 		        '!txt': msg.data,
-	            '!from': from,
+	            '!from': from
 	      };
 	    	
 	      that.writeTA('%s!from%s: %msg!txt%msg', args);

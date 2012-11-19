@@ -8,7 +8,7 @@
 	ServerInfoDisplay.defaults.id = 'serverinfodisplay';
 	ServerInfoDisplay.defaults.fieldset = {
 			legend: 'Server Info',
-			id: 'serverinfo_fieldset',
+			id: 'serverinfo_fieldset'
 	};		
 	
 // ## Meta-data

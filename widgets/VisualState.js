@@ -12,7 +12,7 @@
 	VisualState.defaults.id = 'visualstate';
 	VisualState.defaults.fieldset = { 
 		legend: 'State',
-		id: 'visualstate_fieldset',
+		id: 'visualstate_fieldset'
 	};	
 	
 // ## Meta-data

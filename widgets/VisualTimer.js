@@ -10,7 +10,7 @@
 	VisualTimer.defaults.id = 'visualtimer';
 	VisualTimer.defaults.fieldset = {
 			legend: 'Time left',
-			id: 'visualtimer_fieldset',
+			id: 'visualtimer_fieldset'
 	};		
 	
 // ## Meta-data

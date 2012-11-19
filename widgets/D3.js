@@ -26,7 +26,7 @@
 	
 	D3.dependencies = {
 		d3: {},	
-		JSUS: {},
+		JSUS: {}
 	};
 	
 	function D3 (options) {
