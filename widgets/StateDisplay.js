@@ -41,8 +41,8 @@
 		var idPlayer = PREF + 'player';
 		var idState = PREF + 'state'; 
 			
-		var checkPlayerName = setInterval(function(idState,idPlayer){
-			if (node.player !== null){
+		var checkPlayerName = setInterval(function(idState,idPlayer) {
+			if (node.player && node.player.id) {
 				clearInterval(checkPlayerName);
 				that.updateAll();
 			}
