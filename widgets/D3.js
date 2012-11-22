@@ -26,7 +26,7 @@
 	
 	D3.dependencies = {
 		d3: {},	
-		JSUS: {},
+		JSUS: {}
 	};
 	
 	function D3 (options) {
@@ -61,7 +61,7 @@
 // ## Dependencies	
 	D3ts.dependencies = {
 		D3: {},	
-		JSUS: {},
+		JSUS: {}
 	};
 	
 	D3ts.prototype.__proto__ = D3.prototype;

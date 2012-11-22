@@ -7,9 +7,7 @@
 	
 	GameSummary.defaults = {};
 	GameSummary.defaults.id = 'gamesummary';
-	GameSummary.defaults.fieldset = {
-		legend: 'Game Summary',
-	};
+	GameSummary.defaults.fieldset = { legend: 'Game Summary' };
 	
 // ## Meta-data
 	
