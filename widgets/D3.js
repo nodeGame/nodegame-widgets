@@ -61,7 +61,7 @@
 // ## Dependencies	
 	D3ts.dependencies = {
 		D3: {},	
-		JSUS: {},
+		JSUS: {}
 	};
 	
 	D3ts.prototype.__proto__ = D3.prototype;

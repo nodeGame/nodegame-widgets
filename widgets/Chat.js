@@ -32,7 +32,7 @@
 			MANY_TO_MANY: 'MANY_TO_MANY',
 			MANY_TO_ONE: 'MANY_TO_ONE',
 			ONE_TO_ONE: 'ONE_TO_ONE',
-			RECEIVER_ONLY: 'RECEIVER_ONLY',
+			RECEIVER_ONLY: 'RECEIVER_ONLY'
 	};
 	
 	Chat.name = 'Chat';
@@ -129,10 +129,10 @@
 	      var to = that.recipient.value;
 	      var args = {
 		        '%s': {
-		          'class': 'chat_me',
+		          'class': 'chat_me'
 		        },
 		        '%msg': {
-		          'class': 'chat_msg',
+		          'class': 'chat_msg'
 		        },
 		        '!txt': msg
 	      };
@@ -161,10 +161,10 @@
 	    	var from = that.displayName(msg.from);
 	    	var args = {
 		        '%s': {
-		          'class': 'chat_others',
+		          'class': 'chat_others'
 		        },
 		        '%msg': {
-		          'class': 'chat_msg',
+		          'class': 'chat_msg'
 		        },
 		        '!txt': msg.data,
 	            '!from': from

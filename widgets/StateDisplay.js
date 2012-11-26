@@ -41,8 +41,8 @@
 		var idPlayer = PREF + 'player';
 		var idState = PREF + 'state'; 
 			
-		var checkPlayerName = setInterval(function(idState,idPlayer){
-			if (node.player !== null){
+		var checkPlayerName = setInterval(function(idState,idPlayer) {
+			if (node.player && node.player.id) {
 				clearInterval(checkPlayerName);
 				that.updateAll();
 			}
@@ -55,10 +55,14 @@
 	};
 	
 	StateDisplay.prototype.updateAll = function() {
+		var state = node.game ? new GameState(node.game.state) : new GameState(),
+			id = node.player ? node.player.id : '-';
+			name = node.player && node.player.name ? node.player.name : '-';
+			
 		this.table.clear(true);
-		this.table.addRow(['Name: ', node.player.name]);
-		this.table.addRow(['State: ', new GameState(node.state).toString()]);
-		this.table.addRow(['Id: ', node.player.id]);
+		this.table.addRow(['Name: ', name]);
+		this.table.addRow(['State: ', state.toString()]);
+		this.table.addRow(['Id: ', id]);
 		this.table.parse();
 		
 	};
@@ -72,7 +76,7 @@
 		var OUT = node.OUT;
 		
 		node.on('STATECHANGE', function() {
-			that.updateAll(node.state);
+			that.updateAll();
 		}); 
 	}; 
 	

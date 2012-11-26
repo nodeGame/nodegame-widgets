@@ -7,9 +7,7 @@
 	
 // ## Defaults
 	
-	var defaults = {
-			id: 'controls',
-	}
+	var defaults = { id: 'controls' };
 	
 	Controls.defaults = defaults;
 	
