@@ -14,7 +14,7 @@
 // ## Meta-data
 	
 	NextPreviousState.name = 'Next,Previous State';
-	NextPreviousState.version = '0.3.1';
+	NextPreviousState.version = '0.3.2';
 	NextPreviousState.description = 'Adds two buttons to push forward or rewind the state of the game by one step.';
 		
 	function NextPreviousState(options) {
@@ -37,13 +37,13 @@
 	
 		var updateState = function (state) {
 			if (state) {
-				var stateEvent = node.IN + node.actions.SAY + '.STATE';
+				var stateEvent = node.IN + node.action.SAY + '.STATE';
 				var stateMsg = node.msg.createSTATE(stateEvent, state);
 				// Self Update
 				node.emit(stateEvent, stateMsg);
 				
 				// Update Others
-				stateEvent = node.OUT + node.actions.SAY + '.STATE';
+				stateEvent = node.OUT + node.action.SAY + '.STATE';
 				node.emit(stateEvent, state, 'ALL');
 			}
 			else {

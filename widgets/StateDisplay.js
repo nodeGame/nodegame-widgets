@@ -14,7 +14,7 @@
 // ## Meta-data
 	
 	StateDisplay.name = 'State Display';
-	StateDisplay.version = '0.4.1';
+	StateDisplay.version = '0.4.2';
 	StateDisplay.description = 'Display basic information about player\'s status.';
 	
 	function StateDisplay (options) {
@@ -69,11 +69,6 @@
 	
 	StateDisplay.prototype.listeners = function () {
 		var that = this;
-		var say = node.actions.SAY + '.';
-		var set = node.actions.SET + '.';
-		var get = node.actions.GET + '.'; 
-		var IN =  node.IN;
-		var OUT = node.OUT;
 		
 		node.on('STATECHANGE', function() {
 			that.updateAll();

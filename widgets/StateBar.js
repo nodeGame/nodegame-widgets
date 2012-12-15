@@ -13,7 +13,7 @@
 // ## Meta-data
 	
 	StateBar.name = 'State Bar';
-	StateBar.version = '0.3.1';
+	StateBar.version = '0.3.2';
 	StateBar.description = 'Provides a simple interface to change the state of the game.';
 	
 	function StateBar (options) {
@@ -70,13 +70,13 @@
 				
 				// Self Update
 				if (to === 'ALL') {
-					stateEvent = node.IN + node.actions.SAY + '.STATE';
+					stateEvent = node.IN + node.action.SAY + '.STATE';
 					stateMsg = node.msg.createSTATE(stateEvent, state);
 					node.emit(stateEvent, stateMsg);
 				}
 				
 				// Update Others
-				stateEvent = node.OUT + node.actions.SAY + '.STATE';
+				stateEvent = node.OUT + node.action.SAY + '.STATE';
 				node.emit(stateEvent, state, to);
 			}
 			else {
