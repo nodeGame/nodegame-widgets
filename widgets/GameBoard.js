@@ -66,22 +66,22 @@
 		
 		switch (p.state.is) {
 
-			case GameState.iss.UNKNOWN:
+			case node.is.UNKNOWN:
 				line += '(unknown)';
 				break;
 				
-			case GameState.iss.LOADING:
+			case node.is.LOADING:
 				line += '(loading)';
 				break;
 				
-			case GameState.iss.LOADED:
+			case node.is.LOADED:
 				line += '(loaded)';
 				break;
 				
-			case GameState.iss.PLAYING:
+			case node.is.PLAYING:
 				line += '(playing)';
 				break;
-			case GameState.iss.DONE:
+			case node.is.DONE:
 				line += '(done)';
 				break;		
 			default:

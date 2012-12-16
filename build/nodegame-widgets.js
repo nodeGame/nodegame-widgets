@@ -1237,7 +1237,7 @@ node.widgets = new Widgets();
 // ## Meta-data
 	
 	StateDisplay.name = 'State Display';
-	StateDisplay.version = '0.4.1';
+	StateDisplay.version = '0.4.2';
 	StateDisplay.description = 'Display basic information about player\'s status.';
 	
 	function StateDisplay (options) {
@@ -1292,11 +1292,6 @@ node.widgets = new Widgets();
 	
 	StateDisplay.prototype.listeners = function () {
 		var that = this;
-		var say = node.actions.SAY + '.';
-		var set = node.actions.SET + '.';
-		var get = node.actions.GET + '.'; 
-		var IN =  node.IN;
-		var OUT = node.OUT;
 		
 		node.on('STATECHANGE', function() {
 			that.updateAll();
@@ -1506,22 +1501,22 @@ node.widgets = new Widgets();
 		
 		switch (p.state.is) {
 
-			case GameState.iss.UNKNOWN:
+			case node.is.UNKNOWN:
 				line += '(unknown)';
 				break;
 				
-			case GameState.iss.LOADING:
+			case node.is.LOADING:
 				line += '(loading)';
 				break;
 				
-			case GameState.iss.LOADED:
+			case node.is.LOADED:
 				line += '(loaded)';
 				break;
 				
-			case GameState.iss.PLAYING:
+			case node.is.PLAYING:
 				line += '(playing)';
 				break;
-			case GameState.iss.DONE:
+			case node.is.DONE:
 				line += '(done)';
 				break;		
 			default:
@@ -3580,7 +3575,7 @@ node.widgets = new Widgets();
 // ## Meta-data
 	
 	NextPreviousState.name = 'Next,Previous State';
-	NextPreviousState.version = '0.3.1';
+	NextPreviousState.version = '0.3.2';
 	NextPreviousState.description = 'Adds two buttons to push forward or rewind the state of the game by one step.';
 		
 	function NextPreviousState(options) {
@@ -3603,13 +3598,13 @@ node.widgets = new Widgets();
 	
 		var updateState = function (state) {
 			if (state) {
-				var stateEvent = node.IN + node.actions.SAY + '.STATE';
+				var stateEvent = node.IN + node.action.SAY + '.STATE';
 				var stateMsg = node.msg.createSTATE(stateEvent, state);
 				// Self Update
 				node.emit(stateEvent, stateMsg);
 				
 				// Update Others
-				stateEvent = node.OUT + node.actions.SAY + '.STATE';
+				stateEvent = node.OUT + node.action.SAY + '.STATE';
 				node.emit(stateEvent, state, 'ALL');
 			}
 			else {
@@ -3873,7 +3868,7 @@ node.widgets = new Widgets();
 // ## Meta-data
 	
 	StateBar.name = 'State Bar';
-	StateBar.version = '0.3.1';
+	StateBar.version = '0.3.2';
 	StateBar.description = 'Provides a simple interface to change the state of the game.';
 	
 	function StateBar (options) {
@@ -3930,13 +3925,13 @@ node.widgets = new Widgets();
 				
 				// Self Update
 				if (to === 'ALL') {
-					stateEvent = node.IN + node.actions.SAY + '.STATE';
+					stateEvent = node.IN + node.action.SAY + '.STATE';
 					stateMsg = node.msg.createSTATE(stateEvent, state);
 					node.emit(stateEvent, stateMsg);
 				}
 				
 				// Update Others
-				stateEvent = node.OUT + node.actions.SAY + '.STATE';
+				stateEvent = node.OUT + node.action.SAY + '.STATE';
 				node.emit(stateEvent, state, to);
 			}
 			else {
