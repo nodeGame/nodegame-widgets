@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = '../', thisFile = 'widgets/Chat.js', defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h2">
+        <a href="#defaults">Defaults</a>
+      </div>
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+      <div class="heading h3">
+        <a href="#chat.modes">Chat.modes</a>
+      </div>
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>Chat.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+  
+  <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Chat&#39;</span><span class="p">,</span> <span class="nx">Chat</span><span class="p">);</span>
+  
+  <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">,</span>
+    <span class="nx">W</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">;</span>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="defaults">
+  <h2>
+    <a href="#defaults" class="pilcrow">&#182;</a>
+    Defaults
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;chat&#39;</span><span class="p">;</span>
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Chat&#39;</span> <span class="p">};</span>  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="s1">&#39;MANY_TO_MANY&#39;</span><span class="p">;</span> 
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">textarea_id</span> <span class="o">=</span> <span class="s1">&#39;chat_textarea&#39;</span><span class="p">;</span>
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">chat_id</span> <span class="o">=</span> <span class="s1">&#39;chat_chat&#39;</span><span class="p">;</span>
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">chat_event</span> <span class="o">=</span> <span class="s1">&#39;CHAT&#39;</span><span class="p">;</span>
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">submit_id</span> <span class="o">=</span> <span class="s1">&#39;chat_submit&#39;</span><span class="p">;</span>
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">submit_text</span> <span class="o">=</span> <span class="s1">&#39;chat&#39;</span><span class="p">;</span>
+
+      </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" class="pilcrow">&#182;</a>
+    Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="chat.modes">
+  <h3>
+    <a href="#chat.modes" class="pilcrow">&#182;</a>
+    Chat.modes
+  </h3>
+</div>
+
+
+<p>MANY_TO_MANY: everybody can see all the messages, and it possible
+   to send private messages
+ MANY_TO_ONE: everybody can see all the messages, private messages can
+   be received, but not sent
+ ONE_TO_ONE: everybody sees only personal messages, private messages can
+   be received, but not sent. All messages are sent to the SERVER
+ RECEIVER_ONLY: messages can only be received, but not sent</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>  <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span> <span class="o">=</span> <span class="p">{</span> 
+      <span class="nx">MANY_TO_MANY</span><span class="o">:</span> <span class="s1">&#39;MANY_TO_MANY&#39;</span><span class="p">,</span>
+      <span class="nx">MANY_TO_ONE</span><span class="o">:</span> <span class="s1">&#39;MANY_TO_ONE&#39;</span><span class="p">,</span>
+      <span class="nx">ONE_TO_ONE</span><span class="o">:</span> <span class="s1">&#39;ONE_TO_ONE&#39;</span><span class="p">,</span>
+      <span class="nx">RECEIVER_ONLY</span><span class="o">:</span> <span class="s1">&#39;RECEIVER_ONLY&#39;</span>
+  <span class="p">};</span>
+  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Chat&#39;</span><span class="p">;</span>
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.4&#39;</span><span class="p">;</span>
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Offers a uni / bi-directional communication interface between players, or between players and the experimenter.&#39;</span><span class="p">;</span></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" class="pilcrow">&#182;</a>
+    Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
+  <span class="p">};</span>
+  
+  <span class="kd">function</span> <span class="nx">Chat</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">mode</span><span class="p">;</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">textarea_id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">textarea_id</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">textarea_id</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">chat_id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">chat_id</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">chat_id</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">submit_id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">submit_id</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">submit_id</span><span class="p">;</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">chat_event</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">chat_event</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">chat_event</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">submit_text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">submit_text</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">submit_text</span><span class="p">;</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getEventButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chat_event</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">submit_text</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">submit_id</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea_id</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">chat</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chat_id</span><span class="p">);</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">displayName</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">displayName</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">displayName</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">switch</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
+    
+    <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">RECEIVER_ONLY</span><span class="o">:</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">};</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_ONE</span><span class="o">:</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;ALL&#39;</span><span class="p">};</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">ONE_TO_ONE</span><span class="o">:</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">};</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="o">:</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getRecipientSelector</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  
+  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
+    <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">);</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">!==</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">RECEIVER_ONLY</span><span class="p">)</span> <span class="p">{</span> 
+      <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="p">);</span>
+      <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
+      <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="p">);</span>
+      <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_MANY</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getRoot</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">displayName</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">from</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">from</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">readTA</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">txt</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">txt</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">writeTA</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">string</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">J</span><span class="p">.</span><span class="nx">sprintf</span><span class="p">(</span><span class="nx">string</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">);</span>
+      <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">.</span><span class="nx">scrollHeight</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>  
+        
+      <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chat_event</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">readTA</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">msg</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        
+        <span class="kd">var</span> <span class="nx">to</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;%s&#39;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_me&#39;</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;%msg&#39;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_msg&#39;</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;!txt&#39;</span><span class="o">:</span> <span class="nx">msg</span>
+        <span class="p">};</span>
+        <span class="nx">that</span><span class="p">.</span><span class="nx">writeTA</span><span class="p">(</span><span class="s1">&#39;%sMe%s: %msg!txt%msg&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">trim</span><span class="p">(),</span> <span class="nx">that</span><span class="p">.</span><span class="nx">chat_event</span><span class="p">,</span> <span class="nx">to</span><span class="p">);</span>
+      <span class="p">});</span>
+      
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_MANY</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;UPDATED_PLIST&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">W</span><span class="p">.</span><span class="nx">populateRecipientSelector</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">.</span><span class="nx">fetch</span><span class="p">());</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+      <span class="nx">node</span><span class="p">.</span><span class="nx">onDATA</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chat_event</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">from</span> <span class="o">===</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">from</span> <span class="o">===</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">sid</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">ONE_TO_ONE</span><span class="p">)</span> <span class="p">{</span> 
+          <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">from</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        
+        
+        <span class="kd">var</span> <span class="nx">from</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">displayName</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">from</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;%s&#39;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_others&#39;</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;%msg&#39;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_msg&#39;</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;!txt&#39;</span><span class="o">:</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+              <span class="s1">&#39;!from&#39;</span><span class="o">:</span> <span class="nx">from</span>
+        <span class="p">};</span>
+        
+        <span class="nx">that</span><span class="p">.</span><span class="nx">writeTA</span><span class="p">(</span><span class="s1">&#39;%s!from%s: %msg!txt%msg&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+      <span class="p">});</span>
+  <span class="p">};</span>
+  
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

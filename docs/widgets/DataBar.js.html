@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DataBar.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = '../', thisFile = 'widgets/DataBar.js', defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h2">
+        <a href="#defaults">Defaults</a>
+      </div>
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>DataBar.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+  
+  <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;DataBar&#39;</span><span class="p">,</span> <span class="nx">DataBar</span><span class="p">);</span>
+  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="defaults">
+  <h2>
+    <a href="#defaults" class="pilcrow">&#182;</a>
+    Defaults
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>  <span class="nx">DataBar</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nx">DataBar</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;databar&#39;</span><span class="p">;</span>
+  <span class="nx">DataBar</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span> 
+    <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Send DATA to players&#39;</span>
+  <span class="p">};</span>
+  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" class="pilcrow">&#182;</a>
+    Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>  <span class="nx">DataBar</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Data Bar&#39;</span><span class="p">;</span>
+  <span class="nx">DataBar</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
+  <span class="nx">DataBar</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Adds a input field to send DATA messages to the players&#39;</span><span class="p">;</span>
+    
+  <span class="kd">function</span> <span class="nx">DataBar</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">bar</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">}</span>
+  
+  
+  <span class="nx">DataBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+    
+    <span class="kd">var</span> <span class="nx">sendButton</span><span class="p">,</span> <span class="nx">textInput</span><span class="p">,</span> <span class="nx">dataInput</span><span class="p">;</span>
+    
+    <span class="nx">sendButton</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
+    <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;Text&#39;</span><span class="p">);</span>
+    <span class="nx">textInput</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addTextInput</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="s1">&#39;data-bar-text&#39;</span><span class="p">);</span>
+    <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;Data&#39;</span><span class="p">);</span>
+    <span class="nx">dataInput</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addTextInput</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="s1">&#39;data-bar-data&#39;</span><span class="p">);</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addRecipientSelector</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
+    
+    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    
+    <span class="nx">sendButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      
+      <span class="kd">var</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">text</span><span class="p">;</span>
+      
+      <span class="nx">to</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+      <span class="nx">text</span> <span class="o">=</span> <span class="nx">textInput</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+      <span class="nx">data</span> <span class="o">=</span> <span class="nx">dataInput</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+      
+      <span class="nx">node</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Parsed Data: &#39;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
+      
+      <span class="nx">node</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="nx">to</span><span class="p">);</span>
+    <span class="p">};</span>
+    
+    <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;UPDATED_PLIST&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">populateRecipientSelector</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">);</span>
+    <span class="p">});</span>
+    
+    <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
+    
+  <span class="p">};</span>
+  
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

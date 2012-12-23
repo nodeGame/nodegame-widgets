@@ -50,23 +50,28 @@ program
 		build(options);
 	});
    
-//program
-//	.command('doc')
-//	.description('Build documentation files')
-//	.action(function(){
-//		console.log('Building documentation for nodegame-widgets v.' + version);
-//		// http://nodejs.org/api.html#_child_processes
-//		var dockerDir = J.resolveModuleDir('docker');
-//		var command = dockerDir + 'docker -i ' + rootDir + ' jsus.js lib/ -s true -o ' + rootDir + 'docs/';
-//		var child = exec(command, function (error, stdout, stderr) {
-//			util.print(stdout);
-//			util.print(stderr);
-//			if (error !== null) {
-//				console.log('build error: ' + error);
-//			}
-//		});
-//
-//	});
+program
+	.command('doc')
+	.description('Build documentation files')
+	.action(function(){
+		console.log('Building documentation for nodegame-widgets v.' + version);
+		try {
+			var dockerDir = J.resolveModuleDir('docker');
+		}
+		catch(e) {
+			console.log('module Docker not found. Cannot build doc. Do \'npm install docker\' to fix it.');
+			return false;
+		}
+		var command = dockerDir + 'docker -i ' + rootDir + ' index.js lib/ widgets/ -s true -o ' + rootDir + 'docs/';
+		var child = exec(command, function (error, stdout, stderr) {
+			util.print(stdout);
+			util.print(stderr);
+			if (error !== null) {
+				console.log('build error: ' + error);
+			}
+		});
+
+	});
 
 	
 // Parsing options
