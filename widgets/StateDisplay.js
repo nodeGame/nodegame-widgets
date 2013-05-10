@@ -56,7 +56,7 @@
 	
 	StateDisplay.prototype.updateAll = function() {
 		var state = node.game ? new GameState(node.game.state) : new GameState(),
-			id = node.player ? node.player.id : '-';
+			id = node.player ? node.player.id : '-',
 			name = node.player && node.player.name ? node.player.name : '-';
 			
 		this.table.clear(true);
