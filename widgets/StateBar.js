@@ -62,7 +62,7 @@
 				
 				node.log('Parsed State: ' + result.join("|"));
 				
-				state = new node.GameState({
+				state = new node.GameStage({
 					state: state,
 					step: step,
 					round: round

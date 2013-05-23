@@ -2,8 +2,7 @@
 	
 	node.widgets.register('GameBoard', GameBoard);
 	
-	var GameState = node.GameState,
-		PlayerList = node.PlayerList;
+	var PlayerList = node.PlayerList;
 
 // ## Defaults	
 	

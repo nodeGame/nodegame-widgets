@@ -1,7 +1,7 @@
 (function (node) {
 
 	var Table = node.window.Table,
-		GameState = node.GameState;
+		GameStage = node.GameStage;
 	
 	node.widgets.register('StateDisplay', StateDisplay);	
 
@@ -55,7 +55,7 @@
 	};
 	
 	StateDisplay.prototype.updateAll = function() {
-		var state = node.game ? new GameState(node.game.state) : new GameState(),
+		var state = node.game ? new GameStage(node.game.state) : new GameStage(),
 			id = node.player ? node.player.id : '-',
 			name = node.player && node.player.name ? node.player.name : '-';
 			

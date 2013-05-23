@@ -1,6 +1,6 @@
 (function (node) {
 
-	var GameState = node.GameState,
+	var GameStage = node.GameStage,
 		PlayerList = node.PlayerList;
 	
 	
@@ -49,7 +49,7 @@
 		}, node.game.memory.db);
 		
 		
-		this.gtbl.c('state', GameState.compare);
+		this.gtbl.c('state', GameStage.compare);
 		
 		this.gtbl.setLeft([]);
 		
@@ -112,7 +112,7 @@
 	
 	GameTable.prototype.addLeft = function (state, player) {
 		if (!state) return;
-		state = new GameState(state);
+		state = new GameStage(state);
 		if (!JSUS.in_array({content:state.toString(), type: 'left'}, this.gtbl.left)){
 			this.gtbl.add2Left(state.toString());
 		}
@@ -144,7 +144,7 @@
 	
 	GameTable.prototype.y2State = function (y) {
 		if (!y) return false;
-		return node.game.gameLoop.jumpTo(new GameState(),y);
+		return node.game.gameLoop.jumpTo(new GameStage(),y);
 	};
 	
 	

@@ -1,6 +1,8 @@
 (function (node) {
 
-	var GameState = node.GameState,
+	// TODO: needs major refactoring
+	
+	var GameStage = node.GameStage,
 		PlayerList = node.PlayerList,
 		Table = node.window.Table,
 		HTMLRenderer = node.window.HTMLRenderer;
@@ -43,7 +45,7 @@
 		this.auto_update = ('undefined' !== typeof options.auto_update) ? options.auto_update : true;
 		this.replace = options.replace || false;
 		this.htmlRenderer = new HTMLRenderer({renderers: options.renderers});
-		this.c('state', GameState.compare);
+		this.c('state', GameStage.compare);
 		this.setLeft([]);
 		this.parse(true);
 	};

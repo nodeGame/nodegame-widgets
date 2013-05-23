@@ -2,8 +2,7 @@
 	
 	node.widgets.register('VisualState', VisualState);
 	
-	var GameState = node.GameState,
-		JSUS = node.JSUS,
+	var JSUS = node.JSUS,
 		Table = node.window.Table;
 	
 // ## Defaults
@@ -31,7 +30,6 @@
 	
 	function VisualState (options) {
 		this.id = options.id;
-		this.gameLoop = node.game.gameLoop;
 		
 		this.root = null;		// the parent element
 		this.table = new Table();
@@ -57,16 +55,16 @@
 	};
 	
 	VisualState.prototype.writeState = function () {
-		var state = false;
-		var pr = false;
-		var nx = false;
-		
+		var state, pr, nx, tmp;
 		var miss = '-';
 		
 		if (node.game && node.game.state) {
-			state = this.gameLoop.getName(node.game.state) || miss;
-			pr = this.gameLoop.getName(node.game.previous()) || miss;
-			nx = this.gameLoop.getName(node.game.next()) || miss;
+			tmp = node.game.gameLoop.getStep(node.game.state);
+			state = (tmp) ? tmp.name : miss;
+			tmp = node.game.gameLoop.getStep(node.game.previous());
+			pr = (tmp) ? tmp.name : miss;
+			tmp = node.game.gameLoop.getStep(node.game.next());
+			nx = (tmp) ? tmp.name : miss;
 		}
 		else {
 			state = 'Uninitialized';
