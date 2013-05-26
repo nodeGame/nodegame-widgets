@@ -3514,7 +3514,9 @@ node.widgets = new Widgets();
 	VisualTimer.prototype.listeners = function () {
 		var that = this;
 		node.on('LOADED', function() {
-			var timer = node.game.gameLoop.getAllParams(node.game.gameState).timer;
+		    var stepObj = node.game.getStep();
+		    if (!stepObj) return;
+		    var timer = stepObj.timer;
 			if (timer) {
 				timer = JSUS.clone(timer);
 				that.timerDiv.className = '';
