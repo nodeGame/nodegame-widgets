@@ -116,7 +116,7 @@
 	VisualTimer.prototype.listeners = function () {
 		var that = this;
 		node.on('LOADED', function() {
-		    var stepObj = node.game.getStep();
+		    var stepObj = node.game.getCurrentStep();
 		    if (!stepObj) return;
 		    var timer = stepObj.timer;
 			if (timer) {
