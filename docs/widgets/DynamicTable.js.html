@@ -37,9 +37,18 @@
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
-
-  <span class="kd">var</span> <span class="nx">GameState</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameState</span><span class="p">,</span>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>TODO: needs major refactoring</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>  
+  <span class="kd">var</span> <span class="nx">GameStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameStage</span><span class="p">,</span>
     <span class="nx">PlayerList</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">PlayerList</span><span class="p">,</span>
     <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">,</span>
     <span class="nx">HTMLRenderer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">HTMLRenderer</span><span class="p">;</span>
@@ -67,7 +76,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
 </div>
 <p>JSUS.extend(node.window.Table,this);</p>
         </td>
@@ -90,7 +99,7 @@
     <span class="k">this</span><span class="p">.</span><span class="nx">auto_update</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">auto_update</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">auto_update</span> <span class="o">:</span> <span class="kc">true</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">replace</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">htmlRenderer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HTMLRenderer</span><span class="p">({</span><span class="nx">renderers</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">renderers</span><span class="p">});</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="nx">GameState</span><span class="p">.</span><span class="nx">compare</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="nx">GameStage</span><span class="p">.</span><span class="nx">compare</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">setLeft</span><span class="p">([]);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
   <span class="p">};</span>
@@ -107,7 +116,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>Cell</p>
         </td>
@@ -146,12 +155,12 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
 
-<div class="highlight"><pre><code>            <span class="n">console</span><span class="o">.</span><span class="nb">log</span><span class="p">(</span><span class="s">&#39;Bindings found:&#39;</span><span class="p">);</span>
-            <span class="n">console</span><span class="o">.</span><span class="nb">log</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-            <span class="n">console</span><span class="o">.</span><span class="nb">log</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+<div class="highlight"><pre><code>            <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="err">&#39;</span><span class="n">Bindings</span> <span class="n">found</span><span class="o">:</span><span class="err">&#39;</span><span class="p">);</span>
+            <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+            <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
 </code></pre></div>
 
 
@@ -164,7 +173,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>Replace or Add</p>
         </td>
@@ -177,7 +186,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>End Cell</p>
         </td>
@@ -188,7 +197,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>Header</p>
         </td>
@@ -203,7 +212,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>Left</p>
         </td>
@@ -219,7 +228,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>Auto Update?</p>
         </td>

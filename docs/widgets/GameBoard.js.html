@@ -47,8 +47,7 @@
   
   <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;GameBoard&#39;</span><span class="p">,</span> <span class="nx">GameBoard</span><span class="p">);</span>
   
-  <span class="kd">var</span> <span class="nx">GameState</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameState</span><span class="p">,</span>
-    <span class="nx">PlayerList</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">PlayerList</span><span class="p">;</span></pre></div>
+  <span class="kd">var</span> <span class="nx">PlayerList</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">PlayerList</span><span class="p">;</span></pre></div>
         </td>
       </tr>
       <tr>
@@ -117,12 +116,12 @@
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 
-<div class="highlight"><pre><code><span class="n">node</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s">&#39;in.say.PCONNECT&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">that</span><span class="o">.</span><span class="n">addPlayerToBoard</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">);</span>
+<div class="highlight"><pre><code><span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;in.say.PCONNECT&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">that</span><span class="p">.</span><span class="nx">addPlayerToBoard</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
 <span class="p">});</span>
 
-<span class="n">node</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s">&#39;in.say.PDISCONNECT&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">that</span><span class="o">.</span><span class="n">removePlayerFromBoard</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">);</span>
+<span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;in.say.PDISCONNECT&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">that</span><span class="p">.</span><span class="nx">removePlayerFromBoard</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
 

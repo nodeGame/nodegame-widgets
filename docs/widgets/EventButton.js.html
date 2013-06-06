@@ -160,11 +160,11 @@
   <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 
-<div class="highlight"><pre><code><span class="sr">//</span> <span class="n">Emit</span> <span class="n">DONE</span> <span class="n">only</span> <span class="k">if</span> <span class="n">callback</span> <span class="n">is</span> <span class="n">successful</span>
-<span class="n">this</span><span class="o">.</span><span class="n">button</span><span class="o">.</span><span class="n">onclick</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">var</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="nb">exec</span><span class="p">)</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="nb">exec</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">game</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ok</span><span class="p">)</span> <span class="n">node</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">that</span><span class="o">.</span><span class="n">event</span><span class="p">);</span>
+<div class="highlight"><pre><code><span class="c1">// Emit DONE only if callback is successful</span>
+<span class="k">this</span><span class="p">.</span><span class="n">button</span><span class="p">.</span><span class="n">onclick</span> <span class="o">=</span> <span class="k">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">options</span><span class="p">.</span><span class="n">exec</span><span class="p">)</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">options</span><span class="p">.</span><span class="n">exec</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">game</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ok</span><span class="p">)</span> <span class="n">node</span><span class="p">.</span><span class="n">emit</span><span class="p">(</span><span class="n">that</span><span class="p">.</span><span class="k">event</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
 

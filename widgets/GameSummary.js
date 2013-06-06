@@ -27,8 +27,8 @@
 	};
 	
 	GameSummary.prototype.writeSummary = function (idState, idSummary) {
-		var gName = document.createTextNode('Name: ' + node.game.name),
-			gDescr = document.createTextNode('Descr: ' + node.game.description),
+		var gName = document.createTextNode('Name: ' + node.game.metadata.name),
+			gDescr = document.createTextNode('Descr: ' + node.game.metadata.description),
 			gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
 			gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
 		
