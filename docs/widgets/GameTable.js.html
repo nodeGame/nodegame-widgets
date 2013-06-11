@@ -248,12 +248,12 @@
   
   <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">state2y</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">state</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">gameLoop</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
   <span class="p">};</span>
   
   <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">y2State</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">y</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">gameLoop</span><span class="p">.</span><span class="nx">jumpTo</span><span class="p">(</span><span class="k">new</span> <span class="nx">GameStage</span><span class="p">(),</span><span class="nx">y</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">jumpTo</span><span class="p">(</span><span class="k">new</span> <span class="nx">GameStage</span><span class="p">(),</span><span class="nx">y</span><span class="p">);</span>
   <span class="p">};</span>
   
   

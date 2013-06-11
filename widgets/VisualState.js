@@ -59,11 +59,11 @@
 		var miss = '-';
 		
 		if (node.game && node.game.state) {
-			tmp = node.game.gameLoop.getStep(node.game.state);
+			tmp = node.game.plot.getStep(node.game.state);
 			state = (tmp) ? tmp.name : miss;
-			tmp = node.game.gameLoop.getStep(node.game.previous());
+			tmp = node.game.plot.getStep(node.game.previous());
 			pr = (tmp) ? tmp.name : miss;
-			tmp = node.game.gameLoop.getStep(node.game.next());
+			tmp = node.game.plot.getStep(node.game.next());
 			nx = (tmp) ? tmp.name : miss;
 		}
 		else {
