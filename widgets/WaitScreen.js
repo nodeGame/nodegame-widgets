@@ -1,59 +1,78 @@
 (function (node) {
 
-	node.widgets.register('WaitScreen', WaitScreen);
+    node.widgets.register('WaitScreen', WaitScreen);
 	
 // ## Defaults
 	
-	WaitScreen.defaults = {};
-	WaitScreen.defaults.id = 'waiting';
-	WaitScreen.defaults.fieldset = false;
-	
+    WaitScreen.defaults = {};
+    WaitScreen.defaults.id = 'waiting';
+    WaitScreen.defaults.fieldset = false;
+    
 // ## Meta-data
 	
-	WaitScreen.name = 'WaitingScreen';
-	WaitScreen.version = '0.3.2';
-	WaitScreen.description = 'Show a standard waiting screen';
+    WaitScreen.name = 'WaitingScreen';
+    WaitScreen.version = '0.4.0';
+    WaitScreen.description = 'Show a standard waiting screen';
+    
+    function WaitScreen (options) {
+	this.id = options.id;
 	
-	function WaitScreen (options) {
-		this.id = options.id;
-		
-		this.text = 'Waiting for other players to be done...';
-		this.waitingDiv = null;
+	this.text = {
+            waiting: options.waitingText || 'Waiting for other players to be done...',
+            stepping: options.steppingText || 'Initializing, game will start soon...'
+        }
+
+	this.waitingDiv = null;
+    }
+    
+    function updateScreen(text) {
+        if (!this.waitingDiv) {
+	    this.waitingDiv = node.window.addDiv(document.body, this.id);
 	}
+	    
+	if (this.waitingDiv.style.display === 'none'){
+	    this.waitingDiv.style.display = '';
+	}			
 	
-	WaitScreen.prototype.append = function (root) {
-		return root;
-	};
+	this.waitingDiv.innerHTML = text;
+    }
+
+    function hideScreen() {
+        if (this.waitingDiv) {
+            if (this.waitingDiv.style.display === '') {
+                this.waitingDiv.style.display = 'none';
+            }
+        }
+    }
+
+    WaitScreen.prototype.append = function(root) {
+	return root;
+    };
+    
+    WaitScreen.prototype.getRoot = function() {
+	return this.waitingDiv;
+    };
+    
+    WaitScreen.prototype.listeners = function() {
+        var that = this;
+        node.on('BEFORE_DONE', function(text) {
+            updateScreen.call(that, text || that.text.waiting)
+        });
 	
-	WaitScreen.prototype.getRoot = function () {
-		return this.waitingDiv;
-	};
-	
-	WaitScreen.prototype.listeners = function () {
-		var that = this;
-		node.on('WAITING...', function (text) {
-			if (!that.waitingDiv) {
-				that.waitingDiv = node.window.addDiv(document.body, that.id);
-			}
-			
-			if (that.waitingDiv.style.display === 'none'){
-				that.waitingDiv.style.display = '';
-			}			
-		
-			that.waitingDiv.innerHTML = text || that.text;
-			node.game.pause();
-		});
-		
-		// It is supposed to fade away when a new state starts
-		node.on('LOADED', function(text) {
-			if (that.waitingDiv) {
-				
-				if (that.waitingDiv.style.display === '') {
-					that.waitingDiv.style.display = 'none';
-				}
-			// TODO: Document.js add method to remove element
-			}
-		});
-		
-	}; 
+        node.on('STEPPING', function(text) {
+            updateScreen.call(that, text || that.text.stepping)
+        });
+               
+	// It is supposed to fade away when a new state starts
+        node.on('PLAYING', function(text) {
+            hideScreen.call(that);
+        });
+
+        // It is supposed to fade away when a new state starts
+        node.on('GAME_OVER', function(text) {
+            hideScreen.call(that);
+        });
+
+
+    }; 
 })(node);
