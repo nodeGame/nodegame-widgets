@@ -1213,11 +1213,11 @@ node.widgets = new Widgets();
 		var miss = '-';
 		
 		if (node.game && node.game.state) {
-			tmp = node.game.gameLoop.getStep(node.game.state);
+			tmp = node.game.plot.getStep(node.game.state);
 			state = (tmp) ? tmp.name : miss;
-			tmp = node.game.gameLoop.getStep(node.game.previous());
+			tmp = node.game.plot.getStep(node.game.previous());
 			pr = (tmp) ? tmp.name : miss;
-			tmp = node.game.gameLoop.getStep(node.game.next());
+			tmp = node.game.plot.getStep(node.game.next());
 			nx = (tmp) ? tmp.name : miss;
 		}
 		else {
@@ -1238,6 +1238,7 @@ node.widgets = new Widgets();
 	};
 	
 })(node);
+
 (function (node) {
 
 	var Table = node.window.Table,
@@ -3864,12 +3865,12 @@ node.widgets = new Widgets();
 	
 	GameTable.prototype.state2y = function (state) {
 		if (!state) return false;
-		return node.game.gameLoop.indexOf(state);
+		return node.game.plot.indexOf(state);
 	};
 	
 	GameTable.prototype.y2State = function (y) {
 		if (!y) return false;
-		return node.game.gameLoop.jumpTo(new GameStage(),y);
+		return node.game.plot.jumpTo(new GameStage(),y);
 	};
 	
 	
