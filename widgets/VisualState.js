@@ -1,86 +1,101 @@
 (function (node) {
+    
+    node.widgets.register('VisualState', VisualState);
+    
+    var JSUS = node.JSUS,
+    Table = node.window.Table;
+    
+    // ## Defaults
+    
+    VisualState.defaults = {};
+    VisualState.defaults.id = 'visualstate';
+    VisualState.defaults.fieldset = { 
+	legend: 'State',
+	id: 'visualstate_fieldset'
+    };	
+    
+    // ## Meta-data
+    
+    VisualState.name = 'Visual State';
+    VisualState.version = '0.2.1';
+    VisualState.description = 'Visually display current, previous and next state of the game.';
+    
+    // ## Dependencies
+    
+    VisualState.dependencies = {
+	JSUS: {},
+	Table: {}
+    };
+    
+    
+    function VisualState (options) {
+	this.id = options.id;
 	
-	node.widgets.register('VisualState', VisualState);
-	
-	var JSUS = node.JSUS,
-		Table = node.window.Table;
-	
-// ## Defaults
-	
-	VisualState.defaults = {};
-	VisualState.defaults.id = 'visualstate';
-	VisualState.defaults.fieldset = { 
-		legend: 'State',
-		id: 'visualstate_fieldset'
-	};	
-	
-// ## Meta-data
-	
-	VisualState.name = 'Visual State';
-	VisualState.version = '0.2.1';
-	VisualState.description = 'Visually display current, previous and next state of the game.';
-	
-// ## Dependencies
-	
-	VisualState.dependencies = {
-		JSUS: {},
-		Table: {}
-	};
-	
-	
-	function VisualState (options) {
-		this.id = options.id;
-		
-		this.root = null;		// the parent element
-		this.table = new Table();
-	}
-	
-	VisualState.prototype.getRoot = function () {
-		return this.root;
-	};
-	
-	VisualState.prototype.append = function (root, ids) {
-		var that = this;
-		var PREF = this.id + '_';
-		root.appendChild(this.table.table);
-		this.writeState();
-		return root;
-	};
-		
-	VisualState.prototype.listeners = function () {
-		var that = this;
-		node.on('STATECHANGE', function() {
-			that.writeState();
-		}); 
-	};
-	
-	VisualState.prototype.writeState = function () {
-		var state, pr, nx, tmp;
-		var miss = '-';
-		
-		if (node.game && node.game.state) {
-			tmp = node.game.plot.getStep(node.game.state);
-			state = (tmp) ? tmp.name : miss;
-			tmp = node.game.plot.getStep(node.game.previous());
-			pr = (tmp) ? tmp.name : miss;
-			tmp = node.game.plot.getStep(node.game.next());
-			nx = (tmp) ? tmp.name : miss;
-		}
-		else {
-			state = 'Uninitialized';
-			pr = miss;
-			nx = miss;
-		}
-		this.table.clear(true);
+	this.root = null;		// the parent element
+	this.table = new Table();
+    }
+    
+    VisualState.prototype.getRoot = function () {
+	return this.root;
+    };
+    
+    VisualState.prototype.append = function (root, ids) {
+	var that = this;
+	var PREF = this.id + '_';
+	root.appendChild(this.table.table);
+	this.writeState();
+	return root;
+    };
+    
+    VisualState.prototype.listeners = function () {
+	var that = this;
+        
+        node.on('STEP_CALLBACK_EXECUTED', function() {
+	    that.writeState();
+	});
 
-		this.table.addRow(['Previous: ', pr]);
-		this.table.addRow(['Current: ', state]);
-		this.table.addRow(['Next: ', nx]);
+        // Game over and init?
+    };
+    
+    VisualState.prototype.writeState = function () {
+	var miss, state, pr, nx, tmp;
+        var curStep, nextStep, prevStep;
+	var t;
+        
+        miss = '-';
+	state = 'Uninitialized';
+        pr = miss;
+        nx = miss;
+        
+        curStep = node.game.getCurrentGameStage();
+        
+	if (curStep) {
+            tmp = node.game.plot.getStep(curStep);
+            state = tmp ? tmp.id : miss;
+            
+	    prevStep = node.game.plot.previous(curStep);
+            if (prevStep) {
+                tmp = node.game.plot.getStep(prevStep);
+	        pr = tmp ? tmp.id : miss;
+            }
+            
+	    nextStep = node.game.plot.next(curStep);
+            if (nextStep) {
+                tmp = node.game.plot.getStep(nextStep);
+	        nx = tmp ? tmp.id : miss;
+            }
+        }
+        
+	this.table.clear(true);
+
+	this.table.addRow(['Previous: ', pr]);
+	this.table.addRow(['Current: ', state]);
+	this.table.addRow(['Next: ', nx]);
 	
-		var t = this.table.select('y', '=', 2);
-		t.addClass('strong');
-		t.select('x','=',0).addClass('underline');
-		this.table.parse();
-	};
-	
+	t = this.table.select('y', '=', 2);
+	t.addClass('strong');
+	t.select('x','=',0).addClass('underline');
+	this.table.parse();
+    };
+    
 })(node);
