@@ -71,18 +71,18 @@
 	    level = 'init!';
 	    break;
 
-	case node.is.LOADING:
+	case levels.LOADING:
 	    level = 'loading';
 	    break;	    
 
-	case node.is.LOADED:
+	case levels.LOADED:
 	    level = 'loaded';
 	    break;
 	    
-	case node.is.PLAYING:
+	case levels.PLAYING:
 	    level = 'playing';
 	    break;
-	case node.is.DONE:
+	case levels.DONE:
 	    level = 'done';
 	    break;
 		
