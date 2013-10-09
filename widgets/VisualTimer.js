@@ -115,7 +115,7 @@
 		
 	VisualTimer.prototype.listeners = function () {
 		var that = this;
-		node.on('LOADED', function() {
+		node.on('PLAYING', function() {
 		    var stepObj = node.game.getCurrentStep();
 		    if (!stepObj) return;
 		    var timer = stepObj.timer;
@@ -138,7 +138,7 @@
 					case 'string':
 						options.milliseconds = Number(timer);
 						break;
-				};
+				}
 			
 				if (!options.milliseconds) return;
 			
