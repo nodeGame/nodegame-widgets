@@ -141,6 +141,8 @@
 				}
 			
 				if (!options.milliseconds) return;
+
+                options.update = 1000;
 			
 				if ('function' === typeof options.milliseconds) {
 					options.milliseconds = options.milliseconds.call(node.game);
