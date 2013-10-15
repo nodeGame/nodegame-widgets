@@ -106,7 +106,9 @@
 	};
 	
 	VisualTimer.prototype.stop = function (options) {
-		this.gameTimer.stop();
+        if (!this.gameTimer.isStopped()) {
+            this.gameTimer.stop();
+        }
 	};
 	
 	VisualTimer.prototype.resume = function (options) {
@@ -133,7 +135,7 @@
 						options = timer;
 						break;
 					case 'function':
-						options.milliseconds = timer
+						options.milliseconds = timer;
 						break;
 					case 'string':
 						options.milliseconds = Number(timer);
@@ -159,7 +161,7 @@
 		
 		node.on('DONE', function() {
 			// TODO: This should be enabled again
-			that.gameTimer.stop();
+			that.stop();
 			that.timerDiv.className = 'strike';
 		});
 	};
