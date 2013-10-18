@@ -57,7 +57,7 @@
 		})();
 		
 		
-		this.gameTimer = (options.gameTimer) || new node.GameTimer();
+		this.gameTimer = (options.gameTimer) || node.timer.createTimer();
 		
 		if (this.gameTimer) {
 			this.gameTimer.init(options);
