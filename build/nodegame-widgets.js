@@ -113,63 +113,58 @@ Widget.prototype.highlight = function () {};
      * 
      */
     Widgets.prototype.get = function (w_str, options) {
-        if (!w_str) return;
-        var that = this;
-        options = options || {};
+	if (!w_str) return;
+	var that = this;
+	options = options || {};
+	
+	
+	function createListenerFunction (w, e, l) {
+	    if (!w || !e || !l) return;
+	    w.getRoot()[e] = function() {
+		l.call(w); 
+	    };
+	};
+	
+	function attachListeners (options, w) {
+	    if (!options || !w) return;
+	    var isEvent = false;
+	    for (var i in options) {
+		if (options.hasOwnProperty(i)) {
+		    isEvent = J.in_array(i, ['onclick', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'onload', 'onunload', 'onmouseover']);  
+		    if (isEvent && 'function' === typeof options[i]) {
+			createListenerFunction(w, i, options[i]);
+		    }
+		}			
+	    };
+	};
+	
+	var wProto = J.getNestedValue(w_str, this.widgets);
+	var widget;
+	
+	if (!wProto) {
+	    node.err('widget ' + w_str + ' not found.', 'node-widgets: ');
+	    return;
+	}
+	
+	node.info('registering ' + wProto.name + ' v.' +  wProto.version, 'node-widgets: ');
+	
+	if (!this.checkDependencies(wProto)) return false;
+	
+	// Add missing properties to the user options
+	J.mixout(options, J.clone(wProto.defaults));
+	
+        widget = new wProto(options);
+        // Re-inject defaults
+        widget.defaults = options;
         
+        // Call listeners
+        widget.listeners.call(widget);
         
-        function createListenerFunction (w, e, l) {
-            if (!w || !e || !l) return;
-            w.getRoot()[e] = function() {
-                l.call(w); 
-            };
-        };
-        
-        function attachListeners (options, w) {
-            if (!options || !w) return;
-            var isEvent = false;
-            for (var i in options) {
-                if (options.hasOwnProperty(i)) {
-                    isEvent = J.in_array(i, ['onclick', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'onload', 'onunload', 'onmouseover']);  
-                    if (isEvent && 'function' === typeof options[i]) {
-                        createListenerFunction(w, i, options[i]);
-                    }
-                }                       
-            };
-        };
-        
-        var wProto = J.getNestedValue(w_str, this.widgets);
-        var widget;
-        
-        if (!wProto) {
-            node.err('widget ' + w_str + ' not found.', 'node-widgets: ');
-            return;
-        }
-        
-        node.info('registering ' + wProto.name + ' v.' +  wProto.version, 'node-widgets: ');
-        
-        if (!this.checkDependencies(wProto)) return false;
-        
-        // Add missing properties to the user options
-        J.mixout(options, J.clone(wProto.defaults));
-        
-        try {
-            widget = new wProto(options);
-            // Re-inject defaults
-            widget.defaults = options;
-            
-            // Call listeners
-            widget.listeners.call(widget);
-            
-            // user listeners
-            attachListeners(options, widget);
-        }
-        catch (e) {
-            throw new Error('Error while loading widget ' + wProto.name + ': ',  e);
-        }
-        return widget;
-    };
+        // user listeners
+        attachListeners(options, widget);
 
+	return widget;
+    };
     /**
      * ### Widgets.append
      * 
@@ -1585,18 +1580,18 @@ Widget.prototype.highlight = function () {};
 	    level = 'init!';
 	    break;
 
-	case node.is.LOADING:
+	case levels.LOADING:
 	    level = 'loading';
 	    break;	    
 
-	case node.is.LOADED:
+	case levels.LOADED:
 	    level = 'loaded';
 	    break;
 	    
-	case node.is.PLAYING:
+	case levels.PLAYING:
 	    level = 'playing';
 	    break;
-	case node.is.DONE:
+	case levels.DONE:
 	    level = 'done';
 	    break;
 		
@@ -1636,6 +1631,7 @@ Widget.prototype.highlight = function () {};
     };
     
 })(node);
+
 (function (node) {
 	
 	var Table = node.window.Table;
@@ -3532,7 +3528,7 @@ Widget.prototype.highlight = function () {};
 		})();
 		
 		
-		this.gameTimer = (options.gameTimer) || new node.GameTimer();
+		this.gameTimer = (options.gameTimer) || node.timer.createTimer();
 		
 		if (this.gameTimer) {
 			this.gameTimer.init(options);
@@ -3581,7 +3577,9 @@ Widget.prototype.highlight = function () {};
 	};
 	
 	VisualTimer.prototype.stop = function (options) {
-		this.gameTimer.stop();
+        if (!this.gameTimer.isStopped()) {
+            this.gameTimer.stop();
+        }
 	};
 	
 	VisualTimer.prototype.resume = function (options) {
@@ -3590,7 +3588,7 @@ Widget.prototype.highlight = function () {};
 		
 	VisualTimer.prototype.listeners = function () {
 		var that = this;
-		node.on('LOADED', function() {
+		node.on('PLAYING', function() {
 		    var stepObj = node.game.getCurrentStep();
 		    if (!stepObj) return;
 		    var timer = stepObj.timer;
@@ -3608,14 +3606,16 @@ Widget.prototype.highlight = function () {};
 						options = timer;
 						break;
 					case 'function':
-						options.milliseconds = timer
+						options.milliseconds = timer;
 						break;
 					case 'string':
 						options.milliseconds = Number(timer);
 						break;
-				};
+				}
 			
 				if (!options.milliseconds) return;
+
+                options.update = 1000;
 			
 				if ('function' === typeof options.milliseconds) {
 					options.milliseconds = options.milliseconds.call(node.game);
@@ -3632,7 +3632,7 @@ Widget.prototype.highlight = function () {};
 		
 		node.on('DONE', function() {
 			// TODO: This should be enabled again
-			that.gameTimer.stop();
+			that.stop();
 			that.timerDiv.className = 'strike';
 		});
 	};

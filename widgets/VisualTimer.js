@@ -57,7 +57,7 @@
 		})();
 		
 		
-		this.gameTimer = (options.gameTimer) || new node.GameTimer();
+		this.gameTimer = (options.gameTimer) || node.timer.createTimer();
 		
 		if (this.gameTimer) {
 			this.gameTimer.init(options);
@@ -106,7 +106,9 @@
 	};
 	
 	VisualTimer.prototype.stop = function (options) {
-		this.gameTimer.stop();
+        if (!this.gameTimer.isStopped()) {
+            this.gameTimer.stop();
+        }
 	};
 	
 	VisualTimer.prototype.resume = function (options) {
@@ -115,7 +117,7 @@
 		
 	VisualTimer.prototype.listeners = function () {
 		var that = this;
-		node.on('LOADED', function() {
+		node.on('PLAYING', function() {
 		    var stepObj = node.game.getCurrentStep();
 		    if (!stepObj) return;
 		    var timer = stepObj.timer;
@@ -133,14 +135,16 @@
 						options = timer;
 						break;
 					case 'function':
-						options.milliseconds = timer
+						options.milliseconds = timer;
 						break;
 					case 'string':
 						options.milliseconds = Number(timer);
 						break;
-				};
+				}
 			
 				if (!options.milliseconds) return;
+
+                options.update = 1000;
 			
 				if ('function' === typeof options.milliseconds) {
 					options.milliseconds = options.milliseconds.call(node.game);
@@ -157,7 +161,7 @@
 		
 		node.on('DONE', function() {
 			// TODO: This should be enabled again
-			that.gameTimer.stop();
+			that.stop();
 			that.timerDiv.className = 'strike';
 		});
 	};
