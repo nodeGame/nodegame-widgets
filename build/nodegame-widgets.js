@@ -1364,7 +1364,7 @@ Widget.prototype.highlight = function () {};
     StateDisplay.prototype.listeners = function () {
 	var that = this;
 	
-	node.on('STEP_CALLBACK_EXECUTED', function() {
+	node.on('LOADED', function() {
 	    that.updateAll();
 	}); 
     }; 
