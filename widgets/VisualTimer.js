@@ -1,4 +1,17 @@
-(function (node) {
+/**
+ * # VisualTimer widget for nodeGame
+ * Copyright(c) 2013 Stefano Balietti
+ * MIT Licensed
+ *
+ * Display a timer for the game. Timer can trigger events. 
+ * Only for countdown smaller than 1h.'
+ * 
+ * www.nodegame.org
+ * ---
+ */
+(function(node) {
+
+    "use strict";
 
     node.widgets.register('VisualTimer', VisualTimer);
 
@@ -15,7 +28,6 @@
 
     // ## Meta-data
 
-    VisualTimer.name = 'Visual Timer';
     VisualTimer.version = '0.3.3';
     VisualTimer.description = 'Display a timer for the game. Timer can trigger events. Only for countdown smaller than 1h.';
 
@@ -26,7 +38,7 @@
         JSUS: {}
     };
 
-    function VisualTimer (options) {
+    function VisualTimer(options) {
         this.options = options;
         this.id = options.id;
 
@@ -39,7 +51,7 @@
         this.init(this.options);
     }
 
-    VisualTimer.prototype.init = function (options) {
+    VisualTimer.prototype.init = function(options) {
         options = options || this.options;
         var that = this;
         (function initHooks() {
@@ -52,13 +64,14 @@
                 options.hooks = [];
             }
 
-            options.hooks.push({hook: that.updateDisplay,
-                                ctx: that
-                               });
+            options.hooks.push({
+                hook: that.updateDisplay,
+                ctx: that
+            });
         })();
 
 
-        this.gameTimer = (options.gameTimer) || node.timer.createTimer();
+        this.gameTimer = options.gameTimer || node.timer.createTimer();
 
         if (this.gameTimer) {
             this.gameTimer.init(options);
@@ -73,18 +86,18 @@
 
     };
 
-    VisualTimer.prototype.getRoot = function () {
+    VisualTimer.prototype.getRoot = function() {
         return this.root;
     };
 
-    VisualTimer.prototype.append = function (root) {
+    VisualTimer.prototype.append = function(root) {
         this.root = root;
         this.timerDiv = node.window.addDiv(root, this.id + '_div');
         this.updateDisplay();
         return root;
     };
 
-    VisualTimer.prototype.updateDisplay = function () {
+    VisualTimer.prototype.updateDisplay = function() {
         if (!this.gameTimer.milliseconds || this.gameTimer.milliseconds === 0) {
             this.timerDiv.innerHTML = '00:00';
             return;
@@ -101,22 +114,22 @@
         this.gameTimer.start();
     };
 
-    VisualTimer.prototype.restart = function (options) {
+    VisualTimer.prototype.restart = function(options) {
         this.init(options);
         this.start();
     };
 
-    VisualTimer.prototype.stop = function (options) {
+    VisualTimer.prototype.stop = function(options) {
         if (!this.gameTimer.isStopped()) {
             this.gameTimer.stop();
         }
     };
 
-    VisualTimer.prototype.resume = function (options) {
+    VisualTimer.prototype.resume = function(options) {
         this.gameTimer.resume();
     };
 
-    VisualTimer.prototype.listeners = function () {
+    VisualTimer.prototype.listeners = function() {
         var that = this;
         node.on('PLAYING', function() {
             var stepObj = node.game.getCurrentStep();

@@ -1,5 +1,17 @@
-(function (node) {
-    
+/**
+ * # GameBoard widget for nodeGame
+ * Copyright(c) 2013 Stefano Balietti
+ * MIT Licensed
+ *
+ * Displays a table of currently connected players.
+ *
+ * www.nodegame.org
+ * ---
+ */
+(function(node) {
+   
+    "use strict";
+ 
     node.widgets.register('GameBoard', GameBoard);
     
     var PlayerList = node.PlayerList;
@@ -14,11 +26,10 @@
     
     // ## Meta-data
     
-    GameBoard.name = 'GameBoard';
     GameBoard.version = '0.4.0';
     GameBoard.description = 'Offer a visual representation of the state of all players in the game.';
     
-    function GameBoard (options) {
+    function GameBoard(options) {
 	
 	this.id = options.id || GameBoard.defaults.id;
 	this.status_id = this.id + '_statusbar';
@@ -29,7 +40,7 @@
 	
     }
     
-    GameBoard.prototype.append = function (root) {
+    GameBoard.prototype.append = function(root) {
 	this.root = root;
 	this.status = node.window.addDiv(root, this.status_id);
 	this.board = node.window.addDiv(root, this.id);
@@ -48,7 +59,7 @@
 	
     };
     
-    GameBoard.prototype.printLine = function (p) {
+    GameBoard.prototype.printLine = function(p) {
 
 	var line, levels, level;
         levels = node.constants.stageLevels;
@@ -94,12 +105,12 @@
 	return line + '(' + level + ')';
     };
     
-    GameBoard.prototype.printSeparator = function (p) {
+    GameBoard.prototype.printSeparator = function(p) {
 	return W.getElement('hr', null, {style: 'color: #CCC;'});
     };
     
     
-    GameBoard.prototype.updateBoard = function (pl) {
+    GameBoard.prototype.updateBoard = function(pl) {
 	var player, separator;
         var that = this;
 	
