@@ -3964,32 +3964,26 @@
 
     VisualTimer.prototype.init = function(options) {
         options = options || this.options;
-        var that = this;
-        (function initHooks() {
-            if (options.hooks) {
-                if (!options.hooks instanceof Array) {
-                    options.hooks = [options.hooks];
-                }
+
+        if (options.hooks) {
+            if (!options.hooks instanceof Array) {
+                options.hooks = [options.hooks];
             }
-            else {
-                options.hooks = [];
-            }
-
-            options.hooks.push({
-                hook: that.updateDisplay,
-                ctx: that
-            });
-        })();
-
-
-        this.gameTimer = options.gameTimer || node.timer.createTimer();
-
-        if (this.gameTimer) {
-            this.gameTimer.init(options);
         }
         else {
-            node.log('GameTimer object could not be initialized. VisualTimer will not work properly.', 'ERR');
+            options.hooks = [];
         }
+
+        options.hooks.push({
+            hook: this.updateDisplay,
+            ctx: this
+        });
+
+        if (!this.gameTimer) {
+            this.gameTimer = node.timer.createTimer();
+        }
+        
+        this.gameTimer.init(options);
 
         if (this.timerDiv) {
             this.timerDiv.className = options.className || '';
@@ -4009,14 +4003,15 @@
     };
 
     VisualTimer.prototype.updateDisplay = function() {
+        var time, minutes, seconds;
         if (!this.gameTimer.milliseconds || this.gameTimer.milliseconds === 0) {
             this.timerDiv.innerHTML = '00:00';
             return;
         }
-        var time = this.gameTimer.milliseconds - this.gameTimer.timePassed;
+        time = this.gameTimer.milliseconds - this.gameTimer.timePassed;
         time = JSUS.parseMilliseconds(time);
-        var minutes = (time[2] < 10) ? '' + '0' + time[2] : time[2];
-        var seconds = (time[3] < 10) ? '' + '0' + time[3] : time[3];
+        minutes = (time[2] < 10) ? '' + '0' + time[2] : time[2];
+        seconds = (time[3] < 10) ? '' + '0' + time[3] : time[3];
         this.timerDiv.innerHTML = minutes + ':' + seconds;
     };
 
@@ -4085,7 +4080,6 @@
         });
 
         node.on('DONE', function() {
-            // TODO: This should be enabled again
             that.stop();
             that.timerDiv.className = 'strike';
         });
