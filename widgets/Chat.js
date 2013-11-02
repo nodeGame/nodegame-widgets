@@ -12,8 +12,7 @@
 
     "use strict";
 
-    var J = node.JSUS,
-    W = node.window;
+    var J = node.JSUS;
 
     // ## Defaults
 
@@ -146,7 +145,7 @@
                 '!txt': msg
             };
             that.writeTA('%sMe%s: %msg!txt%msg', args);
-            node.say(msg.trim(), that.chat_event, to);
+            node.say(that.chat_event, to, msg.trim());
         });
 
         if (this.mode === Chat.modes.MANY_TO_MANY) {

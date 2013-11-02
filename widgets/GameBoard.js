@@ -46,8 +46,7 @@
 	this.board = node.window.addDiv(root, this.id);
 	
 	this.updateBoard(node.game.pl);
-	
-	
+		
 	return root;
     };
     
