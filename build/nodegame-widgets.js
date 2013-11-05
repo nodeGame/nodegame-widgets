@@ -3680,14 +3680,15 @@
 
     function resultCb(that, i) {
         var update = function(result) {
-            this.updateStillChecking(-1);
             if (result) {
                 if (!J.isArray(result)) {
                     throw new Error('Requirements.checkRequirements: ' +
                                     'result must be array or undefined.');
                 }
                 that.displayResults(result);
-            }
+             
+            }            
+            that.updateStillChecking(-1);
         };
         return that.callbacks[i](update);
     }
@@ -3754,10 +3755,13 @@
     };
 
     Requirements.prototype.updateStillChecking = function(update, absolute) {
+        var total, remaining;
+
         this.stillChecking = absolute ? update : this.stillChecking + update;
 
-        this.summaryUpdate.innerHTML = '(' + this.stillChecking +
-            ' / ' + this.callbacks.length + ')';
+        total = this.callbacks.length;
+        remaining = total - this.stillChecking;
+        this.summaryUpdate.innerHTML = ' (' +  remaining + ' / ' + total + ')';
 
         if (this.stillChecking <= 0) {
             this.checkingFinished();
