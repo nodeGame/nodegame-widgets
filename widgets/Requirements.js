@@ -39,6 +39,17 @@
         this.id = options.id || Requirements.id;
         this.root = null;
         this.callbacks = [];
+        this.stillChecking = 0;
+        this.withTimeout = options.withTimeout || true;
+        this.timeoutTime = options.timeoutTime || 10000;
+        this.timeoutId = null;
+
+        this.summary = null;
+        this.summaryUpdate = null;
+
+        this.onComplete = null;
+        this.onSuccess = null;
+        this.onFail = null;
 
         function renderResult(o) {
             var imgPath, img, span, text;
@@ -75,6 +86,20 @@
         }
     };
 
+    function resultCb(that, i) {
+        var update = function(result) {
+            this.updateStillChecking(-1);
+            if (result) {
+                if (!J.isArray(result)) {
+                    throw new Error('Requirements.checkRequirements: ' +
+                                    'result must be array or undefined.');
+                }
+                that.displayResults(result);
+            }
+        };
+        return that.callbacks[i](update);
+    }
+
     Requirements.prototype.checkRequirements = function(display) {
         var i, len;
         var errors, cbErrors;
@@ -82,23 +107,91 @@
             throw new Error('Requirements.checkRequirements: no callback ' +
                             'found.');
         }
+
+        this.updateStillChecking(this.callbacks.length, true);
+
         errors = [];
         i = -1, len = this.callbacks.length;
         for ( ; ++i < len ; ) {
             try {
-                cbErrors = this.callbacks[i]();
+                cbErrors = resultCb(this, i);
             }
             catch(e) {
+                this.updateStillChecking(-1);
                 errors.push('An exception occurred in requirement ' + 
-                            (this.callbacks[i].name || 'n.' + i) + '.');
+                            (this.callbacks[i].name || 'n.' + i) + ': ' + e );
+                
             }
-            errors = errors.concat(cbErrors);
+            if (cbErrors) {
+                this.updateStillChecking(-1);
+                errors = errors.concat(cbErrors);
+            }
         }
         
+        if (this.withTimeout) {
+            this.addTimeout();
+        }
+
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
         return errors;
+    };
+
+        
+    Requirements.prototype.addTimeout = function() {
+        var that = this;
+        var errStr = 'One or more function is taking too long. This is ' +
+            'likely to be due to a compatibility issue with your browser ' +
+            'or to bad network connectivity.';
+
+        this.timeoutId = setTimeout(function() {
+            if (that.stillChecking > 0) {
+                that.displayResults([errStr]);
+            }
+            that.timeoutId = null;
+            that.checkingFinished();
+        }, this.timeoutTime);
+    };
+
+    Requirements.prototype.clearTimeout = function() {
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+            this.timeoutId = null;
+        }
+    };
+
+    Requirements.prototype.updateStillChecking = function(update, absolute) {
+        this.stillChecking = absolute ? update : this.stillChecking + update;
+
+        this.summaryUpdate.innerHTML = '(' + this.stillChecking +
+            ' / ' + this.callbacks.length + ')';
+
+        if (this.stillChecking <= 0) {
+            this.checkingFinished();
+        }
+    };
+    
+    Requirements.prototype.checkingFinished = function() {
+        
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+        }
+
+        this.dots.stop();
+
+        if (this.onComplete) {
+            this.onComplete();
+        }
+            
+        if (this.list.size()) {
+            if (this.onFail) {
+                this.onFail();
+            }
+        }
+        else if (this.onSuccess) {
+            this.onSuccess();
+        }
     };
 
     Requirements.prototype.displayResults = function(results) {
@@ -112,15 +205,20 @@
             throw new TypeError('Requirements.displayResults: results must ' +
                                 'be array.');
         }
+
+        // No errors.
         if (!results.length) {
-            // All tests passed.
-            this.list.addDT({
-                success: true,
-                text:'All tests passed'
-            });
+            // Last check and no previous errors.
+            if (!this.list.size() && this.stillChecking <= 0) {
+                // All tests passed.
+                this.list.addDT({
+                    success: true,
+                    text:'All tests passed'
+                });
+            }
         }
         else {
-            
+            // Add the errors.
             i = -1, len = results.length;
             for ( ; ++i < len ; ) {
                 this.list.addDT({
@@ -135,6 +233,19 @@
 
     Requirements.prototype.append = function(root) {
         this.root = root;
+        
+        this.summary = document.createElement('span');
+        this.summary.appendChild(document.createTextNode('Evaluating requirements'));
+        
+        this.summaryUpdate = document.createElement('span');
+        this.summary.appendChild(this.summaryUpdate);
+        
+        this.dots = W.getLoadingDots();
+
+        this.summary.appendChild(this.dots.span);
+        
+        root.appendChild(this.summary);
+        
         root.appendChild(this.list.getRoot());
         return root;
     };
@@ -146,6 +257,43 @@
     Requirements.prototype.listeners = function() {
         var that = this;
     };
+
+    Requirements.prototype.nodeGameRequirements = function() {
+        var errors = [];
+   
+        if ('undefined' === typeof NDDB) {
+            errors.push('NDDB not found.');
+        }
+        
+        if ('undefined' === typeof JSUS) {
+            errors.push('JSUS not found.');
+        }
+        
+        if ('undefined' === typeof node.window) {
+            errors.push('node.window not found.');
+        }
+        
+        if ('undefined' === typeof W) {
+            errors.push('W not found.');
+        }
+        
+        if ('undefined' === typeof node.widgets) {
+            errors.push('node.widgets not found.');
+        }
+        
+        if ('undefined' !== typeof NDDB) {
+            try {
+                var db = new NDDB();
+            }
+            catch(e) {
+                errors.push('An error occurred manipulating the NDDB object: ' +
+                            e.message);
+            }
+        }
+        
+        return errors;
+    };
+
 
     node.widgets.register('Requirements', Requirements);
 

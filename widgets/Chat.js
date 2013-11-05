@@ -30,13 +30,18 @@
     // ## Meta-data
 
     // ### Chat.modes
-    //  MANY_TO_MANY: everybody can see all the messages, and it possible
-    //    to send private messages
-    //  MANY_TO_ONE: everybody can see all the messages, private messages can
-    //    be received, but not sent
-    //  ONE_TO_ONE: everybody sees only personal messages, private messages can
-    //    be received, but not sent. All messages are sent to the SERVER
-    //  RECEIVER_ONLY: messages can only be received, but not sent
+    //
+    // - MANY_TO_MANY: everybody can see all the messages, and it possible
+    //   to send private messages.
+    //
+    // - MANY_TO_ONE: everybody can see all the messages, private messages can
+    //   be received, but not sent.
+    //
+    // ONE_TO_ONE: everybody sees only personal messages, private messages can
+    //   be received, but not sent. All messages are sent to the SERVER.
+    //
+    // RECEIVER_ONLY: messages can only be received, but not sent.
+    //
     Chat.modes = {
         MANY_TO_MANY: 'MANY_TO_MANY',
         MANY_TO_ONE: 'MANY_TO_ONE',
@@ -45,7 +50,8 @@
     };
 
     Chat.version = '0.4';
-    Chat.description = 'Offers a uni / bi-directional communication interface between players, or between players and the experimenter.';
+    Chat.description = 'Offers a uni / bi-directional communication interface ' +
+        'between players, or between players and the experimenter.';
 
     // ## Dependencies
 
@@ -131,11 +137,12 @@
         var that = this;
 
         node.on(this.chat_event, function() {
-            var msg = that.readTA();
+            var msg, to, args;
+            msg = that.readTA();
             if (!msg) return;
 
-            var to = that.recipient.value;
-            var args = {
+            to = that.recipient.value;
+            args = {
                 '%s': {
                     'class': 'chat_me'
                 },
@@ -154,7 +161,8 @@
             });
         }
 
-        node.onDATA(this.chat_event, function(msg) {
+        node.on.data(this.chat_event, function(msg) {
+            var from, args;
             if (msg.from === node.player.id || msg.from === node.player.sid) {
                 return;
             }
@@ -165,8 +173,8 @@
                 }
             }
 
-            var from = that.displayName(msg.from);
-            var args = {
+            from = that.displayName(msg.from);
+            args = {
                 '%s': {
                     'class': 'chat_others'
                 },
