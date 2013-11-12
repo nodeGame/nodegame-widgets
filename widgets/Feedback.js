@@ -42,32 +42,37 @@
     }
 
     Feedback.prototype.append = function(root) {
+        var that = this;
         this.root = root;
         this.textarea = document.createElement('textarea');
         this.submit = document.createElement('button');
+        this.submit.appendChild(document.createTextNode('Submit'));
         this.submit.onclick = function() {
             var feedback, sent;
-            feedback = this.textarea.value;
+            feedback = that.textarea.value;
             if (!feedback.length) {
-                J.highlight(this.textarea, 'ERR');
+                J.highlight(that.textarea, 'ERR');
                 alert('Feedback is empty, not sent.');
                 return false;
             }
-            J.highlight(this.textarea, 'OK');
             sent = node.say('FEEDBACK', 'SERVER', {
                 feedback: feedback,
-                navigator: navigator
+                userAgent: navigator.userAgent
             });
 
             if (sent) {
+                J.highlight(that.textarea, 'OK');
                 alert('Feedback sent. Thank you.');
-                this.submit.disabled = true;
+                that.textarea.disabled = true;
+                that.submit.disabled = true;
             }
             else {
+                J.highlight(that.textarea, 'ERR');
                 alert('An error has occurred, feedback not sent.');
             }
         };
         root.appendChild(this.textarea);
+        root.appendChild(this.submit);
         return root;
     };
 

@@ -36,17 +36,42 @@
     };
 
     function Requirements(options) {
+        // The id of the widget.
         this.id = options.id || Requirements.id;
+        // The root element under which the widget will appended.
         this.root = null;
+        // Array of all test callbacks.
         this.callbacks = [];
+        // Number of tests still pending.
         this.stillChecking = 0;
+        // If TRUE, a maximum timeout to the execution of ALL tests is set.
         this.withTimeout = options.withTimeout || true;
+        // The time in milliseconds for the timeout to expire.
         this.timeoutTime = options.timeoutTime || 10000;
+        // The id of the timeout, if created.
         this.timeoutId = null;
 
+        // Span summarizing the status of the tests.
         this.summary = null;
+        // Span counting how many tests have been completed.
         this.summaryUpdate = null;
+        // Looping dots to give the user the feeling of code execution.
+        this.dots = null;
 
+        // TRUE if at least one test has failed.
+        this.hasFailed = false;
+
+        // The outcomes of all tests.
+        this.results = [];
+
+        // If true, the final result of the tests will be sent to the server.
+        this.sayResults = options.sayResults || false;
+        // The label of the SAY message that will be sent to the server.
+        this.sayResultsLabel = options.sayResultLabel || 'requirements';
+        // Callback to add properties to the result object to send to the server. 
+        this.addToResults = options.addToResults || null;
+
+        // Callbacks to be executed at the end of all tests.
         this.onComplete = null;
         this.onSuccess = null;
         this.onFail = null;
@@ -88,15 +113,17 @@
 
     function resultCb(that, i) {
         var update = function(result) {
+            that.updateStillChecking(-1);
             if (result) {
                 if (!J.isArray(result)) {
                     throw new Error('Requirements.checkRequirements: ' +
                                     'result must be array or undefined.');
                 }
                 that.displayResults(result);
-             
-            }            
-            that.updateStillChecking(-1);
+            }
+            if (that.isCheckingFinished()) {
+                that.checkingFinished();
+            }
         };
         return that.callbacks[i](update);
     }
@@ -136,10 +163,14 @@
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
+        
+        if (this.isCheckingFinished()) {
+            this.checkingFinished();
+        }
+        
         return errors;
     };
-
-        
+       
     Requirements.prototype.addTimeout = function() {
         var that = this;
         var errStr = 'One or more function is taking too long. This is ' +
@@ -151,6 +182,8 @@
                 that.displayResults([errStr]);
             }
             that.timeoutId = null;
+            that.hasFailed = true;
+            that.results.push(errStr);
             that.checkingFinished();
         }, this.timeoutTime);
     };
@@ -170,25 +203,39 @@
         total = this.callbacks.length;
         remaining = total - this.stillChecking;
         this.summaryUpdate.innerHTML = ' (' +  remaining + ' / ' + total + ')';
-
-        if (this.stillChecking <= 0) {
-            this.checkingFinished();
-        }
     };
-    
+
+            
+    Requirements.prototype.isCheckingFinished = function() {  
+        return this.stillChecking <= 0;
+    };
+
     Requirements.prototype.checkingFinished = function() {
-        
+        var results;
+
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
         }
 
         this.dots.stop();
 
+        if (this.sayResults) {
+            results = {
+                userAgent: navigator.userAgent,
+                result: this.results
+            };
+
+            if (this.addToResults) {
+                J.mixin(results, this.addToResults()); 
+            }
+            node.say(this.sayResultsLabel, 'SERVER', results);
+        }
+
         if (this.onComplete) {
             this.onComplete();
         }
-            
-        if (this.list.size()) {
+        
+        if (this.hasFailed) {
             if (this.onFail) {
                 this.onFail();
             }
@@ -200,6 +247,7 @@
 
     Requirements.prototype.displayResults = function(results) {
         var i, len;
+        
         if (!this.list) {
             throw new Error('Requirements.displayResults: list not found. ' +
                             'Have you called .append() first?');
@@ -213,15 +261,18 @@
         // No errors.
         if (!results.length) {
             // Last check and no previous errors.
-            if (!this.list.size() && this.stillChecking <= 0) {
+            if (!this.hasFailed && this.stillChecking <= 0) {
                 // All tests passed.
                 this.list.addDT({
                     success: true,
-                    text:'All tests passed'
+                    text:'All tests passed.'
                 });
+                // Add to the array of results.
+                this.results.push('All tests passed.');
             }
         }
         else {
+            this.hasFailed = true;
             // Add the errors.
             i = -1, len = results.length;
             for ( ; ++i < len ; ) {
@@ -229,6 +280,8 @@
                     success: false,
                     text: results[i]
                 });
+                // Add to the array of results.
+                this.results.push(results[i]);
             }
         }
         // Parse deletes previously existing nodes in the list.
