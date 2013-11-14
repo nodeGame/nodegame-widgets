@@ -183,7 +183,6 @@
             }
             that.timeoutId = null;
             that.hasFailed = true;
-            that.results.push(errStr);
             that.checkingFinished();
         }, this.timeoutTime);
     };
