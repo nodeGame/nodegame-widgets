@@ -40,6 +40,9 @@
 
     function VisualTimer(options) {
         this.options = options;
+        this.options.update = 'undefined' === this.options.update ?
+            1000 : this.options.update;
+
         this.id = options.id;
 
         this.gameTimer = null;
@@ -152,8 +155,6 @@
                 }
 
                 if (!options.milliseconds) return;
-
-                options.update = 1000;
 
                 if ('function' === typeof options.milliseconds) {
                     options.milliseconds = options.milliseconds.call(node.game);
