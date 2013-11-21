@@ -40,7 +40,7 @@
 
     function VisualTimer(options) {
         this.options = options;
-        this.options.update = 'undefined' === this.options.update ?
+        this.options.update = ('undefined' === typeof this.options.update) ?
             1000 : this.options.update;
 
         this.id = options.id;
