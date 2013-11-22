@@ -36,8 +36,9 @@
 	var sendButton, textInput, dataInput;
 
 	sendButton = W.addButton(root);
-	W.writeln('Text');
+	//W.writeln('Text');
 	textInput = W.addTextInput(root, 'data-bar-text');
+	W.addLabel(root, textInput, undefined, 'Text');
 	W.writeln('Data');
 	dataInput = W.addTextInput(root, 'data-bar-data');
 
@@ -55,7 +56,7 @@
 
 	    node.log('Parsed Data: ' + JSON.stringify(data));
 
-	    node.say(data, text, to);
+	    node.say(text, to, data);
 	};
 
 	node.on('UPDATED_PLIST', function() {
