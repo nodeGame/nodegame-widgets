@@ -65,8 +65,15 @@
     var J = node.JSUS;
 
     function Widgets() {
+
+        /**
+         * ## Widgets.widgets
+         *
+         * Container of currently registered widgets 
+         *
+         * @see Widgets.register
+         */
         this.widgets = {};
-        this.root = node.window.root || document.body;
     }
 
     /**
@@ -118,6 +125,7 @@
      * @param {string} w_str The name of the widget to load
      * @param {options} options Optional. Configuration options
      *   to be passed to the widgets
+     * @return {object} widget The requested widget
      *
      * @see Widgets.add
      *
@@ -125,8 +133,17 @@
      * @TODO: add example.
      */
     Widgets.prototype.get = function(w_str, options) {
-	if (!w_str) return;
-	var that = this;
+        var wProto, widget;
+        var that;
+        if ('string' !== typeof w_str) {
+            throw new TypeError('Widgets.get: w_str must be string.');
+        }
+        if (options && 'object' !== typeof options) {
+            throw new TypeError('Widgets.get: options must be object or ' +
+                                'undefined.');
+        }
+        
+        that = this;
 	options = options || {};
 
 	function createListenerFunction(w, e, l) {
@@ -138,10 +155,12 @@
 
 	function attachListeners(options, w) {
 	    if (!options || !w) return;
+            var events = ['onclick', 'onfocus', 'onblur', 'onchange', 
+                          'onsubmit', 'onload', 'onunload', 'onmouseover'];
 	    var isEvent = false;
 	    for (var i in options) {
 		if (options.hasOwnProperty(i)) {
-		    isEvent = J.in_array(i, ['onclick', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'onload', 'onunload', 'onmouseover']);
+		    isEvent = J.in_array(i, events);
 		    if (isEvent && 'function' === typeof options[i]) {
 			createListenerFunction(w, i, options[i]);
 		    }
@@ -149,17 +168,17 @@
 	    };
 	};
 
-	var wProto = J.getNestedValue(w_str, this.widgets);
-	var widget;
-
+	wProto = J.getNestedValue(w_str, this.widgets);
+	
 	if (!wProto) {
-	    node.err('widget ' + w_str + ' not found.');
-	    return;
+            throw new Error('Widgets.get: ' + w_str + ' not found.');
 	}
 
 	node.info('registering ' + wProto.name + ' v.' +  wProto.version);
 
-	if (!this.checkDependencies(wProto)) return false;
+	if (!this.checkDependencies(wProto)) {
+            throw new Error('Widgets.get: ' + w_str + ' has unmet dependecies.');
+        }
 
 	// Add missing properties to the user options
 	J.mixout(options, J.clone(wProto.defaults));
@@ -176,6 +195,7 @@
 
 	return widget;
     };
+
     /**
      * ### Widgets.append
      *
@@ -192,16 +212,30 @@
      * options parameter.
      *
      * @param {string} w_str The name of the widget to load
-     * @param {object} root. The HTML element to which appending the widget
+     * @param {object} root. Optional. The HTML element under which the widget
+     *   will be appended. Defaults, `GameWindow.getFrameRoot()` or document.body
      * @param {options} options Optional. Configuration options to be passed
      *   to the widgets
      * @return {object|boolean} The requested widget, or FALSE is an error occurs
      *
      * @see Widgets.get
      */
-    Widgets.prototype.append = Widgets.prototype.add = function(w, root, options) {
-        if (!w) return;
-        var that = this;
+    Widgets.prototype.append = Widgets.prototype.add = function(w, root,
+                                                                options) {
+        var that;
+        if ('string' !== typeof w && 'object' !== typeof w) {
+            throw new TypeError('Widgets.append: w must be string or object');
+        }
+        if (root && !J.isElement(root)) {
+            throw new TypeError('Widgets.append: root must be HTMLElement ' +
+                                'or undefined.');
+        }
+        if (options && 'object' !== typeof options) {
+            throw new TypeError('Widgets.append: options must be object or ' +
+                                'undefined.');
+        }
+        
+        that = this;
 
         function appendFieldset(root, options, w) {
             if (!options) return root;
@@ -210,15 +244,16 @@
             return W.addFieldset(root, idFieldset, legend, options.attributes);
         };
 
-        // Init default values
-        root = root || this.root;
+        // Init default values.
+        root = root || W.getFrameRoot() || document.body;
         options = options || {};
 
         // Check if it is a object (new widget)
         // If it is a string is the name of an existing widget
         // In this case a dependencies check is done
-        if ('object' !== typeof w) w = this.get(w, options);
-        if (!w) return false;
+        if ('string' === typeof w) {
+            w = this.get(w, options);
+        }
 
         // options exists and options.fieldset exist
         root = appendFieldset(root, options.fieldset || w.defaults.fieldset, w);
@@ -3780,7 +3815,6 @@
             }
             that.timeoutId = null;
             that.hasFailed = true;
-            that.results.push(errStr);
             that.checkingFinished();
         }, this.timeoutTime);
     };
@@ -4244,7 +4278,7 @@
     StateDisplay.prototype.listeners = function() {
 	var that = this;
 
-	node.on('LOADED', function() {
+	node.on('STEP_CALLBACK_EXECUTED', function() {
 	    that.updateAll();
 	});
     };
@@ -4563,11 +4597,14 @@
 
     // ## Meta-data
 
-    WaitScreen.version = '0.5.0';
+    WaitScreen.version = '0.6.0';
     WaitScreen.description = 'Show a standard waiting screen';
 
     function WaitScreen(options) {
+
 	this.id = options.id;
+
+        this.root = null;
 
 	this.text = {
             waiting: options.waitingText ||
@@ -4598,6 +4635,10 @@
     };
 
     WaitScreen.prototype.append = function(root) {
+        // Saves a reference of the widget in GameWindow
+        // that will use it in the GameWindow.lockFrame method.
+        W.waitScreen = this;
+        this.root = root;
 	return root;
     };
 
@@ -4618,6 +4659,14 @@
         node.on('PLAYING', function(text) {
             that.unlock();
         });
+    };
+
+    WaitScreen.prototype.destroy = function() {
+        this.unlock();
+        if (this.waitingDiv) {
+            this.root.removeChild(this.waitingDiv);
+        }
+        W.waitScreen = null; 
     };
 })(node);
 /**

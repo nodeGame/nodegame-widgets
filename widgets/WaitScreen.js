@@ -22,11 +22,14 @@
 
     // ## Meta-data
 
-    WaitScreen.version = '0.5.0';
+    WaitScreen.version = '0.6.0';
     WaitScreen.description = 'Show a standard waiting screen';
 
     function WaitScreen(options) {
+
 	this.id = options.id;
+
+        this.root = null;
 
 	this.text = {
             waiting: options.waitingText ||
@@ -57,6 +60,10 @@
     };
 
     WaitScreen.prototype.append = function(root) {
+        // Saves a reference of the widget in GameWindow
+        // that will use it in the GameWindow.lockFrame method.
+        W.waitScreen = this;
+        this.root = root;
 	return root;
     };
 
@@ -77,5 +84,13 @@
         node.on('PLAYING', function(text) {
             that.unlock();
         });
+    };
+
+    WaitScreen.prototype.destroy = function() {
+        this.unlock();
+        if (this.waitingDiv) {
+            this.root.removeChild(this.waitingDiv);
+        }
+        W.waitScreen = null; 
     };
 })(node);

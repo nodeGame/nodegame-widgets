@@ -95,7 +95,7 @@
     StateDisplay.prototype.listeners = function() {
 	var that = this;
 
-	node.on('LOADED', function() {
+	node.on('STEP_CALLBACK_EXECUTED', function() {
 	    that.updateAll();
 	});
     };
