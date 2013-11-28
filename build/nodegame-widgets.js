@@ -319,6 +319,7 @@
     ('undefined' !== typeof window) ? window : module.parent.exports.window,
     ('undefined' !== typeof window) ? window.node : module.parent.exports.node
 );
+
 /**
  * # Chat widget for nodeGame
  * Copyright(c) 2013 Stefano Balietti
@@ -2410,8 +2411,9 @@
 	var sendButton, textInput, dataInput;
 
 	sendButton = W.addButton(root);
-	W.writeln('Text');
+	//W.writeln('Text');
 	textInput = W.addTextInput(root, 'data-bar-text');
+	W.addLabel(root, textInput, undefined, 'Text');
 	W.writeln('Data');
 	dataInput = W.addTextInput(root, 'data-bar-data');
 
@@ -2429,7 +2431,7 @@
 
 	    node.log('Parsed Data: ' + JSON.stringify(data));
 
-	    node.say(data, text, to);
+	    node.say(text, to, data);
 	};
 
 	node.on('UPDATED_PLIST', function() {
@@ -2441,6 +2443,7 @@
     };
 
 })(node);
+
 /**
  * # Dynamic Table widget for nodeGame
  * Copyright(c) 2013 Stefano Balietti
@@ -4437,6 +4440,9 @@
 
     function VisualTimer(options) {
         this.options = options;
+        this.options.update = ('undefined' === typeof this.options.update) ?
+            1000 : this.options.update;
+
         this.id = options.id;
 
         this.gameTimer = null;
@@ -4549,8 +4555,6 @@
                 }
 
                 if (!options.milliseconds) return;
-
-                options.update = 1000;
 
                 if ('function' === typeof options.milliseconds) {
                     options.milliseconds = options.milliseconds.call(node.game);
