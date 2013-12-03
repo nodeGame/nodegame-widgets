@@ -81,9 +81,14 @@
             that.unlock(text || that.text.stepping)
         });
 
-        node.on('PLAYING', function(text) {
+        node.on('PLAYING', function() {
             that.unlock();
         });
+
+        node.on('RESUMED', function() {
+            that.unlock();
+        });
+
     };
 
     WaitScreen.prototype.destroy = function() {

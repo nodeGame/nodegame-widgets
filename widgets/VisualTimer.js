@@ -15,7 +15,7 @@
 
     node.widgets.register('VisualTimer', VisualTimer);
 
-    var JSUS = node.JSUS;
+    var J = node.JSUS;
 
     // ## Defaults
 
@@ -29,7 +29,8 @@
     // ## Meta-data
 
     VisualTimer.version = '0.3.3';
-    VisualTimer.description = 'Display a timer for the game. Timer can trigger events. Only for countdown smaller than 1h.';
+    VisualTimer.description = 'Display a timer for the game. Timer can ' +
+        'trigger events. Only for countdown smaller than 1h.';
 
     // ## Dependencies
 
@@ -46,16 +47,22 @@
         this.id = options.id;
 
         this.gameTimer = null;
+        
         // The DIV in which to display the timer.
         this.timerDiv = null;   
+        
         // The parent element.
-        this.root = null;               
+        this.root = null;
 
         this.init(this.options);
     }
 
     VisualTimer.prototype.init = function(options) {
-        options = options || this.options;
+        var t;
+        
+        J.mixout(options, this.options);
+
+        console.log(options);
 
         if (options.hooks) {
             if (!options.hooks instanceof Array) {
@@ -81,6 +88,25 @@
             this.timerDiv.className = options.className || '';
         }
 
+        t = this.gameTimer;
+        node.session.register('visualtimer', {
+            set: function(p) {
+                // TODO.
+            },
+            get: function() {
+                return {
+                    startPaused: t.startPaused,
+	            status: t.status,
+                    timeLeft: t.timeLeft,
+                    timePassed: t.timePassed,
+                    update: t.update,
+                    updateRemaining: t.updateRemaining,
+                    updateStart: t. updateStart
+                };
+            }
+        });
+        
+        this.options = options;
     };
 
     VisualTimer.prototype.getRoot = function() {
@@ -101,7 +127,7 @@
             return;
         }
         time = this.gameTimer.milliseconds - this.gameTimer.timePassed;
-        time = JSUS.parseMilliseconds(time);
+        time = J.parseMilliseconds(time);
         minutes = (time[2] < 10) ? '' + '0' + time[2] : time[2];
         seconds = (time[3] < 10) ? '' + '0' + time[3] : time[3];
         this.timerDiv.innerHTML = minutes + ':' + seconds;
@@ -109,6 +135,7 @@
 
     VisualTimer.prototype.start = function() {
         this.updateDisplay();
+        console.log(this.gameTimer);
         this.gameTimer.start();
     };
 
@@ -127,44 +154,22 @@
         this.gameTimer.resume();
     };
 
+    VisualTimer.prototype.setToZero = function() {
+        this.stop();
+        this.timerDiv.innerHTML = '0:0';
+    };
+
     VisualTimer.prototype.listeners = function() {
         var that = this;
         node.on('PLAYING', function() {
-            var stepObj = node.game.getCurrentStep();
+            var stepObj, timer, options;
+            stepObj = node.game.getCurrentStep();
             if (!stepObj) return;
-            var timer = stepObj.timer;
+            timer = stepObj.timer;
             if (timer) {
-                timer = JSUS.clone(timer);
+                options = processOptions(timer, this.options);
+                that.gameTimer.init(timer);
                 that.timerDiv.className = '';
-                var options = {},
-                typeoftimer = typeof timer;
-                switch (typeoftimer) {
-
-                case 'number':
-                    options.milliseconds = timer;
-                    break;
-                case 'object':
-                    options = timer;
-                    break;
-                case 'function':
-                    options.milliseconds = timer;
-                    break;
-                case 'string':
-                    options.milliseconds = Number(timer);
-                    break;
-                }
-
-                if (!options.milliseconds) return;
-
-                if ('function' === typeof options.milliseconds) {
-                    options.milliseconds = options.milliseconds.call(node.game);
-                }
-
-                if (!options.timeup) {
-                    options.timeup = 'DONE';
-                }
-
-                that.gameTimer.init(options);
                 that.start();
             }
         });
@@ -173,6 +178,54 @@
             that.stop();
             that.timerDiv.className = 'strike';
         });
+
+        node.on
     };
+
+    /**
+     * ## processOptions
+     *
+     * Clones and mixes in user options with current options
+     *
+     * Return object is transformed accordingly.
+     *
+     * @param {object} Configuration options
+     * @return {object} Clean, valid configuration object.
+     */
+    function processOptions(options, curOptions) {
+        var typeoftimer;
+        options = J.clone(options);
+        J.mixin(options, curOptions);
+        typeoftimer = typeof timer;
+        switch (typeoftimer) {
+
+        case 'number':
+            options.milliseconds = timer;
+            break;
+        case 'object':
+            options = timer;
+            break;
+        case 'function':
+            options.milliseconds = timer;
+            break;
+        case 'string':
+            options.milliseconds = Number(timer);
+            break;
+        }
+
+        if (!options.milliseconds) {
+            throw new Error('VisualTimer processOptions: milliseconds cannot ' +
+                            'be 0 or undefined.');
+        }
+
+        if ('function' === typeof options.milliseconds) {
+            options.milliseconds = options.milliseconds.call(node.game);
+        }
+
+        if (!options.timeup) {
+            options.timeup = 'DONE';
+        }
+        return options;
+    }
 
 })(node);
