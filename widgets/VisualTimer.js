@@ -168,7 +168,7 @@
             timer = stepObj.timer;
             if (timer) {
                 options = processOptions(timer, this.options);
-                that.gameTimer.init(timer);
+                that.gameTimer.init(options);
                 that.timerDiv.className = '';
                 that.start();
             }
@@ -189,37 +189,36 @@
      *
      * Return object is transformed accordingly.
      *
-     * @param {object} Configuration options
+     * @param {object} options Configuration options
+     * @param {object} curOptions Current configuration of VisualTimer
      * @return {object} Clean, valid configuration object.
      */
-    function processOptions(options, curOptions) {
-        var typeoftimer;
-        options = J.clone(options);
-        J.mixin(options, curOptions);
-        typeoftimer = typeof timer;
-        switch (typeoftimer) {
+    function processOptions(inOptions, curOptions) {
+        var options, typeofOptions;
+        options = {};
+        inOptions = J.clone(inOptions);
+        typeofOptions = typeof inOptions;
+        switch (typeofOptions) {
 
         case 'number':
-            options.milliseconds = timer;
+            options.milliseconds = inOptions;
             break;
         case 'object':
-            options = timer;
+            options = inOptions;
             break;
         case 'function':
-            options.milliseconds = timer;
+            options.milliseconds = inOptions.call(node.game);
             break;
         case 'string':
-            options.milliseconds = Number(timer);
+            options.milliseconds = Number(inOptions);
             break;
         }
+
+        J.mixout(options, curOptions || {});
 
         if (!options.milliseconds) {
             throw new Error('VisualTimer processOptions: milliseconds cannot ' +
                             'be 0 or undefined.');
-        }
-
-        if ('function' === typeof options.milliseconds) {
-            options.milliseconds = options.milliseconds.call(node.game);
         }
 
         if (!options.timeup) {
