@@ -3949,8 +3949,9 @@
         var that = this;
     };
 
-    Requirements.prototype.nodeGameRequirements = function() {
-        var errors = [];
+    Requirements.prototype.nodeGameRequirements = function(result) {
+        var errors, testIFrame, db, that;
+        errors = [];
    
         if ('undefined' === typeof NDDB) {
             errors.push('NDDB not found.');
@@ -3972,6 +3973,39 @@
             errors.push('node.widgets not found.');
         }
         
+        if ('undefined' !== typeof NDDB) {
+            try {
+                db = new NDDB();
+            }
+            catch(e) {
+                errors.push('An error occurred manipulating the NDDB object: ' +
+                            e.message);
+            }
+        }
+        
+        that = this;
+        testIframe = W.addIFrame('testIFrame', this.root);
+
+       try {
+           W.loadFrame('/pages/accessdenied.html', function() {
+               if (!W.getElementById('root')) {
+                   result('W.loadFrame failed to load a test frame correctly.');
+               }
+               that.root.removeChild(testIframe);
+               result();
+           }
+           , { iframe: testIframe , iframeName: 'testIframe' });
+       }
+       catch(e) {
+           errors.push('W.loadFrame raised an error: ' + e);
+       }
+         
+        return errors;
+    };
+
+    Requirements.prototype.nodeGameRequirements = function() {
+        var errors = [];
+   
         if ('undefined' !== typeof NDDB) {
             try {
                 var db = new NDDB();

@@ -11,8 +11,6 @@ pkg = require('../package.json'),
 J = require('JSUS').JSUS,
 version = pkg.version;
 
-
-
 function buildIt(options) {
     
     var out = options.output || "nodegame-widgets";
@@ -32,6 +30,10 @@ function buildIt(options) {
     var libs = {};
     var files = fs.readdirSync(widgetsDir);
     for (var i in files) {
+        // "Dirty" files.
+        if (files[i].charAt(0) === '.' || files[i].charAt(0) === '#') {
+            continue;
+        }
 	if (path.extname(files[i]) === '.js') {
 	    var name = path.basename(files[i], '.js').toLowerCase();
 	    libs[name] = widgetsDir + files[i];
