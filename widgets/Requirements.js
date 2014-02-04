@@ -147,7 +147,8 @@
             catch(e) {
                 this.updateStillChecking(-1);
                 errors.push('An exception occurred in requirement ' + 
-                            (this.callbacks[i].name || 'n.' + i) + ': ' + e );
+                            (this.callbacks[i].name || 'n.' + (i + 1)) +
+                            ': ' + e );
                 
             }
             if (cbErrors) {
@@ -315,7 +316,7 @@
     };
 
     Requirements.prototype.nodeGameRequirements = function(result) {
-        var errors, testIFrame, db, that;
+        var errors, db;
         errors = [];
    
         if ('undefined' === typeof NDDB) {
@@ -348,42 +349,39 @@
             }
         }
         
+        return errors;
+    };
+
+    Requirements.prototype.loadFrameTest = function(result) {
+        var errors, that, testIframe, root;
+        var oldIframe, oldIframeName, oldIframeRoot;
+        errors = [];
         that = this;
-        testIframe = W.addIFrame('testIFrame', this.root);
-
-       try {
-           W.loadFrame('/pages/accessdenied.html', function() {
-               if (!W.getElementById('root')) {
-                   result('W.loadFrame failed to load a test frame correctly.');
-               }
-               that.root.removeChild(testIframe);
-               result();
-           }
-           , { iframe: testIframe , iframeName: 'testIframe' });
-       }
-       catch(e) {
-           errors.push('W.loadFrame raised an error: ' + e);
-       }
-         
-        return errors;
-    };
-
-    Requirements.prototype.nodeGameRequirements = function() {
-        var errors = [];
-   
-        if ('undefined' !== typeof NDDB) {
-            try {
-                var db = new NDDB();
-            }
-            catch(e) {
-                errors.push('An error occurred manipulating the NDDB object: ' +
-                            e.message);
-            }
+        oldIframe = W.getFrame();
+        oldIframeName = W.getFrameName();
+        oldIframeRoot = W.getFrameRoot();
+        root = W.getIFrameAnyChild(oldIframe || document);
+        try {
+            testIframe = W.addIFrame(root, 'testIFrame');
+            W.setFrame(testIframe, 'testIframe', root);
+            W.loadFrame('/pages/testpage.htm', function() {
+                var found;
+                found = W.getElementById('root');
+                if (oldIframe) {
+                    W.setFrame(oldIframe, oldIframeName, oldIframeRoot);
+                }
+                if (!found) {
+                    errors.push('W.loadFrame failed to load a test frame correctly.');
+                }
+                root.removeChild(testIframe);
+                result(errors);
+            });
         }
-        
-        return errors;
+        catch(e) {
+            errors.push('W.loadFrame raised an error: ' + e);
+            return errors;
+        }        
     };
-
 
     node.widgets.register('Requirements', Requirements);
 

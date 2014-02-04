@@ -2733,7 +2733,7 @@
     // ## Dependencies
 
     Feedback.dependencies = {
-        JSUS: {},
+        JSUS: {}
     };
 
     function Feedback(options) {
@@ -3782,7 +3782,8 @@
             catch(e) {
                 this.updateStillChecking(-1);
                 errors.push('An exception occurred in requirement ' + 
-                            (this.callbacks[i].name || 'n.' + i) + ': ' + e );
+                            (this.callbacks[i].name || 'n.' + (i + 1)) +
+                            ': ' + e );
                 
             }
             if (cbErrors) {
@@ -3950,7 +3951,7 @@
     };
 
     Requirements.prototype.nodeGameRequirements = function(result) {
-        var errors, testIFrame, db, that;
+        var errors, db;
         errors = [];
    
         if ('undefined' === typeof NDDB) {
@@ -3983,42 +3984,39 @@
             }
         }
         
+        return errors;
+    };
+
+    Requirements.prototype.loadFrameTest = function(result) {
+        var errors, that, testIframe, root;
+        var oldIframe, oldIframeName, oldIframeRoot;
+        errors = [];
         that = this;
-        testIframe = W.addIFrame('testIFrame', this.root);
-
-       try {
-           W.loadFrame('/pages/accessdenied.html', function() {
-               if (!W.getElementById('root')) {
-                   result('W.loadFrame failed to load a test frame correctly.');
-               }
-               that.root.removeChild(testIframe);
-               result();
-           }
-           , { iframe: testIframe , iframeName: 'testIframe' });
-       }
-       catch(e) {
-           errors.push('W.loadFrame raised an error: ' + e);
-       }
-         
-        return errors;
-    };
-
-    Requirements.prototype.nodeGameRequirements = function() {
-        var errors = [];
-   
-        if ('undefined' !== typeof NDDB) {
-            try {
-                var db = new NDDB();
-            }
-            catch(e) {
-                errors.push('An error occurred manipulating the NDDB object: ' +
-                            e.message);
-            }
+        oldIframe = W.getFrame();
+        oldIframeName = W.getFrameName();
+        oldIframeRoot = W.getFrameRoot();
+        root = W.getIFrameAnyChild(oldIframe || document);
+        try {
+            testIframe = W.addIFrame(root, 'testIFrame');
+            W.setFrame(testIframe, 'testIframe', root);
+            W.loadFrame('/pages/testpage.htm', function() {
+                var found;
+                found = W.getElementById('root');
+                if (oldIframe) {
+                    W.setFrame(oldIframe, oldIframeName, oldIframeRoot);
+                }
+                if (!found) {
+                    errors.push('W.loadFrame failed to load a test frame correctly.');
+                }
+                root.removeChild(testIframe);
+                result(errors);
+            });
         }
-        
-        return errors;
+        catch(e) {
+            errors.push('W.loadFrame raised an error: ' + e);
+            return errors;
+        }        
     };
-
 
     node.widgets.register('Requirements', Requirements);
 
@@ -4220,7 +4218,7 @@
 })(node);
 /**
  * # StateDisplay widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player.
@@ -4314,12 +4312,18 @@
 
     StateDisplay.prototype.listeners = function() {
 	var that = this;
-
 	node.on('STEP_CALLBACK_EXECUTED', function() {
 	    that.updateAll();
-	});
+        });
     };
 
+    StateDisplay.prototype.destroy = function() {
+        if (this.table) {
+            this.root.removeChild(this.table.table);
+            this.table = null;
+        }
+        // node.off('STEP_CALLBACK_EXECUTED', updateTable);
+    };
 })(node);
 /**
  * # VisualState widget for nodeGame
@@ -4434,7 +4438,7 @@
 })(node);
 /**
  * # VisualTimer widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events. 
@@ -4495,8 +4499,6 @@
         var t;
         
         J.mixout(options, this.options);
-
-        console.log(options);
 
         if (options.hooks) {
             if (!options.hooks instanceof Array) {
@@ -4569,7 +4571,6 @@
 
     VisualTimer.prototype.start = function() {
         this.updateDisplay();
-        console.log(this.gameTimer);
         this.gameTimer.start();
     };
 
@@ -4592,6 +4593,22 @@
         this.stop();
         this.timerDiv.innerHTML = '0:0';
     };
+    
+    /**
+     * ## VisualTimer.doTimeUp
+     *
+     * Stops the timer and calls the timeup
+     *
+     * It will call timeup even if the game is paused.
+     *
+     * @see VisualTimer.stop
+     * @see GameTimer.fire
+     */
+    VisualTimer.prototype.doTimeUp = function() {
+        this.stop();
+        this.gameTimer.timeLeft = 0;
+        this.gameTimer.fire(this.gameTimer.timeup);
+    };
 
     VisualTimer.prototype.listeners = function() {
         var that = this;
@@ -4608,7 +4625,7 @@
             }
         });
 
-        node.on('DONE', function() {
+        node.on('REALLY_DONE', function() {
             that.stop();
             that.timerDiv.className = 'strike';
         });
@@ -4665,7 +4682,7 @@
 
 /**
  * # WaitScreen widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player.
@@ -4687,7 +4704,7 @@
 
     // ## Meta-data
 
-    WaitScreen.version = '0.6.0';
+    WaitScreen.version = '0.7.0';
     WaitScreen.description = 'Show a standard waiting screen';
 
     function WaitScreen(options) {
@@ -4700,7 +4717,7 @@
             waiting: options.waitingText ||
                 'Waiting for other players to be done...',
             stepping: options.steppingText ||
-                'Initializing, game will start soon...'
+                'Initializing game step, will be ready soon...'
         };
 
 	this.waitingDiv = null;
@@ -4724,9 +4741,22 @@
         }
     };
 
+    WaitScreen.prototype.updateText = function(text, append) {
+        append = append || false;
+        if ('string' !== typeof text) {
+            throw new TypeError('WaitScreen.updateText: text must be string.');
+        }
+        if (append) {
+            this.waitingDiv.appendChild(document.createTextNode(text));
+        }
+        else {
+            this.waitingDiv.innerHTML = text;
+        }
+    };
+
     WaitScreen.prototype.append = function(root) {
         // Saves a reference of the widget in GameWindow
-        // that will use it in the GameWindow.lockFrame method.
+        // that will use it in the GameWindow.lockScreen method.
         W.waitScreen = this;
         this.root = root;
 	return root;
@@ -4738,26 +4768,50 @@
 
     WaitScreen.prototype.listeners = function() {
         var that = this;
-        node.on('BEFORE_DONE', function(text) {
-            that.lock(text || that.text.waiting)
+
+        // was using WaitScreen method before.
+        // now using GameWindow lock / unlock, so that the state level
+        // is updated. Needs some testing.
+
+        node.on('REALLY_DONE', function(text) {
+            text = text || that.text.waiting;
+            if (W.isScreenLocked()) {
+                that.updateText(text);
+            }
+            else {
+                W.lockScreen(text);
+            }
         });
 
         node.on('STEPPING', function(text) {
-            that.unlock(text || that.text.stepping)
+            text = text || that.text.stepping;
+            if (W.isScreenLocked()) {
+                that.updateText(text);
+            }
+            else {
+                W.lockScreen(text);
+            }
+            // was wrong before... Check this.
+            // that.unlock(text || that.text.stepping)
         });
 
         node.on('PLAYING', function() {
-            that.unlock();
+            if (W.isScreenLocked()) {
+                W.unlockScreen();
+            }
         });
 
         node.on('RESUMED', function() {
-            that.unlock();
+            if (W.isScreenLocked()) {
+                W.unlockScreen();
+            }
         });
-
     };
 
     WaitScreen.prototype.destroy = function() {
-        this.unlock();
+        if (W.isScreenLocked()) {
+            this.unlock();
+        }
         if (this.waitingDiv) {
             this.root.removeChild(this.waitingDiv);
         }

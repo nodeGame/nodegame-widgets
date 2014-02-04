@@ -1,6 +1,6 @@
 /**
  * # StateDisplay widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player.
@@ -94,10 +94,16 @@
 
     StateDisplay.prototype.listeners = function() {
 	var that = this;
-
 	node.on('STEP_CALLBACK_EXECUTED', function() {
 	    that.updateAll();
-	});
+        });
     };
 
+    StateDisplay.prototype.destroy = function() {
+        if (this.table) {
+            this.root.removeChild(this.table.table);
+            this.table = null;
+        }
+        // node.off('STEP_CALLBACK_EXECUTED', updateTable);
+    };
 })(node);

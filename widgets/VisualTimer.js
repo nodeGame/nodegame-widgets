@@ -1,6 +1,6 @@
 /**
  * # VisualTimer widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events. 
@@ -61,8 +61,6 @@
         var t;
         
         J.mixout(options, this.options);
-
-        console.log(options);
 
         if (options.hooks) {
             if (!options.hooks instanceof Array) {
@@ -135,7 +133,6 @@
 
     VisualTimer.prototype.start = function() {
         this.updateDisplay();
-        console.log(this.gameTimer);
         this.gameTimer.start();
     };
 
@@ -158,6 +155,22 @@
         this.stop();
         this.timerDiv.innerHTML = '0:0';
     };
+    
+    /**
+     * ## VisualTimer.doTimeUp
+     *
+     * Stops the timer and calls the timeup
+     *
+     * It will call timeup even if the game is paused.
+     *
+     * @see VisualTimer.stop
+     * @see GameTimer.fire
+     */
+    VisualTimer.prototype.doTimeUp = function() {
+        this.stop();
+        this.gameTimer.timeLeft = 0;
+        this.gameTimer.fire(this.gameTimer.timeup);
+    };
 
     VisualTimer.prototype.listeners = function() {
         var that = this;
@@ -174,7 +187,7 @@
             }
         });
 
-        node.on('DONE', function() {
+        node.on('REALLY_DONE', function() {
             that.stop();
             that.timerDiv.className = 'strike';
         });
