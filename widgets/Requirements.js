@@ -1,6 +1,6 @@
 /**
  * # Requirements widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Checks a list of requirements and displays the results.
@@ -130,7 +130,7 @@
 
     Requirements.prototype.checkRequirements = function(display) {
         var i, len;
-        var errors, cbErrors;
+        var errors, cbErrors, cbName;
         if (!this.callbacks.length) {
             throw new Error('Requirements.checkRequirements: no callback ' +
                             'found.');
@@ -145,11 +145,27 @@
                 cbErrors = resultCb(this, i);
             }
             catch(e) {
+                if (e.msg) {
+                    e = e.msg;
+                }
+                else if (e.message) {
+                    e = e.message;
+                }
+                else if (e.description) {
+                    e.description;
+                }
+                else {
+                    e = e.toString();
+                }
                 this.updateStillChecking(-1);
-                errors.push('An exception occurred in requirement ' + 
-                            (this.callbacks[i].name || 'n.' + (i + 1)) +
-                            ': ' + e );
-                
+                if (this.callbacks[i] && this.callbacks[i].name) { 
+                    cbName = this.callbacks[i].name;
+                }
+                else {
+                    cbName = i + 1;
+                }
+                errors.push('An exception occurred in requirement n.' +
+                            cbName + ': ' + e);                            
             }
             if (cbErrors) {
                 this.updateStillChecking(-1);
