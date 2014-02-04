@@ -2703,7 +2703,7 @@
 })(node);
 /**
  * # Feedback widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server.
