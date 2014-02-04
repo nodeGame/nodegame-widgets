@@ -128,9 +128,26 @@
         return that.callbacks[i](update);
     }
 
+    function extractErrorMsg(e) {
+        var errMsg;
+        if (e.msg) {
+            errMsg = e.msg;
+        }
+        else if (e.message) {
+            errMsg = e.message;
+        }
+        else if (e.description) {
+            errMsg.description;
+        }
+        else {
+            errMsg = e.toString();
+        }
+        return errMsg;
+    }
+
     Requirements.prototype.checkRequirements = function(display) {
         var i, len;
-        var errors, cbErrors, cbName;
+        var errors, cbErrors, cbName, errMsg;
         if (!this.callbacks.length) {
             throw new Error('Requirements.checkRequirements: no callback ' +
                             'found.');
@@ -145,18 +162,7 @@
                 cbErrors = resultCb(this, i);
             }
             catch(e) {
-                if (e.msg) {
-                    e = e.msg;
-                }
-                else if (e.message) {
-                    e = e.message;
-                }
-                else if (e.description) {
-                    e.description;
-                }
-                else {
-                    e = e.toString();
-                }
+                errMsg = extractErrorMsg(e);
                 this.updateStillChecking(-1);
                 if (this.callbacks[i] && this.callbacks[i].name) { 
                     cbName = this.callbacks[i].name;
@@ -165,7 +171,7 @@
                     cbName = i + 1;
                 }
                 errors.push('An exception occurred in requirement n.' +
-                            cbName + ': ' + e);                            
+                            cbName + ': ' + errMsg);                            
             }
             if (cbErrors) {
                 this.updateStillChecking(-1);
@@ -374,9 +380,16 @@
         errors = [];
         that = this;
         oldIframe = W.getFrame();
-        oldIframeName = W.getFrameName();
-        oldIframeRoot = W.getFrameRoot();
-        root = W.getIFrameAnyChild(oldIframe || document);
+
+        if (oldIframe) {
+            oldIframeName = W.getFrameName();
+            oldIframeRoot = W.getFrameRoot();
+            root = W.getIFrameAnyChild(oldIframe);
+        }
+        else {
+            root = document.body;
+        }
+
         try {
             testIframe = W.addIFrame(root, 'testIFrame');
             W.setFrame(testIframe, 'testIframe', root);
@@ -394,7 +407,7 @@
             });
         }
         catch(e) {
-            errors.push('W.loadFrame raised an error: ' + e);
+            errors.push('W.loadFrame raised an error: ' + extractErrMsg(e));
             return errors;
         }        
     };
