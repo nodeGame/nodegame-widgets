@@ -24,7 +24,7 @@
     
     // ## Meta-data
 
-    Requirements.version = '0.1';
+    Requirements.version = '0.2.0';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
@@ -82,10 +82,17 @@
                                     'success-icon.png' : 'delete-icon.png');
             img = document.createElement('img');
             img.src = imgPath;
+
+            // Might be the full exception object.
+            if ('object' === typeof o.content.text) {
+                o.content.text = extractErrorMsg(o.content.text);
+            }
+
             text = document.createTextNode(o.content.text);
             span = document.createElement('span');
             span.className = 'requirement';
             span.appendChild(img);
+            
             span.appendChild(text);
             return span;
         }
@@ -314,7 +321,8 @@
         this.root = root;
         
         this.summary = document.createElement('span');
-        this.summary.appendChild(document.createTextNode('Evaluating requirements'));
+        this.summary.appendChild(
+            document.createTextNode('Evaluating requirements'));
         
         this.summaryUpdate = document.createElement('span');
         this.summary.appendChild(this.summaryUpdate);
@@ -371,6 +379,11 @@
             }
         }
         
+        // We need to test node.Stager because it will be used in other tests.
+        if ('undefined' === typeof node.Stager) {
+            errors.push('node.Stager not found.');
+        }
+
         return errors;
     };
 
@@ -391,7 +404,8 @@
         }
 
         try {
-            testIframe = W.addIFrame(root, 'testIFrame');
+            testIframe = W.addIFrame(root, 'testIFrame', {
+                style: { display: 'none' } } );
             W.setFrame(testIframe, 'testIframe', root);
             W.loadFrame('/pages/testpage.htm', function() {
                 var found;
@@ -400,17 +414,20 @@
                     W.setFrame(oldIframe, oldIframeName, oldIframeRoot);
                 }
                 if (!found) {
-                    errors.push('W.loadFrame failed to load a test frame correctly.');
+                    errors.push('W.loadFrame failed to load a test frame ' +
+                                'correctly.');
                 }
                 root.removeChild(testIframe);
                 result(errors);
             });
         }
         catch(e) {
-            errors.push('W.loadFrame raised an error: ' + extractErrMsg(e));
+            errors.push('W.loadFrame raised an error: ' + extractErrorMsg(e));
             return errors;
         }        
     };
+
+    
 
     node.widgets.register('Requirements', Requirements);
 
