@@ -1,6 +1,6 @@
 /**
  * # EventButton widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a clickable button that fires an event.

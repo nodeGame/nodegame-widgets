@@ -4,7 +4,7 @@
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events. 
- * Only for countdown smaller than 1h.'
+ * Only for countdown smaller than 1h.
  * 
  * www.nodegame.org
  * ---
