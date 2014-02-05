@@ -1,6 +1,6 @@
 /**
  * # Widget
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Prototype of a widget class.

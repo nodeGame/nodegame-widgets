@@ -1,6 +1,6 @@
 /**
  * # Widget
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Prototype of a widget class.
@@ -50,9 +50,8 @@
     ('undefined' !== typeof node) ? node : module.parent.exports.node
 );
 /**
- * # Widgets
- *
- * Copyright(c) 2013 Stefano Balietti
+ * # Widgetss
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Helper class to interact with nodeGame widgets.
@@ -516,7 +515,7 @@
 })(node);
 /**
  * # ChernoffFaces widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -1161,7 +1160,7 @@
 })(node);
 /**
  * # ChernoffFaces (Simplified version) widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -2167,7 +2166,7 @@
 })(node);
 /**
  * # D3 widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Integrates nodeGame with the D3 library to plot a real-time chart. 
@@ -2375,7 +2374,7 @@
 })(node);
 /**
  * # DataBar widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a form to send DATA packages to other clients / SERVER.
@@ -2595,7 +2594,7 @@
 })(node);
 /**
  * # EventButton widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a clickable button that fires an event.
@@ -2792,7 +2791,7 @@
 })(node);
 /**
  * # GameBoard widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Displays a table of currently connected players.
@@ -2927,7 +2926,7 @@
 
 /**
  * # GameSummary widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Shows the configuration options of a game in a box.
@@ -3145,7 +3144,7 @@
 
 /**
  * # MoneyTalks widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Displays a box for formatting currency.
@@ -3240,7 +3239,7 @@
 })(node);
 /**
  * # MsgBar widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients.
@@ -3559,7 +3558,7 @@
 })(node);
 /**
  * # NextPreviousState widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Simple widget to step through the stages of the game.
@@ -4069,7 +4068,7 @@
 })(node);
 /**
  * # ServerInfoDisplay widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Displays information about the server.
@@ -4159,7 +4158,7 @@
 })(node);
 /**
  * # StateBar widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Provides a simple interface to change the game stages.
@@ -4373,7 +4372,7 @@
 })(node);
 /**
  * # VisualState widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Shows current, previous and next state.
@@ -4488,7 +4487,7 @@
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events. 
- * Only for countdown smaller than 1h.'
+ * Only for countdown smaller than 1h.
  * 
  * www.nodegame.org
  * ---
