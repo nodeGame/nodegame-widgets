@@ -4511,7 +4511,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.3.3';
+    VisualTimer.version = '0.4.0';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
@@ -4701,6 +4701,9 @@
             break;
         case 'object':
             options = inOptions;
+            if ('function' === typeof options.milliseconds) {
+	        options.milliseconds = options.milliseconds.call(node.game);
+	    }
             break;
         case 'function':
             options.milliseconds = inOptions.call(node.game);
@@ -4717,7 +4720,7 @@
                             'be 0 or undefined.');
         }
 
-        if (!options.timeup) {
+        if ('undefined' === typeof options.timeup) {
             options.timeup = 'DONE';
         }
         return options;
