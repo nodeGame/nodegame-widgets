@@ -1,6 +1,6 @@
 /**
  * # Chat widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat.

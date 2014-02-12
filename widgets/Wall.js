@@ -1,6 +1,6 @@
 /**
  * # Wall widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where log and other information is added

@@ -1,6 +1,6 @@
 /**
  * # NDDBBrowser widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates an interface to interact with an NDDB database.
@@ -37,7 +37,7 @@
         TriggerManager: {}
     };
 
-    function NDDBBrowser (options) {
+    function NDDBBrowser(options) {
         this.options = options;
         this.nddb = null;
 
@@ -112,7 +112,7 @@
         function notification(el, text) {
             if (el) {
                 node.emit(id + '_GOT', el);
-                this.writeInfo((this.nddb.nddb_pointer + 1) + '/' + this.nddb.length);
+                this.writeInfo((this.nddb.nddb_pointer + 1) + '/' + this.nddb.size());
             }
             else {
                 this.writeInfo('No element found');

@@ -321,7 +321,7 @@
 
 /**
  * # Chat widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat.
@@ -1814,7 +1814,7 @@
 })(node);
 /**
  * # Controls widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manipulates a set of forms.
@@ -2445,7 +2445,7 @@
 
 /**
  * # Dynamic Table widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Extends the GameTable widgets by allowing dynamic reshaping.
@@ -2983,7 +2983,7 @@
 
 /**
  * # GameTable widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that renders in each cell data captured by fired events.
@@ -3405,7 +3405,7 @@
 })(node);
 /**
  * # NDDBBrowser widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates an interface to interact with an NDDB database.
@@ -3442,7 +3442,7 @@
         TriggerManager: {}
     };
 
-    function NDDBBrowser (options) {
+    function NDDBBrowser(options) {
         this.options = options;
         this.nddb = null;
 
@@ -3517,7 +3517,7 @@
         function notification(el, text) {
             if (el) {
                 node.emit(id + '_GOT', el);
-                this.writeInfo((this.nddb.nddb_pointer + 1) + '/' + this.nddb.length);
+                this.writeInfo((this.nddb.nddb_pointer + 1) + '/' + this.nddb.size());
             }
             else {
                 this.writeInfo('No element found');
@@ -4865,7 +4865,7 @@
 })(node);
 /**
  * # Wall widget for nodeGame
- * Copyright(c) 2013 Stefano Balietti
+ * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where log and other information is added
