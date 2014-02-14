@@ -192,7 +192,11 @@
             that.timerDiv.className = 'strike';
         });
 
-        node.on
+    };
+
+    VisualTimer.prototype.destroy = function() {
+        node.timer.destroyTimer(this.gameTimer);
+        this.root.removeChild(this.timerDiv);
     };
 
     /**

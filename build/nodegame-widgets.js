@@ -13,7 +13,7 @@
     node.Widget = Widget;
 
     function Widget() {
-	this.root = null;
+        this.root = null;
     }
 
     Widget.prototype.dependencies = {};
@@ -21,14 +21,14 @@
     Widget.prototype.defaults = {};
 
     Widget.prototype.defaults.fieldset = {
-	legend: 'Widget'
+        legend: 'Widget'
     };
 
 
     Widget.prototype.listeners = function() {};
 
     Widget.prototype.getRoot = function() {
-	return this.root;
+        return this.root;
     };
 
     Widget.prototype.getValues = function() {};
@@ -145,28 +145,6 @@
         that = this;
 	options = options || {};
 
-	function createListenerFunction(w, e, l) {
-	    if (!w || !e || !l) return;
-	    w.getRoot()[e] = function() {
-		l.call(w);
-	    };
-	};
-
-	function attachListeners(options, w) {
-	    if (!options || !w) return;
-            var events = ['onclick', 'onfocus', 'onblur', 'onchange', 
-                          'onsubmit', 'onload', 'onunload', 'onmouseover'];
-	    var isEvent = false;
-	    for (var i in options) {
-		if (options.hasOwnProperty(i)) {
-		    isEvent = J.in_array(i, events);
-		    if (isEvent && 'function' === typeof options[i]) {
-			createListenerFunction(w, i, options[i]);
-		    }
-		}
-	    };
-	};
-
 	wProto = J.getNestedValue(w_str, this.widgets);
 	
 	if (!wProto) {
@@ -221,7 +199,6 @@
      */
     Widgets.prototype.append = Widgets.prototype.add = function(w, root,
                                                                 options) {
-        var that;
         if ('string' !== typeof w && 'object' !== typeof w) {
             throw new TypeError('Widgets.append: w must be string or object');
         }
@@ -234,15 +211,6 @@
                                 'undefined.');
         }
         
-        that = this;
-
-        function appendFieldset(root, options, w) {
-            if (!options) return root;
-            var idFieldset = options.id || w.id + '_fieldset';
-            var legend = options.legend || w.legend;
-            return W.addFieldset(root, idFieldset, legend, options.attributes);
-        };
-
         // Init default values.
         root = root || W.getFrameRoot() || document.body;
         options = options || {};
@@ -254,8 +222,12 @@
             w = this.get(w, options);
         }
 
-        // options exists and options.fieldset exist
-        root = appendFieldset(root, options.fieldset || w.defaults.fieldset, w);
+        // If fieldset option is null, no fieldset is added.
+        // If fieldset option is undefined, default options are used.
+        if (options.fieldset !== null) {
+            root = appendFieldset(root, options.fieldset ||
+                                  w.defaults.fieldset, w);
+        }
         w.append(root);
 
         return w;
@@ -309,6 +281,41 @@
         }
         return true;
     };
+
+    
+    // #### Helper functions.
+    
+    function appendFieldset(root, options, w) {
+        var idFieldset, legend;
+        if (!options) return root;
+        idFieldset = options.id || w.id + '_fieldset';
+        legend = options.legend || w.legend;
+        return W.addFieldset(root, idFieldset, legend, options.attributes);
+    };
+
+    function createListenerFunction(w, e, l) {
+	if (!w || !e || !l) return;
+	w.getRoot()[e] = function() {
+	    l.call(w);
+	};
+    };
+
+    function attachListeners(options, w) {
+        var events, isEvent, i;
+	if (!options || !w) return;
+        isEvent = false;
+        events = ['onclick', 'onfocus', 'onblur', 'onchange', 
+                  'onsubmit', 'onload', 'onunload', 'onmouseover'];	
+	for (i in options) {
+	    if (options.hasOwnProperty(i)) {
+		isEvent = J.in_array(i, events);
+		if (isEvent && 'function' === typeof options[i]) {
+		    createListenerFunction(w, i, options[i]);
+		}
+	    }
+	};
+    };
+
 
     //Expose Widgets to the global object
     node.widgets = new Widgets();
@@ -4675,7 +4682,11 @@
             that.timerDiv.className = 'strike';
         });
 
-        node.on
+    };
+
+    VisualTimer.prototype.destroy = function() {
+        node.timer.destroyTimer(this.gameTimer);
+        this.root.removeChild(this.timerDiv);
     };
 
     /**
