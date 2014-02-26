@@ -90,7 +90,7 @@
             // but we should add a check
 
             var msg = that.parse();
-            node.gsc.send(msg);
+            node.socket.send(msg);
             //console.log(msg.stringify());
         };
         stubButton.onclick = function() {
@@ -153,8 +153,8 @@
         node.window.getElementById(this.id + '_reliable').value = 1;
         node.window.getElementById(this.id + '_priority').value = 0;
 
-        if (node.gsc && node.gsc.session) {
-            node.window.getElementById(this.id + '_session').value = node.gsc.session;
+        if (node.socket && node.socket.session) {
+            node.window.getElementById(this.id + '_session').value = node.socket.session;
         }
 
         node.window.getElementById(this.id + '_state').value = JSON.stringify(node.state);
