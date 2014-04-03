@@ -54,7 +54,7 @@
 
                 // Update Others
                 stateEvent = node.OUT + node.action.SAY + '.STATE';
-                node.emit(stateEvent, state, 'ALL');
+                node.emit(stateEvent, state, 'ROOM');
             }
             else {
                 node.log('No next/previous state. Not sent', 'ERR');

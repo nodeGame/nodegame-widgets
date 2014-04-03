@@ -82,7 +82,7 @@
                 });
 
                 // Self Update
-                if (to === 'ALL') {
+                if (to === 'ROOM') {
                     stateEvent = node.IN + node.action.SAY + '.STATE';
                     stateMsg = node.msg.createSTATE(stateEvent, state);
                     node.emit(stateEvent, stateMsg);

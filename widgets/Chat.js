@@ -86,7 +86,7 @@
             this.recipient = {value: 'SERVER'};
             break;
         case Chat.modes.MANY_TO_ONE:
-            this.recipient = {value: 'ALL'};
+            this.recipient = {value: 'ROOM'};
             break;
         case Chat.modes.ONE_TO_ONE:
             this.recipient = {value: 'SERVER'};
