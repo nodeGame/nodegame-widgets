@@ -37,18 +37,17 @@
 
     Widget.prototype.init = function() {};
 
-    Widget.prototype.getRoot = function() {};
-
-    Widget.prototype.listeners = function() {};
-
     Widget.prototype.getAllValues = function() {};
 
     Widget.prototype.highlight = function() {};
+
+    Widget.prototype.destroy = function() {};
 
 })(
     // Widgets works only in the browser environment.
     ('undefined' !== typeof node) ? node : module.parent.exports.node
 );
+
 /**
  * # Widgetss
  * Copyright(c) 2014 Stefano Balietti
@@ -68,11 +67,20 @@
         /**
          * ## Widgets.widgets
          *
-         * Container of currently registered widgets 
+         * Container of currently registered widgets
          *
          * @see Widgets.register
          */
         this.widgets = {};
+
+        /**
+         * ## Widgets.widgets
+         *
+         * Container of appended widget instances
+         *
+         * @see Widgets.append
+         */
+        this.instances = [];
     }
 
     /**
@@ -81,14 +89,14 @@
      * Registers a new widget in the collection
      *
      * A name and a prototype class must be provided. All properties
-     * that are presetn in `node.Widget`, but missing in the prototype
+     * that are present in `node.Widget`, but missing in the prototype
      * are added.
      *
      * Registered widgets can be loaded with Widgets.get or Widgets.append.
      *
-     * @param {string} name The id under which registering the widget
+     * @param {string} name The id under which to register the widget
      * @param {function} w The widget to add
-     * @return {object|boolean} The registered widget, 
+     * @return {object|boolean} The registered widget,
      *   or FALSE if an error occurs
      */
     Widgets.prototype.register = function(name, w) {
@@ -101,8 +109,9 @@
         }
         // Add default properties to widget prototype
         for (i in node.Widget.prototype) {
-            if (!w[i] && !w.prototype[i]
-                && !(w.prototype.__proto__ && w.prototype.__proto__[i])) {
+            if (!w[i] && !w.prototype[i] &&
+                !(w.prototype.__proto__ && w.prototype.__proto__[i])) {
+
                 w.prototype[i] = J.clone(node.Widget.prototype[i]);
             }
         }
@@ -141,24 +150,24 @@
             throw new TypeError('Widgets.get: options must be object or ' +
                                 'undefined.');
         }
-        
+
         that = this;
-	options = options || {};
+        options = options || {};
 
-	wProto = J.getNestedValue(w_str, this.widgets);
-	
-	if (!wProto) {
+        wProto = J.getNestedValue(w_str, this.widgets);
+
+        if (!wProto) {
             throw new Error('Widgets.get: ' + w_str + ' not found.');
-	}
+        }
 
-	node.info('registering ' + wProto.name + ' v.' +  wProto.version);
+        node.info('registering ' + wProto.name + ' v.' +  wProto.version);
 
-	if (!this.checkDependencies(wProto)) {
+        if (!this.checkDependencies(wProto)) {
             throw new Error('Widgets.get: ' + w_str + ' has unmet dependecies.');
         }
 
-	// Add missing properties to the user options
-	J.mixout(options, J.clone(wProto.defaults));
+        // Add missing properties to the user options
+        J.mixout(options, J.clone(wProto.defaults));
 
         widget = new wProto(options);
         // Re-inject defaults
@@ -170,7 +179,7 @@
         // user listeners
         attachListeners(options, widget);
 
-	return widget;
+        return widget;
     };
 
     /**
@@ -199,8 +208,10 @@
      */
     Widgets.prototype.append = Widgets.prototype.add = function(w, root,
                                                                 options) {
+        var div, heading, body;
+
         if ('string' !== typeof w && 'object' !== typeof w) {
-            throw new TypeError('Widgets.append: w must be string or object');
+            throw new TypeError('Widgets.append: w must be string or object.');
         }
         if (root && !J.isElement(root)) {
             throw new TypeError('Widgets.append: root must be HTMLElement ' +
@@ -210,7 +221,7 @@
             throw new TypeError('Widgets.append: options must be object or ' +
                                 'undefined.');
         }
-        
+
         // Init default values.
         root = root || W.getFrameRoot() || document.body;
         options = options || {};
@@ -222,15 +233,69 @@
             w = this.get(w, options);
         }
 
-        // If fieldset option is null, no fieldset is added.
+        // If fieldset option is null, a div is added instead.
         // If fieldset option is undefined, default options are used.
-        if (options.fieldset !== null) {
-            root = appendFieldset(root, options.fieldset ||
-                                  w.defaults.fieldset, w);
+        //if (options.fieldset !== null) {
+        //    root = appendFieldset(root, options.fieldset ||
+        //                          w.defaults.fieldset, w);
+        //}
+        div = appendDiv(root, {
+            attributes: {className: ['ng_widget', 'panel', 'panel-default']}
+        });
+
+        if (options.fieldset) {
+            // Add heading.
+            heading = appendDiv(div, {
+                attributes: {className: 'panel-heading'}
+            });
+
+            heading.innerHTML = options.fieldset.legend || w.legend;
         }
-        w.append(root);
+
+        body = appendDiv(div, {
+            attributes: {className: 'panel-body'}
+        });
+
+        w.append(body);
+
+        // Store widget instance for destruction.
+        this.instances.push(w);
 
         return w;
+    };
+
+    /**
+     * ### Widgets.destroyAll
+     *
+     * Removes all widgets that have been appended with Widgets.append
+     *
+     * Exceptions thrown in the widgets' destroy methods are caught.
+     *
+     * @see Widgets.append
+     */
+    Widgets.prototype.destroyAll = function() {
+        var i, widget, widgetDiv;
+
+        for (i in this.instances) {
+            if (this.instances.hasOwnProperty(i)) {
+                widget = this.instances[i];
+
+                try {
+                    // Remove widget div/fieldset from root:
+                    if (widget.root) {
+                        widgetDiv = widget.root.parentNode;
+                        widgetDiv.parentNode.removeChild(widgetDiv);
+                    }
+
+                    widget.destroy();
+                }
+                catch (e) {
+                    node.warn('Widgets.destroyAll: Error caught. ' + e + '.');
+                }
+            }
+        }
+
+        this.instances = [];
     };
 
     /**
@@ -253,13 +318,8 @@
      * @return {boolean} TRUE, if all dependencies are met
      */
     Widgets.prototype.checkDependencies = function(w, quiet) {
-        var errMsg, parents, d, lib, found, i; 
+        var parents, d, lib, found, i;
         if (!w.dependencies) return true;
-
-        errMsg = function(w, d) {
-            var name = w.name || w.id;// || w.toString();
-            node.log(d + ' not found. ' + name + ' cannot be loaded.', 'ERR');
-        };
 
         parents = [window, node, this.widgets, node.window];
 
@@ -274,7 +334,7 @@
                     }
                 }
                 if (!found) {
-                    if (!quiet) errMsg(w, lib);
+                    if (!quiet) checkDepErrMsg(w, lib);
                     return false;
                 }
             }
@@ -282,40 +342,49 @@
         return true;
     };
 
-    
+
     // #### Helper functions.
-    
-    function appendFieldset(root, options, w) {
-        var idFieldset, legend;
-        if (!options) return root;
-        idFieldset = options.id || w.id + '_fieldset';
-        legend = options.legend || w.legend;
-        return W.addFieldset(root, idFieldset, legend, options.attributes);
-    };
+
+    //function appendFieldset(root, options, w) {
+    //    var idFieldset, legend;
+    //    if (!options) return root;
+    //    idFieldset = options.id || w.id + '_fieldset';
+    //    legend = options.legend || w.legend;
+    //    return W.addFieldset(root, idFieldset, legend, options.attributes);
+    //}
+
+    function appendDiv(root, options) {
+        // TODO: Check every parameter
+        return W.addDiv(root, undefined, options.attributes);
+    }
 
     function createListenerFunction(w, e, l) {
-	if (!w || !e || !l) return;
-	w.getRoot()[e] = function() {
-	    l.call(w);
-	};
-    };
+        if (!w || !e || !l) return;
+        w.getRoot()[e] = function() {
+            l.call(w);
+        };
+    }
 
     function attachListeners(options, w) {
         var events, isEvent, i;
-	if (!options || !w) return;
+        if (!options || !w) return;
         isEvent = false;
-        events = ['onclick', 'onfocus', 'onblur', 'onchange', 
-                  'onsubmit', 'onload', 'onunload', 'onmouseover'];	
-	for (i in options) {
-	    if (options.hasOwnProperty(i)) {
-		isEvent = J.in_array(i, events);
-		if (isEvent && 'function' === typeof options[i]) {
-		    createListenerFunction(w, i, options[i]);
-		}
-	    }
-	};
-    };
+        events = ['onclick', 'onfocus', 'onblur', 'onchange',
+                  'onsubmit', 'onload', 'onunload', 'onmouseover'];
+        for (i in options) {
+            if (options.hasOwnProperty(i)) {
+                isEvent = J.in_array(i, events);
+                if (isEvent && 'function' === typeof options[i]) {
+                    createListenerFunction(w, i, options[i]);
+                }
+            }
+        }
+    }
 
+    function checkDepErrMsg(w, d) {
+        var name = w.name || w.id;// || w.toString();
+        node.err(d + ' not found. ' + name + ' cannot be loaded.');
+    };
 
     //Expose Widgets to the global object
     node.widgets = new Widgets();
@@ -414,7 +483,7 @@
             this.recipient = {value: 'SERVER'};
             break;
         case Chat.modes.MANY_TO_ONE:
-            this.recipient = {value: 'ALL'};
+            this.recipient = {value: 'ROOM'};
             break;
         case Chat.modes.ONE_TO_ONE:
             this.recipient = {value: 'SERVER'};
@@ -520,6 +589,7 @@
     node.widgets.register('Chat', Chat);
 
 })(node);
+
 /**
  * # ChernoffFaces widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
@@ -3336,7 +3406,7 @@
             // but we should add a check
 
             var msg = that.parse();
-            node.gsc.send(msg);
+            node.socket.send(msg);
             //console.log(msg.stringify());
         };
         stubButton.onclick = function() {
@@ -3399,8 +3469,8 @@
         node.window.getElementById(this.id + '_reliable').value = 1;
         node.window.getElementById(this.id + '_priority').value = 0;
 
-        if (node.gsc && node.gsc.session) {
-            node.window.getElementById(this.id + '_session').value = node.gsc.session;
+        if (node.socket && node.socket.session) {
+            node.window.getElementById(this.id + '_session').value = node.socket.session;
         }
 
         node.window.getElementById(this.id + '_state').value = JSON.stringify(node.state);
@@ -3410,6 +3480,7 @@
     };
 
 })(node);
+
 /**
  * # NDDBBrowser widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
@@ -3619,7 +3690,7 @@
 
                 // Update Others
                 stateEvent = node.OUT + node.action.SAY + '.STATE';
-                node.emit(stateEvent, state, 'ALL');
+                node.emit(stateEvent, state, 'ROOM');
             }
             else {
                 node.log('No next/previous state. Not sent', 'ERR');
@@ -3639,6 +3710,7 @@
     };
 
 })(node);
+
 /**
  * # Requirements widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
@@ -4247,7 +4319,7 @@
                 });
 
                 // Self Update
-                if (to === 'ALL') {
+                if (to === 'ROOM') {
                     stateEvent = node.IN + node.action.SAY + '.STATE';
                     stateMsg = node.msg.createSTATE(stateEvent, state);
                     node.emit(stateEvent, stateMsg);
@@ -4268,6 +4340,7 @@
     };
 
 })(node);
+
 /**
  * # StateDisplay widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
