@@ -280,7 +280,7 @@
             if (this.instances.hasOwnProperty(i)) {
                 widget = this.instances[i];
 
-                try {
+                //try {
                     // Remove widget div/fieldset from root:
                     if (widget.root) {
                         widgetDiv = widget.root.parentNode;
@@ -288,10 +288,10 @@
                     }
 
                     widget.destroy();
-                }
-                catch (e) {
-                    node.warn('Widgets.destroyAll: Error caught. ' + e + '.');
-                }
+                //}
+                //catch (e) {
+                    //node.warn('Widgets.destroyAll: Error caught. ' + e + '.');
+                //}
             }
         }
 
@@ -4945,11 +4945,12 @@
             this.unlock();
         }
         if (this.waitingDiv) {
-            this.root.removeChild(this.waitingDiv);
+            this.waitingDiv.parentNode.removeChild(this.waitingDiv);
         }
         W.waitScreen = null; 
     };
 })(node);
+
 /**
  * # Wall widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
