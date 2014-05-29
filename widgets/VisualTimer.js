@@ -17,20 +17,14 @@
 
     var J = node.JSUS;
 
-    // ## Defaults
-
-    VisualTimer.defaults = {};
-    VisualTimer.defaults.id = 'visualtimer';
-    VisualTimer.defaults.fieldset = {
-        legend: 'Time left',
-        id: 'visualtimer_fieldset'
-    };
-
     // ## Meta-data
 
     VisualTimer.version = '0.4.0';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
+
+    VisualTimer.title = 'Time left';
+    VisualTimer.className = 'visualtimer';
 
     // ## Dependencies
 
@@ -50,9 +44,6 @@
         
         // The DIV in which to display the timer.
         this.timerDiv = null;   
-        
-        // The parent element.
-        this.root = null;
 
         this.init(this.options);
     }
@@ -107,15 +98,9 @@
         this.options = options;
     };
 
-    VisualTimer.prototype.getRoot = function() {
-        return this.root;
-    };
-
-    VisualTimer.prototype.append = function(root) {
-        this.root = root;
-        this.timerDiv = node.window.addDiv(root, this.id + '_div');
+    VisualTimer.prototype.append = function() {
+        this.timerDiv = node.window.addDiv(this.bodyDiv, this.id + '_div');
         this.updateDisplay();
-        return root;
     };
 
     VisualTimer.prototype.updateDisplay = function() {
@@ -196,7 +181,7 @@
 
     VisualTimer.prototype.destroy = function() {
         node.timer.destroyTimer(this.gameTimer);
-        this.root.removeChild(this.timerDiv);
+        this.bodyDiv.removeChild(this.timerDiv);
     };
 
     /**

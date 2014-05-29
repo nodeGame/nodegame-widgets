@@ -17,19 +17,13 @@
     var JSUS = node.JSUS,
     Table = node.window.Table;
 
-    // ## Defaults
-
-    VisualState.defaults = {};
-    VisualState.defaults.id = 'visualstate';
-    VisualState.defaults.fieldset = {
-        legend: 'State',
-        id: 'visualstate_fieldset'
-    };
-
     // ## Meta-data
 
     VisualState.version = '0.2.1';
     VisualState.description = 'Visually display current, previous and next state of the game.';
+
+    VisualState.title = 'State';
+    VisualState.className = 'visualstate';
 
     // ## Dependencies
 
@@ -41,20 +35,14 @@
     function VisualState(options) {
         this.id = options.id;
 
-        this.root = null;
         this.table = new Table();
     }
 
-    VisualState.prototype.getRoot = function() {
-        return this.root;
-    };
-
-    VisualState.prototype.append = function(root, ids) {
+    VisualState.prototype.append = function() {
         var that = this;
         var PREF = this.id + '_';
-        root.appendChild(this.table.table);
+        this.bodyDiv.appendChild(this.table.table);
         this.writeState();
-        return root;
     };
 
     VisualState.prototype.listeners = function() {
