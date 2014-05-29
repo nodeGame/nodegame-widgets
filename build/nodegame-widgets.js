@@ -81,7 +81,8 @@
     };
 
     Widget.prototype.setContext = function(context) {
-        // TODO
+        W.removeClass(this.panelDiv, 'panel-[a-z]*');
+        W.addClass(this.panelDiv, 'panel-' + context);
     };
 
 })(
