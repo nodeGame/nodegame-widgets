@@ -131,7 +131,7 @@
             this.unlock();
         }
         if (this.waitingDiv) {
-            this.root.removeChild(this.waitingDiv);
+            this.waitingDiv.parentNode.removeChild(this.waitingDiv);
         }
         W.waitScreen = null; 
     };
