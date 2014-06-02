@@ -34,7 +34,6 @@
 
     function VisualState(options) {
         this.id = options.id;
-
         this.table = new Table();
     }
 

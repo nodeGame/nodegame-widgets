@@ -22,8 +22,8 @@
     StateDisplay.version = '0.5.0';
     StateDisplay.description = 'Display basic info about player\'s status.';
 
-    StateDisplay.classname = 'statedisplay';
     StateDisplay.title = 'State Display';
+    StateDisplay.className = 'statedisplay';
 
     // ## Dependencies
    
