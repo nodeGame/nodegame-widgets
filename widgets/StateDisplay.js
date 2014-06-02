@@ -17,52 +17,35 @@
 
     node.widgets.register('StateDisplay', StateDisplay);
 
-    // ## Defaults
-
-    StateDisplay.defaults = {};
-    StateDisplay.defaults.id = 'statedisplay';
-    StateDisplay.defaults.fieldset = { legend: 'State Display' };
-
     // ## Meta-data
 
-    StateDisplay.version = '0.4.2';
-    StateDisplay.description = 'Display basic information about player\'s status.';
+    StateDisplay.version = '0.5.0';
+    StateDisplay.description = 'Display basic info about player\'s status.';
+
+    StateDisplay.classname = 'statedisplay';
+    StateDisplay.title = 'State Display';
+
+    // ## Dependencies
+   
+    StateDisplay.dependencies = {      
+        Table: {}
+    };
 
     function StateDisplay(options) {
-
 	this.id = options.id;
-
-	this.root = null;
 	this.table = new Table();
     }
 
-    // TODO: Write a proper INIT method
-    StateDisplay.prototype.init = function() {};
-
-    StateDisplay.prototype.getRoot = function() {
-	return this.root;
-    };
-
-
-    StateDisplay.prototype.append = function(root) {
-	var that = this;
-	var PREF = this.id + '_';
-
-	var idFieldset = PREF + 'fieldset';
-	var idPlayer = PREF + 'player';
-	var idState = PREF + 'state';
-
-	var checkPlayerName = setInterval(function(idState,idPlayer) {
+    StateDisplay.prototype.append = function() {
+	var that, checkPlayerName;
+        that = this;
+	checkPlayerName = setInterval(function() {
 	    if (node.player && node.player.id) {
 		clearInterval(checkPlayerName);
 		that.updateAll();
 	    }
 	}, 100);
-
-	root.appendChild(this.table.table);
-	this.root = root;
-	return root;
-
+	this.bodyDiv.appendChild(this.table.table);
     };
 
     StateDisplay.prototype.updateAll = function() {
@@ -99,11 +82,7 @@
         });
     };
 
-    StateDisplay.prototype.destroy = function() {
-        if (this.table) {
-            this.root.removeChild(this.table.table);
-            this.table = null;
-        }
-        // node.off('STEP_CALLBACK_EXECUTED', updateTable);
+    StateDisplay.prototype.destroy = function() {        
+        node.off('STEP_CALLBACK_EXECUTED', StateDisplay.prototype.updateAll);
     };
 })(node);
