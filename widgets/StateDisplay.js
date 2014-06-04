@@ -26,8 +26,8 @@
     StateDisplay.className = 'statedisplay';
 
     // ## Dependencies
-   
-    StateDisplay.dependencies = {      
+
+    StateDisplay.dependencies = {
         Table: {}
     };
 
@@ -82,7 +82,7 @@
         });
     };
 
-    StateDisplay.prototype.destroy = function() {        
+    StateDisplay.prototype.destroy = function() {
         node.off('STEP_CALLBACK_EXECUTED', StateDisplay.prototype.updateAll);
     };
 })(node);
