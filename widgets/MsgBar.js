@@ -13,24 +13,22 @@
     "use strict";
 
     var GameMsg = node.GameMsg,
-    Table = node.window.Table;
+        GameStage = node.GameStage,
+        Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
-
-    // ## Defaults
-
-    MsgBar.defaults = {};
-    MsgBar.defaults.id = 'msgbar';
-    MsgBar.defaults.fieldset = { legend: 'Send MSG' };
 
     // ## Meta-data
 
     MsgBar.version = '0.5';
     MsgBar.description = 'Send a nodeGame message to players';
 
+    MsgBar.title = 'Send MSG';
+    MsgBar.className = 'msgbar';
+
     function MsgBar(options) {
 
-        this.id = options.id;
+        this.id = options.id || MsgBar.className;
 
         this.recipient = null;
         this.actionSel = null;
@@ -50,27 +48,31 @@
             if (gm.hasOwnProperty(i)) {
                 var id = this.id + '_' + i;
                 this.table.add(i, 0, y);
-                this.table.add(node.window.getTextInput(id), 1, y);
+                this.table.add(W.getTextInput(id), 1, y);
                 if (i === 'target') {
-                    this.targetSel = node.window.getTargetSelector(this.id + '_targets');
+                    this.targetSel = W.getTargetSelector(this.id + '_targets');
                     this.table.add(this.targetSel, 2, y);
 
                     this.targetSel.onchange = function() {
-                        node.window.getElementById(that.id + '_target').value = that.targetSel.value;
+                        W.getElementById(that.id + '_target').value =
+                            that.targetSel.value;
                     };
                 }
                 else if (i === 'action') {
-                    this.actionSel = node.window.getActionSelector(this.id + '_actions');
+                    this.actionSel = W.getActionSelector(this.id + '_actions');
                     this.table.add(this.actionSel, 2, y);
                     this.actionSel.onchange = function() {
-                        node.window.getElementById(that.id + '_action').value = that.actionSel.value;
+                        W.getElementById(that.id + '_action').value =
+                            that.actionSel.value;
                     };
                 }
                 else if (i === 'to') {
-                    this.recipient = node.window.getRecipientSelector(this.id + 'recipients');
+                    this.recipient =
+                        W.getRecipientSelector(this.id + 'recipients');
                     this.table.add(this.recipient, 2, y);
                     this.recipient.onchange = function() {
-                        node.window.getElementById(that.id + '_to').value = that.recipient.value;
+                        W.getElementById(that.id + '_to').value =
+                            that.recipient.value;
                     };
                 }
                 y++;
@@ -79,10 +81,10 @@
         this.table.parse();
     };
 
-    MsgBar.prototype.append = function(root) {
+    MsgBar.prototype.append = function() {
 
-        var sendButton = node.window.addButton(root);
-        var stubButton = node.window.addButton(root, 'stub', 'Add Stub');
+        var sendButton = W.addButton(this.bodyDiv);
+        var stubButton = W.addButton(this.bodyDiv, 'stub', 'Add Stub');
 
         var that = this;
         sendButton.onclick = function() {
@@ -97,20 +99,13 @@
             that.addStub();
         };
 
-        root.appendChild(this.table.table);
-
-        this.root = root;
-        return root;
-    };
-
-    MsgBar.prototype.getRoot = function() {
-        return this.root;
+        this.bodyDiv.appendChild(this.table.table);
     };
 
     MsgBar.prototype.listeners = function() {
         var that = this;
         node.on.plist( function(msg) {
-            node.window.populateRecipientSelector(that.recipient, msg.data);
+            W.populateRecipientSelector(that.recipient, msg.data);
 
         });
     };
@@ -147,19 +142,21 @@
     };
 
     MsgBar.prototype.addStub = function() {
-        node.window.getElementById(this.id + '_from').value = (node.player) ? node.player.id : 'undefined';
-        node.window.getElementById(this.id + '_to').value = this.recipient.value;
-        node.window.getElementById(this.id + '_forward').value = 0;
-        node.window.getElementById(this.id + '_reliable').value = 1;
-        node.window.getElementById(this.id + '_priority').value = 0;
+        W.getElementById(this.id + '_from').value =
+            (node.player) ? node.player.id : 'undefined';
+        W.getElementById(this.id + '_to').value = this.recipient.value;
+        W.getElementById(this.id + '_forward').value = 0;
+        W.getElementById(this.id + '_reliable').value = 1;
+        W.getElementById(this.id + '_priority').value = 0;
 
         if (node.socket && node.socket.session) {
-            node.window.getElementById(this.id + '_session').value = node.socket.session;
+            W.getElementById(this.id + '_session').value = node.socket.session;
         }
 
-        node.window.getElementById(this.id + '_state').value = JSON.stringify(node.state);
-        node.window.getElementById(this.id + '_action').value = this.actionSel.value;
-        node.window.getElementById(this.id + '_target').value = this.targetSel.value;
+        W.getElementById(this.id + '_stage').value =
+            new GameStage(node.player.stage);
+        W.getElementById(this.id + '_action').value = this.actionSel.value;
+        W.getElementById(this.id + '_target').value = this.targetSel.value;
 
     };
 
