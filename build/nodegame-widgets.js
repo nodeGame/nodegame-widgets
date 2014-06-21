@@ -3430,28 +3430,28 @@
 
         // To:
         this.table.add('to', 0, 0);
-        this.table.add(W.getTextInput(this.id + '_to'), 1, 0);
+        this.table.add(W.getTextInput(this.id + '_to'), 0, 1);
         this.recipient =
             W.getRecipientSelector(this.id + '_recipients');
-        this.table.add(this.recipient, 2, 0);
+        this.table.add(this.recipient, 0, 2);
         this.recipient.onchange = function() {
             W.getElementById(that.id + '_to').value =
                 that.recipient.value;
         };
 
         // Action:
-        this.table.add('action', 0, 1);
+        this.table.add('action', 1, 0);
         this.table.add(W.getTextInput(this.id + '_action'), 1, 1);
         this.actionSel = W.getActionSelector(this.id + '_actions');
-        this.table.add(this.actionSel, 2, 1);
+        this.table.add(this.actionSel, 1, 2);
         this.actionSel.onchange = function() {
             W.getElementById(that.id + '_action').value =
                 that.actionSel.value;
         };
 
         // Target:
-        this.table.add('target', 0, 2);
-        this.table.add(W.getTextInput(this.id + '_target'), 1, 2);
+        this.table.add('target', 2, 0);
+        this.table.add(W.getTextInput(this.id + '_target'), 2, 1);
         this.targetSel = W.getTargetSelector(this.id + '_targets');
         this.table.add(this.targetSel, 2, 2);
         this.targetSel.onchange = function() {
@@ -3460,46 +3460,46 @@
         };
 
         // Text:
-        this.table.add('text', 0, 3);
-        this.table.add(W.getTextInput(this.id + '_text'), 1, 3);
+        this.table.add('text', 3, 0);
+        this.table.add(W.getTextInput(this.id + '_text'), 3, 1);
 
         // Data:
-        this.table.add('data', 0, 4);
-        this.table.add(W.getTextInput(this.id + '_data'), 1, 4);
+        this.table.add('data', 4, 0);
+        this.table.add(W.getTextInput(this.id + '_data'), 4, 1);
 
 
         // TODO: Hide the following fields.
         // From:
-        this.table.add('from', 0, 5);
-        this.table.add(W.getTextInput(this.id + '_from'), 1, 5);
+        this.table.add('from', 5, 0);
+        this.table.add(W.getTextInput(this.id + '_from'), 5, 1);
 
         // Priority:
-        this.table.add('priority', 0, 6);
-        this.table.add(W.getTextInput(this.id + '_priority'), 1, 6);
+        this.table.add('priority', 6, 0);
+        this.table.add(W.getTextInput(this.id + '_priority'), 6, 1);
 
         // Reliable:
-        this.table.add('reliable', 0, 7);
-        this.table.add(W.getTextInput(this.id + '_reliable'), 1, 7);
+        this.table.add('reliable', 7, 0);
+        this.table.add(W.getTextInput(this.id + '_reliable'), 7, 1);
 
         // Forward:
-        this.table.add('forward', 0, 8);
-        this.table.add(W.getTextInput(this.id + '_forward'), 1, 8);
+        this.table.add('forward', 8, 0);
+        this.table.add(W.getTextInput(this.id + '_forward'), 8, 1);
 
         // Session:
-        this.table.add('session', 0, 9);
-        this.table.add(W.getTextInput(this.id + '_session'), 1, 9);
+        this.table.add('session', 9, 0);
+        this.table.add(W.getTextInput(this.id + '_session'), 9, 1);
 
         // Stage:
-        this.table.add('stage', 0, 10);
-        this.table.add(W.getTextInput(this.id + '_stage'), 1, 10);
+        this.table.add('stage', 10, 0);
+        this.table.add(W.getTextInput(this.id + '_stage'), 10, 1);
 
         // Created:
-        this.table.add('created', 0, 11);
-        this.table.add(W.getTextInput(this.id + '_created'), 1, 11);
+        this.table.add('created', 11, 0);
+        this.table.add(W.getTextInput(this.id + '_created'), 11, 1);
 
         // Id:
-        this.table.add('id', 0, 12);
-        this.table.add(W.getTextInput(this.id + '_id'), 1, 12);
+        this.table.add('id', 12, 0);
+        this.table.add(W.getTextInput(this.id + '_id'), 12, 1);
 
 
         this.table.parse();
