@@ -43,83 +43,47 @@
     // TODO: Write a proper INIT method
     MsgBar.prototype.init = function() {
         var that;
+        var fields, i, field;
+
         that = this;
 
         // Create fields.
+        // TODO: separate table for fields following 'data'
+        fields = ['to', 'action', 'target', 'text', 'data', 'from', 'priority',
+                  'reliable', 'forward', 'session', 'stage', 'created', 'id'];
 
-        // To:
-        this.table.add('to', 0, 0);
-        this.table.add(W.getTextInput(this.id + '_to'), 1, 0);
-        this.recipient =
-            W.getRecipientSelector(this.id + '_recipients');
-        this.table.add(this.recipient, 2, 0);
-        this.recipient.onchange = function() {
-            W.getElementById(that.id + '_to').value =
-                that.recipient.value;
-        };
+        for (i = 0; i < fields.length; ++i) {
+            field = fields[i];
 
-        // Action:
-        this.table.add('action', 0, 1);
-        this.table.add(W.getTextInput(this.id + '_action'), 1, 1);
-        this.actionSel = W.getActionSelector(this.id + '_actions');
-        this.table.add(this.actionSel, 2, 1);
-        this.actionSel.onchange = function() {
-            W.getElementById(that.id + '_action').value =
-                that.actionSel.value;
-        };
+            this.table.add(field, i, 0);
+            this.table.add(W.getTextInput(this.id + '_' + field), i, 1);
 
-        // Target:
-        this.table.add('target', 0, 2);
-        this.table.add(W.getTextInput(this.id + '_target'), 1, 2);
-        this.targetSel = W.getTargetSelector(this.id + '_targets');
-        this.table.add(this.targetSel, 2, 2);
-        this.targetSel.onchange = function() {
-            W.getElementById(that.id + '_target').value =
-                that.targetSel.value;
-        };
-
-        // Text:
-        this.table.add('text', 0, 3);
-        this.table.add(W.getTextInput(this.id + '_text'), 1, 3);
-
-        // Data:
-        this.table.add('data', 0, 4);
-        this.table.add(W.getTextInput(this.id + '_data'), 1, 4);
-
-
-        // TODO: Hide the following fields.
-        // From:
-        this.table.add('from', 0, 5);
-        this.table.add(W.getTextInput(this.id + '_from'), 1, 5);
-
-        // Priority:
-        this.table.add('priority', 0, 6);
-        this.table.add(W.getTextInput(this.id + '_priority'), 1, 6);
-
-        // Reliable:
-        this.table.add('reliable', 0, 7);
-        this.table.add(W.getTextInput(this.id + '_reliable'), 1, 7);
-
-        // Forward:
-        this.table.add('forward', 0, 8);
-        this.table.add(W.getTextInput(this.id + '_forward'), 1, 8);
-
-        // Session:
-        this.table.add('session', 0, 9);
-        this.table.add(W.getTextInput(this.id + '_session'), 1, 9);
-
-        // Stage:
-        this.table.add('stage', 0, 10);
-        this.table.add(W.getTextInput(this.id + '_stage'), 1, 10);
-
-        // Created:
-        this.table.add('created', 0, 11);
-        this.table.add(W.getTextInput(this.id + '_created'), 1, 11);
-
-        // Id:
-        this.table.add('id', 0, 12);
-        this.table.add(W.getTextInput(this.id + '_id'), 1, 12);
-
+            if (field === 'to') {
+                this.recipient =
+                    W.getRecipientSelector(this.id + '_recipients');
+                this.table.add(this.recipient, i, 2);
+                this.recipient.onchange = function() {
+                    W.getElementById(that.id + '_to').value =
+                        that.recipient.value;
+                };
+            }
+            else if (field === 'action') {
+                this.actionSel = W.getActionSelector(this.id + '_actions');
+                this.table.add(this.actionSel, i, 2);
+                this.actionSel.onchange = function() {
+                    W.getElementById(that.id + '_action').value =
+                        that.actionSel.value;
+                };
+            }
+            else if (field === 'target') {
+                this.targetSel = W.getTargetSelector(this.id + '_targets');
+                this.table.add(this.targetSel, i, 2);
+                this.targetSel.onchange = function() {
+                    W.getElementById(that.id + '_target').value =
+                        that.targetSel.value;
+                };
+            }
+        }
 
         this.table.parse();
     };
@@ -158,11 +122,11 @@
         this.table.forEach( function(e) {
             if (invalid) return;
 
-            if (e.x === 0) {
+            if (e.y === 0) {
                 key = e.content;
                 msg[key] = '';
             }
-            else if (e.x === 1) {
+            else if (e.y === 1) {
 
                 value = e.content.value;
                 if (key === 'stage' || key === 'to' || key === 'data') {
