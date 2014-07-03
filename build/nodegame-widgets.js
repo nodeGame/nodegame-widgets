@@ -3417,6 +3417,7 @@
         this.targetSel = null;
 
         this.table = new Table();
+        this.tableAdvanced = new Table();
 
         this.init();
     }
@@ -3425,6 +3426,7 @@
     MsgBar.prototype.init = function() {
         var that;
         var fields, i, field;
+        var table;
 
         that = this;
 
@@ -3436,13 +3438,18 @@
         for (i = 0; i < fields.length; ++i) {
             field = fields[i];
 
-            this.table.add(field, i, 0);
-            this.table.add(W.getTextInput(this.id + '_' + field), i, 1);
+            // Put TO, ACTION, TARGET, TEXT, DATA in the first table which is
+            // always visible, the other fields in the "advanced" table which
+            // is hidden by default.
+            table = i < 5 ? this.table : this.tableAdvanced;
+
+            table.add(field, i, 0);
+            table.add(W.getTextInput(this.id + '_' + field), i, 1);
 
             if (field === 'to') {
                 this.recipient =
                     W.getRecipientSelector(this.id + '_recipients');
-                this.table.add(this.recipient, i, 2);
+                table.add(this.recipient, i, 2);
                 this.recipient.onchange = function() {
                     W.getElementById(that.id + '_to').value =
                         that.recipient.value;
@@ -3450,7 +3457,7 @@
             }
             else if (field === 'action') {
                 this.actionSel = W.getActionSelector(this.id + '_actions');
-                this.table.add(this.actionSel, i, 2);
+                table.add(this.actionSel, i, 2);
                 this.actionSel.onchange = function() {
                     W.getElementById(that.id + '_action').value =
                         that.actionSel.value;
@@ -3458,7 +3465,7 @@
             }
             else if (field === 'target') {
                 this.targetSel = W.getTargetSelector(this.id + '_targets');
-                this.table.add(this.targetSel, i, 2);
+                table.add(this.targetSel, i, 2);
                 this.targetSel.onchange = function() {
                     W.getElementById(that.id + '_target').value =
                         that.targetSel.value;
@@ -3467,24 +3474,37 @@
         }
 
         this.table.parse();
+        this.tableAdvanced.parse();
     };
 
     MsgBar.prototype.append = function() {
+        var advButton;
         var sendButton;
         var that;
 
         that = this;
 
+        // Show table of basic fields.
         this.bodyDiv.appendChild(this.table.table);
 
+        this.bodyDiv.appendChild(this.tableAdvanced.table);
+        this.tableAdvanced.table.style.display = 'none';
+
+        // Show 'Send' button.
         sendButton = W.addButton(this.bodyDiv);
         sendButton.onclick = function() {
             var msg = that.parse();
 
             if (msg) {
                 node.socket.send(msg);
-                //console.log(msg.stringify());
             }
+        };
+
+        // Show a button that expands the table of advanced fields.
+        advButton = W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+        advButton.onclick = function() {
+            that.tableAdvanced.table.style.display =
+                that.tableAdvanced.table.style.display === '' ? 'none' : '';
         };
     };
 
@@ -3493,6 +3513,7 @@
 
     MsgBar.prototype.parse = function() {
         var msg, that, key, value, gameMsg, invalid;
+        var tableFunction;
 
         msg = {};
         that = this;
@@ -3500,7 +3521,7 @@
         value = null;
         invalid = false;
 
-        this.table.forEach( function(e) {
+        tableFunction = function(e) {
             if (invalid) return;
 
             if (e.y === 0) {
@@ -3544,7 +3565,10 @@
 
                 msg[key] = value;
             }
-        });
+        };
+
+        this.table.forEach(tableFunction);
+        this.tableAdvanced.forEach(tableFunction);
 
         if (invalid) return null;
         gameMsg = node.msg.create(msg);
