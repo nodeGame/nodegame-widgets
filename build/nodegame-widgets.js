@@ -4617,9 +4617,9 @@
         this.table.addRow(['Current: ', state]);
         this.table.addRow(['Next: ', nx]);
 
-        t = this.table.select('y', '=', 2);
+        t = this.table.selexec('y', '=', 0);
         t.addClass('strong');
-        t.select('x','=',0).addClass('underline');
+        t.selexec('x', '=', 2).addClass('underline');
         this.table.parse();
     };
 
