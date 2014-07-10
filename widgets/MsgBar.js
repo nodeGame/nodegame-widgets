@@ -63,11 +63,13 @@
             table = i < 5 ? this.table : this.tableAdvanced;
 
             table.add(field, i, 0);
-            table.add(W.getTextInput(this.id + '_' + field), i, 1);
+            table.add(W.getTextInput(this.id + '_' + field, {tabindex: i+1}), i, 1);
 
             if (field === 'to') {
                 this.recipient =
                     W.getRecipientSelector(this.id + '_recipients');
+                W.addAttributes2Elem(this.recipient,
+                        {tabindex: fields.length+1});
                 table.add(this.recipient, i, 2);
                 this.recipient.onchange = function() {
                     W.getElementById(that.id + '_to').value =
@@ -76,6 +78,8 @@
             }
             else if (field === 'action') {
                 this.actionSel = W.getActionSelector(this.id + '_actions');
+                W.addAttributes2Elem(this.actionSel,
+                        {tabindex: fields.length+2});
                 table.add(this.actionSel, i, 2);
                 this.actionSel.onchange = function() {
                     W.getElementById(that.id + '_action').value =
@@ -84,6 +88,8 @@
             }
             else if (field === 'target') {
                 this.targetSel = W.getTargetSelector(this.id + '_targets');
+                W.addAttributes2Elem(this.targetSel,
+                        {tabindex: fields.length+3});
                 table.add(this.targetSel, i, 2);
                 this.targetSel.onchange = function() {
                     W.getElementById(that.id + '_target').value =
