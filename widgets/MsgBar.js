@@ -21,7 +21,7 @@
 
     // ## Meta-data
 
-    MsgBar.version = '0.5';
+    MsgBar.version = '0.6';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
@@ -137,68 +137,86 @@
     };
 
     MsgBar.prototype.parse = function() {
-        var msg, that, key, value, gameMsg, invalid;
-        var tableFunction;
+        var msg, gameMsg
 
         msg = {};
-        that = this;
-        key = null;
-        value = null;
-        invalid = false;
 
-        tableFunction = function(e) {
-            if (invalid) return;
-
-            if (e.y === 0) {
-                key = e.content;
-                msg[key] = '';
-            }
-            else if (e.y === 1) {
-
-                value = e.content.value;
-                if (key === 'stage' || key === 'to' || key === 'data') {
-                    try {
-                        value = JSUS.parse(e.content.value);
-                    }
-                    catch (ex) {
-                        value = e.content.value;
-                    }
-                }
-
-                if (key === 'to' && 'number' === typeof value) {
-                    value = '' + value;
-                }
-
-                // Validate input.
-                if (key === 'to' &&
-                    ((!JSUS.isArray(value) && 'string' !== typeof value) ||
-                      value.trim() === '')) {
-
-                    alert('Invalid "to" field');
-                    invalid = true;
-                }
-
-                if (key === 'action' && value.trim() === '') {
-                    alert('Missing "action" field');
-                    invalid = true;
-                }
-
-                if (key === 'target' && value.trim() === '') {
-                    alert('Missing "target" field');
-                    invalid = true;
-                }
-
-                msg[key] = value;
-            }
-        };
-
-        this.table.forEach(tableFunction);
-        this.tableAdvanced.forEach(tableFunction);
-
-        if (invalid) return null;
+        this.table.forEach(validateTableMsg, msg);
+        if (msg._invalid) return null;
+        this.tableAdvanced.forEach(validateTableMsg, msg);
+        if (msg._invalid) return null;
+        delete msg._lastKey;
+        delete msg._invalid;
         gameMsg = node.msg.create(msg);
-        node.info(gameMsg, 'MsgBar sent: ');
+        node.info('MsgBar msg created. ' +  gameMsg.toSMS());
         return gameMsg;
     };
+
+    // # Helper Function.
+
+
+    function validateTableMsg(e, msg) {
+        var key, value;
+        if (msg._invalid) return;
+
+        if (e.y === 2) return;
+
+        if (e.y === 0) {
+            // Saving the value of last key.
+            msg._lastKey =  e.content;
+            return;
+        }
+        
+        // Fetching the value of last key.
+        key = msg._lastKey;
+        value = e.content.value;
+
+        if (key === 'stage' || key === 'to' || key === 'data') {
+            try {
+                value = JSUS.parse(e.content.value);
+            }
+            catch (ex) {
+                value = e.content.value;
+            }
+        }
+
+        // Validate input.
+        if (key === 'to') {
+            if ('number' === typeof value) {
+                value = '' + value;
+            }
+
+            if ((!JSUS.isArray(value) && 'string' !== typeof value) ||
+                ('string' === typeof value && value.trim() === '')) {
+
+                alert('Invalid "to" field');
+                msg._invalid = true;
+            }
+        }
+
+        else if (key === 'action') {
+            if (value.trim() === '') {
+                alert('Missing "action" field');
+                msg._invalid = true;
+            }
+            else {
+                value = value.toLowerCase();
+            }
+
+        }
+
+        else if (key === 'target') {
+            if (value.trim() === '') {
+                alert('Missing "target" field');
+                msg._invalid = true;
+            }
+            else {
+                value = value.toUpperCase();
+            }
+        }
+
+        // Assigning the value.
+        msg[key] = value;    
+    }
 
 })(node);
