@@ -183,13 +183,19 @@
 
     VisualTimer.prototype.resume = function(options) {
         this.gameTimer.resume();
+        this.waitDiv.style.display = 'none';
+        
     };
 
     VisualTimer.prototype.setToZero = function() {
         this.stop();
-        this.timerDiv.innerHTML = '0:0';
+        this.waitDiv.style.display = 'none';
+        this.timerDiv.innerHTML = '00:00';
     };
     
+    VisualTimer.prototype.empty_timer = function(options) {
+        this.timerDiv.innerHTML = '';
+    }
     /**
      * ## VisualTimer.doTimeUp
      *
