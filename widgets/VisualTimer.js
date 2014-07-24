@@ -44,6 +44,13 @@
         
         // The DIV in which to display the timer.
         this.timerDiv = null;   
+        
+        // The DIV in which to display the maximum waiting time left.
+        this.waitDiv = null;
+        
+        this.runDiv = null;
+        
+        this.timeLeft = null;
 
         this.init(this.options);
     }
@@ -70,9 +77,9 @@
         if (!this.gameTimer) {
             this.gameTimer = node.timer.createTimer();
         }
-        
-        this.gameTimer.init(options);
 
+        this.gameTimer.init(options);
+        
         if (this.timerDiv) {
             this.timerDiv.className = options.className || '';
         }
@@ -94,29 +101,53 @@
                 };
             }
         });
-        
+                
         this.options = options;
+        
+        this.runDiv = this.timerDiv;
+        if (this.waitDiv) {
+            this.waitDiv.style.display = 'none';
+        }
     };
 
     VisualTimer.prototype.append = function() {
-        this.timerDiv = node.window.addDiv(this.bodyDiv, this.id + '_div');
+        var titleWaitDiv, timeWaitDiv;
+        
+        this.timerDiv = node.window.addDiv(this.bodyDiv);
+        
+        this.waitDiv = node.window.addDiv(this.bodyDiv);
+        
+        titleWaitDiv = node.window.addDiv(this.bodyDiv);
+        titleWaitDiv.innerHTML = 'Max. Wait Time';
+        titleWaitDiv.className = 'waitTimerTitle';
+        this.waitDiv.appendChild(titleWaitDiv);
+        
+        timeWaitDiv = node.window.addDiv(this.bodyDiv);
+        timeWaitDiv.className = 'waitTimer';
+        this.waitDiv.appendChild(timeWaitDiv);
+        
+        
+        this.runDiv = this.timerDiv;
         this.updateDisplay();
     };
 
     VisualTimer.prototype.updateDisplay = function() {
         var time, minutes, seconds;
         if (!this.gameTimer.milliseconds || this.gameTimer.milliseconds === 0) {
-            this.timerDiv.innerHTML = '00:00';
+            this.runDiv.innerHTML = '00:00';
             return;
         }
         time = this.gameTimer.milliseconds - this.gameTimer.timePassed;
         time = J.parseMilliseconds(time);
         minutes = (time[2] < 10) ? '' + '0' + time[2] : time[2];
         seconds = (time[3] < 10) ? '' + '0' + time[3] : time[3];
-        this.timerDiv.innerHTML = minutes + ':' + seconds;
+        this.runDiv.innerHTML = minutes + ':' + seconds;
     };
 
     VisualTimer.prototype.start = function() {
+        this.timerDiv.className = '';
+        this.runDiv = this.timerDiv;
+        this.waitDiv.style.display = 'none';
         this.updateDisplay();
         this.gameTimer.start();
     };
@@ -128,8 +159,26 @@
 
     VisualTimer.prototype.stop = function(options) {
         if (!this.gameTimer.isStopped()) {
-            this.gameTimer.stop();
+            var waitTime;
+            this.timeLeft = this.gameTimer.milliseconds - this.gameTimer.timePassed;
+            
+            if (typeof options === 'undefined' || typeof options.waitTime === 'undefined') {
+                waitTime = this.timeLeft;
+            }
+            else {
+                waitTime = options.waitTime;
+            }
+            if (waitTime >= 0) {
+                this.gameTimer.restart({milliseconds : waitTime});
+                this.runDiv = this.waitDiv.children[1];
+                this.waitDiv.style.display = '';
+            }
+            else {
+                this.gameTimer.stop();
+            }
+            this.updateDisplay();
         }
+            
     };
 
     VisualTimer.prototype.resume = function(options) {
@@ -167,7 +216,6 @@
             if (timer) {
                 options = processOptions(timer, this.options);
                 that.gameTimer.init(options);
-                that.timerDiv.className = '';
                 that.start();
             }
         });
@@ -175,7 +223,7 @@
         node.on('REALLY_DONE', function() {
             that.stop();
             that.timerDiv.className = 'strike';
-        });
+       });
 
     };
 
