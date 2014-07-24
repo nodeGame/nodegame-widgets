@@ -4382,7 +4382,7 @@
     StateBar.description =
         'Provides a simple interface to change the stage of a game.';
 
-    StateBar.title = 'Change Game State';
+    StateBar.title = 'Change GameStage';
     StateBar.className = 'statebar';
 
     function StateBar(options) {
@@ -4391,51 +4391,49 @@
     }
 
     StateBar.prototype.append = function() {
-        var PREF;
-        var idButton, idStateSel, idRecipient, sendButton, stateSel, that;
+        var prefix, that;
+        var idButton, idStageField, idRecipientField;
+        var sendButton, stageField, recipientField;
 
-        PREF = this.id + '_';
+        prefix = this.id + '_';
 
-        idButton = PREF + 'sendButton';
-        idStateSel = PREF + 'stateSel';
-        idRecipient = PREF + 'recipient';
+        idButton = prefix + 'sendButton';
+        idStageField = prefix + 'stageField';
+        idRecipientField = prefix + 'recipient';
+
+        this.bodyDiv.appendChild(document.createTextNode('Stage:'));
+        stageField = W.getTextInput(idStageField);
+        this.bodyDiv.appendChild(stageField);
+
+        this.bodyDiv.appendChild(document.createTextNode(' To:'));
+        recipientField = W.getTextInput(idRecipientField);
+        this.bodyDiv.appendChild(recipientField);
 
         sendButton = node.window.addButton(this.bodyDiv, idButton);
-        stateSel = node.window.addStateSelector(this.bodyDiv, idStateSel);
-        this.recipient =
-            node.window.addRecipientSelector(this.bodyDiv, idRecipient);
 
         that = this;
 
-        node.on('UPDATED_PLIST', function() {
-            node.window.populateRecipientSelector(that.recipient, node.game.pl);
-        });
+        //node.on('UPDATED_PLIST', function() {
+        //    node.window.populateRecipientSelector(that.recipient, node.game.pl);
+        //});
 
         sendButton.onclick = function() {
-            var to, result;
-            var stage, step, round, stateEvent, stateMsg;
+            var to;
+            var stage;
 
             // Should be within the range of valid values
             // but we should add a check
-            to = that.recipient.value;
+            to = recipientField.value;
 
             try {
-                stage = new node.GameStage(stateSel.value);
-                // Update Others
+                stage = new node.GameStage(stageField.value);
                 node.remoteCommand('goto_step', to, stage);
             }
             catch (e) {
                 node.err('Invalid stage, not sent: ' + e);
-                node.socket.sendTXT('E: invalid stage, not sent');
             }
         };
     };
-
-    // # Helper Function.
-
-    function isNatural(str) {
-        return /^[1-9][0-9]*$/.test(str);
-    }
 
 })(node);
 
