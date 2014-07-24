@@ -4761,8 +4761,22 @@
     };
 
     VisualTimer.prototype.append = function() {
-        this.timerDiv = node.window.addDiv(this.bodyDiv, this.id + '_div');
-        this.waitDiv = node.window.addDiv(this.bodyDiv, this.id + '_div');
+        var titleWaitDiv, timeWaitDiv;
+        
+        this.timerDiv = node.window.addDiv(this.bodyDiv);
+        
+        this.waitDiv = node.window.addDiv(this.bodyDiv);
+        
+        titleWaitDiv = node.window.addDiv(this.bodyDiv);
+        titleWaitDiv.innerHTML = 'Max. Wait Time';
+        titleWaitDiv.className = 'waitTimerTitle';
+        this.waitDiv.appendChild(titleWaitDiv);
+        
+        timeWaitDiv = node.window.addDiv(this.bodyDiv);
+        timeWaitDiv.className = 'waitTimer';
+        this.waitDiv.appendChild(timeWaitDiv);
+        
+        
         this.runDiv = this.timerDiv;
         this.updateDisplay();
     };
@@ -4806,7 +4820,7 @@
             }
             if (waitTime >= 0) {
                 this.gameTimer.restart({milliseconds : waitTime});
-                this.runDiv = this.waitDiv;
+                this.runDiv = this.waitDiv.children[1];
                 this.waitDiv.style.display = '';
             }
             else {
