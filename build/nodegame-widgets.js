@@ -3409,7 +3409,6 @@
     MsgBar.className = 'msgbar';
 
     function MsgBar(options) {
-
         this.id = options.id || MsgBar.className;
 
         this.recipient = null;
@@ -3533,11 +3532,12 @@
         return gameMsg;
     };
 
-    // # Helper Function.
 
+    // # Helper Function.
 
     function validateTableMsg(e, msg) {
         var key, value;
+
         if (msg._invalid) return;
 
         if (e.y === 2) return;
@@ -3547,7 +3547,7 @@
             msg._lastKey =  e.content;
             return;
         }
-        
+
         // Fetching the value of last key.
         key = msg._lastKey;
         value = e.content.value;
@@ -3597,10 +3597,11 @@
         }
 
         // Assigning the value.
-        msg[key] = value;    
+        msg[key] = value;
     }
 
 })(node);
+
 /**
  * # NDDBBrowser widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
@@ -4375,89 +4376,66 @@
 
     node.widgets.register('StateBar', StateBar);
 
-    // ## Defaults
-
-    StateBar.defaults = {};
-    StateBar.defaults.id = 'statebar';
-    StateBar.defaults.fieldset = { legend: 'Change Game State' };
-
     // ## Meta-data
 
     StateBar.version = '0.3.2';
-    StateBar.description = 'Provides a simple interface to change the stage of a game.';
+    StateBar.description =
+        'Provides a simple interface to change the stage of a game.';
+
+    StateBar.title = 'Change Game State';
+    StateBar.className = 'statebar';
 
     function StateBar(options) {
-        this.id = options.id;
+        this.id = options.id || StateBar.className;
         this.recipient = null;
     }
 
-    StateBar.prototype.getRoot = function () {
-        return this.root;
-    };
+    StateBar.prototype.append = function() {
+        var PREF;
+        var idButton, idStateSel, idRecipient, sendButton, stateSel, that;
 
-    StateBar.prototype.append = function (root) {
+        PREF = this.id + '_';
 
-        var PREF = this.id + '_';
-
-        var idButton = PREF + 'sendButton',
-        idStateSel = PREF + 'stateSel',
+        idButton = PREF + 'sendButton';
+        idStateSel = PREF + 'stateSel';
         idRecipient = PREF + 'recipient';
 
-        var sendButton = node.window.addButton(root, idButton);
-        var stateSel = node.window.addStateSelector(root, idStateSel);
-        this.recipient = node.window.addRecipientSelector(root, idRecipient);
+        sendButton = node.window.addButton(this.bodyDiv, idButton);
+        stateSel = node.window.addStateSelector(this.bodyDiv, idStateSel);
+        this.recipient =
+            node.window.addRecipientSelector(this.bodyDiv, idRecipient);
 
-        var that = this;
+        that = this;
 
         node.on('UPDATED_PLIST', function() {
             node.window.populateRecipientSelector(that.recipient, node.game.pl);
         });
 
         sendButton.onclick = function() {
+            var to, result;
+            var stage, step, round, stateEvent, stateMsg;
 
             // Should be within the range of valid values
             // but we should add a check
-            var to = that.recipient.value;
+            to = that.recipient.value;
 
-            // STATE.STEP:ROUND
-            var parseState = /^(\d+)(?:\.(\d+))?(?::(\d+))?$/;
-
-            var result = parseState.exec(stateSel.value);
-            var state, step, round, stateEvent, stateMsg;
-            if (result !== null) {
-                // Note: not result[0]!
-                state = result[1];
-                step = result[2] || 1;
-                round = result[3] || 1;
-
-                node.log('Parsed State: ' + result.join("|"));
-
-                state = new node.GameStage({
-                    state: state,
-                    step: step,
-                    round: round
-                });
-
-                // Self Update
-                if (to === 'ROOM') {
-                    stateEvent = node.IN + node.action.SAY + '.STATE';
-                    stateMsg = node.msg.createSTATE(stateEvent, state);
-                    node.emit(stateEvent, stateMsg);
-                }
-
+            try {
+                stage = new node.GameStage(stateSel.value);
                 // Update Others
-                stateEvent = node.OUT + node.action.SAY + '.STATE';
-                node.emit(stateEvent, state, to);
+                node.remoteCommand('goto_step', to, stage);
             }
-            else {
-                node.err('Not valid state. Not sent.');
-                node.socket.sendTXT('E: not valid state. Not sent');
+            catch (e) {
+                node.err('Invalid stage, not sent: ' + e);
+                node.socket.sendTXT('E: invalid stage, not sent');
             }
         };
-
-        this.root = root;
-        return root;
     };
+
+    // # Helper Function.
+
+    function isNatural(str) {
+        return /^[1-9][0-9]*$/.test(str);
+    }
 
 })(node);
 
