@@ -370,12 +370,21 @@
             if (options.hideTitle) {
                 this.hideTitle();
             }
+            else {
+                this.unhideTitle();
+            }
             if (options.hideBody) {
                 this.hideBody();
+            }
+            else {
+                this.unhideBody();
             }
             if (options.hideBox) {
                 this.hideBox();
             }   
+            else {
+                this.unhideBox();
+            }
         }
 
         this.setTitle(options.title || '');
