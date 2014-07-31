@@ -112,17 +112,18 @@
 
     VisualTimer.prototype.append = function() {
         var titleWaitDiv, timeWaitDiv;
-        
+
         this.timerDiv = node.window.addDiv(this.bodyDiv);
         
         this.waitDiv = node.window.addDiv(this.bodyDiv);
+        this.waitDiv.style.display = 'none';
         
-        titleWaitDiv = node.window.addDiv(this.bodyDiv);
+        titleWaitDiv = node.window.getDiv();
         titleWaitDiv.innerHTML = 'Max. Wait Time';
         titleWaitDiv.className = 'waitTimerTitle';
         this.waitDiv.appendChild(titleWaitDiv);
         
-        timeWaitDiv = node.window.addDiv(this.bodyDiv);
+        timeWaitDiv = node.window.getDiv();
         timeWaitDiv.className = 'waitTimer';
         this.waitDiv.appendChild(timeWaitDiv);
         
