@@ -28,7 +28,6 @@
     MsgBar.className = 'msgbar';
 
     function MsgBar(options) {
-
         this.id = options.id || MsgBar.className;
 
         this.recipient = null;
@@ -152,11 +151,12 @@
         return gameMsg;
     };
 
-    // # Helper Function.
 
+    // # Helper Function.
 
     function validateTableMsg(e, msg) {
         var key, value;
+
         if (msg._invalid) return;
 
         if (e.y === 2) return;
@@ -166,7 +166,7 @@
             msg._lastKey =  e.content;
             return;
         }
-        
+
         // Fetching the value of last key.
         key = msg._lastKey;
         value = e.content.value;
@@ -216,7 +216,7 @@
         }
 
         // Assigning the value.
-        msg[key] = value;    
+        msg[key] = value;
     }
 
 })(node);
