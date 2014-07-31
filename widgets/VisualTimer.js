@@ -51,38 +51,29 @@
          *  ### timerDiv
          *  The DIV in which to display the time left to make a move.
          */
-        this.timerDiv = null;   
+        this.mainBox = null;   
         
         /**
          *  ### waitDiv
          *  The DIV in which to display the maximum waiting time left. 
          */
-        this.waitDiv = null;
+        this.waitBox = null;
         
         /**
-         *  ### runDiv
+         *  ### activeBox
          *  The DIV in which to display the time.
          *  
          *  This variable is always a reference to either 'waitDiv' or 
          *  'timerDiv'. 
          */
-        this.runDiv = null;
+        this.activeBox = null;
         
-        /**
-         *  ### timeLeft
-         *  Stores the time left when 'stop' is called.
-         *  
-         *  Not to be confused with gameTimer.timeLeft
-         *
-         *  @see VisualTimer.stop
-         */
-        this.timeLeft = null;
 
         this.init(this.options);
     }
 
     VisualTimer.prototype.init = function(options) {
-        var t;
+        var t, mainBoxOptions, waitBoxOptions;
         
         J.mixout(options, this.options);
 
@@ -106,10 +97,6 @@
 
         this.gameTimer.init(options);
         
-        if (this.timerDiv) {
-            this.timerDiv.className = options.className || '';
-        }
-
         t = this.gameTimer;
         node.session.register('visualtimer', {
             set: function(p) {
@@ -130,49 +117,50 @@
                 
         this.options = options;
         
-        this.runDiv = this.timerDiv;
-        
-        if (this.waitDiv) {
-            this.waitDiv.style.display = 'none';
+
+        mainBoxOptions = {classNameBody: options.className, hideTitle: true};
+        waitBoxOptions = {title: 'Max. wait timer', 
+                classNameTitle: 'waitTimerTitle',
+                classNameBody: 'waitTimerBody', hideBox: true};
+                       
+        if (!this.mainBox) {
+            this.mainBox = new TimerBox(mainBoxOptions);
         }
+        else {
+            this.mainBox.init(mainBoxOptions);
+        }
+        if (!this.waitBox) {
+            this.waitBox = new TimerBox(waitBoxOptions);
+        } 
+        else {
+            this.waitBox.init(waitBoxOptions);
+        }
+        
+        this.activeBox = this.mainBox;
     };
 
     VisualTimer.prototype.append = function() {
-        var titleWaitDiv, timeWaitDiv;
-
-        this.timerDiv = node.window.addDiv(this.bodyDiv);
-        
-        this.waitDiv = node.window.addDiv(this.bodyDiv);
-        this.waitDiv.style.display = 'none';
-        
-        titleWaitDiv = node.window.getDiv();
-        titleWaitDiv.innerHTML = 'Max. Wait Time';
-        titleWaitDiv.className = 'waitTimerTitle';
-        this.waitDiv.appendChild(titleWaitDiv);
-        
-        timeWaitDiv = node.window.getDiv();
-        timeWaitDiv.className = 'waitTimer';
-        this.waitDiv.appendChild(timeWaitDiv);
-        
-        
-        this.runDiv = this.timerDiv;
+        this.bodyDiv.appendChild(this.mainBox.boxDiv);
+        this.bodyDiv.appendChild(this.waitBox.boxDiv);
+      
+        this.activeBox = this.mainBox;
         this.updateDisplay();
     };
     /**
      *  ## VisualTimer.updateDisplay
-     *  Changes 'runDiv' to display current time of 'gameTimer'
+     *  Changes 'activeBox' to display current time of 'gameTimer'
      */
     VisualTimer.prototype.updateDisplay = function() {
         var time, minutes, seconds;
         if (!this.gameTimer.milliseconds || this.gameTimer.milliseconds === 0) {
-            this.runDiv.innerHTML = '00:00';
+            this.activeBox.bodyDiv.innerHTML = '00:00';
             return;
         }
         time = this.gameTimer.milliseconds - this.gameTimer.timePassed;
         time = J.parseMilliseconds(time);
         minutes = (time[2] < 10) ? '' + '0' + time[2] : time[2];
         seconds = (time[3] < 10) ? '' + '0' + time[3] : time[3];
-        this.runDiv.innerHTML = minutes + ':' + seconds;
+        this.activeBox.bodyDiv.innerHTML = minutes + ':' + seconds;
     };
 
     /**
@@ -180,17 +168,14 @@
      *  Starts the timer and changes the display accordingly.
      *
      *  Starts the 'gameTimer', hides 'waitDiv', unstrikes 'timerDiv' and
-     *  sets 'runDiv' as a reference to 'timerDiv'.
+     *  sets 'activeBox' as a reference to 'timerDiv'.
      *
      *  @see VisualTimer.updateDisplay
      *  @see GameTimer.start
      */
     VisualTimer.prototype.start = function() {
-        this.timerDiv.className = '';
-        this.runDiv = this.timerDiv;
-        this.waitDiv.style.display = 'none';
-        this.updateDisplay();
         this.gameTimer.start();
+        this.updateDisplay();
     };
 
     /**
@@ -222,7 +207,7 @@
      *  Uf 'options.waitTime' is a _positive_ value, then the 'gameTimer' is 
      *  restarted with that value. 
      *  After the gameTimer has been restarted, 'waitDiv' is unhidden and 
-     *  'runDiv' is set such that 'VisualTimer.updateDisplay' updates 'waitDiv',
+     *  'activeBox' is set such that 'VisualTimer.updateDisplay' updates 'waitDiv',
      *  displaying the max. wait time.
      *
      *  @param {object} options Configuration object
@@ -233,28 +218,27 @@
      *  @see GameTimer.stop
      */
     VisualTimer.prototype.stop = function(options) {
-        var waitTime;
         if (!this.gameTimer.isStopped()) {
-            this.timeLeft = this.gameTimer.milliseconds -
-                    this.gameTimer.timePassed;
-            
-            if (typeof options === 'undefined' ||
-                    typeof options.waitTime === 'undefined') {
-                waitTime = this.timeLeft;
-            }
-            else {
-                waitTime = options.waitTime;
-            }
-            if (waitTime >= 0) {
-                this.gameTimer.restart({milliseconds : waitTime});
-                this.runDiv = this.waitDiv.children[1]; // timeWaitDiv
-                this.waitDiv.style.display = '';
-            }
-            else {
-                this.gameTimer.stop();
-            }
-            this.updateDisplay();
+            this.activeBox.timeLeft = this.gameTimer.timeLeft;
+            this.gameTimer.stop();
         }  
+    };
+    
+    VisualTimer.prototype.switchActiveBoxTo = function(box,options) {
+        var waitTime;
+        this.activeBox = box;
+        this.activeBox.timeLeft = this.gameTimer.timeLeft || 0;
+        if (typeof options === 'undefined' ||
+                typeof options.waitTime === 'undefined') {
+            waitTime = this.activeBox.timeLeft;
+        }
+        else {
+            waitTime = options.waitTime;
+        }
+        if (waitTime > 0) {
+            this.gameTimer.restart({milliseconds: waitTime});
+        }
+        this.updateDisplay();
     };
 
     /**
@@ -265,27 +249,11 @@
      */
     VisualTimer.prototype.resume = function() {
         this.gameTimer.resume();
-        this.waitDiv.style.display = 'none';
     };
 
-    /**
-     *  ## VisualTimer.resume
-     *  Stops 'VisualTimer', hides 'waitDiv' and sets 'timerDiv' to zero.
-     *
-     *  @see VisualTimer.stop
-     */
     VisualTimer.prototype.setToZero = function() {
         this.stop();
-        this.waitDiv.style.display = 'none';
-        this.timerDiv.innerHTML = '00:00';
-    };
-    
-    /**
-     *  ## VisualTimer.emptyTimer
-     *  Changes 'timerDiv' to have an empty body.
-     */
-    VisualTimer.prototype.clearTimer = function() {
-        this.timerDiv.innerHTML = '';
+        this.activeBox.bodyDiv.innerHTML = '00:00';
     };
     
     /**
@@ -314,13 +282,18 @@
             if (timer) {
                 options = processOptions(timer, this.options);
                 that.gameTimer.init(options);
+                that.mainBox.setClassNameBody('');
+                that.switchActiveBoxTo(that.mainBox,-1);
+                that.mainBox.unhideBox();
+                that.waitBox.hideBox();
                 that.start();
             }
         });
 
         node.on('REALLY_DONE', function() {
-            that.stop();
-            that.timerDiv.className = 'strike';
+            that.mainBox.setClassNameBody('strike');
+            that.switchActiveBoxTo(that.waitBox);
+            that.waitBox.unhideBox();
        });
     };
 
@@ -377,5 +350,69 @@
         return options;
     }
     
+    function TimerBox(options) {
+        this.boxDiv = null;
+        this.titleDiv = null;
+        this.bodyDiv = null;
+        
+        this.timeLeft = null;
+                
+        this.boxDiv = node.window.getDiv();
+        this.titleDiv = node.window.addDiv(this.boxDiv);
+        this.bodyDiv = node.window.addDiv(this.boxDiv);
+        
+        this.init(options);
+    
+    }
+    
+    TimerBox.prototype.init = function(options) {        
+        if (options) {
+            if (options.hideTitle) {
+                this.hideTitle();
+            }
+            if (options.hideBody) {
+                this.hideBody();
+            }
+            if (options.hideBox) {
+                this.hideBox();
+            }   
+        }
+
+        this.setTitle(options.title || '');
+        this.setClassNameTitle(options.classNameTitle || '');
+        this.setClassNameBody(options.classNameBody || '');
+        
+        if(options.timeLeft) {
+            this.timeLeft = options.timeLeft;
+        }
+    };
+    
+    TimerBox.prototype.hideBox = function() {
+        this.boxDiv.style.display = 'none';
+    };
+    TimerBox.prototype.unhideBox = function() {
+        this.boxDiv.style.display = '';
+    };
+    TimerBox.prototype.hideTitle = function() {
+        this.titleDiv.style.display = 'none';
+    };
+    TimerBox.prototype.unhideTitle = function() {
+        this.boxTitle.dislay.style = '';
+    };
+    TimerBox.prototype.hideBody = function() {
+        this.bodyDiv.style.display = 'none';
+    };
+    TimerBox.prototype.unhideBody = function() {
+        this.bodyDiv.dislay.style = '';
+    };
+    TimerBox.prototype.setTitle = function(title) {
+        this.titleDiv.innerHTML = title;
+    };
+    TimerBox.prototype.setClassNameTitle = function(className) {
+        this.titleDiv.className = className;
+    };
+    TimerBox.prototype.setClassNameBody = function(className) {
+        this.bodyDiv.className = className;
+    };
 
 })(node);
