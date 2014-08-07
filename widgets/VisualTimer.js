@@ -135,7 +135,8 @@
         if (!this.isInitialized) {
             options.hooks.push({
                 hook: this.updateDisplay,
-                ctx: this
+                ctx: this,
+                name: 'VisualTimer.updateDisplay'
             });
         }
 
@@ -346,7 +347,6 @@
         if(typeof options.waitBoxOptions === 'undefined') {
             options.waitBoxOptions = {};
         }
-        debugger
         options.mainBoxOptions.classNameBody = 'strike';
         options.mainBoxOptions.timeLeft = this.gameTimer.timeLeft || 0;
         options.activeBox = this.waitBox;
