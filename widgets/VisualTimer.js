@@ -48,8 +48,10 @@
         this.gameTimer = null;
         
         /**
-         *  ### timerDiv
-         *  The DIV in which to display the time left to make a move.
+         *  ### mainBox
+         *  The TimerBox which displays the main timer.
+         *
+         * @see node.TimerBox
          */
         this.mainBox = null;   
         
@@ -151,6 +153,7 @@
      *  Changes 'activeBox' to display current time of 'gameTimer'
      */
     VisualTimer.prototype.updateDisplay = function() {
+//        debugger
         var time, minutes, seconds;
         if (!this.gameTimer.milliseconds || this.gameTimer.milliseconds === 0) {
             this.activeBox.bodyDiv.innerHTML = '00:00';
@@ -174,8 +177,8 @@
      *  @see GameTimer.start
      */
     VisualTimer.prototype.start = function() {
-        this.gameTimer.start();
         this.updateDisplay();
+        this.gameTimer.start();
     };
 
     /**
@@ -188,6 +191,7 @@
      *  @see VisualTimer.start
      */
     VisualTimer.prototype.restart = function(options) {
+        this.stop();
         this.init(options);
         this.start();
     };
@@ -236,6 +240,8 @@
             waitTime = options.waitTime;
         }
         if (waitTime > 0) {
+            if (!this.gameTimer.isStopped()){
+            this.gameTimer.stop();}
             this.gameTimer.restart({milliseconds: waitTime});
         }
         this.updateDisplay();
@@ -252,6 +258,7 @@
     };
 
     VisualTimer.prototype.setToZero = function() {
+        debugger
         this.stop();
         this.activeBox.bodyDiv.innerHTML = '00:00';
     };
@@ -267,6 +274,7 @@
      * @see GameTimer.fire
      */
     VisualTimer.prototype.doTimeUp = function() {
+        debugger
         this.stop();
         this.gameTimer.timeLeft = 0;
         this.gameTimer.fire(this.gameTimer.timeup);
@@ -281,7 +289,8 @@
             timer = stepObj.timer;
             if (timer) {
                 options = processOptions(timer, this.options);
-                that.gameTimer.init(options);
+                that.stop();
+                that.init(options);
                 that.mainBox.setClassNameBody('');
                 that.switchActiveBoxTo(that.mainBox,-1);
                 that.mainBox.unhideBox();
@@ -406,13 +415,13 @@
         this.titleDiv.style.display = 'none';
     };
     TimerBox.prototype.unhideTitle = function() {
-        this.boxTitle.dislay.style = '';
+        this.titleDiv.style.display = '';
     };
     TimerBox.prototype.hideBody = function() {
         this.bodyDiv.style.display = 'none';
     };
     TimerBox.prototype.unhideBody = function() {
-        this.bodyDiv.dislay.style = '';
+        this.bodyDiv.style.display = '';
     };
     TimerBox.prototype.setTitle = function(title) {
         this.titleDiv.innerHTML = title;
