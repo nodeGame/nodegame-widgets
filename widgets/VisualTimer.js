@@ -49,33 +49,37 @@
         
         /**
          *  ### mainBox
-         *  The TimerBox which displays the main timer.
+         *  The 'TimerBox' which displays the main timer.
          *
-         * @see node.TimerBox
+         *  @see TimerBox
          */
         this.mainBox = null;   
         
         /**
-         *  ### waitDiv
-         *  The DIV in which to display the maximum waiting time left. 
+         *  ### waitBox
+         *  The 'TimerBox' which displays the wait timer.
+         *
+         *  @see TimerBox         
          */
         this.waitBox = null;
         
         /**
          *  ### activeBox
-         *  The DIV in which to display the time.
+         *  The 'TimerBox' in which to display the time.
          *  
-         *  This variable is always a reference to either 'waitDiv' or 
-         *  'timerDiv'. 
+         *  This variable is always a reference to either 'waitBox' or 
+         *  'mainBox'. 
+         *
+         *  @see TimerBox      
          */
         this.activeBox = null;
         
-
+        this.isInitialized = false;
         this.init(this.options);
     }
 
     VisualTimer.prototype.init = function(options) {
-        var t, mainBoxOptions, waitBoxOptions;
+        var t;
         
         J.mixout(options, this.options);
 
@@ -88,10 +92,13 @@
             options.hooks = [];
         }
 
-        options.hooks.push({
-            hook: this.updateDisplay,
-            ctx: this
-        });
+        // only push this hook once
+        if (!this.isInitialized) {
+            options.hooks.push({
+                hook: this.updateDisplay,
+                ctx: this
+            });
+        }
 
         if (!this.gameTimer) {
             this.gameTimer = node.timer.createTimer();
@@ -116,29 +123,38 @@
                 };
             }
         });
-                
         this.options = options;
         
-
-        mainBoxOptions = {classNameBody: options.className, hideTitle: true};
-        waitBoxOptions = {title: 'Max. wait timer', 
-                classNameTitle: 'waitTimerTitle',
-                classNameBody: 'waitTimerBody', hideBox: true};
-                       
-        if (!this.mainBox) {
-            this.mainBox = new TimerBox(mainBoxOptions);
+        if(!this.options.mainBoxOptions) {
+            this.options.mainBoxOptions = {};
         }
-        else {
-            this.mainBox.init(mainBoxOptions);
-        }
-        if (!this.waitBox) {
-            this.waitBox = new TimerBox(waitBoxOptions);
-        } 
-        else {
-            this.waitBox.init(waitBoxOptions);
+        if(!this.options.waitBoxOptions) {
+            this.options.waitBoxOptions = {};
         }
         
-        this.activeBox = this.mainBox;
+        J.mixout(this.options.mainBoxOptions,
+                {classNameBody: options.className, hideTitle: true});
+        J.mixout(this.options.waitBoxOptions,
+                {title: 'Max. wait timer', 
+                classNameTitle: 'waitTimerTitle',
+                classNameBody: 'waitTimerBody', hideBox: true});
+                       
+        if (!this.mainBox) {
+            this.mainBox = new TimerBox(this.options.mainBoxOptions);
+        }
+        else {
+            this.mainBox.init(this.options.mainBoxOptions);
+        }
+        if (!this.waitBox) {
+            this.waitBox = new TimerBox(this.options.waitBoxOptions);
+        } 
+        else {
+            this.waitBox.init(this.options.waitBoxOptions);
+        }
+        
+        this.activeBox = options.activeBox || this.mainBox;
+        
+        this.isInitialized = true;
     };
 
     VisualTimer.prototype.append = function() {
@@ -151,9 +167,10 @@
     /**
      *  ## VisualTimer.updateDisplay
      *  Changes 'activeBox' to display current time of 'gameTimer'
+     *
+     *  @see TimerBox.bodyDiv      
      */
     VisualTimer.prototype.updateDisplay = function() {
-//        debugger
         var time, minutes, seconds;
         if (!this.gameTimer.milliseconds || this.gameTimer.milliseconds === 0) {
             this.activeBox.bodyDiv.innerHTML = '00:00';
@@ -168,16 +185,13 @@
 
     /**
      *  ## VisualTimer.start
-     *  Starts the timer and changes the display accordingly.
-     *
-     *  Starts the 'gameTimer', hides 'waitDiv', unstrikes 'timerDiv' and
-     *  sets 'activeBox' as a reference to 'timerDiv'.
+     *  Starts the timer.
      *
      *  @see VisualTimer.updateDisplay
      *  @see GameTimer.start
      */
     VisualTimer.prototype.start = function() {
-        this.updateDisplay();
+        this.updateDisplay();        
         this.gameTimer.start();
     };
 
@@ -189,6 +203,7 @@
      *
      *  @see VisualTimer.init
      *  @see VisualTimer.start
+     *  @see VisualTimer.stop
      */
     VisualTimer.prototype.restart = function(options) {
         this.stop();
@@ -198,27 +213,11 @@
 
     /**
      *  ## VisualTimer.stop
-     *  Stops the timer display and start displaying max. wait time.
-     *
-     *  Does nothing if 'gameTimer' is stopped.
-     *  Otherwise it updates 'timeLeft' with the current time in 'gameTimer',
-     *  and changes the display according to the options object as follows.
-     *
-     *  If 'options.waitTime' is a _negative_ value, the 'gameTimer' is stopped,
-     *  'VisualTimer.updateDisplay' is called and the function is returned
-     *  If 'options' or 'options.waitTime' is _undefined_, the gameTimer is 
-     *  restarted with the current time left on the clock. 
-     *  Uf 'options.waitTime' is a _positive_ value, then the 'gameTimer' is 
-     *  restarted with that value. 
-     *  After the gameTimer has been restarted, 'waitDiv' is unhidden and 
-     *  'activeBox' is set such that 'VisualTimer.updateDisplay' updates 'waitDiv',
-     *  displaying the max. wait time.
+     *  Stops the timer displRay and stores the time left in 'activeBox.timeLeft'
      *
      *  @param {object} options Configuration object
      *
-     *  @see VisualTimer.updateDisplay
      *  @see GameTimer.isStopped
-     *  @see GameTimer.restart
      *  @see GameTimer.stop
      */
     VisualTimer.prototype.stop = function(options) {
@@ -227,42 +226,80 @@
             this.gameTimer.stop();
         }  
     };
-    
-    VisualTimer.prototype.switchActiveBoxTo = function(box,options) {
-        var waitTime;
-        this.activeBox = box;
+    /**
+     *  ## VisualTimer.switchActiveBoxTo
+     *  Switches the display of the 'gameTimer' into the 'TimerBox' 'box'.
+     *
+     *  Stores 'gameTimer.timeLeft' into 'activeBox' and then switches
+     *  'activeBox' to reference 'box'.
+     *
+     *  @param {TimerBox} box TimerBox in which to display 'gameTimer' time
+     */
+    VisualTimer.prototype.switchActiveBoxTo = function(box) {
         this.activeBox.timeLeft = this.gameTimer.timeLeft || 0;
-        if (typeof options === 'undefined' ||
-                typeof options.waitTime === 'undefined') {
-            waitTime = this.activeBox.timeLeft;
-        }
-        else {
-            waitTime = options.waitTime;
-        }
-        if (waitTime > 0) {
-            if (!this.gameTimer.isStopped()){
-            this.gameTimer.stop();}
-            this.gameTimer.restart({milliseconds: waitTime});
-        }
+        this.activeBox = box;
         this.updateDisplay();
     };
-
+    
+    VisualTimer.prototype.startWaiting = function(options) {
+        if(typeof options === 'undefined') {
+            options = {};
+        }
+        options = J.clone(options);
+        if (typeof options.milliseconds === 'undefined') {
+            options.milliseconds = this.gameTimer.timeLeft;
+        }
+        if(typeof options.mainBoxOptions === 'undefined') {
+            options.mainBoxOptions = {};
+        }
+        if(typeof options.waitBoxOptions === 'undefined') {
+            options.waitBoxOptions = {};
+        }
+        options.mainBoxOptions.classNameBody = 'strike';
+        options.mainBoxOptions.timeLeft = this.gameTimer.timeLeft || 0;
+        options.activeBox = this.waitBox;
+        options.waitBoxOptions.hideBox = false;
+        this.restart(options);
+    };
+    
+    VisualTimer.prototype.startTiming = function(options) {
+        if(typeof options === 'undefined') {
+            options = {};
+        }
+        options = J.clone(options);
+        if(typeof options.mainBoxOptions === 'undefined') {
+            options.mainBoxOptions = {};
+        }
+        if(typeof options.waitBoxOptions === 'undefined') {
+            options.waitBoxOptions = {};
+        }
+        options.activeBox = this.mainBox;
+        options.waitBoxOptions.timeLeft = this.gameTimer.timeLeft || 0;
+        options.waitBoxOptions.hideBox = true;
+        options.mainBoxOptions.classNameBody = '';
+        this.restart(options)
+    };
+    
     /**
      *  ## VisualTimer.resume
-     *  Resumes the 'gameTimer' and hides 'waitDiv'
+     *  Resumes the 'gameTimer'
      *
      *  @see GameTimer.resume
      */
     VisualTimer.prototype.resume = function() {
         this.gameTimer.resume();
     };
-
+    /**
+     *  ## VisualTimer.setToZero
+     *  stops 'gameTimer' and sets 'activeBox' to display '00:00'
+     *
+     *  @see GameTimer.resume
+     */
     VisualTimer.prototype.setToZero = function() {
-        debugger
         this.stop();
         this.activeBox.bodyDiv.innerHTML = '00:00';
+        this.activeBox.setClassNameBody('strike');
     };
-    
     /**
      * ## VisualTimer.doTimeUp
      *
@@ -274,7 +311,6 @@
      * @see GameTimer.fire
      */
     VisualTimer.prototype.doTimeUp = function() {
-        debugger
         this.stop();
         this.gameTimer.timeLeft = 0;
         this.gameTimer.fire(this.gameTimer.timeup);
@@ -282,6 +318,9 @@
 
     VisualTimer.prototype.listeners = function() {
         var that = this;
+        /* On 'PLAYING' the 'mainBox' is switched to, unhidden and unstriked.
+         * the 'waitBox' is hidden. The timer is restarted.
+         */
         node.on('PLAYING', function() {
             var stepObj, timer, options;
             stepObj = node.game.getCurrentStep();
@@ -289,20 +328,14 @@
             timer = stepObj.timer;
             if (timer) {
                 options = processOptions(timer, this.options);
-                that.stop();
-                that.init(options);
-                that.mainBox.setClassNameBody('');
-                that.switchActiveBoxTo(that.mainBox,-1);
-                that.mainBox.unhideBox();
-                that.waitBox.hideBox();
-                that.start();
+                that.startTiming(options);
             }
         });
 
         node.on('REALLY_DONE', function() {
-            that.mainBox.setClassNameBody('strike');
-            that.switchActiveBoxTo(that.waitBox);
-            that.waitBox.unhideBox();
+            if(!that.gameTimer.isStopped()) {
+                that.startWaiting();   
+            }
        });
     };
 
