@@ -12,13 +12,11 @@
 
     "use strict";
 
-    // TODO: Introduce rules for update: other vs self
-
     node.widgets.register('StateBar', StateBar);
 
     // ## Meta-data
 
-    StateBar.version = '0.3.2';
+    StateBar.version = '0.4.0';
     StateBar.description =
         'Provides a simple interface to change the stage of a game.';
 
