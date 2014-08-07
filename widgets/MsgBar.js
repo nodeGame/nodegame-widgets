@@ -40,7 +40,6 @@
         this.init();
     }
 
-    // TODO: Write a proper INIT method
     MsgBar.prototype.init = function() {
         var that;
         var fields, i, field;
@@ -49,7 +48,6 @@
         that = this;
 
         // Create fields.
-        // TODO: separate table for fields following 'data'
         fields = ['to', 'action', 'target', 'text', 'data', 'from', 'priority',
                   'reliable', 'forward', 'session', 'stage', 'created', 'id'];
 
@@ -136,7 +134,7 @@
     };
 
     MsgBar.prototype.parse = function() {
-        var msg, gameMsg
+        var msg, gameMsg;
 
         msg = {};
 

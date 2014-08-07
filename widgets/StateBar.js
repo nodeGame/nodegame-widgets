@@ -5,8 +5,6 @@
  *
  * Provides a simple interface to change the game stages.
  *
- * TODO: needs refactoring
- *
  * www.nodegame.org
  * ---
  */
