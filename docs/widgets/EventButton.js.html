@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = '../', thisFile = 'widgets/EventButton.js', defaultSidebar = true;
+    var relativeDir = "../", thisFile = "widgets/EventButton.js", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
 </head>
@@ -18,6 +18,12 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h1">
+        <a href="#eventbutton%20widget%20for%20nodegame">EventButton widget for nodeGame</a>
+      </div>
+      <div class="heading h2">
+        <a href="#www.nodegame.org">www.nodegame.org</a>
+      </div>
       <div class="heading h2">
         <a href="#defaults">Defaults</a>
       </div>
@@ -28,7 +34,7 @@
         <a href="#dependencies">Dependencies</a>
       </div>
       <div class="heading h1">
-        <a href="#done-button">Done Button</a>
+        <a href="#done%20button">Done Button</a>
       </div>
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
@@ -43,97 +49,123 @@
 <table cellpadding="0" cellspacing="0">
   <tbody>
       <tr>
-        <td class="docs">
-          <h1>EventButton.js</h1>
-        </td>
-        <td class="code highlight"></td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="eventbutton%20widget%20for%20nodegame">
+  <h1>
+    <a href="#eventbutton%20widget%20for%20nodegame" name="eventbutton%20widget%20for%20nodegame" class="pilcrow">&#182;</a>
+    EventButton widget for nodeGame
+  </h1>
 </div>
 
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Creates a clickable button that fires an event.</p>
+
+
+<div class="pilwrap" id="www.nodegame.org">
+  <h2>
+    <a href="#www.nodegame.org" name="www.nodegame.org" class="pilcrow">&#182;</a>
+    www.nodegame.org
+  </h2>
+</div>
+
+  </div>
+</div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
 
-  <span class="kd">var</span> <span class="nx">JSUS</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
-  <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;EventButton&#39;</span><span class="p">,</span> <span class="nx">EventButton</span><span class="p">);</span>
-  </pre></div>
+    <span class="kd">var</span> <span class="nx">JSUS</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;EventButton&#39;</span><span class="p">,</span> <span class="nx">EventButton</span><span class="p">);</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="defaults">
   <h2>
-    <a href="#defaults" class="pilcrow">&#182;</a>
+    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
     Defaults
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;eventbutton&#39;</span><span class="p">;</span>
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>  
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;eventbutton&#39;</span><span class="p">;</span>
+    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" class="pilcrow">&#182;</a>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
     Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Event Button&#39;</span><span class="p">;</span>
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span><span class="p">;</span>
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span><span class="p">;</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" class="pilcrow">&#182;</a>
+    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
     Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
-  <span class="p">};</span>
-  
-  <span class="kd">function</span> <span class="nx">EventButton</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>   <span class="c1">// the parent element</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="s1">&#39;Send&#39;</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">callback</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
-  <span class="p">}</span>
-  
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">hasChildNodes</span><span class="p">())</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+    <span class="kd">function</span> <span class="nx">EventButton</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="s1">&#39;Send&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">callback</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">text</span><span class="p">));</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">event</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">event</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">callback</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">callback</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span></pre></div>
+
+    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">hasChildNodes</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">text</span><span class="p">));</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">event</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">event</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">callback</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">callback</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -143,15 +175,18 @@
 </div>
 <p>Emit Event only if callback is successful</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">ok</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">callback</span><span class="p">){</span>
-          <span class="nx">ok</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">);</span>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">ok</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">callback</span><span class="p">){</span>
+                    <span class="nx">ok</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">ok</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">event</span><span class="p">);</span>
+            <span class="p">};</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">ok</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">event</span><span class="p">);</span>
-      <span class="p">};</span>
-    <span class="p">}</span>
-    </pre></div>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -160,83 +195,93 @@
   <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 
-<div class="highlight"><pre><code><span class="c1">// Emit DONE only if callback is successful</span>
-<span class="k">this</span><span class="p">.</span><span class="n">button</span><span class="p">.</span><span class="n">onclick</span> <span class="o">=</span> <span class="k">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">var</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">options</span><span class="p">.</span><span class="n">exec</span><span class="p">)</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">options</span><span class="p">.</span><span class="n">exec</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">game</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ok</span><span class="p">)</span> <span class="n">node</span><span class="p">.</span><span class="n">emit</span><span class="p">(</span><span class="n">that</span><span class="p">.</span><span class="k">event</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight"><pre><code>         <span class="c1">// Emit DONE only if callback is successful</span>
+         <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                 <span class="kd">var</span> <span class="nx">ok</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                 <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">exec</span><span class="p">)</span> <span class="nx">ok</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">exec</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">);</span>
+                 <span class="k">if</span> <span class="p">(</span><span class="nx">ok</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">event</span><span class="p">);</span>
+         <span class="p">}</span>
 </code></pre></div>
 
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  <span class="p">};</span>
-  
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
-    <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>  
-  <span class="p">};</span>
-  
-  <span class="nx">EventButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
-    </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">};</span>
+
+    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="done-button">
+<div class="pilwrap" id="done%20button">
   <h1>
-    <a href="#done-button" class="pilcrow">&#182;</a>
+    <a href="#done%20button" name="done%20button" class="pilcrow">&#182;</a>
     Done Button
   </h1>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;DoneButton&#39;</span><span class="p">,</span> <span class="nx">DoneButton</span><span class="p">);</span>
-  
-  <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">EventButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
-  <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">DoneButton</span><span class="p">;</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;DoneButton&#39;</span><span class="p">,</span> <span class="nx">DoneButton</span><span class="p">);</span>
+
+    <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">EventButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+    <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">DoneButton</span><span class="p">;</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" class="pilcrow">&#182;</a>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
     Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;donebutton&#39;</span><span class="p">;</span>
-  <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span><span class="p">;</span>
-  <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Done Button&#39;</span><span class="p">;</span>
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;donebutton&#39;</span><span class="p">;</span>
+    <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span><span class="p">;</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" class="pilcrow">&#182;</a>
+    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
     Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">EventButton</span><span class="o">:</span> <span class="p">{}</span>
-  <span class="p">};</span>
-  
-  <span class="kd">function</span> <span class="nx">DoneButton</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">options</span><span class="p">.</span><span class="nx">event</span> <span class="o">=</span> <span class="s1">&#39;DONE&#39;</span><span class="p">;</span>
-    <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">||</span> <span class="s1">&#39;Done!&#39;</span><span class="p">;</span>
-    <span class="nx">EventButton</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  <span class="p">}</span>
-  
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">EventButton</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+    <span class="kd">function</span> <span class="nx">DoneButton</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="p">.</span><span class="nx">event</span> <span class="o">=</span> <span class="s1">&#39;DONE&#39;</span><span class="p">;</span>
+        <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">||</span> <span class="s1">&#39;Done!&#39;</span><span class="p">;</span>
+        <span class="nx">EventButton</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>
         </td>

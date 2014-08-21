@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = '../', thisFile = 'widgets/ServerInfoDisplay.js', defaultSidebar = true;
+    var relativeDir = "../", thisFile = "widgets/ServerInfoDisplay.js", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
 </head>
@@ -18,6 +18,12 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h1">
+        <a href="#serverinfodisplay%20widget%20for%20nodegame">ServerInfoDisplay widget for nodeGame</a>
+      </div>
+      <div class="heading h2">
+        <a href="#www.nodegame.org">www.nodegame.org</a>
+      </div>
       <div class="heading h2">
         <a href="#defaults">Defaults</a>
       </div>
@@ -31,119 +37,139 @@
 <table cellpadding="0" cellspacing="0">
   <tbody>
       <tr>
-        <td class="docs">
-          <h1>ServerInfoDisplay.js</h1>
-        </td>
-        <td class="code highlight"></td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="serverinfodisplay%20widget%20for%20nodegame">
+  <h1>
+    <a href="#serverinfodisplay%20widget%20for%20nodegame" name="serverinfodisplay%20widget%20for%20nodegame" class="pilcrow">&#182;</a>
+    ServerInfoDisplay widget for nodeGame
+  </h1>
 </div>
 
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Displays information about the server.</p>
+
+
+<div class="pilwrap" id="www.nodegame.org">
+  <h2>
+    <a href="#www.nodegame.org" name="www.nodegame.org" class="pilcrow">&#182;</a>
+    www.nodegame.org
+  </h2>
+</div>
+
+  </div>
+</div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
-  
-  <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;ServerInfoDisplay&#39;</span><span class="p">,</span> <span class="nx">ServerInfoDisplay</span><span class="p">);</span>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;ServerInfoDisplay&#39;</span><span class="p">,</span> <span class="nx">ServerInfoDisplay</span><span class="p">);</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="defaults">
   <h2>
-    <a href="#defaults" class="pilcrow">&#182;</a>
+    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
     Defaults
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;serverinfodisplay&#39;</span><span class="p">;</span>
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Server Info&#39;</span><span class="p">,</span>
-      <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;serverinfo_fieldset&#39;</span>
-  <span class="p">};</span>    
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;serverinfodisplay&#39;</span><span class="p">;</span>
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Server Info&#39;</span><span class="p">,</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;serverinfo_fieldset&#39;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" class="pilcrow">&#182;</a>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
     Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Server Info Display&#39;</span><span class="p">;</span>
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
-  
-  <span class="kd">function</span> <span class="nx">ServerInfoDisplay</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>  
-    <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-    
-    
-    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">//new node.window.Table();</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">button</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    
-  <span class="p">}</span>
-  
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">div</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.4&#39;</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nx">ServerInfoDisplay</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">//new node.window.Table();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Waiting for the reply from Server...&#39;</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">clear</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Refresh&#39;</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Refresh&#39;</span><span class="p">));</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">that</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">();</span>
+
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">div</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Waiting for the reply from Server...&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">clear</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Refresh&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Refresh&#39;</span><span class="p">));</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">();</span>
+        <span class="p">};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">();</span>
     <span class="p">};</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">();</span>
-  <span class="p">};</span>
-  
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
-    <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">div</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
-  <span class="p">};</span>
-  
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;INFO&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">removeChildrenFromNode</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">div</span><span class="p">);</span>
-      <span class="nx">that</span><span class="p">.</span><span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">processInfo</span><span class="p">(</span><span class="nx">info</span><span class="p">));</span>
-    <span class="p">});</span>
-  <span class="p">};</span>
-  
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">clear</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">info</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">)){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="nx">key</span><span class="p">,</span><span class="nx">info</span><span class="p">[</span><span class="nx">key</span><span class="p">]]);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-  <span class="p">};</span>
-  
-  <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;NODEGAME_READY&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">that</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
-    <span class="p">});</span>
-  <span class="p">};</span> 
-  
+
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">div</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;INFO&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">removeChildrenFromNode</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">div</span><span class="p">);</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">processInfo</span><span class="p">(</span><span class="nx">info</span><span class="p">));</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">clear</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">info</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">)){</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="nx">key</span><span class="p">,</span><span class="nx">info</span><span class="p">[</span><span class="nx">key</span><span class="p">]]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">ServerInfoDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;PLAYER_CREATED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>
         </td>

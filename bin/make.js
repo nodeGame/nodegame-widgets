@@ -56,7 +56,7 @@ program
 	.action(function(){
 		console.log('Building documentation for nodegame-widgets v.' + version);
 		try {
-			var dockerDir = J.resolveModuleDir('docker');
+			var dockerDir = J.resolveModuleDir('docker', rootDir);
 		}
 		catch(e) {
 			console.log('module Docker not found. Cannot build doc. Do \'npm install docker\' to fix it.');
