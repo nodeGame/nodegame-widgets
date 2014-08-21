@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = '../', thisFile = 'widgets/Controls.js', defaultSidebar = true;
+    var relativeDir = "../", thisFile = "widgets/Controls.js", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
 </head>
@@ -18,6 +18,12 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h1">
+        <a href="#controls%20widget%20for%20nodegame">Controls widget for nodeGame</a>
+      </div>
+      <div class="heading h2">
+        <a href="#www.nodegame.org">www.nodegame.org</a>
+      </div>
       <div class="heading h2">
         <a href="#defaults">Defaults</a>
       </div>
@@ -28,20 +34,38 @@
 <table cellpadding="0" cellspacing="0">
   <tbody>
       <tr>
-        <td class="docs">
-          <h1>Controls.js</h1>
-        </td>
-        <td class="code highlight"></td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls%20widget%20for%20nodegame">
+  <h1>
+    <a href="#controls%20widget%20for%20nodegame" name="controls%20widget%20for%20nodegame" class="pilcrow">&#182;</a>
+    Controls widget for nodeGame
+  </h1>
 </div>
 
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Creates and manipulates a set of forms.</p>
+
+
+<div class="pilwrap" id="www.nodegame.org">
+  <h2>
+    <a href="#www.nodegame.org" name="www.nodegame.org" class="pilcrow">&#182;</a>
+    www.nodegame.org
+  </h2>
+</div>
+
+  </div>
+</div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -51,30 +75,36 @@
 </div>
 <p>TODO: handle different events, beside onchange</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Controls&#39;</span><span class="p">,</span> <span class="nx">Controls</span><span class="p">);</span>  
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Controls&#39;</span><span class="p">,</span> <span class="nx">Controls</span><span class="p">);</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="defaults">
   <h2>
-    <a href="#defaults" class="pilcrow">&#182;</a>
+    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
     Defaults
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="kd">var</span> <span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;controls&#39;</span> <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="nx">defaults</span><span class="p">;</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">Slider</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">jQuerySlider</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">Radio</span>  <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="kd">var</span> <span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;controls&#39;</span> <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="nx">defaults</span><span class="p">;</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">Slider</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">jQuerySlider</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">Radio</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -84,26 +114,28 @@
 </div>
 <p>Meta-data</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Controls&#39;</span><span class="p">;</span>
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span><span class="p">;</span>
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Wraps a collection of user-inputs controls.&#39;</span><span class="p">;</span>
-    
-  <span class="kd">function</span> <span class="nx">Controls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    
-    <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    
-    <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_change&#39;</span><span class="p">;</span>
-    
-    <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-  <span class="p">}</span>
+        <td class="code highlight"><div class="highlight"><pre>
 
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span></pre></div>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Wraps a collection of user-inputs controls.&#39;</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nx">Controls</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="s1">&#39;controls&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_change&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -114,9 +146,12 @@
 <p>TODO: node.window.addTextInput
 return node.window.addTextInput(root, id, attributes);</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getItem</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -127,62 +162,66 @@ return node.window.addTextInput(root, id, attributes);</p>
 <p>TODO: node.window.addTextInput
 return node.window.getTextInput(id, attributes);</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">};</span>
 
-    <span class="k">this</span><span class="p">.</span><span class="nx">hasChanged</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// TODO: should this be inherited?</span>
-    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">else</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">List</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">();</span>
-    
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">features</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">populate</span><span class="p">();</span>
-  <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">toReturn</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-    <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">);</span>
-    
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">idButton</span> <span class="o">=</span> <span class="s1">&#39;submit_&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">idButton</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">idButton</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attributes</span><span class="p">);</span>
-      
-      <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">);</span>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">hasChanged</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// TODO: should this be inherited?</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">){</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
-      <span class="p">};</span>
-    <span class="p">}</span>   
-    
-    <span class="k">return</span> <span class="nx">toReturn</span><span class="p">;</span>
-  <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-  <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">populate</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span></pre></div>
+        <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">List</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">features</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">populate</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">toReturn</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">idButton</span> <span class="o">=</span> <span class="s1">&#39;submit_&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">idButton</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+                <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">idButton</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attributes</span><span class="p">);</span>
+
+            <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">toReturn</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">populate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">container</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -190,16 +229,19 @@ return node.window.getTextInput(id, attributes);</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
-<p>Prepare the attributes vector</p>
+<p>Prepare the attributes vector.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">attributes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
-        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-          <span class="k">delete</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-        <span class="p">}</span>
-              
-        <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="nx">attributes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+                <span class="nx">id</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+                    <span class="k">delete</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -207,10 +249,14 @@ return node.window.getTextInput(id, attributes);</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
-<p>Add a different element according to the subclass instantiated</p>
+<p>Add a different element according
+to the subclass instantiated.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">container</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
-                </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="nx">elem</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">container</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -220,16 +266,19 @@ return node.window.getTextInput(id, attributes);</p>
 </div>
 <p>Fire the onChange event, if one defined</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">elem</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">);</span>
-          <span class="p">};</span>
-        <span class="p">}</span>
-        
-        <span class="k">if</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">label</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addLabel</span><span class="p">(</span><span class="nx">container</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">label</span><span class="p">);</span>
-        <span class="p">}</span>
-        </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">elem</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                        <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">);</span>
+                    <span class="p">};</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">label</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">W</span><span class="p">.</span><span class="nx">addLabel</span><span class="p">(</span><span class="nx">container</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">label</span><span class="p">);</span>
+                <span class="p">}</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -237,15 +286,18 @@ return node.window.getTextInput(id, attributes);</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
-<p>Element added to the list</p>
+<p>Element added to the list.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>        <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -255,17 +307,21 @@ return node.window.getTextInput(id, attributes);</p>
 </div>
 <p>TODO: should this be inherited?</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>    <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">that</span><span class="p">.</span><span class="nx">hasChanged</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="p">});</span>
-        
-  <span class="p">};</span>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">hasChanged</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">});</span>
 
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">refresh</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>  
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span></pre></div>
+    <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">refresh</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">el</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">el</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -273,14 +329,13 @@ return node.window.getTextInput(id, attributes);</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
-
-<div class="highlight"><pre><code>            <span class="n">node</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="err">&#39;</span><span class="n">KEY</span><span class="o">:</span> <span class="err">&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">DEBUG</span><span class="err">&#39;</span><span class="p">);</span>
-            <span class="n">node</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="err">&#39;</span><span class="n">VALUE</span><span class="o">:</span> <span class="err">&#39;</span> <span class="o">+</span> <span class="n">el</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">DEBUG</span><span class="err">&#39;</span><span class="p">);</span>
-</code></pre></div>
-
-
+<p>node.log('KEY: ' + key, 'DEBUG');
+node.log('VALUE: ' + el.value, 'DEBUG');</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>          <span class="nx">el</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                    <span class="nx">el</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -291,20 +346,33 @@ return node.window.getTextInput(id, attributes);</p>
 <p>TODO: set all the other attributes
 TODO: remove/add elements</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>        <span class="p">}</span>
-        
-      <span class="p">}</span>
-    <span class="p">}</span>
-    
-    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-  <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>  
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="p">}</span>
+
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">out</span><span class="p">,</span> <span class="nx">el</span><span class="p">,</span> <span class="nx">key</span><span class="p">;</span>
+        <span class="nx">out</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">el</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="nx">out</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">out</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">highlight</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">highlight</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">,</span> <span class="nx">code</span><span class="p">);</span>
+    <span class="p">};</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -312,26 +380,12 @@ TODO: remove/add elements</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
-
-<div class="highlight"><pre><code>            <span class="n">node</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="err">&#39;</span><span class="n">KEY</span><span class="o">:</span> <span class="err">&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">DEBUG</span><span class="err">&#39;</span><span class="p">);</span>
-            <span class="n">node</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="err">&#39;</span><span class="n">VALUE</span><span class="o">:</span> <span class="err">&#39;</span> <span class="o">+</span> <span class="n">el</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="err">&#39;</span><span class="n">DEBUG</span><span class="err">&#39;</span><span class="p">);</span>
-</code></pre></div>
-
-
+<p>Sub-classes</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>          <span class="nx">out</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
-        <span class="p">}</span>
-        
-      <span class="p">}</span>
-    <span class="p">}</span>
-    
-    <span class="k">return</span> <span class="nx">out</span><span class="p">;</span>
-  <span class="p">};</span>
-  
-  <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">highlight</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">highlight</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">,</span> <span class="nx">code</span><span class="p">);</span>
-  <span class="p">};</span>
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -339,9 +393,35 @@ TODO: remove/add elements</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
-<p>Sub-classes</p>
+<p>Slider</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
+
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;slidercontrols&#39;</span><span class="p">;</span>
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span><span class="p">;</span>
+
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+
+    <span class="kd">function</span> <span class="nx">SliderControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addSlider</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getSlider</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
+    <span class="p">};</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -349,33 +429,46 @@ TODO: remove/add elements</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
-<p>Slider </p>
+<p>jQuerySlider</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
-  <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
-  
-  <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;slidercontrols&#39;</span><span class="p">;</span>
-  <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Slider Controls&#39;</span><span class="p">;</span>
-  <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span><span class="p">;</span>
-  
-  <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
-  <span class="p">};</span>
-  
-  
-  <span class="kd">function</span> <span class="nx">SliderControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  <span class="p">}</span>
-  
-  <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addSlider</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
-  <span class="p">};</span>
-  
-  <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getItem</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getSlider</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
-  <span class="p">};</span>
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
+
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;jqueryslidercontrols&#39;</span><span class="p">;</span>
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.13&#39;</span><span class="p">;</span>
+
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">jQuery</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+
+    <span class="kd">function</span> <span class="nx">jQuerySliderControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">slider</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div/&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span>
+        <span class="p">}).</span><span class="nx">slider</span><span class="p">();</span>
+
+        <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">slider</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">s</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">};</span>
+
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">slider</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div/&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span>
+        <span class="p">}).</span><span class="nx">slider</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="nx">slider</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -383,42 +476,13 @@ TODO: remove/add elements</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
-<p>jQuerySlider</p>
+<p>/////////////////////////</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>    
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
-    
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;jqueryslidercontrols&#39;</span><span class="p">;</span>
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Experimental: jQuery Slider Controls&#39;</span><span class="p">;</span>
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.13&#39;</span><span class="p">;</span>
-    
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">jQuery</span><span class="o">:</span> <span class="p">{},</span>
-        <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-    
-    
-    <span class="kd">function</span> <span class="nx">jQuerySliderControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-    <span class="p">}</span>
-    
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">slider</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div/&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span>
-    <span class="p">}).</span><span class="nx">slider</span><span class="p">();</span>
-  
-    <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">slider</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nx">s</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-  <span class="p">};</span>
-  
-  <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getItem</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">slider</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;&lt;div/&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span>
-      <span class="p">}).</span><span class="nx">slider</span><span class="p">();</span>
-    
-    <span class="k">return</span> <span class="nx">slider</span><span class="p">;</span>
-  <span class="p">};</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -426,13 +490,29 @@ TODO: remove/add elements</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
-<p>/////////////////////////</p>
+<p>Radio</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  
-  
+        <td class="code highlight"><div class="highlight"><pre>
 
-  </pre></div>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
+
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;radiocontrols&#39;</span><span class="p">;</span>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.1&#39;</span><span class="p">;</span>
+
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+    <span class="kd">function</span> <span class="nx">RadioControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">groupName</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">:</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">generateUniqueId</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -440,24 +520,24 @@ TODO: remove/add elements</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
-<p>Radio</p>
+<p>overriding populare also. There is an error with the Label</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
-  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
-  
-  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;radiocontrols&#39;</span><span class="p">;</span>
-  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Radio Controls&#39;</span><span class="p">;</span>
-  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.1&#39;</span><span class="p">;</span>
-  
-  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
-  <span class="p">};</span>
-  
-  <span class="kd">function</span> <span class="nx">RadioControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">groupName</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">:</span> 
-                                <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">generateUniqueId</span><span class="p">();</span> </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">populate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">container</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;radio&#39;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">.</span><span class="nx">group</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="s2">&quot;radioGroup&quot;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">.</span><span class="nx">group</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="s2">&quot;radioGroup&quot;</span><span class="p">;</span>
+            <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -465,11 +545,18 @@ TODO: remove/add elements</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
-<p>alert(this.groupName);</p>
+<p>Prepare the attributes vector.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  <span class="p">}</span>
-  
-  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="nx">attributes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+                <span class="nx">id</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+                    <span class="k">delete</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+                <span class="p">}</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -477,12 +564,14 @@ TODO: remove/add elements</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
-<p>console.log('ADDDING radio');
-console.log(attributes);
-add the group name if not specified
-TODO: is this a javascript bug?</p>
+<p>Add a different element according
+to the subclass instantiated.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="nx">elem</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -490,16 +579,17 @@ TODO: is this a javascript bug?</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
-
-<div class="highlight"><pre><code>    <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">this</span><span class="p">);</span>
-    <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">this</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
-    <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="err">&#39;</span><span class="n">MODMOD</span> <span class="err">&#39;</span> <span class="o">+</span> <span class="n">this</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
-</code></pre></div>
-
-
+<p>Fire the onChange event, if one defined</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>      <span class="nx">attributes</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupName</span><span class="p">;</span>
-    <span class="p">}</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">elem</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                        <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">);</span>
+                    <span class="p">};</span>
+                <span class="p">}</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -507,12 +597,23 @@ TODO: is this a javascript bug?</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
-<p>console.log(attributes);</p>
+<p>Element added to the list.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addRadioButton</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>  
-  <span class="p">};</span>
-  
-  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getItem</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">(</span><span class="nx">elem</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">elem</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">attributes</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupName</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="nx">elem</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addRadioButton</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -520,12 +621,16 @@ TODO: is this a javascript bug?</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
-<p>console.log('ADDDING radio');
-console.log(attributes);
-add the group name if not specified
-TODO: is this a javascript bug?</p>
+<p>Adding the text for the radio button</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">elem</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">label</span><span class="p">));</span>
+        <span class="k">return</span> <span class="nx">elem</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -533,16 +638,15 @@ TODO: is this a javascript bug?</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
-
-<div class="highlight"><pre><code>    <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">this</span><span class="p">);</span>
-    <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">this</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
-    <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="err">&#39;</span><span class="n">MODMOD</span> <span class="err">&#39;</span> <span class="o">+</span> <span class="n">this</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
-</code></pre></div>
-
-
+<p>console.log('ADDDING radio');
+console.log(attributes);
+add the group name if not specified
+TODO: is this a javascript bug?</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>      <span class="nx">attributes</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupName</span><span class="p">;</span>
-    <span class="p">}</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -550,11 +654,19 @@ TODO: is this a javascript bug?</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
-<p>console.log(attributes);</p>
+
+<div class="highlight"><pre><code>             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;MODMOD &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+</code></pre></div>
+
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getRadioButton</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>  
-  <span class="p">};</span>
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">attributes</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupName</span><span class="p">;</span>
+        <span class="p">}</span>
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -562,21 +674,37 @@ TODO: is this a javascript bug?</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
+<p>console.log(attributes);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getRadioButton</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">);</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+</div>
 <p>Override getAllValues for Radio Controls</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">checked</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">el</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">checked</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nx">el</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
         <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-  <span class="p">};</span>
-  
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">};</span>
+
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>
         </td>

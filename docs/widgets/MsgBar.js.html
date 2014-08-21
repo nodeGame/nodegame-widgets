@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = '../', thisFile = 'widgets/MsgBar.js', defaultSidebar = true;
+    var relativeDir = "../", thisFile = "widgets/MsgBar.js", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
 </head>
@@ -18,11 +18,17 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h1">
+        <a href="#msgbar%20widget%20for%20nodegame">MsgBar widget for nodeGame</a>
+      </div>
       <div class="heading h2">
-        <a href="#defaults">Defaults</a>
+        <a href="#www.nodegame.org">www.nodegame.org</a>
       </div>
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
+      </div>
+      <div class="heading h1">
+        <a href="#helper%20function.">Helper Function.</a>
       </div>
     </div>
   </div>
@@ -31,71 +37,105 @@
 <table cellpadding="0" cellspacing="0">
   <tbody>
       <tr>
-        <td class="docs">
-          <h1>MsgBar.js</h1>
-        </td>
-        <td class="code highlight"></td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="msgbar%20widget%20for%20nodegame">
+  <h1>
+    <a href="#msgbar%20widget%20for%20nodegame" name="msgbar%20widget%20for%20nodegame" class="pilcrow">&#182;</a>
+    MsgBar widget for nodeGame
+  </h1>
 </div>
 
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
 
-  <span class="kd">var</span> <span class="nx">GameMsg</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameMsg</span><span class="p">,</span>
-    <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
-  
-  <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;MsgBar&#39;</span><span class="p">,</span> <span class="nx">MsgBar</span><span class="p">);</span></pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="defaults">
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Creates a tool for sending messages to other connected clients.</p>
+
+
+<div class="pilwrap" id="www.nodegame.org">
   <h2>
-    <a href="#defaults" class="pilcrow">&#182;</a>
-    Defaults
+    <a href="#www.nodegame.org" name="www.nodegame.org" class="pilcrow">&#182;</a>
+    www.nodegame.org
   </h2>
 </div>
 
+  </div>
+</div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;msgbar&#39;</span><span class="p">;</span>
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Send MSG&#39;</span> <span class="p">};</span>  
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">GameMsg</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameMsg</span><span class="p">,</span>
+        <span class="nx">GameStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameStage</span><span class="p">,</span>
+        <span class="nx">JSUS</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">,</span>
+        <span class="nx">Table</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;MsgBar&#39;</span><span class="p">,</span> <span class="nx">MsgBar</span><span class="p">);</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" class="pilcrow">&#182;</a>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
     Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Msg Bar&#39;</span><span class="p">;</span>
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.4&#39;</span><span class="p">;</span>
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Send a nodeGame message to players&#39;</span><span class="p">;</span>
-  
-  <span class="kd">function</span> <span class="nx">MsgBar</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    
-    <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-    
-    <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    
-    <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
-      
-    <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
-  <span class="p">}</span>
-  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.6&#39;</span><span class="p">;</span>
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Send a nodeGame message to players&#39;</span><span class="p">;</span>
+
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Send MSG&#39;</span><span class="p">;</span>
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;msgbar&#39;</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nx">MsgBar</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">field</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">table</span><span class="p">;</span>
+
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>Create fields.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;priority&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;reliable&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="s1">&#39;session&#39;</span><span class="p">,</span> <span class="s1">&#39;stage&#39;</span><span class="p">,</span> <span class="s1">&#39;created&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">];</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">field</span> <span class="o">=</span> <span class="nx">fields</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -103,52 +143,62 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
-<p>TODO: Write a proper INIT method</p>
+<p>Put TO, ACTION, TARGET, TEXT, DATA in the first table which is
+always visible, the other fields in the "advanced" table which
+is hidden by default.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">gm</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GameMsg</span><span class="p">();</span>
-    <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">gm</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">gm</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getTextInput</span><span class="p">(</span><span class="nx">id</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="s1">&#39;target&#39;</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getTargetSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_targets&#39;</span><span class="p">);</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
-          
-          <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_target&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span> 
-          <span class="p">};</span>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">table</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">;</span>
+
+            <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">field</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">W</span><span class="p">.</span><span class="nx">getTextInput</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">field</span><span class="p">,</span> <span class="p">{</span><span class="nx">tabindex</span><span class="o">:</span> <span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">}),</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">field</span> <span class="o">===</span> <span class="s1">&#39;to&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span>
+                    <span class="nx">W</span><span class="p">.</span><span class="nx">getRecipientSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_recipients&#39;</span><span class="p">);</span>
+                <span class="nx">W</span><span class="p">.</span><span class="nx">addAttributes2Elem</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span>
+                        <span class="p">{</span><span class="nx">tabindex</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">length</span><span class="o">+</span><span class="mi">1</span><span class="p">});</span>
+                <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_to&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span>
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">field</span> <span class="o">===</span> <span class="s1">&#39;action&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getActionSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_actions&#39;</span><span class="p">);</span>
+                <span class="nx">W</span><span class="p">.</span><span class="nx">addAttributes2Elem</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">,</span>
+                        <span class="p">{</span><span class="nx">tabindex</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">length</span><span class="o">+</span><span class="mi">2</span><span class="p">});</span>
+                <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_action&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span>
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">field</span> <span class="o">===</span> <span class="s1">&#39;target&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getTargetSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_targets&#39;</span><span class="p">);</span>
+                <span class="nx">W</span><span class="p">.</span><span class="nx">addAttributes2Elem</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">,</span>
+                        <span class="p">{</span><span class="nx">tabindex</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">length</span><span class="o">+</span><span class="mi">3</span><span class="p">});</span>
+                <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_target&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span>
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
         <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="s1">&#39;action&#39;</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getActionSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_actions&#39;</span><span class="p">);</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_action&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span> 
-          <span class="p">};</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="s1">&#39;to&#39;</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getRecipientSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;recipients&#39;</span><span class="p">);</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_to&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span> 
-          <span class="p">};</span>
-        <span class="p">}</span>
-        <span class="nx">y</span><span class="o">++</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-  <span class="p">};</span>
-  
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-    
-    <span class="kd">var</span> <span class="nx">sendButton</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">stubButton</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="s1">&#39;stub&#39;</span><span class="p">,</span> <span class="s1">&#39;Add Stub&#39;</span><span class="p">);</span>
-    
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="nx">sendButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">advButton</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">sendButton</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -156,12 +206,16 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
-<p>Should be within the range of valid values
-but we should add a check</p>
+<p>Show table of basic fields.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>      
-      <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nx">gsc</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span></pre></div>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -169,79 +223,182 @@ but we should add a check</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
-<p>console.log(msg.stringify());</p>
+<p>Show 'Send' button.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>    <span class="p">};</span>
-    <span class="nx">stubButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">that</span><span class="p">.</span><span class="nx">addStub</span><span class="p">();</span>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">sendButton</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
+        <span class="nx">sendButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>Show a button that expands the table of advanced fields.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">advButton</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="s1">&#39;Toggle advanced options&#39;</span><span class="p">);</span>
+        <span class="nx">advButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span> <span class="o">?</span> <span class="s1">&#39;none&#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="p">};</span>
     <span class="p">};</span>
-    
-    <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
-    
-    <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
-  <span class="p">};</span>
-  
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getRoot</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">;</span>
-  <span class="p">};</span>
-  
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>  
-    <span class="nx">node</span><span class="p">.</span><span class="nx">onPLIST</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">populateRecipientSelector</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-    
-    <span class="p">});</span> 
-  <span class="p">};</span>
-  
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      
-        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">x</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">key</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">;</span>
-          <span class="nx">msg</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> 
+
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">};</span>
+
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">msg</span><span class="p">,</span> <span class="nx">gameMsg</span><span class="p">;</span>
+
+        <span class="nx">msg</span> <span class="o">=</span> <span class="p">{};</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">validateTableMsg</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">validateTableMsg</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">_lastKey</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span><span class="p">;</span>
+        <span class="nx">gameMsg</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">msg</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;MsgBar msg created. &#39;</span> <span class="o">+</span>  <span class="nx">gameMsg</span><span class="p">.</span><span class="nx">toSMS</span><span class="p">());</span>
+        <span class="k">return</span> <span class="nx">gameMsg</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="helper%20function.">
+  <h1>
+    <a href="#helper%20function." name="helper%20function." class="pilcrow">&#182;</a>
+    Helper Function.
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="kd">function</span> <span class="nx">validateTableMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">y</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">y</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Saving the value of last key.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">msg</span><span class="p">.</span><span class="nx">_lastKey</span> <span class="o">=</span>  <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">x</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-          
-          <span class="nx">value</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;state&#39;</span> <span class="o">||</span> <span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Fetching the value of last key.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">key</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">_lastKey</span><span class="p">;</span>
+        <span class="nx">value</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;stage&#39;</span> <span class="o">||</span> <span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;to&#39;</span> <span class="o">||</span> <span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">try</span> <span class="p">{</span>
-              <span class="nx">value</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
-              <span class="nx">value</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
             <span class="p">}</span>
-          <span class="p">}</span>
-          
-          <span class="nx">msg</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
         <span class="p">}</span>
-    <span class="p">});</span>
-    <span class="kd">var</span> <span class="nx">gameMsg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GameMsg</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">gameMsg</span><span class="p">,</span> <span class="s1">&#39;MsgBar sent: &#39;</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nx">gameMsg</span><span class="p">;</span>
-  <span class="p">};</span>
-  
-  <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addStub</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_from&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">)</span> <span class="o">?</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="s1">&#39;undefined&#39;</span><span class="p">;</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_to&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_forward&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_reliable&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_priority&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    
-    <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">gsc</span> <span class="o">&amp;&amp;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">gsc</span><span class="p">.</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_session&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">gsc</span><span class="p">.</span><span class="nx">session</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p>Validate input.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;to&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">((</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">)</span> <span class="o">||</span>
+                <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">))</span> <span class="p">{</span>
+
+                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Invalid &quot;to&quot; field&#39;</span><span class="p">);</span>
+                <span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;action&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Missing &quot;action&quot; field&#39;</span><span class="p">);</span>
+                <span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;target&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Missing &quot;target&quot; field&#39;</span><span class="p">);</span>
+                <span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>Assigning the value.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">msg</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
     <span class="p">}</span>
-    
-    <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_state&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">state</span><span class="p">);</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_action&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-    <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_target&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-    
-  <span class="p">};</span>
-  
+
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>
         </td>
