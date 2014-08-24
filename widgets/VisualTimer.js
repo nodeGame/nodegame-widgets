@@ -19,7 +19,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.4.0';
+    VisualTimer.version = '0.5.0';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
@@ -165,10 +165,10 @@
         });
         this.options = options;
 
-        if(!this.options.mainBoxOptions) {
+        if (!this.options.mainBoxOptions) {
             this.options.mainBoxOptions = {};
         }
-        if(!this.options.waitBoxOptions) {
+        if (!this.options.waitBoxOptions) {
             this.options.waitBoxOptions = {};
         }
 
@@ -192,7 +192,7 @@
             this.waitBox.init(this.options.waitBoxOptions);
         }
 
-        this.activeBox = options.activeBox || this.mainBox;
+        this.activeBox = this.options.activeBox || this.mainBox;
 
         this.isInitialized = true;
     };
@@ -334,17 +334,17 @@
       * @see VisualTimer.restart
       */
     VisualTimer.prototype.startWaiting = function(options) {
-        if(typeof options === 'undefined') {
+        if (typeof options === 'undefined') {
             options = {};
         }
         options = J.clone(options);
         if (typeof options.milliseconds === 'undefined') {
             options.milliseconds = this.gameTimer.timeLeft;
         }
-        if(typeof options.mainBoxOptions === 'undefined') {
+        if (typeof options.mainBoxOptions === 'undefined') {
             options.mainBoxOptions = {};
         }
-        if(typeof options.waitBoxOptions === 'undefined') {
+        if (typeof options.waitBoxOptions === 'undefined') {
             options.waitBoxOptions = {};
         }
         options.mainBoxOptions.classNameBody = 'strike';
@@ -368,21 +368,21 @@
       * @see VisualTimer.restart
       */
     VisualTimer.prototype.startTiming = function(options) {
-        if(typeof options === 'undefined') {
+        if (typeof options === 'undefined') {
             options = {};
         }
         options = J.clone(options);
-        if(typeof options.mainBoxOptions === 'undefined') {
+        if (typeof options.mainBoxOptions === 'undefined') {
             options.mainBoxOptions = {};
         }
-        if(typeof options.waitBoxOptions === 'undefined') {
+        if (typeof options.waitBoxOptions === 'undefined') {
             options.waitBoxOptions = {};
         }
         options.activeBox = this.mainBox;
         options.waitBoxOptions.timeLeft = this.gameTimer.timeLeft || 0;
         options.waitBoxOptions.hideBox = true;
         options.mainBoxOptions.classNameBody = '';
-        this.restart(options)
+        this.restart(options);
     };
 
     /**
@@ -440,7 +440,7 @@
         });
 
         node.on('REALLY_DONE', function() {
-            if(!that.gameTimer.isStopped()) {
+            if (!that.gameTimer.isStopped()) {
                 that.startWaiting();
             }
        });
@@ -576,77 +576,85 @@
         this.setClassNameTitle(options.classNameTitle || '');
         this.setClassNameBody(options.classNameBody || '');
 
-        if(options.timeLeft) {
+        if (options.timeLeft) {
             this.timeLeft = options.timeLeft;
         }
     };
 
     /**
-     * ## hideBox
+     * ## TimerBox.hideBox
      *
      * hides entire 'TimerBox'
      */
     TimerBox.prototype.hideBox = function() {
         this.boxDiv.style.display = 'none';
     };
+
     /**
-     * ## unhideBox
+     * ## TimerBox.unhideBox
      *
      * hides entire 'TimerBox'
      */
     TimerBox.prototype.unhideBox = function() {
         this.boxDiv.style.display = '';
     };
+
     /**
-     * ## hideTitle
+     * ## TimerBox.hideTitle
      *
      * hides title of 'TimerBox'
      */
     TimerBox.prototype.hideTitle = function() {
         this.titleDiv.style.display = 'none';
     };
+
     /**
-     * ## unhideTitle
+     * ## TimerBox.unhideTitle
      *
      * unhides title of 'TimerBox'
      */
     TimerBox.prototype.unhideTitle = function() {
         this.titleDiv.style.display = '';
     };
+
     /**
-     * ## hideBody
+     * ## TimerBox.hideBody
      *
      * hides body of 'TimerBox'
      */
     TimerBox.prototype.hideBody = function() {
         this.bodyDiv.style.display = 'none';
     };
+
     /**
-     * ## unhideBody
+     * ## TimerBox.unhideBody
      *
      * unhides Body of 'TimerBox'
      */
     TimerBox.prototype.unhideBody = function() {
         this.bodyDiv.style.display = '';
     };
+
     /**
-     * ## setTitle
+     * ## TimerBox.setTitle
      *
      * sets title of 'TimerBox'
      */
     TimerBox.prototype.setTitle = function(title) {
         this.titleDiv.innerHTML = title;
     };
+
     /**
-     * ## setClassNameTitle
+     * ## TimerBox.setClassNameTitle
      *
      * sets class name of title of 'TimerBox'
      */
     TimerBox.prototype.setClassNameTitle = function(className) {
         this.titleDiv.className = className;
     };
+
     /**
-     * ## setClassNameBody
+     * ## TimerBox.setClassNameBody
      *
      * sets class name of body of 'TimerBox'
      */
