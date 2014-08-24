@@ -3,9 +3,9 @@
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Display a timer for the game. Timer can trigger events. 
+ * Display a timer for the game. Timer can trigger events.
  * Only for countdown smaller than 1h.
- * 
+ *
  * www.nodegame.org
  * ---
  */
@@ -33,12 +33,12 @@
         JSUS: {}
     };
 
-    /** 
+    /**
      *  ## VisualTimer
      *
      *  'VisualTimer' displays and manages a 'GameTimer'
      *  The options it can take are:
-     
+
      *  - any options that can be passed to a 'GameTimer'
      *  - waitBoxOptions: an option object to be passed to 'TimerBox'
      *  - mainBoxOptions: an option object to be passed to 'TimerBox'
@@ -53,13 +53,13 @@
 
         /**
          *  ### gameTimer
-         *  
+         *
          *  The timer which counts down the game time.
          *
-         *  @see node.timer.createTimer  
+         *  @see node.timer.createTimer
          */
         this.gameTimer = null;
-        
+
         /**
          *  ### mainBox
          *
@@ -67,39 +67,39 @@
          *
          *  @see TimerBox
          */
-        this.mainBox = null;   
-        
+        this.mainBox = null;
+
         /**
          *  ### waitBox
          *
          *  The 'TimerBox' which displays the wait timer.
          *
-         *  @see TimerBox         
+         *  @see TimerBox
          */
         this.waitBox = null;
-        
+
         /**
          *  ### activeBox
          *
          *  The 'TimerBox' in which to display the time.
-         *  
-         *  This variable is always a reference to either 'waitBox' or 
-         *  'mainBox'. 
          *
-         *  @see TimerBox      
+         *  This variable is always a reference to either 'waitBox' or
+         *  'mainBox'.
+         *
+         *  @see TimerBox
          */
         this.activeBox = null;
-        
+
         /**
          *  ### isInitialized
          *
-         *  indicates whether the instance has been initializded already   
+         *  indicates whether the instance has been initializded already
          */
         this.isInitialized = false;
         this.init(this.options);
     }
-    
-    /** 
+
+    /**
      *  ## VisualTimer
      *
      *  Initializes the instance. When called again, adds options to current
@@ -116,7 +116,7 @@
      */
     VisualTimer.prototype.init = function(options) {
         var t;
-        
+
         if (!options) {
             options = {};
         }
@@ -145,7 +145,7 @@
         }
 
         this.gameTimer.init(options);
-        
+
         t = this.gameTimer;
         node.session.register('visualtimer', {
             set: function(p) {
@@ -164,21 +164,21 @@
             }
         });
         this.options = options;
-        
+
         if(!this.options.mainBoxOptions) {
             this.options.mainBoxOptions = {};
         }
         if(!this.options.waitBoxOptions) {
             this.options.waitBoxOptions = {};
         }
-        
+
         J.mixout(this.options.mainBoxOptions,
                 {classNameBody: options.className, hideTitle: true});
         J.mixout(this.options.waitBoxOptions,
-                {title: 'Max. wait timer', 
+                {title: 'Max. wait timer',
                 classNameTitle: 'waitTimerTitle',
                 classNameBody: 'waitTimerBody', hideBox: true});
-                       
+
         if (!this.mainBox) {
             this.mainBox = new TimerBox(this.options.mainBoxOptions);
         }
@@ -187,24 +187,24 @@
         }
         if (!this.waitBox) {
             this.waitBox = new TimerBox(this.options.waitBoxOptions);
-        } 
+        }
         else {
             this.waitBox.init(this.options.waitBoxOptions);
         }
-        
+
         this.activeBox = options.activeBox || this.mainBox;
-        
+
         this.isInitialized = true;
     };
 
     VisualTimer.prototype.append = function() {
         this.bodyDiv.appendChild(this.mainBox.boxDiv);
         this.bodyDiv.appendChild(this.waitBox.boxDiv);
-      
+
         this.activeBox = this.mainBox;
         this.updateDisplay();
     };
-    
+
     /**
      *  ## VisualTimer.clear
      *
@@ -220,9 +220,9 @@
         if (!options) {
             options = {};
         }
-        
+
         node.timer.destroyTimer(this.gameTimer);
-                
+
         // ----- as in constructor -----
         this.options = options;
         this.options.update = ('undefined' === typeof this.options.update) ?
@@ -233,16 +233,16 @@
         this.isInitialized = false;
         this.init(this.options);
         // ----- as in constructor ----
-        
-        return oldOptions;   
+
+        return oldOptions;
     };
-    
+
     /**
      *  ## VisualTimer.updateDisplay
      *
      *  Changes 'activeBox' to display current time of 'gameTimer'
      *
-     *  @see TimerBox.bodyDiv      
+     *  @see TimerBox.bodyDiv
      */
     VisualTimer.prototype.updateDisplay = function() {
         var time, minutes, seconds;
@@ -266,7 +266,7 @@
      *  @see GameTimer.start
      */
     VisualTimer.prototype.start = function() {
-        this.updateDisplay();        
+        this.updateDisplay();
         this.gameTimer.start();
     };
 
@@ -301,7 +301,7 @@
         if (!this.gameTimer.isStopped()) {
             this.activeBox.timeLeft = this.gameTimer.timeLeft;
             this.gameTimer.stop();
-        }  
+        }
     };
     /**
      *  ## VisualTimer.switchActiveBoxTo
@@ -318,7 +318,7 @@
         this.activeBox = box;
         this.updateDisplay();
     };
-    
+
     /**
       * ## VisualTimer.startWaiting
       *
@@ -353,14 +353,14 @@
         options.waitBoxOptions.hideBox = false;
         this.restart(options);
     };
-    
+
     /**
       * ## VisualTimer.startTiming
       *
       * Changes the 'VisualTimer' appearance to a regular countdown
       *
       * The mainBox will be unstriked and set active, the waitBox will be
-      * hidden. All other options are forwarded directly to 
+      * hidden. All other options are forwarded directly to
       * 'VisualTimer.restart'.
       *
       * @param {object} options Configuration object
@@ -384,7 +384,7 @@
         options.mainBoxOptions.classNameBody = '';
         this.restart(options)
     };
-    
+
     /**
      *  ## VisualTimer.resume
      *
@@ -395,7 +395,7 @@
     VisualTimer.prototype.resume = function() {
         this.gameTimer.resume();
     };
-    
+
     /**
      *  ## VisualTimer.setToZero
      *
@@ -408,7 +408,7 @@
         this.activeBox.bodyDiv.innerHTML = '00:00';
         this.activeBox.setClassNameBody('strike');
     };
-    
+
     /**
      * ## VisualTimer.doTimeUp
      *
@@ -441,7 +441,7 @@
 
         node.on('REALLY_DONE', function() {
             if(!that.gameTimer.isStopped()) {
-                that.startWaiting();   
+                that.startWaiting();
             }
        });
     };
@@ -499,58 +499,58 @@
         }
         return options;
     }
-    
+
     /**
      *  ## TimerBox
      *
      *  'TimerBox' represents a box wherein to display the timer.
      *  The options it can take are:
-     
+
      *  - hideTitle
      *  - hideBody
      *  - hideBox
      *  - title
      *  - classNameTitle
      *  - classNameBody
-     *  - timeLeft 
+     *  - timeLeft
      */
     function TimerBox(options) {
         /**
          *  ### boxDiv
-         *  
+         *
          *  The Div which will contain the title and body Divs
          */
         this.boxDiv = null;
-        
+
         /**
          *  ### titleDiv
-         *  
+         *
          *  The Div which will contain the title
          */
         this.titleDiv = null;
         /**
          *  ### bodyDiv
-         *  
+         *
          *  The Div which will contain the numbers
          */
         this.bodyDiv = null;
-        
+
         /**
          *  ### timeLeft
-         *  
+         *
          *  Used to store the last value before focus is taken away
          */
         this.timeLeft = null;
-                
+
         this.boxDiv = node.window.getDiv();
         this.titleDiv = node.window.addDiv(this.boxDiv);
         this.bodyDiv = node.window.addDiv(this.boxDiv);
-        
+
         this.init(options);
-    
+
     }
-    
-    TimerBox.prototype.init = function(options) {        
+
+    TimerBox.prototype.init = function(options) {
         if (options) {
             if (options.hideTitle) {
                 this.hideTitle();
@@ -566,7 +566,7 @@
             }
             if (options.hideBox) {
                 this.hideBox();
-            }   
+            }
             else {
                 this.unhideBox();
             }
@@ -575,12 +575,12 @@
         this.setTitle(options.title || '');
         this.setClassNameTitle(options.classNameTitle || '');
         this.setClassNameBody(options.classNameBody || '');
-        
+
         if(options.timeLeft) {
             this.timeLeft = options.timeLeft;
         }
     };
-    
+
     /**
      * ## hideBox
      *

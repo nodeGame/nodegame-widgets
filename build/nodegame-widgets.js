@@ -4368,13 +4368,11 @@
 
     "use strict";
 
-    // TODO: Introduce rules for update: other vs self
-
     node.widgets.register('StateBar', StateBar);
 
     // ## Meta-data
 
-    StateBar.version = '0.3.2';
+    StateBar.version = '0.4.0';
     StateBar.description =
         'Provides a simple interface to change the stage of a game.';
 
@@ -4753,11 +4751,12 @@
             options.hooks = [];
         }
 
-        // only push this hook once
+        // Only push this hook once.
         if (!this.isInitialized) {
             options.hooks.push({
                 hook: this.updateDisplay,
-                ctx: this
+                ctx: this,
+                name: 'VisualTimer.updateDisplay'
             });
         }
 
@@ -4829,7 +4828,7 @@
     /**
      *  ## VisualTimer.clear
      *
-     *  Reverts state of 'VisualTimer' to right after first initialization.
+     *  Reverts state of 'VisualTimer' to right after constructor call.
      *
      *  @param {object} options Configuration object
      *
@@ -4968,7 +4967,6 @@
         if(typeof options.waitBoxOptions === 'undefined') {
             options.waitBoxOptions = {};
         }
-        debugger
         options.mainBoxOptions.classNameBody = 'strike';
         options.mainBoxOptions.timeLeft = this.gameTimer.timeLeft || 0;
         options.activeBox = this.waitBox;
