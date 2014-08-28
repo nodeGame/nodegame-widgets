@@ -4561,6 +4561,7 @@
      * `VisualRound` displays information on the current and total rounds and
      * stages.
      *
+     * @param {object} options The options taken.
      * The options it can take are:
      *
      * - `stageOffset`: Stage displayed is the actual stage minus stageOffset.
@@ -4671,6 +4672,7 @@
      *
      * The options it can take are the same as `VisualRound` constructor.
      *
+     * @param {object} options The options taken.
      * @see VisualRound
      */
     VisualRound.prototype.init = function(options) {
@@ -4734,6 +4736,8 @@
      *
      * Assignes `this.strategy` to a `CombinedStrategy` based on the array of
      * style names provided.
+     *
+     * @param {array} styleNames Array of strings representing the names.
      */
     VisualRound.prototype.initStyle = function(styleNames) {
         var index, style, strategies;
@@ -4779,6 +4783,7 @@
      * reassignes `this.strategy` to a `CombinedStrategy` based on the
      * array of style names provided and activates this new strategy.
      *
+     * @param {array} styleNames Array of strings representing the names.
      * @see VisualRound.init
      */
     VisualRound.prototype.setStyle = function(styleNames) {
@@ -5776,6 +5781,7 @@
      * - waitBoxOptions: an option object to be passed to `TimerBox`
      * - mainBoxOptions: an option object to be passed to `TimerBox`
      *
+     * @param {object} options The options taken.
      * @see TimerBox
      * @see GameTimer
      */
@@ -6182,8 +6188,10 @@
      * ## TimerBox
      *
      * `TimerBox` represents a box wherein to display the timer.
+     *
+     * @param {object} options The options taken.
      * The options it can take are:
-
+     *
      * - `hideTitle`
      * - `hideBody`
      * - `hideBox`
