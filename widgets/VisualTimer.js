@@ -114,6 +114,7 @@
      * - waitBoxOptions: an option object to be passed to `TimerBox`
      * - mainBoxOptions: an option object to be passed to `TimerBox`
      *
+     * @param {object} options The options taken.
      * @see TimerBox
      * @see GameTimer
      */
