@@ -22,9 +22,6 @@
         <a href="#visualtimer%20widget%20for%20nodegame">VisualTimer widget for nodeGame</a>
       </div>
       <div class="heading h2">
-        <a href="#www.nodegame.org">www.nodegame.org</a>
-      </div>
-      <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
       <div class="heading h2">
@@ -49,7 +46,7 @@
         <a href="#isinitialized">isInitialized</a>
       </div>
       <div class="heading h2">
-        <a href="#visualtimer">VisualTimer</a>
+        <a href="#visualtimer.init">VisualTimer.init</a>
       </div>
       <div class="heading h2">
         <a href="#visualtimer.clear">VisualTimer.clear</a>
@@ -87,6 +84,9 @@
       <div class="heading h2">
         <a href="#processoptions">processOptions</a>
       </div>
+      <div class="heading h1">
+        <a href="#timerbox%20class">TimerBox Class</a>
+      </div>
       <div class="heading h2">
         <a href="#timerbox">TimerBox</a>
       </div>
@@ -103,31 +103,31 @@
         <a href="#timeleft">timeLeft</a>
       </div>
       <div class="heading h2">
-        <a href="#hidebox">hideBox</a>
+        <a href="#timerbox.hidebox">TimerBox.hideBox</a>
       </div>
       <div class="heading h2">
-        <a href="#unhidebox">unhideBox</a>
+        <a href="#timerbox.unhidebox">TimerBox.unhideBox</a>
       </div>
       <div class="heading h2">
-        <a href="#hidetitle">hideTitle</a>
+        <a href="#timerbox.hidetitle">TimerBox.hideTitle</a>
       </div>
       <div class="heading h2">
-        <a href="#unhidetitle">unhideTitle</a>
+        <a href="#timerbox.unhidetitle">TimerBox.unhideTitle</a>
       </div>
       <div class="heading h2">
-        <a href="#hidebody">hideBody</a>
+        <a href="#timerbox.hidebody">TimerBox.hideBody</a>
       </div>
       <div class="heading h2">
-        <a href="#unhidebody">unhideBody</a>
+        <a href="#timerbox.unhidebody">TimerBox.unhideBody</a>
       </div>
       <div class="heading h2">
-        <a href="#settitle">setTitle</a>
+        <a href="#timerbox.settitle">TimerBox.setTitle</a>
       </div>
       <div class="heading h2">
-        <a href="#setclassnametitle">setClassNameTitle</a>
+        <a href="#timerbox.setclassnametitle">TimerBox.setClassNameTitle</a>
       </div>
       <div class="heading h2">
-        <a href="#setclassnamebody">setClassNameBody</a>
+        <a href="#timerbox.setclassnamebody">TimerBox.setClassNameBody</a>
       </div>
     </div>
   </div>
@@ -149,17 +149,12 @@
 <p>Copyright(c) 2014 Stefano Balietti
 MIT Licensed</p>
   </div>
-  <div class="body"><p>Display a timer for the game. Timer can trigger events. 
+  <div class="body"><p>Display a timer for the game. Timer can trigger events.
 Only for countdown smaller than 1h.</p>
 
+<p>www.nodegame.org</p>
 
-<div class="pilwrap" id="www.nodegame.org">
-  <h2>
-    <a href="#www.nodegame.org" name="www.nodegame.org" class="pilcrow">&#182;</a>
-    www.nodegame.org
-  </h2>
-</div>
-
+<hr />
   </div>
 </div>
         </td>
@@ -187,7 +182,7 @@ Only for countdown smaller than 1h.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.4.0&#39;</span><span class="p">;</span>
+    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.0&#39;</span><span class="p">;</span>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display a timer for the game. Timer can &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;trigger events. Only for countdown smaller than 1h.&#39;</span><span class="p">;</span>
 
@@ -230,17 +225,31 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>'VisualTimer' displays and manages a 'GameTimer'
- The options it can take are:</p>
+  <div class="body"><p><code>VisualTimer</code> displays and manages a <code>GameTimer</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.
+The options it can take are:
 
 <ul>
-<li>any options that can be passed to a 'GameTimer'
-<ul><li>waitBoxOptions: an option object to be passed to 'TimerBox'</li>
-<li>mainBoxOptions: an option object to be passed to 'TimerBox'</li></ul></li>
-</ul>
-
-<p>@see TimerBox
- @see GameTimer</p>
+<li>any options that can be passed to a <code>GameTimer</code></li>
+<li>waitBoxOptions: an option object to be passed to <code>TimerBox</code></li>
+<li>mainBoxOptions: an option object to be passed to <code>TimerBox</code></li>
+</ul></span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">TimerBox</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTimer
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -266,14 +275,19 @@ Only for countdown smaller than 1h.</p>
 
   </div>
   <div class="body"><p>The timer which counts down the game time.</p>
-
-<p>@see node.timer.createTimer  </p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">node.timer.createTimer
+</span>
+    </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        
+
 
 </pre></div>
         </td>
@@ -289,15 +303,20 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>The 'TimerBox' which displays the main timer.</p>
-
-<p>@see TimerBox</p>
+  <div class="body"><p>The <code>TimerBox</code> which displays the main timer.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">TimerBox
+</span>
+    </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>   
-        
+        <span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
 
 </pre></div>
         </td>
@@ -313,15 +332,20 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>The 'TimerBox' which displays the wait timer.</p>
-
-<p>@see TimerBox         </p>
+  <div class="body"><p>The <code>TimerBox</code> which displays the wait timer.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">TimerBox
+</span>
+    </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">waitBox</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        
+
 
 </pre></div>
         </td>
@@ -337,18 +361,23 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>The 'TimerBox' in which to display the time.</p>
+  <div class="body"><p>The <code>TimerBox</code> in which to display the time.</p>
 
-<p>This variable is always a reference to either 'waitBox' or 
- 'mainBox'. </p>
-
-<p>@see TimerBox      </p>
+<p>This variable is always a reference to either <code>waitBox</code> or
+<code>mainBox</code>.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">TimerBox
+</span>
+    </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        
+
 
 </pre></div>
         </td>
@@ -364,7 +393,7 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>indicates whether the instance has been initializded already   </p>
+  <div class="body"><p>indicates whether the instance has been initializded already</p>
   </div>
 </div>
         </td>
@@ -372,7 +401,7 @@ Only for countdown smaller than 1h.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">isInitialized</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
     <span class="p">}</span>
-    
+
 
 </pre></div>
         </td>
@@ -380,34 +409,42 @@ Only for countdown smaller than 1h.</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="visualtimer">
+<div class="pilwrap" id="visualtimer.init">
   <h2>
-    <a href="#visualtimer" name="visualtimer" class="pilcrow">&#182;</a>
-    VisualTimer
+    <a href="#visualtimer.init" name="visualtimer.init" class="pilcrow">&#182;</a>
+    VisualTimer.init
   </h2>
 </div>
 
   </div>
   <div class="body"><p>Initializes the instance. When called again, adds options to current
- ones.</p>
+ones.</p>
 
 <p>The options it can take are:</p>
 
 <ul>
-<li>any options that can be passed to a 'GameTimer'
-<ul><li>waitBoxOptions: an option object to be passed to 'TimerBox'</li>
-<li>mainBoxOptions: an option object to be passed to 'TimerBox'</li></ul></li>
+<li>any options that can be passed to a <code>GameTimer</code></li>
+<li>waitBoxOptions: an option object to be passed to <code>TimerBox</code></li>
+<li>mainBoxOptions: an option object to be passed to <code>TimerBox</code></li>
 </ul>
-
-<p>@see TimerBox
- @see GameTimer</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">TimerBox</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTimer
+</span>
+    </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">t</span><span class="p">;</span>
-        
+
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
@@ -447,7 +484,7 @@ Only for countdown smaller than 1h.</p>
         <span class="p">}</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-        
+
         <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">;</span>
         <span class="nx">node</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;visualtimer&#39;</span><span class="p">,</span> <span class="p">{</span>
             <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
@@ -477,21 +514,21 @@ Only for countdown smaller than 1h.</p>
             <span class="p">}</span>
         <span class="p">});</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
-        
-        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        
+
         <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">,</span>
                 <span class="p">{</span><span class="nx">classNameBody</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">,</span> <span class="nx">hideTitle</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
         <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">,</span>
-                <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Max. wait timer&#39;</span><span class="p">,</span> 
+                <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Max. wait timer&#39;</span><span class="p">,</span>
                 <span class="nx">classNameTitle</span><span class="o">:</span> <span class="s1">&#39;waitTimerTitle&#39;</span><span class="p">,</span>
                 <span class="nx">classNameBody</span><span class="o">:</span> <span class="s1">&#39;waitTimerBody&#39;</span><span class="p">,</span> <span class="nx">hideBox</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
-                       
+
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TimerBox</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">);</span>
         <span class="p">}</span>
@@ -500,24 +537,24 @@ Only for countdown smaller than 1h.</p>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">waitBox</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">waitBox</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TimerBox</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">);</span>
-        <span class="p">}</span> 
+        <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">waitBox</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">);</span>
         <span class="p">}</span>
-        
-        <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span><span class="p">;</span>
-        
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span><span class="p">;</span>
+
         <span class="k">this</span><span class="p">.</span><span class="nx">isInitialized</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span><span class="p">.</span><span class="nx">boxDiv</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">waitBox</span><span class="p">.</span><span class="nx">boxDiv</span><span class="p">);</span>
-      
+
         <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
     <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -533,12 +570,30 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>Reverts state of 'VisualTimer' to right after constructor call.</p>
-
-<p>@param {object} options Configuration object</p>
-
-<p>@see node.timer.destroyTimer
- @see VisualTimer.init</p>
+  <div class="body"><p>Reverts state of <code>VisualTimer</code> to right after constructor call.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Configuration object</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">object</span>
+      <span>Old options.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">node.timer.destroyTimer</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualTimer.init
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -548,9 +603,9 @@ Only for countdown smaller than 1h.</p>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        
+
         <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">destroyTimer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">);</span>
-                
+
 
 </pre></div>
         </td>
@@ -583,10 +638,10 @@ Only for countdown smaller than 1h.</p>
 <p>----- as in constructor ----</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        
-        <span class="k">return</span> <span class="nx">oldOptions</span><span class="p">;</span>   
+
+        <span class="k">return</span> <span class="nx">oldOptions</span><span class="p">;</span>
     <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -602,9 +657,14 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>Changes 'activeBox' to display current time of 'gameTimer'</p>
-
-<p>@see TimerBox.bodyDiv      </p>
+  <div class="body"><p>Changes <code>activeBox</code> to display current time of <code>gameTimer</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">TimerBox.bodyDiv
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -638,15 +698,23 @@ Only for countdown smaller than 1h.</p>
 
   </div>
   <div class="body"><p>Starts the timer.</p>
-
-<p>@see VisualTimer.updateDisplay
- @see GameTimer.start</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualTimer.updateDisplay</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTimer.start
+</span>
+    </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>        
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
     <span class="p">};</span>
 
@@ -666,12 +734,27 @@ Only for countdown smaller than 1h.</p>
 
   </div>
   <div class="body"><p>Restarts the timer with new options</p>
-
-<p>@param {object} options Configuration object</p>
-
-<p>@see VisualTimer.init
- @see VisualTimer.start
- @see VisualTimer.stop</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Configuration object</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualTimer.init</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualTimer.start</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualTimer.stop
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -697,12 +780,24 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>Stops the timer display and stores the time left in 'activeBox.timeLeft'</p>
-
-<p>@param {object} options Configuration object</p>
-
-<p>@see GameTimer.isStopped
- @see GameTimer.stop</p>
+  <div class="body"><p>Stops the timer display and stores the time left in <code>activeBox.timeLeft</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Configuration object</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTimer.isStopped</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTimer.stop
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -711,7 +806,7 @@ Only for countdown smaller than 1h.</p>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">isStopped</span><span class="p">())</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span><span class="p">.</span><span class="nx">timeLeft</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">timeLeft</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
-        <span class="p">}</span>  
+        <span class="p">}</span>
     <span class="p">};</span>
 
 </pre></div>
@@ -728,12 +823,18 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>Switches the display of the 'gameTimer' into the 'TimerBox' 'box'.</p>
+  <div class="body"><p>Switches the display of the <code>gameTimer</code> into the <code>TimerBox</code> <code>box</code>.</p>
 
-<p>Stores 'gameTimer.timeLeft' into 'activeBox' and then switches
- 'activeBox' to reference 'box'.</p>
-
-<p>@param {TimerBox} box TimerBox in which to display 'gameTimer' time</p>
+<p>Stores <code>gameTimer.timeLeft</code> into <code>activeBox</code> and then switches
+<code>activeBox</code> to reference <code>box</code>.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">box</span>
+      <span class="dox_type">TimerBox</span>
+      <span>TimerBox in which to display <code>gameTimer</code> time</span>
+    </div>
   </div>
 </div>
         </td>
@@ -743,7 +844,7 @@ Only for countdown smaller than 1h.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">=</span> <span class="nx">box</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
     <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -759,12 +860,12 @@ Only for countdown smaller than 1h.</p>
 </div>
 
   </div>
-  <div class="body"><p>Changes the 'VisualTimer' appearance to a max. wait timer</p>
+  <div class="body"><p>Changes the <code>VisualTimer</code> appearance to a max. wait timer</p>
 
 <p>If options and/or options.milliseconds are undefined, the wait timer
-will start with the current time left on the 'gameTimer'. The mainBox
+will start with the current time left on the <code>gameTimer</code>. The mainBox
 will be striked out, the waitBox set active and unhidden. All other
-options are forwarded directly to 'VisualTimer.restart'.</p>
+options are forwarded directly to <code>VisualTimer.restart</code>.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -783,17 +884,17 @@ options are forwarded directly to 'VisualTimer.restart'.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">startWaiting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">timeLeft</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
         <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">.</span><span class="nx">classNameBody</span> <span class="o">=</span> <span class="s1">&#39;strike&#39;</span><span class="p">;</span>
@@ -802,7 +903,7 @@ options are forwarded directly to 'VisualTimer.restart'.</p>
         <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">.</span><span class="nx">hideBox</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">restart</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
     <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -818,11 +919,11 @@ options are forwarded directly to 'VisualTimer.restart'.</p>
 </div>
 
   </div>
-  <div class="body"><p>Changes the 'VisualTimer' appearance to a regular countdown</p>
+  <div class="body"><p>Changes the <code>VisualTimer</code> appearance to a regular countdown</p>
 
 <p>The mainBox will be unstriked and set active, the waitBox will be
-hidden. All other options are forwarded directly to 
-'VisualTimer.restart'.</p>
+hidden. All other options are forwarded directly to
+<code>VisualTimer.restart</code>.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -841,23 +942,23 @@ hidden. All other options are forwarded directly to
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">startTiming</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
         <span class="nx">options</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span><span class="p">;</span>
         <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">.</span><span class="nx">timeLeft</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">timeLeft</span> <span class="o">||</span> <span class="mi">0</span><span class="p">;</span>
         <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">.</span><span class="nx">hideBox</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">.</span><span class="nx">classNameBody</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">restart</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">restart</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
     <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -873,9 +974,14 @@ hidden. All other options are forwarded directly to
 </div>
 
   </div>
-  <div class="body"><p>Resumes the 'gameTimer'</p>
-
-<p>@see GameTimer.resume</p>
+  <div class="body"><p>Resumes the <code>gameTimer</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTimer.resume
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -883,7 +989,7 @@ hidden. All other options are forwarded directly to
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">resume</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">resume</span><span class="p">();</span>
     <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -899,9 +1005,14 @@ hidden. All other options are forwarded directly to
 </div>
 
   </div>
-  <div class="body"><p>stops 'gameTimer' and sets 'activeBox' to display '00:00'</p>
-
-<p>@see GameTimer.resume</p>
+  <div class="body"><p>stops <code>gameTimer</code> and sets <code>activeBox</code> to display <code>00:00</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTimer.resume
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -911,7 +1022,7 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;00:00&#39;</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span><span class="p">.</span><span class="nx">setClassNameBody</span><span class="p">(</span><span class="s1">&#39;strike&#39;</span><span class="p">);</span>
     <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -966,8 +1077,8 @@ hidden. All other options are forwarded directly to
         <span class="p">});</span>
 
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;REALLY_DONE&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">that</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">isStopped</span><span class="p">())</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">startWaiting</span><span class="p">();</span>   
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">that</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">isStopped</span><span class="p">())</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">startWaiting</span><span class="p">();</span>
             <span class="p">}</span>
        <span class="p">});</span>
     <span class="p">};</span>
@@ -1055,7 +1166,33 @@ hidden. All other options are forwarded directly to
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">options</span><span class="p">;</span>
     <span class="p">}</span>
-    
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="timerbox%20class">
+  <h1>
+    <a href="#timerbox%20class" name="timerbox%20class" class="pilcrow">&#182;</a>
+    TimerBox Class
+  </h1>
+</div>
+
+  </div>
+  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+
+<p>Represents a box wherin to display a <code>VisualTimer</code>.</p>
+
+<hr />
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
 
 </pre></div>
         </td>
@@ -1071,18 +1208,26 @@ hidden. All other options are forwarded directly to
 </div>
 
   </div>
-  <div class="body"><p>'TimerBox' represents a box wherein to display the timer.
- The options it can take are:</p>
+  <div class="body"><p><code>TimerBox</code> represents a box wherein to display the timer.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.
+The options it can take are:
 
 <ul>
-<li>hideTitle
-<ul><li>hideBody</li>
-<li>hideBox</li>
-<li>title</li>
-<li>classNameTitle</li>
-<li>classNameBody</li>
-<li>timeLeft </li></ul></li>
-</ul>
+<li><code>hideTitle</code></li>
+<li><code>hideBody</code></li>
+<li><code>hideBox</code></li>
+<li><code>title</code></li>
+<li><code>classNameTitle</code></li>
+<li><code>classNameBody</code></li>
+<li><code>timeLeft</code></li>
+</ul></span>
+    </div>
   </div>
 </div>
         </td>
@@ -1109,7 +1254,7 @@ hidden. All other options are forwarded directly to
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">boxDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        
+
 
 </pre></div>
         </td>
@@ -1152,7 +1297,7 @@ hidden. All other options are forwarded directly to
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        
+
 
 </pre></div>
         </td>
@@ -1174,16 +1319,16 @@ hidden. All other options are forwarded directly to
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">timeLeft</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-                
+
         <span class="k">this</span><span class="p">.</span><span class="nx">boxDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getDiv</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">boxDiv</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">boxDiv</span><span class="p">);</span>
-        
+
         <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-    
+
     <span class="p">}</span>
-    
-    <span class="nx">TimerBox</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>        
+
+    <span class="nx">TimerBox</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">hideTitle</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">hideTitle</span><span class="p">();</span>
@@ -1199,7 +1344,7 @@ hidden. All other options are forwarded directly to
             <span class="p">}</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">hideBox</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">hideBox</span><span class="p">();</span>
-            <span class="p">}</span>   
+            <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">unhideBox</span><span class="p">();</span>
             <span class="p">}</span>
@@ -1208,12 +1353,12 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">setClassNameTitle</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">classNameTitle</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">setClassNameBody</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">classNameBody</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
-        
-        <span class="k">if</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">timeLeft</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">timeLeft</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">timeLeft</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeLeft</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -1221,15 +1366,15 @@ hidden. All other options are forwarded directly to
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="hidebox">
+<div class="pilwrap" id="timerbox.hidebox">
   <h2>
-    <a href="#hidebox" name="hidebox" class="pilcrow">&#182;</a>
-    hideBox
+    <a href="#timerbox.hidebox" name="timerbox.hidebox" class="pilcrow">&#182;</a>
+    TimerBox.hideBox
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>hides entire 'TimerBox'</p>
+  <div class="body"><p>hides entire <code>TimerBox</code></p>
   </div>
 </div>
         </td>
@@ -1238,21 +1383,22 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">boxDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
     <span class="p">};</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="unhidebox">
+<div class="pilwrap" id="timerbox.unhidebox">
   <h2>
-    <a href="#unhidebox" name="unhidebox" class="pilcrow">&#182;</a>
-    unhideBox
+    <a href="#timerbox.unhidebox" name="timerbox.unhidebox" class="pilcrow">&#182;</a>
+    TimerBox.unhideBox
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>hides entire 'TimerBox'</p>
+  <div class="body"><p>hides entire <code>TimerBox</code></p>
   </div>
 </div>
         </td>
@@ -1261,21 +1407,22 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">boxDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="p">};</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="hidetitle">
+<div class="pilwrap" id="timerbox.hidetitle">
   <h2>
-    <a href="#hidetitle" name="hidetitle" class="pilcrow">&#182;</a>
-    hideTitle
+    <a href="#timerbox.hidetitle" name="timerbox.hidetitle" class="pilcrow">&#182;</a>
+    TimerBox.hideTitle
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>hides title of 'TimerBox'</p>
+  <div class="body"><p>hides title of <code>TimerBox</code></p>
   </div>
 </div>
         </td>
@@ -1284,21 +1431,22 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
     <span class="p">};</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="unhidetitle">
+<div class="pilwrap" id="timerbox.unhidetitle">
   <h2>
-    <a href="#unhidetitle" name="unhidetitle" class="pilcrow">&#182;</a>
-    unhideTitle
+    <a href="#timerbox.unhidetitle" name="timerbox.unhidetitle" class="pilcrow">&#182;</a>
+    TimerBox.unhideTitle
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>unhides title of 'TimerBox'</p>
+  <div class="body"><p>unhides title of <code>TimerBox</code></p>
   </div>
 </div>
         </td>
@@ -1307,21 +1455,22 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="p">};</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="hidebody">
+<div class="pilwrap" id="timerbox.hidebody">
   <h2>
-    <a href="#hidebody" name="hidebody" class="pilcrow">&#182;</a>
-    hideBody
+    <a href="#timerbox.hidebody" name="timerbox.hidebody" class="pilcrow">&#182;</a>
+    TimerBox.hideBody
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>hides body of 'TimerBox'</p>
+  <div class="body"><p>hides body of <code>TimerBox</code></p>
   </div>
 </div>
         </td>
@@ -1330,21 +1479,22 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
     <span class="p">};</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="unhidebody">
+<div class="pilwrap" id="timerbox.unhidebody">
   <h2>
-    <a href="#unhidebody" name="unhidebody" class="pilcrow">&#182;</a>
-    unhideBody
+    <a href="#timerbox.unhidebody" name="timerbox.unhidebody" class="pilcrow">&#182;</a>
+    TimerBox.unhideBody
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>unhides Body of 'TimerBox'</p>
+  <div class="body"><p>unhides Body of <code>TimerBox</code></p>
   </div>
 </div>
         </td>
@@ -1353,21 +1503,22 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="p">};</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="settitle">
+<div class="pilwrap" id="timerbox.settitle">
   <h2>
-    <a href="#settitle" name="settitle" class="pilcrow">&#182;</a>
-    setTitle
+    <a href="#timerbox.settitle" name="timerbox.settitle" class="pilcrow">&#182;</a>
+    TimerBox.setTitle
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>sets title of 'TimerBox'</p>
+  <div class="body"><p>sets title of <code>TimerBox</code></p>
   </div>
 </div>
         </td>
@@ -1376,21 +1527,22 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
     <span class="p">};</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="setclassnametitle">
+<div class="pilwrap" id="timerbox.setclassnametitle">
   <h2>
-    <a href="#setclassnametitle" name="setclassnametitle" class="pilcrow">&#182;</a>
-    setClassNameTitle
+    <a href="#timerbox.setclassnametitle" name="timerbox.setclassnametitle" class="pilcrow">&#182;</a>
+    TimerBox.setClassNameTitle
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>sets class name of title of 'TimerBox'</p>
+  <div class="body"><p>sets class name of title of <code>TimerBox</code></p>
   </div>
 </div>
         </td>
@@ -1399,21 +1551,22 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">className</span><span class="p">;</span>
     <span class="p">};</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="setclassnamebody">
+<div class="pilwrap" id="timerbox.setclassnamebody">
   <h2>
-    <a href="#setclassnamebody" name="setclassnamebody" class="pilcrow">&#182;</a>
-    setClassNameBody
+    <a href="#timerbox.setclassnamebody" name="timerbox.setclassnamebody" class="pilcrow">&#182;</a>
+    TimerBox.setClassNameBody
   </h2>
 </div>
 
   </div>
-  <div class="body"><p>sets class name of body of 'TimerBox'</p>
+  <div class="body"><p>sets class name of body of <code>TimerBox</code></p>
   </div>
 </div>
         </td>

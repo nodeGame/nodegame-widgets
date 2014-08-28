@@ -1,0 +1,2782 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VisualRound.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "widgets/VisualRound.js", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#visualround%20widget%20for%20nodegame">VisualRound widget for nodeGame</a>
+      </div>
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround">VisualRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#strategy">strategy</a>
+      </div>
+      <div class="heading h3">
+        <a href="#stager">stager</a>
+      </div>
+      <div class="heading h3">
+        <a href="#gameplot">gamePlot</a>
+      </div>
+      <div class="heading h3">
+        <a href="#curstage">curStage</a>
+      </div>
+      <div class="heading h3">
+        <a href="#totstage">totStage</a>
+      </div>
+      <div class="heading h3">
+        <a href="#curround">curRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#totround">totRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#stageoffset">stageOffset</a>
+      </div>
+      <div class="heading h3">
+        <a href="#oldstageid">oldStageId</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround.init">VisualRound.init</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround.updatedisplay">VisualRound.updateDisplay</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround.initstyle">VisualRound.initStyle</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround.setstyle">VisualRound.setStyle</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround.getstyle">VisualRound.getStyle</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround.activate">VisualRound.activate</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround.deactivate">VisualRound.deactivate</a>
+      </div>
+      <div class="heading h2">
+        <a href="#visualround.updateinformation">VisualRound.updateInformation</a>
+      </div>
+      <div class="heading h1">
+        <a href="#emptystrategy%20class">EmptyStrategy Class</a>
+      </div>
+      <div class="heading h2">
+        <a href="#emptystrategy">EmptyStrategy</a>
+      </div>
+      <div class="heading h3">
+        <a href="#name">name</a>
+      </div>
+      <div class="heading h3">
+        <a href="#visualround">visualRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h2">
+        <a href="#emptystrategy.init">EmptyStrategy.init</a>
+      </div>
+      <div class="heading h2">
+        <a href="#emptystrategy.updatedisplay">EmptyStrategy.updateDisplay</a>
+      </div>
+      <div class="heading h1">
+        <a href="#countupstages%20class">CountUpStages Class</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countupstages">CountUpStages</a>
+      </div>
+      <div class="heading h3">
+        <a href="#name">name</a>
+      </div>
+      <div class="heading h3">
+        <a href="#visualround">visualRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h3">
+        <a href="#curstagenumber">curStageNumber</a>
+      </div>
+      <div class="heading h3">
+        <a href="#totstagenumber">totStageNumber</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countupstages.init">CountUpStages.init</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countupstages.updatedisplay">CountUpStages.updateDisplay</a>
+      </div>
+      <div class="heading h1">
+        <a href="#countdownstages%20class">CountDownStages Class</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countdownstages">CountDownStages</a>
+      </div>
+      <div class="heading h3">
+        <a href="#name">name</a>
+      </div>
+      <div class="heading h3">
+        <a href="#visualround">visualRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h3">
+        <a href="#stagesleft">stagesLeft</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countdownstages.init">CountDownStages.init</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countdownstages.updatedisplay">CountDownStages.updateDisplay</a>
+      </div>
+      <div class="heading h1">
+        <a href="#countuprounds%20class">CountUpRounds Class</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countuprounds">CountUpRounds</a>
+      </div>
+      <div class="heading h3">
+        <a href="#name">name</a>
+      </div>
+      <div class="heading h3">
+        <a href="#visualround">visualRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h3">
+        <a href="#curroundnumber">curRoundNumber</a>
+      </div>
+      <div class="heading h3">
+        <a href="#totroundnumber">totRoundNumber</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countuprounds.init">CountUpRounds.init</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countuprounds.updatedisplay">CountUpRounds.updateDisplay</a>
+      </div>
+      <div class="heading h1">
+        <a href="#countdownrounds%20class">CountDownRounds Class</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countdownrounds">CountDownRounds</a>
+      </div>
+      <div class="heading h3">
+        <a href="#name">name</a>
+      </div>
+      <div class="heading h3">
+        <a href="#visualround">visualRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h3">
+        <a href="#roundsleft">roundsLeft</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countdownrounds.init">CountDownRounds.init</a>
+      </div>
+      <div class="heading h2">
+        <a href="#countdownrounds.updatedisplay">CountDownRounds.updateDisplay</a>
+      </div>
+      <div class="heading h1">
+        <a href="#combinedstrategy%20class">CombinedStrategy Class</a>
+      </div>
+      <div class="heading h2">
+        <a href="#combinedstrategy">CombinedStrategy</a>
+      </div>
+      <div class="heading h3">
+        <a href="#name">name</a>
+      </div>
+      <div class="heading h3">
+        <a href="#visualround">visualRound</a>
+      </div>
+      <div class="heading h3">
+        <a href="#strategies">strategies</a>
+      </div>
+      <div class="heading h3">
+        <a href="#displaydiv">displayDiv</a>
+      </div>
+      <div class="heading h2">
+        <a href="#combinedstrategy.init">CombinedStrategy.init</a>
+      </div>
+      <div class="heading h2">
+        <a href="#combinedstrategy.updatedisplay">CombinedStrategy.updateDisplay</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround%20widget%20for%20nodegame">
+  <h1>
+    <a href="#visualround%20widget%20for%20nodegame" name="visualround%20widget%20for%20nodegame" class="pilcrow">&#182;</a>
+    VisualRound widget for nodeGame
+  </h1>
+</div>
+
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Display number of current round and/or stage.
+Can also display countdown and total number of rounds and/or stages.</p>
+
+<p>www.nodegame.org</p>
+
+<hr />
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;VisualRound&#39;</span><span class="p">,</span><span class="nx">VisualRound</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
+    Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">;</span>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display number of current round and/or stage.&#39;</span> <span class="o">+</span>
+        <span class="s1">&#39;Can also display countdown and total number of rounds and/or stages.&#39;</span><span class="p">;</span>
+
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Round and Stage info&#39;</span><span class="p">;</span>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;visualround&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
+    Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">GamePlot</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround">
+  <h2>
+    <a href="#visualround" name="visualround" class="pilcrow">&#182;</a>
+    VisualRound
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>VisualRound</code> displays information on the current and total rounds and
+stages.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.
+The options it can take are:
+
+<ul>
+<li><code>stageOffset</code>: Stage displayed is the actual stage minus stageOffset.</li>
+<li><code>flexibleMode</code>: Set <code>true</code>, if number of rounds and/or stages can
+change dynamically.</li>
+<li><code>curStage</code>: When (re)starting in <code>flexibleMode</code>, you can set the current
+stage.</li>
+<li><code>curRound</code>: When (re)starting in <code>flexibleMode</code>, you can set the current
+round.</li>
+<li><code>totStage</code>: When (re)starting in <code>flexibleMode</code>, you can set the total
+number of stages.</li>
+<li><code>totRound</code>: When (re)starting in <code>flexibleMode</code>, you can set the total
+number of rounds.</li>
+<li><code>oldStageId</code>: When (re)starting in <code>flexibleMode</code>, you can pass the id
+of the current stage.</li>
+<li><code>style</code>: Array of strings. Determines the display style of the widget.
+Currently available styles are:</li>
+<li><ul><li><code>COUNT_UP_STAGES</code>: Display only current stage number.</li></ul></li>
+<li><ul><li><code>COUNT_UP_ROUNDS</code>: Display only current round number.</li></ul></li>
+<li><ul><li><code>COUNT_UP_STAGES_TO_TOTAL</code>: Display current and total stage number.</li></ul></li>
+<li><ul><li><code>COUNT_UP_ROUNDS_TO_TOTAL</code>: Display current and total round number.</li></ul></li>
+<li><ul><li><code>COUNT_DOWN_STAGES</code>: Display number of stages left to play.</li></ul></li>
+<li><ul><li>`COUNT_DOWN_ROUNDS: Display number of rounds left in this stage.</li></ul></li>
+</ul></span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameStager</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GamePlot
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">VisualRound</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="strategy">
+  <h3>
+    <a href="#strategy" name="strategy" class="pilcrow">&#182;</a>
+    strategy
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Strategy which determines information displayed. Set through
+<code>VisualRound.setStyle</code> using a string to describe the strategy.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.setStyle
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">strategy</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="stager">
+  <h3>
+    <a href="#stager" name="stager" class="pilcrow">&#182;</a>
+    stager
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p><code>GameStager</code> object to provide stage and round information.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameStager
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">stager</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gameplot">
+  <h3>
+    <a href="#gameplot" name="gameplot" class="pilcrow">&#182;</a>
+    gamePlot
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p><code>GamePlot</code> object to provide stage and round information.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GamePlot
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="curstage">
+  <h3>
+    <a href="#curstage" name="curstage" class="pilcrow">&#182;</a>
+    curStage
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Number of the current stage.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="totstage">
+  <h3>
+    <a href="#totstage" name="totstage" class="pilcrow">&#182;</a>
+    totStage
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Total number of stages. Might be null if in <code>flexibleMode</code>.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="curround">
+  <h3>
+    <a href="#curround" name="curround" class="pilcrow">&#182;</a>
+    curRound
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Number of the current round.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="totround">
+  <h3>
+    <a href="#totround" name="totround" class="pilcrow">&#182;</a>
+    totRound
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Total number of rounds. Might be null if in <code>flexibleMode</code>.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="stageoffset">
+  <h3>
+    <a href="#stageoffset" name="stageoffset" class="pilcrow">&#182;</a>
+    stageOffset
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Stage displayed is the actual stage minus stageOffset.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="oldstageid">
+  <h3>
+    <a href="#oldstageid" name="oldstageid" class="pilcrow">&#182;</a>
+    oldStageId
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Stage id of the previous stage. Needed in <code>flexibleMode</code> to count
+    rounds.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround.init">
+  <h2>
+    <a href="#visualround.init" name="visualround.init" class="pilcrow">&#182;</a>
+    VisualRound.init
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes the instance. When called again, adds options to current
+ones.</p>
+
+<p>The options it can take are the same as <code>VisualRound</code> constructor.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="p">}</span>
+
+        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">stageOffset</span> <span class="o">||</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">flexibleMode</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">stageOffset</span> <span class="o">||</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">totStage</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">totRound</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">oldStageId</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">stager</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">.</span><span class="nx">stager</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateInformation</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">style</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">initStyle</span><span class="p">([</span><span class="s1">&#39;COUNT_UP_ROUNDS_TO_TOTAL&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;COUNT_UP_STAGES_TO_TOTAL&#39;</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">initStyle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">style</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">};</span>
+
+     <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">activate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">strategy</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround.updatedisplay">
+  <h2>
+    <a href="#visualround.updatedisplay" name="visualround.updatedisplay" class="pilcrow">&#182;</a>
+    VisualRound.updateDisplay
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Updates the values displayed by forwarding the call to this.strategy.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">strategy</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">strategy</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround.initstyle">
+  <h2>
+    <a href="#visualround.initstyle" name="visualround.initstyle" class="pilcrow">&#182;</a>
+    VisualRound.initStyle
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Assignes <code>this.strategy</code> to a <code>CombinedStrategy</code> based on the array of
+style names provided.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">styleNames</span>
+      <span class="dox_type">array</span>
+      <span>Array of strings representing the names.</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">initStyle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">styleNames</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">style</span><span class="p">,</span> <span class="nx">strategies</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>Build compound name.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">style</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="nx">styleNames</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">style</span> <span class="o">+=</span> <span class="nx">styleNames</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">style</span> <span class="o">=</span> <span class="nx">style</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">style</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+        <span class="nx">strategies</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="nx">styleNames</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="nx">styleNames</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">case</span> <span class="s1">&#39;COUNT_UP_STAGES_TO_TOTAL&#39;</span><span class="o">:</span>
+                    <span class="nx">strategies</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpStages</span><span class="p">(</span><span class="k">this</span><span class="p">,{</span><span class="nx">toTotal</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="s1">&#39;COUNT_UP_STAGES&#39;</span><span class="o">:</span>
+                    <span class="nx">strategies</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpStages</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="s1">&#39;COUNT_DOWN_STAGES&#39;</span><span class="o">:</span>
+                    <span class="nx">strategies</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountDownStages</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="s1">&#39;COUNT_UP_ROUNDS_TO_TOTAL&#39;</span><span class="o">:</span>
+                    <span class="nx">strategies</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpRounds</span><span class="p">(</span><span class="k">this</span><span class="p">,{</span><span class="nx">toTotal</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="s1">&#39;COUNT_UP_ROUNDS&#39;</span><span class="o">:</span>
+                    <span class="nx">strategies</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpRounds</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="s1">&#39;COUNT_DOWN_ROUNDS&#39;</span><span class="o">:</span>
+                    <span class="nx">strategies</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountDownRounds</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">strategy</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CombinedStrategy</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">strategies</span><span class="p">);</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround.setstyle">
+  <h2>
+    <a href="#visualround.setstyle" name="visualround.setstyle" class="pilcrow">&#182;</a>
+    VisualRound.setStyle
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>If and only if styleNames does not define the same strategy as
+<code>this.strategy</code>, this function deactivates <code>this.strategy</code>,
+reassignes <code>this.strategy</code> to a <code>CombinedStrategy</code> based on the
+array of style names provided and activates this new strategy.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">styleNames</span>
+      <span class="dox_type">array</span>
+      <span>Array of strings representing the names.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.init
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setStyle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">styleNames</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">style</span><span class="p">,</span> <span class="nx">strategies</span><span class="p">;</span>
+
+        <span class="nx">style</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="nx">styleNames</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">style</span> <span class="o">+=</span> <span class="nx">styleNames</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">style</span> <span class="o">=</span> <span class="nx">style</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">style</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">style</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">strategy</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">deactivate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">strategy</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">initStyle</span><span class="p">(</span><span class="nx">styleNames</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">activate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">strategy</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround.getstyle">
+  <h2>
+    <a href="#visualround.getstyle" name="visualround.getstyle" class="pilcrow">&#182;</a>
+    VisualRound.getStyle
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Returns name of current style.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">string</span>
+      <span>Name of current style.</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getStyle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">strategy</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround.activate">
+  <h2>
+    <a href="#visualround.activate" name="visualround.activate" class="pilcrow">&#182;</a>
+    VisualRound.activate
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Appends the displayDiv of the given strategy to <code>this.bodyDiv</code>. Calls
+<code>strategy.activate</code> if it is defined.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">strategy</span>
+      <span class="dox_type">object</span>
+      <span>Strategy to activate.</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">activate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">strategy</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">strategy</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">strategy</span><span class="p">.</span><span class="nx">activate</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">strategy</span><span class="p">.</span><span class="nx">activate</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround.deactivate">
+  <h2>
+    <a href="#visualround.deactivate" name="visualround.deactivate" class="pilcrow">&#182;</a>
+    VisualRound.deactivate
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Removes the displayDiv of the given strategy from <code>this.bodyDiv</code>. Calls
+<code>strategy.deactivate</code> if it is defined.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">strategy</span>
+      <span class="dox_type">object</span>
+      <span>Strategy to deactivate.</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">deactivate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">strategy</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">strategy</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">strategy</span><span class="p">.</span><span class="nx">deactivate</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">strategy</span><span class="p">.</span><span class="nx">deactivate</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;STEP_CALLBACK_EXECUTED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">updateInformation</span><span class="p">();</span>
+        <span class="p">});</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
+<p>TODO: Game over and init?</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround.updateinformation">
+  <h2>
+    <a href="#visualround.updateinformation" name="visualround.updateinformation" class="pilcrow">&#182;</a>
+    VisualRound.updateInformation
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Updates information about rounds and stages and updates the display.</p>
+
+<p>Updates curRound, curStage, totRound, totStage, oldStageId and calls
+<code>VisualRound.updateDisplay</code>.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateInformation</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">idseq</span><span class="p">,</span> <span class="nx">stage</span><span class="p">;</span>
+        <span class="nx">stage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">.</span><span class="nx">getStage</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>Flexible mode</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">flexibleMode</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">id</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span> <span class="o">=</span> <span class="nx">stage</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+</div>
+<p>Normal mode</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">else</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>Extracts only id attribute from array of objects</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">idseq</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span><span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">id</span><span class="p">;});</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>Every round has an identifier</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">=</span> <span class="nx">idseq</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span><span class="k">return</span> <span class="nx">obj</span><span class="p">;}).</span><span class="nx">length</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">round</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="nx">idseq</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">num</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">-=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="emptystrategy%20class">
+  <h1>
+    <a href="#emptystrategy%20class" name="emptystrategy%20class" class="pilcrow">&#182;</a>
+    EmptyStrategy Class
+  </h1>
+</div>
+
+  </div>
+  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+
+<p>Defines a strategy for the <code>VisualRound</code> which displays nothing.</p>
+
+<hr />
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="emptystrategy">
+  <h2>
+    <a href="#emptystrategy" name="emptystrategy" class="pilcrow">&#182;</a>
+    EmptyStrategy
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Display strategy which contains the bare minumum. Displays nothing.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">visualRound</span>
+      <span class="dox_type">VisualRound</span>
+      <span>The <code>VisualRound</code> object to which the
+    strategy belongs</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">EmptyStrategy</span><span class="p">(</span><span class="nx">visualRound</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="name">
+  <h3>
+    <a href="#name" name="name" class="pilcrow">&#182;</a>
+    name
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The name of the strategy also refered to as the name of the style</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;EMPTY&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround">
+  <h3>
+    <a href="#visualround" name="visualround" class="pilcrow">&#182;</a>
+    visualRound
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The <code>VisualRound</code> object to which the strategy belongs.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span> <span class="o">=</span> <span class="nx">visualRound</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the information is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="emptystrategy.init">
+  <h2>
+    <a href="#emptystrategy.init" name="emptystrategy.init" class="pilcrow">&#182;</a>
+    EmptyStrategy.init
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes instance.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">EmptyStrategy.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">EmptyStrategy</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getDiv</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;rounddiv&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="emptystrategy.updatedisplay">
+  <h2>
+    <a href="#emptystrategy.updatedisplay" name="emptystrategy.updatedisplay" class="pilcrow">&#182;</a>
+    EmptyStrategy.updateDisplay
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Does nothing.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">EmptyStrategy</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countupstages%20class">
+  <h1>
+    <a href="#countupstages%20class" name="countupstages%20class" class="pilcrow">&#182;</a>
+    CountUpStages Class
+  </h1>
+</div>
+
+  </div>
+  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+
+<p>Defines a strategy for the <code>VisualRound</code> which displays the current
+and possibly the total number of stages.</p>
+
+<hr />
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countupstages">
+  <h2>
+    <a href="#countupstages" name="countupstages" class="pilcrow">&#182;</a>
+    CountUpStages
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Display strategy which displays the current and possibly the total
+number of stages.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">visualRound</span>
+      <span class="dox_type">VisualRound</span>
+      <span>The <code>VisualRound</code> object to which the
+    strategy belongs</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken. If <code>options.toTotal == true</code>,
+    then the total number of stages is displayed.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">CountUpStages</span><span class="p">(</span><span class="nx">visualRound</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="name">
+  <h3>
+    <a href="#name" name="name" class="pilcrow">&#182;</a>
+    name
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The name of the strategy also refered to as the name of the style</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;COUNT_UP_STAGES&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">toTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+=</span> <span class="s1">&#39;_TO_TOTAL&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround">
+  <h3>
+    <a href="#visualround" name="visualround" class="pilcrow">&#182;</a>
+    visualRound
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The <code>VisualRound</code> object to which the strategy belongs.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span> <span class="o">=</span> <span class="nx">visualRound</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the information is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="curstagenumber">
+  <h3>
+    <a href="#curstagenumber" name="curstagenumber" class="pilcrow">&#182;</a>
+    curStageNumber
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The span in which the current stage number is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curStageNumber</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="totstagenumber">
+  <h3>
+    <a href="#totstagenumber" name="totstagenumber" class="pilcrow">&#182;</a>
+    totStageNumber
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The element in which the total stage number is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">totStageNumber</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the title is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The span in which the text <code>of</code> is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">textDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countupstages.init">
+  <h2>
+    <a href="#countupstages.init" name="countupstages.init" class="pilcrow">&#182;</a>
+    CountUpStages.init
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes instance.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken. If <code>options.toTotal == true</code>,
+    then the total number of stages is displayed.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">CountUpStages.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CountUpStages</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getDiv</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;stagediv&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;title&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Stage:&#39;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">toTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curStageNumber</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curStageNumber</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curStageNumber</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curStageNumber</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">toTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">textDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">textDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">textDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39; of &#39;</span><span class="p">;</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStageNumber</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStageNumber</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countupstages.updatedisplay">
+  <h2>
+    <a href="#countupstages.updatedisplay" name="countupstages.updatedisplay" class="pilcrow">&#182;</a>
+    CountUpStages.updateDisplay
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Updates the content of <code>curStageNumber</code> and <code>totStageNumber</code> according
+to <code>visualRound</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CountUpStages</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curStageNumber</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">curStage</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">toTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStageNumber</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">||</span> <span class="s1">&#39;?&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countdownstages%20class">
+  <h1>
+    <a href="#countdownstages%20class" name="countdownstages%20class" class="pilcrow">&#182;</a>
+    CountDownStages Class
+  </h1>
+</div>
+
+  </div>
+  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+
+<p>Defines a strategy for the <code>VisualRound</code> which displays the remaining
+number of stages.</p>
+
+<hr />
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countdownstages">
+  <h2>
+    <a href="#countdownstages" name="countdownstages" class="pilcrow">&#182;</a>
+    CountDownStages
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Display strategy which displays the remaining number of stages.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">visualRound</span>
+      <span class="dox_type">VisualRound</span>
+      <span>The <code>VisualRound</code> object to which the
+    strategy belongs</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">CountDownStages</span><span class="p">(</span><span class="nx">visualRound</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="name">
+  <h3>
+    <a href="#name" name="name" class="pilcrow">&#182;</a>
+    name
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The name of the strategy also refered to as the name of the style</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;COUNT_DOWN_STAGES&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround">
+  <h3>
+    <a href="#visualround" name="visualround" class="pilcrow">&#182;</a>
+    visualRound
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The <code>VisualRound</code> object to which the strategy belongs.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span> <span class="o">=</span> <span class="nx">visualRound</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the information is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="stagesleft">
+  <h3>
+    <a href="#stagesleft" name="stagesleft" class="pilcrow">&#182;</a>
+    stagesLeft
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the number stages left is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">stagesLeft</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the title is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countdownstages.init">
+  <h2>
+    <a href="#countdownstages.init" name="countdownstages.init" class="pilcrow">&#182;</a>
+    CountDownStages.init
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes instance.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">CountDownStages.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CountDownStages</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getDiv</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;stagediv&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;title&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Stages left: &#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">stagesLeft</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">stagesLeft</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countdownstages.updatedisplay">
+  <h2>
+    <a href="#countdownstages.updatedisplay" name="countdownstages.updatedisplay" class="pilcrow">&#182;</a>
+    CountDownStages.updateDisplay
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Updates the content of <code>stagesLeft</code> according to <code>visualRound</code>.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CountDownStages</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">curStage</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">stagesLeft</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">stagesLeft</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span>
+                <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">curStage</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;?&#39;</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countuprounds%20class">
+  <h1>
+    <a href="#countuprounds%20class" name="countuprounds%20class" class="pilcrow">&#182;</a>
+    CountUpRounds Class
+  </h1>
+</div>
+
+  </div>
+  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+
+<p>Defines a strategy for the <code>VisualRound</code> which displays the current
+and possibly the total number of rounds.</p>
+
+<hr />
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countuprounds">
+  <h2>
+    <a href="#countuprounds" name="countuprounds" class="pilcrow">&#182;</a>
+    CountUpRounds
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Display strategy which displays the current and possibly the total
+number of rounds.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">visualRound</span>
+      <span class="dox_type">VisualRound</span>
+      <span>The <code>VisualRound</code> object to which the
+    strategy belongs</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken. If <code>options.toTotal == true</code>,
+    then the total number of rounds is displayed.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">CountUpRounds</span><span class="p">(</span><span class="nx">visualRound</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="name">
+  <h3>
+    <a href="#name" name="name" class="pilcrow">&#182;</a>
+    name
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The name of the strategy also refered to as the name of the style</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;COUNT_UP_ROUNDS&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">toTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+=</span> <span class="s1">&#39;_TO_TOTAL&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround">
+  <h3>
+    <a href="#visualround" name="visualround" class="pilcrow">&#182;</a>
+    visualRound
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The <code>VisualRound</code> object to which the strategy belongs.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span> <span class="o">=</span> <span class="nx">visualRound</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the information is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="curroundnumber">
+  <h3>
+    <a href="#curroundnumber" name="curroundnumber" class="pilcrow">&#182;</a>
+    curRoundNumber
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The span in which the current round number is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curRoundNumber</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="totroundnumber">
+  <h3>
+    <a href="#totroundnumber" name="totroundnumber" class="pilcrow">&#182;</a>
+    totRoundNumber
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The element in which the total round number is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">totRoundNumber</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the title is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The span in which the text <code>of</code> is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">textDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countuprounds.init">
+  <h2>
+    <a href="#countuprounds.init" name="countuprounds.init" class="pilcrow">&#182;</a>
+    CountUpRounds.init
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes instance.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken. If <code>options.toTotal == true</code>,
+    then the total number of rounds is displayed.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">CountUpRounds.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CountUpRounds</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getDiv</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;rounddiv&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;title&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Round:&#39;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">toTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curRoundNumber</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curRoundNumber</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curRoundNumber</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curRoundNumber</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">toTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">textDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">textDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">textDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39; of &#39;</span><span class="p">;</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">totRoundNumber</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totRoundNumber</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countuprounds.updatedisplay">
+  <h2>
+    <a href="#countuprounds.updatedisplay" name="countuprounds.updatedisplay" class="pilcrow">&#182;</a>
+    CountUpRounds.updateDisplay
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Updates the content of <code>curRoundNumber</code> and <code>totRoundNumber</code> according
+to <code>visualRound</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CountUpRounds</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">curRoundNumber</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">curRound</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">toTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totRoundNumber</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">||</span> <span class="s1">&#39;?&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countdownrounds%20class">
+  <h1>
+    <a href="#countdownrounds%20class" name="countdownrounds%20class" class="pilcrow">&#182;</a>
+    CountDownRounds Class
+  </h1>
+</div>
+
+  </div>
+  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+
+<p>Defines a strategy for the <code>VisualRound</code> which displays the remaining
+number of rounds.</p>
+
+<hr />
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countdownrounds">
+  <h2>
+    <a href="#countdownrounds" name="countdownrounds" class="pilcrow">&#182;</a>
+    CountDownRounds
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Display strategy which displays the remaining number of rounds.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">visualRound</span>
+      <span class="dox_type">VisualRound</span>
+      <span>The <code>VisualRound</code> object to which the
+    strategy belongs</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">CountDownRounds</span><span class="p">(</span><span class="nx">visualRound</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="name">
+  <h3>
+    <a href="#name" name="name" class="pilcrow">&#182;</a>
+    name
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The name of the strategy also refered to as the name of the style</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;COUNT_DOWN_ROUNDS&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround">
+  <h3>
+    <a href="#visualround" name="visualround" class="pilcrow">&#182;</a>
+    visualRound
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The <code>VisualRound</code> object to which the strategy belongs.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span> <span class="o">=</span> <span class="nx">visualRound</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the information is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="roundsleft">
+  <h3>
+    <a href="#roundsleft" name="roundsleft" class="pilcrow">&#182;</a>
+    roundsLeft
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the number rounds left is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">roundsLeft</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the title is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countdownrounds.init">
+  <h2>
+    <a href="#countdownrounds.init" name="countdownrounds.init" class="pilcrow">&#182;</a>
+    CountDownRounds.init
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes instance.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">CountDownRounds.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CountDownRounds</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getDiv</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;rounddiv&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;title&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">titleDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Round left: &#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">roundsLeft</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">roundsLeft</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="countdownrounds.updatedisplay">
+  <h2>
+    <a href="#countdownrounds.updatedisplay" name="countdownrounds.updatedisplay" class="pilcrow">&#182;</a>
+    CountDownRounds.updateDisplay
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Updates the content of <code>roundsLeft</code> according to <code>visualRound</code>.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CountDownRounds</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">curRound</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">roundsLeft</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">roundsLeft</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span>
+                <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span><span class="p">.</span><span class="nx">curRound</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;?&#39;</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="combinedstrategy%20class">
+  <h1>
+    <a href="#combinedstrategy%20class" name="combinedstrategy%20class" class="pilcrow">&#182;</a>
+    CombinedStrategy Class
+  </h1>
+</div>
+
+  </div>
+  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+
+<p>Defines a strategy for the <code>VisualRound</code> which displays the information
+according to multiple strategies.</p>
+
+<hr />
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="combinedstrategy">
+  <h2>
+    <a href="#combinedstrategy" name="combinedstrategy" class="pilcrow">&#182;</a>
+    CombinedStrategy
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Display strategy which combines multiple other display strategies.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">visualRound</span>
+      <span class="dox_type">VisualRound</span>
+      <span>The <code>VisualRound</code> object to which the
+    strategy belongs</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">strategies</span>
+      <span class="dox_type">array</span>
+      <span>Array of strategies to be used in combination.</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">CombinedStrategy</span><span class="p">(</span><span class="nx">visualRound</span><span class="p">,</span> <span class="nx">strategies</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">index</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="name">
+  <h3>
+    <a href="#name" name="name" class="pilcrow">&#182;</a>
+    name
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The name of the strategy also refered to as the name of the style</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="nx">strategies</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+=</span> <span class="nx">strategies</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualround">
+  <h3>
+    <a href="#visualround" name="visualround" class="pilcrow">&#182;</a>
+    visualRound
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The <code>VisualRound</code> object to which the strategy belongs.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">visualRound</span> <span class="o">=</span> <span class="nx">visualRound</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="strategies">
+  <h3>
+    <a href="#strategies" name="strategies" class="pilcrow">&#182;</a>
+    strategies
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The array of strategies to be used in combination.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">strategies</span> <span class="o">=</span> <span class="nx">strategies</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="displaydiv">
+  <h3>
+    <a href="#displaydiv" name="displaydiv" class="pilcrow">&#182;</a>
+    displayDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which the information is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="combinedstrategy.init">
+  <h2>
+    <a href="#combinedstrategy.init" name="combinedstrategy.init" class="pilcrow">&#182;</a>
+    CombinedStrategy.init
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes instance.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>The options taken.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">CombinedStrategy.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+     <span class="nx">CombinedStrategy</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">index</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getDiv</span><span class="p">();</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">strategies</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">strategies</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">displayDiv</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="combinedstrategy.updatedisplay">
+  <h2>
+    <a href="#combinedstrategy.updatedisplay" name="combinedstrategy.updatedisplay" class="pilcrow">&#182;</a>
+    CombinedStrategy.updateDisplay
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Calls <code>updateDisplay</code> for all strategies in the combination.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualRound.updateDisplay
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">CombinedStrategy</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">index</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">strategies</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">strategies</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">updateDisplay</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
