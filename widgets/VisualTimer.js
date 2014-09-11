@@ -39,7 +39,7 @@
      *
      * `VisualTimer` displays and manages a `GameTimer`
      *
-     * @param {object} options The options taken.
+     * @param @param {object} options Optional. Configuration options
      * The options it can take are:
      *
      * - any options that can be passed to a `GameTimer`
@@ -114,7 +114,7 @@
      * - waitBoxOptions: an option object to be passed to `TimerBox`
      * - mainBoxOptions: an option object to be passed to `TimerBox`
      *
-     * @param {object} options The options taken.
+     * @param @param {object} options Optional. Configuration options
      * @see TimerBox
      * @see GameTimer
      */
@@ -522,7 +522,7 @@
      *
      * `TimerBox` represents a box wherein to display the timer.
      *
-     * @param {object} options The options taken.
+     * @param @param {object} options Optional. Configuration options
      * The options it can take are:
      *
      * - `hideTitle`
