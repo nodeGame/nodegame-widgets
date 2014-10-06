@@ -3,7 +3,8 @@
 
     node.widgets.register('LanguageSelector', LanguageSelector);
 
-    var J = node.JSUS;
+    var J = node.JSUS,
+        game = node.game;
 
     // ## Meta-data
 
@@ -16,13 +17,14 @@
     // ## Dependencies
 
     LanguageSelector.dependencies = {
-        JSUS: {}
+        JSUS: {},
+        Game: {}
     };
 
     function LanguageSelector(options) {
         this.options = options;
 
-        this.availableLanguages = null;
+        this.availableLanguages = game.availableLanguages;
         this.displayForm = null;
         this.buttonLabels = [];
         this.buttons = [];
@@ -34,17 +36,28 @@
     }
 
     LanguageSelector.prototype.init = function(options) {
-        var i = 0;
+        var that = this;
 
         J.mixout(options, this.options);
         this.options = options;
 
-        this.updateAvalaibleLanguages(options);
-
         // Display initialization.
         this.displayForm = node.window.getElement('form','radioButtonForm');
 
-        debugger
+        if (game.languageLoaded) { debugger
+            this.languageInit(this.options);
+        }
+        else { debugger
+            game.onLanguageLoaded = function() {
+                game.languageLoaded = true;
+                that.languageInit(this.options);
+            };
+        }
+    };
+
+    LanguageSelector.prototype.languageInit = function(options) {
+        var i = 0;
+
         for(i = 0; i < this.availableLanguages.length; ++i) {
 
             this.buttonLabels[i] = node.window.getElement('label', 'label' + i,
@@ -81,7 +94,7 @@
                 function(obj){return obj[property];}).indexOf(value));
             return;
         }
-
+        debugger
         // Uncheck current language button and change className of label.
         if (this.currentLanguageIndex !== null &&
             this.currentLanguageIndex !== arguments[0] ) {
@@ -110,37 +123,10 @@
     LanguageSelector.prototype.updateAvalaibleLanguages = function(options) {
         var that = this;
 
-        // TODO:Synchronize
-        node.getJSON('languages.json',
-            function(languages) {
-                that.availableLanguages2 = languages; debugger
+        node.getJSON('languages.json', function(languages) {
+                that.availableLanguages = languages;
             }
         );
-
-
-
-        this.availableLanguages =
-        [
-           {
-        name: "English",
-        "nativeName": "English",
-        "shortName": "en",
-        "flag": ""
-    },
-    {
-        "name": "German",
-        "nativeName": "Deutsch",
-        "shortName": "de",
-        "flag": ""
-    },
-    {
-        "name": "French",
-        "nativeName": "Français",
-        "shortName": "fr",
-        "flag": ""
-    }
-        ];
-        debugger;
     };
 
 })(node);
