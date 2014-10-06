@@ -3315,7 +3315,7 @@
         this.buttonLabels = [];
         this.buttons = [];
 
-        this.currentLanguageIndex = null;
+        this.currentLanguageIndex = game.currentLanguageIndex;
         this.languagePath = null;
 
         this.init(this.options);
@@ -3330,15 +3330,16 @@
         // Display initialization.
         this.displayForm = node.window.getElement('form','radioButtonForm');
 
-        if (game.languageLoaded) { debugger
-            this.languageInit(this.options);
-        }
-        else { debugger
-            game.onLanguageLoaded = function() {
-                game.languageLoaded = true;
-                that.languageInit(this.options);
-            };
-        }
+        this.languageInit(this.options);
+//        if (game.languageLoaded) { debugger
+//            this.languageInit(this.options);
+//        }
+//        else { debugger
+//            game.onLanguageLoaded = function() {
+//                game.languageLoaded = true;
+//                that.languageInit(this.options);
+//            };
+//        }
     };
 
     LanguageSelector.prototype.languageInit = function(options) {
@@ -3380,7 +3381,7 @@
                 function(obj){return obj[property];}).indexOf(value));
             return;
         }
-        debugger
+
         // Uncheck current language button and change className of label.
         if (this.currentLanguageIndex !== null &&
             this.currentLanguageIndex !== arguments[0] ) {
