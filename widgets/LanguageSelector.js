@@ -119,7 +119,7 @@
          * @see LanguageSelector.setLanguage
          */
         this.onLangCallback = function(msg) {
-            var i = 0;
+            var i;
 
             if (that.languagesLoaded) {
                 return;
@@ -189,7 +189,7 @@
         node.on.lang(this.onLangCallback);
 
         // Display initialization.
-        this.displayForm = node.window.getElement('form','radioButtonForm');
+        this.displayForm = node.window.getElement('form', 'radioButtonForm');
         this.loadingDiv = node.window.addDiv(this.displayForm);
         this.loadingDiv.innerHTML = 'Loading language information...';
 
@@ -212,7 +212,7 @@
      */
     LanguageSelector.prototype.setLanguage = function(property, value) {
 
-        // If only one argument is provided, assume it to be the index
+        // If only one argument is provided, assume it to be the index.
         if (arguments.length == 2) {
             this.setLanguage(J.map(this.availableLanguages,
                 function(obj){return obj[property];}).indexOf(value));
@@ -235,7 +235,7 @@
         this.buttonLabels[this.currentLanguageIndex].className =
             'selectedButtonLabel';
 
-        // Update node.player
+        // Update node.player.
         node.player.lang = this.availableLanguages[this.currentLanguageIndex];
         node.player.lang.path = node.player.lang.shortName + '/';
     };
@@ -246,10 +246,8 @@
      * Updates available languages asynchronously
      */
     LanguageSelector.prototype.updateAvalaibleLanguages = function(options) {
-        if (options) {
-            if (options.callback) {
-                this.onLangCallbackExtension = options.callback;
-            }
+        if (options && options.callback) {
+            this.onLangCallbackExtension = options.callback;            
         }
         node.socket.send(node.msg.create({
             target: "LANG",
