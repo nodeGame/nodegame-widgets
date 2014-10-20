@@ -1,5 +1,5 @@
 /**
- * # VisualRound widget for nodeGame
+ * # LanguageSelector widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
@@ -19,7 +19,7 @@
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.2.0';
+    LanguageSelector.version = '0.3.0';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
@@ -29,7 +29,6 @@
 
     LanguageSelector.dependencies = {
         JSUS: {},
-        Game: {}
     };
 
     /**
@@ -49,7 +48,7 @@
         /**
          * ### LanguageSelector.availableLanguages
          *
-         * Array containing an object per availble language
+         * Object containing an object per availble language.
          *
          * The language object contains at least the following properties:
          *
@@ -58,18 +57,33 @@
          * - `shortName`: An abbreviation for the language, also determines the
          *  path to the context files for this language.
          *
+         * The key for each language object is its `shortName`.
+         *
          * @see Player.lang
          */
-        this.availableLanguages = null;
+        this.availableLanguages = {
+            en: {
+                name: 'English',
+                nativeName: 'English',
+                shortName: 'en'
+            }
+        };
 
         /**
          * ### LanguageSelector.currentLanguageIndex
          *
-         * A numeral indicating the position of the currently used language
+         * A reference to the currently used language
          *
          * @see LanguageSelector.availableLanguages
          */
-        this.currentLanguageIndex = null;
+        this.currentLanguage = null;
+
+        /**
+         * ### LanguageSelector.buttonListLength
+         *
+         * Specifies maximum number of radio buttons used in selection tool
+         */
+        this.buttonListLength = null;
 
         /**
          * ### LanguageSelector.displayForm
@@ -79,18 +93,18 @@
         this.displayForm = null;
 
         /**
-         * ### LanguageSelector.buttonLabels
+         * ### LanguageSelector.optionsLabel
          *
-         * Array containing the labels for the language selection buttons
+         * Array containing the labels for the language selection optionsDisplay
          */
-        this.buttonLabels = [];
+        this.optionsLabel = {};
 
         /**
-         * ### LanguageSelector.buttons
+         * ### LanguageSelector.optionsDisplay
          *
-         * Array containing the buttons for the language selection
+         * Array containing the optionsDisplay for the language selection
          */
-        this.buttons = [];
+        this.optionsDisplay = {};
 
         /**
          * ### LanguageSelector.loadingDiv
@@ -106,12 +120,14 @@
          */
         this.languagesLoaded = false;
 
+        this.usingButtons = null;
+
         /**
          * ### LanguageSelector.onLangCallback
          *
          * Function to be called when languages have been loaded
          *
-         * Initializes form displaying the information as well as the buttons
+         * Initializes form displaying the information as well as the optionsDisplay
          * and their labels. Initializes language to English.
          * Forwards to `LanguageSelector.onLangCallbackExtension` at the very
          * end.
@@ -119,44 +135,82 @@
          * @see LanguageSelector.setLanguage
          */
         this.onLangCallback = function(msg) {
-            var i;
+            var language;
 
-            if (that.languagesLoaded) {
-                return;
+            // Clear display.
+            while (that.displayForm.firstChild) {
+                that.displayForm.removeChild(that.displayForm.firstChild);
             }
 
             // Initialize widget.
             that.availableLanguages = msg.data;
-            for (i = 0; i < msg.data.length; ++i) {
+            if (that.usingButtons) {
 
-                that.buttonLabels[i] = node.window.getElement('label', 'label' +
-                    i, { for: 'radioButton' + i });
+                // Creates labled buttons.
+                for (language in msg.data) {
+                    if (msg.data.hasOwnProperty(language)) {
+                        that.optionsLabel[language] = node.window.getElement('label',
+                            language + 'Label', { for: language + 'RadioButton' });
 
-                that.buttons[i] = node.window.getElement('input',
-                    'radioButton' + i, {
-                        type: 'radio',
-                        name: 'languageButton',
-                        value: msg.data[i].name,
-                        onClick: 'node.game.lang.setLanguage('+ i + ')'
+                        that.optionsDisplay[language] = node.window.getElement('input',
+                            language + 'RadioButton', {
+                                type: 'radio',
+                                name: 'languageButton',
+                                value: msg.data[language].name,
+                            }
+                        );
+
+                        that.optionsDisplay[language].onclick =
+                            makeSetLanguageOnClick(language);
+
+                        that.optionsLabel[language].appendChild(
+                            that.optionsDisplay[language]);
+                        that.optionsLabel[language].appendChild(
+                            document.createTextNode(
+                                msg.data[language].nativeName));
+                        node.window.addElement('br', that.displayForm);
+                        that.optionsLabel[language].className =
+                            'unselectedButtonLabel';
+                        that.displayForm.appendChild(that.optionsLabel[language]);
+
                     }
-                );
-                that.buttonLabels[i].appendChild(that.buttons[i]);
-                that.buttonLabels[i].appendChild(
-                    document.createTextNode(msg.data[i].nativeName));
-                node.window.addElement('br', that.buttonLabels[i]);
-                that.buttonLabels[i].className = 'unselectedButtonLabel';
-                that.displayForm.appendChild(that.buttonLabels[i]);
+                }
+            }
+            else {
+
+                that.displaySelection = node.window.getElement('select',
+                    'selectLanguage');
+                for (language in msg.data) {
+                    that.optionsLabel[language] =
+                        document.createTextNode(msg.data[language].nativeName);
+                    that.optionsDisplay[language] = node.window.getElement('option',
+                        language + 'Option', { value: language });
+                    that.optionsDisplay[language].appendChild(that.optionsLabel[language]);
+                    that.displaySelection.appendChild(that.optionsDisplay[language]);
+
+                }
+                that.displayForm.appendChild(that.displaySelection);
+                that.displayForm.onchange = function() {
+                    that.setLanguage(that.displaySelection.value);
+                };
             }
 
             that.loadingDiv.style.display = 'none';
             that.languagesLoaded = true;
 
             // Initialize to English.
-            that.setLanguage('shortName','en');
+            that.setLanguage('en');
 
             // Extension point.
             if (that.onLangCallbackExtension) {
                 that.onLangCallbackExtension(msg);
+                that.onLangCallbackExtension = null;
+            }
+
+            function makeSetLanguageOnClick(langName) {
+                return function() {
+                    that.setLanguage(langName);
+                };
             }
         };
 
@@ -185,6 +239,8 @@
         J.mixout(options, this.options);
         this.options = options;
 
+        this.usingButtons = this.options.usingButtons || true;
+
         // Register listener.
         node.on.lang(this.onLangCallback);
 
@@ -193,7 +249,7 @@
         this.loadingDiv = node.window.addDiv(this.displayForm);
         this.loadingDiv.innerHTML = 'Loading language information...';
 
-        this.updateAvalaibleLanguages();
+        this.loadLanguages();
     };
 
     LanguageSelector.prototype.append = function() {
@@ -210,33 +266,37 @@
      *  property is assumed to represent the index of the language.
      *
      */
-    LanguageSelector.prototype.setLanguage = function(property, value) {
+    LanguageSelector.prototype.setLanguage = function(langName) {
 
-        // If only one argument is provided, assume it to be the index.
-        if (arguments.length == 2) {
-            this.setLanguage(J.map(this.availableLanguages,
-                function(obj){return obj[property];}).indexOf(value));
-            return;
-        }
+        if (this.usingButtons) {
 
-        // Uncheck current language button and change className of label.
-        if (this.currentLanguageIndex !== null &&
-            this.currentLanguageIndex !== arguments[0] ) {
-            this.buttons[this.currentLanguageIndex].checked = 'unchecked';
-            this.buttonLabels[this.currentLanguageIndex].className =
-                'unselectedButtonLabel';
+            // Uncheck current language button and change className of label.
+            if (this.currentLanguage !== null &&
+                this.currentLanguage !== this.availableLanguages[langName] ) {
+
+                this.optionsDisplay[this.currentLanguage].checked =
+                    'unchecked';
+                this.optionsLabel[this.currentLanguage].className =
+                    'unselectedButtonLabel';
+            }
         }
 
         // Set current language index.
-        this.currentLanguageIndex = arguments[0];
+        this.currentLanguage = langName;
 
-        // Check language button and change className of label.
-        this.buttons[this.currentLanguageIndex].checked = 'checked';
-        this.buttonLabels[this.currentLanguageIndex].className =
-            'selectedButtonLabel';
+        if (this.usingButtons) {
+
+            // Check language button and change className of label.
+            this.optionsDisplay[this.currentLanguage].checked = 'checked';
+            this.optionsLabel[this.currentLanguage].className =
+                'selectedButtonLabel';
+        }
+        else {
+            this.displaySelection.value = this.currentLanguage;
+        }
 
         // Update node.player.
-        node.player.lang = this.availableLanguages[this.currentLanguageIndex];
+        node.player.lang = this.availableLanguages[this.currentLanguage];
         node.player.lang.path = node.player.lang.shortName + '/';
     };
 
@@ -247,13 +307,32 @@
      */
     LanguageSelector.prototype.updateAvalaibleLanguages = function(options) {
         if (options && options.callback) {
-            this.onLangCallbackExtension = options.callback;            
+            this.onLangCallbackExtension = options.callback;
         }
         node.socket.send(node.msg.create({
             target: "LANG",
             to: "SERVER",
             action: "get"}
         ));
+    };
+
+    /**
+     * ## LanguageSelector.loadLanguages
+     *
+     * Loads languages once from server
+     *
+     * @see LanguageSelector.updateAvalaibleLanguages
+     */
+    LanguageSelector.prototype.loadLanguages = function(options) {
+        if(!this.languagesLoaded) {
+            this.updateAvalaibleLanguages(options);
+        }
+        else {
+            if (options && options.callback) {
+                options.callback();
+            }
+
+        }
     };
 
 })(node);

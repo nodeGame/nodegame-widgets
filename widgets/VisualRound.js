@@ -244,7 +244,9 @@
         // Build compound name.
         compoundDisplayModeName = '';
         for (index in displayModeNames) {
-            compoundDisplayModeName += displayModeNames[index] + '&';
+            if (displayModeNames.hasOwnProperty(index)) {
+                compoundDisplayModeName += displayModeNames[index] + '&';
+            }
         }
 
         // Remove trailing '&'.
@@ -263,25 +265,29 @@
         // Build `CompoundDisplayMode`.
         displayModes = [];
         for (index in displayModeNames) {
-            switch (displayModeNames[index]) {
-                case 'COUNT_UP_STAGES_TO_TOTAL':
-                    displayModes.push(new CountUpStages(this, {toTotal: true}));
-                    break;
-                case 'COUNT_UP_STAGES':
-                    displayModes.push(new CountUpStages(this));
-                    break;
-                case 'COUNT_DOWN_STAGES':
-                    displayModes.push(new CountDownStages(this));
-                    break;
-                case 'COUNT_UP_ROUNDS_TO_TOTAL':
-                    displayModes.push(new CountUpRounds(this, {toTotal: true}));
-                    break;
-                case 'COUNT_UP_ROUNDS':
-                    displayModes.push(new CountUpRounds(this));
-                    break;
-                case 'COUNT_DOWN_ROUNDS':
-                    displayModes.push(new CountDownRounds(this));
-                    break;
+            if (displayModeNames.hasOwnProperty(index)) {
+                switch (displayModeNames[index]) {
+                    case 'COUNT_UP_STAGES_TO_TOTAL':
+                        displayModes.push(new CountUpStages(this,
+                            {toTotal: true}));
+                        break;
+                    case 'COUNT_UP_STAGES':
+                        displayModes.push(new CountUpStages(this));
+                        break;
+                    case 'COUNT_DOWN_STAGES':
+                        displayModes.push(new CountDownStages(this));
+                        break;
+                    case 'COUNT_UP_ROUNDS_TO_TOTAL':
+                        displayModes.push(new CountUpRounds(this,
+                            {toTotal: true}));
+                        break;
+                    case 'COUNT_UP_ROUNDS':
+                        displayModes.push(new CountUpRounds(this));
+                        break;
+                    case 'COUNT_DOWN_ROUNDS':
+                        displayModes.push(new CountDownRounds(this));
+                        break;
+                }
             }
         }
         this.displayMode = new CompoundDisplayMode(this, displayModes);
@@ -1013,7 +1019,9 @@
         this.name = '';
 
         for (index in displayModes) {
-            this.name += displayModes[index].name + '&';
+            if (displayModes.hasOwnProperty(index)) {
+                this.name += displayModes[index].name + '&';
+            }
         }
 
         this.name = this.name.substr(0, this.name.length -1);
@@ -1060,7 +1068,10 @@
         this.displayDiv = node.window.getDiv();
 
         for (index in this.displayModes) {
-            this.displayDiv.appendChild(this.displayModes[index].displayDiv);
+            if (this.displayModes.hasOwnProperty(index)) {
+                this.displayDiv.appendChild(
+                    this.displayModes[index].displayDiv);
+            }
         }
 
         this.updateDisplay();
@@ -1076,15 +1087,19 @@
     CompoundDisplayMode.prototype.updateDisplay = function() {
         var index;
         for (index in this.displayModes) {
-            this.displayModes[index].updateDisplay();
+            if (this.displayModes.hasOwnProperty(index)) {
+                this.displayModes[index].updateDisplay();
+            }
         }
     };
 
     CompoundDisplayMode.prototype.activate = function() {
         var index;
         for (index in this.displayModes) {
-            if (this.displayModes[index].activate) {
-                this.displayModes[index].activate();
+            if (this.displayModes.hasOwnProperty(index)) {
+                if (this.displayModes[index].activate) {
+                    this.displayModes[index].activate();
+                }
             }
         }
     };
@@ -1092,8 +1107,10 @@
     CompoundDisplayMode.prototype.deactivate = function() {
         var index;
         for (index in this.displayModes) {
-            if (this.displayModes[index].deactivate) {
-                this.displayMode[index].deactivate();
+            if (this.displayModes.hasOwnProperty(index)) {
+                if (this.displayModes[index].deactivate) {
+                    this.displayMode[index].deactivate();
+                }
             }
         }
     };
