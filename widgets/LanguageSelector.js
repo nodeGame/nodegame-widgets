@@ -132,6 +132,8 @@
          * Forwards to `LanguageSelector.onLangCallbackExtension` at the very
          * end.
          *
+         * @param {object} msg GameMsg
+         *
          * @see LanguageSelector.setLanguage
          */
         this.onLangCallback = function(msg) {
@@ -231,6 +233,8 @@
      *
      * Initializes the widget
      *
+     * @param {object} options Optional. Configuration options
+     *
      * @see LanguageSelector.onLangCallback
      */
     LanguageSelector.prototype.init = function(options) {
@@ -259,12 +263,11 @@
     /**
      * ## LanguageSelector.setLanguage
      *
-     * Sets language and updates view and `Player.lang`
+     * Sets language and updates view
      *
-     * @param property Indicates which language property to use as identifier.
-     * @param value Indicates which language to select. If no value is provided,
-     *  property is assumed to represent the index of the language.
+     * @param {string} langName shortName of language to be set.
      *
+     * @see NodeGameClient.setLanguage
      */
     LanguageSelector.prototype.setLanguage = function(langName) {
 
@@ -296,14 +299,15 @@
         }
 
         // Update node.player.
-        node.player.lang = this.availableLanguages[this.currentLanguage];
-        node.player.lang.path = node.player.lang.shortName + '/';
+        node.setLanguage(this.availableLanguages[this.currentLanguage]);
     };
 
     /**
      * ## LanguageSelector.updateAvalaibleLanguages
      *
      * Updates available languages asynchronously
+     *
+     * @param {object} options Optional. Configuration options
      */
     LanguageSelector.prototype.updateAvalaibleLanguages = function(options) {
         if (options && options.callback) {
@@ -320,6 +324,8 @@
      * ## LanguageSelector.loadLanguages
      *
      * Loads languages once from server
+     *
+     * @param {object} options Optional. Configuration options
      *
      * @see LanguageSelector.updateAvalaibleLanguages
      */
