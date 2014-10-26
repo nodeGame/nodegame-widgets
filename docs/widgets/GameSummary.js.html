@@ -84,11 +84,11 @@ MIT Licensed</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    
+
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;gamesummary&#39;</span><span class="p">;</span>
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Game Summary&#39;</span> <span class="p">};</span>
-    
+
 
 </pre></div>
         </td>
@@ -104,27 +104,27 @@ MIT Licensed</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    
+
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Show the general configuration options of the game.&#39;</span><span class="p">;</span>
-    
+
     <span class="kd">function</span> <span class="nx">GameSummary</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
-    
+
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">writeSummary</span><span class="p">();</span>
   <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
     <span class="p">};</span>
-    
+
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">writeSummary</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">idState</span><span class="p">,</span> <span class="nx">idSummary</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">gName</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Name: &#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">metadata</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span>
   <span class="nx">gDescr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Descr: &#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">metadata</span><span class="p">.</span><span class="nx">description</span><span class="p">),</span>
   <span class="nx">gMinP</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Min Pl.: &#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">minPlayers</span><span class="p">),</span>
   <span class="nx">gMaxP</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Max Pl.: &#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">maxPlayers</span><span class="p">);</span>
-  
+
   <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">gName</span><span class="p">);</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">));</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">gDescr</span><span class="p">);</span>
@@ -132,7 +132,7 @@ MIT Licensed</p>
   <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">gMinP</span><span class="p">);</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">));</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">gMaxP</span><span class="p">);</span>
-  
+
   <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">,</span> <span class="nx">idSummary</span><span class="p">);</span>
     <span class="p">};</span>
 

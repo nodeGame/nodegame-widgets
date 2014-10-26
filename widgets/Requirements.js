@@ -18,10 +18,10 @@
 
     Requirements.defaults = {};
     Requirements.defaults.id = 'requirements';
-    Requirements.defaults.fieldset = { 
+    Requirements.defaults.fieldset = {
         legend: 'Requirements'
     };
-    
+
     // ## Meta-data
 
     Requirements.version = '0.2.0';
@@ -68,7 +68,7 @@
         this.sayResults = options.sayResults || false;
         // The label of the SAY message that will be sent to the server.
         this.sayResultsLabel = options.sayResultLabel || 'requirements';
-        // Callback to add properties to the result object to send to the server. 
+        // Callback to add properties to the result object to send to the server.
         this.addToResults = options.addToResults || null;
 
         // Callbacks to be executed at the end of all tests.
@@ -78,7 +78,7 @@
 
         function renderResult(o) {
             var imgPath, img, span, text;
-            imgPath = '/images/' + (o.content.success ? 
+            imgPath = '/images/' + (o.content.success ?
                                     'success-icon.png' : 'delete-icon.png');
             img = document.createElement('img');
             img.src = imgPath;
@@ -92,11 +92,11 @@
             span = document.createElement('span');
             span.className = 'requirement';
             span.appendChild(img);
-            
+
             span.appendChild(text);
             return span;
         }
-        
+
         // TODO: simplify render syntax.
         this.list = new W.List({
             render: {
@@ -171,21 +171,21 @@
             catch(e) {
                 errMsg = extractErrorMsg(e);
                 this.updateStillChecking(-1);
-                if (this.callbacks[i] && this.callbacks[i].name) { 
+                if (this.callbacks[i] && this.callbacks[i].name) {
                     cbName = this.callbacks[i].name;
                 }
                 else {
                     cbName = i + 1;
                 }
                 errors.push('An exception occurred in requirement n.' +
-                            cbName + ': ' + errMsg);                            
+                            cbName + ': ' + errMsg);
             }
             if (cbErrors) {
                 this.updateStillChecking(-1);
                 errors = errors.concat(cbErrors);
             }
         }
-        
+
         if (this.withTimeout) {
             this.addTimeout();
         }
@@ -193,14 +193,14 @@
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
-        
+
         if (this.isCheckingFinished()) {
             this.checkingFinished();
         }
-        
+
         return errors;
     };
-       
+
     Requirements.prototype.addTimeout = function() {
         var that = this;
         var errStr = 'One or more function is taking too long. This is ' +
@@ -234,8 +234,8 @@
         this.summaryUpdate.innerHTML = ' (' +  remaining + ' / ' + total + ')';
     };
 
-            
-    Requirements.prototype.isCheckingFinished = function() {  
+
+    Requirements.prototype.isCheckingFinished = function() {
         return this.stillChecking <= 0;
     };
 
@@ -255,7 +255,7 @@
             };
 
             if (this.addToResults) {
-                J.mixin(results, this.addToResults()); 
+                J.mixin(results, this.addToResults());
             }
             node.say(this.sayResultsLabel, 'SERVER', results);
         }
@@ -263,7 +263,7 @@
         if (this.onComplete) {
             this.onComplete();
         }
-        
+
         if (this.hasFailed) {
             if (this.onFail) {
                 this.onFail();
@@ -276,12 +276,12 @@
 
     Requirements.prototype.displayResults = function(results) {
         var i, len;
-        
+
         if (!this.list) {
             throw new Error('Requirements.displayResults: list not found. ' +
                             'Have you called .append() first?');
         }
-        
+
         if (!J.isArray(results)) {
             throw new TypeError('Requirements.displayResults: results must ' +
                                 'be array.');
@@ -319,20 +319,20 @@
 
     Requirements.prototype.append = function(root) {
         this.root = root;
-        
+
         this.summary = document.createElement('span');
         this.summary.appendChild(
             document.createTextNode('Evaluating requirements'));
-        
+
         this.summaryUpdate = document.createElement('span');
         this.summary.appendChild(this.summaryUpdate);
-        
+
         this.dots = W.getLoadingDots();
 
         this.summary.appendChild(this.dots.span);
-        
+
         root.appendChild(this.summary);
-        
+
         root.appendChild(this.list.getRoot());
         return root;
     };
@@ -348,27 +348,27 @@
     Requirements.prototype.nodeGameRequirements = function(result) {
         var errors, db;
         errors = [];
-   
+
         if ('undefined' === typeof NDDB) {
             errors.push('NDDB not found.');
         }
-        
+
         if ('undefined' === typeof JSUS) {
             errors.push('JSUS not found.');
         }
-        
+
         if ('undefined' === typeof node.window) {
             errors.push('node.window not found.');
         }
-        
+
         if ('undefined' === typeof W) {
             errors.push('W not found.');
         }
-        
+
         if ('undefined' === typeof node.widgets) {
             errors.push('node.widgets not found.');
         }
-        
+
         if ('undefined' !== typeof NDDB) {
             try {
                 db = new NDDB();
@@ -378,7 +378,7 @@
                             e.message);
             }
         }
-        
+
         // We need to test node.Stager because it will be used in other tests.
         if ('undefined' === typeof node.Stager) {
             errors.push('node.Stager not found.');
@@ -424,10 +424,10 @@
         catch(e) {
             errors.push('W.loadFrame raised an error: ' + extractErrorMsg(e));
             return errors;
-        }        
+        }
     };
 
-    
+
 
     node.widgets.register('Requirements', Requirements);
 

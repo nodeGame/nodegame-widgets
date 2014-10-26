@@ -14,20 +14,20 @@ Loading a widget from a nodeGame game is very easy:
 	var root = W.getElementById('myRoot');
 
 	var wall = node.widgets.append('Wall', root, options);
-	
+
 	// or
-	
+
 	var wall = node.widgets.get('Wall', options);
-	
+
 	// some operations
-	
+
 	wall.append(root);
-	
+
 	// or
-	
+
 	var myCustomWidget = new myCustomWidgets(options);
 	node.widgets.append(myCustomWidget, root);
-	
+
 ```
 
 ### First parameter: Widget object or string
@@ -54,7 +54,7 @@ A standard javascript event listener ('onclick', 'onfocus', 'onblur', 'onchange'
 
 ```js
 		var options = {
-			onclick: function () { 
+			onclick: function () {
 				// do something
 			}
 		};
@@ -80,16 +80,16 @@ In order to preserve encapsulation, a widget should always be wrapped in a self-
 
 ```js
 	(function (exports) {
-	
+
 	  // register a widget to the global collection
 		node.widgets.register('myWidget', myWidget);
-	
+
 		function myWidget (options) {
 	  		// init
 		}
-	
+
 		// More code here
-	
+
 	})();
 ```
 
@@ -99,19 +99,19 @@ Widgets must define a number of constants describing their expected behavior, ve
 ```js
 
 	// Encapsulated
-	
+
 	myWidget.defaults = {};
 	myWidget.defaults.id = 'myWidget';
-	
-	myWidget.defaults.fieldset = { 
+
+	myWidget.defaults.fieldset = {
     legend: 'Foo',
     id: 'foo_fieldset',
   };
-  
+
 	myWidget.name = 'my cool Widget';
 	myWidget.version = '0.3';
 	myWidget.description = 'This widget does cool stuff';
-	
+
 	myWidget.dependencies = {
 		JSUS: {}
 	};
@@ -119,7 +119,7 @@ Widgets must define a number of constants describing their expected behavior, ve
 	function myWidget (options) {
 		// init
 	}
-	
+
 	// More code here
 ```
 
@@ -156,9 +156,9 @@ node make.js build -w msgbar,visualstate -o mywidgets.js // about 4Kb minified
 
   Commands:
 
-    clean 
+    clean
     Removes all files from build folder
-    
+
     build [options] [options]
     Creates a custom build of nodegame-widgets.js
 
@@ -175,7 +175,7 @@ node make.js build -w msgbar,visualstate -o mywidgets.js // about 4Kb minified
     -l, --lib <items>    choose libraries to include
     -A, --analyse        analyse build
     -a, --all            full build of JSUS
-    -o, --output <file>  
+    -o, --output <file>
 
 ## License
 

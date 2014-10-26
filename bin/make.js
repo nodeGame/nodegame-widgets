@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // # JSUS make script
- 
+
 
 /**
  * Module dependencies.
@@ -31,14 +31,14 @@ function list(val) {
 program
   .version(version);
 
-program  
+program
 	.command('clean')
 	.description('Removes all files from build folder')
 	.action(function(){
 		J.cleanDir(buildDir);
 });
-  
-program  
+
+program
 	.command('build [options]')
 	.description('Creates a custom build of nodegame-widgets.js')
 	.option('-w, --widgets <items>', 'choose widgets to include', list)
@@ -49,7 +49,7 @@ program
 	.action(function(env, options){
 		build(options);
 	});
-   
+
 program
 	.command('doc')
 	.description('Build documentation files')
@@ -73,6 +73,6 @@ program
 
 	});
 
-	
+
 // Parsing options
 program.parse(process.argv);
