@@ -57,7 +57,7 @@
                 node.emit(stateEvent, state, 'ROOM');
             }
             else {
-                node.log('No next/previous state. Not sent', 'ERR');
+                node.err('No next/previous state. Not sent');
             }
         };
 
