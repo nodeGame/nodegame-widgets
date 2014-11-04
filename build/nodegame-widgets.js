@@ -3285,6 +3285,354 @@
 })(node);
 
 /**
+ * # LanguageSelector widget for nodeGame
+ * Copyright(c) 2014 Stefano Balietti
+ * MIT Licensed
+ *
+ * Manages and displays information about languages available and selected.
+ *
+ * www.nodegame.org
+ * ---
+ */
+ (function(node) {
+
+    "use strict";
+
+    node.widgets.register('LanguageSelector', LanguageSelector);
+
+    var J = node.JSUS,
+        game = node.game;
+
+    // ## Meta-data
+
+    LanguageSelector.version = '0.3.1';
+    LanguageSelector.description = 'Display information about the current ' +
+        'language and allows to change language.';
+    LanguageSelector.title = 'Language';
+    LanguageSelector.className = 'languageselector';
+
+    // ## Dependencies
+
+    LanguageSelector.dependencies = {
+        JSUS: {}
+    };
+
+    /**
+     * ## LanguageSelector constructor
+     *
+     * Manages the setting and display of the language used
+     *
+     * @param {object} options Optional. Configuration options
+     *
+     * @see Player.lang
+     */
+    function LanguageSelector(options) {
+        var that = this;
+
+        this.options = options;
+
+        /**
+         * ### LanguageSelector.availableLanguages
+         *
+         * Object containing an object per availble language.
+         *
+         * The language object contains at least the following properties:
+         *
+         * - `name`: Name of the language in English.
+         * - `nativeName`: Native name of the language
+         * - `shortName`: An abbreviation for the language, also determines the
+         *  path to the context files for this language.
+         *
+         * The key for each language object is its `shortName`.
+         *
+         * @see Player.lang
+         */
+        this.availableLanguages = {
+            en: {
+                name: 'English',
+                nativeName: 'English',
+                shortName: 'en'
+            }
+        };
+
+        /**
+         * ### LanguageSelector.currentLanguageIndex
+         *
+         * A reference to the currently used language
+         *
+         * @see LanguageSelector.availableLanguages
+         */
+        this.currentLanguage = null;
+
+        /**
+         * ### LanguageSelector.buttonListLength
+         *
+         * Specifies maximum number of radio buttons used in selection tool
+         */
+        this.buttonListLength = null;
+
+        /**
+         * ### LanguageSelector.displayForm
+         *
+         * The form in which the widget displays the language information
+         */
+        this.displayForm = null;
+
+        /**
+         * ### LanguageSelector.optionsLabel
+         *
+         * Array containing the labels for the language selection optionsDisplay
+         */
+        this.optionsLabel = {};
+
+        /**
+         * ### LanguageSelector.optionsDisplay
+         *
+         * Array containing the optionsDisplay for the language selection
+         */
+        this.optionsDisplay = {};
+
+        /**
+         * ### LanguageSelector.loadingDiv
+         *
+         * Div displaying information on whether the languages have been loaded
+         */
+        this.loadingDiv = null;
+
+        /**
+         * ### LanguageSelector.languagesLoaded
+         *
+         * Flag indicating whether languages have been loaded from server
+         */
+        this.languagesLoaded = false;
+
+        this.usingButtons = null;
+
+        /**
+         * ### LanguageSelector.onLangCallback
+         *
+         * Function to be called when languages have been loaded
+         *
+         * Initializes form displaying the information as well
+         * as the optionsDisplay and their labels.
+         * Initializes language to English.
+         * Forwards to `LanguageSelector.onLangCallbackExtension` at the very
+         * end.
+         *
+         * @param {object} msg GameMsg
+         *
+         * @see LanguageSelector.setLanguage
+         */
+        this.onLangCallback = function(msg) {
+            var language;
+
+            // Clear display.
+            while (that.displayForm.firstChild) {
+                that.displayForm.removeChild(that.displayForm.firstChild);
+            }
+
+            // Initialize widget.
+            that.availableLanguages = msg.data;
+            if (that.usingButtons) {
+
+                // Creates labled buttons.
+                for (language in msg.data) {
+                    if (msg.data.hasOwnProperty(language)) {
+                        that.optionsLabel[language] = W.getElement('label',
+                            language + 'Label', {
+                                'for': language + 'RadioButton'
+                            });
+
+                        that.optionsDisplay[language] = W.getElement('input',
+                            language + 'RadioButton', {
+                                type: 'radio',
+                                name: 'languageButton',
+                                value: msg.data[language].name,
+                            }
+                        );
+
+                        that.optionsDisplay[language].onclick =
+                            makeSetLanguageOnClick(language);
+
+                        that.optionsLabel[language].appendChild(
+                            that.optionsDisplay[language]);
+                        that.optionsLabel[language].appendChild(
+                            document.createTextNode(
+                                msg.data[language].nativeName));
+                        node.window.addElement('br', that.displayForm);
+                        that.optionsLabel[language].className =
+                            'unselectedButtonLabel';
+                        that.displayForm.appendChild(that.optionsLabel[language]);
+
+                    }
+                }
+            }
+            else {
+
+                that.displaySelection = node.window.getElement('select',
+                    'selectLanguage');
+                for (language in msg.data) {
+                    that.optionsLabel[language] =
+                        document.createTextNode(msg.data[language].nativeName);
+                    that.optionsDisplay[language] = node.window.getElement('option',
+                        language + 'Option', { value: language });
+                    that.optionsDisplay[language].appendChild(that.optionsLabel[language]);
+                    that.displaySelection.appendChild(that.optionsDisplay[language]);
+
+                }
+                that.displayForm.appendChild(that.displaySelection);
+                that.displayForm.onchange = function() {
+                    that.setLanguage(that.displaySelection.value);
+                };
+            }
+
+            that.loadingDiv.style.display = 'none';
+            that.languagesLoaded = true;
+
+            // Initialize to English.
+            that.setLanguage('en');
+
+            // Extension point.
+            if (that.onLangCallbackExtension) {
+                that.onLangCallbackExtension(msg);
+                that.onLangCallbackExtension = null;
+            }
+
+            function makeSetLanguageOnClick(langName) {
+                return function() {
+                    that.setLanguage(langName);
+                };
+            }
+        };
+
+        /**
+         * ### LanguageSelector.onLangCallbackExtension
+         *
+         * Extension point to `LanguageSelector.onLangCallback`
+         *
+         * @see LanguageSelector.onLangCallback
+         */
+        this.onLangCallbackExtension = null;
+
+        this.init(this.options);
+    }
+
+    /**
+     * ## LanguageSelector.init
+     *
+     * Initializes the widget
+     *
+     * @param {object} options Optional. Configuration options
+     *
+     * @see LanguageSelector.onLangCallback
+     */
+    LanguageSelector.prototype.init = function(options) {
+        var that = this;
+
+        J.mixout(options, this.options);
+        this.options = options;
+
+        this.usingButtons = this.options.usingButtons || true;
+
+        // Register listener.
+        node.on.lang(this.onLangCallback);
+
+        // Display initialization.
+        this.displayForm = node.window.getElement('form', 'radioButtonForm');
+        this.loadingDiv = node.window.addDiv(this.displayForm);
+        this.loadingDiv.innerHTML = 'Loading language information...';
+
+        this.loadLanguages();
+    };
+
+    LanguageSelector.prototype.append = function() {
+        this.bodyDiv.appendChild(this.displayForm);
+    };
+
+    /**
+     * ## LanguageSelector.setLanguage
+     *
+     * Sets language and updates view
+     *
+     * @param {string} langName shortName of language to be set.
+     *
+     * @see NodeGameClient.setLanguage
+     */
+    LanguageSelector.prototype.setLanguage = function(langName) {
+
+        if (this.usingButtons) {
+
+            // Uncheck current language button and change className of label.
+            if (this.currentLanguage !== null &&
+                this.currentLanguage !== this.availableLanguages[langName] ) {
+
+                this.optionsDisplay[this.currentLanguage].checked =
+                    'unchecked';
+                this.optionsLabel[this.currentLanguage].className =
+                    'unselectedButtonLabel';
+            }
+        }
+
+        // Set current language index.
+        this.currentLanguage = langName;
+
+        if (this.usingButtons) {
+
+            // Check language button and change className of label.
+            this.optionsDisplay[this.currentLanguage].checked = 'checked';
+            this.optionsLabel[this.currentLanguage].className =
+                'selectedButtonLabel';
+        }
+        else {
+            this.displaySelection.value = this.currentLanguage;
+        }
+
+        // Update node.player.
+        node.setLanguage(this.availableLanguages[this.currentLanguage]);
+    };
+
+    /**
+     * ## LanguageSelector.updateAvalaibleLanguages
+     *
+     * Updates available languages asynchronously
+     *
+     * @param {object} options Optional. Configuration options
+     */
+    LanguageSelector.prototype.updateAvalaibleLanguages = function(options) {
+        if (options && options.callback) {
+            this.onLangCallbackExtension = options.callback;
+        }
+        node.socket.send(node.msg.create({
+            target: "LANG",
+            to: "SERVER",
+            action: "get"
+        }));
+    };
+
+    /**
+     * ## LanguageSelector.loadLanguages
+     *
+     * Loads languages once from server
+     *
+     * @param {object} options Optional. Configuration options
+     *
+     * @see LanguageSelector.updateAvalaibleLanguages
+     */
+    LanguageSelector.prototype.loadLanguages = function(options) {
+        if(!this.languagesLoaded) {
+            this.updateAvalaibleLanguages(options);
+        }
+        else {
+            if (options && options.callback) {
+                options.callback();
+            }
+
+        }
+    };
+
+})(node);
+
+/**
  * # MoneyTalks widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
@@ -3850,13 +4198,13 @@
 
     Requirements.defaults = {};
     Requirements.defaults.id = 'requirements';
-    Requirements.defaults.fieldset = { 
+    Requirements.defaults.fieldset = {
         legend: 'Requirements'
     };
-    
+
     // ## Meta-data
 
-    Requirements.version = '0.2.0';
+    Requirements.version = '0.5.0';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
@@ -3867,11 +4215,16 @@
         List: {}
     };
 
+    /**
+     * ## Requirements.
+     *
+     * Instantiates a new Requirements object
+     *
+     * @param {object} options
+     */
     function Requirements(options) {
         // The id of the widget.
         this.id = options.id || Requirements.id;
-        // The root element under which the widget will appended.
-        this.root = null;
         // Array of all test callbacks.
         this.callbacks = [];
         // Number of tests still pending.
@@ -3900,7 +4253,7 @@
         this.sayResults = options.sayResults || false;
         // The label of the SAY message that will be sent to the server.
         this.sayResultsLabel = options.sayResultLabel || 'requirements';
-        // Callback to add properties to the result object to send to the server. 
+        // Callback to add properties to the result object to send to the server.
         this.addToResults = options.addToResults || null;
 
         // Callbacks to be executed at the end of all tests.
@@ -3910,7 +4263,7 @@
 
         function renderResult(o) {
             var imgPath, img, span, text;
-            imgPath = '/images/' + (o.content.success ? 
+            imgPath = '/images/' + (o.content.success ?
                                     'success-icon.png' : 'delete-icon.png');
             img = document.createElement('img');
             img.src = imgPath;
@@ -3924,11 +4277,11 @@
             span = document.createElement('span');
             span.className = 'requirement';
             span.appendChild(img);
-            
+
             span.appendChild(text);
             return span;
         }
-        
+
         // TODO: simplify render syntax.
         this.list = new W.List({
             render: {
@@ -3938,6 +4291,23 @@
         });
     }
 
+    /**
+     * ## Requirements.addRequirements
+     *
+     * Adds any number of callbacks checking the requirements
+     *
+     * Callbacks can be asynchronous or synchronous.
+     *
+     * An asynchronous callback must call the `results` function
+     * passed as input parameter to communicate the outcome of the test.
+     *
+     * A synchronous callback must return the value immediately.
+     *
+     * In both cases the return is an array, where every item is an
+     * error message. Empty array means test passed.
+     *
+     * @see this.callbacks
+     */
     Requirements.prototype.addRequirements = function() {
         var i, len;
         i = -1, len = arguments.length;
@@ -3950,40 +4320,22 @@
         }
     };
 
-    function resultCb(that, i) {
-        var update = function(result) {
-            that.updateStillChecking(-1);
-            if (result) {
-                if (!J.isArray(result)) {
-                    throw new Error('Requirements.checkRequirements: ' +
-                                    'result must be array or undefined.');
-                }
-                that.displayResults(result);
-            }
-            if (that.isCheckingFinished()) {
-                that.checkingFinished();
-            }
-        };
-        return that.callbacks[i](update);
-    }
-
-    function extractErrorMsg(e) {
-        var errMsg;
-        if (e.msg) {
-            errMsg = e.msg;
-        }
-        else if (e.message) {
-            errMsg = e.message;
-        }
-        else if (e.description) {
-            errMsg.description;
-        }
-        else {
-            errMsg = e.toString();
-        }
-        return errMsg;
-    }
-
+    /**
+     * ## Requirements.checkRequirements
+     *
+     * Asynchrounsly or synchrounsly checks all registered callbacks
+     *
+     * Can add a timeout for the max execution time of the callbacks, if the
+     * corresponding option is set.
+     *
+     * Results are displayed conditionally
+     *
+     * @param {boolean} display If TRUE, results are displayed.
+     * @return {errors} The array containing the errors
+     *
+     * @see this.withTimeout
+     * @see this.callbacks
+     */
     Requirements.prototype.checkRequirements = function(display) {
         var i, len;
         var errors, cbErrors, cbName, errMsg;
@@ -4003,21 +4355,21 @@
             catch(e) {
                 errMsg = extractErrorMsg(e);
                 this.updateStillChecking(-1);
-                if (this.callbacks[i] && this.callbacks[i].name) { 
+                if (this.callbacks[i] && this.callbacks[i].name) {
                     cbName = this.callbacks[i].name;
                 }
                 else {
                     cbName = i + 1;
                 }
                 errors.push('An exception occurred in requirement n.' +
-                            cbName + ': ' + errMsg);                            
+                            cbName + ': ' + errMsg);
             }
             if (cbErrors) {
                 this.updateStillChecking(-1);
                 errors = errors.concat(cbErrors);
             }
         }
-        
+
         if (this.withTimeout) {
             this.addTimeout();
         }
@@ -4025,14 +4377,25 @@
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
-        
+
         if (this.isCheckingFinished()) {
             this.checkingFinished();
         }
-        
+
         return errors;
     };
-       
+
+    /**
+     * ## Requirements.addTimeout
+     *
+     * Starts a timeout for the max execution time of the callbacks
+     *
+     * Upon time out results are checked, and eventually displayed.
+     *
+     * @see this.stillCheckings
+     * @see this.withTimeout
+     * @see this.callbacks
+     */
     Requirements.prototype.addTimeout = function() {
         var that = this;
         var errStr = 'One or more function is taking too long. This is ' +
@@ -4049,6 +4412,15 @@
         }, this.timeoutTime);
     };
 
+    /**
+     * ## Requirements.clearTimeout
+     *
+     * Clears the timeout for the max execution time of the callbacks
+     *
+     * @see this.timeoutId
+     * @see this.stillCheckings
+     * @see this.callbacks
+     */
     Requirements.prototype.clearTimeout = function() {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
@@ -4056,6 +4428,20 @@
         }
     };
 
+    /**
+     * ## Requirements.updateStillChecking
+     *
+     * Updates the number of callbacks still running on the display
+     *
+     * @param {number} The number of callbacks still running, or an increment
+     *   as compared to the current value
+     * @param {boolean} absolute TRUE, if `update` is to be interpreted as an
+     *   absolute value
+     *
+     * @see this.summaryUpdate
+     * @see this.stillCheckings
+     * @see this.callbacks
+     */
     Requirements.prototype.updateStillChecking = function(update, absolute) {
         var total, remaining;
 
@@ -4066,11 +4452,33 @@
         this.summaryUpdate.innerHTML = ' (' +  remaining + ' / ' + total + ')';
     };
 
-            
-    Requirements.prototype.isCheckingFinished = function() {  
+    /**
+     * ## Requirements.isCheckingFinished
+     *
+     * Returns TRUE, if all callbacks have returned
+     *
+     * @see this.stillCheckings
+     * @see this.callbacks
+     */
+    Requirements.prototype.isCheckingFinished = function() {
         return this.stillChecking <= 0;
     };
 
+    /**
+     * ## Requirements.CheckingFinished
+     *
+     * Cleans up timer and dots, and executes final callbacks accordingly
+     *
+     * First, executes the `onComplete` callback in any case. Then if no
+     * errors have been raised executes the `onSuccess` callback, otherwise
+     * the `onFail` callback.
+     *
+     * @see this.onComplete
+     * @see this.onSuccess
+     * @see this.onFail
+     * @see this.stillCheckings
+     * @see this.callbacks
+     */
     Requirements.prototype.checkingFinished = function() {
         var results;
 
@@ -4087,7 +4495,7 @@
             };
 
             if (this.addToResults) {
-                J.mixin(results, this.addToResults()); 
+                J.mixin(results, this.addToResults());
             }
             node.say(this.sayResultsLabel, 'SERVER', results);
         }
@@ -4095,25 +4503,42 @@
         if (this.onComplete) {
             this.onComplete();
         }
-        
+
         if (this.hasFailed) {
-            if (this.onFail) {
-                this.onFail();
-            }
+            if (this.onFail) this.onFail();
         }
         else if (this.onSuccess) {
             this.onSuccess();
         }
     };
 
+    /**
+     * ## Requirements.displayResults
+     *
+     * Displays the results of the callbacks on the screen
+     *
+     * Creates a new item in the list of results for every error found
+     * in the results array.
+     *
+     * If no error was raised, the results array should be empty.
+     *
+     * @param {array} results The array containing the return values of all
+     *   the callbacks
+     *
+     * @see this.onComplete
+     * @see this.onSuccess
+     * @see this.onFail
+     * @see this.stillCheckings
+     * @see this.callbacks
+     */
     Requirements.prototype.displayResults = function(results) {
         var i, len;
-        
+
         if (!this.list) {
             throw new Error('Requirements.displayResults: list not found. ' +
                             'Have you called .append() first?');
         }
-        
+
         if (!J.isArray(results)) {
             throw new TypeError('Requirements.displayResults: results must ' +
                                 'be array.');
@@ -4149,58 +4574,59 @@
         this.list.parse();
     };
 
-    Requirements.prototype.append = function(root) {
-        this.root = root;
-        
+    Requirements.prototype.append = function() {
         this.summary = document.createElement('span');
         this.summary.appendChild(
             document.createTextNode('Evaluating requirements'));
-        
+
         this.summaryUpdate = document.createElement('span');
         this.summary.appendChild(this.summaryUpdate);
-        
+
         this.dots = W.getLoadingDots();
 
         this.summary.appendChild(this.dots.span);
-        
-        root.appendChild(this.summary);
-        
-        root.appendChild(this.list.getRoot());
-        return root;
+
+        this.bodyDiv.appendChild(this.summary);
+
+        this.bodyDiv.appendChild(this.list.getRoot());
     };
 
-    Requirements.prototype.getRoot = function() {
-        return this.root;
-    };
+    Requirements.prototype.listeners = function() {};
 
-    Requirements.prototype.listeners = function() {
-        var that = this;
-    };
+    // ## Default Requirement Functions
 
+    /**
+     * ## Requirements.nodeGameRequirements
+     *
+     * Checks whether the basic dependencies of nodeGame are satisfied
+     *
+     * @param {function} The asynchronous result function
+     * @return {array} errors Array of synchronous errors
+     */
     Requirements.prototype.nodeGameRequirements = function(result) {
         var errors, db;
         errors = [];
-   
+
         if ('undefined' === typeof NDDB) {
             errors.push('NDDB not found.');
         }
-        
+
         if ('undefined' === typeof JSUS) {
             errors.push('JSUS not found.');
         }
-        
+
         if ('undefined' === typeof node.window) {
             errors.push('node.window not found.');
         }
-        
+
         if ('undefined' === typeof W) {
             errors.push('W not found.');
         }
-        
+
         if ('undefined' === typeof node.widgets) {
             errors.push('node.widgets not found.');
         }
-        
+
         if ('undefined' !== typeof NDDB) {
             try {
                 db = new NDDB();
@@ -4210,7 +4636,7 @@
                             e.message);
             }
         }
-        
+
         // We need to test node.Stager because it will be used in other tests.
         if ('undefined' === typeof node.Stager) {
             errors.push('node.Stager not found.');
@@ -4219,6 +4645,16 @@
         return errors;
     };
 
+    /**
+     * ## Requirements.loadFrameTest
+     *
+     * Checks whether the iframe can be created and used
+     *
+     * Requires an active connection.
+     *
+     * @param {function} The asynchronous result function
+     * @return {array} errors Array of synchronous errors
+     */
     Requirements.prototype.loadFrameTest = function(result) {
         var errors, that, testIframe, root;
         var oldIframe, oldIframeName, oldIframeRoot;
@@ -4256,14 +4692,49 @@
         catch(e) {
             errors.push('W.loadFrame raised an error: ' + extractErrorMsg(e));
             return errors;
-        }        
+        }
     };
 
-    
+    // ## Helper methods
+
+    function resultCb(that, i) {
+        var update = function(result) {
+            that.updateStillChecking(-1);
+            if (result) {
+                if (!J.isArray(result)) {
+                    throw new Error('Requirements.checkRequirements: ' +
+                                    'result must be array or undefined.');
+                }
+                that.displayResults(result);
+            }
+            if (that.isCheckingFinished()) {
+                that.checkingFinished();
+            }
+        };
+        return that.callbacks[i](update);
+    }
+
+    function extractErrorMsg(e) {
+        var errMsg;
+        if (e.msg) {
+            errMsg = e.msg;
+        }
+        else if (e.message) {
+            errMsg = e.message;
+        }
+        else if (e.description) {
+            errMsg.description;
+        }
+        else {
+            errMsg = e.toString();
+        }
+        return errMsg;
+    }
 
     node.widgets.register('Requirements', Requirements);
 
 })(node);
+
 /**
  * # ServerInfoDisplay widget for nodeGame
  * Copyright(c) 2014 Stefano Balietti
@@ -4765,7 +5236,9 @@
         // Build compound name.
         compoundDisplayModeName = '';
         for (index in displayModeNames) {
-            compoundDisplayModeName += displayModeNames[index] + '&';
+            if (displayModeNames.hasOwnProperty(index)) {
+                compoundDisplayModeName += displayModeNames[index] + '&';
+            }
         }
 
         // Remove trailing '&'.
@@ -4784,25 +5257,29 @@
         // Build `CompoundDisplayMode`.
         displayModes = [];
         for (index in displayModeNames) {
-            switch (displayModeNames[index]) {
-                case 'COUNT_UP_STAGES_TO_TOTAL':
-                    displayModes.push(new CountUpStages(this, {toTotal: true}));
-                    break;
-                case 'COUNT_UP_STAGES':
-                    displayModes.push(new CountUpStages(this));
-                    break;
-                case 'COUNT_DOWN_STAGES':
-                    displayModes.push(new CountDownStages(this));
-                    break;
-                case 'COUNT_UP_ROUNDS_TO_TOTAL':
-                    displayModes.push(new CountUpRounds(this, {toTotal: true}));
-                    break;
-                case 'COUNT_UP_ROUNDS':
-                    displayModes.push(new CountUpRounds(this));
-                    break;
-                case 'COUNT_DOWN_ROUNDS':
-                    displayModes.push(new CountDownRounds(this));
-                    break;
+            if (displayModeNames.hasOwnProperty(index)) {
+                switch (displayModeNames[index]) {
+                    case 'COUNT_UP_STAGES_TO_TOTAL':
+                        displayModes.push(new CountUpStages(this,
+                            {toTotal: true}));
+                        break;
+                    case 'COUNT_UP_STAGES':
+                        displayModes.push(new CountUpStages(this));
+                        break;
+                    case 'COUNT_DOWN_STAGES':
+                        displayModes.push(new CountDownStages(this));
+                        break;
+                    case 'COUNT_UP_ROUNDS_TO_TOTAL':
+                        displayModes.push(new CountUpRounds(this,
+                            {toTotal: true}));
+                        break;
+                    case 'COUNT_UP_ROUNDS':
+                        displayModes.push(new CountUpRounds(this));
+                        break;
+                    case 'COUNT_DOWN_ROUNDS':
+                        displayModes.push(new CountDownRounds(this));
+                        break;
+                }
             }
         }
         this.displayMode = new CompoundDisplayMode(this, displayModes);
@@ -5534,7 +6011,9 @@
         this.name = '';
 
         for (index in displayModes) {
-            this.name += displayModes[index].name + '&';
+            if (displayModes.hasOwnProperty(index)) {
+                this.name += displayModes[index].name + '&';
+            }
         }
 
         this.name = this.name.substr(0, this.name.length -1);
@@ -5581,7 +6060,10 @@
         this.displayDiv = node.window.getDiv();
 
         for (index in this.displayModes) {
-            this.displayDiv.appendChild(this.displayModes[index].displayDiv);
+            if (this.displayModes.hasOwnProperty(index)) {
+                this.displayDiv.appendChild(
+                    this.displayModes[index].displayDiv);
+            }
         }
 
         this.updateDisplay();
@@ -5597,15 +6079,19 @@
     CompoundDisplayMode.prototype.updateDisplay = function() {
         var index;
         for (index in this.displayModes) {
-            this.displayModes[index].updateDisplay();
+            if (this.displayModes.hasOwnProperty(index)) {
+                this.displayModes[index].updateDisplay();
+            }
         }
     };
 
     CompoundDisplayMode.prototype.activate = function() {
         var index;
         for (index in this.displayModes) {
-            if (this.displayModes[index].activate) {
-                this.displayModes[index].activate();
+            if (this.displayModes.hasOwnProperty(index)) {
+                if (this.displayModes[index].activate) {
+                    this.displayModes[index].activate();
+                }
             }
         }
     };
@@ -5613,8 +6099,10 @@
     CompoundDisplayMode.prototype.deactivate = function() {
         var index;
         for (index in this.displayModes) {
-            if (this.displayModes[index].deactivate) {
-                this.displayMode[index].deactivate();
+            if (this.displayModes.hasOwnProperty(index)) {
+                if (this.displayModes[index].deactivate) {
+                    this.displayMode[index].deactivate();
+                }
             }
         }
     };
