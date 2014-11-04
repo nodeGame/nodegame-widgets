@@ -516,7 +516,6 @@
         }
     };
 
-<<<<<<< HEAD
     // ## Helper methods
 
     function resultCb(that, i) {
