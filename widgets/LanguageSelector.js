@@ -19,7 +19,7 @@
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.3.0';
+    LanguageSelector.version = '0.3.1';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
@@ -28,7 +28,7 @@
     // ## Dependencies
 
     LanguageSelector.dependencies = {
-        JSUS: {},
+        JSUS: {}
     };
 
     /**
@@ -127,8 +127,9 @@
          *
          * Function to be called when languages have been loaded
          *
-         * Initializes form displaying the information as well as the optionsDisplay
-         * and their labels. Initializes language to English.
+         * Initializes form displaying the information as well
+         * as the optionsDisplay and their labels.
+         * Initializes language to English.
          * Forwards to `LanguageSelector.onLangCallbackExtension` at the very
          * end.
          *
@@ -151,10 +152,12 @@
                 // Creates labled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
-                        that.optionsLabel[language] = node.window.getElement('label',
-                            language + 'Label', { for: language + 'RadioButton' });
+                        that.optionsLabel[language] = W.getElement('label',
+                            language + 'Label', {
+                                'for': language + 'RadioButton'
+                            });
 
-                        that.optionsDisplay[language] = node.window.getElement('input',
+                        that.optionsDisplay[language] = W.getElement('input',
                             language + 'RadioButton', {
                                 type: 'radio',
                                 name: 'languageButton',
@@ -316,8 +319,8 @@
         node.socket.send(node.msg.create({
             target: "LANG",
             to: "SERVER",
-            action: "get"}
-        ));
+            action: "get"
+        }));
     };
 
     /**
