@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LanguageSelector.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "widgets/LanguageSelector.js", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#languageselector%20widget%20for%20nodegame">LanguageSelector widget for nodeGame</a>
+      </div>
+      <div class="heading h2">
+        <a href="#www.nodegame.org">www.nodegame.org</a>
+      </div>
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+      <div class="heading h2">
+        <a href="#languageselector%20constructor">LanguageSelector constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.availablelanguages">LanguageSelector.availableLanguages</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.currentlanguageindex">LanguageSelector.currentLanguageIndex</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.buttonlistlength">LanguageSelector.buttonListLength</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.displayform">LanguageSelector.displayForm</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.optionslabel">LanguageSelector.optionsLabel</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.optionsdisplay">LanguageSelector.optionsDisplay</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.loadingdiv">LanguageSelector.loadingDiv</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.languagesloaded">LanguageSelector.languagesLoaded</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.onlangcallback">LanguageSelector.onLangCallback</a>
+      </div>
+      <div class="heading h3">
+        <a href="#languageselector.onlangcallbackextension">LanguageSelector.onLangCallbackExtension</a>
+      </div>
+      <div class="heading h2">
+        <a href="#languageselector.init">LanguageSelector.init</a>
+      </div>
+      <div class="heading h2">
+        <a href="#languageselector.setlanguage">LanguageSelector.setLanguage</a>
+      </div>
+      <div class="heading h2">
+        <a href="#languageselector.updateavalaiblelanguages">LanguageSelector.updateAvalaibleLanguages</a>
+      </div>
+      <div class="heading h2">
+        <a href="#languageselector.loadlanguages">LanguageSelector.loadLanguages</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector%20widget%20for%20nodegame">
+  <h1>
+    <a href="#languageselector%20widget%20for%20nodegame" name="languageselector%20widget%20for%20nodegame" class="pilcrow">&#182;</a>
+    LanguageSelector widget for nodeGame
+  </h1>
+</div>
+
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Manages and displays information about languages available and selected.</p>
+
+
+<div class="pilwrap" id="www.nodegame.org">
+  <h2>
+    <a href="#www.nodegame.org" name="www.nodegame.org" class="pilcrow">&#182;</a>
+    www.nodegame.org
+  </h2>
+</div>
+
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre> <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;LanguageSelector&#39;</span><span class="p">,</span> <span class="nx">LanguageSelector</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">,</span>
+        <span class="nx">game</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
+    Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.1&#39;</span><span class="p">;</span>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display information about the current &#39;</span> <span class="o">+</span>
+        <span class="s1">&#39;language and allows to change language.&#39;</span><span class="p">;</span>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Language&#39;</span><span class="p">;</span>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;languageselector&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
+    Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector%20constructor">
+  <h2>
+    <a href="#languageselector%20constructor" name="languageselector%20constructor" class="pilcrow">&#182;</a>
+    LanguageSelector constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Manages the setting and display of the language used</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Player.lang
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">LanguageSelector</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.availablelanguages">
+  <h3>
+    <a href="#languageselector.availablelanguages" name="languageselector.availablelanguages" class="pilcrow">&#182;</a>
+    LanguageSelector.availableLanguages
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Object containing an object per availble language.</p>
+
+<p>The language object contains at least the following properties:</p>
+
+<ul>
+<li><code>name</code>: Name of the language in English.</li>
+<li><code>nativeName</code>: Native name of the language</li>
+<li><code>shortName</code>: An abbreviation for the language, also determines the
+path to the context files for this language.</li>
+</ul>
+
+<p>The key for each language object is its <code>shortName</code>.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Player.lang
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">en</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;English&#39;</span><span class="p">,</span>
+                <span class="nx">nativeName</span><span class="o">:</span> <span class="s1">&#39;English&#39;</span><span class="p">,</span>
+                <span class="nx">shortName</span><span class="o">:</span> <span class="s1">&#39;en&#39;</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.currentlanguageindex">
+  <h3>
+    <a href="#languageselector.currentlanguageindex" name="languageselector.currentlanguageindex" class="pilcrow">&#182;</a>
+    LanguageSelector.currentLanguageIndex
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>A reference to the currently used language</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">LanguageSelector.availableLanguages
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.buttonlistlength">
+  <h3>
+    <a href="#languageselector.buttonlistlength" name="languageselector.buttonlistlength" class="pilcrow">&#182;</a>
+    LanguageSelector.buttonListLength
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Specifies maximum number of radio buttons used in selection tool</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">buttonListLength</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.displayform">
+  <h3>
+    <a href="#languageselector.displayform" name="languageselector.displayform" class="pilcrow">&#182;</a>
+    LanguageSelector.displayForm
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The form in which the widget displays the language information</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayForm</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.optionslabel">
+  <h3>
+    <a href="#languageselector.optionslabel" name="languageselector.optionslabel" class="pilcrow">&#182;</a>
+    LanguageSelector.optionsLabel
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Array containing the labels for the language selection optionsDisplay</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">optionsLabel</span> <span class="o">=</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.optionsdisplay">
+  <h3>
+    <a href="#languageselector.optionsdisplay" name="languageselector.optionsdisplay" class="pilcrow">&#182;</a>
+    LanguageSelector.optionsDisplay
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Array containing the optionsDisplay for the language selection</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">optionsDisplay</span> <span class="o">=</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.loadingdiv">
+  <h3>
+    <a href="#languageselector.loadingdiv" name="languageselector.loadingdiv" class="pilcrow">&#182;</a>
+    LanguageSelector.loadingDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Div displaying information on whether the languages have been loaded</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">loadingDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.languagesloaded">
+  <h3>
+    <a href="#languageselector.languagesloaded" name="languageselector.languagesloaded" class="pilcrow">&#182;</a>
+    LanguageSelector.languagesLoaded
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Flag indicating whether languages have been loaded from server</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">languagesLoaded</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.onlangcallback">
+  <h3>
+    <a href="#languageselector.onlangcallback" name="languageselector.onlangcallback" class="pilcrow">&#182;</a>
+    LanguageSelector.onLangCallback
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Function to be called when languages have been loaded</p>
+
+<p>Initializes form displaying the information as well
+as the optionsDisplay and their labels.
+Initializes language to English.
+Forwards to <code>LanguageSelector.onLangCallbackExtension</code> at the very
+end.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">msg</span>
+      <span class="dox_type">object</span>
+      <span>GameMsg</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">LanguageSelector.setLanguage
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">onLangCallback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">language</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>Clear display.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">while</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+            <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>Initialize widget.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">availableLanguages</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>Creates labled buttons.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">for</span> <span class="p">(</span><span class="nx">language</span> <span class="k">in</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">language</span><span class="p">))</span> <span class="p">{</span>
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">]</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span>
+                            <span class="nx">language</span> <span class="o">+</span> <span class="s1">&#39;Label&#39;</span><span class="p">,</span> <span class="p">{</span>
+                                <span class="s1">&#39;for&#39;</span><span class="o">:</span> <span class="nx">language</span> <span class="o">+</span> <span class="s1">&#39;RadioButton&#39;</span>
+                            <span class="p">});</span>
+
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">]</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span>
+                            <span class="nx">language</span> <span class="o">+</span> <span class="s1">&#39;RadioButton&#39;</span><span class="p">,</span> <span class="p">{</span>
+                                <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span><span class="p">,</span>
+                                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;languageButton&#39;</span><span class="p">,</span>
+                                <span class="nx">value</span><span class="o">:</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">name</span><span class="p">,</span>
+                            <span class="p">}</span>
+                        <span class="p">);</span>
+
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">onclick</span> <span class="o">=</span>
+                            <span class="nx">makeSetLanguageOnClick</span><span class="p">(</span><span class="nx">language</span><span class="p">);</span>
+
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span>
+                            <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">]);</span>
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span>
+                            <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span>
+                                <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">nativeName</span><span class="p">));</span>
+                        <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">);</span>
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">className</span> <span class="o">=</span>
+                            <span class="s1">&#39;unselectedButtonLabel&#39;</span><span class="p">;</span>
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">]);</span>
+
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+
+                <span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;selectLanguage&#39;</span><span class="p">);</span>
+                <span class="k">for</span> <span class="p">(</span><span class="nx">language</span> <span class="k">in</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">]</span> <span class="o">=</span>
+                        <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">nativeName</span><span class="p">);</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">]</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;option&#39;</span><span class="p">,</span>
+                        <span class="nx">language</span> <span class="o">+</span> <span class="s1">&#39;Option&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">language</span> <span class="p">});</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">]);</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">]);</span>
+
+                <span class="p">}</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">);</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
+
+            <span class="nx">that</span><span class="p">.</span><span class="nx">loadingDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">languagesLoaded</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>Initialize to English.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>Extension point.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="kd">function</span> <span class="nx">makeSetLanguageOnClick</span><span class="p">(</span><span class="nx">langName</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">langName</span><span class="p">);</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.onlangcallbackextension">
+  <h3>
+    <a href="#languageselector.onlangcallbackextension" name="languageselector.onlangcallbackextension" class="pilcrow">&#182;</a>
+    LanguageSelector.onLangCallbackExtension
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Extension point to <code>LanguageSelector.onLangCallback</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">LanguageSelector.onLangCallback
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.init">
+  <h2>
+    <a href="#languageselector.init" name="languageselector.init" class="pilcrow">&#182;</a>
+    LanguageSelector.init
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes the widget</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">LanguageSelector.onLangCallback
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">usingButtons</span> <span class="o">||</span> <span class="kc">true</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>Register listener.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">lang</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onLangCallback</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
+<p>Display initialization.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">displayForm</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">,</span> <span class="s1">&#39;radioButtonForm&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">loadingDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">loadingDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Loading language information...&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">loadLanguages</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">);</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.setlanguage">
+  <h2>
+    <a href="#languageselector.setlanguage" name="languageselector.setlanguage" class="pilcrow">&#182;</a>
+    LanguageSelector.setLanguage
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Sets language and updates view</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">langName</span>
+      <span class="dox_type">string</span>
+      <span>shortName of language to be set.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">NodeGameClient.setLanguage
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setLanguage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">langName</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>Uncheck current language button and change className of label.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="nx">langName</span><span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
+
+                <span class="k">this</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">].</span><span class="nx">checked</span> <span class="o">=</span>
+                    <span class="s1">&#39;unchecked&#39;</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">].</span><span class="nx">className</span> <span class="o">=</span>
+                    <span class="s1">&#39;unselectedButtonLabel&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+</div>
+<p>Set current language index.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span> <span class="o">=</span> <span class="nx">langName</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>Check language button and change className of label.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">].</span><span class="nx">checked</span> <span class="o">=</span> <span class="s1">&#39;checked&#39;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">].</span><span class="nx">className</span> <span class="o">=</span>
+                <span class="s1">&#39;selectedButtonLabel&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>Update node.player.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">]);</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.updateavalaiblelanguages">
+  <h2>
+    <a href="#languageselector.updateavalaiblelanguages" name="languageselector.updateavalaiblelanguages" class="pilcrow">&#182;</a>
+    LanguageSelector.updateAvalaibleLanguages
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Updates available languages asynchronously</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateAvalaibleLanguages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">msg</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+            <span class="nx">target</span><span class="o">:</span> <span class="s2">&quot;LANG&quot;</span><span class="p">,</span>
+            <span class="nx">to</span><span class="o">:</span> <span class="s2">&quot;SERVER&quot;</span><span class="p">,</span>
+            <span class="nx">action</span><span class="o">:</span> <span class="s2">&quot;get&quot;</span>
+        <span class="p">}));</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.loadlanguages">
+  <h2>
+    <a href="#languageselector.loadlanguages" name="languageselector.loadlanguages" class="pilcrow">&#182;</a>
+    LanguageSelector.loadLanguages
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Loads languages once from server</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">LanguageSelector.updateAvalaibleLanguages
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">loadLanguages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">languagesLoaded</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">updateAvalaibleLanguages</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">();</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

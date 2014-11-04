@@ -805,7 +805,9 @@ the new one is activated.</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">compoundDisplayModeName</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="nx">displayModeNames</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">compoundDisplayModeName</span> <span class="o">+=</span> <span class="nx">displayModeNames</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">displayModeNames</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">index</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">compoundDisplayModeName</span> <span class="o">+=</span> <span class="nx">displayModeNames</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
 
@@ -846,25 +848,29 @@ the new one is activated.</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">displayModes</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="nx">displayModeNames</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">switch</span> <span class="p">(</span><span class="nx">displayModeNames</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span> <span class="p">{</span>
-                <span class="k">case</span> <span class="s1">&#39;COUNT_UP_STAGES_TO_TOTAL&#39;</span><span class="o">:</span>
-                    <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpStages</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span><span class="nx">toTotal</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">case</span> <span class="s1">&#39;COUNT_UP_STAGES&#39;</span><span class="o">:</span>
-                    <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpStages</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">case</span> <span class="s1">&#39;COUNT_DOWN_STAGES&#39;</span><span class="o">:</span>
-                    <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountDownStages</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">case</span> <span class="s1">&#39;COUNT_UP_ROUNDS_TO_TOTAL&#39;</span><span class="o">:</span>
-                    <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpRounds</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span><span class="nx">toTotal</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">case</span> <span class="s1">&#39;COUNT_UP_ROUNDS&#39;</span><span class="o">:</span>
-                    <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpRounds</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">case</span> <span class="s1">&#39;COUNT_DOWN_ROUNDS&#39;</span><span class="o">:</span>
-                    <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountDownRounds</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
-                    <span class="k">break</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">displayModeNames</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">index</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">switch</span> <span class="p">(</span><span class="nx">displayModeNames</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="k">case</span> <span class="s1">&#39;COUNT_UP_STAGES_TO_TOTAL&#39;</span><span class="o">:</span>
+                        <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpStages</span><span class="p">(</span><span class="k">this</span><span class="p">,</span>
+                            <span class="p">{</span><span class="nx">toTotal</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;COUNT_UP_STAGES&#39;</span><span class="o">:</span>
+                        <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpStages</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;COUNT_DOWN_STAGES&#39;</span><span class="o">:</span>
+                        <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountDownStages</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;COUNT_UP_ROUNDS_TO_TOTAL&#39;</span><span class="o">:</span>
+                        <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpRounds</span><span class="p">(</span><span class="k">this</span><span class="p">,</span>
+                            <span class="p">{</span><span class="nx">toTotal</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;COUNT_UP_ROUNDS&#39;</span><span class="o">:</span>
+                        <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountUpRounds</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;COUNT_DOWN_ROUNDS&#39;</span><span class="o">:</span>
+                        <span class="nx">displayModes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">CountDownRounds</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                        <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">displayMode</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CompoundDisplayMode</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">displayModes</span><span class="p">);</span>
@@ -2649,7 +2655,9 @@ information according to multiple displayModes.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
 
         <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="nx">displayModes</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+=</span> <span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">displayModes</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">index</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+=</span> <span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
@@ -2770,7 +2778,10 @@ information according to multiple displayModes.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getDiv</span><span class="p">();</span>
 
         <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">displayDiv</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">index</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">displayDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">displayDiv</span><span class="p">);</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
@@ -2806,15 +2817,19 @@ information according to multiple displayModes.</p>
     <span class="nx">CompoundDisplayMode</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">index</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">updateDisplay</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">index</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">updateDisplay</span><span class="p">();</span>
+            <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">};</span>
 
     <span class="nx">CompoundDisplayMode</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">activate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">index</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">activate</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">activate</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">index</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">activate</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">activate</span><span class="p">();</span>
+                <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">};</span>
@@ -2822,8 +2837,10 @@ information according to multiple displayModes.</p>
     <span class="nx">CompoundDisplayMode</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">deactivate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">index</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">deactivate</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">displayMode</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">deactivate</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">index</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayModes</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">deactivate</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">displayMode</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">deactivate</span><span class="p">();</span>
+                <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">};</span>
