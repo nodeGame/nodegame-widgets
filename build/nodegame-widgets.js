@@ -2311,7 +2311,7 @@
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Integrates nodeGame with the D3 library to plot a real-time chart. 
+ * Integrates nodeGame with the D3 library to plot a real-time chart.
  *
  * www.nodegame.org
  * ---
@@ -2319,105 +2319,105 @@
 (function(node) {
 
     "use strict";
-        
+
     node.widgets.register('D3', D3);
     node.widgets.register('D3ts', D3ts);
-    
+
     D3.prototype.__proto__ = node.Widget.prototype;
     D3.prototype.constructor = D3;
 
     // ## Defaults
-    
+
     D3.defaults = {};
     D3.defaults.id = 'D3';
     D3.defaults.fieldset = {
 	legend: 'D3 plot'
     };
 
-    
+
     // ## Meta-data
-    
+
     D3.version = '0.1';
     D3.description = 'Real time plots for nodeGame with d3.js';
-    
+
     // ## Dependencies
-    
+
     D3.dependencies = {
-	d3: {},	
+	d3: {},
 	JSUS: {}
     };
-    
+
     function D3 (options) {
 	this.id = options.id || D3.id;
 	this.event = options.event || 'D3';
 	this.svg = null;
-	
+
 	var that = this;
 	node.on(this.event, function(value) {
-	    that.tick.call(that, value); 
+	    that.tick.call(that, value);
 	});
     }
-    
+
     D3.prototype.append = function(root) {
 	this.root = root;
 	this.svg = d3.select(root).append("svg");
 	return root;
     };
-    
+
     D3.prototype.tick = function() {};
-    
+
     // # D3ts
-    
-    
+
+
     // ## Meta-data
-    
+
     D3ts.id = 'D3ts';
     D3ts.version = '0.1';
     D3ts.description = 'Time series plot for nodeGame with d3.js';
-    
-    // ## Dependencies	
+
+    // ## Dependencies
     D3ts.dependencies = {
-	D3: {},	
+	D3: {},
 	JSUS: {}
     };
-    
+
     D3ts.prototype.__proto__ = D3.prototype;
     D3ts.prototype.constructor = D3ts;
-    
+
     D3ts.defaults = {};
-    
+
     D3ts.defaults.width = 400;
     D3ts.defaults.height = 200;
-    
+
     D3ts.defaults.margin = {
-    	top: 10, 
-    	right: 10, 
-    	bottom: 20, 
-    	left: 40 
+    	top: 10,
+    	right: 10,
+    	bottom: 20,
+    	left: 40
     };
-    
+
     D3ts.defaults.domain = {
 	x: [0, 10],
 	y: [0, 1]
     };
-    
+
     D3ts.defaults.range = {
     	x: [0, D3ts.defaults.width],
     	y: [D3ts.defaults.height, 0]
     };
-    
+
     function D3ts (options) {
 	D3.call(this, options);
-	
-	
+
+
 	var o = this.options = JSUS.merge(D3ts.defaults, options);
-	
+
 	var n = this.n = o.n;
-	
+
 	this.data = [0];
-	
+
 	this.margin = o.margin;
-	
+
 	var width = this.width = o.width - this.margin.left - this.margin.right;
 	var height = this.height = o.height - this.margin.top - this.margin.bottom;
 
@@ -2435,18 +2435,18 @@
 	    .x(function(d, i) { return x(i); })
 	    .y(function(d, i) { return y(d); });
     }
-    
+
     D3ts.prototype.init = function(options) {
 	//D3.init.call(this, options);
-	
+
 	console.log('init!');
 	var x = this.x,
 	y = this.y,
 	height = this.height,
 	width = this.width,
 	margin = this.margin;
-	
-	
+
+
 	// Create the SVG and place it in the middle
 	this.svg.attr("width", width + margin.left + margin.right)
 	    .attr("height", height + margin.top + margin.bottom)
@@ -2477,20 +2477,20 @@
 	    .append("path")
 	    .data([this.data])
 	    .attr("class", "line")
-	    .attr("d", this.line);		
+	    .attr("d", this.line);
     };
-    
+
     D3ts.prototype.tick = function(value) {
 	this.alreadyInit = this.alreadyInit || false;
 	if (!this.alreadyInit) {
 	    this.init();
 	    this.alreadyInit = true;
 	}
-	
+
 	var x = this.x;
-	
+
 	console.log('tick!');
-	
+
 	// push a new data point onto the back
 	this.data.push(value);
 
@@ -2501,18 +2501,18 @@
 
 	// pop the old data point off the front
 	if (this.data.length > this.n) {
-	    
+
 	    this.path
 	  	.transition()
 	  	.duration(500)
 	  	.ease("linear")
 	  	.attr("transform", "translate(" + x(-1) + ")");
-	    
+
 	    this.data.shift();
-	    
+
 	}
     };
-    
+
 })(node);
 /**
  * # DataBar widget for nodeGame
@@ -2862,10 +2862,10 @@
 
     Feedback.defaults = {};
     Feedback.defaults.id = 'feedback';
-    Feedback.defaults.fieldset = { 
+    Feedback.defaults.fieldset = {
         legend: 'Feedback'
     };
-    
+
     // ## Meta-data
 
     Feedback.version = '0.1';
@@ -2942,70 +2942,70 @@
  * ---
  */
 (function(node) {
-   
+
     "use strict";
- 
+
     node.widgets.register('GameBoard', GameBoard);
-    
+
     var PlayerList = node.PlayerList;
 
-    // ## Defaults	
-    
+    // ## Defaults
+
     GameBoard.defaults = {};
     GameBoard.defaults.id = 'gboard';
     GameBoard.defaults.fieldset = {
 	legend: 'Game Board'
     };
-    
+
     // ## Meta-data
-    
+
     GameBoard.version = '0.4.0';
     GameBoard.description = 'Offer a visual representation of the state of all players in the game.';
-    
+
     function GameBoard(options) {
-	
+
 	this.id = options.id || GameBoard.defaults.id;
 	this.status_id = this.id + '_statusbar';
-	
+
 	this.board = null;
 	this.status = null;
 	this.root = null;
-	
+
     }
-    
+
     GameBoard.prototype.append = function(root) {
 	this.root = root;
 	this.status = node.window.addDiv(root, this.status_id);
 	this.board = node.window.addDiv(root, this.id);
-	
+
 	this.updateBoard(node.game.pl);
-		
+
 	return root;
     };
-    
+
     GameBoard.prototype.listeners = function() {
-	var that = this;		
+	var that = this;
 	node.on('UPDATED_PLIST', function() {
 	    that.updateBoard(node.game.pl);
 	});
-	
+
     };
-    
+
     GameBoard.prototype.printLine = function(p) {
 
 	var line, levels, level;
         levels = node.constants.stageLevels;
 
-        line = '[' + (p.name || p.id) + "]> \t"; 
-	line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' + p.stage.step; 
+        line = '[' + (p.name || p.id) + "]> \t";
+	line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' + p.stage.step;
 	line += ' ';
-	
+
 	switch (p.stageLevel) {
 
 	case levels.UNINITIALIZED:
 	    level = 'uninit.';
 	    break;
-	    
+
 	case levels.INITIALIZING:
 	    level = 'init...';
 	    break;
@@ -3016,54 +3016,54 @@
 
 	case levels.LOADING:
 	    level = 'loading';
-	    break;	    
+	    break;
 
 	case levels.LOADED:
 	    level = 'loaded';
 	    break;
-	    
+
 	case levels.PLAYING:
 	    level = 'playing';
 	    break;
 	case levels.DONE:
 	    level = 'done';
 	    break;
-		
+
 	default:
 	    level = p.stageLevel;
-	    break;		
+	    break;
 	}
 
 	return line + '(' + level + ')';
     };
-    
+
     GameBoard.prototype.printSeparator = function(p) {
 	return W.getElement('hr', null, {style: 'color: #CCC;'});
     };
-    
-    
+
+
     GameBoard.prototype.updateBoard = function(pl) {
 	var player, separator;
         var that = this;
-	
+
 	this.status.innerHTML = 'Updating...';
-	
+
 	if (pl.size()) {
 	    that.board.innerHTML = '';
 	    pl.forEach( function(p) {
 		player = that.printLine(p);
-		
+
 		W.write(player, that.board);
-		
+
 		separator = that.printSeparator(p);
 		W.write(separator, that.board);
 	    });
 	}
-	
-	
+
+
 	this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
     };
-    
+
 })(node);
 
 /**
@@ -3083,33 +3083,33 @@
     node.widgets.register('GameSummary', GameSummary);
 
     // ## Defaults
-    
+
     GameSummary.defaults = {};
     GameSummary.defaults.id = 'gamesummary';
     GameSummary.defaults.fieldset = { legend: 'Game Summary' };
-    
+
     // ## Meta-data
-    
+
     GameSummary.version = '0.3';
     GameSummary.description = 'Show the general configuration options of the game.';
-    
+
     function GameSummary(options) {
 	this.summaryDiv = null;
     }
-    
+
     GameSummary.prototype.append = function(root) {
 	this.root = root;
 	this.summaryDiv = node.window.addDiv(root);
 	this.writeSummary();
 	return root;
     };
-    
+
     GameSummary.prototype.writeSummary = function(idState, idSummary) {
 	var gName = document.createTextNode('Name: ' + node.game.metadata.name),
 	gDescr = document.createTextNode('Descr: ' + node.game.metadata.description),
 	gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
 	gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
-	
+
 	this.summaryDiv.appendChild(gName);
 	this.summaryDiv.appendChild(document.createElement('br'));
 	this.summaryDiv.appendChild(gDescr);
@@ -3117,7 +3117,7 @@
 	this.summaryDiv.appendChild(gMinP);
 	this.summaryDiv.appendChild(document.createElement('br'));
 	this.summaryDiv.appendChild(gMaxP);
-	
+
 	node.window.addDiv(this.root, this.summaryDiv, idSummary);
     };
 
@@ -4385,6 +4385,7 @@
         return errors;
     };
 
+<<<<<<< HEAD
     /**
      * ## Requirements.addTimeout
      *
@@ -4396,6 +4397,8 @@
      * @see this.withTimeout
      * @see this.callbacks
      */
+=======
+>>>>>>> 71c4d7e84ae14a6fcb1c2a4e00d2c14caf69b17a
     Requirements.prototype.addTimeout = function() {
         var that = this;
         var errStr = 'One or more function is taking too long. This is ' +
@@ -4452,6 +4455,7 @@
         this.summaryUpdate.innerHTML = ' (' +  remaining + ' / ' + total + ')';
     };
 
+<<<<<<< HEAD
     /**
      * ## Requirements.isCheckingFinished
      *
@@ -4460,6 +4464,9 @@
      * @see this.stillCheckings
      * @see this.callbacks
      */
+=======
+
+>>>>>>> 71c4d7e84ae14a6fcb1c2a4e00d2c14caf69b17a
     Requirements.prototype.isCheckingFinished = function() {
         return this.stillChecking <= 0;
     };
@@ -4574,7 +4581,13 @@
         this.list.parse();
     };
 
+<<<<<<< HEAD
     Requirements.prototype.append = function() {
+=======
+    Requirements.prototype.append = function(root) {
+        this.root = root;
+
+>>>>>>> 71c4d7e84ae14a6fcb1c2a4e00d2c14caf69b17a
         this.summary = document.createElement('span');
         this.summary.appendChild(
             document.createTextNode('Evaluating requirements'));
@@ -4585,6 +4598,15 @@
         this.dots = W.getLoadingDots();
 
         this.summary.appendChild(this.dots.span);
+<<<<<<< HEAD
+=======
+
+        root.appendChild(this.summary);
+
+        root.appendChild(this.list.getRoot());
+        return root;
+    };
+>>>>>>> 71c4d7e84ae14a6fcb1c2a4e00d2c14caf69b17a
 
         this.bodyDiv.appendChild(this.summary);
 
@@ -4695,6 +4717,7 @@
         }
     };
 
+<<<<<<< HEAD
     // ## Helper methods
 
     function resultCb(that, i) {
@@ -4730,6 +4753,9 @@
         }
         return errMsg;
     }
+=======
+
+>>>>>>> 71c4d7e84ae14a6fcb1c2a4e00d2c14caf69b17a
 
     node.widgets.register('Requirements', Requirements);
 

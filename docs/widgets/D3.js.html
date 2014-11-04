@@ -78,10 +78,10 @@ MIT Licensed</p>
         <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
 
     <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-        
+
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;D3&#39;</span><span class="p">,</span> <span class="nx">D3</span><span class="p">);</span>
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;D3ts&#39;</span><span class="p">,</span> <span class="nx">D3ts</span><span class="p">);</span>
-    
+
     <span class="nx">D3</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
     <span class="nx">D3</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">D3</span><span class="p">;</span>
 
@@ -100,14 +100,14 @@ MIT Licensed</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    
+
     <span class="nx">D3</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
     <span class="nx">D3</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;D3&#39;</span><span class="p">;</span>
     <span class="nx">D3</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;D3 plot&#39;</span>
     <span class="p">};</span>
 
-    
+
 
 </pre></div>
         </td>
@@ -123,10 +123,10 @@ MIT Licensed</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    
+
     <span class="nx">D3</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span><span class="p">;</span>
     <span class="nx">D3</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Real time plots for nodeGame with d3.js&#39;</span><span class="p">;</span>
-    
+
 
 </pre></div>
         </td>
@@ -142,31 +142,31 @@ MIT Licensed</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    
+
     <span class="nx">D3</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">d3</span><span class="o">:</span> <span class="p">{},</span> 
+  <span class="nx">d3</span><span class="o">:</span> <span class="p">{},</span>
   <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
-    
+
     <span class="kd">function</span> <span class="nx">D3</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">D3</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">event</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">event</span> <span class="o">||</span> <span class="s1">&#39;D3&#39;</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">svg</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-  
+
   <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
   <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">event</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">that</span><span class="p">.</span><span class="nx">tick</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span> 
+      <span class="nx">that</span><span class="p">.</span><span class="nx">tick</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
   <span class="p">});</span>
     <span class="p">}</span>
-    
+
     <span class="nx">D3</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">svg</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">root</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
     <span class="p">};</span>
-    
+
     <span class="nx">D3</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">tick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
-    
+
 
 </pre></div>
         </td>
@@ -182,8 +182,8 @@ MIT Licensed</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    
-    
+
+
 
 </pre></div>
         </td>
@@ -199,11 +199,11 @@ MIT Licensed</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;D3ts&#39;</span><span class="p">;</span>
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span><span class="p">;</span>
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Time series plot for nodeGame with d3.js&#39;</span><span class="p">;</span>
-    
+
 
 </pre></div>
         </td>
@@ -220,47 +220,47 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">D3</span><span class="o">:</span> <span class="p">{},</span> 
+  <span class="nx">D3</span><span class="o">:</span> <span class="p">{},</span>
   <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">D3</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">D3ts</span><span class="p">;</span>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="mi">400</span><span class="p">;</span>
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">margin</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">top</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> 
-      <span class="nx">right</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> 
-      <span class="nx">bottom</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span> 
-      <span class="nx">left</span><span class="o">:</span> <span class="mi">40</span> 
+      <span class="nx">top</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="nx">right</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="nx">bottom</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
+      <span class="nx">left</span><span class="o">:</span> <span class="mi">40</span>
     <span class="p">};</span>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">domain</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">x</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
   <span class="nx">y</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="p">};</span>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">range</span> <span class="o">=</span> <span class="p">{</span>
       <span class="nx">x</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">width</span><span class="p">],</span>
       <span class="nx">y</span><span class="o">:</span> <span class="p">[</span><span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="p">};</span>
-    
+
     <span class="kd">function</span> <span class="nx">D3ts</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">D3</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  
-  
+
+
   <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  
+
   <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">n</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">n</span><span class="p">;</span>
-  
+
   <span class="k">this</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-  
+
   <span class="k">this</span><span class="p">.</span><span class="nx">margin</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">margin</span><span class="p">;</span>
-  
+
   <span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">width</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">left</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">right</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">height</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">top</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">bottom</span><span class="p">;</span>
 
@@ -300,7 +300,7 @@ MIT Licensed</p>
       <span class="p">.</span><span class="nx">x</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">x</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">})</span>
       <span class="p">.</span><span class="nx">y</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">y</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span> <span class="p">});</span>
     <span class="p">}</span>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
@@ -314,15 +314,15 @@ MIT Licensed</p>
 <p>D3.init.call(this, options);</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  
+
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;init!&#39;</span><span class="p">);</span>
   <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span>
   <span class="nx">y</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span>
   <span class="nx">height</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span>
   <span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span>
   <span class="nx">margin</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">;</span>
-  
-  
+
+
 
 </pre></div>
         </td>
@@ -397,20 +397,20 @@ MIT Licensed</p>
       <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">data</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">])</span>
       <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;line&quot;</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">line</span><span class="p">);</span>    
+      <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">line</span><span class="p">);</span>
     <span class="p">};</span>
-    
+
     <span class="nx">D3ts</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">tick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">alreadyInit</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">alreadyInit</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
   <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">alreadyInit</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">alreadyInit</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
   <span class="p">}</span>
-  
+
   <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">;</span>
-  
+
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;tick!&#39;</span><span class="p">);</span>
-  
+
 
 </pre></div>
         </td>
@@ -454,18 +454,18 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
-      
+
       <span class="k">this</span><span class="p">.</span><span class="nx">path</span>
       <span class="p">.</span><span class="nx">transition</span><span class="p">()</span>
       <span class="p">.</span><span class="nx">duration</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">ease</span><span class="p">(</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;translate(&quot;</span> <span class="o">+</span> <span class="nx">x</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">);</span>
-      
+
       <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
-      
+
   <span class="p">}</span>
     <span class="p">};</span>
-    
+
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>
         </td>

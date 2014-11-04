@@ -18,10 +18,10 @@
 
     Feedback.defaults = {};
     Feedback.defaults.id = 'feedback';
-    Feedback.defaults.fieldset = { 
+    Feedback.defaults.fieldset = {
         legend: 'Feedback'
     };
-    
+
     // ## Meta-data
 
     Feedback.version = '0.1';

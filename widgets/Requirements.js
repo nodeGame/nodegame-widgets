@@ -395,6 +395,7 @@
     };
 
     Requirements.prototype.append = function() {
+
         this.summary = document.createElement('span');
         this.summary.appendChild(
             document.createTextNode('Evaluating requirements'));
@@ -515,6 +516,7 @@
         }
     };
 
+<<<<<<< HEAD
     // ## Helper methods
 
     function resultCb(that, i) {
