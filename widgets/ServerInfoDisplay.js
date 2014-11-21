@@ -1,12 +1,11 @@
 /**
- * # ServerInfoDisplay widget for nodeGame
+ * # ServerInfoDisplay
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Displays information about the server.
+ * Displays information about the server
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

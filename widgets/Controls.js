@@ -1,12 +1,11 @@
 /**
- * # Controls widget for nodeGame
+ * # Controls
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates and manipulates a set of forms.
+ * Creates and manipulates a set of forms
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -26,7 +25,7 @@
     Controls.jQuerySlider = jQuerySliderControls;
     Controls.Radio = RadioControls;
 
-    // Meta-data
+    // ## Meta-data
 
     Controls.version = '0.3';
     Controls.description = 'Wraps a collection of user-inputs controls.';

@@ -1,12 +1,11 @@
 /**
- * # StateDisplay widget for nodeGame
+ * # StateDisplay
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Display information about the state of a player.
+ * Display information about the state of a player
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

@@ -1,12 +1,11 @@
 /**
- * # GameTable widget for nodeGame
+ * # GameTable
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a table that renders in each cell data captured by fired events.
+ * Creates a table that renders in each cell data captured by fired events
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

@@ -1,12 +1,11 @@
 /**
- * # Chat widget for nodeGame
+ * # Chat
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a simple configurable chat.
+ * Creates a simple configurable chat
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -50,7 +49,7 @@
     };
 
     Chat.version = '0.4';
-    Chat.description = 'Offers a uni / bi-directional communication interface ' +
+    Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the experimenter.';
 
     // ## Dependencies
@@ -72,7 +71,8 @@
         this.chat_event = options.chat_event || Chat.defaults.chat_event;
         this.submit_text = options.submit_text || Chat.defaults.submit_text;
 
-        this.submit = W.getEventButton(this.chat_event, this.submit_text, this.submit_id);
+        this.submit = W.getEventButton(this.chat_event, this.submit_text,
+                                       this.submit_id);
         this.textarea = W.getElement('textarea', this.textarea_id);
         this.chat = W.getElement('div', this.chat_id);
 
@@ -157,7 +157,8 @@
 
         if (this.mode === Chat.modes.MANY_TO_MANY) {
             node.on('UPDATED_PLIST', function() {
-                W.populateRecipientSelector(that.recipient, node.game.pl.fetch());
+                W.populateRecipientSelector(that.recipient,
+                    node.game.pl.fetch());
             });
         }
 

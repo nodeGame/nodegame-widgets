@@ -19,10 +19,7 @@
     <div id="tree"></div>
     <div id="headings">
       <div class="heading h1">
-        <a href="#requirements%20widget%20for%20nodegame">Requirements widget for nodeGame</a>
-      </div>
-      <div class="heading h2">
-        <a href="#www.nodegame.org">www.nodegame.org</a>
+        <a href="#requirements">Requirements</a>
       </div>
       <div class="heading h2">
         <a href="#defaults">Defaults</a>
@@ -34,39 +31,42 @@
         <a href="#dependencies">Dependencies</a>
       </div>
       <div class="heading h2">
-        <a href="#requirements.">Requirements.</a>
+        <a href="#requirements%20constructor">Requirements constructor</a>
       </div>
       <div class="heading h2">
+        <a href="#requirements%20methods">Requirements methods</a>
+      </div>
+      <div class="heading h3">
         <a href="#requirements.addrequirements">Requirements.addRequirements</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.checkrequirements">Requirements.checkRequirements</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.addtimeout">Requirements.addTimeout</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.cleartimeout">Requirements.clearTimeout</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.updatestillchecking">Requirements.updateStillChecking</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.ischeckingfinished">Requirements.isCheckingFinished</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.checkingfinished">Requirements.CheckingFinished</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.displayresults">Requirements.displayResults</a>
       </div>
       <div class="heading h2">
         <a href="#default%20requirement%20functions">Default Requirement Functions</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.nodegamerequirements">Requirements.nodeGameRequirements</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#requirements.loadframetest">Requirements.loadFrameTest</a>
       </div>
       <div class="heading h2">
@@ -81,10 +81,10 @@
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="requirements%20widget%20for%20nodegame">
+<div class="pilwrap" id="requirements">
   <h1>
-    <a href="#requirements%20widget%20for%20nodegame" name="requirements%20widget%20for%20nodegame" class="pilcrow">&#182;</a>
-    Requirements widget for nodeGame
+    <a href="#requirements" name="requirements" class="pilcrow">&#182;</a>
+    Requirements
   </h1>
 </div>
 
@@ -92,16 +92,9 @@
 <p>Copyright(c) 2014 Stefano Balietti
 MIT Licensed</p>
   </div>
-  <div class="body"><p>Checks a list of requirements and displays the results.</p>
+  <div class="body"><p>Checks a list of requirements and displays the results</p>
 
-
-<div class="pilwrap" id="www.nodegame.org">
-  <h2>
-    <a href="#www.nodegame.org" name="www.nodegame.org" class="pilcrow">&#182;</a>
-    www.nodegame.org
-  </h2>
-</div>
-
+<p>www.nodegame.org</p>
   </div>
 </div>
         </td>
@@ -181,10 +174,10 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="requirements.">
+<div class="pilwrap" id="requirements%20constructor">
   <h2>
-    <a href="#requirements." name="requirements." class="pilcrow">&#182;</a>
-    Requirements.
+    <a href="#requirements%20constructor" name="requirements%20constructor" class="pilcrow">&#182;</a>
+    Requirements constructor
   </h2>
 </div>
 
@@ -463,13 +456,29 @@ MIT Licensed</p>
         </td>
       </tr>
       <tr>
+        <td class="docs">
+<div class="pilwrap" id="requirements%20methods">
+  <h2>
+    <a href="#requirements%20methods" name="requirements%20methods" class="pilcrow">&#182;</a>
+    Requirements methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.addrequirements">
-  <h2>
+  <h3>
     <a href="#requirements.addrequirements" name="requirements.addrequirements" class="pilcrow">&#182;</a>
     Requirements.addRequirements
-  </h2>
+  </h3>
 </div>
 
   </div>
@@ -515,14 +524,14 @@ error message. Empty array means test passed.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.checkrequirements">
-  <h2>
+  <h3>
     <a href="#requirements.checkrequirements" name="requirements.checkrequirements" class="pilcrow">&#182;</a>
     Requirements.checkRequirements
-  </h2>
+  </h3>
 </div>
 
   </div>
-  <div class="body"><p>Asynchrounsly or synchrounsly checks all registered callbacks</p>
+  <div class="body"><p>Asynchronously or synchronously checks all registered callbacks</p>
 
 <p>Can add a timeout for the max execution time of the callbacks, if the
 corresponding option is set.</p>
@@ -534,12 +543,12 @@ corresponding option is set.</p>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">display</span>
       <span class="dox_type">boolean</span>
-      <span>If TRUE, results are displayed.</span>
+      <span>If TRUE, results are displayed</span>
     </div>
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name"></span>
-      <span class="dox_type">errors</span>
+      <span class="dox_type">array</span>
       <span>The array containing the errors</span>
     </div>
     <div class="dox_tag_title">See</div>
@@ -612,10 +621,10 @@ corresponding option is set.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.addtimeout">
-  <h2>
+  <h3>
     <a href="#requirements.addtimeout" name="requirements.addtimeout" class="pilcrow">&#182;</a>
     Requirements.addTimeout
-  </h2>
+  </h3>
 </div>
 
   </div>
@@ -665,10 +674,10 @@ corresponding option is set.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.cleartimeout">
-  <h2>
+  <h3>
     <a href="#requirements.cleartimeout" name="requirements.cleartimeout" class="pilcrow">&#182;</a>
     Requirements.clearTimeout
-  </h2>
+  </h3>
 </div>
 
   </div>
@@ -707,10 +716,10 @@ corresponding option is set.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.updatestillchecking">
-  <h2>
+  <h3>
     <a href="#requirements.updatestillchecking" name="requirements.updatestillchecking" class="pilcrow">&#182;</a>
     Requirements.updateStillChecking
-  </h2>
+  </h3>
 </div>
 
   </div>
@@ -719,10 +728,10 @@ corresponding option is set.</p>
   <div class="details">
     <div class="dox_tag_title">Params</div>
     <div class="dox_tag_detail">
-      <span class="dox_tag_name">The</span>
+      <span class="dox_tag_name">update</span>
       <span class="dox_type">number</span>
-      <span>number of callbacks still running, or an increment
-  as compared to the current value</span>
+      <span>The number of callbacks still running, or an
+  increment as compared to the current value</span>
     </div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">absolute</span>
@@ -765,14 +774,14 @@ corresponding option is set.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.ischeckingfinished">
-  <h2>
+  <h3>
     <a href="#requirements.ischeckingfinished" name="requirements.ischeckingfinished" class="pilcrow">&#182;</a>
     Requirements.isCheckingFinished
-  </h2>
+  </h3>
 </div>
 
   </div>
-  <div class="body"><p>Returns TRUE, if all callbacks have returned</p>
+  <div class="body"><p>Returns TRUE if all callbacks have returned</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
@@ -800,10 +809,10 @@ corresponding option is set.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.checkingfinished">
-  <h2>
+  <h3>
     <a href="#requirements.checkingfinished" name="requirements.checkingfinished" class="pilcrow">&#182;</a>
     Requirements.CheckingFinished
-  </h2>
+  </h3>
 </div>
 
   </div>
@@ -880,10 +889,10 @@ the <code>onFail</code> callback.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.displayresults">
-  <h2>
+  <h3>
     <a href="#requirements.displayresults" name="requirements.displayresults" class="pilcrow">&#182;</a>
     Requirements.displayResults
-  </h2>
+  </h3>
 </div>
 
   </div>
@@ -947,7 +956,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>No errors.</p>
         </td>
@@ -960,7 +969,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Last check and no previous errors.</p>
         </td>
@@ -973,7 +982,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>All tests passed.</p>
         </td>
@@ -989,7 +998,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Add to the array of results.</p>
         </td>
@@ -1006,7 +1015,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Add the errors.</p>
         </td>
@@ -1024,7 +1033,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>Add to the array of results.</p>
         </td>
@@ -1039,7 +1048,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>Parse deletes previously existing nodes in the list.</p>
         </td>
@@ -1091,10 +1100,10 @@ in the results array.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.nodegamerequirements">
-  <h2>
+  <h3>
     <a href="#requirements.nodegamerequirements" name="requirements.nodegamerequirements" class="pilcrow">&#182;</a>
     Requirements.nodeGameRequirements
-  </h2>
+  </h3>
 </div>
 
   </div>
@@ -1103,15 +1112,15 @@ in the results array.</p>
   <div class="details">
     <div class="dox_tag_title">Params</div>
     <div class="dox_tag_detail">
-      <span class="dox_tag_name">The</span>
+      <span class="dox_tag_name">result</span>
       <span class="dox_type">function</span>
-      <span>asynchronous result function</span>
+      <span>The asynchronous result function</span>
     </div>
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name"></span>
       <span class="dox_type">array</span>
-      <span>errors Array of synchronous errors</span>
+      <span>Array of synchronous errors</span>
     </div>
   </div>
 </div>
@@ -1158,7 +1167,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>We need to test node.Stager because it will be used in other tests.</p>
         </td>
@@ -1178,10 +1187,10 @@ in the results array.</p>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="requirements.loadframetest">
-  <h2>
+  <h3>
     <a href="#requirements.loadframetest" name="requirements.loadframetest" class="pilcrow">&#182;</a>
     Requirements.loadFrameTest
-  </h2>
+  </h3>
 </div>
 
   </div>
@@ -1192,15 +1201,15 @@ in the results array.</p>
   <div class="details">
     <div class="dox_tag_title">Params</div>
     <div class="dox_tag_detail">
-      <span class="dox_tag_name">The</span>
+      <span class="dox_tag_name">result</span>
       <span class="dox_type">function</span>
-      <span>asynchronous result function</span>
+      <span>The asynchronous result function</span>
     </div>
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name"></span>
       <span class="dox_type">array</span>
-      <span>errors Array of synchronous errors</span>
+      <span>Array of synchronous errors</span>
     </div>
   </div>
 </div>

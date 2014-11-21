@@ -1,12 +1,11 @@
 /**
- * # MoneyTalks widget for nodeGame
+ * # MoneyTalks
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Displays a box for formatting currency.
+ * Displays a box for formatting currency
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

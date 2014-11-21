@@ -1,12 +1,11 @@
 /**
- * # GameSummary widget for nodeGame
+ * # GameSummary
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Shows the configuration options of a game in a box.
+ * Shows the configuration options of a game in a box
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

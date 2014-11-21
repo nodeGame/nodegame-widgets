@@ -1,16 +1,15 @@
 /**
- * # Dynamic Table widget for nodeGame
+ * # DynamicTable
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Extends the GameTable widgets by allowing dynamic reshaping.
+ * Extends the GameTable widgets by allowing dynamic reshaping
  *
  * TODO: this widget needs refactoring.
  *
  * @experimental
  * @see GameTable widget
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

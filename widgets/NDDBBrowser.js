@@ -1,12 +1,11 @@
 /**
- * # NDDBBrowser widget for nodeGame
+ * # NDDBBrowser
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates an interface to interact with an NDDB database.
+ * Creates an interface to interact with an NDDB database
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

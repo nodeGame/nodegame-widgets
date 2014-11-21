@@ -1,13 +1,12 @@
 /**
- * # Wall widget for nodeGame
+ * # Wall
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where log and other information is added
- * with a number and timestamp.
+ * with a number and timestamp
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -35,7 +34,7 @@
         JSUS: {}
     };
 
-    function Wall (options) {
+    function Wall(options) {
         this.id = options.id || Wall.id;
         this.name = options.name || this.name;
         this.buffer = [];

@@ -1,12 +1,11 @@
 /**
- * # StateBar widget for nodeGame
+ * # StateBar
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Provides a simple interface to change the game stages.
+ * Provides a simple interface to change the game stages
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

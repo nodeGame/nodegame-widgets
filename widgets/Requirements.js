@@ -1,12 +1,11 @@
 /**
- * # Requirements widget for nodeGame
+ * # Requirements
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Checks a list of requirements and displays the results.
+ * Checks a list of requirements and displays the results
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -36,7 +35,7 @@
     };
 
     /**
-     * ## Requirements.
+     * ## Requirements constructor
      *
      * Instantiates a new Requirements object
      *
@@ -111,8 +110,10 @@
         });
     }
 
+    // ## Requirements methods
+
     /**
-     * ## Requirements.addRequirements
+     * ### Requirements.addRequirements
      *
      * Adds any number of callbacks checking the requirements
      *
@@ -141,17 +142,18 @@
     };
 
     /**
-     * ## Requirements.checkRequirements
+     * ### Requirements.checkRequirements
      *
-     * Asynchrounsly or synchrounsly checks all registered callbacks
+     * Asynchronously or synchronously checks all registered callbacks
      *
      * Can add a timeout for the max execution time of the callbacks, if the
      * corresponding option is set.
      *
      * Results are displayed conditionally
      *
-     * @param {boolean} display If TRUE, results are displayed.
-     * @return {errors} The array containing the errors
+     * @param {boolean} display If TRUE, results are displayed
+     *
+     * @return {array} The array containing the errors
      *
      * @see this.withTimeout
      * @see this.callbacks
@@ -206,7 +208,7 @@
     };
 
     /**
-     * ## Requirements.addTimeout
+     * ### Requirements.addTimeout
      *
      * Starts a timeout for the max execution time of the callbacks
      *
@@ -233,7 +235,7 @@
     };
 
     /**
-     * ## Requirements.clearTimeout
+     * ### Requirements.clearTimeout
      *
      * Clears the timeout for the max execution time of the callbacks
      *
@@ -249,12 +251,12 @@
     };
 
     /**
-     * ## Requirements.updateStillChecking
+     * ### Requirements.updateStillChecking
      *
      * Updates the number of callbacks still running on the display
      *
-     * @param {number} The number of callbacks still running, or an increment
-     *   as compared to the current value
+     * @param {number} update The number of callbacks still running, or an
+     *   increment as compared to the current value
      * @param {boolean} absolute TRUE, if `update` is to be interpreted as an
      *   absolute value
      *
@@ -273,9 +275,9 @@
     };
 
     /**
-     * ## Requirements.isCheckingFinished
+     * ### Requirements.isCheckingFinished
      *
-     * Returns TRUE, if all callbacks have returned
+     * Returns TRUE if all callbacks have returned
      *
      * @see this.stillCheckings
      * @see this.callbacks
@@ -285,7 +287,7 @@
     };
 
     /**
-     * ## Requirements.CheckingFinished
+     * ### Requirements.CheckingFinished
      *
      * Cleans up timer and dots, and executes final callbacks accordingly
      *
@@ -333,7 +335,7 @@
     };
 
     /**
-     * ## Requirements.displayResults
+     * ### Requirements.displayResults
      *
      * Displays the results of the callbacks on the screen
      *
@@ -417,12 +419,13 @@
     // ## Default Requirement Functions
 
     /**
-     * ## Requirements.nodeGameRequirements
+     * ### Requirements.nodeGameRequirements
      *
      * Checks whether the basic dependencies of nodeGame are satisfied
      *
-     * @param {function} The asynchronous result function
-     * @return {array} errors Array of synchronous errors
+     * @param {function} result The asynchronous result function
+     *
+     * @return {array} Array of synchronous errors
      */
     Requirements.prototype.nodeGameRequirements = function(result) {
         var errors, db;
@@ -467,14 +470,15 @@
     };
 
     /**
-     * ## Requirements.loadFrameTest
+     * ### Requirements.loadFrameTest
      *
      * Checks whether the iframe can be created and used
      *
      * Requires an active connection.
      *
-     * @param {function} The asynchronous result function
-     * @return {array} errors Array of synchronous errors
+     * @param {function} result The asynchronous result function
+     *
+     * @return {array} Array of synchronous errors
      */
     Requirements.prototype.loadFrameTest = function(result) {
         var errors, that, testIframe, root;

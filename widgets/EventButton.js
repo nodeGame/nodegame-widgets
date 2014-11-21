@@ -1,12 +1,11 @@
 /**
- * # EventButton widget for nodeGame
+ * # EventButton
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a clickable button that fires an event.
+ * Creates a clickable button that fires an event
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -81,7 +80,7 @@
 
     EventButton.prototype.listeners = function() {};
 
-    // # Done Button
+    // # DoneButton
 
     node.widgets.register('DoneButton', DoneButton);
 

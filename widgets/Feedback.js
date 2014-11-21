@@ -1,12 +1,11 @@
 /**
- * # Feedback widget for nodeGame
+ * # Feedback
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Sends a feedback message to the server.
+ * Sends a feedback message to the server
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

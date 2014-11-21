@@ -1,12 +1,11 @@
 /**
- * # MsgBar widget for nodeGame
+ * # MsgBar
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a tool for sending messages to other connected clients.
+ * Creates a tool for sending messages to other connected clients
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

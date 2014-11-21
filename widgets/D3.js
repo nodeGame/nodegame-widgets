@@ -1,12 +1,11 @@
 /**
- * # D3 widget for nodeGame
+ * # D3
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Integrates nodeGame with the D3 library to plot a real-time chart.
+ * Integrates nodeGame with the D3 library to plot a real-time chart
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

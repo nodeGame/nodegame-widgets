@@ -1,12 +1,11 @@
 /**
- * # GameBoard widget for nodeGame
+ * # GameBoard
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Displays a table of currently connected players.
+ * Displays a table of currently connected players
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

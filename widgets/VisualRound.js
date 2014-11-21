@@ -1,14 +1,14 @@
 /**
- * # VisualRound widget for nodeGame
+ * # VisualRound
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Display information about rounds and/or stage in the game.
+ * Display information about rounds and/or stage in the game
+ *
  * Accepts different visualization options (e.g. countdown, etc.).
  * See `VisualRound` constructor for a list of all available options.
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -39,23 +39,27 @@
      *
      * Displays information on the current and total rounds and stages
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Optional. Configuration options.
+     *   The options it can take are:
      *
-     * The options it can take are:
-     *
-     * - `stageOffset`: Stage displayed is the actual stage minus stageOffset.
-     * - `flexibleMode`: Set `true`, if number of rounds and/or stages can
-     *     change dynamically.
-     * - `curStage`: When (re)starting in `flexibleMode`, sets the current stage
-     * - `curRound`: When (re)starting in `flexibleMode`, sets the current round
-     * - `totStage`: When (re)starting in `flexibleMode`, sets the total
-     *     number of stages.
-     * - `totRound`: When (re)starting in `flexibleMode`, sets the total
-     *     number of rounds.
-     * - `oldStageId`: When (re)starting in `flexibleMode`, sets the id of
-     *     the current stage.
-     * - `displayModeNames`: Array of strings which determines the display style
-     *     of the widget.
+     *   - `stageOffset`:
+     *     Stage displayed is the actual stage minus stageOffset
+     *   - `flexibleMode`:
+     *     Set `true`, if number of rounds and/or stages can change dynamically
+     *   - `curStage`:
+     *     When (re)starting in `flexibleMode`, sets the current stage
+     *   - `curRound`:
+     *     When (re)starting in `flexibleMode`, sets the current round
+     *   - `totStage`:
+     *     When (re)starting in `flexibleMode`, sets the total number of stages
+     *   - `totRound`:
+     *     When (re)starting in `flexibleMode`, sets the total number of
+     *     rounds
+     *   - `oldStageId`:
+     *     When (re)starting in `flexibleMode`, sets the id of the current
+     *     stage
+     *   - `displayModeNames`:
+     *     Array of strings which determines the display style of the widget
      *
      * @see VisualRound.setDisplayMode
      * @see GameStager
@@ -141,8 +145,10 @@
         this.init(this.options);
     }
 
+    // ## VisualRound methods
+
     /**
-     * ## VisualRound.init
+     * ### VisualRound.init
      *
      * Initializes the instance
      *
@@ -197,7 +203,7 @@
     };
 
     /**
-     * ## VisualRound.updateDisplay
+     * ### VisualRound.updateDisplay
      *
      * Updates the values displayed by forwarding the call to displayMode obj
      *
@@ -210,7 +216,7 @@
     };
 
     /**
-     * ## VisualRound.setDisplayMode
+     * ### VisualRound.setDisplayMode
      *
      * Sets the `VisualRound.displayMode` value
      *
@@ -227,7 +233,7 @@
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
      * - `COUNT_DOWN_ROUNDS: Display number of rounds left in this stage.
      *
-     * @param {array} displayModeNames Array of strings representing the names.
+     * @param {array} displayModeNames Array of strings representing the names
      *
      * @see VisualRound.displayMode
      * @see CompoundDisplayMode
@@ -295,24 +301,24 @@
     };
 
     /**
-     * ## VisualRound.getDisplayMode
+     * ### VisualRound.getDisplayMode
      *
      * Returns name of the current displayMode
      *
-     * @return {string} Name of the current displayMode.
+     * @return {string} Name of the current displayMode
      */
     VisualRound.prototype.getDisplayModeName = function() {
         return this.displayMode.name;
     };
 
     /**
-     * ## VisualRound.activate
+     * ### VisualRound.activate
      *
      * Appends the displayDiv of the given displayMode to `this.bodyDiv`
      *
      * Calls `displayMode.activate`, if one is defined.
      *
-     * @param {object} displayMode DisplayMode to activate.
+     * @param {object} displayMode DisplayMode to activate
      *
      * @see VisualRound.deactivate
      */
@@ -326,13 +332,13 @@
     };
 
     /**
-     * ## VisualRound.deactivate
+     * ### VisualRound.deactivate
      *
      * Removes the displayDiv of the given displayMode from `this.bodyDiv`
      *
      * Calls `displayMode.deactivate` if it is defined.
      *
-     * @param {object} displayMode DisplayMode to deactivate.
+     * @param {object} displayMode DisplayMode to deactivate
      *
      * @see VisualRound.activate
      */
@@ -354,7 +360,7 @@
     };
 
     /**
-     * ## VisualRound.updateInformation
+     * ### VisualRound.updateInformation
      *
      * Updates information about rounds and stages and updates the display
      *
@@ -405,14 +411,12 @@
     };
 
    /**
-     * # EmptyDisplayMode Class
+     * # EmptyDisplayMode
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
-     * Defines a displayMode for the `VisualRound` which displays nothing.
-     *
-     * ---
+     * Defines a displayMode for the `VisualRound` which displays nothing
      */
 
     /**
@@ -421,7 +425,7 @@
      * Display a displayMode which contains the bare minumum (nothing)
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs
+     *   displayMode belongs
      * @param {object} options Optional. Configuration options
      *
      * @see VisualRound
@@ -455,8 +459,10 @@
         this.init(this.options);
     }
 
+    // ## EmptyDisplayMode methods
+
     /**
-     * ## EmptyDisplayMode.init
+     * ### EmptyDisplayMode.init
      *
      * Initializes the instance
      *
@@ -472,7 +478,7 @@
     };
 
     /**
-     * ## EmptyDisplayMode.updateDisplay
+     * ### EmptyDisplayMode.updateDisplay
      *
      * Does nothing
      *
@@ -481,15 +487,13 @@
     EmptyDisplayMode.prototype.updateDisplay = function() {};
 
     /**
-     * # CountUpStages Class
+     * # CountUpStages
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
-     * and, possibly, the total number of stages.
-     *
-     * ---
+     * and, possibly, the total number of stages
      */
 
     /**
@@ -500,10 +504,10 @@
      * Can be constructed to furthermore display the total number of stages.
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *      displayMode belongs.
+     *   displayMode belongs
      * @param {object} options Optional. Configuration options.
-     *      If `options.toTotal == true`, then the total number of stages is
-     *      displayed.
+     *   If `options.toTotal == true`, then the total number of stages is
+     *   displayed
      *
      * @see VisualRound
      */
@@ -568,14 +572,15 @@
         this.init(this.options);
     }
 
+    // ## CountUpStages methods
+
     /**
-     * ## CountUpStages.init
+     * ### CountUpStages.init
      *
      * Initializes the instance
      *
-     * @param {object} options Optional. Configuration options.
-     *      If `options.toTotal == true`, then the total number of stages is
-     *      displayed.
+     * @param {object} options Optional. Configuration options. If
+     *   `options.toTotal == true`, then the total number of stages is displayed
      *
      * @see CountUpStages.updateDisplay
      */
@@ -611,7 +616,7 @@
     };
 
     /**
-     * ## CountUpStages.updateDisplay
+     * ### CountUpStages.updateDisplay
      *
      * Updates the content of `curStageNumber` and `totStageNumber`
      *
@@ -627,15 +632,13 @@
     };
 
    /**
-     * # CountDownStages Class
+     * # CountDownStages
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
-     * number of stages.
-     *
-     * ---
+     * number of stages
      */
 
     /**
@@ -644,7 +647,7 @@
      * Display mode which displays the remaining number of stages
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs.
+     *   displayMode belongs.
      * @param {object} options Optional. Configuration options
      *
      * @see VisualRound
@@ -692,8 +695,10 @@
         this.init(this.options);
     }
 
+    // ## CountDownStages methods
+
     /**
-     * ## CountDownStages.init
+     * ### CountDownStages.init
      *
      * Initializes the instance
      *
@@ -716,7 +721,7 @@
     };
 
     /**
-     * ## CountDownStages.updateDisplay
+     * ### CountDownStages.updateDisplay
      *
      * Updates the content of `stagesLeft` according to `visualRound`
      *
@@ -732,29 +737,26 @@
     };
 
    /**
-     * # CountUpRounds Class
+     * # CountUpRounds
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
-     * and possibly the total number of rounds.
-     *
-     * ---
+     * and possibly the total number of rounds
      */
 
     /**
      * ## CountUpRounds constructor
      *
-     * Display mode which displays the current number of rounds.
+     * Display mode which displays the current number of rounds
      *
      * Can be constructed to furthermore display the total number of stages.
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs.
-     * @param {object} options Optional. Configuration options.
-     *      If `options.toTotal == true`, then the total number of rounds is
-     *      displayed.
+     *   displayMode belongs
+     * @param {object} options Optional. Configuration options. If
+     *   `options.toTotal == true`, then the total number of rounds is displayed
      *
      * @see VisualRound
      */
@@ -773,7 +775,7 @@
         }
 
         /**
-         * CountUpRounds.visualRound
+         * ### CountUpRounds.visualRound
          *
          * The `VisualRound` object to which the displayMode belongs
          *
@@ -782,35 +784,35 @@
         this.visualRound = visualRound;
 
         /**
-         * CountUpRounds.displayDiv
+         * ### CountUpRounds.displayDiv
          *
          * The DIV in which the information is displayed
          */
         this.displayDiv = null;
 
         /**
-         * CountUpRounds.curRoundNumber
+         * ### CountUpRounds.curRoundNumber
          *
          * The span in which the current round number is displayed
          */
         this.curRoundNumber = null;
 
         /**
-         * CountUpRounds.totRoundNumber
+         * ### CountUpRounds.totRoundNumber
          *
          * The element in which the total round number is displayed
          */
         this.totRoundNumber = null;
 
         /**
-         * CountUpRounds.displayDiv
+         * ### CountUpRounds.displayDiv
          *
          * The DIV in which the title is displayed
          */
         this.titleDiv = null;
 
         /**
-         * CountUpRounds.displayDiv
+         * ### CountUpRounds.displayDiv
          *
          * The span in which the text ` of ` is displayed
          */
@@ -819,14 +821,15 @@
         this.init(this.options);
     }
 
+    // ## CountUpRounds methods
+
     /**
-     * ## CountUpRounds.init
+     * ### CountUpRounds.init
      *
      * Initializes the instance
      *
-     * @param {object} options Optional. Configuration options.
-     *      If `options.toTotal == true`, then the total number of rounds is
-     *      displayed.
+     * @param {object} options Optional. Configuration options. If
+     *   `options.toTotal == true`, then the total number of rounds is displayed
      *
      * @see CountUpRounds.updateDisplay
      */
@@ -862,7 +865,7 @@
     };
 
     /**
-     * ## CountUpRounds.updateDisplay
+     * ### CountUpRounds.updateDisplay
      *
      * Updates the content of `curRoundNumber` and `totRoundNumber`
      *
@@ -879,24 +882,22 @@
 
 
    /**
-     * # CountDownRounds Class
+     * # CountDownRounds
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
-     * number of rounds.
-     *
-     * ---
+     * number of rounds
      */
 
     /**
      * ## CountDownRounds constructor
      *
-     * Display mode which displays the remaining number of rounds.
+     * Display mode which displays the remaining number of rounds
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs
+     *   displayMode belongs
      * @param {object} options Optional. Configuration options
      *
      * @see VisualRound
@@ -944,8 +945,10 @@
         this.init(this.options);
     }
 
+    // ## CountDownRounds methods
+
     /**
-     * ## CountDownRounds.init
+     * ### CountDownRounds.init
      *
      * Initializes the instance
      *
@@ -968,7 +971,7 @@
     };
 
     /**
-     * ## CountDownRounds.updateDisplay
+     * ### CountDownRounds.updateDisplay
      *
      * Updates the content of `roundsLeft` according to `visualRound`
      *
@@ -984,26 +987,24 @@
     };
 
     /**
-     * # CompoundDisplayMode Class
+     * # CompoundDisplayMode
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the
-     * information according to multiple displayModes.
-     *
-     * ---
+     * information according to multiple displayModes
      */
 
     /**
-     * ## CompoundDisplayMode
+     * ## CompoundDisplayMode constructor
      *
      * Display mode which combines multiple other display displayModes
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs.
+     *   displayMode belongs
      * @param {array} displayModes Array of displayModes to be used in
-     *      combination.
+     *   combination
      * @param {object} options Optional. Configuration options
      *
      * @see VisualRound
@@ -1054,8 +1055,10 @@
         this.init(options);
     }
 
+    // ## CompoundDisplayMode methods
+
     /**
-     * ## CompoundDisplayMode.init
+     * ### CompoundDisplayMode.init
      *
      * Initializes the instance
      *
@@ -1078,7 +1081,7 @@
      };
 
     /**
-     * ## CompoundDisplayMode.updateDisplay
+     * ### CompoundDisplayMode.updateDisplay
      *
      * Calls `updateDisplay` for all displayModes in the combination
      *

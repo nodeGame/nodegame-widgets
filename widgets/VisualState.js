@@ -1,12 +1,11 @@
 /**
- * # VisualState widget for nodeGame
+ * # VisualState
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Shows current, previous and next state.
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

@@ -1,12 +1,11 @@
 /**
- * # ChernoffFaces (Simplified version) widget for nodeGame
+ * # ChernoffFacesSimple
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -16,7 +15,7 @@
 
     node.widgets.register('ChernoffFacesSimple', ChernoffFaces);
 
-    // # Defaults
+    // ## Defaults
 
     ChernoffFaces.defaults = {};
     ChernoffFaces.defaults.id = 'ChernoffFaces';

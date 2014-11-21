@@ -1,12 +1,11 @@
 /**
- * # DataBar widget for nodeGame
+ * # DataBar
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a form to send DATA packages to other clients / SERVER.
+ * Creates a form to send DATA packages to other clients / SERVER
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

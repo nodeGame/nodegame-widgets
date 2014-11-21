@@ -1,12 +1,11 @@
 /**
- * # LanguageSelector widget for nodeGame
+ * # LanguageSelector
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Manages and displays information about languages available and selected.
+ * Manages and displays information about languages available and selected
  *
  * www.nodegame.org
- * ---
  */
  (function(node) {
 
@@ -55,7 +54,7 @@
          * - `name`: Name of the language in English.
          * - `nativeName`: Native name of the language
          * - `shortName`: An abbreviation for the language, also determines the
-         *  path to the context files for this language.
+         *    path to the context files for this language.
          *
          * The key for each language object is its `shortName`.
          *
@@ -231,8 +230,10 @@
         this.init(this.options);
     }
 
+    // ## LanguageSelector methods
+
     /**
-     * ## LanguageSelector.init
+     * ### LanguageSelector.init
      *
      * Initializes the widget
      *
@@ -264,11 +265,11 @@
     };
 
     /**
-     * ## LanguageSelector.setLanguage
+     * ### LanguageSelector.setLanguage
      *
      * Sets language and updates view
      *
-     * @param {string} langName shortName of language to be set.
+     * @param {string} langName shortName of language to be set
      *
      * @see NodeGameClient.setLanguage
      */
@@ -306,7 +307,7 @@
     };
 
     /**
-     * ## LanguageSelector.updateAvalaibleLanguages
+     * ### LanguageSelector.updateAvailableLanguages
      *
      * Updates available languages asynchronously
      *
@@ -324,7 +325,7 @@
     };
 
     /**
-     * ## LanguageSelector.loadLanguages
+     * ### LanguageSelector.loadLanguages
      *
      * Loads languages once from server
      *

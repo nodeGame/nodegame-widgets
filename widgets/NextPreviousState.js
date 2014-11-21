@@ -1,12 +1,11 @@
 /**
- * # NextPreviousState widget for nodeGame
+ * # NextPreviousState
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Simple widget to step through the stages of the game.
+ * Simple widget to step through the stages of the game
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 

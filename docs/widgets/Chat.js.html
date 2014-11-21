@@ -19,10 +19,7 @@
     <div id="tree"></div>
     <div id="headings">
       <div class="heading h1">
-        <a href="#chat%20widget%20for%20nodegame">Chat widget for nodeGame</a>
-      </div>
-      <div class="heading h2">
-        <a href="#www.nodegame.org">www.nodegame.org</a>
+        <a href="#chat">Chat</a>
       </div>
       <div class="heading h2">
         <a href="#defaults">Defaults</a>
@@ -45,10 +42,10 @@
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="chat%20widget%20for%20nodegame">
+<div class="pilwrap" id="chat">
   <h1>
-    <a href="#chat%20widget%20for%20nodegame" name="chat%20widget%20for%20nodegame" class="pilcrow">&#182;</a>
-    Chat widget for nodeGame
+    <a href="#chat" name="chat" class="pilcrow">&#182;</a>
+    Chat
   </h1>
 </div>
 
@@ -56,16 +53,9 @@
 <p>Copyright(c) 2014 Stefano Balietti
 MIT Licensed</p>
   </div>
-  <div class="body"><p>Creates a simple configurable chat.</p>
+  <div class="body"><p>Creates a simple configurable chat</p>
 
-
-<div class="pilwrap" id="www.nodegame.org">
-  <h2>
-    <a href="#www.nodegame.org" name="www.nodegame.org" class="pilcrow">&#182;</a>
-    www.nodegame.org
-  </h2>
-</div>
-
+<p>www.nodegame.org</p>
   </div>
 </div>
         </td>
@@ -153,7 +143,7 @@ be received, but not sent.</p></li>
     <span class="p">};</span>
 
     <span class="nx">Chat</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.4&#39;</span><span class="p">;</span>
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Offers a uni / bi-directional communication interface &#39;</span> <span class="o">+</span>
+    <span class="nx">Chat</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Offers a uni-/bi-directional communication interface &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;between players, or between players and the experimenter.&#39;</span><span class="p">;</span>
 
 
@@ -189,7 +179,8 @@ be received, but not sent.</p></li>
         <span class="k">this</span><span class="p">.</span><span class="nx">chat_event</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">chat_event</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">chat_event</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">submit_text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">submit_text</span> <span class="o">||</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">submit_text</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getEventButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chat_event</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">submit_text</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">submit_id</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getEventButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chat_event</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">submit_text</span><span class="p">,</span>
+                                       <span class="k">this</span><span class="p">.</span><span class="nx">submit_id</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea_id</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">chat</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chat_id</span><span class="p">);</span>
 
@@ -274,7 +265,8 @@ be received, but not sent.</p></li>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_MANY</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;UPDATED_PLIST&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="nx">W</span><span class="p">.</span><span class="nx">populateRecipientSelector</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">.</span><span class="nx">fetch</span><span class="p">());</span>
+                <span class="nx">W</span><span class="p">.</span><span class="nx">populateRecipientSelector</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span>
+                    <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">.</span><span class="nx">fetch</span><span class="p">());</span>
             <span class="p">});</span>
         <span class="p">}</span>
 
