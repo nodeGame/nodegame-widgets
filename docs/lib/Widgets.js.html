@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Widgets.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "lib/Widgets.js", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#widgets">Widgets</a>
+      </div>
+      <div class="heading h2">
+        <a href="#widgets%20constructor">Widgets constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widgets.widgets">Widgets.widgets</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widgets.widgets">Widgets.widgets</a>
+      </div>
+      <div class="heading h2">
+        <a href="#widgets%20methods">Widgets methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widgets.register">Widgets.register</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widgets.get">Widgets.get</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widgets.append">Widgets.append</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widgets.destroyall">Widgets.destroyAll</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widgets.checkdependencies">Widgets.checkDependencies</a>
+      </div>
+      <div class="heading h2">
+        <a href="#helper%20functions">Helper functions</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets">
+  <h1>
+    <a href="#widgets" name="widgets" class="pilcrow">&#182;</a>
+    Widgets
+  </h1>
+</div>
+
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Helper class to interact with nodeGame widgets</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="widgets%20constructor">
+  <h2>
+    <a href="#widgets%20constructor" name="widgets%20constructor" class="pilcrow">&#182;</a>
+    Widgets constructor
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="kd">function</span> <span class="nx">Widgets</span><span class="p">()</span> <span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets.widgets">
+  <h3>
+    <a href="#widgets.widgets" name="widgets.widgets" class="pilcrow">&#182;</a>
+    Widgets.widgets
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Container of currently registered widgets</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.register
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span> <span class="o">=</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets.widgets">
+  <h3>
+    <a href="#widgets.widgets" name="widgets.widgets" class="pilcrow">&#182;</a>
+    Widgets.widgets
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Container of appended widget instances</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.append
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">instances</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="widgets%20methods">
+  <h2>
+    <a href="#widgets%20methods" name="widgets%20methods" class="pilcrow">&#182;</a>
+    Widgets methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets.register">
+  <h3>
+    <a href="#widgets.register" name="widgets.register" class="pilcrow">&#182;</a>
+    Widgets.register
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Registers a new widget in the collection</p>
+
+<p>A name and a prototype class must be provided. All properties
+that are present in <code>node.Widget</code>, but missing in the prototype
+are added.</p>
+
+<p>Registered widgets can be loaded with Widgets.get or Widgets.append.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">name</span>
+      <span class="dox_type">string</span>
+      <span>The id under which to register the widget</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">w</span>
+      <span class="dox_type">function</span>
+      <span>The widget to add</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">object</span>
+      <span class="dox_type">boolean</span>
+      <span>The registered widget,
+  or FALSE if an error occurs</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.register: name must be string.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.register: w must be function.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>Add default properties to widget prototype</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nx">Widget</span><span class="p">());</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">w</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets.get">
+  <h3>
+    <a href="#widgets.get" name="widgets.get" class="pilcrow">&#182;</a>
+    Widgets.get
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Retrieves, instantiates and returns the specified widget</p>
+
+<p>It can attach standard javascript listeners to the root element of
+the widget if specified in the options.</p>
+
+<p>The dependencies are checked, and if the conditions are not met,
+returns FALSE.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">w_str</span>
+      <span class="dox_type">string</span>
+      <span>The name of the widget to load</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">options</span>
+      <span>Optional. Configuration options
+  to be passed to the widgets</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">object</span>
+      <span>widget The requested widget</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.add
+</span>
+    </div>
+    <div class="dox_tag_title">TODO:</div>
+    <div class="dox_tag_detail">
+      <span>add supports for any listener. Maybe requires some refactoring.</span>
+    </div>
+    <div class="dox_tag_title">TODO:</div>
+    <div class="dox_tag_detail">
+      <span>add example.</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w_str</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">wProto</span><span class="p">,</span> <span class="nx">widget</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w_str</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: w_str must be string.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: options must be object or &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;undefined.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+        <span class="nx">wProto</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getNestedValue</span><span class="p">(</span><span class="nx">w_str</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">wProto</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">w_str</span> <span class="o">+</span> <span class="s1">&#39; not found.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;registering &#39;</span> <span class="o">+</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; v.&#39;</span> <span class="o">+</span>  <span class="nx">wProto</span><span class="p">.</span><span class="nx">version</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">checkDependencies</span><span class="p">(</span><span class="nx">wProto</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">w_str</span> <span class="o">+</span> <span class="s1">&#39; has unmet &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;dependecies.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Add missing properties to the user options</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">wProto</span><span class="p">.</span><span class="nx">defaults</span><span class="p">));</span>
+
+        <span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wProto</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Re-inject defaults</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">footer</span><span class="p">;</span>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">context</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p>Call listeners</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">listeners</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>user listeners</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">widget</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nx">widget</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets.append">
+  <h3>
+    <a href="#widgets.append" name="widgets.append" class="pilcrow">&#182;</a>
+    Widgets.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Appends a widget to the specified root element</p>
+
+<p>If no root element is specified the widget is append to the global root.</p>
+
+<p>The first parameter can be string representing the name of the widget or
+a valid widget already loaded, for example through Widgets.get.
+In the latter case, dependencies are checked, and it returns FALSE if
+conditions are not met.</p>
+
+<p>It automatically creates a fieldset element around the widget if
+requested by the internal widget configuration, or if specified in the
+options parameter.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">w_str</span>
+      <span class="dox_type">string</span>
+      <span>The name of the widget to load</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">root.</span>
+      <span class="dox_type">object</span>
+      <span>Optional. The HTML element under which the widget
+  will be appended. Default: <code>GameWindow.getFrameRoot()</code> or document.body</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">options</span>
+      <span>Optional. Configuration options to be passed
+  to the widgets</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">object</span>
+      <span class="dox_type">boolean</span>
+      <span>The requested widget, or FALSE is an error
+  occurs</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.get
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span>
+                                                                <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.append: w must be string or object.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">root</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isElement</span><span class="p">(</span><span class="nx">root</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.append: root must be HTMLElement &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;or undefined.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.append: options must be object or &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;undefined.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>Init default values.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span> <span class="o">||</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrameRoot</span><span class="p">()</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>Check if it is a object (new widget)
+If it is a string is the name of an existing widget
+In this case a dependencies check is done</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>If fieldset option is null, a div is added instead.
+If fieldset option is undefined, default options are used.
+if (options.fieldset !== null) {
+   root = appendFieldset(root, options.fieldset ||
+                         w.defaults.fieldset, w);
+}</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span> <span class="o">=</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">className</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;ng_widget&#39;</span><span class="p">,</span> <span class="s1">&#39;panel&#39;</span><span class="p">,</span> <span class="s1">&#39;panel-default&#39;</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">className</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>Optionally add title.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">w</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>Add body.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">w</span><span class="p">.</span><span class="nx">bodyDiv</span> <span class="o">=</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span><span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;panel-body&#39;</span><span class="p">}</span>
+        <span class="p">});</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+</div>
+<p>Optionally add footer.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">footer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">w</span><span class="p">.</span><span class="nx">setFooter</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">footer</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>Optionally set context.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">w</span><span class="p">.</span><span class="nx">setContext</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nx">w</span><span class="p">.</span><span class="nx">append</span><span class="p">();</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>Store widget instance for destruction.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nx">w</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets.destroyall">
+  <h3>
+    <a href="#widgets.destroyall" name="widgets.destroyall" class="pilcrow">&#182;</a>
+    Widgets.destroyAll
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Removes all widgets that have been appended with Widgets.append</p>
+
+<p>Exceptions thrown in the widgets' destroy methods are caught.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.append
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroyAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">widget</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">widget</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+
+                <span class="k">try</span> <span class="p">{</span>
+                    <span class="nx">widget</span><span class="p">.</span><span class="nx">destroy</span><span class="p">();</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+<p>Remove the widget's div from its parent:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                    <span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;Widgets.destroyAll: Error caught. &#39;</span> <span class="o">+</span> <span class="nx">e</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">instances</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets.checkdependencies">
+  <h3>
+    <a href="#widgets.checkdependencies" name="widgets.checkdependencies" class="pilcrow">&#182;</a>
+    Widgets.checkDependencies
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Checks if all the dependencies are already loaded</p>
+
+<p>Dependencies are searched for in the following objects:</p>
+
+<ul>
+<li>window</li>
+<li>node</li>
+<li>this.widgets</li>
+<li>node.window</li>
+</ul>
+
+<p>TODO: Check for version and other constraints.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">The</span>
+      <span class="dox_type">object</span>
+      <span>widget to check</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">quiet</span>
+      <span class="dox_type">boolean</span>
+      <span>Optional. If TRUE, no warning will be raised.
+  Default: FALSE</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">boolean</span>
+      <span>TRUE, if all dependencies are met</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkDependencies</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">quiet</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">parents</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">lib</span><span class="p">,</span> <span class="nx">found</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">w</span><span class="p">.</span><span class="nx">dependencies</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+
+        <span class="nx">parents</span> <span class="o">=</span> <span class="p">[</span><span class="nb">window</span><span class="p">,</span> <span class="nx">node</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">];</span>
+
+        <span class="nx">d</span> <span class="o">=</span> <span class="nx">w</span><span class="p">.</span><span class="nx">dependencies</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">lib</span> <span class="k">in</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">lib</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">found</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">parents</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">getNestedValue</span><span class="p">(</span><span class="nx">lib</span><span class="p">,</span> <span class="nx">parents</span><span class="p">[</span><span class="nx">i</span><span class="p">]))</span> <span class="p">{</span>
+                        <span class="nx">found</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">found</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">quiet</span><span class="p">)</span> <span class="nx">checkDepErrMsg</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">lib</span><span class="p">);</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="helper%20functions">
+  <h2>
+    <a href="#helper%20functions" name="helper%20functions" class="pilcrow">&#182;</a>
+    Helper functions
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>function appendFieldset(root, options, w) {
+   var idFieldset, legend;
+   if (!options) return root;
+   idFieldset = options.id || w.id + '_fieldset';
+   legend = options.legend || w.legend;
+   return W.addFieldset(root, idFieldset, legend, options.attributes);
+}</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="kd">function</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>TODO: Check every parameter</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">return</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">attributes</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">w</span> <span class="o">||</span> <span class="o">!</span><span class="nx">e</span> <span class="o">||</span> <span class="o">!</span><span class="nx">l</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">[</span><span class="nx">e</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">l</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">events</span><span class="p">,</span> <span class="nx">isEvent</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span> <span class="o">||</span> <span class="o">!</span><span class="nx">w</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="nx">isEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nx">events</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;onclick&#39;</span><span class="p">,</span> <span class="s1">&#39;onfocus&#39;</span><span class="p">,</span> <span class="s1">&#39;onblur&#39;</span><span class="p">,</span> <span class="s1">&#39;onchange&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;onsubmit&#39;</span><span class="p">,</span> <span class="s1">&#39;onload&#39;</span><span class="p">,</span> <span class="s1">&#39;onunload&#39;</span><span class="p">,</span> <span class="s1">&#39;onmouseover&#39;</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">isEvent</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">events</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">isEvent</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">checkDepErrMsg</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">w</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">w</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span><span class="c1">// || w.toString();</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="nx">d</span> <span class="o">+</span> <span class="s1">&#39; not found. &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; cannot be loaded.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+</div>
+<p>Expose Widgets to the global object</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Widgets</span><span class="p">();</span>
+
+<span class="p">})(</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+</div>
+<p>Widgets works only in the browser environment.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nb">window</span><span class="p">)</span> <span class="o">?</span> <span class="nb">window</span> <span class="o">:</span> <span class="nx">module</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nb">window</span><span class="p">,</span>
+    <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nb">window</span><span class="p">)</span> <span class="o">?</span> <span class="nb">window</span><span class="p">.</span><span class="nx">node</span> <span class="o">:</span> <span class="nx">module</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">node</span>
+<span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

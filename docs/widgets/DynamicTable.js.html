@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DynamicTable.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "widgets/DynamicTable.js", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#dynamictable">DynamicTable</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="dynamictable">
+  <h1>
+    <a href="#dynamictable" name="dynamictable" class="pilcrow">&#182;</a>
+    DynamicTable
+  </h1>
+</div>
+
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Extends the GameTable widgets by allowing dynamic reshaping</p>
+
+<p>TODO: this widget needs refactoring.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">experimental</div>
+    <div class="dox_tag_detail">
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTable widget
+www.nodegame.org
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">GameStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameStage</span><span class="p">,</span>
+    <span class="nx">PlayerList</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">PlayerList</span><span class="p">,</span>
+    <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">,</span>
+    <span class="nx">HTMLRenderer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">HTMLRenderer</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;DynamicTable&#39;</span><span class="p">,</span> <span class="nx">DynamicTable</span><span class="p">);</span>
+
+
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">Table</span><span class="p">;</span>
+
+
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;dynamictable&#39;</span><span class="p">;</span>
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.1&#39;</span><span class="p">;</span>
+
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">Table</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">HTMLRenderer</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+    <span class="kd">function</span> <span class="nx">DynamicTable</span> <span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>JSUS.extend(node.window.Table,this);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">Table</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="s1">&#39;Dynamic Table&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">legend</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+            <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_fieldset&#39;</span>
+        <span class="p">};</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bindings</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">auto_update</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">auto_update</span><span class="p">)</span> <span class="o">?</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">auto_update</span> <span class="o">:</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">replace</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">htmlRenderer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HTMLRenderer</span><span class="p">({</span><span class="nx">renderers</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">renderers</span><span class="p">});</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="nx">GameStage</span><span class="p">.</span><span class="nx">compare</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">setLeft</span><span class="p">([]);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">bind</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">bindings</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">event</span> <span class="o">||</span> <span class="o">!</span><span class="nx">bindings</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">bindings</span><span class="p">.</span><span class="nx">x</span> <span class="o">||</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>Cell</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="kd">var</span> <span class="nx">func</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">replace</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">func</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="kd">var</span> <span class="nx">found</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">);</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">found</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">ci</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">ci</span> <span class="o">&lt;</span> <span class="nx">found</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">ci</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="nx">bindings</span><span class="p">.</span><span class="nx">cell</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">,</span> <span class="nx">found</span><span class="p">[</span><span class="nx">ci</span><span class="p">]);</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                        <span class="k">else</span> <span class="p">{</span>
+                            <span class="kd">var</span> <span class="nx">cell</span> <span class="o">=</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">cell</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span>
+                                <span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">.</span><span class="nx">Cell</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="nx">y</span><span class="p">}));</span>
+                            <span class="nx">that</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">cell</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">};</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">func</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="kd">var</span> <span class="nx">cell</span> <span class="o">=</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">cell</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span>
+                                <span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">.</span><span class="nx">Cell</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="nx">y</span><span class="p">}));</span>
+                        <span class="nx">that</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">cell</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
+                    <span class="p">};</span>
+                <span class="p">}</span>
+
+                <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">y</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&amp;&amp;</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+
+                    <span class="nx">x</span> <span class="o">=</span> <span class="p">(</span><span class="nx">x</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="o">?</span> <span class="nx">x</span> <span class="o">:</span> <span class="p">[</span><span class="nx">x</span><span class="p">];</span>
+                    <span class="nx">y</span> <span class="o">=</span> <span class="p">(</span><span class="nx">y</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="o">?</span> <span class="nx">y</span> <span class="o">:</span> <span class="p">[</span><span class="nx">y</span><span class="p">];</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>console.log('Bindings found:');
+console.log(x);
+console.log(y);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+                    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">xi</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">xi</span> <span class="o">&lt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">xi</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">yi</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">yi</span> <span class="o">&lt;</span> <span class="nx">y</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">yi</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>Replace or Add</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                            <span class="nx">func</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">xi</span><span class="p">],</span> <span class="nx">y</span><span class="p">[</span><span class="nx">yi</span><span class="p">]);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>End Cell</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>Header</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">bindings</span><span class="p">.</span><span class="nx">header</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">header</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+                <span class="nx">h</span> <span class="o">=</span> <span class="p">(</span><span class="nx">h</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="o">?</span> <span class="nx">h</span> <span class="o">:</span> <span class="p">[</span><span class="nx">h</span><span class="p">];</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="nx">h</span><span class="p">);</span>
+            <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>Left</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">bindings</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">left</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">left</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">header</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">l</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Auto Update?</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">auto_update</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+
+    <span class="p">};</span>
+
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">DynamicTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

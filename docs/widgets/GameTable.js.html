@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GameTable.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "widgets/GameTable.js", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#gametable">GameTable</a>
+      </div>
+      <div class="heading h2">
+        <a href="#defaults">Defaults</a>
+      </div>
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gametable">
+  <h1>
+    <a href="#gametable" name="gametable" class="pilcrow">&#182;</a>
+    GameTable
+  </h1>
+</div>
+
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Creates a table that renders in each cell data captured by fired events</p>
+
+<p>www.nodegame.org</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">GameStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameStage</span><span class="p">,</span>
+    <span class="nx">PlayerList</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">PlayerList</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;GameTable&#39;</span><span class="p">,</span> <span class="nx">GameTable</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="defaults">
+  <h2>
+    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
+    Defaults
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;gametable&#39;</span><span class="p">;</span>
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Game Table&#39;</span><span class="p">,</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;gametable_fieldset&#39;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
+    Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
+    Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+    <span class="kd">function</span> <span class="nx">GameTable</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">GameTable</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">plist</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">plist</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">plist</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PlayerList</span><span class="p">();</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">({</span>
+            <span class="nx">auto_update</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">id</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
+            <span class="nx">render</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">render</span>
+        <span class="p">},</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">memory</span><span class="p">.</span><span class="nx">db</span><span class="p">);</span>
+
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">c</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="nx">GameStage</span><span class="p">.</span><span class="nx">compare</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">setLeft</span><span class="p">([]);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+    <span class="p">};</span>
+
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addRenderer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">addRenderer</span><span class="p">(</span><span class="nx">func</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">resetRender</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">resetRenderer</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">removeRenderer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">removeRenderer</span><span class="p">(</span><span class="nx">func</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
+        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">plist</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>var diff = JSUS.arrayDiff(msg.data,that.plist.db);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="kd">var</span> <span class="nx">plist</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PlayerList</span><span class="p">({},</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">diff</span> <span class="o">=</span> <span class="nx">plist</span><span class="p">.</span><span class="nx">diff</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">plist</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">diff</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>console.log('New Players found');
+console.log(diff);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="nx">diff</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span><span class="nx">that</span><span class="p">.</span><span class="nx">addPlayer</span><span class="p">(</span><span class="nx">el</span><span class="p">);});</span>
+            <span class="p">}</span>
+
+            <span class="nx">that</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <span class="p">});</span>
+
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;in.set.DATA&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="nx">that</span><span class="p">.</span><span class="nx">addLeft</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">state</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">from</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">player2x</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">from</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">state2y</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">state</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
+
+            <span class="nx">that</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addPlayer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">player</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">plist</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">player</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">header</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">plist</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span><span class="k">return</span> <span class="nx">el</span><span class="p">.</span><span class="nx">name</span><span class="p">;});</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="nx">header</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addLeft</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">player</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">state</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="nx">state</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GameStage</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">in_array</span><span class="p">({</span><span class="nx">content</span><span class="o">:</span><span class="nx">state</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;left&#39;</span><span class="p">},</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">left</span><span class="p">))</span> <span class="p">{</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">add2Left</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+        <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>Is it a new display associated to the same state?</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state2y</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">player2x</span><span class="p">(</span><span class="nx">player</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="nx">y</span><span class="p">).</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="nx">x</span><span class="p">).</span><span class="nx">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">add2Left</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">player2x</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">player</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">player</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">plist</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="nx">player</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">count</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">x2Player</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">x</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">plist</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="nx">x</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">count</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">state2y</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">state</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">y2State</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">y</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">jumpTo</span><span class="p">(</span><span class="k">new</span> <span class="nx">GameStage</span><span class="p">(),</span><span class="nx">y</span><span class="p">);</span>
+    <span class="p">};</span>
+
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

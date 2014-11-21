@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VisualState.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "widgets/VisualState.js", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#visualstate">VisualState</a>
+      </div>
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualstate">
+  <h1>
+    <a href="#visualstate" name="visualstate" class="pilcrow">&#182;</a>
+    VisualState
+  </h1>
+</div>
+
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Shows current, previous and next state.</p>
+
+<p>www.nodegame.org</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;VisualState&#39;</span><span class="p">,</span> <span class="nx">VisualState</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">JSUS</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">,</span>
+    <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
+    Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">VisualState</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.1&#39;</span><span class="p">;</span>
+    <span class="nx">VisualState</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
+        <span class="s1">&#39;Visually display current, previous and next state of the game.&#39;</span><span class="p">;</span>
+
+    <span class="nx">VisualState</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;State&#39;</span><span class="p">;</span>
+    <span class="nx">VisualState</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;visualstate&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
+    Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">VisualState</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">Table</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+    <span class="kd">function</span> <span class="nx">VisualState</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="nx">VisualState</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">PREF</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">writeState</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">VisualState</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;STEP_CALLBACK_EXECUTED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">writeState</span><span class="p">();</span>
+        <span class="p">});</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>Game over and init?</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">};</span>
+
+    <span class="nx">VisualState</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">writeState</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">miss</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">pr</span><span class="p">,</span> <span class="nx">nx</span><span class="p">,</span> <span class="nx">tmp</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">curStep</span><span class="p">,</span> <span class="nx">nextStep</span><span class="p">,</span> <span class="nx">prevStep</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">t</span><span class="p">;</span>
+
+        <span class="nx">miss</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="p">;</span>
+        <span class="nx">state</span> <span class="o">=</span> <span class="s1">&#39;Uninitialized&#39;</span><span class="p">;</span>
+        <span class="nx">pr</span> <span class="o">=</span> <span class="nx">miss</span><span class="p">;</span>
+        <span class="nx">nx</span> <span class="o">=</span> <span class="nx">miss</span><span class="p">;</span>
+
+        <span class="nx">curStep</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentGameStage</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">curStep</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getStep</span><span class="p">(</span><span class="nx">curStep</span><span class="p">);</span>
+            <span class="nx">state</span> <span class="o">=</span> <span class="nx">tmp</span> <span class="o">?</span> <span class="nx">tmp</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
+
+            <span class="nx">prevStep</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">previous</span><span class="p">(</span><span class="nx">curStep</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">prevStep</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getStep</span><span class="p">(</span><span class="nx">prevStep</span><span class="p">);</span>
+                <span class="nx">pr</span> <span class="o">=</span> <span class="nx">tmp</span> <span class="o">?</span> <span class="nx">tmp</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="nx">nextStep</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">curStep</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">nextStep</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getStep</span><span class="p">(</span><span class="nx">nextStep</span><span class="p">);</span>
+                <span class="nx">nx</span> <span class="o">=</span> <span class="nx">tmp</span> <span class="o">?</span> <span class="nx">tmp</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">clear</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Previous: &#39;</span><span class="p">,</span> <span class="nx">pr</span><span class="p">]);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Current: &#39;</span><span class="p">,</span> <span class="nx">state</span><span class="p">]);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Next: &#39;</span><span class="p">,</span> <span class="nx">nx</span><span class="p">]);</span>
+
+        <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">selexec</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="nx">t</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;strong&#39;</span><span class="p">);</span>
+        <span class="nx">t</span><span class="p">.</span><span class="nx">selexec</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;underline&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+    <span class="p">};</span>
+
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
