@@ -20,7 +20,7 @@
     GameBoard.defaults = {};
     GameBoard.defaults.id = 'gboard';
     GameBoard.defaults.fieldset = {
-	legend: 'Game Board'
+        legend: 'Game Board'
     };
 
     // ## Meta-data
@@ -30,104 +30,104 @@
 
     function GameBoard(options) {
 
-	this.id = options.id || GameBoard.defaults.id;
-	this.status_id = this.id + '_statusbar';
+        this.id = options.id || GameBoard.defaults.id;
+        this.status_id = this.id + '_statusbar';
 
-	this.board = null;
-	this.status = null;
-	this.root = null;
+        this.board = null;
+        this.status = null;
+        this.root = null;
 
     }
 
     GameBoard.prototype.append = function(root) {
-	this.root = root;
-	this.status = node.window.addDiv(root, this.status_id);
-	this.board = node.window.addDiv(root, this.id);
+        this.root = root;
+        this.status = node.window.addDiv(root, this.status_id);
+        this.board = node.window.addDiv(root, this.id);
 
-	this.updateBoard(node.game.pl);
+        this.updateBoard(node.game.pl);
 
-	return root;
+        return root;
     };
 
     GameBoard.prototype.listeners = function() {
-	var that = this;
-	node.on('UPDATED_PLIST', function() {
-	    that.updateBoard(node.game.pl);
-	});
+        var that = this;
+        node.on('UPDATED_PLIST', function() {
+            that.updateBoard(node.game.pl);
+        });
 
     };
 
     GameBoard.prototype.printLine = function(p) {
 
-	var line, levels, level;
+        var line, levels, level;
         levels = node.constants.stageLevels;
 
         line = '[' + (p.name || p.id) + "]> \t";
-	line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' + p.stage.step;
-	line += ' ';
+        line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' + p.stage.step;
+        line += ' ';
 
-	switch (p.stageLevel) {
+        switch (p.stageLevel) {
 
-	case levels.UNINITIALIZED:
-	    level = 'uninit.';
-	    break;
+        case levels.UNINITIALIZED:
+            level = 'uninit.';
+            break;
 
-	case levels.INITIALIZING:
-	    level = 'init...';
-	    break;
+        case levels.INITIALIZING:
+            level = 'init...';
+            break;
 
-	case levels.INITIALIZING:
-	    level = 'init!';
-	    break;
+        case levels.INITIALIZING:
+            level = 'init!';
+            break;
 
-	case levels.LOADING:
-	    level = 'loading';
-	    break;
+        case levels.LOADING:
+            level = 'loading';
+            break;
 
-	case levels.LOADED:
-	    level = 'loaded';
-	    break;
+        case levels.LOADED:
+            level = 'loaded';
+            break;
 
-	case levels.PLAYING:
-	    level = 'playing';
-	    break;
-	case levels.DONE:
-	    level = 'done';
-	    break;
+        case levels.PLAYING:
+            level = 'playing';
+            break;
+        case levels.DONE:
+            level = 'done';
+            break;
 
-	default:
-	    level = p.stageLevel;
-	    break;
-	}
+        default:
+            level = p.stageLevel;
+            break;
+        }
 
-	return line + '(' + level + ')';
+        return line + '(' + level + ')';
     };
 
     GameBoard.prototype.printSeparator = function(p) {
-	return W.getElement('hr', null, {style: 'color: #CCC;'});
+        return W.getElement('hr', null, {style: 'color: #CCC;'});
     };
 
 
     GameBoard.prototype.updateBoard = function(pl) {
-	var player, separator;
+        var player, separator;
         var that = this;
 
-	this.status.innerHTML = 'Updating...';
+        this.status.innerHTML = 'Updating...';
 
-	if (pl.size()) {
-	    that.board.innerHTML = '';
-	    pl.forEach( function(p) {
-		player = that.printLine(p);
+        if (pl.size()) {
+            that.board.innerHTML = '';
+            pl.forEach( function(p) {
+                player = that.printLine(p);
 
-		W.write(player, that.board);
+                W.write(player, that.board);
 
-		separator = that.printSeparator(p);
-		W.write(separator, that.board);
-	    });
-	}
+                separator = that.printSeparator(p);
+                W.write(separator, that.board);
+            });
+        }
 
 
-	this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
+        this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
     };
 
 })(node);

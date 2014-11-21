@@ -28,7 +28,7 @@
     // ## Dependencies
 
     VisualTimer.dependencies = {
-        GameTimer : {},
+        GameTimer: {},
         JSUS: {}
     };
 
@@ -158,7 +158,7 @@
             get: function() {
                 return {
                     startPaused: t.startPaused,
-	                status: t.status,
+                        status: t.status,
                     timeLeft: t.timeLeft,
                     timePassed: t.timePassed,
                     update: t.update,
@@ -485,8 +485,8 @@
         case 'object':
             options = inOptions;
             if ('function' === typeof options.milliseconds) {
-	        options.milliseconds = options.milliseconds.call(node.game);
-	    }
+                options.milliseconds = options.milliseconds.call(node.game);
+            }
             break;
         case 'function':
             options.milliseconds = inOptions.call(node.game);

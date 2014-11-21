@@ -25,31 +25,31 @@
     GameSummary.description = 'Show the general configuration options of the game.';
 
     function GameSummary(options) {
-	this.summaryDiv = null;
+        this.summaryDiv = null;
     }
 
     GameSummary.prototype.append = function(root) {
-	this.root = root;
-	this.summaryDiv = node.window.addDiv(root);
-	this.writeSummary();
-	return root;
+        this.root = root;
+        this.summaryDiv = node.window.addDiv(root);
+        this.writeSummary();
+        return root;
     };
 
     GameSummary.prototype.writeSummary = function(idState, idSummary) {
-	var gName = document.createTextNode('Name: ' + node.game.metadata.name),
-	gDescr = document.createTextNode('Descr: ' + node.game.metadata.description),
-	gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
-	gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
+        var gName = document.createTextNode('Name: ' + node.game.metadata.name),
+        gDescr = document.createTextNode('Descr: ' + node.game.metadata.description),
+        gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
+        gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
 
-	this.summaryDiv.appendChild(gName);
-	this.summaryDiv.appendChild(document.createElement('br'));
-	this.summaryDiv.appendChild(gDescr);
-	this.summaryDiv.appendChild(document.createElement('br'));
-	this.summaryDiv.appendChild(gMinP);
-	this.summaryDiv.appendChild(document.createElement('br'));
-	this.summaryDiv.appendChild(gMaxP);
+        this.summaryDiv.appendChild(gName);
+        this.summaryDiv.appendChild(document.createElement('br'));
+        this.summaryDiv.appendChild(gDescr);
+        this.summaryDiv.appendChild(document.createElement('br'));
+        this.summaryDiv.appendChild(gMinP);
+        this.summaryDiv.appendChild(document.createElement('br'));
+        this.summaryDiv.appendChild(gMaxP);
 
-	node.window.addDiv(this.root, this.summaryDiv, idSummary);
+        node.window.addDiv(this.root, this.summaryDiv, idSummary);
     };
 
 })(node);

@@ -31,53 +31,53 @@
     };
 
     function StateDisplay(options) {
-	this.id = options.id;
-	this.table = new Table();
+        this.id = options.id;
+        this.table = new Table();
     }
 
     StateDisplay.prototype.append = function() {
-	var that, checkPlayerName;
+        var that, checkPlayerName;
         that = this;
-	checkPlayerName = setInterval(function() {
-	    if (node.player && node.player.id) {
-		clearInterval(checkPlayerName);
-		that.updateAll();
-	    }
-	}, 100);
-	this.bodyDiv.appendChild(this.table.table);
+        checkPlayerName = setInterval(function() {
+            if (node.player && node.player.id) {
+                clearInterval(checkPlayerName);
+                that.updateAll();
+            }
+        }, 100);
+        this.bodyDiv.appendChild(this.table.table);
     };
 
     StateDisplay.prototype.updateAll = function() {
-	var stage, stageNo, stageId, playerId, tmp, miss;
+        var stage, stageNo, stageId, playerId, tmp, miss;
         miss = '-';
 
         stageId = miss;
         stageNo = miss;
         playerId = miss;
 
-	if (node.player.id) {
+        if (node.player.id) {
             playerId = node.player.id;
         }
 
-	stage = node.game.getCurrentGameStage();
-	if (stage) {
+        stage = node.game.getCurrentGameStage();
+        if (stage) {
             tmp = node.game.plot.getStep(stage);
             stageId = tmp ? tmp.id : '-';
             stageNo = stage.toString();
         }
 
-	this.table.clear(true);
-	this.table.addRow(['Stage  No: ', stageNo]);
-	this.table.addRow(['Stage  Id: ', stageId]);
-	this.table.addRow(['Player Id: ', playerId]);
-	this.table.parse();
+        this.table.clear(true);
+        this.table.addRow(['Stage  No: ', stageNo]);
+        this.table.addRow(['Stage  Id: ', stageId]);
+        this.table.addRow(['Player Id: ', playerId]);
+        this.table.parse();
 
     };
 
     StateDisplay.prototype.listeners = function() {
-	var that = this;
-	node.on('STEP_CALLBACK_EXECUTED', function() {
-	    that.updateAll();
+        var that = this;
+        node.on('STEP_CALLBACK_EXECUTED', function() {
+            that.updateAll();
         });
     };
 
