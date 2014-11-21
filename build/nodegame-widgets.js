@@ -3,13 +3,12 @@
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Prototype of a widget class.
+ * Prototype of a widget class
  *
- * The methods of the prototype will be injected in every new widget, if missing.
+ * The methods of the prototype will be injected in every new widget, if
+ * missing.
  * Properties: _headingDiv_, _bodyDiv_, and _footer_ might be automatically
  * added as well, depending on widget configuration.
- *
- * ---
  */
 (function(node) {
 
@@ -115,8 +114,7 @@
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Helper class to interact with nodeGame widgets.
- * ---
+ * Helper class to interact with nodeGame widgets
  */
 (function(window, node) {
 
@@ -124,10 +122,12 @@
 
     var J = node.JSUS;
 
+    // ## Widgets constructor
+
     function Widgets() {
 
         /**
-         * ## Widgets.widgets
+         * ### Widgets.widgets
          *
          * Container of currently registered widgets
          *
@@ -136,7 +136,7 @@
         this.widgets = {};
 
         /**
-         * ## Widgets.widgets
+         * ### Widgets.widgets
          *
          * Container of appended widget instances
          *
@@ -144,6 +144,8 @@
          */
         this.instances = [];
     }
+
+    // ## Widgets methods
 
     /**
      * ### Widgets.register
@@ -219,7 +221,8 @@
         node.info('registering ' + wProto.name + ' v.' +  wProto.version);
 
         if (!this.checkDependencies(wProto)) {
-            throw new Error('Widgets.get: ' + w_str + ' has unmet dependecies.');
+            throw new Error('Widgets.get: ' + w_str + ' has unmet ' +
+                            'dependecies.');
         }
 
         // Add missing properties to the user options
@@ -246,8 +249,9 @@
     /**
      * ### Widgets.append
      *
-     * Appends a widget to the specified root element. If no root element
-     * is specified the widget is append to the global root.
+     * Appends a widget to the specified root element
+     *
+     * If no root element is specified the widget is append to the global root.
      *
      * The first parameter can be string representing the name of the widget or
      * a valid widget already loaded, for example through Widgets.get.
@@ -260,10 +264,12 @@
      *
      * @param {string} w_str The name of the widget to load
      * @param {object} root. Optional. The HTML element under which the widget
-     *   will be appended. Defaults, `GameWindow.getFrameRoot()` or document.body
+     *   will be appended. Default: `GameWindow.getFrameRoot()` or document.body
      * @param {options} options Optional. Configuration options to be passed
      *   to the widgets
-     * @return {object|boolean} The requested widget, or FALSE is an error occurs
+     *
+     * @return {object|boolean} The requested widget, or FALSE is an error
+     *   occurs
      *
      * @see Widgets.get
      */
@@ -379,7 +385,7 @@
      *
      * @param {object} The widget to check
      * @param {boolean} quiet Optional. If TRUE, no warning will be raised.
-     *   Defaults FALSE
+     *   Default: FALSE
      * @return {boolean} TRUE, if all dependencies are met
      */
     Widgets.prototype.checkDependencies = function(w, quiet) {
@@ -408,7 +414,7 @@
     };
 
 
-    // #### Helper functions.
+    // ## Helper functions
 
     //function appendFieldset(root, options, w) {
     //    var idFieldset, legend;
@@ -461,14 +467,13 @@
 );
 
 /**
- * # Chat widget for nodeGame
+ * # Chat
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a simple configurable chat.
+ * Creates a simple configurable chat
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -512,7 +517,7 @@
     };
 
     Chat.version = '0.4';
-    Chat.description = 'Offers a uni / bi-directional communication interface ' +
+    Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the experimenter.';
 
     // ## Dependencies
@@ -534,7 +539,8 @@
         this.chat_event = options.chat_event || Chat.defaults.chat_event;
         this.submit_text = options.submit_text || Chat.defaults.submit_text;
 
-        this.submit = W.getEventButton(this.chat_event, this.submit_text, this.submit_id);
+        this.submit = W.getEventButton(this.chat_event, this.submit_text,
+                                       this.submit_id);
         this.textarea = W.getElement('textarea', this.textarea_id);
         this.chat = W.getElement('div', this.chat_id);
 
@@ -619,7 +625,8 @@
 
         if (this.mode === Chat.modes.MANY_TO_MANY) {
             node.on('UPDATED_PLIST', function() {
-                W.populateRecipientSelector(that.recipient, node.game.pl.fetch());
+                W.populateRecipientSelector(that.recipient,
+                    node.game.pl.fetch());
             });
         }
 
@@ -656,14 +663,13 @@
 })(node);
 
 /**
- * # ChernoffFaces widget for nodeGame
+ * # ChernoffFaces
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Displays multidimensional data in the shape of a Chernoff Face.
+ * Displays multidimensional data in the shape of a Chernoff Face
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -685,7 +691,8 @@
     // ## Meta-data
 
     ChernoffFaces.version = '0.3';
-    ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.';
+    ChernoffFaces.description =
+        'Display parametric data in the form of a Chernoff Face.';
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -726,9 +733,11 @@
         this.id = options.id || this.id;
         var PREF = this.id + '_';
 
-        this.features = options.features || this.features || FaceVector.random();
+        this.features = options.features || this.features ||
+                        FaceVector.random();
 
-        this.controls = ('undefined' !== typeof options.controls) ?  options.controls : true;
+        this.controls = ('undefined' !== typeof options.controls) ?
+            options.controls : true;
 
         var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
         var idButton = (options.idButton) ? options.idButton : PREF + 'button';
@@ -739,7 +748,8 @@
 
         var sc_options = {
             id: 'cf_controls',
-            features: JSUS.mergeOnKey(FaceVector.defaults, this.features, 'value'),
+            features: JSUS.mergeOnKey(FaceVector.defaults, this.features,
+                                      'value'),
             change: this.change,
             fieldset: {id: this.id + '_controls_fieldest',
                        legend: this.controls.legend || 'Controls'
@@ -788,7 +798,9 @@
         var fv = new FaceVector(features);
         this.fp.redraw(fv);
         // Without merging wrong values are passed as attributes
-        this.sc.init({features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')});
+        this.sc.init({
+            features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')
+        });
         this.sc.refresh();
     };
 
@@ -1024,7 +1036,8 @@
     //TODO Scaling ?
     FacePainter.computeFaceOffset = function(face, offset, y) {
         y = y || 0;
-        //var pos = y - face.head_radius * face.scaleY + face.head_radius * face.scaleY * 2 * offset;
+        //var pos = y - face.head_radius * face.scaleY +
+        //          face.head_radius * face.scaleY * 2 * offset;
         var pos = y - face.head_radius + face.head_radius * 2 * offset;
         //console.log('POS: ' + pos);
         return pos;
@@ -1033,7 +1046,8 @@
     FacePainter.computeEyebrowOffset = function(face, y) {
         y = y || 0;
         var eyemindistance = 2;
-        return FacePainter.computeFaceOffset(face, face.eye_height, y) - eyemindistance - face.eyebrow_eyedistance;
+        return FacePainter.computeFaceOffset(face, face.eye_height, y) -
+            eyemindistance - face.eyebrow_eyedistance;
     };
 
 
@@ -1041,8 +1055,8 @@
      *
      * A description of a Chernoff Face.
      *
-     * This class packages the 11-dimensional vector of numbers from 0 through 1 that completely
-     * describe a Chernoff face.
+     * This class packages the 11-dimensional vector of numbers from 0 through
+     * 1 that completely describe a Chernoff face.
      *
      */
 
@@ -1216,8 +1230,11 @@
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!JSUS.in_array(key,['color','lineWidth','scaleX','scaleY'])) {
-                    out[key] = FaceVector.defaults[key].min + Math.random() * FaceVector.defaults[key].max;
+                if (!JSUS.in_array(key,
+                            ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
+
+                    out[key] = FaceVector.defaults[key].min +
+                        Math.random() * FaceVector.defaults[key].max;
                 }
             }
         }
@@ -1261,8 +1278,8 @@
             if (this.hasOwnProperty(key)) {
                 if (FaceVector.defaults.hasOwnProperty(key)) {
                     if (key !== 'color') {
-                        this[key] = FaceVector.defaults[key].min + Math.random() * FaceVector.defaults[key].max;
-
+                        this[key] = FaceVector.defaults[key].min +
+                            Math.random() * FaceVector.defaults[key].max;
                     }
                 }
             }
@@ -1302,14 +1319,13 @@
 })(node);
 
 /**
- * # ChernoffFaces (Simplified version) widget for nodeGame
+ * # ChernoffFacesSimple
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -1319,7 +1335,7 @@
 
     node.widgets.register('ChernoffFacesSimple', ChernoffFaces);
 
-    // # Defaults
+    // ## Defaults
 
     ChernoffFaces.defaults = {};
     ChernoffFaces.defaults.id = 'ChernoffFaces';
@@ -1330,7 +1346,8 @@
     // ## Meta-data
 
     ChernoffFaces.version = '0.3';
-    ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.'
+    ChernoffFaces.description =
+        'Display parametric data in the form of a Chernoff Face.'
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -1372,16 +1389,20 @@
         this.id = options.id || this.id;
         var PREF = this.id + '_';
 
-        this.features = options.features || this.features || FaceVector.random();
+        this.features = options.features || this.features ||
+            FaceVector.random();
 
-        this.controls = ('undefined' !== typeof options.controls) ?  options.controls : true;
+        this.controls = ('undefined' !== typeof options.controls) ?
+                        options.controls : true;
 
         var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
         var idButton = (options.idButton) ? options.idButton : PREF + 'button';
 
         this.dims = {
-            width: (options.width) ? options.width : ChernoffFaces.defaults.canvas.width,
-            height:(options.height) ? options.height : ChernoffFaces.defaults.canvas.heigth
+            width:  options.width ?
+                options.width : ChernoffFaces.defaults.canvas.width,
+            height: options.height ?
+                options.height : ChernoffFaces.defaults.canvas.heigth
         };
 
         this.canvas = node.window.getCanvas(idCanvas, this.dims);
@@ -1390,7 +1411,8 @@
 
         var sc_options = {
             id: 'cf_controls',
-            features: JSUS.mergeOnKey(FaceVector.defaults, this.features, 'value'),
+            features:
+                JSUS.mergeOnKey(FaceVector.defaults, this.features, 'value'),
             change: this.change,
             fieldset: {id: this.id + '_controls_fieldest',
                        legend: this.controls.legend || 'Controls'
@@ -1445,7 +1467,9 @@
         var fv = new FaceVector(features);
         this.fp.redraw(fv);
         // Without merging wrong values are passed as attributes
-        this.sc.init({features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')});
+        this.sc.init({
+            features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')
+        });
         this.sc.refresh();
     };
 
@@ -1521,10 +1545,12 @@
         }
 
         if (this.canvas.width > this.canvas.height) {
-            var ratio = this.canvas.width / face.head_radius * face.head_scale_x;
+            var ratio = this.canvas.width / face.head_radius *
+                face.head_scale_x;
         }
         else {
-            var ratio = this.canvas.height / face.head_radius * face.head_scale_y;
+            var ratio = this.canvas.height / face.head_radius *
+                face.head_scale_y;
         }
 
         face.scaleX = ratio / 2;
@@ -1679,7 +1705,8 @@
     //TODO Scaling ?
     FacePainter.computeFaceOffset = function(face, offset, y) {
         var y = y || 0;
-        //var pos = y - face.head_radius * face.scaleY + face.head_radius * face.scaleY * 2 * offset;
+        //var pos = y - face.head_radius * face.scaleY +
+        //          face.head_radius * face.scaleY * 2 * offset;
         var pos = y - face.head_radius + face.head_radius * 2 * offset;
         //console.log('POS: ' + pos);
         return pos;
@@ -1688,7 +1715,8 @@
     FacePainter.computeEyebrowOffset = function(face, y) {
         var y = y || 0;
         var eyemindistance = 2;
-        return FacePainter.computeFaceOffset(face, face.eye_height, y) - eyemindistance - face.eyebrow_eyedistance;
+        return FacePainter.computeFaceOffset(face, face.eye_height, y) -
+            eyemindistance - face.eyebrow_eyedistance;
     };
 
 
@@ -1696,8 +1724,8 @@
      *
      * A description of a Chernoff Face.
      *
-     * This class packages the 11-dimensional vector of numbers from 0 through 1 that completely
-     * describe a Chernoff face.
+     * This class packages the 11-dimensional vector of numbers from 0 through
+     * 1 that completely describe a Chernoff face.
      *
      */
 
@@ -1871,8 +1899,11 @@
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!JSUS.in_array(key,['color','lineWidth','scaleX','scaleY'])) {
-                    out[key] = FaceVector.defaults[key].min + Math.random() * FaceVector.defaults[key].max;
+                if (!JSUS.in_array(key,
+                            ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
+
+                    out[key] = FaceVector.defaults[key].min +
+                        Math.random() * FaceVector.defaults[key].max;
                 }
             }
         }
@@ -1916,8 +1947,8 @@
             if (this.hasOwnProperty(key)) {
                 if (FaceVector.defaults.hasOwnProperty(key)) {
                     if (key !== 'color') {
-                        this[key] = FaceVector.defaults[key].min + Math.random() * FaceVector.defaults[key].max;
-
+                        this[key] = FaceVector.defaults[key].min +
+                            Math.random() * FaceVector.defaults[key].max;
                     }
                 }
             }
@@ -1957,14 +1988,13 @@
 })(node);
 
 /**
- * # Controls widget for nodeGame
+ * # Controls
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates and manipulates a set of forms.
+ * Creates and manipulates a set of forms
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -1984,7 +2014,7 @@
     Controls.jQuerySlider = jQuerySliderControls;
     Controls.Radio = RadioControls;
 
-    // Meta-data
+    // ## Meta-data
 
     Controls.version = '0.3';
     Controls.description = 'Wraps a collection of user-inputs controls.';
@@ -2045,7 +2075,8 @@
                 idButton = this.options.submit.id;
                 delete this.options.submit.id;
             }
-            this.submit = node.window.addButton(root, idButton, this.options.submit, this.options.attributes);
+            this.submit = node.window.addButton(root, idButton,
+                    this.options.submit, this.options.attributes);
 
             var that = this;
             this.submit.onclick = function() {
@@ -2310,14 +2341,13 @@
 })(node);
 
 /**
- * # D3 widget for nodeGame
+ * # D3
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Integrates nodeGame with the D3 library to plot a real-time chart.
+ * Integrates nodeGame with the D3 library to plot a real-time chart
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -2334,7 +2364,7 @@
     D3.defaults = {};
     D3.defaults.id = 'D3';
     D3.defaults.fieldset = {
-	legend: 'D3 plot'
+        legend: 'D3 plot'
     };
 
 
@@ -2346,25 +2376,25 @@
     // ## Dependencies
 
     D3.dependencies = {
-	d3: {},
-	JSUS: {}
+        d3: {},
+        JSUS: {}
     };
 
     function D3 (options) {
-	this.id = options.id || D3.id;
-	this.event = options.event || 'D3';
-	this.svg = null;
+        this.id = options.id || D3.id;
+        this.event = options.event || 'D3';
+        this.svg = null;
 
-	var that = this;
-	node.on(this.event, function(value) {
-	    that.tick.call(that, value);
-	});
+        var that = this;
+        node.on(this.event, function(value) {
+            that.tick.call(that, value);
+        });
     }
 
     D3.prototype.append = function(root) {
-	this.root = root;
-	this.svg = d3.select(root).append("svg");
-	return root;
+        this.root = root;
+        this.svg = d3.select(root).append("svg");
+        return root;
     };
 
     D3.prototype.tick = function() {};
@@ -2380,8 +2410,8 @@
 
     // ## Dependencies
     D3ts.dependencies = {
-	D3: {},
-	JSUS: {}
+        D3: {},
+        JSUS: {}
     };
 
     D3ts.prototype.__proto__ = D3.prototype;
@@ -2393,140 +2423,141 @@
     D3ts.defaults.height = 200;
 
     D3ts.defaults.margin = {
-    	top: 10,
-    	right: 10,
-    	bottom: 20,
-    	left: 40
+        top: 10,
+        right: 10,
+        bottom: 20,
+        left: 40
     };
 
     D3ts.defaults.domain = {
-	x: [0, 10],
-	y: [0, 1]
+        x: [0, 10],
+        y: [0, 1]
     };
 
     D3ts.defaults.range = {
-    	x: [0, D3ts.defaults.width],
-    	y: [D3ts.defaults.height, 0]
+        x: [0, D3ts.defaults.width],
+        y: [D3ts.defaults.height, 0]
     };
 
     function D3ts (options) {
-	D3.call(this, options);
+        D3.call(this, options);
 
 
-	var o = this.options = JSUS.merge(D3ts.defaults, options);
+        var o = this.options = JSUS.merge(D3ts.defaults, options);
 
-	var n = this.n = o.n;
+        var n = this.n = o.n;
 
-	this.data = [0];
+        this.data = [0];
 
-	this.margin = o.margin;
+        this.margin = o.margin;
 
-	var width = this.width = o.width - this.margin.left - this.margin.right;
-	var height = this.height = o.height - this.margin.top - this.margin.bottom;
+        var width = this.width = o.width - this.margin.left - this.margin.right;
+        var height = this.height = o.height - this.margin.top -
+                     this.margin.bottom;
 
-	// identity function
-	var x = this.x = d3.scale.linear()
-	    .domain(o.domain.x)
-	    .range(o.range.x);
+        // identity function
+        var x = this.x = d3.scale.linear()
+            .domain(o.domain.x)
+            .range(o.range.x);
 
-	var y = this.y = d3.scale.linear()
-	    .domain(o.domain.y)
-	    .range(o.range.y);
+        var y = this.y = d3.scale.linear()
+            .domain(o.domain.y)
+            .range(o.range.y);
 
-	// line generator
-	this.line = d3.svg.line()
-	    .x(function(d, i) { return x(i); })
-	    .y(function(d, i) { return y(d); });
+        // line generator
+        this.line = d3.svg.line()
+            .x(function(d, i) { return x(i); })
+            .y(function(d, i) { return y(d); });
     }
 
     D3ts.prototype.init = function(options) {
-	//D3.init.call(this, options);
+        //D3.init.call(this, options);
 
-	console.log('init!');
-	var x = this.x,
-	y = this.y,
-	height = this.height,
-	width = this.width,
-	margin = this.margin;
-
-
-	// Create the SVG and place it in the middle
-	this.svg.attr("width", width + margin.left + margin.right)
-	    .attr("height", height + margin.top + margin.bottom)
-	    .append("g")
-	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        console.log('init!');
+        var x = this.x,
+        y = this.y,
+        height = this.height,
+        width = this.width,
+        margin = this.margin;
 
 
-	// Line does not go out the axis
-	this.svg.append("defs").append("clipPath")
-	    .attr("id", "clip")
-	    .append("rect")
-	    .attr("width", width)
-	    .attr("height", height);
+        // Create the SVG and place it in the middle
+        this.svg.attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top +
+                  ")");
 
-	// X axis
-	this.svg.append("g")
-	    .attr("class", "x axis")
-	    .attr("transform", "translate(0," + height + ")")
-	    .call(d3.svg.axis().scale(x).orient("bottom"));
 
-	// Y axis
-	this.svg.append("g")
-	    .attr("class", "y axis")
-	    .call(d3.svg.axis().scale(y).orient("left"));
+        // Line does not go out the axis
+        this.svg.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", width)
+            .attr("height", height);
 
-	this.path = this.svg.append("g")
-	    .attr("clip-path", "url(#clip)")
-	    .append("path")
-	    .data([this.data])
-	    .attr("class", "line")
-	    .attr("d", this.line);
+        // X axis
+        this.svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.svg.axis().scale(x).orient("bottom"));
+
+        // Y axis
+        this.svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.svg.axis().scale(y).orient("left"));
+
+        this.path = this.svg.append("g")
+            .attr("clip-path", "url(#clip)")
+            .append("path")
+            .data([this.data])
+            .attr("class", "line")
+            .attr("d", this.line);
     };
 
     D3ts.prototype.tick = function(value) {
-	this.alreadyInit = this.alreadyInit || false;
-	if (!this.alreadyInit) {
-	    this.init();
-	    this.alreadyInit = true;
-	}
+        this.alreadyInit = this.alreadyInit || false;
+        if (!this.alreadyInit) {
+            this.init();
+            this.alreadyInit = true;
+        }
 
-	var x = this.x;
+        var x = this.x;
 
-	console.log('tick!');
+        console.log('tick!');
 
-	// push a new data point onto the back
-	this.data.push(value);
+        // push a new data point onto the back
+        this.data.push(value);
 
-	// redraw the line, and slide it to the left
-	this.path
-	    .attr("d", this.line)
-	    .attr("transform", null);
+        // redraw the line, and slide it to the left
+        this.path
+            .attr("d", this.line)
+            .attr("transform", null);
 
-	// pop the old data point off the front
-	if (this.data.length > this.n) {
+        // pop the old data point off the front
+        if (this.data.length > this.n) {
 
-	    this.path
-	  	.transition()
-	  	.duration(500)
-	  	.ease("linear")
-	  	.attr("transform", "translate(" + x(-1) + ")");
+            this.path
+                .transition()
+                .duration(500)
+                .ease("linear")
+                .attr("transform", "translate(" + x(-1) + ")");
 
-	    this.data.shift();
+            this.data.shift();
 
-	}
+        }
     };
 
 })(node);
 
 /**
- * # DataBar widget for nodeGame
+ * # DataBar
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a form to send DATA packages to other clients / SERVER.
+ * Creates a form to send DATA packages to other clients / SERVER
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -2538,70 +2569,69 @@
     DataBar.defaults = {};
     DataBar.defaults.id = 'databar';
     DataBar.defaults.fieldset = {
-	legend: 'Send DATA to players'
+        legend: 'Send DATA to players'
     };
 
     // ## Meta-data
     DataBar.version = '0.4';
-    DataBar.description = 'Adds a input field to send DATA messages to the players';
+    DataBar.description =
+        'Adds a input field to send DATA messages to the players';
 
     function DataBar(options) {
-	this.bar = null;
-	this.root = null;
-	this.recipient = null;
+        this.bar = null;
+        this.root = null;
+        this.recipient = null;
     }
 
     DataBar.prototype.append = function(root) {
 
-	var sendButton, textInput, dataInput;
+        var sendButton, textInput, dataInput;
 
-	sendButton = W.addButton(root);
-	//W.writeln('Text');
-	textInput = W.addTextInput(root, 'data-bar-text');
-	W.addLabel(root, textInput, undefined, 'Text');
-	W.writeln('Data');
-	dataInput = W.addTextInput(root, 'data-bar-data');
+        sendButton = W.addButton(root);
+        //W.writeln('Text');
+        textInput = W.addTextInput(root, 'data-bar-text');
+        W.addLabel(root, textInput, undefined, 'Text');
+        W.writeln('Data');
+        dataInput = W.addTextInput(root, 'data-bar-data');
 
-	this.recipient = W.addRecipientSelector(root);
+        this.recipient = W.addRecipientSelector(root);
 
-	var that = this;
+        var that = this;
 
-	sendButton.onclick = function() {
+        sendButton.onclick = function() {
+            var to, data, text;
 
-	    var to, data, text;
+            to = that.recipient.value;
+            text = textInput.value;
+            data = dataInput.value;
 
-	    to = that.recipient.value;
-	    text = textInput.value;
-	    data = dataInput.value;
+            node.log('Parsed Data: ' + JSON.stringify(data));
 
-	    node.log('Parsed Data: ' + JSON.stringify(data));
+            node.say(text, to, data);
+        };
 
-	    node.say(text, to, data);
-	};
+        node.on('UPDATED_PLIST', function() {
+            node.window.populateRecipientSelector(that.recipient, node.game.pl);
+        });
 
-	node.on('UPDATED_PLIST', function() {
-	    node.window.populateRecipientSelector(that.recipient, node.game.pl);
-	});
-
-	return root;
+        return root;
 
     };
 
 })(node);
 
 /**
- * # Dynamic Table widget for nodeGame
+ * # DynamicTable
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Extends the GameTable widgets by allowing dynamic reshaping.
+ * Extends the GameTable widgets by allowing dynamic reshaping
  *
  * TODO: this widget needs refactoring.
  *
  * @experimental
  * @see GameTable widget
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -2623,116 +2653,120 @@
     DynamicTable.version = '0.3.1';
 
     DynamicTable.dependencies = {
-	Table: {},
-	JSUS: {},
-	HTMLRenderer: {}
+        Table: {},
+        JSUS: {},
+        HTMLRenderer: {}
     };
 
     function DynamicTable (options, data) {
-	//JSUS.extend(node.window.Table,this);
-	Table.call(this, options, data);
-	this.options = options;
-	this.id = options.id;
-	this.name = options.name || 'Dynamic Table';
-	this.fieldset = { legend: this.name,
-			  id: this.id + '_fieldset'
-		        };
+        //JSUS.extend(node.window.Table,this);
+        Table.call(this, options, data);
+        this.options = options;
+        this.id = options.id;
+        this.name = options.name || 'Dynamic Table';
+        this.fieldset = {
+            legend: this.name,
+            id: this.id + '_fieldset'
+        };
 
-	this.root = null;
-	this.bindings = {};
-	this.init(this.options);
+        this.root = null;
+        this.bindings = {};
+        this.init(this.options);
     }
 
     DynamicTable.prototype.init = function(options) {
-	this.options = options;
-	this.name = options.name || this.name;
-	this.auto_update = ('undefined' !== typeof options.auto_update) ? options.auto_update : true;
-	this.replace = options.replace || false;
-	this.htmlRenderer = new HTMLRenderer({renderers: options.renderers});
-	this.c('state', GameStage.compare);
-	this.setLeft([]);
-	this.parse(true);
+        this.options = options;
+        this.name = options.name || this.name;
+        this.auto_update = ('undefined' !== typeof options.auto_update) ?
+            options.auto_update : true;
+        this.replace = options.replace || false;
+        this.htmlRenderer = new HTMLRenderer({renderers: options.renderers});
+        this.c('state', GameStage.compare);
+        this.setLeft([]);
+        this.parse(true);
     };
 
     DynamicTable.prototype.bind = function(event, bindings) {
-	if (!event || !bindings) return;
-	var that = this;
+        if (!event || !bindings) return;
+        var that = this;
 
-	node.on(event, function(msg) {
+        node.on(event, function(msg) {
 
-	    if (bindings.x || bindings.y) {
-		// Cell
-		var func;
-		if (that.replace) {
-		    func = function(x, y) {
-			var found = that.get(x,y);
-			if (found.length !== 0) {
-			    for (var ci=0; ci < found.length; ci++) {
-				bindings.cell.call(that, msg, found[ci]);
-			    }
-			}
-			else {
-			    var cell = bindings.cell.call(that, msg, new Table.Cell({x: x, y: y}));
-			    that.add(cell);
-			}
-		    };
-		}
-		else {
-		    func = function(x, y) {
-			var cell = bindings.cell.call(that, msg, new Table.Cell({x: x, y: y}));
-			that.add(cell, x, y);
-		    };
-		}
+            if (bindings.x || bindings.y) {
+                // Cell
+                var func;
+                if (that.replace) {
+                    func = function(x, y) {
+                        var found = that.get(x,y);
+                        if (found.length !== 0) {
+                            for (var ci=0; ci < found.length; ci++) {
+                                bindings.cell.call(that, msg, found[ci]);
+                            }
+                        }
+                        else {
+                            var cell = bindings.cell.call(
+                                that, msg, new Table.Cell({x: x, y: y}));
+                            that.add(cell);
+                        }
+                    };
+                }
+                else {
+                    func = function(x, y) {
+                        var cell = bindings.cell.call(
+                                that, msg, new Table.Cell({x: x, y: y}));
+                        that.add(cell, x, y);
+                    };
+                }
 
-		var x = bindings.x.call(that, msg);
-		var y = bindings.y.call(that, msg);
+                var x = bindings.x.call(that, msg);
+                var y = bindings.y.call(that, msg);
 
-		if (x && y) {
+                if (x && y) {
 
-		    x = (x instanceof Array) ? x : [x];
-		    y = (y instanceof Array) ? y : [y];
+                    x = (x instanceof Array) ? x : [x];
+                    y = (y instanceof Array) ? y : [y];
 
-                    //					console.log('Bindings found:');
-                    //					console.log(x);
-                    //					console.log(y);
+                    //console.log('Bindings found:');
+                    //console.log(x);
+                    //console.log(y);
 
-		    for (var xi=0; xi < x.length; xi++) {
-			for (var yi=0; yi < y.length; yi++) {
-			    // Replace or Add
-			    func.call(that, x[xi], y[yi]);
-			}
-		    }
-		}
-		// End Cell
-	    }
+                    for (var xi=0; xi < x.length; xi++) {
+                        for (var yi=0; yi < y.length; yi++) {
+                            // Replace or Add
+                            func.call(that, x[xi], y[yi]);
+                        }
+                    }
+                }
+                // End Cell
+            }
 
-	    // Header
-	    if (bindings.header) {
-		var h = bindings.header.call(that, msg);
-		h = (h instanceof Array) ? h : [h];
-		that.setHeader(h);
-	    }
+            // Header
+            if (bindings.header) {
+                var h = bindings.header.call(that, msg);
+                h = (h instanceof Array) ? h : [h];
+                that.setHeader(h);
+            }
 
-	    // Left
-	    if (bindings.left) {
-		var l = bindings.left.call(that, msg);
-		if (!JSUS.in_array(l, that.left)) {
-		    that.header.push(l);
-		}
-	    }
+            // Left
+            if (bindings.left) {
+                var l = bindings.left.call(that, msg);
+                if (!JSUS.in_array(l, that.left)) {
+                    that.header.push(l);
+                }
+            }
 
-	    // Auto Update?
-	    if (that.auto_update) {
-		that.parse();
-	    }
-	});
+            // Auto Update?
+            if (that.auto_update) {
+                that.parse();
+            }
+        });
 
     };
 
     DynamicTable.prototype.append = function(root) {
-	this.root = root;
-	root.appendChild(this.table);
-	return root;
+        this.root = root;
+        root.appendChild(this.table);
+        return root;
     };
 
     DynamicTable.prototype.listeners = function() {};
@@ -2740,14 +2774,13 @@
 })(node);
 
 /**
- * # EventButton widget for nodeGame
+ * # EventButton
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a clickable button that fires an event.
+ * Creates a clickable button that fires an event
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -2806,12 +2839,12 @@
             };
         }
 
-        //              // Emit DONE only if callback is successful
-        //              this.button.onclick = function() {
-        //                      var ok = true;
-        //                      if (options.exec) ok = options.exec.call(node.game);
-        //                      if (ok) node.emit(that.event);
-        //              }
+        //// Emit DONE only if callback is successful
+        //this.button.onclick = function() {
+        //        var ok = true;
+        //        if (options.exec) ok = options.exec.call(node.game);
+        //        if (ok) node.emit(that.event);
+        //}
     };
 
     EventButton.prototype.append = function(root) {
@@ -2822,7 +2855,7 @@
 
     EventButton.prototype.listeners = function() {};
 
-    // # Done Button
+    // # DoneButton
 
     node.widgets.register('DoneButton', DoneButton);
 
@@ -2849,14 +2882,13 @@
 })(node);
 
 /**
- * # Feedback widget for nodeGame
+ * # Feedback
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Sends a feedback message to the server.
+ * Sends a feedback message to the server
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -2939,14 +2971,13 @@
 })(node);
 
 /**
- * # GameBoard widget for nodeGame
+ * # GameBoard
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Displays a table of currently connected players.
+ * Displays a table of currently connected players
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -2961,127 +2992,128 @@
     GameBoard.defaults = {};
     GameBoard.defaults.id = 'gboard';
     GameBoard.defaults.fieldset = {
-	legend: 'Game Board'
+        legend: 'Game Board'
     };
 
     // ## Meta-data
 
     GameBoard.version = '0.4.0';
-    GameBoard.description = 'Offer a visual representation of the state of all players in the game.';
+    GameBoard.description = 'Offer a visual representation of the state of ' +
+                            'all players in the game.';
 
     function GameBoard(options) {
 
-	this.id = options.id || GameBoard.defaults.id;
-	this.status_id = this.id + '_statusbar';
+        this.id = options.id || GameBoard.defaults.id;
+        this.status_id = this.id + '_statusbar';
 
-	this.board = null;
-	this.status = null;
-	this.root = null;
+        this.board = null;
+        this.status = null;
+        this.root = null;
 
     }
 
     GameBoard.prototype.append = function(root) {
-	this.root = root;
-	this.status = node.window.addDiv(root, this.status_id);
-	this.board = node.window.addDiv(root, this.id);
+        this.root = root;
+        this.status = node.window.addDiv(root, this.status_id);
+        this.board = node.window.addDiv(root, this.id);
 
-	this.updateBoard(node.game.pl);
+        this.updateBoard(node.game.pl);
 
-	return root;
+        return root;
     };
 
     GameBoard.prototype.listeners = function() {
-	var that = this;
-	node.on('UPDATED_PLIST', function() {
-	    that.updateBoard(node.game.pl);
-	});
+        var that = this;
+        node.on('UPDATED_PLIST', function() {
+            that.updateBoard(node.game.pl);
+        });
 
     };
 
     GameBoard.prototype.printLine = function(p) {
 
-	var line, levels, level;
+        var line, levels, level;
         levels = node.constants.stageLevels;
 
         line = '[' + (p.name || p.id) + "]> \t";
-	line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' + p.stage.step;
-	line += ' ';
+        line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' +
+                p.stage.step;
+        line += ' ';
 
-	switch (p.stageLevel) {
+        switch (p.stageLevel) {
 
-	case levels.UNINITIALIZED:
-	    level = 'uninit.';
-	    break;
+        case levels.UNINITIALIZED:
+            level = 'uninit.';
+            break;
 
-	case levels.INITIALIZING:
-	    level = 'init...';
-	    break;
+        case levels.INITIALIZING:
+            level = 'init...';
+            break;
 
-	case levels.INITIALIZING:
-	    level = 'init!';
-	    break;
+        case levels.INITIALIZING:
+            level = 'init!';
+            break;
 
-	case levels.LOADING:
-	    level = 'loading';
-	    break;
+        case levels.LOADING:
+            level = 'loading';
+            break;
 
-	case levels.LOADED:
-	    level = 'loaded';
-	    break;
+        case levels.LOADED:
+            level = 'loaded';
+            break;
 
-	case levels.PLAYING:
-	    level = 'playing';
-	    break;
-	case levels.DONE:
-	    level = 'done';
-	    break;
+        case levels.PLAYING:
+            level = 'playing';
+            break;
+        case levels.DONE:
+            level = 'done';
+            break;
 
-	default:
-	    level = p.stageLevel;
-	    break;
-	}
+        default:
+            level = p.stageLevel;
+            break;
+        }
 
-	return line + '(' + level + ')';
+        return line + '(' + level + ')';
     };
 
     GameBoard.prototype.printSeparator = function(p) {
-	return W.getElement('hr', null, {style: 'color: #CCC;'});
+        return W.getElement('hr', null, {style: 'color: #CCC;'});
     };
 
 
     GameBoard.prototype.updateBoard = function(pl) {
-	var player, separator;
+        var player, separator;
         var that = this;
 
-	this.status.innerHTML = 'Updating...';
+        this.status.innerHTML = 'Updating...';
 
-	if (pl.size()) {
-	    that.board.innerHTML = '';
-	    pl.forEach( function(p) {
-		player = that.printLine(p);
+        if (pl.size()) {
+            that.board.innerHTML = '';
+            pl.forEach( function(p) {
+                player = that.printLine(p);
 
-		W.write(player, that.board);
+                W.write(player, that.board);
 
-		separator = that.printSeparator(p);
-		W.write(separator, that.board);
-	    });
-	}
+                separator = that.printSeparator(p);
+                W.write(separator, that.board);
+            });
+        }
 
 
-	this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
+        this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
     };
 
 })(node);
 
 /**
- * # GameSummary widget for nodeGame
+ * # GameSummary
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Shows the configuration options of a game in a box.
+ * Shows the configuration options of a game in a box
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -3098,47 +3130,48 @@
     // ## Meta-data
 
     GameSummary.version = '0.3';
-    GameSummary.description = 'Show the general configuration options of the game.';
+    GameSummary.description =
+        'Show the general configuration options of the game.';
 
     function GameSummary(options) {
-	this.summaryDiv = null;
+        this.summaryDiv = null;
     }
 
     GameSummary.prototype.append = function(root) {
-	this.root = root;
-	this.summaryDiv = node.window.addDiv(root);
-	this.writeSummary();
-	return root;
+        this.root = root;
+        this.summaryDiv = node.window.addDiv(root);
+        this.writeSummary();
+        return root;
     };
 
     GameSummary.prototype.writeSummary = function(idState, idSummary) {
-	var gName = document.createTextNode('Name: ' + node.game.metadata.name),
-	gDescr = document.createTextNode('Descr: ' + node.game.metadata.description),
-	gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
-	gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
+        var gName = document.createTextNode('Name: ' + node.game.metadata.name),
+        gDescr = document.createTextNode(
+                'Descr: ' + node.game.metadata.description),
+        gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
+        gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
 
-	this.summaryDiv.appendChild(gName);
-	this.summaryDiv.appendChild(document.createElement('br'));
-	this.summaryDiv.appendChild(gDescr);
-	this.summaryDiv.appendChild(document.createElement('br'));
-	this.summaryDiv.appendChild(gMinP);
-	this.summaryDiv.appendChild(document.createElement('br'));
-	this.summaryDiv.appendChild(gMaxP);
+        this.summaryDiv.appendChild(gName);
+        this.summaryDiv.appendChild(document.createElement('br'));
+        this.summaryDiv.appendChild(gDescr);
+        this.summaryDiv.appendChild(document.createElement('br'));
+        this.summaryDiv.appendChild(gMinP);
+        this.summaryDiv.appendChild(document.createElement('br'));
+        this.summaryDiv.appendChild(gMaxP);
 
-	node.window.addDiv(this.root, this.summaryDiv, idSummary);
+        node.window.addDiv(this.root, this.summaryDiv, idSummary);
     };
 
 })(node);
 
 /**
- * # GameTable widget for nodeGame
+ * # GameTable
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a table that renders in each cell data captured by fired events.
+ * Creates a table that renders in each cell data captured by fired events
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -3227,8 +3260,8 @@
             var plist = new PlayerList({}, msg.data);
             var diff = plist.diff(that.plist);
             if (diff) {
-                //                              console.log('New Players found');
-                //                              console.log(diff);
+                //console.log('New Players found');
+                //console.log(diff);
                 diff.forEach(function(el){that.addPlayer(el);});
             }
 
@@ -3255,7 +3288,9 @@
     GameTable.prototype.addLeft = function(state, player) {
         if (!state) return;
         state = new GameStage(state);
-        if (!JSUS.in_array({content:state.toString(), type: 'left'}, this.gtbl.left)){
+        if (!JSUS.in_array({content:state.toString(), type: 'left'},
+                    this.gtbl.left)) {
+
             this.gtbl.add2Left(state.toString());
         }
         // Is it a new display associated to the same state?
@@ -3292,14 +3327,13 @@
 })(node);
 
 /**
- * # LanguageSelector widget for nodeGame
+ * # LanguageSelector
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Manages and displays information about languages available and selected.
+ * Manages and displays information about languages available and selected
  *
  * www.nodegame.org
- * ---
  */
  (function(node) {
 
@@ -3348,7 +3382,7 @@
          * - `name`: Name of the language in English.
          * - `nativeName`: Native name of the language
          * - `shortName`: An abbreviation for the language, also determines the
-         *  path to the context files for this language.
+         *    path to the context files for this language.
          *
          * The key for each language object is its `shortName`.
          *
@@ -3469,8 +3503,8 @@
                         node.window.addElement('br', that.displayForm);
                         that.optionsLabel[language].className =
                             'unselectedButtonLabel';
-                        that.displayForm.appendChild(that.optionsLabel[language]);
-
+                        that.displayForm.appendChild(
+                                that.optionsLabel[language]);
                     }
                 }
             }
@@ -3481,10 +3515,12 @@
                 for (language in msg.data) {
                     that.optionsLabel[language] =
                         document.createTextNode(msg.data[language].nativeName);
-                    that.optionsDisplay[language] = node.window.getElement('option',
-                        language + 'Option', { value: language });
-                    that.optionsDisplay[language].appendChild(that.optionsLabel[language]);
-                    that.displaySelection.appendChild(that.optionsDisplay[language]);
+                    that.optionsDisplay[language] = node.window.getElement(
+                        'option', language + 'Option', { value: language });
+                    that.optionsDisplay[language].appendChild(
+                        that.optionsLabel[language]);
+                    that.displaySelection.appendChild(
+                        that.optionsDisplay[language]);
 
                 }
                 that.displayForm.appendChild(that.displaySelection);
@@ -3524,8 +3560,10 @@
         this.init(this.options);
     }
 
+    // ## LanguageSelector methods
+
     /**
-     * ## LanguageSelector.init
+     * ### LanguageSelector.init
      *
      * Initializes the widget
      *
@@ -3557,11 +3595,11 @@
     };
 
     /**
-     * ## LanguageSelector.setLanguage
+     * ### LanguageSelector.setLanguage
      *
      * Sets language and updates view
      *
-     * @param {string} langName shortName of language to be set.
+     * @param {string} langName shortName of language to be set
      *
      * @see NodeGameClient.setLanguage
      */
@@ -3599,7 +3637,7 @@
     };
 
     /**
-     * ## LanguageSelector.updateAvalaibleLanguages
+     * ### LanguageSelector.updateAvailableLanguages
      *
      * Updates available languages asynchronously
      *
@@ -3617,7 +3655,7 @@
     };
 
     /**
-     * ## LanguageSelector.loadLanguages
+     * ### LanguageSelector.loadLanguages
      *
      * Loads languages once from server
      *
@@ -3640,14 +3678,13 @@
 })(node);
 
 /**
- * # MoneyTalks widget for nodeGame
+ * # MoneyTalks
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Displays a box for formatting currency.
+ * Displays a box for formatting currency
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -3696,8 +3733,10 @@
         this.money = options.money || this.money;
         this.precision = options.precision || this.precision;
 
-        this.spanCurrency.id = options.idCurrency || this.spanCurrency.id || 'moneytalks_currency';
-        this.spanMoney.id = options.idMoney || this.spanMoney.id || 'moneytalks_money';
+        this.spanCurrency.id = options.idCurrency || this.spanCurrency.id ||
+            'moneytalks_currency';
+        this.spanMoney.id = options.idMoney || this.spanMoney.id ||
+            'moneytalks_money';
 
         this.spanCurrency.innerHTML = this.currency;
         this.spanMoney.innerHTML = this.money;
@@ -3736,14 +3775,13 @@
 })(node);
 
 /**
- * # MsgBar widget for nodeGame
+ * # MsgBar
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates a tool for sending messages to other connected clients.
+ * Creates a tool for sending messages to other connected clients
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -3797,7 +3835,8 @@
             table = i < 5 ? this.table : this.tableAdvanced;
 
             table.add(field, i, 0);
-            table.add(W.getTextInput(this.id + '_' + field, {tabindex: i+1}), i, 1);
+            table.add(W.getTextInput(this.id + '_' + field, {tabindex: i+1}),
+                                     i, 1);
 
             if (field === 'to') {
                 this.recipient =
@@ -3860,7 +3899,8 @@
         };
 
         // Show a button that expands the table of advanced fields.
-        advButton = W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+        advButton =
+            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
@@ -3957,14 +3997,13 @@
 })(node);
 
 /**
- * # NDDBBrowser widget for nodeGame
+ * # NDDBBrowser
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Creates an interface to interact with an NDDB database.
+ * Creates an interface to interact with an NDDB database
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -3985,7 +4024,8 @@
     // ## Meta-data
 
     NDDBBrowser.version = '0.1.2';
-    NDDBBrowser.description = 'Provides a very simple interface to control a NDDB istance.';
+    NDDBBrowser.description =
+        'Provides a very simple interface to control a NDDB istance.';
 
     // ## Dependencies
 
@@ -4013,14 +4053,19 @@
 
         function addButtons() {
             var id = this.id;
-            node.window.addEventButton(id + '_GO_TO_FIRST', '<<', this.commandsDiv, 'go_to_first');
-            node.window.addEventButton(id + '_GO_TO_PREVIOUS', '<', this.commandsDiv, 'go_to_previous');
-            node.window.addEventButton(id + '_GO_TO_NEXT', '>', this.commandsDiv, 'go_to_next');
-            node.window.addEventButton(id + '_GO_TO_LAST', '>>', this.commandsDiv, 'go_to_last');
+            node.window.addEventButton(id + '_GO_TO_FIRST', '<<',
+                this.commandsDiv, 'go_to_first');
+            node.window.addEventButton(id + '_GO_TO_PREVIOUS', '<',
+                this.commandsDiv, 'go_to_previous');
+            node.window.addEventButton(id + '_GO_TO_NEXT', '>',
+                this.commandsDiv, 'go_to_next');
+            node.window.addEventButton(id + '_GO_TO_LAST', '>>',
+                this.commandsDiv, 'go_to_last');
             node.window.addBreak(this.commandsDiv);
         }
         function addInfoBar() {
-            var span = this.commandsDiv.appendChild(document.createElement('span'));
+            var span = this.commandsDiv.appendChild(
+                document.createElement('span'));
             return span;
         }
 
@@ -4070,7 +4115,8 @@
         function notification(el, text) {
             if (el) {
                 node.emit(id + '_GOT', el);
-                this.writeInfo((this.nddb.nddb_pointer + 1) + '/' + this.nddb.size());
+                this.writeInfo((this.nddb.nddb_pointer + 1) + '/' +
+                    this.nddb.size());
             }
             else {
                 this.writeInfo('No element found');
@@ -4111,14 +4157,13 @@
 })(node);
 
 /**
- * # NextPreviousState widget for nodeGame
+ * # NextPreviousState
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Simple widget to step through the stages of the game.
+ * Simple widget to step through the stages of the game
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -4137,7 +4182,8 @@
     // ## Meta-data
 
     NextPreviousState.version = '0.3.2';
-    NextPreviousState.description = 'Adds two buttons to push forward or rewind the state of the game by one step.';
+    NextPreviousState.description = 'Adds two buttons to push forward or ' +
+        'rewind the state of the game by one step.';
 
     function NextPreviousState(options) {
         this.id = options.id;
@@ -4188,14 +4234,13 @@
 })(node);
 
 /**
- * # Requirements widget for nodeGame
+ * # Requirements
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Checks a list of requirements and displays the results.
+ * Checks a list of requirements and displays the results
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -4225,7 +4270,7 @@
     };
 
     /**
-     * ## Requirements.
+     * ## Requirements constructor
      *
      * Instantiates a new Requirements object
      *
@@ -4262,7 +4307,8 @@
         this.sayResults = options.sayResults || false;
         // The label of the SAY message that will be sent to the server.
         this.sayResultsLabel = options.sayResultLabel || 'requirements';
-        // Callback to add properties to the result object to send to the server.
+        // Callback to add properties to the result object to send to the
+        // server.
         this.addToResults = options.addToResults || null;
 
         // Callbacks to be executed at the end of all tests.
@@ -4300,8 +4346,10 @@
         });
     }
 
+    // ## Requirements methods
+
     /**
-     * ## Requirements.addRequirements
+     * ### Requirements.addRequirements
      *
      * Adds any number of callbacks checking the requirements
      *
@@ -4330,17 +4378,18 @@
     };
 
     /**
-     * ## Requirements.checkRequirements
+     * ### Requirements.checkRequirements
      *
-     * Asynchrounsly or synchrounsly checks all registered callbacks
+     * Asynchronously or synchronously checks all registered callbacks
      *
      * Can add a timeout for the max execution time of the callbacks, if the
      * corresponding option is set.
      *
      * Results are displayed conditionally
      *
-     * @param {boolean} display If TRUE, results are displayed.
-     * @return {errors} The array containing the errors
+     * @param {boolean} display If TRUE, results are displayed
+     *
+     * @return {array} The array containing the errors
      *
      * @see this.withTimeout
      * @see this.callbacks
@@ -4395,7 +4444,7 @@
     };
 
     /**
-     * ## Requirements.addTimeout
+     * ### Requirements.addTimeout
      *
      * Starts a timeout for the max execution time of the callbacks
      *
@@ -4422,7 +4471,7 @@
     };
 
     /**
-     * ## Requirements.clearTimeout
+     * ### Requirements.clearTimeout
      *
      * Clears the timeout for the max execution time of the callbacks
      *
@@ -4438,12 +4487,12 @@
     };
 
     /**
-     * ## Requirements.updateStillChecking
+     * ### Requirements.updateStillChecking
      *
      * Updates the number of callbacks still running on the display
      *
-     * @param {number} The number of callbacks still running, or an increment
-     *   as compared to the current value
+     * @param {number} update The number of callbacks still running, or an
+     *   increment as compared to the current value
      * @param {boolean} absolute TRUE, if `update` is to be interpreted as an
      *   absolute value
      *
@@ -4462,9 +4511,9 @@
     };
 
     /**
-     * ## Requirements.isCheckingFinished
+     * ### Requirements.isCheckingFinished
      *
-     * Returns TRUE, if all callbacks have returned
+     * Returns TRUE if all callbacks have returned
      *
      * @see this.stillCheckings
      * @see this.callbacks
@@ -4474,7 +4523,7 @@
     };
 
     /**
-     * ## Requirements.CheckingFinished
+     * ### Requirements.CheckingFinished
      *
      * Cleans up timer and dots, and executes final callbacks accordingly
      *
@@ -4522,7 +4571,7 @@
     };
 
     /**
-     * ## Requirements.displayResults
+     * ### Requirements.displayResults
      *
      * Displays the results of the callbacks on the screen
      *
@@ -4606,12 +4655,13 @@
     // ## Default Requirement Functions
 
     /**
-     * ## Requirements.nodeGameRequirements
+     * ### Requirements.nodeGameRequirements
      *
      * Checks whether the basic dependencies of nodeGame are satisfied
      *
-     * @param {function} The asynchronous result function
-     * @return {array} errors Array of synchronous errors
+     * @param {function} result The asynchronous result function
+     *
+     * @return {array} Array of synchronous errors
      */
     Requirements.prototype.nodeGameRequirements = function(result) {
         var errors, db;
@@ -4656,14 +4706,15 @@
     };
 
     /**
-     * ## Requirements.loadFrameTest
+     * ### Requirements.loadFrameTest
      *
      * Checks whether the iframe can be created and used
      *
      * Requires an active connection.
      *
-     * @param {function} The asynchronous result function
-     * @return {array} errors Array of synchronous errors
+     * @param {function} result The asynchronous result function
+     *
+     * @return {array} Array of synchronous errors
      */
     Requirements.prototype.loadFrameTest = function(result) {
         var errors, that, testIframe, root;
@@ -4746,14 +4797,13 @@
 })(node);
 
 /**
- * # ServerInfoDisplay widget for nodeGame
+ * # ServerInfoDisplay
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Displays information about the server.
+ * Displays information about the server
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -4837,14 +4887,13 @@
 })(node);
 
 /**
- * # StateBar widget for nodeGame
+ * # StateBar
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Provides a simple interface to change the game stages.
+ * Provides a simple interface to change the game stages
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -4890,7 +4939,8 @@
         that = this;
 
         //node.on('UPDATED_PLIST', function() {
-        //    node.window.populateRecipientSelector(that.recipient, node.game.pl);
+        //    node.window.populateRecipientSelector(
+        //        that.recipient, node.game.pl);
         //});
 
         sendButton.onclick = function() {
@@ -4914,14 +4964,13 @@
 })(node);
 
 /**
- * # StateDisplay widget for nodeGame
+ * # StateDisplay
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Display information about the state of a player.
+ * Display information about the state of a player
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -4947,53 +4996,53 @@
     };
 
     function StateDisplay(options) {
-	this.id = options.id;
-	this.table = new Table();
+        this.id = options.id;
+        this.table = new Table();
     }
 
     StateDisplay.prototype.append = function() {
-	var that, checkPlayerName;
+        var that, checkPlayerName;
         that = this;
-	checkPlayerName = setInterval(function() {
-	    if (node.player && node.player.id) {
-		clearInterval(checkPlayerName);
-		that.updateAll();
-	    }
-	}, 100);
-	this.bodyDiv.appendChild(this.table.table);
+        checkPlayerName = setInterval(function() {
+            if (node.player && node.player.id) {
+                clearInterval(checkPlayerName);
+                that.updateAll();
+            }
+        }, 100);
+        this.bodyDiv.appendChild(this.table.table);
     };
 
     StateDisplay.prototype.updateAll = function() {
-	var stage, stageNo, stageId, playerId, tmp, miss;
+        var stage, stageNo, stageId, playerId, tmp, miss;
         miss = '-';
 
         stageId = miss;
         stageNo = miss;
         playerId = miss;
 
-	if (node.player.id) {
+        if (node.player.id) {
             playerId = node.player.id;
         }
 
-	stage = node.game.getCurrentGameStage();
-	if (stage) {
+        stage = node.game.getCurrentGameStage();
+        if (stage) {
             tmp = node.game.plot.getStep(stage);
             stageId = tmp ? tmp.id : '-';
             stageNo = stage.toString();
         }
 
-	this.table.clear(true);
-	this.table.addRow(['Stage  No: ', stageNo]);
-	this.table.addRow(['Stage  Id: ', stageId]);
-	this.table.addRow(['Player Id: ', playerId]);
-	this.table.parse();
+        this.table.clear(true);
+        this.table.addRow(['Stage  No: ', stageNo]);
+        this.table.addRow(['Stage  Id: ', stageId]);
+        this.table.addRow(['Player Id: ', playerId]);
+        this.table.parse();
 
     };
 
     StateDisplay.prototype.listeners = function() {
-	var that = this;
-	node.on('STEP_CALLBACK_EXECUTED', function() {
-	    that.updateAll();
+        var that = this;
+        node.on('STEP_CALLBACK_EXECUTED', function() {
+            that.updateAll();
         });
     };
 
@@ -5003,16 +5052,16 @@
 })(node);
 
 /**
- * # VisualRound widget for nodeGame
+ * # VisualRound
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Display information about rounds and/or stage in the game.
+ * Display information about rounds and/or stage in the game
+ *
  * Accepts different visualization options (e.g. countdown, etc.).
  * See `VisualRound` constructor for a list of all available options.
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -5043,23 +5092,27 @@
      *
      * Displays information on the current and total rounds and stages
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Optional. Configuration options.
+     *   The options it can take are:
      *
-     * The options it can take are:
-     *
-     * - `stageOffset`: Stage displayed is the actual stage minus stageOffset.
-     * - `flexibleMode`: Set `true`, if number of rounds and/or stages can
-     *     change dynamically.
-     * - `curStage`: When (re)starting in `flexibleMode`, sets the current stage
-     * - `curRound`: When (re)starting in `flexibleMode`, sets the current round
-     * - `totStage`: When (re)starting in `flexibleMode`, sets the total
-     *     number of stages.
-     * - `totRound`: When (re)starting in `flexibleMode`, sets the total
-     *     number of rounds.
-     * - `oldStageId`: When (re)starting in `flexibleMode`, sets the id of
-     *     the current stage.
-     * - `displayModeNames`: Array of strings which determines the display style
-     *     of the widget.
+     *   - `stageOffset`:
+     *     Stage displayed is the actual stage minus stageOffset
+     *   - `flexibleMode`:
+     *     Set `true`, if number of rounds and/or stages can change dynamically
+     *   - `curStage`:
+     *     When (re)starting in `flexibleMode`, sets the current stage
+     *   - `curRound`:
+     *     When (re)starting in `flexibleMode`, sets the current round
+     *   - `totStage`:
+     *     When (re)starting in `flexibleMode`, sets the total number of stages
+     *   - `totRound`:
+     *     When (re)starting in `flexibleMode`, sets the total number of
+     *     rounds
+     *   - `oldStageId`:
+     *     When (re)starting in `flexibleMode`, sets the id of the current
+     *     stage
+     *   - `displayModeNames`:
+     *     Array of strings which determines the display style of the widget
      *
      * @see VisualRound.setDisplayMode
      * @see GameStager
@@ -5145,8 +5198,10 @@
         this.init(this.options);
     }
 
+    // ## VisualRound methods
+
     /**
-     * ## VisualRound.init
+     * ### VisualRound.init
      *
      * Initializes the instance
      *
@@ -5201,7 +5256,7 @@
     };
 
     /**
-     * ## VisualRound.updateDisplay
+     * ### VisualRound.updateDisplay
      *
      * Updates the values displayed by forwarding the call to displayMode obj
      *
@@ -5214,7 +5269,7 @@
     };
 
     /**
-     * ## VisualRound.setDisplayMode
+     * ### VisualRound.setDisplayMode
      *
      * Sets the `VisualRound.displayMode` value
      *
@@ -5231,7 +5286,7 @@
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
      * - `COUNT_DOWN_ROUNDS: Display number of rounds left in this stage.
      *
-     * @param {array} displayModeNames Array of strings representing the names.
+     * @param {array} displayModeNames Array of strings representing the names
      *
      * @see VisualRound.displayMode
      * @see CompoundDisplayMode
@@ -5299,24 +5354,24 @@
     };
 
     /**
-     * ## VisualRound.getDisplayMode
+     * ### VisualRound.getDisplayMode
      *
      * Returns name of the current displayMode
      *
-     * @return {string} Name of the current displayMode.
+     * @return {string} Name of the current displayMode
      */
     VisualRound.prototype.getDisplayModeName = function() {
         return this.displayMode.name;
     };
 
     /**
-     * ## VisualRound.activate
+     * ### VisualRound.activate
      *
      * Appends the displayDiv of the given displayMode to `this.bodyDiv`
      *
      * Calls `displayMode.activate`, if one is defined.
      *
-     * @param {object} displayMode DisplayMode to activate.
+     * @param {object} displayMode DisplayMode to activate
      *
      * @see VisualRound.deactivate
      */
@@ -5330,13 +5385,13 @@
     };
 
     /**
-     * ## VisualRound.deactivate
+     * ### VisualRound.deactivate
      *
      * Removes the displayDiv of the given displayMode from `this.bodyDiv`
      *
      * Calls `displayMode.deactivate` if it is defined.
      *
-     * @param {object} displayMode DisplayMode to deactivate.
+     * @param {object} displayMode DisplayMode to deactivate
      *
      * @see VisualRound.activate
      */
@@ -5358,7 +5413,7 @@
     };
 
     /**
-     * ## VisualRound.updateInformation
+     * ### VisualRound.updateInformation
      *
      * Updates information about rounds and stages and updates the display
      *
@@ -5409,14 +5464,12 @@
     };
 
    /**
-     * # EmptyDisplayMode Class
+     * # EmptyDisplayMode
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
-     * Defines a displayMode for the `VisualRound` which displays nothing.
-     *
-     * ---
+     * Defines a displayMode for the `VisualRound` which displays nothing
      */
 
     /**
@@ -5425,7 +5478,7 @@
      * Display a displayMode which contains the bare minumum (nothing)
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs
+     *   displayMode belongs
      * @param {object} options Optional. Configuration options
      *
      * @see VisualRound
@@ -5459,8 +5512,10 @@
         this.init(this.options);
     }
 
+    // ## EmptyDisplayMode methods
+
     /**
-     * ## EmptyDisplayMode.init
+     * ### EmptyDisplayMode.init
      *
      * Initializes the instance
      *
@@ -5476,7 +5531,7 @@
     };
 
     /**
-     * ## EmptyDisplayMode.updateDisplay
+     * ### EmptyDisplayMode.updateDisplay
      *
      * Does nothing
      *
@@ -5485,15 +5540,13 @@
     EmptyDisplayMode.prototype.updateDisplay = function() {};
 
     /**
-     * # CountUpStages Class
+     * # CountUpStages
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
-     * and, possibly, the total number of stages.
-     *
-     * ---
+     * and, possibly, the total number of stages
      */
 
     /**
@@ -5504,10 +5557,10 @@
      * Can be constructed to furthermore display the total number of stages.
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *      displayMode belongs.
+     *   displayMode belongs
      * @param {object} options Optional. Configuration options.
-     *      If `options.toTotal == true`, then the total number of stages is
-     *      displayed.
+     *   If `options.toTotal == true`, then the total number of stages is
+     *   displayed
      *
      * @see VisualRound
      */
@@ -5572,14 +5625,15 @@
         this.init(this.options);
     }
 
+    // ## CountUpStages methods
+
     /**
-     * ## CountUpStages.init
+     * ### CountUpStages.init
      *
      * Initializes the instance
      *
-     * @param {object} options Optional. Configuration options.
-     *      If `options.toTotal == true`, then the total number of stages is
-     *      displayed.
+     * @param {object} options Optional. Configuration options. If
+     *   `options.toTotal == true`, then the total number of stages is displayed
      *
      * @see CountUpStages.updateDisplay
      */
@@ -5615,7 +5669,7 @@
     };
 
     /**
-     * ## CountUpStages.updateDisplay
+     * ### CountUpStages.updateDisplay
      *
      * Updates the content of `curStageNumber` and `totStageNumber`
      *
@@ -5631,15 +5685,13 @@
     };
 
    /**
-     * # CountDownStages Class
+     * # CountDownStages
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
-     * number of stages.
-     *
-     * ---
+     * number of stages
      */
 
     /**
@@ -5648,7 +5700,7 @@
      * Display mode which displays the remaining number of stages
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs.
+     *   displayMode belongs.
      * @param {object} options Optional. Configuration options
      *
      * @see VisualRound
@@ -5696,8 +5748,10 @@
         this.init(this.options);
     }
 
+    // ## CountDownStages methods
+
     /**
-     * ## CountDownStages.init
+     * ### CountDownStages.init
      *
      * Initializes the instance
      *
@@ -5720,7 +5774,7 @@
     };
 
     /**
-     * ## CountDownStages.updateDisplay
+     * ### CountDownStages.updateDisplay
      *
      * Updates the content of `stagesLeft` according to `visualRound`
      *
@@ -5736,29 +5790,26 @@
     };
 
    /**
-     * # CountUpRounds Class
+     * # CountUpRounds
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
-     * and possibly the total number of rounds.
-     *
-     * ---
+     * and possibly the total number of rounds
      */
 
     /**
      * ## CountUpRounds constructor
      *
-     * Display mode which displays the current number of rounds.
+     * Display mode which displays the current number of rounds
      *
      * Can be constructed to furthermore display the total number of stages.
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs.
-     * @param {object} options Optional. Configuration options.
-     *      If `options.toTotal == true`, then the total number of rounds is
-     *      displayed.
+     *   displayMode belongs
+     * @param {object} options Optional. Configuration options. If
+     *   `options.toTotal == true`, then the total number of rounds is displayed
      *
      * @see VisualRound
      */
@@ -5777,7 +5828,7 @@
         }
 
         /**
-         * CountUpRounds.visualRound
+         * ### CountUpRounds.visualRound
          *
          * The `VisualRound` object to which the displayMode belongs
          *
@@ -5786,35 +5837,35 @@
         this.visualRound = visualRound;
 
         /**
-         * CountUpRounds.displayDiv
+         * ### CountUpRounds.displayDiv
          *
          * The DIV in which the information is displayed
          */
         this.displayDiv = null;
 
         /**
-         * CountUpRounds.curRoundNumber
+         * ### CountUpRounds.curRoundNumber
          *
          * The span in which the current round number is displayed
          */
         this.curRoundNumber = null;
 
         /**
-         * CountUpRounds.totRoundNumber
+         * ### CountUpRounds.totRoundNumber
          *
          * The element in which the total round number is displayed
          */
         this.totRoundNumber = null;
 
         /**
-         * CountUpRounds.displayDiv
+         * ### CountUpRounds.displayDiv
          *
          * The DIV in which the title is displayed
          */
         this.titleDiv = null;
 
         /**
-         * CountUpRounds.displayDiv
+         * ### CountUpRounds.displayDiv
          *
          * The span in which the text ` of ` is displayed
          */
@@ -5823,14 +5874,15 @@
         this.init(this.options);
     }
 
+    // ## CountUpRounds methods
+
     /**
-     * ## CountUpRounds.init
+     * ### CountUpRounds.init
      *
      * Initializes the instance
      *
-     * @param {object} options Optional. Configuration options.
-     *      If `options.toTotal == true`, then the total number of rounds is
-     *      displayed.
+     * @param {object} options Optional. Configuration options. If
+     *   `options.toTotal == true`, then the total number of rounds is displayed
      *
      * @see CountUpRounds.updateDisplay
      */
@@ -5866,7 +5918,7 @@
     };
 
     /**
-     * ## CountUpRounds.updateDisplay
+     * ### CountUpRounds.updateDisplay
      *
      * Updates the content of `curRoundNumber` and `totRoundNumber`
      *
@@ -5883,24 +5935,22 @@
 
 
    /**
-     * # CountDownRounds Class
+     * # CountDownRounds
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
-     * number of rounds.
-     *
-     * ---
+     * number of rounds
      */
 
     /**
      * ## CountDownRounds constructor
      *
-     * Display mode which displays the remaining number of rounds.
+     * Display mode which displays the remaining number of rounds
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs
+     *   displayMode belongs
      * @param {object} options Optional. Configuration options
      *
      * @see VisualRound
@@ -5948,8 +5998,10 @@
         this.init(this.options);
     }
 
+    // ## CountDownRounds methods
+
     /**
-     * ## CountDownRounds.init
+     * ### CountDownRounds.init
      *
      * Initializes the instance
      *
@@ -5972,7 +6024,7 @@
     };
 
     /**
-     * ## CountDownRounds.updateDisplay
+     * ### CountDownRounds.updateDisplay
      *
      * Updates the content of `roundsLeft` according to `visualRound`
      *
@@ -5988,26 +6040,24 @@
     };
 
     /**
-     * # CompoundDisplayMode Class
+     * # CompoundDisplayMode
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the
-     * information according to multiple displayModes.
-     *
-     * ---
+     * information according to multiple displayModes
      */
 
     /**
-     * ## CompoundDisplayMode
+     * ## CompoundDisplayMode constructor
      *
      * Display mode which combines multiple other display displayModes
      *
      * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *     displayMode belongs.
+     *   displayMode belongs
      * @param {array} displayModes Array of displayModes to be used in
-     *      combination.
+     *   combination
      * @param {object} options Optional. Configuration options
      *
      * @see VisualRound
@@ -6058,8 +6108,10 @@
         this.init(options);
     }
 
+    // ## CompoundDisplayMode methods
+
     /**
-     * ## CompoundDisplayMode.init
+     * ### CompoundDisplayMode.init
      *
      * Initializes the instance
      *
@@ -6082,7 +6134,7 @@
      };
 
     /**
-     * ## CompoundDisplayMode.updateDisplay
+     * ### CompoundDisplayMode.updateDisplay
      *
      * Calls `updateDisplay` for all displayModes in the combination
      *
@@ -6122,14 +6174,13 @@
 })(node);
 
 /**
- * # VisualState widget for nodeGame
+ * # VisualState
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Shows current, previous and next state.
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -6143,7 +6194,8 @@
     // ## Meta-data
 
     VisualState.version = '0.2.1';
-    VisualState.description = 'Visually display current, previous and next state of the game.';
+    VisualState.description =
+        'Visually display current, previous and next state of the game.';
 
     VisualState.title = 'State';
     VisualState.className = 'visualstate';
@@ -6221,7 +6273,7 @@
 })(node);
 
 /**
- * # VisualTimer widget for nodeGame
+ * # VisualTimer
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
@@ -6229,8 +6281,6 @@
  * Only for countdown smaller than 1h.
  *
  * www.nodegame.org
- *
- * ---
  */
 (function(node) {
 
@@ -6252,21 +6302,21 @@
     // ## Dependencies
 
     VisualTimer.dependencies = {
-        GameTimer : {},
+        GameTimer: {},
         JSUS: {}
     };
 
     /**
-     * ## VisualTimer
+     * ## VisualTimer constructor
      *
      * `VisualTimer` displays and manages a `GameTimer`
      *
-     * @param @param {object} options Optional. Configuration options
+     * @param {object} options Optional. Configuration options
      * The options it can take are:
      *
-     * - any options that can be passed to a `GameTimer`
-     * - waitBoxOptions: an option object to be passed to `TimerBox`
-     * - mainBoxOptions: an option object to be passed to `TimerBox`
+     *   - any options that can be passed to a `GameTimer`
+     *   - waitBoxOptions: an option object to be passed to `TimerBox`
+     *   - mainBoxOptions: an option object to be passed to `TimerBox`
      *
      * @see TimerBox
      * @see GameTimer
@@ -6277,36 +6327,36 @@
             1000 : this.options.update;
 
         /**
-         * ### gameTimer
+         * ### VisualTimer.gameTimer
          *
-         * The timer which counts down the game time.
+         * The timer which counts down the game time
          *
          * @see node.timer.createTimer
          */
         this.gameTimer = null;
 
         /**
-         * ### mainBox
+         * ### VisualTimer.mainBox
          *
-         * The `TimerBox` which displays the main timer.
+         * The `TimerBox` which displays the main timer
          *
          * @see TimerBox
          */
         this.mainBox = null;
 
         /**
-         * ### waitBox
+         * ### VisualTimer.waitBox
          *
-         * The `TimerBox` which displays the wait timer.
+         * The `TimerBox` which displays the wait timer
          *
          * @see TimerBox
          */
         this.waitBox = null;
 
         /**
-         * ### activeBox
+         * ### VisualTimer.activeBox
          *
-         * The `TimerBox` in which to display the time.
+         * The `TimerBox` in which to display the time
          *
          * This variable is always a reference to either `waitBox` or
          * `mainBox`.
@@ -6316,19 +6366,20 @@
         this.activeBox = null;
 
         /**
-         * ### isInitialized
+         * ### VisualTimer.isInitialized
          *
-         * indicates whether the instance has been initializded already
+         * Indicates whether the instance has been initializded already
          */
         this.isInitialized = false;
         this.init(this.options);
     }
 
+    // ## VisualTimer methods
+
     /**
-     * ## VisualTimer.init
+     * ### VisualTimer.init
      *
-     * Initializes the instance. When called again, adds options to current
-     * ones.
+     * Initializes the instance. When called again, adds options to current ones
      *
      * The options it can take are:
      *
@@ -6336,7 +6387,8 @@
      * - waitBoxOptions: an option object to be passed to `TimerBox`
      * - mainBoxOptions: an option object to be passed to `TimerBox`
      *
-     * @param @param {object} options Optional. Configuration options
+     * @param {object} options Optional. Configuration options
+     *
      * @see TimerBox
      * @see GameTimer
      */
@@ -6375,12 +6427,12 @@
         t = this.gameTimer;
         node.session.register('visualtimer', {
             set: function(p) {
-                // TODO.
+                // TODO
             },
             get: function() {
                 return {
                     startPaused: t.startPaused,
-	                status: t.status,
+                        status: t.status,
                     timeLeft: t.timeLeft,
                     timePassed: t.timePassed,
                     update: t.update,
@@ -6432,13 +6484,13 @@
     };
 
     /**
-     * ## VisualTimer.clear
+     * ### VisualTimer.clear
      *
-     * Reverts state of `VisualTimer` to right after constructor call.
+     * Reverts state of `VisualTimer` to right after constructor call
      *
      * @param {object} options Configuration object
      *
-     * @return {object} Old options.
+     * @return {object} Old options
      *
      * @see node.timer.destroyTimer
      * @see VisualTimer.init
@@ -6466,7 +6518,7 @@
     };
 
     /**
-     * ## VisualTimer.updateDisplay
+     * ### VisualTimer.updateDisplay
      *
      * Changes `activeBox` to display current time of `gameTimer`
      *
@@ -6486,9 +6538,9 @@
     };
 
     /**
-     * ## VisualTimer.start
+     * ### VisualTimer.start
      *
-     * Starts the timer.
+     * Starts the timer
      *
      * @see VisualTimer.updateDisplay
      * @see GameTimer.start
@@ -6499,7 +6551,7 @@
     };
 
     /**
-     * ## VisualTimer.restart
+     * ### VisualTimer.restart
      *
      * Restarts the timer with new options
      *
@@ -6516,7 +6568,7 @@
     };
 
     /**
-     * ## VisualTimer.stop
+     * ### VisualTimer.stop
      *
      * Stops the timer display and stores the time left in `activeBox.timeLeft`
      *
@@ -6532,9 +6584,9 @@
         }
     };
     /**
-     * ## VisualTimer.switchActiveBoxTo
+     * ### VisualTimer.switchActiveBoxTo
      *
-     * Switches the display of the `gameTimer` into the `TimerBox` `box`.
+     * Switches the display of the `gameTimer` into the `TimerBox` `box`
      *
      * Stores `gameTimer.timeLeft` into `activeBox` and then switches
      * `activeBox` to reference `box`.
@@ -6548,7 +6600,7 @@
     };
 
     /**
-      * ## VisualTimer.startWaiting
+      * ### VisualTimer.startWaiting
       *
       * Changes the `VisualTimer` appearance to a max. wait timer
       *
@@ -6583,7 +6635,7 @@
     };
 
     /**
-      * ## VisualTimer.startTiming
+      * ### VisualTimer.startTiming
       *
       * Changes the `VisualTimer` appearance to a regular countdown
       *
@@ -6614,7 +6666,7 @@
     };
 
     /**
-     * ## VisualTimer.resume
+     * ### VisualTimer.resume
      *
      * Resumes the `gameTimer`
      *
@@ -6625,9 +6677,9 @@
     };
 
     /**
-     * ## VisualTimer.setToZero
+     * ### VisualTimer.setToZero
      *
-     * stops `gameTimer` and sets `activeBox` to display `00:00`
+     * Stops `gameTimer` and sets `activeBox` to display `00:00`
      *
      * @see GameTimer.resume
      */
@@ -6638,7 +6690,7 @@
     };
 
     /**
-     * ## VisualTimer.doTimeUp
+     * ### VisualTimer.doTimeUp
      *
      * Stops the timer and calls the timeup
      *
@@ -6680,8 +6732,10 @@
         this.bodyDiv.removeChild(this.waitBox.boxDiv);
     };
 
+    // ## Helper functions
+
     /**
-     * ## processOptions
+     * ### processOptions
      *
      * Clones and mixes in user options with current options
      *
@@ -6689,7 +6743,8 @@
      *
      * @param {object} options Configuration options
      * @param {object} curOptions Current configuration of VisualTimer
-     * @return {object} Clean, valid configuration object.
+     *
+     * @return {object} Clean, valid configuration object
      */
     function processOptions(inOptions, curOptions) {
         var options, typeofOptions;
@@ -6704,8 +6759,8 @@
         case 'object':
             options = inOptions;
             if ('function' === typeof options.milliseconds) {
-	        options.milliseconds = options.milliseconds.call(node.game);
-	    }
+                options.milliseconds = options.milliseconds.call(node.game);
+            }
             break;
         case 'function':
             options.milliseconds = inOptions.call(node.game);
@@ -6729,55 +6784,53 @@
     }
 
    /**
-     * # TimerBox Class
+     * # TimerBox
      *
      * Copyright(c) 2014 Stefano Balietti
      * MIT Licensed
      *
-     * Represents a box wherin to display a `VisualTimer`.
-     *
-     * ---
+     * Represents a box wherin to display a `VisualTimer`
      */
 
     /**
-     * ## TimerBox
+     * ## TimerBox constructor
      *
-     * `TimerBox` represents a box wherein to display the timer.
+     * `TimerBox` represents a box wherein to display the timer
      *
-     * @param @param {object} options Optional. Configuration options
-     * The options it can take are:
+     * @param {object} options Optional. Configuration options
+     *   The options it can take are:
      *
-     * - `hideTitle`
-     * - `hideBody`
-     * - `hideBox`
-     * - `title`
-     * - `classNameTitle`
-     * - `classNameBody`
-     * - `timeLeft`
+     *   - `hideTitle`
+     *   - `hideBody`
+     *   - `hideBox`
+     *   - `title`
+     *   - `classNameTitle`
+     *   - `classNameBody`
+     *   - `timeLeft`
      */
     function TimerBox(options) {
         /**
-         * ### boxDiv
+         * ### TimerBox.boxDiv
          *
          * The Div which will contain the title and body Divs
          */
         this.boxDiv = null;
 
         /**
-         * ### titleDiv
+         * ### TimerBox.titleDiv
          *
          * The Div which will contain the title
          */
         this.titleDiv = null;
         /**
-         * ### bodyDiv
+         * ### TimerBox.bodyDiv
          *
          * The Div which will contain the numbers
          */
         this.bodyDiv = null;
 
         /**
-         * ### timeLeft
+         * ### TimerBox.timeLeft
          *
          * Used to store the last value before focus is taken away
          */
@@ -6822,82 +6875,84 @@
         }
     };
 
+    // ## TimerBox methods
+
     /**
-     * ## TimerBox.hideBox
+     * ### TimerBox.hideBox
      *
-     * hides entire `TimerBox`
+     * Hides entire `TimerBox`
      */
     TimerBox.prototype.hideBox = function() {
         this.boxDiv.style.display = 'none';
     };
 
     /**
-     * ## TimerBox.unhideBox
+     * ### TimerBox.unhideBox
      *
-     * hides entire `TimerBox`
+     * Hides entire `TimerBox`
      */
     TimerBox.prototype.unhideBox = function() {
         this.boxDiv.style.display = '';
     };
 
     /**
-     * ## TimerBox.hideTitle
+     * ### TimerBox.hideTitle
      *
-     * hides title of `TimerBox`
+     * Hides title of `TimerBox`
      */
     TimerBox.prototype.hideTitle = function() {
         this.titleDiv.style.display = 'none';
     };
 
     /**
-     * ## TimerBox.unhideTitle
+     * ### TimerBox.unhideTitle
      *
-     * unhides title of `TimerBox`
+     * Unhides title of `TimerBox`
      */
     TimerBox.prototype.unhideTitle = function() {
         this.titleDiv.style.display = '';
     };
 
     /**
-     * ## TimerBox.hideBody
+     * ### TimerBox.hideBody
      *
-     * hides body of `TimerBox`
+     * Hides body of `TimerBox`
      */
     TimerBox.prototype.hideBody = function() {
         this.bodyDiv.style.display = 'none';
     };
 
     /**
-     * ## TimerBox.unhideBody
+     * ### TimerBox.unhideBody
      *
-     * unhides Body of `TimerBox`
+     * Unhides Body of `TimerBox`
      */
     TimerBox.prototype.unhideBody = function() {
         this.bodyDiv.style.display = '';
     };
 
     /**
-     * ## TimerBox.setTitle
+     * ### TimerBox.setTitle
      *
-     * sets title of `TimerBox`
+     * Sets title of `TimerBox`
      */
     TimerBox.prototype.setTitle = function(title) {
         this.titleDiv.innerHTML = title;
     };
 
     /**
-     * ## TimerBox.setClassNameTitle
+     * ### TimerBox.setClassNameTitle
      *
-     * sets class name of title of `TimerBox`
+     * Sets class name of title of `TimerBox`
      */
     TimerBox.prototype.setClassNameTitle = function(className) {
         this.titleDiv.className = className;
     };
 
     /**
-     * ## TimerBox.setClassNameBody
+     * ### TimerBox.setClassNameBody
      *
-     * sets class name of body of `TimerBox`
+     * Sets class name of body of `TimerBox`
      */
     TimerBox.prototype.setClassNameBody = function(className) {
         this.bodyDiv.className = className;
@@ -6906,15 +6961,14 @@
 })(node);
 
 /**
- * # Wall widget for nodeGame
+ * # Wall
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where log and other information is added
- * with a number and timestamp.
+ * with a number and timestamp
  *
  * www.nodegame.org
- * ---
  */
 (function(node) {
 
@@ -6933,8 +6987,8 @@
     // ## Meta-data
 
     Wall.version = '0.3';
-    Wall.description = 'Intercepts all LOG events and prints them ';
-    Wall.description += 'into a DIV element with an ordinal number and a timestamp.';
+    Wall.description = 'Intercepts all LOG events and prints them into a DIV ' +
+                       'element with an ordinal number and a timestamp.';
 
     // ## Dependencies
 
@@ -6942,7 +6996,7 @@
         JSUS: {}
     };
 
-    function Wall (options) {
+    function Wall(options) {
         this.id = options.id || Wall.id;
         this.name = options.name || this.name;
         this.buffer = [];
