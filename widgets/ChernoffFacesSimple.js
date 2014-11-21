@@ -26,7 +26,8 @@
     // ## Meta-data
 
     ChernoffFaces.version = '0.3';
-    ChernoffFaces.description = 'Display parametric data in the form of a Chernoff Face.'
+    ChernoffFaces.description =
+        'Display parametric data in the form of a Chernoff Face.'
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -68,16 +69,20 @@
         this.id = options.id || this.id;
         var PREF = this.id + '_';
 
-        this.features = options.features || this.features || FaceVector.random();
+        this.features = options.features || this.features ||
+            FaceVector.random();
 
-        this.controls = ('undefined' !== typeof options.controls) ?  options.controls : true;
+        this.controls = ('undefined' !== typeof options.controls) ?
+                        options.controls : true;
 
         var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
         var idButton = (options.idButton) ? options.idButton : PREF + 'button';
 
         this.dims = {
-            width: (options.width) ? options.width : ChernoffFaces.defaults.canvas.width,
-            height:(options.height) ? options.height : ChernoffFaces.defaults.canvas.heigth
+            width:  options.width ?
+                options.width : ChernoffFaces.defaults.canvas.width,
+            height: options.height ?
+                options.height : ChernoffFaces.defaults.canvas.heigth
         };
 
         this.canvas = node.window.getCanvas(idCanvas, this.dims);
@@ -86,7 +91,8 @@
 
         var sc_options = {
             id: 'cf_controls',
-            features: JSUS.mergeOnKey(FaceVector.defaults, this.features, 'value'),
+            features:
+                JSUS.mergeOnKey(FaceVector.defaults, this.features, 'value'),
             change: this.change,
             fieldset: {id: this.id + '_controls_fieldest',
                        legend: this.controls.legend || 'Controls'
@@ -141,7 +147,9 @@
         var fv = new FaceVector(features);
         this.fp.redraw(fv);
         // Without merging wrong values are passed as attributes
-        this.sc.init({features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')});
+        this.sc.init({
+            features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')
+        });
         this.sc.refresh();
     };
 
@@ -217,10 +225,12 @@
         }
 
         if (this.canvas.width > this.canvas.height) {
-            var ratio = this.canvas.width / face.head_radius * face.head_scale_x;
+            var ratio = this.canvas.width / face.head_radius *
+                face.head_scale_x;
         }
         else {
-            var ratio = this.canvas.height / face.head_radius * face.head_scale_y;
+            var ratio = this.canvas.height / face.head_radius *
+                face.head_scale_y;
         }
 
         face.scaleX = ratio / 2;
@@ -375,7 +385,8 @@
     //TODO Scaling ?
     FacePainter.computeFaceOffset = function(face, offset, y) {
         var y = y || 0;
-        //var pos = y - face.head_radius * face.scaleY + face.head_radius * face.scaleY * 2 * offset;
+        //var pos = y - face.head_radius * face.scaleY +
+        //          face.head_radius * face.scaleY * 2 * offset;
         var pos = y - face.head_radius + face.head_radius * 2 * offset;
         //console.log('POS: ' + pos);
         return pos;
@@ -384,7 +395,8 @@
     FacePainter.computeEyebrowOffset = function(face, y) {
         var y = y || 0;
         var eyemindistance = 2;
-        return FacePainter.computeFaceOffset(face, face.eye_height, y) - eyemindistance - face.eyebrow_eyedistance;
+        return FacePainter.computeFaceOffset(face, face.eye_height, y) -
+            eyemindistance - face.eyebrow_eyedistance;
     };
 
 
@@ -392,8 +404,8 @@
      *
      * A description of a Chernoff Face.
      *
-     * This class packages the 11-dimensional vector of numbers from 0 through 1 that completely
-     * describe a Chernoff face.
+     * This class packages the 11-dimensional vector of numbers from 0 through
+     * 1 that completely describe a Chernoff face.
      *
      */
 
@@ -567,8 +579,11 @@
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!JSUS.in_array(key,['color','lineWidth','scaleX','scaleY'])) {
-                    out[key] = FaceVector.defaults[key].min + Math.random() * FaceVector.defaults[key].max;
+                if (!JSUS.in_array(key,
+                            ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
+
+                    out[key] = FaceVector.defaults[key].min +
+                        Math.random() * FaceVector.defaults[key].max;
                 }
             }
         }
@@ -612,8 +627,8 @@
             if (this.hasOwnProperty(key)) {
                 if (FaceVector.defaults.hasOwnProperty(key)) {
                     if (key !== 'color') {
-                        this[key] = FaceVector.defaults[key].min + Math.random() * FaceVector.defaults[key].max;
-
+                        this[key] = FaceVector.defaults[key].min +
+                            Math.random() * FaceVector.defaults[key].max;
                     }
                 }
             }

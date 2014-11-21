@@ -22,7 +22,8 @@
     // ## Meta-data
 
     GameSummary.version = '0.3';
-    GameSummary.description = 'Show the general configuration options of the game.';
+    GameSummary.description =
+        'Show the general configuration options of the game.';
 
     function GameSummary(options) {
         this.summaryDiv = null;
@@ -37,7 +38,8 @@
 
     GameSummary.prototype.writeSummary = function(idState, idSummary) {
         var gName = document.createTextNode('Name: ' + node.game.metadata.name),
-        gDescr = document.createTextNode('Descr: ' + node.game.metadata.description),
+        gDescr = document.createTextNode(
+                'Descr: ' + node.game.metadata.description),
         gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
         gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
 

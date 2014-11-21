@@ -55,7 +55,8 @@
     DynamicTable.prototype.init = function(options) {
         this.options = options;
         this.name = options.name || this.name;
-        this.auto_update = ('undefined' !== typeof options.auto_update) ? options.auto_update : true;
+        this.auto_update = ('undefined' !== typeof options.auto_update) ?
+            options.auto_update : true;
         this.replace = options.replace || false;
         this.htmlRenderer = new HTMLRenderer({renderers: options.renderers});
         this.c('state', GameStage.compare);
@@ -81,14 +82,16 @@
                             }
                         }
                         else {
-                            var cell = bindings.cell.call(that, msg, new Table.Cell({x: x, y: y}));
+                            var cell = bindings.cell.call(
+                                that, msg, new Table.Cell({x: x, y: y}));
                             that.add(cell);
                         }
                     };
                 }
                 else {
                     func = function(x, y) {
-                        var cell = bindings.cell.call(that, msg, new Table.Cell({x: x, y: y}));
+                        var cell = bindings.cell.call(
+                                that, msg, new Table.Cell({x: x, y: y}));
                         that.add(cell, x, y);
                     };
                 }
@@ -101,9 +104,9 @@
                     x = (x instanceof Array) ? x : [x];
                     y = (y instanceof Array) ? y : [y];
 
-                    //                                        console.log('Bindings found:');
-                    //                                        console.log(x);
-                    //                                        console.log(y);
+                    //console.log('Bindings found:');
+                    //console.log(x);
+                    //console.log(y);
 
                     for (var xi=0; xi < x.length; xi++) {
                         for (var yi=0; yi < y.length; yi++) {

@@ -22,7 +22,8 @@
 
     // ## Meta-data
     DataBar.version = '0.4';
-    DataBar.description = 'Adds a input field to send DATA messages to the players';
+    DataBar.description =
+        'Adds a input field to send DATA messages to the players';
 
     function DataBar(options) {
         this.bar = null;

@@ -175,8 +175,8 @@
                         node.window.addElement('br', that.displayForm);
                         that.optionsLabel[language].className =
                             'unselectedButtonLabel';
-                        that.displayForm.appendChild(that.optionsLabel[language]);
-
+                        that.displayForm.appendChild(
+                                that.optionsLabel[language]);
                     }
                 }
             }
@@ -187,10 +187,12 @@
                 for (language in msg.data) {
                     that.optionsLabel[language] =
                         document.createTextNode(msg.data[language].nativeName);
-                    that.optionsDisplay[language] = node.window.getElement('option',
-                        language + 'Option', { value: language });
-                    that.optionsDisplay[language].appendChild(that.optionsLabel[language]);
-                    that.displaySelection.appendChild(that.optionsDisplay[language]);
+                    that.optionsDisplay[language] = node.window.getElement(
+                        'option', language + 'Option', { value: language });
+                    that.optionsDisplay[language].appendChild(
+                        that.optionsLabel[language]);
+                    that.displaySelection.appendChild(
+                        that.optionsDisplay[language]);
 
                 }
                 that.displayForm.appendChild(that.displaySelection);

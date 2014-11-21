@@ -86,7 +86,8 @@
                 idButton = this.options.submit.id;
                 delete this.options.submit.id;
             }
-            this.submit = node.window.addButton(root, idButton, this.options.submit, this.options.attributes);
+            this.submit = node.window.addButton(root, idButton,
+                    this.options.submit, this.options.attributes);
 
             var that = this;
             this.submit.onclick = function() {

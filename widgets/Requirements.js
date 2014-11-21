@@ -72,7 +72,8 @@
         this.sayResults = options.sayResults || false;
         // The label of the SAY message that will be sent to the server.
         this.sayResultsLabel = options.sayResultLabel || 'requirements';
-        // Callback to add properties to the result object to send to the server.
+        // Callback to add properties to the result object to send to the
+        // server.
         this.addToResults = options.addToResults || null;
 
         // Callbacks to be executed at the end of all tests.

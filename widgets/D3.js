@@ -110,7 +110,8 @@
         this.margin = o.margin;
 
         var width = this.width = o.width - this.margin.left - this.margin.right;
-        var height = this.height = o.height - this.margin.top - this.margin.bottom;
+        var height = this.height = o.height - this.margin.top -
+                     this.margin.bottom;
 
         // identity function
         var x = this.x = d3.scale.linear()
@@ -142,7 +143,8 @@
         this.svg.attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + margin.left + "," + margin.top +
+                  ")");
 
 
         // Line does not go out the axis

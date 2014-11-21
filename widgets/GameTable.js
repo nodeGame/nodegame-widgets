@@ -94,8 +94,8 @@
             var plist = new PlayerList({}, msg.data);
             var diff = plist.diff(that.plist);
             if (diff) {
-                //                              console.log('New Players found');
-                //                              console.log(diff);
+                //console.log('New Players found');
+                //console.log(diff);
                 diff.forEach(function(el){that.addPlayer(el);});
             }
 
@@ -122,7 +122,9 @@
     GameTable.prototype.addLeft = function(state, player) {
         if (!state) return;
         state = new GameStage(state);
-        if (!JSUS.in_array({content:state.toString(), type: 'left'}, this.gtbl.left)){
+        if (!JSUS.in_array({content:state.toString(), type: 'left'},
+                    this.gtbl.left)) {
+
             this.gtbl.add2Left(state.toString());
         }
         // Is it a new display associated to the same state?

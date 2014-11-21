@@ -54,8 +54,10 @@
         this.money = options.money || this.money;
         this.precision = options.precision || this.precision;
 
-        this.spanCurrency.id = options.idCurrency || this.spanCurrency.id || 'moneytalks_currency';
-        this.spanMoney.id = options.idMoney || this.spanMoney.id || 'moneytalks_money';
+        this.spanCurrency.id = options.idCurrency || this.spanCurrency.id ||
+            'moneytalks_currency';
+        this.spanMoney.id = options.idMoney || this.spanMoney.id ||
+            'moneytalks_money';
 
         this.spanCurrency.innerHTML = this.currency;
         this.spanMoney.innerHTML = this.money;

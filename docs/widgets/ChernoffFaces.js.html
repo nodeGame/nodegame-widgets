@@ -104,7 +104,8 @@ MIT Licensed</p>
         <td class="code highlight"><div class="highlight"><pre>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display parametric data in the form of a Chernoff Face.&#39;</span><span class="p">;</span>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
+        <span class="s1">&#39;Display parametric data in the form of a Chernoff Face.&#39;</span><span class="p">;</span>
 
 
 </pre></div>
@@ -159,9 +160,11 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">PREF</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span>
+                        <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">controls</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span><span class="p">)</span> <span class="o">?</span>  <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span> <span class="o">:</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">controls</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span><span class="p">)</span> <span class="o">?</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span> <span class="o">:</span> <span class="kc">true</span><span class="p">;</span>
 
         <span class="kd">var</span> <span class="nx">idCanvas</span> <span class="o">=</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">idCanvas</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">idCanvas</span> <span class="o">:</span> <span class="nx">PREF</span> <span class="o">+</span> <span class="s1">&#39;canvas&#39;</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">idButton</span> <span class="o">=</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">idButton</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">idButton</span> <span class="o">:</span> <span class="nx">PREF</span> <span class="o">+</span> <span class="s1">&#39;button&#39;</span><span class="p">;</span>
@@ -172,7 +175,8 @@ MIT Licensed</p>
 
         <span class="kd">var</span> <span class="nx">sc_options</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;cf_controls&#39;</span><span class="p">,</span>
-            <span class="nx">features</span><span class="o">:</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span>
+            <span class="nx">features</span><span class="o">:</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">,</span>
+                                      <span class="s1">&#39;value&#39;</span><span class="p">),</span>
             <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span><span class="p">,</span>
             <span class="nx">fieldset</span><span class="o">:</span> <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_controls_fieldest&#39;</span><span class="p">,</span>
                        <span class="nx">legend</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">controls</span><span class="p">.</span><span class="nx">legend</span> <span class="o">||</span> <span class="s1">&#39;Controls&#39;</span>
@@ -254,7 +258,9 @@ MIT Licensed</p>
 <p>Without merging wrong values are passed as attributes</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span><span class="nx">features</span><span class="o">:</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)});</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+            <span class="nx">features</span><span class="o">:</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+        <span class="p">});</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">refresh</span><span class="p">();</span>
     <span class="p">};</span>
 
@@ -620,7 +626,8 @@ The class that actually draws the faces on the Canvas</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
-<p>var pos = y - face.head_radius * face.scaleY + face.head_radius * face.scaleY * 2 * offset;</p>
+<p>var pos = y - face.head_radius * face.scaleY +
+         face.head_radius * face.scaleY * 2 * offset;</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">-</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_radius</span> <span class="o">+</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_radius</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="nx">offset</span><span class="p">;</span>
@@ -642,7 +649,8 @@ The class that actually draws the faces on the Canvas</p>
     <span class="nx">FacePainter</span><span class="p">.</span><span class="nx">computeEyebrowOffset</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">face</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">y</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">||</span> <span class="mi">0</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">eyemindistance</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-        <span class="k">return</span> <span class="nx">FacePainter</span><span class="p">.</span><span class="nx">computeFaceOffset</span><span class="p">(</span><span class="nx">face</span><span class="p">,</span> <span class="nx">face</span><span class="p">.</span><span class="nx">eye_height</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="o">-</span> <span class="nx">eyemindistance</span> <span class="o">-</span> <span class="nx">face</span><span class="p">.</span><span class="nx">eyebrow_eyedistance</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">FacePainter</span><span class="p">.</span><span class="nx">computeFaceOffset</span><span class="p">(</span><span class="nx">face</span><span class="p">,</span> <span class="nx">face</span><span class="p">.</span><span class="nx">eye_height</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="o">-</span>
+            <span class="nx">eyemindistance</span> <span class="o">-</span> <span class="nx">face</span><span class="p">.</span><span class="nx">eyebrow_eyedistance</span><span class="p">;</span>
     <span class="p">};</span>
 
 
@@ -660,8 +668,8 @@ The class that actually draws the faces on the Canvas</p>
   </div>
   <div class="body"><p>A description of a Chernoff Face.</p>
 
-<p>This class packages the 11-dimensional vector of numbers from 0 through 1 that completely
-describe a Chernoff face.</p>
+<p>This class packages the 11-dimensional vector of numbers from 0 through
+1 that completely describe a Chernoff face.</p>
   </div>
 </div>
         </td>
@@ -925,8 +933,11 @@ describe a Chernoff face.</p>
         <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">key</span><span class="p">,[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span><span class="s1">&#39;lineWidth&#39;</span><span class="p">,</span><span class="s1">&#39;scaleX&#39;</span><span class="p">,</span><span class="s1">&#39;scaleY&#39;</span><span class="p">]))</span> <span class="p">{</span>
-                    <span class="nx">out</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">min</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">max</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span>
+                            <span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;lineWidth&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleX&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleY&#39;</span><span class="p">]))</span> <span class="p">{</span>
+
+                    <span class="nx">out</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">min</span> <span class="o">+</span>
+                        <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">max</span><span class="p">;</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -992,8 +1003,8 @@ describe a Chernoff face.</p>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
                     <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">!==</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="k">this</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">min</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">max</span><span class="p">;</span>
-
+                        <span class="k">this</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">min</span> <span class="o">+</span>
+                            <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">max</span><span class="p">;</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>

@@ -24,7 +24,8 @@
     // ## Meta-data
 
     NextPreviousState.version = '0.3.2';
-    NextPreviousState.description = 'Adds two buttons to push forward or rewind the state of the game by one step.';
+    NextPreviousState.description = 'Adds two buttons to push forward or ' +
+        'rewind the state of the game by one step.';
 
     function NextPreviousState(options) {
         this.id = options.id;

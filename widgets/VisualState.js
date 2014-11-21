@@ -19,7 +19,8 @@
     // ## Meta-data
 
     VisualState.version = '0.2.1';
-    VisualState.description = 'Visually display current, previous and next state of the game.';
+    VisualState.description =
+        'Visually display current, previous and next state of the game.';
 
     VisualState.title = 'State';
     VisualState.className = 'visualstate';

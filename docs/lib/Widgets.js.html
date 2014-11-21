@@ -328,7 +328,8 @@ returns FALSE.</p>
         <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;registering &#39;</span> <span class="o">+</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; v.&#39;</span> <span class="o">+</span>  <span class="nx">wProto</span><span class="p">.</span><span class="nx">version</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">checkDependencies</span><span class="p">(</span><span class="nx">wProto</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">w_str</span> <span class="o">+</span> <span class="s1">&#39; has unmet dependecies.&#39;</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">w_str</span> <span class="o">+</span> <span class="s1">&#39; has unmet &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;dependecies.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
 
 
@@ -448,7 +449,8 @@ options parameter.</p>
       <span class="dox_tag_name"></span>
       <span class="dox_type">object</span>
       <span class="dox_type">boolean</span>
-      <span>The requested widget, or FALSE is an error occurs</span>
+      <span>The requested widget, or FALSE is an error
+  occurs</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">

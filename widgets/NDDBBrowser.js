@@ -26,7 +26,8 @@
     // ## Meta-data
 
     NDDBBrowser.version = '0.1.2';
-    NDDBBrowser.description = 'Provides a very simple interface to control a NDDB istance.';
+    NDDBBrowser.description =
+        'Provides a very simple interface to control a NDDB istance.';
 
     // ## Dependencies
 
@@ -54,14 +55,19 @@
 
         function addButtons() {
             var id = this.id;
-            node.window.addEventButton(id + '_GO_TO_FIRST', '<<', this.commandsDiv, 'go_to_first');
-            node.window.addEventButton(id + '_GO_TO_PREVIOUS', '<', this.commandsDiv, 'go_to_previous');
-            node.window.addEventButton(id + '_GO_TO_NEXT', '>', this.commandsDiv, 'go_to_next');
-            node.window.addEventButton(id + '_GO_TO_LAST', '>>', this.commandsDiv, 'go_to_last');
+            node.window.addEventButton(id + '_GO_TO_FIRST', '<<',
+                this.commandsDiv, 'go_to_first');
+            node.window.addEventButton(id + '_GO_TO_PREVIOUS', '<',
+                this.commandsDiv, 'go_to_previous');
+            node.window.addEventButton(id + '_GO_TO_NEXT', '>',
+                this.commandsDiv, 'go_to_next');
+            node.window.addEventButton(id + '_GO_TO_LAST', '>>',
+                this.commandsDiv, 'go_to_last');
             node.window.addBreak(this.commandsDiv);
         }
         function addInfoBar() {
-            var span = this.commandsDiv.appendChild(document.createElement('span'));
+            var span = this.commandsDiv.appendChild(
+                document.createElement('span'));
             return span;
         }
 
@@ -111,7 +117,8 @@
         function notification(el, text) {
             if (el) {
                 node.emit(id + '_GOT', el);
-                this.writeInfo((this.nddb.nddb_pointer + 1) + '/' + this.nddb.size());
+                this.writeInfo((this.nddb.nddb_pointer + 1) + '/' +
+                    this.nddb.size());
             }
             else {
                 this.writeInfo('No element found');

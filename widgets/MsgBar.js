@@ -59,7 +59,8 @@
             table = i < 5 ? this.table : this.tableAdvanced;
 
             table.add(field, i, 0);
-            table.add(W.getTextInput(this.id + '_' + field, {tabindex: i+1}), i, 1);
+            table.add(W.getTextInput(this.id + '_' + field, {tabindex: i+1}),
+                                     i, 1);
 
             if (field === 'to') {
                 this.recipient =
@@ -122,7 +123,8 @@
         };
 
         // Show a button that expands the table of advanced fields.
-        advButton = W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+        advButton =
+            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';

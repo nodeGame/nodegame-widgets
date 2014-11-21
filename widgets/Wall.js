@@ -25,8 +25,8 @@
     // ## Meta-data
 
     Wall.version = '0.3';
-    Wall.description = 'Intercepts all LOG events and prints them ';
-    Wall.description += 'into a DIV element with an ordinal number and a timestamp.';
+    Wall.description = 'Intercepts all LOG events and prints them into a DIV ' +
+                       'element with an ordinal number and a timestamp.';
 
     // ## Dependencies
 

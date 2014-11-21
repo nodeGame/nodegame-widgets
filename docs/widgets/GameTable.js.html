@@ -205,12 +205,8 @@ MIT Licensed</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
-
-<div class="highlight"><pre><code>                         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;New Players found&#39;</span><span class="p">);</span>
-                         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">diff</span><span class="p">);</span>
-</code></pre></div>
-
-
+<p>console.log('New Players found');
+console.log(diff);</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
                 <span class="nx">diff</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span><span class="nx">that</span><span class="p">.</span><span class="nx">addPlayer</span><span class="p">(</span><span class="nx">el</span><span class="p">);});</span>
@@ -239,7 +235,9 @@ MIT Licensed</p>
     <span class="nx">GameTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addLeft</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">player</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">state</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="nx">state</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GameStage</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">in_array</span><span class="p">({</span><span class="nx">content</span><span class="o">:</span><span class="nx">state</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;left&#39;</span><span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">left</span><span class="p">)){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">in_array</span><span class="p">({</span><span class="nx">content</span><span class="o">:</span><span class="nx">state</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;left&#39;</span><span class="p">},</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">left</span><span class="p">))</span> <span class="p">{</span>
+
             <span class="k">this</span><span class="p">.</span><span class="nx">gtbl</span><span class="p">.</span><span class="nx">add2Left</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
         <span class="p">}</span>
 

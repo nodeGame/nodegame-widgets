@@ -51,7 +51,8 @@
         that = this;
 
         //node.on('UPDATED_PLIST', function() {
-        //    node.window.populateRecipientSelector(that.recipient, node.game.pl);
+        //    node.window.populateRecipientSelector(
+        //        that.recipient, node.game.pl);
         //});
 
         sendButton.onclick = function() {

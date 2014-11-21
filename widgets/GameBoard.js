@@ -26,7 +26,8 @@
     // ## Meta-data
 
     GameBoard.version = '0.4.0';
-    GameBoard.description = 'Offer a visual representation of the state of all players in the game.';
+    GameBoard.description = 'Offer a visual representation of the state of ' +
+                            'all players in the game.';
 
     function GameBoard(options) {
 
@@ -63,7 +64,8 @@
         levels = node.constants.stageLevels;
 
         line = '[' + (p.name || p.id) + "]> \t";
-        line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' + p.stage.step;
+        line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' +
+                p.stage.step;
         line += ' ';
 
         switch (p.stageLevel) {

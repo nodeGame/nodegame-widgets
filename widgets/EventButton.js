@@ -64,12 +64,12 @@
             };
         }
 
-        //              // Emit DONE only if callback is successful
-        //              this.button.onclick = function() {
-        //                      var ok = true;
-        //                      if (options.exec) ok = options.exec.call(node.game);
-        //                      if (ok) node.emit(that.event);
-        //              }
+        //// Emit DONE only if callback is successful
+        //this.button.onclick = function() {
+        //        var ok = true;
+        //        if (options.exec) ok = options.exec.call(node.game);
+        //        if (ok) node.emit(that.event);
+        //}
     };
 
     EventButton.prototype.append = function(root) {
