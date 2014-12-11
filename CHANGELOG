@@ -1,4 +1,7 @@
 # nodegame-widgets change log
 
-## 0.6.0
- - Change log of new version starts here
+## 0.6.4
+
+ - Documentation fixes.
+ - Removed EventButton.
+
