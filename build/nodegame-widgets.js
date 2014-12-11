@@ -136,7 +136,7 @@
         this.widgets = {};
 
         /**
-         * ### Widgets.widgets
+         * ### Widgets.instances
          *
          * Container of appended widget instances
          *
@@ -191,6 +191,7 @@
      * @param {string} w_str The name of the widget to load
      * @param {options} options Optional. Configuration options
      *   to be passed to the widgets
+     *
      * @return {object} widget The requested widget
      *
      * @see Widgets.add
@@ -258,15 +259,13 @@
      * In the latter case, dependencies are checked, and it returns FALSE if
      * conditions are not met.
      *
-     * It automatically creates a fieldset element around the widget if
-     * requested by the internal widget configuration, or if specified in the
-     * options parameter.
-     *
-     * @param {string} w_str The name of the widget to load
-     * @param {object} root. Optional. The HTML element under which the widget
-     *   will be appended. Default: `GameWindow.getFrameRoot()` or document.body
+     * @param {string|object} w The name of the widget to load or a loaded
+     *   widget object
+     * @param {object} root Optional. The HTML element under which the widget
+     *   will be appended. Default: `GameWindow.getFrameRoot()` or
+     *   `document.body`
      * @param {options} options Optional. Configuration options to be passed
-     *   to the widgets
+     *   to the widget
      *
      * @return {object|boolean} The requested widget, or FALSE is an error
      *   occurs
@@ -298,12 +297,6 @@
             w = this.get(w, options);
         }
 
-        // If fieldset option is null, a div is added instead.
-        // If fieldset option is undefined, default options are used.
-        //if (options.fieldset !== null) {
-        //    root = appendFieldset(root, options.fieldset ||
-        //                          w.defaults.fieldset, w);
-        //}
         w.panelDiv = appendDiv(root, {
             attributes: {
                 className: ['ng_widget', 'panel', 'panel-default', w.className]
@@ -383,7 +376,7 @@
      *
      * TODO: Check for version and other constraints.
      *
-     * @param {object} The widget to check
+     * @param {object} w The widget to check
      * @param {boolean} quiet Optional. If TRUE, no warning will be raised.
      *   Default: FALSE
      * @return {boolean} TRUE, if all dependencies are met
@@ -415,14 +408,6 @@
 
 
     // ## Helper functions
-
-    //function appendFieldset(root, options, w) {
-    //    var idFieldset, legend;
-    //    if (!options) return root;
-    //    idFieldset = options.id || w.id + '_fieldset';
-    //    legend = options.legend || w.legend;
-    //    return W.addFieldset(root, idFieldset, legend, options.attributes);
-    //}
 
     function appendDiv(root, options) {
         // TODO: Check every parameter
@@ -2770,114 +2755,6 @@
     };
 
     DynamicTable.prototype.listeners = function() {};
-
-})(node);
-
-/**
- * # EventButton
- * Copyright(c) 2014 Stefano Balietti
- * MIT Licensed
- *
- * Creates a clickable button that fires an event
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    var JSUS = node.JSUS;
-
-    node.widgets.register('EventButton', EventButton);
-
-    // ## Defaults
-
-    EventButton.defaults = {};
-    EventButton.defaults.id = 'eventbutton';
-    EventButton.defaults.fieldset = false;
-
-    // ## Meta-data
-
-    EventButton.version = '0.2';
-
-    // ## Dependencies
-
-    EventButton.dependencies = {
-        JSUS: {}
-    };
-
-    function EventButton(options) {
-        this.options = options;
-        this.id = options.id;
-
-        this.root = null;
-        this.text = 'Send';
-        this.button = document.createElement('button');
-        this.callback = null;
-        this.init(this.options);
-    }
-
-    EventButton.prototype.init = function(options) {
-        options = options || this.options;
-        this.button.id = options.id || this.id;
-        var text = options.text || this.text;
-        while (this.button.hasChildNodes()) {
-            this.button.removeChild(this.button.firstChild);
-        }
-        this.button.appendChild(document.createTextNode(text));
-        this.event = options.event || this.event;
-        this.callback = options.callback || this.callback;
-        var that = this;
-        if (this.event) {
-            // Emit Event only if callback is successful
-            this.button.onclick = function() {
-                var ok = true;
-                if (this.callback){
-                    ok = options.callback.call(node.game);
-                }
-                if (ok) node.emit(that.event);
-            };
-        }
-
-        //// Emit DONE only if callback is successful
-        //this.button.onclick = function() {
-        //        var ok = true;
-        //        if (options.exec) ok = options.exec.call(node.game);
-        //        if (ok) node.emit(that.event);
-        //}
-    };
-
-    EventButton.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.button);
-        return root;
-    };
-
-    EventButton.prototype.listeners = function() {};
-
-    // # DoneButton
-
-    node.widgets.register('DoneButton', DoneButton);
-
-    DoneButton.prototype.__proto__ = EventButton.prototype;
-    DoneButton.prototype.constructor = DoneButton;
-
-    // ## Meta-data
-
-    DoneButton.id = 'donebutton';
-    DoneButton.version = '0.1';
-
-    // ## Dependencies
-
-    DoneButton.dependencies = {
-        EventButton: {}
-    };
-
-    function DoneButton (options) {
-        options.event = 'DONE';
-        options.text = options.text || 'Done!';
-        EventButton.call(this, options);
-    }
 
 })(node);
 
