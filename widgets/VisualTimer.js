@@ -51,6 +51,11 @@
         this.options = options || {};
         this.options.update = ('undefined' === typeof this.options.update) ?
             1000 : this.options.update;
+        this.options.stopOnDone = ('undefined' ===
+            typeof this.options.stopOnDone) ? true : this.options.stopOnDone;
+        this.options.startOnPlaying = ('undefined' ===
+            typeof this.options.startOnPlaying) ?
+            true : this.options.startOnPlaying;
 
         /**
          * ### VisualTimer.gameTimer
@@ -328,7 +333,7 @@
     /**
       * ### VisualTimer.startWaiting
       *
-      * Changes the `VisualTimer` appearance to a max. wait timer
+      * Stops the timer and changes the appearance to a max. wait timer
       *
       * If options and/or options.milliseconds are undefined, the wait timer
       * will start with the current time left on the `gameTimer`. The mainBox
@@ -363,7 +368,7 @@
     /**
       * ### VisualTimer.startTiming
       *
-      * Changes the `VisualTimer` appearance to a regular countdown
+      * Starts the timer and changes appearance to a regular countdown
       *
       * The mainBox will be unstriked and set active, the waitBox will be
       * hidden. All other options are forwarded directly to
@@ -436,18 +441,22 @@
 
         node.on('PLAYING', function() {
             var stepObj, timer, options;
-            stepObj = node.game.getCurrentStep();
-            if (!stepObj) return;
-            timer = stepObj.timer;
-            if (timer) {
-                options = processOptions(timer, this.options);
-                that.startTiming(options);
+            if (that.options.startOnPlaying) {
+                stepObj = node.game.getCurrentStep();
+                if (!stepObj) return;
+                timer = stepObj.timer;
+                if (timer) {
+                    options = processOptions(timer, this.options);
+                    that.startTiming(options);
+                }
             }
         });
 
         node.on('REALLY_DONE', function() {
-            if (!that.gameTimer.isStopped()) {
-                that.startWaiting();
+            if (that.options.stopOnDone) {
+                if (!that.gameTimer.isStopped()) {
+                    that.startWaiting();
+                }
             }
        });
     };
