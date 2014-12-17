@@ -265,6 +265,11 @@ The options it can take are:
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">update</span><span class="p">)</span> <span class="o">?</span>
             <span class="mi">1000</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">update</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">stopOnDone</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span>
+            <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">stopOnDone</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">stopOnDone</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">startOnPlaying</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span>
+            <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">startOnPlaying</span><span class="p">)</span> <span class="o">?</span>
+            <span class="kc">true</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">startOnPlaying</span><span class="p">;</span>
 
 
 </pre></div>
@@ -888,7 +893,7 @@ The options it can take are:
 </div>
 
   </div>
-  <div class="body"><p>Changes the <code>VisualTimer</code> appearance to a max. wait timer</p>
+  <div class="body"><p>Stops the timer and changes the appearance to a max. wait timer</p>
 
 <p>If options and/or options.milliseconds are undefined, the wait timer
 will start with the current time left on the <code>gameTimer</code>. The mainBox
@@ -947,7 +952,7 @@ options are forwarded directly to <code>VisualTimer.restart</code>.</p>
 </div>
 
   </div>
-  <div class="body"><p>Changes the <code>VisualTimer</code> appearance to a regular countdown</p>
+  <div class="body"><p>Starts the timer and changes appearance to a regular countdown</p>
 
 <p>The mainBox will be unstriked and set active, the waitBox will be
 hidden. All other options are forwarded directly to
@@ -1095,18 +1100,22 @@ hidden. All other options are forwarded directly to
 
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;PLAYING&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">stepObj</span><span class="p">,</span> <span class="nx">timer</span><span class="p">,</span> <span class="nx">options</span><span class="p">;</span>
-            <span class="nx">stepObj</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentStep</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">stepObj</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-            <span class="nx">timer</span> <span class="o">=</span> <span class="nx">stepObj</span><span class="p">.</span><span class="nx">timer</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">timer</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">options</span> <span class="o">=</span> <span class="nx">processOptions</span><span class="p">(</span><span class="nx">timer</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">startTiming</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">startOnPlaying</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">stepObj</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentStep</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">stepObj</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+                <span class="nx">timer</span> <span class="o">=</span> <span class="nx">stepObj</span><span class="p">.</span><span class="nx">timer</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">timer</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">options</span> <span class="o">=</span> <span class="nx">processOptions</span><span class="p">(</span><span class="nx">timer</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">startTiming</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+                <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">});</span>
 
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;REALLY_DONE&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">that</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">isStopped</span><span class="p">())</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">startWaiting</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">stopOnDone</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">that</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">isStopped</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">startWaiting</span><span class="p">();</span>
+                <span class="p">}</span>
             <span class="p">}</span>
        <span class="p">});</span>
     <span class="p">};</span>
