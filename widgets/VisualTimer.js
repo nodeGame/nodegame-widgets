@@ -49,13 +49,6 @@
      */
     function VisualTimer(options) {
         this.options = options || {};
-        this.options.update = ('undefined' === typeof this.options.update) ?
-            1000 : this.options.update;
-        this.options.stopOnDone = ('undefined' ===
-            typeof this.options.stopOnDone) ? true : this.options.stopOnDone;
-        this.options.startOnPlaying = ('undefined' ===
-            typeof this.options.startOnPlaying) ?
-            true : this.options.startOnPlaying;
 
         /**
          * ### VisualTimer.gameTimer
@@ -102,6 +95,7 @@
          * Indicates whether the instance has been initializded already
          */
         this.isInitialized = false;
+
         this.init(this.options);
     }
 
@@ -125,9 +119,10 @@
      */
     VisualTimer.prototype.init = function(options) {
         var t;
-
-        if (!options) {
-            options = {};
+        options = options || {};
+        if ('object' !== typeof options) {
+            throw new TypeError('VisualTimer.init: options must be ' +
+                                'object or undefined');        
         }
         J.mixout(options, this.options);
 
@@ -172,7 +167,18 @@
                 };
             }
         });
+
         this.options = options;
+
+        if ('undefined' === typeof this.options.update) {
+            this.options.update = 1000;
+        }
+        if ('undefined' === typeof this.options.stopOnDone) {
+            this.options.stopOnDone = true;
+        }
+        if ('undefined' === typeof this.options.startOnPlaying) {
+            this.options.startOnPlaying = true;
+        } 
 
         if (!this.options.mainBoxOptions) {
             this.options.mainBoxOptions = {};
@@ -217,33 +223,26 @@
     /**
      * ### VisualTimer.clear
      *
-     * Reverts state of `VisualTimer` to right after constructor call
+     * Reverts state of `VisualTimer` to right after a constructor call
      *
      * @param {object} options Configuration object
      *
-     * @return {object} Old options
+     * @return {object} oldOptions The Old options
      *
      * @see node.timer.destroyTimer
      * @see VisualTimer.init
      */
     VisualTimer.prototype.clear = function(options) {
-        var oldOptions = this.options;
-        if (!options) {
-            options = {};
-        }
+        var oldOptions;
+        options = options || {};
+        oldOptions = this.options;
 
         node.timer.destroyTimer(this.gameTimer);
 
-        // ----- as in constructor -----
-        this.options = options;
-        this.options.update = ('undefined' === typeof this.options.update) ?
-            1000 : this.options.update;
         this.gameTimer = null;
-
         this.activeBox = null;
         this.isInitialized = false;
-        this.init(this.options);
-        // ----- as in constructor ----
+        this.init(options);
 
         return oldOptions;
     };
