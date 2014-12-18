@@ -1,7 +1,7 @@
   {
   "name": "nodegame-widgets",
   "description": "nodegame-widgets: Collections of useful and reusable javascript / HTML code snippets for nodegame-window.",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "keywords": [ "nodegame", "window", "widgets" ],
   "author": "Stefano Balietti <futur.dorko@gmail.com>",
   "licenses": [
