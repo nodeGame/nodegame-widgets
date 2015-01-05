@@ -24,8 +24,6 @@
 
     Wall.title = 'Wall';
     Wall.className = 'wall';
-    Wall.id = 'wall';
-
 
     // ## Dependencies
 
@@ -50,7 +48,7 @@
          *
          * The id of the PRE in which to write
          */
-        this.id = options.id || Wall.id;
+        this.id = options.id || 'wall';
 
         /**
          * ### Wall.name
