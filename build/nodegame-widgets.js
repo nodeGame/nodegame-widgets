@@ -660,24 +660,19 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
-    Table = node.window.Table;
-
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
-    // ## Defaults
-
-    ChernoffFaces.defaults = {};
-    ChernoffFaces.defaults.id = 'ChernoffFaces';
-    ChernoffFaces.defaults.canvas = {};
-    ChernoffFaces.defaults.canvas.width = 100;
-    ChernoffFaces.defaults.canvas.heigth = 100;
+    var J = node.JSUS;
+    var Table = node.window.Table;
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.3';
+    ChernoffFaces.version = '0.3.1';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
+
+    ChernoffFaces.title = 'ChernoffFaces';
+    ChernoffFaces.className = 'chernofffaces';
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -689,20 +684,21 @@
 
     ChernoffFaces.FaceVector = FaceVector;
     ChernoffFaces.FacePainter = FacePainter;
+    ChernoffFaces.width = 100;
+    ChernoffFaces.height = 100;
 
     function ChernoffFaces (options) {
+        var that = this;
+
         this.options = options;
-        this.id = options.id;
         this.table = new Table({id: 'cf_table'});
-        this.root = options.root || document.createElement('div');
-        this.root.id = this.id;
 
         this.sc = node.widgets.get('Controls.Slider');  // Slider Controls
         this.fp = null; // Face Painter
         this.canvas = null;
 
         this.change = 'CF_CHANGE';
-        var that = this;
+
         this.changeFunc = function() {
             that.draw(that.sc.getAllValues());
         };
@@ -715,8 +711,6 @@
 
     ChernoffFaces.prototype.init = function(options) {
         var that = this;
-        this.id = options.id || this.id;
-        var PREF = this.id + '_';
 
         this.features = options.features || this.features ||
                         FaceVector.random();
@@ -724,21 +718,15 @@
         this.controls = ('undefined' !== typeof options.controls) ?
             options.controls : true;
 
-        var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
-        var idButton = (options.idButton) ? options.idButton : PREF + 'button';
-
-        this.canvas = node.window.getCanvas(idCanvas, options.canvas);
+        this.canvas = node.window.getCanvas('ChernoffFaces_canvas', options.canvas);
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
         var sc_options = {
             id: 'cf_controls',
-            features: JSUS.mergeOnKey(FaceVector.defaults, this.features,
+            features: J.mergeOnKey(FaceVector.defaults, this.features,
                                       'value'),
             change: this.change,
-            fieldset: {id: this.id + '_controls_fieldest',
-                       legend: this.controls.legend || 'Controls'
-                      },
             submit: 'Send'
         };
 
@@ -763,19 +751,21 @@
         }
 
 
+        this.someDiv = document.createElement('div');
+        this.someDiv.appendChild(this.table.table);
+
+
         this.table.add(this.canvas);
         this.table.parse();
-        this.root.appendChild(this.table.table);
     };
 
     ChernoffFaces.prototype.getCanvas = function() {
         return this.canvas;
     };
 
-    ChernoffFaces.prototype.append = function(root) {
-        root.appendChild(this.root);
+    ChernoffFaces.prototype.append = function() {
+        this.bodyDiv.appendChild(this.someDiv);
         this.table.parse();
-        return this.root;
     };
 
     ChernoffFaces.prototype.draw = function(features) {
@@ -784,7 +774,7 @@
         this.fp.redraw(fv);
         // Without merging wrong values are passed as attributes
         this.sc.init({
-            features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')
+            features: J.mergeOnKey(FaceVector.defaults, features, 'value')
         });
         this.sc.refresh();
     };
@@ -799,7 +789,7 @@
         this.fp.redraw(fv);
 
         var sc_options = {
-            features: JSUS.mergeOnValue(FaceVector.defaults, fv),
+            features: J.mergeOnValue(FaceVector.defaults, fv),
             change: this.change
         };
         this.sc.init(sc_options);
@@ -815,8 +805,8 @@
 
         this.canvas = new node.window.Canvas(canvas);
 
-        this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
-        this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
+        this.scaleX = canvas.width / ChernoffFaces.width;
+        this.scaleY = canvas.height / ChernoffFaces.heigth;
     }
 
     //Draws a Chernoff face.
@@ -861,7 +851,7 @@
             return;
         }
 
-        var ration;
+        var ratio;
         if (this.canvas.width > this.canvas.height) {
             ratio = this.canvas.width / face.head_radius * face.head_scale_x;
         }
@@ -1044,8 +1034,6 @@
      * 1 that completely describe a Chernoff face.
      *
      */
-
-
     FaceVector.defaults = {
         // Head
         head_radius: {
@@ -1207,7 +1195,41 @@
             step: 0.01,
             value: 20,
             label: 'Lower lip'
+        },
+
+        scaleX: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'Scale X'
+        },
+
+        scaleY: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'Scale Y'
+        },
+
+        color: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'color'
+        },
+
+        lineWidth: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'lineWidth'
         }
+
+
     };
 
     //Constructs a random face vector.
@@ -1215,7 +1237,7 @@
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!JSUS.in_array(key,
+                if (!J.in_array(key,
                             ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
 
                     out[key] = FaceVector.defaults[key].min +
@@ -1227,7 +1249,7 @@
         out.scaleX = 1;
         out.scaleY = 1;
 
-        out.color = 'green';
+        out.color = 'red';
         out.lineWidth = 1;
 
         return new FaceVector(out);
@@ -2771,20 +2793,18 @@
 
     "use strict";
 
+    node.widgets.register('Feedback', Feedback);
+
     var J = node.JSUS;
-
-    // ## Defaults
-
-    Feedback.defaults = {};
-    Feedback.defaults.id = 'feedback';
-    Feedback.defaults.fieldset = {
-        legend: 'Feedback'
-    };
 
     // ## Meta-data
 
-    Feedback.version = '0.1';
-    Feedback.description = 'Displays a simple feedback form';
+    Feedback.version = '0.2';
+    Feedback.description = 'Displays a simple feedback form.';
+
+    Feedback.title = 'Feedback';
+    Feedback.className = 'feedback';
+
 
     // ## Dependencies
 
@@ -2792,17 +2812,35 @@
         JSUS: {}
     };
 
-    function Feedback(options) {
-        this.id = options.id || Feedback.id;
-        this.root = null;
+    /**
+     * ## Feedback constructor
+     *
+     * `Feedback` sends a feedback message to the server
+     */
+    function Feedback() {
+        /**
+         * ### Feedback.textarea
+         *
+         * The TEXTAREA wherein clients can enter feedback
+         */
         this.textarea = null;
+
+        /**
+         * ### Feedback.submit
+         *
+         * Button to submit the feedback form
+         */
         this.submit = null;
-        this.label = options.label || 'FEEDBACK';
     }
 
-    Feedback.prototype.append = function(root) {
+    /**
+     * ## Feedback.append
+     *
+     * Appends widget to this.bodyDiv
+     */
+    Feedback.prototype.append = function() {
         var that = this;
-        this.root = root;
+
         this.textarea = document.createElement('textarea');
         this.submit = document.createElement('button');
         this.submit.appendChild(document.createTextNode('Submit'));
@@ -2830,21 +2868,14 @@
                 alert('An error has occurred, feedback not sent.');
             }
         };
-        root.appendChild(this.textarea);
-        root.appendChild(this.submit);
-        return root;
+        this.bodyDiv.appendChild(this.textarea);
+        this.bodyDiv.appendChild(this.submit);
     };
 
-    Feedback.prototype.getRoot = function() {
-        return this.root;
-    };
 
     Feedback.prototype.listeners = function() {
         var that = this;
     };
-
-    node.widgets.register('Feedback', Feedback);
-
 })(node);
 
 /**
@@ -3569,20 +3600,15 @@
 
     node.widgets.register('MoneyTalks', MoneyTalks);
 
-    var JSUS = node.JSUS;
-
-    // ## Defaults
-
-    MoneyTalks.defaults = {};
-    MoneyTalks.defaults.id = 'moneytalks';
-    MoneyTalks.defaults.fieldset = {
-        legend: 'Earnings'
-    };
+    var J = node.JSUS;
 
     // ## Meta-data
 
-    MoneyTalks.version = '0.1.0';
-    MoneyTalks.description = 'Display the earnings of a player.';
+    MoneyTalks.version = '0.1.1';
+    MoneyTalks.description = 'Displays the earnings of a player.';
+
+    MoneyTalks.title = 'Earnings';
+    MoneyTalks.className = 'moneytalks';
 
     // ## Dependencies
 
@@ -3590,44 +3616,86 @@
         JSUS: {}
     };
 
+    /**
+     * ## MoneyTalks constructor
+     *
+     * `MoneyTalks` displays the earnings of the player so far
+     *
+     * @param {object} options Optional. Configuration options
+     * which is forwarded to MoneyTalks.init.
+     *
+     * @see MoneyTalks.init
+     */
     function MoneyTalks(options) {
-        this.id = options.id || MoneyTalks.defaults.id;
-
-        this.root = null;               // the parent element
-
+        /**
+         * ### MoneyTalks.spanCurrency
+         *
+         * The SPAN which holds information on the currency
+         */
         this.spanCurrency = document.createElement('span');
+
+        /**
+         * ### MoneyTalks.spanMoney
+         *
+         * The SPAN which holds information about the money earned so far
+         */
         this.spanMoney = document.createElement('span');
 
+        /**
+         * ### MoneyTalks.currency
+         *
+         * String describing the currency
+         */
         this.currency = 'EUR';
+
+        /**
+         * ### MoneyTalks.money
+         *
+         * Currently earned money
+         */
         this.money = 0;
+
+        /**
+         * ### MoneyTalks.precicison
+         *
+         * Precision of floating point number to display
+         */
         this.precision = 2;
+
         this.init(options);
     }
 
-
+    /**
+     * ## MoneyTalks init
+     *
+     * Initializes the widget
+     *
+     * @param {object} options Optional. Configuration options.
+     *
+     * The  options object can have the following attributes:
+     *   - `currency`: String describing currency to use.
+     *   - `money`: Current amount of money earned.
+     *   - `precision`: Precision of floating point output to use.
+     *   - `currencyClassName`: Class name to be set for this.spanCurrency.
+     *   - `moneyClassName`: Class name to be set for this.spanMoney;
+     */
     MoneyTalks.prototype.init = function(options) {
         this.currency = options.currency || this.currency;
         this.money = options.money || this.money;
         this.precision = options.precision || this.precision;
 
-        this.spanCurrency.id = options.idCurrency || this.spanCurrency.id ||
-            'moneytalks_currency';
-        this.spanMoney.id = options.idMoney || this.spanMoney.id ||
-            'moneytalks_money';
+        this.spanCurrency.className = options.currencyClassName ||
+            this.spanCurrency.className || 'moneytalkscurrency';
+        this.spanMoney.className = options.moneyClassName ||
+            this.spanMoney.className || 'moneytalksmoney';
 
         this.spanCurrency.innerHTML = this.currency;
         this.spanMoney.innerHTML = this.money;
     };
 
-    MoneyTalks.prototype.getRoot = function() {
-        return this.root;
-    };
-
-    MoneyTalks.prototype.append = function(root, ids) {
-        var PREF = this.id + '_';
-        root.appendChild(this.spanMoney);
-        root.appendChild(this.spanCurrency);
-        return root;
+    MoneyTalks.prototype.append = function() {
+        this.bodyDiv.appendChild(this.spanMoney);
+        this.bodyDiv.appendChild(this.spanCurrency);
     };
 
     MoneyTalks.prototype.listeners = function() {
@@ -3637,6 +3705,11 @@
         });
     };
 
+    /**
+     * ## MoneyTalks.update
+     *
+     * Updates the contents of this.money and this.spanMoney according to amount
+     */
     MoneyTalks.prototype.update = function(amount) {
         if ('number' !== typeof amount) {
             // Try to parse strings
@@ -3648,7 +3721,6 @@
         this.money += amount;
         this.spanMoney.innerHTML = this.money.toFixed(this.precision);
     };
-
 })(node);
 
 /**
@@ -5161,7 +5233,7 @@
      * - `COUNT_UP_STAGES_TO_TOTAL`: Display current and total stage number.
      * - `COUNT_UP_ROUNDS_TO_TOTAL`: Display current and total round number.
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
-     * - `COUNT_DOWN_ROUNDS: Display number of rounds left in this stage.
+     * - `COUNT_DOWN_ROUNDS`: Display number of rounds left in this stage.
      *
      * @param {array} displayModeNames Array of strings representing the names
      *
@@ -6192,8 +6264,8 @@
      * The options it can take are:
      *
      *   - any options that can be passed to a `GameTimer`
-     *   - waitBoxOptions: an option object to be passed to `TimerBox`
-     *   - mainBoxOptions: an option object to be passed to `TimerBox`
+     *   - `waitBoxOptions`: an option object to be passed to `TimerBox`
+     *   - `mainBoxOptions`: an option object to be passed to `TimerBox`
      *
      * @see TimerBox
      * @see GameTimer
@@ -6273,7 +6345,7 @@
         options = options || {};
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined');        
+                                'object or undefined');
         }
         J.mixout(options, this.options);
 
@@ -6329,7 +6401,7 @@
         }
         if ('undefined' === typeof this.options.startOnPlaying) {
             this.options.startOnPlaying = true;
-        } 
+        }
 
         if (!this.options.mainBoxOptions) {
             this.options.mainBoxOptions = {};
@@ -6390,22 +6462,10 @@
 
         node.timer.destroyTimer(this.gameTimer);
 
-        // TODO: avoid code duplication.
-        // ----- as in constructor -----
-        // this.options = options;
-        //this.options.update = ('undefined' === typeof this.options.update) ?
-        //    1000 : this.options.update;
-        //this.options.stopOnDone = ('undefined' ===
-        //    typeof this.options.stopOnDone) ? true : this.options.stopOnDone;
-        //this.options.startOnPlaying = ('undefined' ===
-        //    typeof this.options.startOnPlaying) ?
-        //    true : this.options.startOnPlaying;
-
         this.gameTimer = null;
         this.activeBox = null;
         this.isInitialized = false;
         this.init(options);
-        // ----- as in constructor ----
 
         return oldOptions;
     };
@@ -6873,19 +6933,18 @@
 
     node.widgets.register('Wall', Wall);
 
-    var JSUS = node.JSUS;
-
-    // ## Defaults
-
-    Wall.defaults = {};
-    Wall.defaults.id = 'wall';
-    Wall.defaults.fieldset = { legend: 'Game Log' };
+    var J = node.JSUS;
 
     // ## Meta-data
 
-    Wall.version = '0.3';
-    Wall.description = 'Intercepts all LOG events and prints them into a DIV ' +
+    Wall.version = '0.3.1';
+    Wall.description = 'Intercepts all LOG events and prints them into a PRE ' +
                        'element with an ordinal number and a timestamp.';
+
+    Wall.title = 'Wall';
+    Wall.className = 'wall';
+    Wall.id = 'wall';
+
 
     // ## Dependencies
 
@@ -6893,28 +6952,78 @@
         JSUS: {}
     };
 
+    /**
+     * ## Wall constructor
+     *
+     * `Wall` prints all LOG events into a PRE.
+     *
+     * @param {object} options Optional. Configuration options
+     * The options it can take are:
+     *
+     *   - id: The id of the PRE in which to write.
+     *   - name: The name of this Wall.
+     */
     function Wall(options) {
+        /**
+         * ### Wall.id
+         *
+         * The id of the PRE in which to write
+         */
         this.id = options.id || Wall.id;
+
+        /**
+         * ### Wall.name
+         *
+         * The name of this Wall
+         */
         this.name = options.name || this.name;
+
+        /**
+         * ### Wall.buffer
+         *
+         * Buffer for logs which are to be logged before the document is ready
+         */
         this.buffer = [];
+
+        /**
+         * ### Wall.counter
+         *
+         * Counts number of entries on wall
+         */
         this.counter = 0;
 
+        /**
+         * ### Wall.wall
+         *
+         * The PRE in which to write
+         */
         this.wall = node.window.getElement('pre', this.id);
     }
 
+    // ## Wall methods
+
+    /**
+     * ### Wall.init
+     *
+     * Initializes the instance.
+     *
+     * If options are provided, the counter is set to `options.counter`
+     * otherwise nothing happens.
+     */
     Wall.prototype.init = function(options) {
         options = options || {};
         this.counter = options.counter || this.counter;
     };
 
-    Wall.prototype.append = function(root) {
-        return root.appendChild(this.wall);
+    Wall.prototype.append = function() {
+        return this.bodyDiv.appendChild(this.wall);
     };
 
-    Wall.prototype.getRoot = function() {
-        return this.wall;
-    };
-
+    /**
+     * ### Wall.listeners
+     *
+     * Wall has a listener to the `LOG` event
+     */
     Wall.prototype.listeners = function() {
         var that = this;
         node.on('LOG', function(msg) {
@@ -6923,15 +7032,28 @@
         });
     };
 
+
+    /**
+     *  ### Wall.write
+     *
+     * Writes argument as first entry of this.wall if document is fully loaded
+     *
+     * Writes into this.buffer if document is not ready yet.
+     */
     Wall.prototype.write = function(text) {
         if (document.readyState !== 'complete') {
             this.buffer.push(s);
         } else {
-            var mark = this.counter++ + ') ' + JSUS.getTime() + ' ';
+            var mark = this.counter++ + ') ' + J.getTime() + ' ';
             this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
         }
     };
 
+    /**
+     * ### Wall.debuffer
+     *
+     * If the document is ready, the buffer content is written into this.wall
+     */
     Wall.prototype.debuffer = function() {
         if (document.readyState === 'complete' && this.buffer.length > 0) {
             for (var i=0; i < this.buffer.length; i++) {

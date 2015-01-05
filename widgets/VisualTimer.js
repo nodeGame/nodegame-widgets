@@ -41,8 +41,8 @@
      * The options it can take are:
      *
      *   - any options that can be passed to a `GameTimer`
-     *   - waitBoxOptions: an option object to be passed to `TimerBox`
-     *   - mainBoxOptions: an option object to be passed to `TimerBox`
+     *   - `waitBoxOptions`: an option object to be passed to `TimerBox`
+     *   - `mainBoxOptions`: an option object to be passed to `TimerBox`
      *
      * @see TimerBox
      * @see GameTimer
@@ -122,7 +122,7 @@
         options = options || {};
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined');        
+                                'object or undefined');
         }
         J.mixout(options, this.options);
 
@@ -178,7 +178,7 @@
         }
         if ('undefined' === typeof this.options.startOnPlaying) {
             this.options.startOnPlaying = true;
-        } 
+        }
 
         if (!this.options.mainBoxOptions) {
             this.options.mainBoxOptions = {};

@@ -11,20 +11,18 @@
 
     "use strict";
 
+    node.widgets.register('Feedback', Feedback);
+
     var J = node.JSUS;
-
-    // ## Defaults
-
-    Feedback.defaults = {};
-    Feedback.defaults.id = 'feedback';
-    Feedback.defaults.fieldset = {
-        legend: 'Feedback'
-    };
 
     // ## Meta-data
 
-    Feedback.version = '0.1';
-    Feedback.description = 'Displays a simple feedback form';
+    Feedback.version = '0.2';
+    Feedback.description = 'Displays a simple feedback form.';
+
+    Feedback.title = 'Feedback';
+    Feedback.className = 'feedback';
+
 
     // ## Dependencies
 
@@ -32,17 +30,35 @@
         JSUS: {}
     };
 
-    function Feedback(options) {
-        this.id = options.id || Feedback.id;
-        this.root = null;
+    /**
+     * ## Feedback constructor
+     *
+     * `Feedback` sends a feedback message to the server
+     */
+    function Feedback() {
+        /**
+         * ### Feedback.textarea
+         *
+         * The TEXTAREA wherein clients can enter feedback
+         */
         this.textarea = null;
+
+        /**
+         * ### Feedback.submit
+         *
+         * Button to submit the feedback form
+         */
         this.submit = null;
-        this.label = options.label || 'FEEDBACK';
     }
 
-    Feedback.prototype.append = function(root) {
+    /**
+     * ## Feedback.append
+     *
+     * Appends widget to this.bodyDiv
+     */
+    Feedback.prototype.append = function() {
         var that = this;
-        this.root = root;
+
         this.textarea = document.createElement('textarea');
         this.submit = document.createElement('button');
         this.submit.appendChild(document.createTextNode('Submit'));
@@ -70,19 +86,12 @@
                 alert('An error has occurred, feedback not sent.');
             }
         };
-        root.appendChild(this.textarea);
-        root.appendChild(this.submit);
-        return root;
+        this.bodyDiv.appendChild(this.textarea);
+        this.bodyDiv.appendChild(this.submit);
     };
 
-    Feedback.prototype.getRoot = function() {
-        return this.root;
-    };
 
     Feedback.prototype.listeners = function() {
         var that = this;
     };
-
-    node.widgets.register('Feedback', Feedback);
-
 })(node);
