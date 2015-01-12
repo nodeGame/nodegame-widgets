@@ -12,9 +12,10 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.widgets.register('VisualTimer', VisualTimer);
 
-    var J = node.JSUS;
 
     // ## Meta-data
 

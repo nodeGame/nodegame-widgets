@@ -11,9 +11,10 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.widgets.register('Feedback', Feedback);
 
-    var J = node.JSUS;
 
     // ## Meta-data
 

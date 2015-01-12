@@ -12,9 +12,9 @@
 
     "use strict";
 
-    node.widgets.register('Wall', Wall);
-
     var J = node.JSUS;
+
+    node.widgets.register('Wall', Wall);
 
     // ## Meta-data
 

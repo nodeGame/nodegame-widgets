@@ -11,10 +11,12 @@
 
     "use strict";
 
-    node.widgets.register('ChernoffFaces', ChernoffFaces);
-
     var J = node.JSUS;
     var Table = node.window.Table;
+
+    node.widgets.register('ChernoffFaces', ChernoffFaces);
+
+
 
     // ## Meta-data
 

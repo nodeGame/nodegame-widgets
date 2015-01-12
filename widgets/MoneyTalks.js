@@ -11,9 +11,9 @@
 
     "use strict";
 
-    node.widgets.register('MoneyTalks', MoneyTalks);
-
     var J = node.JSUS;
+
+    node.widgets.register('MoneyTalks', MoneyTalks);
 
     // ## Meta-data
 
@@ -79,7 +79,7 @@
     }
 
     /**
-     * ## MoneyTalks init
+     * ## MoneyTalks.init
      *
      * Initializes the widget
      *
