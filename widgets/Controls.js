@@ -55,10 +55,32 @@
     function Controls(options) {
         this.options = options;
 
+        /**
+         * ### Controls.listRoot
+         *
+         * The list which holds the controls
+         */
         this.listRoot = null;
+
+        /**
+         * ### Controls.submit
+         *
+         * The submit button
+         */
         this.submit = null;
 
+        /**
+         * ### Controls.changeEvent
+         *
+         * The event to be fired when the list changes
+         */
         this.changeEvent = 'Controls_change';
+
+        /**
+         * ### Controls.hasChanged
+         *
+         * Flag to indicate whether the list has changed
+         */
         this.hasChanged = false;
 
         this.init(options);
