@@ -660,10 +660,12 @@
 
     "use strict";
 
-    node.widgets.register('ChernoffFaces', ChernoffFaces);
-
     var J = node.JSUS;
     var Table = node.window.Table;
+
+    node.widgets.register('ChernoffFaces', ChernoffFaces);
+
+
 
     // ## Meta-data
 
@@ -2009,33 +2011,42 @@
 
     // TODO: handle different events, beside onchange
 
+    var J = node.JSUS;
+    var sliderControls = SliderControls;
+    var jQuerySlider = jQuerySliderControls;
+    var radioControls = RadioControls;
+
+
     node.widgets.register('Controls', Controls);
 
-    // ## Defaults
 
-    var defaults = { id: 'controls' };
-
-    Controls.defaults = defaults;
-
-    Controls.Slider = SliderControls;
-    Controls.jQuerySlider = jQuerySliderControls;
-    Controls.Radio = RadioControls;
 
     // ## Meta-data
 
-    Controls.version = '0.3';
+    Controls.version = '0.3.1';
     Controls.description = 'Wraps a collection of user-inputs controls.';
 
+    Controls.title = 'Controls';
+    Controls.className = 'controls';
+
+    /**
+     * ## Controls constructor
+     *
+     * `Control` wraps a collection of user-input controls
+     *
+     * @param {object} options Optional. Configuration options
+     * which is forwarded to Controls.init.
+     *
+     * @see Controls.init
+     */
     function Controls(options) {
         this.options = options;
-        this.id = 'undefined' !== typeof options.id ? options.id : 'controls';
-        this.root = null;
 
         this.listRoot = null;
-        this.fieldset = null;
         this.submit = null;
 
-        this.changeEvent = this.id + '_change';
+        this.changeEvent = 'Controls_change';
+        this.hasChanged = false;
 
         this.init(options);
     }
@@ -2050,11 +2061,25 @@
         //return node.window.getTextInput(id, attributes);
     };
 
+    /**
+     * ## Controls.init
+     *
+     * Initializes the widget
+     *
+     * @param {object} options Optional. Configuration options.
+     *
+     * The  options object can have the following attributes:
+     *   - Any option that can be passed to `node.window.List` constructor.
+     *   - `change`: DUNNO
+     *   - `features`: DUNNO
+     *   - `submit`: NOT HERE
+     *
+     * @see nodegame-window/List
+     */
     Controls.prototype.init = function(options) {
-
         this.hasChanged = false; // TODO: should this be inherited?
         if ('undefined' !== typeof options.change) {
-            if (!options.change){
+            if (!options.change) {
                 this.changeEvent = false;
             }
             else {
@@ -2064,36 +2089,36 @@
         this.list = new node.window.List(options);
         this.listRoot = this.list.getRoot();
 
-        if (!options.features) return;
-        if (!this.root) this.root = this.listRoot;
+        if (!options.features) {
+            return;
+        }
+
         this.features = options.features;
         this.populate();
     };
 
-    Controls.prototype.append = function(root) {
-        this.root = root;
-        var toReturn = this.listRoot;
+    Controls.prototype.append = function() {
+        var that = this;
+        var idButton = 'submit_Controls';
+
+
         this.list.parse();
-        root.appendChild(this.listRoot);
+        this.bodyDiv.appendChild(this.listRoot);
 
         if (this.options.submit) {
-            var idButton = 'submit_' + this.id;
             if (this.options.submit.id) {
                 idButton = this.options.submit.id;
                 delete this.options.submit.id;
             }
-            this.submit = node.window.addButton(root, idButton,
+            this.submit = node.window.addButton(this.bodyDiv, idButton,
                     this.options.submit, this.options.attributes);
 
-            var that = this;
             this.submit.onclick = function() {
                 if (that.options.change) {
                     node.emit(that.options.change);
                 }
             };
         }
-
-        return toReturn;
     };
 
     Controls.prototype.parse = function() {
@@ -2101,8 +2126,8 @@
     };
 
     Controls.prototype.populate = function() {
-        var key, id, attributes, container, elem, that;
-        that = this;
+        var key, id, attributes, container, elem;
+        var that = this;
 
         for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
@@ -2139,7 +2164,7 @@
     Controls.prototype.listeners = function() {
         var that = this;
         // TODO: should this be inherited?
-        node.on(this.changeEvent, function(){
+        node.on(this.changeEvent, function() {
             that.hasChanged = true;
         });
 
@@ -2180,22 +2205,30 @@
         return node.window.highlight(this.listRoot, code);
     };
 
-    // Sub-classes
+    /**
+     * ## Sub-classes
+     */
 
-    // Slider
+    /**
+     * ### Slider
+     */
+    node.widgets.register('SliderControls', SliderControls);
 
     SliderControls.prototype.__proto__ = Controls.prototype;
     SliderControls.prototype.constructor = SliderControls;
 
-    SliderControls.id = 'slidercontrols';
-    SliderControls.version = '0.2';
+    SliderControls.version = '0.2.1';
+    SliderControls.description = 'Collection of Sliders.';
+
+    SliderControls.title = 'Slider Controls';
+    SliderControls.className = 'slidercontrols';
 
     SliderControls.dependencies = {
         Controls: {}
     };
 
 
-    function SliderControls (options) {
+    function SliderControls(options) {
         Controls.call(this, options);
     }
 
@@ -2207,21 +2240,26 @@
         return node.window.getSlider(id, attributes);
     };
 
-    // jQuerySlider
+    /**
+     * jQuerySlider
+     */
+     node.widgets.register('jQuerySliderControls', jQuerySliderControls);
 
     jQuerySliderControls.prototype.__proto__ = Controls.prototype;
     jQuerySliderControls.prototype.constructor = jQuerySliderControls;
 
-    jQuerySliderControls.id = 'jqueryslidercontrols';
-    jQuerySliderControls.version = '0.13';
+    jQuerySliderControls.version = '0.14';
+    jQuerySliderControls.description = 'Collection of jQuery Sliders.';
+
+    jQuerySliderControls.title = 'jQuery Slider Controls';
+    jQuerySliderControls.className = 'jqueryslidercontrols';
 
     jQuerySliderControls.dependencies = {
         jQuery: {},
         Controls: {}
     };
 
-
-    function jQuerySliderControls (options) {
+    function jQuerySliderControls(options) {
         Controls.call(this, options);
     }
 
@@ -2242,30 +2280,33 @@
         return slider;
     };
 
+    /**
+     * Radio
+     */
 
-    ///////////////////////////
-
-
-    // Radio
+    node.widgets.register('RadioControls', RadioControls);
 
     RadioControls.prototype.__proto__ = Controls.prototype;
     RadioControls.prototype.constructor = RadioControls;
 
-    RadioControls.id = 'radiocontrols';
-    RadioControls.version = '0.1.1';
+    RadioControls.version = '0.1.2';
+    RadioControls.description = 'Collection of Radio Controls.';
+
+    RadioControls.title = 'Radio Controls';
+    RadioControls.className = 'radiocontrols';
 
     RadioControls.dependencies = {
         Controls: {}
     };
 
-    function RadioControls (options) {
+    function RadioControls(options) {
         Controls.call(this,options);
         this.groupName = ('undefined' !== typeof options.name) ? options.name :
             node.window.generateUniqueId();
         this.radioElem = null;
     }
 
-    // overriding populare also. There is an error with the Label
+    // overriding populate also. There is an error with the Label
     RadioControls.prototype.populate = function() {
         var key, id, attributes, container, elem, that;
         that = this;
@@ -2273,8 +2314,8 @@
         if (!this.radioElem) {
             this.radioElem = document.createElement('radio');
             this.radioElem.group = this.name || "radioGroup";
-            this.radioElem.group = this.id || "radioGroup";
-            root.appendChild(this.radioElem);
+            this.radioElem.group = this.className || "radioGroup";
+            this.bodyDiv.appendChild(this.radioElem);
         }
 
         for (key in this.features) {
@@ -2793,9 +2834,10 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.widgets.register('Feedback', Feedback);
 
-    var J = node.JSUS;
 
     // ## Meta-data
 
@@ -3598,9 +3640,9 @@
 
     "use strict";
 
-    node.widgets.register('MoneyTalks', MoneyTalks);
-
     var J = node.JSUS;
+
+    node.widgets.register('MoneyTalks', MoneyTalks);
 
     // ## Meta-data
 
@@ -3666,7 +3708,7 @@
     }
 
     /**
-     * ## MoneyTalks init
+     * ## MoneyTalks.init
      *
      * Initializes the widget
      *
@@ -5016,9 +5058,9 @@
 
     "use strict";
 
-    node.widgets.register('VisualRound', VisualRound);
-
     var J = node.JSUS;
+
+    node.widgets.register('VisualRound', VisualRound);
 
     // ## Meta-data
 
@@ -6235,9 +6277,10 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.widgets.register('VisualTimer', VisualTimer);
 
-    var J = node.JSUS;
 
     // ## Meta-data
 
@@ -6931,9 +6974,9 @@
 
     "use strict";
 
-    node.widgets.register('Wall', Wall);
-
     var J = node.JSUS;
+
+    node.widgets.register('Wall', Wall);
 
     // ## Meta-data
 
@@ -6943,8 +6986,6 @@
 
     Wall.title = 'Wall';
     Wall.className = 'wall';
-    Wall.id = 'wall';
-
 
     // ## Dependencies
 
@@ -6969,7 +7010,7 @@
          *
          * The id of the PRE in which to write
          */
-        this.id = options.id || Wall.id;
+        this.id = options.id || 'wall';
 
         /**
          * ### Wall.name
