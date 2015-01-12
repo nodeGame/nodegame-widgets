@@ -601,9 +601,10 @@
         this.init(options)
     }
 
+    // ## Chat methods
 
     /**
-     * ## Chat.init
+     * ### Chat.init
      *
      * Initializes the widget
      *
@@ -2186,8 +2187,10 @@
         //return node.window.getTextInput(id, attributes);
     };
 
+    // ## Controls methods
+
     /**
-     * ## Controls.init
+     * ### Controls.init
      *
      * Initializes the widget
      *
@@ -2223,7 +2226,7 @@
     };
 
     /**
-     * ## Controls.append
+     * ### Controls.append
      *
      * Appends the widget to `this.bodyDiv`
      *
@@ -2258,7 +2261,7 @@
     };
 
     /**
-     * ## Controls.populate
+     * ### Controls.populate
      *
      * Adds features to the list.
      *
@@ -2344,9 +2347,7 @@
         return node.window.highlight(this.listRoot, code);
     };
 
-    /**
-     * ## Sub-classes
-     */
+    // ## Sub-classes
 
     /**
      * ### Slider
@@ -2380,7 +2381,7 @@
     };
 
     /**
-     * jQuerySlider
+     * ### jQuerySlider
      */
      node.widgets.register('jQuerySliderControls', jQuerySliderControls);
 
@@ -2420,7 +2421,7 @@
     };
 
     /**
-     * Radio
+     * ### RadioControls
      */
 
     node.widgets.register('RadioControls', RadioControls);
@@ -2752,38 +2753,45 @@
 
     node.widgets.register('DataBar', DataBar);
 
-    // ## Defaults
-    DataBar.defaults = {};
-    DataBar.defaults.id = 'databar';
-    DataBar.defaults.fieldset = {
-        legend: 'Send DATA to players'
-    };
-
     // ## Meta-data
-    DataBar.version = '0.4';
+
+    DataBar.version = '0.4.1';
     DataBar.description =
         'Adds a input field to send DATA messages to the players';
 
-    function DataBar(options) {
+    DataBar.title = 'DataBar';
+    DataBar.className = 'databar';
+
+
+    /**
+     * ## DataBar constructor
+     *
+     * Instantiates a new DataBar object
+     */
+    function DataBar() {
         this.bar = null;
-        this.root = null;
         this.recipient = null;
     }
 
-    DataBar.prototype.append = function(root) {
+    // ## DataBar methods
+
+     /**
+     * ## DataBar.append
+     *
+     * Appends widget to `this.bodyDiv`
+     */
+    DataBar.prototype.append = function() {
 
         var sendButton, textInput, dataInput;
-
-        sendButton = W.addButton(root);
-        //W.writeln('Text');
-        textInput = W.addTextInput(root, 'data-bar-text');
-        W.addLabel(root, textInput, undefined, 'Text');
-        W.writeln('Data');
-        dataInput = W.addTextInput(root, 'data-bar-data');
-
-        this.recipient = W.addRecipientSelector(root);
-
         var that = this;
+
+        sendButton = W.addButton(this.bodyDiv);
+        textInput = W.addTextInput(this.bodyDiv, 'data-bar-text');
+        W.addLabel(this.bodyDiv, textInput, undefined, 'Text');
+        W.writeln('Data');
+        dataInput = W.addTextInput(this.bodyDiv, 'data-bar-data');
+
+        this.recipient = W.addRecipientSelector(this.bodyDiv);
 
         sendButton.onclick = function() {
             var to, data, text;
@@ -2800,9 +2808,6 @@
         node.on('UPDATED_PLIST', function() {
             node.window.populateRecipientSelector(that.recipient, node.game.pl);
         });
-
-        return root;
-
     };
 
 })(node);
@@ -3014,8 +3019,10 @@
         this.submit = null;
     }
 
+    // ## Feedback methods
+
     /**
-     * ## Feedback.append
+     * ### Feedback.append
      *
      * Appends widget to this.bodyDiv
      */
@@ -3106,8 +3113,10 @@
         this.status = null;
     }
 
+    // ## GameBoard methods
+
     /**
-     * ## GameBoard.append
+     * ### GameBoard.append
      *
      * Appends widget to `this.bodyDiv` and updates the board
      *
@@ -3128,7 +3137,7 @@
     };
 
     /**
-     * ## GameBoard.updateBoard
+     * ### GameBoard.updateBoard
      *
      * Updates the information on the game board
      *
@@ -3154,8 +3163,10 @@
         this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
     };
 
+    // ## Helper methods
+
      /**
-     * ## printLine
+     * ### printLine
      *
      * Returns a `String` describing the player passed in
      *
@@ -3258,8 +3269,11 @@
          */
         this.summaryDiv = null;
     }
+
+    // ## GameSummary methods
+
     /**
-     * ## GameSummary.append
+     * ### GameSummary.append
      *
      * Appends the widget to `this.bodyDiv` and calls `this.writeSummary`
      *
@@ -3271,7 +3285,7 @@
     };
 
     /**
-     * ## GameSummary.writeSummary
+     * ### GameSummary.writeSummary
      *
      * Writes a summary of the game configuration into `this.summaryDiv`
      */
@@ -3470,10 +3484,10 @@
 
     "use strict";
 
-    node.widgets.register('LanguageSelector', LanguageSelector);
-
     var J = node.JSUS,
         game = node.game;
+
+    node.widgets.register('LanguageSelector', LanguageSelector);
 
     // ## Meta-data
 
@@ -3888,8 +3902,10 @@
         this.init(options);
     }
 
+    // ## MoneyTalks methods
+
     /**
-     * ## MoneyTalks.init
+     * ### MoneyTalks.init
      *
      * Initializes the widget
      *
@@ -3929,7 +3945,7 @@
     };
 
     /**
-     * ## MoneyTalks.update
+     * ### MoneyTalks.update
      *
      * Updates the contents of this.money and this.spanMoney according to amount
      */
@@ -4420,19 +4436,16 @@
 
     var J = node.JSUS;
 
-    // ## Defaults
-
-    Requirements.defaults = {};
-    Requirements.defaults.id = 'requirements';
-    Requirements.defaults.fieldset = {
-        legend: 'Requirements'
-    };
+    node.widgets.register('Requirements', Requirements);
 
     // ## Meta-data
 
-    Requirements.version = '0.5.0';
+    Requirements.version = '0.5.1';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
+
+    Requirements.title = 'Requirements';
+    Requirements.className = 'requirements';
 
     // ## Dependencies
 
@@ -4449,44 +4462,132 @@
      * @param {object} options
      */
     function Requirements(options) {
-        // The id of the widget.
-        this.id = options.id || Requirements.id;
-        // Array of all test callbacks.
+        /**
+         * ### Requirements.callbacks
+         *
+         * Array of all test callbacks
+         */
         this.callbacks = [];
-        // Number of tests still pending.
+
+        /**
+         * ### Requirements.stillChecking
+         *
+         * Number of tests still pending
+         */
         this.stillChecking = 0;
-        // If TRUE, a maximum timeout to the execution of ALL tests is set.
+
+        /**
+         * ### Requirements.withTimeout
+         *
+         * If TRUE, a maximum timeout to the execution of ALL tests is set
+         */
         this.withTimeout = options.withTimeout || true;
-        // The time in milliseconds for the timeout to expire.
+
+        /**
+         * ### Requirements.timeoutTime
+         *
+         * The time in milliseconds for the timeout to expire
+         */
         this.timeoutTime = options.timeoutTime || 10000;
-        // The id of the timeout, if created.
+
+        /**
+         * ### Requirements.timeoutId
+         *
+         * The id of the timeout, if created
+         */
         this.timeoutId = null;
 
-        // Span summarizing the status of the tests.
+        /**
+         * ### Requirements.summary
+         *
+         * Span summarizing the status of the tests
+         */
         this.summary = null;
-        // Span counting how many tests have been completed.
+
+        /**
+         * ### Requirements.summaryUpdate
+         *
+         * Span counting how many tests have been completed
+         */
         this.summaryUpdate = null;
-        // Looping dots to give the user the feeling of code execution.
+
+        /**
+         * ### Requirements.dots
+         *
+         * Looping dots to give the user the feeling of code execution
+         */
         this.dots = null;
 
-        // TRUE if at least one test has failed.
+        /**
+         * ### Requirements.hasFailed
+         *
+         * TRUE if at least one test has failed
+         */
         this.hasFailed = false;
 
-        // The outcomes of all tests.
+        /**
+         * ### Requirements.results
+         *
+         * The outcomes of all tests
+         */
         this.results = [];
 
-        // If true, the final result of the tests will be sent to the server.
+        /**
+         * ### Requirements.sayResult
+         *
+         * If true, the final result of the tests will be sent to the server
+         */
         this.sayResults = options.sayResults || false;
-        // The label of the SAY message that will be sent to the server.
+
+        /**
+         * ### Requirements.sayResultLabel
+         *
+         * The label of the SAY message that will be sent to the server
+         */
         this.sayResultsLabel = options.sayResultLabel || 'requirements';
-        // Callback to add properties to the result object to send to the
-        // server.
+
+        /**
+         * ### Requirements.addToResults
+         *
+         *  Callback to add properties to result object sent to server
+         */
         this.addToResults = options.addToResults || null;
 
-        // Callbacks to be executed at the end of all tests.
+        /**
+         * ### Requirements.onComplete
+         *
+         * Callback to be executed at the end of all tests
+         */
         this.onComplete = null;
+
+        /**
+         * ### Requirements.onSuccess
+         *
+         * Callback to be executed at the end of all tests
+         */
         this.onSuccess = null;
+
+        /**
+         * ### Requirements.onFail
+         *
+         * Callback to be executed at the end of all tests
+         */
         this.onFail = null;
+
+        /**
+         * ### Requirements.list
+         *
+         * `List` to render the results
+         *
+         * @see nodegame-server/List
+         */
+        // TODO: simplify render syntax.
+        this.list = new W.List({
+            render: {
+                pipeline: renderResult,
+                returnAt: 'first'
+            }
+        });
 
         function renderResult(o) {
             var imgPath, img, span, text;
@@ -4508,14 +4609,6 @@
             span.appendChild(text);
             return span;
         }
-
-        // TODO: simplify render syntax.
-        this.list = new W.List({
-            render: {
-                pipeline: renderResult,
-                returnAt: 'first'
-            }
-        });
     }
 
     // ## Requirements methods
@@ -4964,8 +5057,6 @@
         return errMsg;
     }
 
-    node.widgets.register('Requirements', Requirements);
-
 })(node);
 
 /**
@@ -5020,8 +5111,10 @@
 
     }
 
+    // ## ServerInfoDisplay methods
+
     /**
-     * ## ServerInfoDisplay.init
+     * ### ServerInfoDisplay.init
      *
      * Initializes the widget
      */
@@ -5050,7 +5143,7 @@
     };
 
     /**
-     * ## ServerInfoDisplay.getInfo
+     * ### ServerInfoDisplay.getInfo
      *
      * Updates current info
      *
@@ -5065,7 +5158,7 @@
     };
 
     /**
-     * ## ServerInfoDisplay.processInfo
+     * ### ServerInfoDisplay.processInfo
      *
      * Processes incoming server info and displays it in `this.table`
      */
@@ -6418,8 +6511,10 @@
         this.table = new Table();
     }
 
+    // ## VisualStage methods
+
     /**
-     * ## VisualStage.append
+     * ### VisualStage.append
      *
      * Appends widget to `this.bodyDiv` and writes the stage
      *
@@ -6440,7 +6535,7 @@
     };
 
     /**
-     * ## VisualStage.writeStage
+     * ### VisualStage.writeStage
      *
      * Writes the current, previous and next stage into `this.table`
      */
