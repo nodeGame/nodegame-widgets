@@ -11,11 +11,10 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
+    var JSUS = node.JSUS;
+    var Table = node.window.Table;
 
     node.widgets.register('VisualStage', VisualStage);
-
-    Table = node.window.Table;
 
     // ## Meta-data
 
