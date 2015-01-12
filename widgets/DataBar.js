@@ -39,6 +39,11 @@
      * ## DataBar.append
      *
      * Appends widget to `this.bodyDiv`
+<<<<<<< HEAD
+=======
+     *
+     * @param {object} options
+>>>>>>> 71aa4fe00a97a4725f2d989d29b61a3b5e13e839
      */
     DataBar.prototype.append = function() {
 
