@@ -5205,17 +5205,27 @@
     StateBar.title = 'Change GameStage';
     StateBar.className = 'statebar';
 
-    function StateBar(options) {
-        this.id = options.id || StateBar.className;
-        this.recipient = null;
+
+    /**
+     * ## StateBar constructor
+     *
+     * `StateBar` provides a simple interface to change game stages
+     */
+    function StateBar() {
+        //this.recipient = null;
     }
 
+    /**
+     * ### StateBar.append
+     *
+     * Appends widget to `this.bodyDiv`
+     */
     StateBar.prototype.append = function() {
-        var prefix, that;
+        var prefix, that = this;
         var idButton, idStageField, idRecipientField;
         var sendButton, stageField, recipientField;
 
-        prefix = this.id + '_';
+        prefix = StateBar.className + '_';
 
         idButton = prefix + 'sendButton';
         idStageField = prefix + 'stageField';
@@ -5230,8 +5240,6 @@
         this.bodyDiv.appendChild(recipientField);
 
         sendButton = node.window.addButton(this.bodyDiv, idButton);
-
-        that = this;
 
         //node.on('UPDATED_PLIST', function() {
         //    node.window.populateRecipientSelector(
@@ -5290,11 +5298,32 @@
         Table: {}
     };
 
-    function StateDisplay(options) {
-        this.id = options.id;
+
+    /**
+     * ## StateDisplay constructor
+     *
+     * `StateDisplay` displays information about the state of a player
+     */
+    function StateDisplay() {
+        /**
+         * ### StateDisplay.table
+         *
+         * The `Table` which holds the information
+         *
+         * @See nodegame-window/Table
+         */
         this.table = new Table();
     }
 
+    // ## StateDisplay methods
+
+    /**
+     * ### StateDisplay.append
+     *
+     * Appends widget to `this.bodyDiv` and calls `this.updateAll`
+     *
+     * @see StateDisplay.updateAll
+     */
     StateDisplay.prototype.append = function() {
         var that, checkPlayerName;
         that = this;
@@ -5307,6 +5336,11 @@
         this.bodyDiv.appendChild(this.table.table);
     };
 
+    /**
+     * ### StateDisplay.updateAll
+     *
+     * Updates information in `this.table`
+     */
     StateDisplay.prototype.updateAll = function() {
         var stage, stageNo, stageId, playerId, tmp, miss;
         miss = '-';
