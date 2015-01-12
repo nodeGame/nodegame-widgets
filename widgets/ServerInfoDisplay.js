@@ -50,8 +50,10 @@
 
     }
 
+    // ## ServerInfoDisplay methods
+
     /**
-     * ## ServerInfoDisplay.init
+     * ### ServerInfoDisplay.init
      *
      * Initializes the widget
      */
@@ -80,7 +82,7 @@
     };
 
     /**
-     * ## ServerInfoDisplay.getInfo
+     * ### ServerInfoDisplay.getInfo
      *
      * Updates current info
      *
@@ -95,7 +97,7 @@
     };
 
     /**
-     * ## ServerInfoDisplay.processInfo
+     * ### ServerInfoDisplay.processInfo
      *
      * Processes incoming server info and displays it in `this.table`
      */

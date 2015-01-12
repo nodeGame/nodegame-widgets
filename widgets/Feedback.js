@@ -52,8 +52,10 @@
         this.submit = null;
     }
 
+    // ## Feedback methods
+
     /**
-     * ## Feedback.append
+     * ### Feedback.append
      *
      * Appends widget to this.bodyDiv
      */

@@ -78,8 +78,10 @@
         this.init(options);
     }
 
+    // ## MoneyTalks methods
+
     /**
-     * ## MoneyTalks.init
+     * ### MoneyTalks.init
      *
      * Initializes the widget
      *
@@ -119,7 +121,7 @@
     };
 
     /**
-     * ## MoneyTalks.update
+     * ### MoneyTalks.update
      *
      * Updates the contents of this.money and this.spanMoney according to amount
      */

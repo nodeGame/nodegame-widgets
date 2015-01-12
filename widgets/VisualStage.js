@@ -41,8 +41,10 @@
         this.table = new Table();
     }
 
+    // ## VisualStage methods
+
     /**
-     * ## VisualStage.append
+     * ### VisualStage.append
      *
      * Appends widget to `this.bodyDiv` and writes the stage
      *
@@ -63,7 +65,7 @@
     };
 
     /**
-     * ## VisualStage.writeStage
+     * ### VisualStage.writeStage
      *
      * Writes the current, previous and next stage into `this.table`
      */

@@ -45,8 +45,10 @@
         this.status = null;
     }
 
+    // ## GameBoard methods
+
     /**
-     * ## GameBoard.append
+     * ### GameBoard.append
      *
      * Appends widget to `this.bodyDiv` and updates the board
      *
@@ -67,7 +69,7 @@
     };
 
     /**
-     * ## GameBoard.updateBoard
+     * ### GameBoard.updateBoard
      *
      * Updates the information on the game board
      *

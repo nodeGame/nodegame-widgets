@@ -96,8 +96,10 @@
         //return node.window.getTextInput(id, attributes);
     };
 
+    // ## Controls methods
+
     /**
-     * ## Controls.init
+     * ### Controls.init
      *
      * Initializes the widget
      *
@@ -133,7 +135,7 @@
     };
 
     /**
-     * ## Controls.append
+     * ### Controls.append
      *
      * Appends the widget to `this.bodyDiv`
      *
@@ -168,7 +170,7 @@
     };
 
     /**
-     * ## Controls.populate
+     * ### Controls.populate
      *
      * Adds features to the list.
      *
@@ -254,9 +256,7 @@
         return node.window.highlight(this.listRoot, code);
     };
 
-    /**
-     * ## Sub-classes
-     */
+    // ## Sub-classes
 
     /**
      * ### Slider
@@ -290,7 +290,7 @@
     };
 
     /**
-     * jQuerySlider
+     * ### jQuerySlider
      */
      node.widgets.register('jQuerySliderControls', jQuerySliderControls);
 
@@ -330,7 +330,7 @@
     };
 
     /**
-     * Radio
+     * ### RadioControls
      */
 
     node.widgets.register('RadioControls', RadioControls);

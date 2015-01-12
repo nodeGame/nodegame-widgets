@@ -36,8 +36,11 @@
          */
         this.summaryDiv = null;
     }
+
+    // ## GameSummary methods
+
     /**
-     * ## GameSummary.append
+     * ### GameSummary.append
      *
      * Appends the widget to `this.bodyDiv` and calls `this.writeSummary`
      *
@@ -49,7 +52,7 @@
     };
 
     /**
-     * ## GameSummary.writeSummary
+     * ### GameSummary.writeSummary
      *
      * Writes a summary of the game configuration into `this.summaryDiv`
      */

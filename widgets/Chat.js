@@ -148,9 +148,10 @@
         this.init(options)
     }
 
+    // ## Chat methods
 
     /**
-     * ## Chat.init
+     * ### Chat.init
      *
      * Initializes the widget
      *
