@@ -3,7 +3,7 @@
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Shows current, previous and next state.
+ * Shows current, previous and next stage.
  *
  * www.nodegame.org
  */
@@ -20,9 +20,9 @@
 
     VisualStage.version = '0.2.2';
     VisualStage.description =
-        'Visually display current, previous and next state of the game.';
+        'Visually display current, previous and next stage of the game.';
 
-    VisualStage.title = 'State';
+    VisualStage.title = 'Stage';
     VisualStage.className = 'visualstage';
 
     // ## Dependencies
@@ -35,7 +35,7 @@
     /**
      * ## VisualStage constructor
      *
-     * `VisualStage` displays current, previous and next state of the game
+     * `VisualStage` displays current, previous and next stage of the game
      */
     function VisualStage() {
         this.table = new Table();
@@ -44,36 +44,36 @@
     /**
      * ## VisualStage.append
      *
-     * Appends widget to `this.bodyDiv` and writes the state
+     * Appends widget to `this.bodyDiv` and writes the stage
      *
-     * @see VisualStage.writeState
+     * @see VisualStage.writeStage
      */
     VisualStage.prototype.append = function() {
         this.bodyDiv.appendChild(this.table.table);
-        this.writeState();
+        this.writeStage();
     };
 
     VisualStage.prototype.listeners = function() {
         var that = this;
 
         node.on('STEP_CALLBACK_EXECUTED', function() {
-            that.writeState();
+            that.writeStage();
         });
         // Game over and init?
     };
 
     /**
-     * ## VisualStage.writeState
+     * ## VisualStage.writeStage
      *
-     * Writes the current, previous and next state into `this.table`
+     * Writes the current, previous and next stage into `this.table`
      */
-    VisualStage.prototype.writeState = function() {
-        var miss, state, pr, nx, tmp;
+    VisualStage.prototype.writeStage = function() {
+        var miss, stage, pr, nx, tmp;
         var curStep, nextStep, prevStep;
         var t;
 
         miss = '-';
-        state = 'Uninitialized';
+        stage = 'Uninitialized';
         pr = miss;
         nx = miss;
 
@@ -81,7 +81,7 @@
 
         if (curStep) {
             tmp = node.game.plot.getStep(curStep);
-            state = tmp ? tmp.id : miss;
+            stage = tmp ? tmp.id : miss;
 
             prevStep = node.game.plot.previous(curStep);
             if (prevStep) {
@@ -99,7 +99,7 @@
         this.table.clear(true);
 
         this.table.addRow(['Previous: ', pr]);
-        this.table.addRow(['Current: ', state]);
+        this.table.addRow(['Current: ', stage]);
         this.table.addRow(['Next: ', nx]);
 
         t = this.table.selexec('y', '=', 0);
