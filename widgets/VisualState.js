@@ -1,5 +1,5 @@
 /**
- * # VisualState
+ * # VisualStage
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
@@ -11,50 +11,64 @@
 
     "use strict";
 
-    node.widgets.register('VisualState', VisualState);
-
     var JSUS = node.JSUS,
+
+    node.widgets.register('VisualStage', VisualStage);
+
     Table = node.window.Table;
 
     // ## Meta-data
 
-    VisualState.version = '0.2.1';
-    VisualState.description =
+    VisualStage.version = '0.2.2';
+    VisualStage.description =
         'Visually display current, previous and next state of the game.';
 
-    VisualState.title = 'State';
-    VisualState.className = 'visualstate';
+    VisualStage.title = 'State';
+    VisualStage.className = 'visualstage';
 
     // ## Dependencies
 
-    VisualState.dependencies = {
+    VisualStage.dependencies = {
         JSUS: {},
         Table: {}
     };
 
-    function VisualState(options) {
-        this.id = options.id;
+    /**
+     * ## VisualStage constructor
+     *
+     * `VisualStage` displays current, previous and next state of the game
+     */
+    function VisualStage() {
         this.table = new Table();
     }
 
-    VisualState.prototype.append = function() {
-        var that = this;
-        var PREF = this.id + '_';
+    /**
+     * ## VisualStage.append
+     *
+     * Appends widget to `this.bodyDiv` and writes the state
+     *
+     * @see VisualStage.writeState
+     */
+    VisualStage.prototype.append = function() {
         this.bodyDiv.appendChild(this.table.table);
         this.writeState();
     };
 
-    VisualState.prototype.listeners = function() {
+    VisualStage.prototype.listeners = function() {
         var that = this;
 
         node.on('STEP_CALLBACK_EXECUTED', function() {
             that.writeState();
         });
-
         // Game over and init?
     };
 
-    VisualState.prototype.writeState = function() {
+    /**
+     * ## VisualStage.writeState
+     *
+     * Writes the current, previous and next state into `this.table`
+     */
+    VisualStage.prototype.writeState = function() {
         var miss, state, pr, nx, tmp;
         var curStep, nextStep, prevStep;
         var t;
