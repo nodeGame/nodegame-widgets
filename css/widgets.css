@@ -120,7 +120,7 @@
 /* Chat */
 
 
-#chat_chat {
+.chat {
     overflow-y: scroll;
     height: 200px;
     width: 450px;
@@ -128,7 +128,7 @@
     padding: 5px;
 }
 
-#chat_textarea {
+.chat > .panel-body > textarea {
     height: 100px;
     width: 400px;
 }
