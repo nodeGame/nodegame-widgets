@@ -4983,36 +4983,56 @@
 
     node.widgets.register('ServerInfoDisplay', ServerInfoDisplay);
 
-    // ## Defaults
-
-    ServerInfoDisplay.defaults = {};
-    ServerInfoDisplay.defaults.id = 'serverinfodisplay';
-    ServerInfoDisplay.defaults.fieldset = {
-        legend: 'Server Info',
-        id: 'serverinfo_fieldset'
-    };
-
     // ## Meta-data
 
-    ServerInfoDisplay.version = '0.4';
+    ServerInfoDisplay.version = '0.4.1';
+    ServerInfoDisplay.description = 'Displays information about the server.'
 
-    function ServerInfoDisplay(options) {
-        this.id = options.id;
+    ServerInfoDisplay.title = 'Server Info';
+    ServerInfoDisplay.className = 'serverinfodisplay';
 
-        this.root = null;
+    /**
+     * ## ServerInfoDisplay constructor
+     *
+     * `ServerInfoDisplay` shows information about the server
+     */
+    function ServerInfoDisplay() {
+        /**
+         * ### ServerInfoDisplay.div
+         *
+         * The DIV wherein to display the information
+         */
         this.div = document.createElement('div');
+
+        /**
+         * ### ServerInfoDisplay.table
+         *
+         * The table holding the information
+         */
         this.table = null; //new node.window.Table();
+
+        /**
+         * ### ServerInfoDisplay.button
+         *
+         * The button TODO
+         */
         this.button = null;
+
     }
 
-    ServerInfoDisplay.prototype.init = function(options) {
+    /**
+     * ## ServerInfoDisplay.init
+     *
+     * Initializes the widget
+     */
+    ServerInfoDisplay.prototype.init = function() {
         var that = this;
         if (!this.div) {
             this.div = document.createElement('div');
         }
         this.div.innerHTML = 'Waiting for the reply from Server...';
         if (!this.table) {
-            this.table = new node.window.Table(options);
+            this.table = new node.window.Table();
         }
         this.table.clear(true);
         this.button = document.createElement('button');
@@ -5021,16 +5041,21 @@
         this.button.onclick = function(){
             that.getInfo();
         };
-        this.root.appendChild(this.button);
+        this.bodyDiv.appendChild(this.button);
         this.getInfo();
     };
 
-    ServerInfoDisplay.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.div);
-        return root;
+    ServerInfoDisplay.prototype.append = function() {
+        this.bodyDiv.appendChild(this.div);
     };
 
+    /**
+     * ## ServerInfoDisplay.getInfo
+     *
+     * Updates current info
+     *
+     * @see ServerInfoDisplay.processInfo
+     */
     ServerInfoDisplay.prototype.getInfo = function() {
         var that = this;
         node.get('INFO', function(info) {
@@ -5039,6 +5064,11 @@
         });
     };
 
+    /**
+     * ## ServerInfoDisplay.processInfo
+     *
+     * Processes incoming server info and displays it in `this.table`
+     */
     ServerInfoDisplay.prototype.processInfo = function(info) {
         this.table.clear(true);
         for (var key in info) {
@@ -6350,7 +6380,7 @@
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Shows current, previous and next state.
+ * Shows current, previous and next stage.
  *
  * www.nodegame.org
  */
@@ -6367,9 +6397,9 @@
 
     VisualStage.version = '0.2.2';
     VisualStage.description =
-        'Visually display current, previous and next state of the game.';
+        'Visually display current, previous and next stage of the game.';
 
-    VisualStage.title = 'State';
+    VisualStage.title = 'Stage';
     VisualStage.className = 'visualstage';
 
     // ## Dependencies
@@ -6382,7 +6412,7 @@
     /**
      * ## VisualStage constructor
      *
-     * `VisualStage` displays current, previous and next state of the game
+     * `VisualStage` displays current, previous and next stage of the game
      */
     function VisualStage() {
         this.table = new Table();
@@ -6391,36 +6421,36 @@
     /**
      * ## VisualStage.append
      *
-     * Appends widget to `this.bodyDiv` and writes the state
+     * Appends widget to `this.bodyDiv` and writes the stage
      *
-     * @see VisualStage.writeState
+     * @see VisualStage.writeStage
      */
     VisualStage.prototype.append = function() {
         this.bodyDiv.appendChild(this.table.table);
-        this.writeState();
+        this.writeStage();
     };
 
     VisualStage.prototype.listeners = function() {
         var that = this;
 
         node.on('STEP_CALLBACK_EXECUTED', function() {
-            that.writeState();
+            that.writeStage();
         });
         // Game over and init?
     };
 
     /**
-     * ## VisualStage.writeState
+     * ## VisualStage.writeStage
      *
-     * Writes the current, previous and next state into `this.table`
+     * Writes the current, previous and next stage into `this.table`
      */
-    VisualStage.prototype.writeState = function() {
-        var miss, state, pr, nx, tmp;
+    VisualStage.prototype.writeStage = function() {
+        var miss, stage, pr, nx, tmp;
         var curStep, nextStep, prevStep;
         var t;
 
         miss = '-';
-        state = 'Uninitialized';
+        stage = 'Uninitialized';
         pr = miss;
         nx = miss;
 
@@ -6428,7 +6458,7 @@
 
         if (curStep) {
             tmp = node.game.plot.getStep(curStep);
-            state = tmp ? tmp.id : miss;
+            stage = tmp ? tmp.id : miss;
 
             prevStep = node.game.plot.previous(curStep);
             if (prevStep) {
@@ -6446,7 +6476,7 @@
         this.table.clear(true);
 
         this.table.addRow(['Previous: ', pr]);
-        this.table.addRow(['Current: ', state]);
+        this.table.addRow(['Current: ', stage]);
         this.table.addRow(['Next: ', nx]);
 
         t = this.table.selexec('y', '=', 0);
