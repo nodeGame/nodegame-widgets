@@ -52,7 +52,7 @@
 
     };
 
-     /**
+    /**
      * ## Chat constructor
      *
      * `Chat` is a simple configurable chat
