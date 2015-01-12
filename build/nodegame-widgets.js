@@ -3127,7 +3127,47 @@
         });
     };
 
-    GameBoard.prototype.printLine = function(p) {
+    /**
+     * ## GameBoard.updateBoard
+     *
+     * Updates the information on the game board
+     *
+     * @see printLine
+     */
+    GameBoard.prototype.updateBoard = function(pl) {
+        var player, separator;
+        var that = this;
+
+        this.status.innerHTML = 'Updating...';
+
+        if (pl.size()) {
+            that.board.innerHTML = '';
+            pl.forEach( function(p) {
+                player = printLine(p);
+
+                W.write(player, that.board);
+
+                separator = printSeparator();
+                W.write(separator, that.board);
+            });
+        }
+        this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
+    };
+
+     /**
+     * ## printLine
+     *
+     * Returns a `String` describing the player passed in
+     *
+     * @param {Player} `p`. Player object which will be passed in by a call to
+     * `node.game.pl.forEach`.
+     *
+     * @return {String} A string describing the `Player` `p`.
+     *
+     * @see GameBoard.updateBoard
+     * @see nodegame-client/Player
+     */
+    function printLine(p) {
 
         var line, levels, level;
         levels = node.constants.stageLevels;
@@ -3172,34 +3212,11 @@
         }
 
         return line + '(' + level + ')';
-    };
+    }
 
-    GameBoard.prototype.printSeparator = function() {
+    function printSeparator() {
         return W.getElement('hr', null, {style: 'color: #CCC;'});
-    };
-
-
-    GameBoard.prototype.updateBoard = function(pl) {
-        var player, separator;
-        var that = this;
-
-        this.status.innerHTML = 'Updating...';
-
-        if (pl.size()) {
-            that.board.innerHTML = '';
-            pl.forEach( function(p) {
-                player = that.printLine(p);
-
-                W.write(player, that.board);
-
-                separator = that.printSeparator();
-                W.write(separator, that.board);
-            });
-        }
-
-
-        this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
-    };
+    }
 
 })(node);
 

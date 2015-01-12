@@ -73,7 +73,7 @@
      *
      * @see printLine
      */
-    GameBoard.prototype.updateBoard = function(b) {
+    GameBoard.prototype.updateBoard = function(pl) {
         var player, separator;
         var that = this;
 
