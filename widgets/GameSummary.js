@@ -13,29 +13,46 @@
 
     node.widgets.register('GameSummary', GameSummary);
 
-    // ## Defaults
-
-    GameSummary.defaults = {};
-    GameSummary.defaults.id = 'gamesummary';
-    GameSummary.defaults.fieldset = { legend: 'Game Summary' };
-
     // ## Meta-data
 
-    GameSummary.version = '0.3';
+    GameSummary.version = '0.3.1';
     GameSummary.description =
         'Show the general configuration options of the game.';
 
-    function GameSummary(options) {
+    GameSummary.title = 'Game Summary';
+    GameSummary.className = 'gamesummary';
+
+
+    /**
+     * ## GameSummary constructor
+     *
+     * `GameSummary` shows the configuration options of the game in a box
+     */
+    function GameSummary() {
+        /**
+         * ### GameSummary.summaryDiv
+         *
+         * The DIV in which to display the information
+         */
         this.summaryDiv = null;
     }
-
-    GameSummary.prototype.append = function(root) {
-        this.root = root;
-        this.summaryDiv = node.window.addDiv(root);
+    /**
+     * ## GameSummary.append
+     *
+     * Appends the widget to `this.bodyDiv` and calls `this.writeSummary`
+     *
+     * @see GameSummary.writeSummary
+     */
+    GameSummary.prototype.append = function() {
+        this.summaryDiv = node.window.addDiv(this.bodyDiv);
         this.writeSummary();
-        return root;
     };
 
+    /**
+     * ## GameSummary.writeSummary
+     *
+     * Writes a summary of the game configuration into `this.summaryDiv`
+     */
     GameSummary.prototype.writeSummary = function(idState, idSummary) {
         var gName = document.createTextNode('Name: ' + node.game.metadata.name),
         gDescr = document.createTextNode(
@@ -51,7 +68,7 @@
         this.summaryDiv.appendChild(document.createElement('br'));
         this.summaryDiv.appendChild(gMaxP);
 
-        node.window.addDiv(this.root, this.summaryDiv, idSummary);
+        node.window.addDiv(this.bodyDiv, this.summaryDiv, idSummary);
     };
 
 })(node);

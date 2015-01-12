@@ -505,7 +505,7 @@
 
     };
 
-     /**
+    /**
      * ## Chat constructor
      *
      * `Chat` is a simple configurable chat
@@ -3072,43 +3072,52 @@
 
     "use strict";
 
-    node.widgets.register('GameBoard', GameBoard);
-
     var PlayerList = node.PlayerList;
 
-    // ## Defaults
-
-    GameBoard.defaults = {};
-    GameBoard.defaults.id = 'gboard';
-    GameBoard.defaults.fieldset = {
-        legend: 'Game Board'
-    };
+    node.widgets.register('GameBoard', GameBoard);
 
     // ## Meta-data
 
-    GameBoard.version = '0.4.0';
+    GameBoard.version = '0.4.1';
     GameBoard.description = 'Offer a visual representation of the state of ' +
                             'all players in the game.';
 
+    GameBoard.title = 'Game Board';
+    GameBoard.className = 'gameboard';
+
+    /**
+     * ## GameBoard constructor
+     *
+     * `GameBoard` shows the currently connected players
+     */
     function GameBoard(options) {
-
-        this.id = options.id || GameBoard.defaults.id;
-        this.status_id = this.id + '_statusbar';
-
+        /**
+         * ### GameBoard.board
+         *
+         * The DIV wherein to display the players
+         */
         this.board = null;
-        this.status = null;
-        this.root = null;
 
+        /**
+         * ### GameBoard.status
+         *
+         * The DIV wherein to display the status of the game board
+         */
+        this.status = null;
     }
 
-    GameBoard.prototype.append = function(root) {
-        this.root = root;
-        this.status = node.window.addDiv(root, this.status_id);
-        this.board = node.window.addDiv(root, this.id);
+    /**
+     * ## GameBoard.append
+     *
+     * Appends widget to `this.bodyDiv` and updates the board
+     *
+     * @see GameBoard.updateBoard
+     */
+    GameBoard.prototype.append = function() {
+        this.status = node.window.addDiv(this.bodyDiv, 'gboard_status');
+        this.board = node.window.addDiv(this.bodyDiv, 'gboard');
 
         this.updateBoard(node.game.pl);
-
-        return root;
     };
 
     GameBoard.prototype.listeners = function() {
@@ -3116,7 +3125,6 @@
         node.on('UPDATED_PLIST', function() {
             that.updateBoard(node.game.pl);
         });
-
     };
 
     GameBoard.prototype.printLine = function(p) {
@@ -3166,7 +3174,7 @@
         return line + '(' + level + ')';
     };
 
-    GameBoard.prototype.printSeparator = function(p) {
+    GameBoard.prototype.printSeparator = function() {
         return W.getElement('hr', null, {style: 'color: #CCC;'});
     };
 
@@ -3184,7 +3192,7 @@
 
                 W.write(player, that.board);
 
-                separator = that.printSeparator(p);
+                separator = that.printSeparator();
                 W.write(separator, that.board);
             });
         }
@@ -3210,29 +3218,46 @@
 
     node.widgets.register('GameSummary', GameSummary);
 
-    // ## Defaults
-
-    GameSummary.defaults = {};
-    GameSummary.defaults.id = 'gamesummary';
-    GameSummary.defaults.fieldset = { legend: 'Game Summary' };
-
     // ## Meta-data
 
-    GameSummary.version = '0.3';
+    GameSummary.version = '0.3.1';
     GameSummary.description =
         'Show the general configuration options of the game.';
 
-    function GameSummary(options) {
+    GameSummary.title = 'Game Summary';
+    GameSummary.className = 'gamesummary';
+
+
+    /**
+     * ## GameSummary constructor
+     *
+     * `GameSummary` shows the configuration options of the game in a box
+     */
+    function GameSummary() {
+        /**
+         * ### GameSummary.summaryDiv
+         *
+         * The DIV in which to display the information
+         */
         this.summaryDiv = null;
     }
-
-    GameSummary.prototype.append = function(root) {
-        this.root = root;
-        this.summaryDiv = node.window.addDiv(root);
+    /**
+     * ## GameSummary.append
+     *
+     * Appends the widget to `this.bodyDiv` and calls `this.writeSummary`
+     *
+     * @see GameSummary.writeSummary
+     */
+    GameSummary.prototype.append = function() {
+        this.summaryDiv = node.window.addDiv(this.bodyDiv);
         this.writeSummary();
-        return root;
     };
 
+    /**
+     * ## GameSummary.writeSummary
+     *
+     * Writes a summary of the game configuration into `this.summaryDiv`
+     */
     GameSummary.prototype.writeSummary = function(idState, idSummary) {
         var gName = document.createTextNode('Name: ' + node.game.metadata.name),
         gDescr = document.createTextNode(
@@ -3248,7 +3273,7 @@
         this.summaryDiv.appendChild(document.createElement('br'));
         this.summaryDiv.appendChild(gMaxP);
 
-        node.window.addDiv(this.root, this.summaryDiv, idSummary);
+        node.window.addDiv(this.bodyDiv, this.summaryDiv, idSummary);
     };
 
 })(node);
