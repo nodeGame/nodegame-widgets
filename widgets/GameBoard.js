@@ -95,8 +95,10 @@
         this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
     };
 
+    // ## Helper methods
+
      /**
-     * ## printLine
+     * ### printLine
      *
      * Returns a `String` describing the player passed in
      *
