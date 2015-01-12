@@ -13,38 +13,47 @@
 
     node.widgets.register('DataBar', DataBar);
 
-    // ## Defaults
-    DataBar.defaults = {};
-    DataBar.defaults.id = 'databar';
-    DataBar.defaults.fieldset = {
-        legend: 'Send DATA to players'
-    };
-
     // ## Meta-data
-    DataBar.version = '0.4';
+
+    DataBar.version = '0.4.1';
     DataBar.description =
         'Adds a input field to send DATA messages to the players';
 
-    function DataBar(options) {
+    DataBar.title = 'DataBar';
+    DataBar.className = 'databar';
+
+
+    /**
+     * ## DataBar constructor
+     *
+     * Instantiates a new DataBar object
+     */
+    function DataBar() {
         this.bar = null;
-        this.root = null;
         this.recipient = null;
     }
 
-    DataBar.prototype.append = function(root) {
+    // ## DataBar methods
+
+     /**
+     * ## DataBar.append
+     *
+     * Appends widget to `this.bodyDiv`
+     *
+     * @param {object} options
+     */
+    DataBar.prototype.append = function() {
 
         var sendButton, textInput, dataInput;
-
-        sendButton = W.addButton(root);
-        //W.writeln('Text');
-        textInput = W.addTextInput(root, 'data-bar-text');
-        W.addLabel(root, textInput, undefined, 'Text');
-        W.writeln('Data');
-        dataInput = W.addTextInput(root, 'data-bar-data');
-
-        this.recipient = W.addRecipientSelector(root);
-
         var that = this;
+
+        sendButton = W.addButton(this.bodyDiv);
+        textInput = W.addTextInput(this.bodyDiv, 'data-bar-text');
+        W.addLabel(this.bodyDiv, textInput, undefined, 'Text');
+        W.writeln('Data');
+        dataInput = W.addTextInput(this.bodyDiv, 'data-bar-data');
+
+        this.recipient = W.addRecipientSelector(this.bodyDiv);
 
         sendButton.onclick = function() {
             var to, data, text;
@@ -61,9 +70,6 @@
         node.on('UPDATED_PLIST', function() {
             node.window.populateRecipientSelector(that.recipient, node.game.pl);
         });
-
-        return root;
-
     };
 
 })(node);
