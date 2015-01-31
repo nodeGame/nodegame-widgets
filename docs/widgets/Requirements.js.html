@@ -22,9 +22,6 @@
         <a href="#requirements">Requirements</a>
       </div>
       <div class="heading h2">
-        <a href="#defaults">Defaults</a>
-      </div>
-      <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
       <div class="heading h2">
@@ -32,6 +29,57 @@
       </div>
       <div class="heading h2">
         <a href="#requirements%20constructor">Requirements constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.callbacks">Requirements.callbacks</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.stillchecking">Requirements.stillChecking</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.withtimeout">Requirements.withTimeout</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.timeouttime">Requirements.timeoutTime</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.timeoutid">Requirements.timeoutId</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.summary">Requirements.summary</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.summaryupdate">Requirements.summaryUpdate</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.dots">Requirements.dots</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.hasfailed">Requirements.hasFailed</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.results">Requirements.results</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.sayresult">Requirements.sayResult</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.sayresultlabel">Requirements.sayResultLabel</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.addtoresults">Requirements.addToResults</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.oncomplete">Requirements.onComplete</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.onsuccess">Requirements.onSuccess</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.onfail">Requirements.onFail</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.list">Requirements.list</a>
       </div>
       <div class="heading h2">
         <a href="#requirements%20methods">Requirements methods</a>
@@ -104,27 +152,7 @@ MIT Licensed</p>
 
     <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="defaults">
-  <h2>
-    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
-    Defaults
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;requirements&#39;</span><span class="p">;</span>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Requirements&#39;</span>
-    <span class="p">};</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Requirements&#39;</span><span class="p">,</span> <span class="nx">Requirements</span><span class="p">);</span>
 
 
 </pre></div>
@@ -142,9 +170,12 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.0&#39;</span><span class="p">;</span>
+    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.1&#39;</span><span class="p">;</span>
     <span class="nx">Requirements</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Checks a set of requirements and display the &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;results&#39;</span><span class="p">;</span>
+
+    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Requirements&#39;</span><span class="p">;</span>
+    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;requirements&#39;</span><span class="p">;</span>
 
 
 </pre></div>
@@ -201,76 +232,107 @@ MIT Licensed</p>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.callbacks">
+  <h3>
+    <a href="#requirements.callbacks" name="requirements.callbacks" class="pilcrow">&#182;</a>
+    Requirements.callbacks
+  </h3>
 </div>
-<p>The id of the widget.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">Requirements</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  </div>
+  <div class="body"><p>Array of all test callbacks</p>
+  </div>
 </div>
-<p>Array of all test callbacks.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span> <span class="o">=</span> <span class="p">[];</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.stillchecking">
+  <h3>
+    <a href="#requirements.stillchecking" name="requirements.stillchecking" class="pilcrow">&#182;</a>
+    Requirements.stillChecking
+  </h3>
 </div>
-<p>Number of tests still pending.</p>
+
+  </div>
+  <div class="body"><p>Number of tests still pending</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.withtimeout">
+  <h3>
+    <a href="#requirements.withtimeout" name="requirements.withtimeout" class="pilcrow">&#182;</a>
+    Requirements.withTimeout
+  </h3>
 </div>
-<p>If TRUE, a maximum timeout to the execution of ALL tests is set.</p>
+
+  </div>
+  <div class="body"><p>If TRUE, a maximum timeout to the execution of ALL tests is set</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">withTimeout</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">withTimeout</span> <span class="o">||</span> <span class="kc">true</span><span class="p">;</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
-</div>
-<p>The time in milliseconds for the timeout to expire.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeoutTime</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeoutTime</span> <span class="o">||</span> <span class="mi">10000</span><span class="p">;</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.timeouttime">
+  <h3>
+    <a href="#requirements.timeouttime" name="requirements.timeouttime" class="pilcrow">&#182;</a>
+    Requirements.timeoutTime
+  </h3>
 </div>
-<p>The id of the timeout, if created.</p>
+
+  </div>
+  <div class="body"><p>The time in milliseconds for the timeout to expire</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timeoutTime</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeoutTime</span> <span class="o">||</span> <span class="mi">10000</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.timeoutid">
+  <h3>
+    <a href="#requirements.timeoutid" name="requirements.timeoutid" class="pilcrow">&#182;</a>
+    Requirements.timeoutId
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The id of the timeout, if created</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -280,37 +342,63 @@ MIT Licensed</p>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.summary">
+  <h3>
+    <a href="#requirements.summary" name="requirements.summary" class="pilcrow">&#182;</a>
+    Requirements.summary
+  </h3>
 </div>
-<p>Span summarizing the status of the tests.</p>
+
+  </div>
+  <div class="body"><p>Span summarizing the status of the tests</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">summary</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
-</div>
-<p>Span counting how many tests have been completed.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.summaryupdate">
+  <h3>
+    <a href="#requirements.summaryupdate" name="requirements.summaryupdate" class="pilcrow">&#182;</a>
+    Requirements.summaryUpdate
+  </h3>
 </div>
-<p>Looping dots to give the user the feeling of code execution.</p>
+
+  </div>
+  <div class="body"><p>Span counting how many tests have been completed</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.dots">
+  <h3>
+    <a href="#requirements.dots" name="requirements.dots" class="pilcrow">&#182;</a>
+    Requirements.dots
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Looping dots to give the user the feeling of code execution</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">dots</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -320,11 +408,19 @@ MIT Licensed</p>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.hasfailed">
+  <h3>
+    <a href="#requirements.hasfailed" name="requirements.hasfailed" class="pilcrow">&#182;</a>
+    Requirements.hasFailed
+  </h3>
 </div>
-<p>TRUE if at least one test has failed.</p>
+
+  </div>
+  <div class="body"><p>TRUE if at least one test has failed</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
@@ -334,11 +430,19 @@ MIT Licensed</p>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.results">
+  <h3>
+    <a href="#requirements.results" name="requirements.results" class="pilcrow">&#182;</a>
+    Requirements.results
+  </h3>
 </div>
-<p>The outcomes of all tests.</p>
+
+  </div>
+  <div class="body"><p>The outcomes of all tests</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">results</span> <span class="o">=</span> <span class="p">[];</span>
@@ -348,38 +452,63 @@ MIT Licensed</p>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.sayresult">
+  <h3>
+    <a href="#requirements.sayresult" name="requirements.sayresult" class="pilcrow">&#182;</a>
+    Requirements.sayResult
+  </h3>
 </div>
-<p>If true, the final result of the tests will be sent to the server.</p>
+
+  </div>
+  <div class="body"><p>If true, the final result of the tests will be sent to the server</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">sayResults</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sayResults</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
-</div>
-<p>The label of the SAY message that will be sent to the server.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sayResultsLabel</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sayResultLabel</span> <span class="o">||</span> <span class="s1">&#39;requirements&#39;</span><span class="p">;</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.sayresultlabel">
+  <h3>
+    <a href="#requirements.sayresultlabel" name="requirements.sayresultlabel" class="pilcrow">&#182;</a>
+    Requirements.sayResultLabel
+  </h3>
 </div>
-<p>Callback to add properties to the result object to send to the
-server.</p>
+
+  </div>
+  <div class="body"><p>The label of the SAY message that will be sent to the server</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">sayResultsLabel</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sayResultLabel</span> <span class="o">||</span> <span class="s1">&#39;requirements&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.addtoresults">
+  <h3>
+    <a href="#requirements.addtoresults" name="requirements.addtoresults" class="pilcrow">&#182;</a>
+    Requirements.addToResults
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Callback to add properties to result object sent to server</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">addToResults</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">addToResults</span> <span class="o">||</span> <span class="kc">null</span><span class="p">;</span>
@@ -389,16 +518,102 @@ server.</p>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.oncomplete">
+  <h3>
+    <a href="#requirements.oncomplete" name="requirements.oncomplete" class="pilcrow">&#182;</a>
+    Requirements.onComplete
+  </h3>
 </div>
-<p>Callbacks to be executed at the end of all tests.</p>
+
+  </div>
+  <div class="body"><p>Callback to be executed at the end of all tests</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">onComplete</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.onsuccess">
+  <h3>
+    <a href="#requirements.onsuccess" name="requirements.onsuccess" class="pilcrow">&#182;</a>
+    Requirements.onSuccess
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Callback to be executed at the end of all tests</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.onfail">
+  <h3>
+    <a href="#requirements.onfail" name="requirements.onfail" class="pilcrow">&#182;</a>
+    Requirements.onFail
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Callback to be executed at the end of all tests</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">onFail</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.list">
+  <h3>
+    <a href="#requirements.list" name="requirements.list" class="pilcrow">&#182;</a>
+    Requirements.list
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p><code>List</code> to render the results</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">nodegame-server/List
+</span>
+    </div>
+  </div>
+</div>
+
+<p>TODO: simplify render syntax.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">W</span><span class="p">.</span><span class="nx">List</span><span class="p">({</span>
+            <span class="nx">render</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">pipeline</span><span class="o">:</span> <span class="nx">renderResult</span><span class="p">,</span>
+                <span class="nx">returnAt</span><span class="o">:</span> <span class="s1">&#39;first&#39;</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
 
         <span class="kd">function</span> <span class="nx">renderResult</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">imgPath</span><span class="p">,</span> <span class="nx">img</span><span class="p">,</span> <span class="nx">span</span><span class="p">,</span> <span class="nx">text</span><span class="p">;</span>
@@ -414,7 +629,7 @@ server.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Might be the full exception object.</p>
         </td>
@@ -431,25 +646,6 @@ server.</p>
             <span class="nx">span</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
             <span class="k">return</span> <span class="nx">span</span><span class="p">;</span>
         <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
-</div>
-<p>TODO: simplify render syntax.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">W</span><span class="p">.</span><span class="nx">List</span><span class="p">({</span>
-            <span class="nx">render</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">pipeline</span><span class="o">:</span> <span class="nx">renderResult</span><span class="p">,</span>
-                <span class="nx">returnAt</span><span class="o">:</span> <span class="s1">&#39;first&#39;</span>
-            <span class="p">}</span>
-        <span class="p">});</span>
     <span class="p">}</span>
 
 
@@ -1305,8 +1501,6 @@ in the results array.</p>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">errMsg</span><span class="p">;</span>
     <span class="p">}</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Requirements&#39;</span><span class="p">,</span> <span class="nx">Requirements</span><span class="p">);</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>

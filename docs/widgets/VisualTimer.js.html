@@ -169,9 +169,10 @@ Only for countdown smaller than 1h.</p>
 
     <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
+    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;VisualTimer&#39;</span><span class="p">,</span> <span class="nx">VisualTimer</span><span class="p">);</span>
 
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
 
 
 </pre></div>
@@ -244,8 +245,8 @@ The options it can take are:
 
 <ul>
 <li>any options that can be passed to a <code>GameTimer</code></li>
-<li>waitBoxOptions: an option object to be passed to <code>TimerBox</code></li>
-<li>mainBoxOptions: an option object to be passed to <code>TimerBox</code></li>
+<li><code>waitBoxOptions</code>: an option object to be passed to <code>TimerBox</code></li>
+<li><code>mainBoxOptions</code>: an option object to be passed to <code>TimerBox</code></li>
 </ul></span>
     </div>
     <div class="dox_tag_title">See</div>
@@ -474,7 +475,7 @@ The options it can take are:
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;VisualTimer.init: options must be &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;object or undefined&#39;</span><span class="p">);</span>        
+                                <span class="s1">&#39;object or undefined&#39;</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
 
@@ -552,7 +553,7 @@ The options it can take are:
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">startOnPlaying</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">startOnPlaying</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span> 
+        <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>

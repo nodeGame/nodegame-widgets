@@ -22,10 +22,31 @@
         <a href="#gameboard">GameBoard</a>
       </div>
       <div class="heading h2">
-        <a href="#defaults">Defaults</a>
+        <a href="#meta-data">Meta-data</a>
       </div>
       <div class="heading h2">
-        <a href="#meta-data">Meta-data</a>
+        <a href="#gameboard%20constructor">GameBoard constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#gameboard.board">GameBoard.board</a>
+      </div>
+      <div class="heading h3">
+        <a href="#gameboard.status">GameBoard.status</a>
+      </div>
+      <div class="heading h2">
+        <a href="#gameboard%20methods">GameBoard methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#gameboard.append">GameBoard.append</a>
+      </div>
+      <div class="heading h3">
+        <a href="#gameboard.updateboard">GameBoard.updateBoard</a>
+      </div>
+      <div class="heading h2">
+        <a href="#helper%20methods">Helper methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#printline">printLine</a>
       </div>
     </div>
   </div>
@@ -57,31 +78,9 @@ MIT Licensed</p>
 
     <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;GameBoard&#39;</span><span class="p">,</span> <span class="nx">GameBoard</span><span class="p">);</span>
-
     <span class="kd">var</span> <span class="nx">PlayerList</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">PlayerList</span><span class="p">;</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="defaults">
-  <h2>
-    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
-    Defaults
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;gboard&#39;</span><span class="p">;</span>
-    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Game Board&#39;</span>
-    <span class="p">};</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;GameBoard&#39;</span><span class="p">,</span> <span class="nx">GameBoard</span><span class="p">);</span>
 
 
 </pre></div>
@@ -99,29 +98,127 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.4.0&#39;</span><span class="p">;</span>
+    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.4.1&#39;</span><span class="p">;</span>
     <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Offer a visual representation of the state of &#39;</span> <span class="o">+</span>
                             <span class="s1">&#39;all players in the game.&#39;</span><span class="p">;</span>
 
+    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Game Board&#39;</span><span class="p">;</span>
+    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;gameboard&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gameboard%20constructor">
+  <h2>
+    <a href="#gameboard%20constructor" name="gameboard%20constructor" class="pilcrow">&#182;</a>
+    GameBoard constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>GameBoard</code> shows the currently connected players</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="kd">function</span> <span class="nx">GameBoard</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">status_id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_statusbar&#39;</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gameboard.board">
+  <h3>
+    <a href="#gameboard.board" name="gameboard.board" class="pilcrow">&#182;</a>
+    GameBoard.board
+  </h3>
+</div>
 
+  </div>
+  <div class="body"><p>The DIV wherein to display the players</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">board</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gameboard.status">
+  <h3>
+    <a href="#gameboard.status" name="gameboard.status" class="pilcrow">&#182;</a>
+    GameBoard.status
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV wherein to display the status of the game board</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">status_id</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">board</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="gameboard%20methods">
+  <h2>
+    <a href="#gameboard%20methods" name="gameboard%20methods" class="pilcrow">&#182;</a>
+    GameBoard methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gameboard.append">
+  <h3>
+    <a href="#gameboard.append" name="gameboard.append" class="pilcrow">&#182;</a>
+    GameBoard.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Appends widget to <code>this.bodyDiv</code> and updates the board</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameBoard.updateBoard
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="s1">&#39;gboard_status&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">board</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="s1">&#39;gboard&#39;</span><span class="p">);</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">updateBoard</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">);</span>
-
-        <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -129,10 +226,116 @@ MIT Licensed</p>
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;UPDATED_PLIST&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">updateBoard</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">);</span>
         <span class="p">});</span>
-
     <span class="p">};</span>
 
-    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">printLine</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gameboard.updateboard">
+  <h3>
+    <a href="#gameboard.updateboard" name="gameboard.updateboard" class="pilcrow">&#182;</a>
+    GameBoard.updateBoard
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Updates the information on the game board</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">printLine
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateBoard</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pl</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">player</span><span class="p">,</span> <span class="nx">separator</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">status</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Updating...&#39;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">pl</span><span class="p">.</span><span class="nx">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+            <span class="nx">pl</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">player</span> <span class="o">=</span> <span class="nx">printLine</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+
+                <span class="nx">W</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">player</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">board</span><span class="p">);</span>
+
+                <span class="nx">separator</span> <span class="o">=</span> <span class="nx">printSeparator</span><span class="p">();</span>
+                <span class="nx">W</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">separator</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">board</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">status</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Connected players: &#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="helper%20methods">
+  <h2>
+    <a href="#helper%20methods" name="helper%20methods" class="pilcrow">&#182;</a>
+    Helper methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="printline">
+  <h3>
+    <a href="#printline" name="printline" class="pilcrow">&#182;</a>
+    printLine
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Returns a <code>String</code> describing the player passed in</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">`p`.</span>
+      <span class="dox_type">Player</span>
+      <span>Player object which will be passed in by a call to
+<code>node.game.pl.forEach</code>.</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">String</span>
+      <span>A string describing the <code>Player</code> <code>p</code>.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameBoard.updateBoard</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">nodegame-client/Player
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">printLine</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
 
         <span class="kd">var</span> <span class="nx">line</span><span class="p">,</span> <span class="nx">levels</span><span class="p">,</span> <span class="nx">level</span><span class="p">;</span>
         <span class="nx">levels</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">constants</span><span class="p">.</span><span class="nx">stageLevels</span><span class="p">;</span>
@@ -177,34 +380,11 @@ MIT Licensed</p>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="nx">line</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="nx">level</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">;</span>
-    <span class="p">};</span>
+    <span class="p">}</span>
 
-    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">printSeparator</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">printSeparator</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;hr&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="p">{</span><span class="nx">style</span><span class="o">:</span> <span class="s1">&#39;color: #CCC;&#39;</span><span class="p">});</span>
-    <span class="p">};</span>
-
-
-    <span class="nx">GameBoard</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateBoard</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pl</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">player</span><span class="p">,</span> <span class="nx">separator</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">status</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Updating...&#39;</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">pl</span><span class="p">.</span><span class="nx">size</span><span class="p">())</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">board</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-            <span class="nx">pl</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">player</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">printLine</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
-
-                <span class="nx">W</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">player</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">board</span><span class="p">);</span>
-
-                <span class="nx">separator</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">printSeparator</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
-                <span class="nx">W</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">separator</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">board</span><span class="p">);</span>
-            <span class="p">});</span>
-        <span class="p">}</span>
-
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">status</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Connected players: &#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-    <span class="p">};</span>
+    <span class="p">}</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>

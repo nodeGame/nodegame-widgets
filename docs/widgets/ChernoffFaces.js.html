@@ -22,9 +22,6 @@
         <a href="#chernofffaces">ChernoffFaces</a>
       </div>
       <div class="heading h2">
-        <a href="#defaults">Defaults</a>
-      </div>
-      <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
       <div class="heading h2">
@@ -60,32 +57,12 @@ MIT Licensed</p>
 
     <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
-    <span class="kd">var</span> <span class="nx">JSUS</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">,</span>
-    <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;ChernoffFaces&#39;</span><span class="p">,</span> <span class="nx">ChernoffFaces</span><span class="p">);</span>
 
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="defaults">
-  <h2>
-    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
-    Defaults
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;ChernoffFaces&#39;</span><span class="p">;</span>
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">heigth</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
 
 
 </pre></div>
@@ -103,9 +80,12 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.1&#39;</span><span class="p">;</span>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
         <span class="s1">&#39;Display parametric data in the form of a Chernoff Face.&#39;</span><span class="p">;</span>
+
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;ChernoffFaces&#39;</span><span class="p">;</span>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;chernofffaces&#39;</span><span class="p">;</span>
 
 
 </pre></div>
@@ -131,20 +111,21 @@ MIT Licensed</p>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">FaceVector</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">;</span>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">FacePainter</span> <span class="o">=</span> <span class="nx">FacePainter</span><span class="p">;</span>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
 
     <span class="kd">function</span> <span class="nx">ChernoffFaces</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;cf_table&#39;</span><span class="p">});</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">root</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;Controls.Slider&#39;</span><span class="p">);</span>  <span class="c1">// Slider Controls</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// Face Painter</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">change</span> <span class="o">=</span> <span class="s1">&#39;CF_CHANGE&#39;</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
         <span class="k">this</span><span class="p">.</span><span class="nx">changeFunc</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">());</span>
         <span class="p">};</span>
@@ -157,8 +138,6 @@ MIT Licensed</p>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">PREF</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span>
                         <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
@@ -166,21 +145,15 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">controls</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span><span class="p">)</span> <span class="o">?</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span> <span class="o">:</span> <span class="kc">true</span><span class="p">;</span>
 
-        <span class="kd">var</span> <span class="nx">idCanvas</span> <span class="o">=</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">idCanvas</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">idCanvas</span> <span class="o">:</span> <span class="nx">PREF</span> <span class="o">+</span> <span class="s1">&#39;canvas&#39;</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">idButton</span> <span class="o">=</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">idButton</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">idButton</span> <span class="o">:</span> <span class="nx">PREF</span> <span class="o">+</span> <span class="s1">&#39;button&#39;</span><span class="p">;</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getCanvas</span><span class="p">(</span><span class="nx">idCanvas</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">canvas</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getCanvas</span><span class="p">(</span><span class="s1">&#39;ChernoffFaces_canvas&#39;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">canvas</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FacePainter</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">));</span>
 
         <span class="kd">var</span> <span class="nx">sc_options</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;cf_controls&#39;</span><span class="p">,</span>
-            <span class="nx">features</span><span class="o">:</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">,</span>
+            <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">,</span>
                                       <span class="s1">&#39;value&#39;</span><span class="p">),</span>
             <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span><span class="p">,</span>
-            <span class="nx">fieldset</span><span class="o">:</span> <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_controls_fieldest&#39;</span><span class="p">,</span>
-                       <span class="nx">legend</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">controls</span><span class="p">.</span><span class="nx">legend</span> <span class="o">||</span> <span class="s1">&#39;Controls&#39;</span>
-                      <span class="p">},</span>
             <span class="nx">submit</span><span class="o">:</span> <span class="s1">&#39;Send&#39;</span>
         <span class="p">};</span>
 
@@ -193,7 +166,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>Controls are always there, but may not be visible</p>
         </td>
@@ -209,7 +182,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
 <p>Dealing with the onchange event</p>
         </td>
@@ -227,19 +200,21 @@ MIT Licensed</p>
         <span class="p">}</span>
 
 
+        <span class="k">this</span><span class="p">.</span><span class="nx">someDiv</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">someDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+
+
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
     <span class="p">};</span>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getCanvas</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">);</span>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">someDiv</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">draw</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
@@ -253,13 +228,13 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>Without merging wrong values are passed as attributes</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-            <span class="nx">features</span><span class="o">:</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+            <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
         <span class="p">});</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">refresh</span><span class="p">();</span>
     <span class="p">};</span>
@@ -272,7 +247,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>if (this.sc) return this.sc.getAllValues();</p>
         </td>
@@ -285,7 +260,7 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">redraw</span><span class="p">(</span><span class="nx">fv</span><span class="p">);</span>
 
         <span class="kd">var</span> <span class="nx">sc_options</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="nx">features</span><span class="o">:</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">mergeOnValue</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">fv</span><span class="p">),</span>
+            <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnValue</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">fv</span><span class="p">),</span>
             <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span>
         <span class="p">};</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">sc_options</span><span class="p">);</span>
@@ -302,7 +277,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>FacePainter
 The class that actually draws the faces on the Canvas</p>
@@ -312,8 +287,8 @@ The class that actually draws the faces on the Canvas</p>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Canvas</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">scaleX</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">scaleY</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">heigth</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">scaleX</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">scaleY</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">heigth</span><span class="p">;</span>
     <span class="p">}</span>
 
 
@@ -323,7 +298,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>Draws a Chernoff face.</p>
         </td>
@@ -341,7 +316,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>console.log('Face Scale ' + face.scaleY + ' ' + face.scaleX );</p>
         </td>
@@ -380,7 +355,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
 <p>TODO: Improve. It eats a bit of the margins</p>
         </td>
@@ -391,7 +366,7 @@ The class that actually draws the faces on the Canvas</p>
             <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kd">var</span> <span class="nx">ration</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ratio</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">ratio</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_radius</span> <span class="o">*</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_scale_x</span><span class="p">;</span>
         <span class="p">}</span>
@@ -431,7 +406,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>console.log(face);</p>
         </td>
@@ -453,7 +428,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>console.log(face);</p>
         </td>
@@ -549,7 +524,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>this.canvas.ctx.closePath();</p>
         </td>
@@ -575,7 +550,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>Upper Lip</p>
         </td>
@@ -591,7 +566,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>Lower Lip</p>
         </td>
@@ -610,7 +585,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>TODO Scaling ?</p>
         </td>
@@ -624,7 +599,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>var pos = y - face.head_radius * face.scaleY +
          face.head_radius * face.scaleY * 2 * offset;</p>
@@ -638,7 +613,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>console.log('POS: ' + pos);</p>
         </td>
@@ -661,7 +636,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <div class="dox">
   <div class="summary"><p>!</p>
@@ -674,8 +649,6 @@ The class that actually draws the faces on the Canvas</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-
-
     <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span>
 
 </pre></div>
@@ -684,7 +657,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Head</p>
         </td>
@@ -697,7 +670,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>id can be specified otherwise is taken head_radius</p>
         </td>
@@ -729,7 +702,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Eye</p>
         </td>
@@ -776,7 +749,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Pupil</p>
         </td>
@@ -809,7 +782,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Eyebrow</p>
         </td>
@@ -849,7 +822,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Nose</p>
         </td>
@@ -882,7 +855,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Mouth</p>
         </td>
@@ -914,7 +887,41 @@ The class that actually draws the faces on the Canvas</p>
             <span class="nx">step</span><span class="o">:</span> <span class="mf">0.01</span><span class="p">,</span>
             <span class="nx">value</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
             <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Lower lip&#39;</span>
+        <span class="p">},</span>
+
+        <span class="nx">scaleX</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nx">max</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
+            <span class="nx">step</span><span class="o">:</span> <span class="mf">0.01</span><span class="p">,</span>
+            <span class="nx">value</span><span class="o">:</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Scale X&#39;</span>
+        <span class="p">},</span>
+
+        <span class="nx">scaleY</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nx">max</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
+            <span class="nx">step</span><span class="o">:</span> <span class="mf">0.01</span><span class="p">,</span>
+            <span class="nx">value</span><span class="o">:</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Scale Y&#39;</span>
+        <span class="p">},</span>
+
+        <span class="nx">color</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nx">max</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
+            <span class="nx">step</span><span class="o">:</span> <span class="mf">0.01</span><span class="p">,</span>
+            <span class="nx">value</span><span class="o">:</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;color&#39;</span>
+        <span class="p">},</span>
+
+        <span class="nx">lineWidth</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nx">max</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
+            <span class="nx">step</span><span class="o">:</span> <span class="mf">0.01</span><span class="p">,</span>
+            <span class="nx">value</span><span class="o">:</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;lineWidth&#39;</span>
         <span class="p">}</span>
+
+
     <span class="p">};</span>
 
 
@@ -924,7 +931,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Constructs a random face vector.</p>
         </td>
@@ -933,7 +940,7 @@ The class that actually draws the faces on the Canvas</p>
         <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span>
                             <span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;lineWidth&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleX&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleY&#39;</span><span class="p">]))</span> <span class="p">{</span>
 
                     <span class="nx">out</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">min</span> <span class="o">+</span>
@@ -945,7 +952,7 @@ The class that actually draws the faces on the Canvas</p>
         <span class="nx">out</span><span class="p">.</span><span class="nx">scaleX</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
         <span class="nx">out</span><span class="p">.</span><span class="nx">scaleY</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 
-        <span class="nx">out</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">;</span>
+        <span class="nx">out</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
         <span class="nx">out</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 
         <span class="k">return</span> <span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="nx">out</span><span class="p">);</span>
@@ -968,7 +975,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Merge on key</p>
         </td>
@@ -993,7 +1000,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Constructs a random face vector.</p>
         </td>
@@ -1018,7 +1025,7 @@ The class that actually draws the faces on the Canvas</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Computes the Euclidean distance between two FaceVectors.</p>
         </td>

@@ -1,5 +1,10 @@
 # nodegame-widgets change log
 
+## 0.6.7
+
+- Many widgets have been ported (to check still)
+- IE fix for setTitle (insertBefore)
+
 ## 0.6.6
 
  - Fix bug `#VisualTimer.clear()` with the new option introduced in 0.6.5
@@ -12,4 +17,3 @@
 
  - Documentation fixes.
  - Removed EventButton.
-

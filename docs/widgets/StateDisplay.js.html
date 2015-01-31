@@ -27,6 +27,21 @@
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+      <div class="heading h2">
+        <a href="#statedisplay%20constructor">StateDisplay constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#statedisplay.table">StateDisplay.table</a>
+      </div>
+      <div class="heading h2">
+        <a href="#statedisplay%20methods">StateDisplay methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#statedisplay.append">StateDisplay.append</a>
+      </div>
+      <div class="heading h3">
+        <a href="#statedisplay.updateall">StateDisplay.updateAll</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -104,11 +119,100 @@ MIT Licensed</p>
         <span class="nx">Table</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
 
-    <span class="kd">function</span> <span class="nx">StateDisplay</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="statedisplay%20constructor">
+  <h2>
+    <a href="#statedisplay%20constructor" name="statedisplay%20constructor" class="pilcrow">&#182;</a>
+    StateDisplay constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>StateDisplay</code> displays information about the state of a player</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">StateDisplay</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="statedisplay.table">
+  <h3>
+    <a href="#statedisplay.table" name="statedisplay.table" class="pilcrow">&#182;</a>
+    StateDisplay.table
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The <code>Table</code> which holds the information</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span>nodegame-window/Table</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
     <span class="p">}</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="statedisplay%20methods">
+  <h2>
+    <a href="#statedisplay%20methods" name="statedisplay%20methods" class="pilcrow">&#182;</a>
+    StateDisplay methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="statedisplay.append">
+  <h3>
+    <a href="#statedisplay.append" name="statedisplay.append" class="pilcrow">&#182;</a>
+    StateDisplay.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Appends widget to <code>this.bodyDiv</code> and calls <code>this.updateAll</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">StateDisplay.updateAll
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">StateDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">that</span><span class="p">,</span> <span class="nx">checkPlayerName</span><span class="p">;</span>
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
@@ -121,6 +225,26 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
     <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="statedisplay.updateall">
+  <h3>
+    <a href="#statedisplay.updateall" name="statedisplay.updateall" class="pilcrow">&#182;</a>
+    StateDisplay.updateAll
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Updates information in <code>this.table</code></p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">StateDisplay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">stage</span><span class="p">,</span> <span class="nx">stageNo</span><span class="p">,</span> <span class="nx">stageId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="nx">tmp</span><span class="p">,</span> <span class="nx">miss</span><span class="p">;</span>
         <span class="nx">miss</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="p">;</span>
