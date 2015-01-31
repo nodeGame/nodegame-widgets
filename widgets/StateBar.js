@@ -22,17 +22,27 @@
     StateBar.title = 'Change GameStage';
     StateBar.className = 'statebar';
 
-    function StateBar(options) {
-        this.id = options.id || StateBar.className;
-        this.recipient = null;
+
+    /**
+     * ## StateBar constructor
+     *
+     * `StateBar` provides a simple interface to change game stages
+     */
+    function StateBar() {
+        //this.recipient = null;
     }
 
+    /**
+     * ### StateBar.append
+     *
+     * Appends widget to `this.bodyDiv`
+     */
     StateBar.prototype.append = function() {
-        var prefix, that;
+        var prefix, that = this;
         var idButton, idStageField, idRecipientField;
         var sendButton, stageField, recipientField;
 
-        prefix = this.id + '_';
+        prefix = StateBar.className + '_';
 
         idButton = prefix + 'sendButton';
         idStageField = prefix + 'stageField';
@@ -47,8 +57,6 @@
         this.bodyDiv.appendChild(recipientField);
 
         sendButton = node.window.addButton(this.bodyDiv, idButton);
-
-        that = this;
 
         //node.on('UPDATED_PLIST', function() {
         //    node.window.populateRecipientSelector(

@@ -13,36 +13,58 @@
 
     node.widgets.register('ServerInfoDisplay', ServerInfoDisplay);
 
-    // ## Defaults
-
-    ServerInfoDisplay.defaults = {};
-    ServerInfoDisplay.defaults.id = 'serverinfodisplay';
-    ServerInfoDisplay.defaults.fieldset = {
-        legend: 'Server Info',
-        id: 'serverinfo_fieldset'
-    };
-
     // ## Meta-data
 
-    ServerInfoDisplay.version = '0.4';
+    ServerInfoDisplay.version = '0.4.1';
+    ServerInfoDisplay.description = 'Displays information about the server.'
 
-    function ServerInfoDisplay(options) {
-        this.id = options.id;
+    ServerInfoDisplay.title = 'Server Info';
+    ServerInfoDisplay.className = 'serverinfodisplay';
 
-        this.root = null;
+    /**
+     * ## ServerInfoDisplay constructor
+     *
+     * `ServerInfoDisplay` shows information about the server
+     */
+    function ServerInfoDisplay() {
+        /**
+         * ### ServerInfoDisplay.div
+         *
+         * The DIV wherein to display the information
+         */
         this.div = document.createElement('div');
+
+        /**
+         * ### ServerInfoDisplay.table
+         *
+         * The table holding the information
+         */
         this.table = null; //new node.window.Table();
+
+        /**
+         * ### ServerInfoDisplay.button
+         *
+         * The button TODO
+         */
         this.button = null;
+
     }
 
-    ServerInfoDisplay.prototype.init = function(options) {
+    // ## ServerInfoDisplay methods
+
+    /**
+     * ### ServerInfoDisplay.init
+     *
+     * Initializes the widget
+     */
+    ServerInfoDisplay.prototype.init = function() {
         var that = this;
         if (!this.div) {
             this.div = document.createElement('div');
         }
         this.div.innerHTML = 'Waiting for the reply from Server...';
         if (!this.table) {
-            this.table = new node.window.Table(options);
+            this.table = new node.window.Table();
         }
         this.table.clear(true);
         this.button = document.createElement('button');
@@ -51,16 +73,21 @@
         this.button.onclick = function(){
             that.getInfo();
         };
-        this.root.appendChild(this.button);
+        this.bodyDiv.appendChild(this.button);
         this.getInfo();
     };
 
-    ServerInfoDisplay.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.div);
-        return root;
+    ServerInfoDisplay.prototype.append = function() {
+        this.bodyDiv.appendChild(this.div);
     };
 
+    /**
+     * ### ServerInfoDisplay.getInfo
+     *
+     * Updates current info
+     *
+     * @see ServerInfoDisplay.processInfo
+     */
     ServerInfoDisplay.prototype.getInfo = function() {
         var that = this;
         node.get('INFO', function(info) {
@@ -69,6 +96,11 @@
         });
     };
 
+    /**
+     * ### ServerInfoDisplay.processInfo
+     *
+     * Processes incoming server info and displays it in `this.table`
+     */
     ServerInfoDisplay.prototype.processInfo = function(info) {
         this.table.clear(true);
         for (var key in info) {

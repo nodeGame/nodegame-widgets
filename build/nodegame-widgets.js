@@ -466,20 +466,16 @@
 
     var J = node.JSUS;
 
-    // ## Defaults
-
-    Chat.defaults = {};
-    Chat.defaults.id = 'chat';
-    Chat.defaults.fieldset = { legend: 'Chat' };
-    Chat.defaults.mode = 'MANY_TO_MANY';
-    Chat.defaults.textarea_id = 'chat_textarea';
-    Chat.defaults.chat_id = 'chat_chat';
-    Chat.defaults.chat_event = 'CHAT';
-    Chat.defaults.submit_id = 'chat_submit';
-    Chat.defaults.submit_text = 'chat';
-
+    node.widgets.register('Chat', Chat);
 
     // ## Meta-data
+
+    Chat.version = '0.4.1';
+    Chat.description = 'Offers a uni-/bi-directional communication interface ' +
+        'between players, or between players and the experimenter.';
+
+    Chat.title = 'Chat';
+    Chat.className = 'chat';
 
     // ### Chat.modes
     //
@@ -489,10 +485,10 @@
     // - MANY_TO_ONE: everybody can see all the messages, private messages can
     //   be received, but not sent.
     //
-    // ONE_TO_ONE: everybody sees only personal messages, private messages can
+    // - ONE_TO_ONE: everybody sees only personal messages, private messages can
     //   be received, but not sent. All messages are sent to the SERVER.
     //
-    // RECEIVER_ONLY: messages can only be received, but not sent.
+    // - RECEIVER_ONLY: messages can only be received, but not sent.
     //
     Chat.modes = {
         MANY_TO_MANY: 'MANY_TO_MANY',
@@ -501,77 +497,176 @@
         RECEIVER_ONLY: 'RECEIVER_ONLY'
     };
 
-    Chat.version = '0.4';
-    Chat.description = 'Offers a uni-/bi-directional communication interface ' +
-        'between players, or between players and the experimenter.';
 
     // ## Dependencies
 
     Chat.dependencies = {
         JSUS: {}
+
     };
 
+    /**
+     * ## Chat constructor
+     *
+     * `Chat` is a simple configurable chat
+     *
+     * @param {object} options Optional. Configuration options
+     * which is forwarded to Chat.init.
+     *
+     * @see Chat.init
+     */
     function Chat (options) {
-        this.id = options.id || Chat.id;
-        this.mode = options.mode || Chat.defaults.mode;
+        /**
+         * ### Chat.mode
+         *
+         * Determines to mode of communication
+         *
+         * @see Chat.modes
+         */
+        this.mode = null;
 
-        this.root = null;
+        /**
+         * ### Chat.recipient
+         *
+         * Determines recipient of the messages
+         */
+        this.recipient = null;
 
-        this.textarea_id = options.textarea_id || Chat.defaults.textarea_id;
-        this.chat_id = options.chat_id || Chat.defaults.chat_id;
-        this.submit_id = options.submit_id || Chat.defaults.submit_id;
 
-        this.chat_event = options.chat_event || Chat.defaults.chat_event;
-        this.submit_text = options.submit_text || Chat.defaults.submit_text;
+        /**
+         * ### Chat.textarea
+         *
+         * The textarea wherein to write and read
+         */
+        this.textarea = null;
 
-        this.submit = W.getEventButton(this.chat_event, this.submit_text,
-                                       this.submit_id);
-        this.textarea = W.getElement('textarea', this.textarea_id);
-        this.chat = W.getElement('div', this.chat_id);
+        /**
+         * ### Chat.textareaId
+         *
+         * The id of the textarea
+         */
+        this.textareaId = null;
 
-        if ('undefined' !== typeof options.displayName) {
-            this.displayName = options.displayName;
-        }
 
-        switch(this.mode) {
+        /**
+         * ### Chat.chat
+         *
+         * The DIV wherein to display the chat
+         */
+        this.chat = null;
 
-        case Chat.modes.RECEIVER_ONLY:
-            this.recipient = {value: 'SERVER'};
-            break;
-        case Chat.modes.MANY_TO_ONE:
-            this.recipient = {value: 'ROOM'};
-            break;
-        case Chat.modes.ONE_TO_ONE:
-            this.recipient = {value: 'SERVER'};
-            break;
-        default:
-            this.recipient = W.getRecipientSelector();
-        }
+        /**
+         * ### Chat.chatId
+         *
+         * The id of the chat DIV
+         */
+        this.chatId = null;
+
+
+        /**
+         * ### Chat.submit
+         *
+         * The submit button
+         */
+        this.submit = null;
+
+        /**
+         * ### Chat.submitId
+         *
+         * The id of the submit butten
+         */
+        this.submitId = null;
+
+        /**
+         * ### Chat.submitText
+         *
+         * The text on the submit button
+         */
+        this.submitText = null;
+
+
+        /**
+         * ### Chat.chatEvent
+         *
+         * The event to fire when sending a message
+         */
+        this.chatEvent = null;
+
+        /**
+         * ### Chat.displayName
+         *
+         * Function which displays the sender's name
+         */
+        this.displayName = null;
+        this.init(options)
     }
 
+    // ## Chat methods
 
-    Chat.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.chat);
+    /**
+     * ### Chat.init
+     *
+     * Initializes the widget
+     *
+     * @param {object} options Optional. Configuration options.
+     *
+     * The  options object can have the following attributes:
+     *   - `mode`: Determines to mode of communication
+     *   - `textareaId`: The id of the textarea
+     *   - `chatId`: The id of the chat DIV
+     *   - `submitId`: The id of the submit butten
+     *   - `submitText`: The text on the submit button
+     *   - `chatEvent`: The event to fire when sending a message
+     *   - `displayName`: Function which displays the sender's name
+     */
+    Chat.prototype.init = function(options) {
+        options = options || {};
+        this.mode = options.mode || 'MANY_TO_MANY';
+
+        this.textareaId = options.textareaId || 'chat_textarea';
+        this.chatId = options.chatId || 'chat_chat';
+        this.submitId = options.submitId || 'chat_submit';
+
+        this.chatEvent = options.chatEvent || 'CHAT';
+        this.submitText = options.submitText || 'chat';
+
+        this.submit = W.getEventButton(this.chatEvent, this.submitText,
+                                       this.submitId);
+        this.textarea = W.getElement('textarea', this.textareaId);
+        this.chat = W.getElement('div', this.chatId);
+
+        this.displayName = options.displayName || function(from) {
+            return from;
+        };
+
+        switch(this.mode) {
+            case Chat.modes.RECEIVER_ONLY:
+                this.recipient = {value: 'SERVER'};
+                break;
+            case Chat.modes.MANY_TO_ONE:
+                this.recipient = {value: 'ROOM'};
+                break;
+            case Chat.modes.ONE_TO_ONE:
+                this.recipient = {value: 'SERVER'};
+                break;
+            default:
+                this.recipient = W.getRecipientSelector();
+        }
+    };
+
+
+    Chat.prototype.append = function() {
+        this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
-            W.writeln('', root);
-            root.appendChild(this.textarea);
-            W.writeln('', root);
-            root.appendChild(this.submit);
+            W.writeln('', this.bodyDiv);
+            this.bodyDiv.appendChild(this.textarea);
+            W.writeln('', this.bodyDiv);
+            this.bodyDiv.appendChild(this.submit);
             if (this.mode === Chat.modes.MANY_TO_MANY) {
-                root.appendChild(this.recipient);
+                this.bodyDiv.appendChild(this.recipient);
             }
         }
-        return root;
-    };
-
-    Chat.prototype.getRoot = function() {
-        return this.root;
-    };
-
-    Chat.prototype.displayName = function(from) {
-        return from;
     };
 
     Chat.prototype.readTA = function() {
@@ -589,7 +684,7 @@
     Chat.prototype.listeners = function() {
         var that = this;
 
-        node.on(this.chat_event, function() {
+        node.on(this.chatEvent, function() {
             var msg, to, args;
             msg = that.readTA();
             if (!msg) return;
@@ -605,7 +700,7 @@
                 '!txt': msg
             };
             that.writeTA('%sMe%s: %msg!txt%msg', args);
-            node.say(that.chat_event, to, msg.trim());
+            node.say(that.chatEvent, to, msg.trim());
         });
 
         if (this.mode === Chat.modes.MANY_TO_MANY) {
@@ -615,7 +710,7 @@
             });
         }
 
-        node.on.data(this.chat_event, function(msg) {
+        node.on.data(this.chatEvent, function(msg) {
             var from, args;
             if (msg.from === node.player.id || msg.from === node.player.sid) {
                 return;
@@ -643,8 +738,6 @@
         });
     };
 
-    node.widgets.register('Chat', Chat);
-
 })(node);
 
 /**
@@ -660,24 +753,21 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
-    Table = node.window.Table;
+    var J = node.JSUS;
+    var Table = node.window.Table;
 
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
-    // ## Defaults
 
-    ChernoffFaces.defaults = {};
-    ChernoffFaces.defaults.id = 'ChernoffFaces';
-    ChernoffFaces.defaults.canvas = {};
-    ChernoffFaces.defaults.canvas.width = 100;
-    ChernoffFaces.defaults.canvas.heigth = 100;
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.3';
+    ChernoffFaces.version = '0.3.1';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
+
+    ChernoffFaces.title = 'ChernoffFaces';
+    ChernoffFaces.className = 'chernofffaces';
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -689,20 +779,21 @@
 
     ChernoffFaces.FaceVector = FaceVector;
     ChernoffFaces.FacePainter = FacePainter;
+    ChernoffFaces.width = 100;
+    ChernoffFaces.height = 100;
 
     function ChernoffFaces (options) {
+        var that = this;
+
         this.options = options;
-        this.id = options.id;
         this.table = new Table({id: 'cf_table'});
-        this.root = options.root || document.createElement('div');
-        this.root.id = this.id;
 
         this.sc = node.widgets.get('Controls.Slider');  // Slider Controls
         this.fp = null; // Face Painter
         this.canvas = null;
 
         this.change = 'CF_CHANGE';
-        var that = this;
+
         this.changeFunc = function() {
             that.draw(that.sc.getAllValues());
         };
@@ -715,8 +806,6 @@
 
     ChernoffFaces.prototype.init = function(options) {
         var that = this;
-        this.id = options.id || this.id;
-        var PREF = this.id + '_';
 
         this.features = options.features || this.features ||
                         FaceVector.random();
@@ -724,21 +813,15 @@
         this.controls = ('undefined' !== typeof options.controls) ?
             options.controls : true;
 
-        var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
-        var idButton = (options.idButton) ? options.idButton : PREF + 'button';
-
-        this.canvas = node.window.getCanvas(idCanvas, options.canvas);
+        this.canvas = node.window.getCanvas('ChernoffFaces_canvas', options.canvas);
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
         var sc_options = {
             id: 'cf_controls',
-            features: JSUS.mergeOnKey(FaceVector.defaults, this.features,
+            features: J.mergeOnKey(FaceVector.defaults, this.features,
                                       'value'),
             change: this.change,
-            fieldset: {id: this.id + '_controls_fieldest',
-                       legend: this.controls.legend || 'Controls'
-                      },
             submit: 'Send'
         };
 
@@ -763,19 +846,21 @@
         }
 
 
+        this.someDiv = document.createElement('div');
+        this.someDiv.appendChild(this.table.table);
+
+
         this.table.add(this.canvas);
         this.table.parse();
-        this.root.appendChild(this.table.table);
     };
 
     ChernoffFaces.prototype.getCanvas = function() {
         return this.canvas;
     };
 
-    ChernoffFaces.prototype.append = function(root) {
-        root.appendChild(this.root);
+    ChernoffFaces.prototype.append = function() {
+        this.bodyDiv.appendChild(this.someDiv);
         this.table.parse();
-        return this.root;
     };
 
     ChernoffFaces.prototype.draw = function(features) {
@@ -784,7 +869,7 @@
         this.fp.redraw(fv);
         // Without merging wrong values are passed as attributes
         this.sc.init({
-            features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')
+            features: J.mergeOnKey(FaceVector.defaults, features, 'value')
         });
         this.sc.refresh();
     };
@@ -799,7 +884,7 @@
         this.fp.redraw(fv);
 
         var sc_options = {
-            features: JSUS.mergeOnValue(FaceVector.defaults, fv),
+            features: J.mergeOnValue(FaceVector.defaults, fv),
             change: this.change
         };
         this.sc.init(sc_options);
@@ -815,8 +900,8 @@
 
         this.canvas = new node.window.Canvas(canvas);
 
-        this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
-        this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
+        this.scaleX = canvas.width / ChernoffFaces.width;
+        this.scaleY = canvas.height / ChernoffFaces.heigth;
     }
 
     //Draws a Chernoff face.
@@ -861,7 +946,7 @@
             return;
         }
 
-        var ration;
+        var ratio;
         if (this.canvas.width > this.canvas.height) {
             ratio = this.canvas.width / face.head_radius * face.head_scale_x;
         }
@@ -1044,8 +1129,6 @@
      * 1 that completely describe a Chernoff face.
      *
      */
-
-
     FaceVector.defaults = {
         // Head
         head_radius: {
@@ -1207,7 +1290,41 @@
             step: 0.01,
             value: 20,
             label: 'Lower lip'
+        },
+
+        scaleX: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'Scale X'
+        },
+
+        scaleY: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'Scale Y'
+        },
+
+        color: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'color'
+        },
+
+        lineWidth: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'lineWidth'
         }
+
+
     };
 
     //Constructs a random face vector.
@@ -1215,7 +1332,7 @@
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!JSUS.in_array(key,
+                if (!J.in_array(key,
                             ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
 
                     out[key] = FaceVector.defaults[key].min +
@@ -1227,7 +1344,7 @@
         out.scaleX = 1;
         out.scaleY = 1;
 
-        out.color = 'green';
+        out.color = 'red';
         out.lineWidth = 1;
 
         return new FaceVector(out);
@@ -1987,33 +2104,75 @@
 
     // TODO: handle different events, beside onchange
 
+    var J = node.JSUS;
+    var sliderControls = SliderControls;
+    var jQuerySlider = jQuerySliderControls;
+    var radioControls = RadioControls;
+
+
     node.widgets.register('Controls', Controls);
 
-    // ## Defaults
 
-    var defaults = { id: 'controls' };
-
-    Controls.defaults = defaults;
-
-    Controls.Slider = SliderControls;
-    Controls.jQuerySlider = jQuerySliderControls;
-    Controls.Radio = RadioControls;
 
     // ## Meta-data
 
-    Controls.version = '0.3';
+    Controls.version = '0.3.1';
     Controls.description = 'Wraps a collection of user-inputs controls.';
 
+    Controls.title = 'Controls';
+    Controls.className = 'controls';
+
+    /**
+     * ## Controls constructor
+     *
+     * `Control` wraps a collection of user-input controls
+     *
+     * @param {object} options Optional. Configuration options
+     * which is stored and forwarded to Controls.init.
+     *
+     *  The  options object can have the following attributes:
+     *   - Any option that can be passed to `node.window.List` constructor.
+     *   - `change`: Event to fire when contents change.
+     *   - `features`: Collection of collection attributes for individual
+     *                 controls.
+     *   - `submit`: Description of the submit button.
+     *               If submit.id is defined, the button will get that id and
+     *               the text on the button will be the text in submit.name.
+     *               If submit is a string, it will be the text on the button.
+     *   - `attributes`: Attributes of the submit button.
+     *
+     * @see Controls.init
+     */
     function Controls(options) {
         this.options = options;
-        this.id = 'undefined' !== typeof options.id ? options.id : 'controls';
-        this.root = null;
 
+        /**
+         * ### Controls.listRoot
+         *
+         * The list which holds the controls
+         */
         this.listRoot = null;
-        this.fieldset = null;
+
+        /**
+         * ### Controls.submit
+         *
+         * The submit button
+         */
         this.submit = null;
 
-        this.changeEvent = this.id + '_change';
+        /**
+         * ### Controls.changeEvent
+         *
+         * The event to be fired when the list changes
+         */
+        this.changeEvent = 'Controls_change';
+
+        /**
+         * ### Controls.hasChanged
+         *
+         * Flag to indicate whether the list has changed
+         */
+        this.hasChanged = false;
 
         this.init(options);
     }
@@ -2028,11 +2187,27 @@
         //return node.window.getTextInput(id, attributes);
     };
 
-    Controls.prototype.init = function(options) {
+    // ## Controls methods
 
+    /**
+     * ### Controls.init
+     *
+     * Initializes the widget
+     *
+     * @param {object} options Optional. Configuration options.
+     *
+     *  The  options object can have the following attributes:
+     *   - Any option that can be passed to `node.window.List` constructor.
+     *   - `change`: Event to fire when contents change.
+     *   - `features`: Collection of collection attributes for individual
+     *                 controls.
+     *
+     * @see nodegame-window/List
+     */
+    Controls.prototype.init = function(options) {
         this.hasChanged = false; // TODO: should this be inherited?
         if ('undefined' !== typeof options.change) {
-            if (!options.change){
+            if (!options.change) {
                 this.changeEvent = false;
             }
             else {
@@ -2042,45 +2217,59 @@
         this.list = new node.window.List(options);
         this.listRoot = this.list.getRoot();
 
-        if (!options.features) return;
-        if (!this.root) this.root = this.listRoot;
+        if (!options.features) {
+            return;
+        }
+
         this.features = options.features;
         this.populate();
     };
 
-    Controls.prototype.append = function(root) {
-        this.root = root;
-        var toReturn = this.listRoot;
+    /**
+     * ### Controls.append
+     *
+     * Appends the widget to `this.bodyDiv`
+     *
+     * @see Controls.init
+     */
+    Controls.prototype.append = function() {
+        var that = this;
+        var idButton = 'submit_Controls';
+
+
         this.list.parse();
-        root.appendChild(this.listRoot);
+        this.bodyDiv.appendChild(this.listRoot);
 
         if (this.options.submit) {
-            var idButton = 'submit_' + this.id;
             if (this.options.submit.id) {
                 idButton = this.options.submit.id;
-                delete this.options.submit.id;
+                this.option.submit = this.option.submit.name;
             }
-            this.submit = node.window.addButton(root, idButton,
+            this.submit = node.window.addButton(this.bodyDiv, idButton,
                     this.options.submit, this.options.attributes);
 
-            var that = this;
             this.submit.onclick = function() {
                 if (that.options.change) {
                     node.emit(that.options.change);
                 }
             };
         }
-
-        return toReturn;
     };
 
     Controls.prototype.parse = function() {
         return this.list.parse();
     };
 
+    /**
+     * ### Controls.populate
+     *
+     * Adds features to the list.
+     *
+     * @see Controls.init
+     */
     Controls.prototype.populate = function() {
-        var key, id, attributes, container, elem, that;
-        that = this;
+        var key, id, attributes, container, elem;
+        var that = this;
 
         for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
@@ -2117,7 +2306,7 @@
     Controls.prototype.listeners = function() {
         var that = this;
         // TODO: should this be inherited?
-        node.on(this.changeEvent, function(){
+        node.on(this.changeEvent, function() {
             that.hasChanged = true;
         });
 
@@ -2158,22 +2347,28 @@
         return node.window.highlight(this.listRoot, code);
     };
 
-    // Sub-classes
+    // ## Sub-classes
 
-    // Slider
+    /**
+     * ### Slider
+     */
+    node.widgets.register('SliderControls', SliderControls);
 
     SliderControls.prototype.__proto__ = Controls.prototype;
     SliderControls.prototype.constructor = SliderControls;
 
-    SliderControls.id = 'slidercontrols';
-    SliderControls.version = '0.2';
+    SliderControls.version = '0.2.1';
+    SliderControls.description = 'Collection of Sliders.';
+
+    SliderControls.title = 'Slider Controls';
+    SliderControls.className = 'slidercontrols';
 
     SliderControls.dependencies = {
         Controls: {}
     };
 
 
-    function SliderControls (options) {
+    function SliderControls(options) {
         Controls.call(this, options);
     }
 
@@ -2185,21 +2380,26 @@
         return node.window.getSlider(id, attributes);
     };
 
-    // jQuerySlider
+    /**
+     * ### jQuerySlider
+     */
+     node.widgets.register('jQuerySliderControls', jQuerySliderControls);
 
     jQuerySliderControls.prototype.__proto__ = Controls.prototype;
     jQuerySliderControls.prototype.constructor = jQuerySliderControls;
 
-    jQuerySliderControls.id = 'jqueryslidercontrols';
-    jQuerySliderControls.version = '0.13';
+    jQuerySliderControls.version = '0.14';
+    jQuerySliderControls.description = 'Collection of jQuery Sliders.';
+
+    jQuerySliderControls.title = 'jQuery Slider Controls';
+    jQuerySliderControls.className = 'jqueryslidercontrols';
 
     jQuerySliderControls.dependencies = {
         jQuery: {},
         Controls: {}
     };
 
-
-    function jQuerySliderControls (options) {
+    function jQuerySliderControls(options) {
         Controls.call(this, options);
     }
 
@@ -2220,30 +2420,33 @@
         return slider;
     };
 
+    /**
+     * ### RadioControls
+     */
 
-    ///////////////////////////
-
-
-    // Radio
+    node.widgets.register('RadioControls', RadioControls);
 
     RadioControls.prototype.__proto__ = Controls.prototype;
     RadioControls.prototype.constructor = RadioControls;
 
-    RadioControls.id = 'radiocontrols';
-    RadioControls.version = '0.1.1';
+    RadioControls.version = '0.1.2';
+    RadioControls.description = 'Collection of Radio Controls.';
+
+    RadioControls.title = 'Radio Controls';
+    RadioControls.className = 'radiocontrols';
 
     RadioControls.dependencies = {
         Controls: {}
     };
 
-    function RadioControls (options) {
+    function RadioControls(options) {
         Controls.call(this,options);
         this.groupName = ('undefined' !== typeof options.name) ? options.name :
             node.window.generateUniqueId();
         this.radioElem = null;
     }
 
-    // overriding populare also. There is an error with the Label
+    // overriding populate also. There is an error with the Label
     RadioControls.prototype.populate = function() {
         var key, id, attributes, container, elem, that;
         that = this;
@@ -2251,8 +2454,8 @@
         if (!this.radioElem) {
             this.radioElem = document.createElement('radio');
             this.radioElem.group = this.name || "radioGroup";
-            this.radioElem.group = this.id || "radioGroup";
-            root.appendChild(this.radioElem);
+            this.radioElem.group = this.className || "radioGroup";
+            this.bodyDiv.appendChild(this.radioElem);
         }
 
         for (key in this.features) {
@@ -2550,38 +2753,45 @@
 
     node.widgets.register('DataBar', DataBar);
 
-    // ## Defaults
-    DataBar.defaults = {};
-    DataBar.defaults.id = 'databar';
-    DataBar.defaults.fieldset = {
-        legend: 'Send DATA to players'
-    };
-
     // ## Meta-data
-    DataBar.version = '0.4';
+
+    DataBar.version = '0.4.1';
     DataBar.description =
         'Adds a input field to send DATA messages to the players';
 
-    function DataBar(options) {
+    DataBar.title = 'DataBar';
+    DataBar.className = 'databar';
+
+
+    /**
+     * ## DataBar constructor
+     *
+     * Instantiates a new DataBar object
+     */
+    function DataBar() {
         this.bar = null;
-        this.root = null;
         this.recipient = null;
     }
 
-    DataBar.prototype.append = function(root) {
+    // ## DataBar methods
+
+     /**
+     * ## DataBar.append
+     *
+     * Appends widget to `this.bodyDiv`
+     */
+    DataBar.prototype.append = function() {
 
         var sendButton, textInput, dataInput;
-
-        sendButton = W.addButton(root);
-        //W.writeln('Text');
-        textInput = W.addTextInput(root, 'data-bar-text');
-        W.addLabel(root, textInput, undefined, 'Text');
-        W.writeln('Data');
-        dataInput = W.addTextInput(root, 'data-bar-data');
-
-        this.recipient = W.addRecipientSelector(root);
-
         var that = this;
+
+        sendButton = W.addButton(this.bodyDiv);
+        textInput = W.addTextInput(this.bodyDiv, 'data-bar-text');
+        W.addLabel(this.bodyDiv, textInput, undefined, 'Text');
+        W.writeln('Data');
+        dataInput = W.addTextInput(this.bodyDiv, 'data-bar-data');
+
+        this.recipient = W.addRecipientSelector(this.bodyDiv);
 
         sendButton.onclick = function() {
             var to, data, text;
@@ -2598,9 +2808,6 @@
         node.on('UPDATED_PLIST', function() {
             node.window.populateRecipientSelector(that.recipient, node.game.pl);
         });
-
-        return root;
-
     };
 
 })(node);
@@ -2773,18 +2980,17 @@
 
     var J = node.JSUS;
 
-    // ## Defaults
+    node.widgets.register('Feedback', Feedback);
 
-    Feedback.defaults = {};
-    Feedback.defaults.id = 'feedback';
-    Feedback.defaults.fieldset = {
-        legend: 'Feedback'
-    };
 
     // ## Meta-data
 
-    Feedback.version = '0.1';
-    Feedback.description = 'Displays a simple feedback form';
+    Feedback.version = '0.2';
+    Feedback.description = 'Displays a simple feedback form.';
+
+    Feedback.title = 'Feedback';
+    Feedback.className = 'feedback';
+
 
     // ## Dependencies
 
@@ -2792,17 +2998,37 @@
         JSUS: {}
     };
 
-    function Feedback(options) {
-        this.id = options.id || Feedback.id;
-        this.root = null;
+    /**
+     * ## Feedback constructor
+     *
+     * `Feedback` sends a feedback message to the server
+     */
+    function Feedback() {
+        /**
+         * ### Feedback.textarea
+         *
+         * The TEXTAREA wherein clients can enter feedback
+         */
         this.textarea = null;
+
+        /**
+         * ### Feedback.submit
+         *
+         * Button to submit the feedback form
+         */
         this.submit = null;
-        this.label = options.label || 'FEEDBACK';
     }
 
-    Feedback.prototype.append = function(root) {
+    // ## Feedback methods
+
+    /**
+     * ### Feedback.append
+     *
+     * Appends widget to this.bodyDiv
+     */
+    Feedback.prototype.append = function() {
         var that = this;
-        this.root = root;
+
         this.textarea = document.createElement('textarea');
         this.submit = document.createElement('button');
         this.submit.appendChild(document.createTextNode('Submit'));
@@ -2830,21 +3056,14 @@
                 alert('An error has occurred, feedback not sent.');
             }
         };
-        root.appendChild(this.textarea);
-        root.appendChild(this.submit);
-        return root;
+        this.bodyDiv.appendChild(this.textarea);
+        this.bodyDiv.appendChild(this.submit);
     };
 
-    Feedback.prototype.getRoot = function() {
-        return this.root;
-    };
 
     Feedback.prototype.listeners = function() {
         var that = this;
     };
-
-    node.widgets.register('Feedback', Feedback);
-
 })(node);
 
 /**
@@ -2860,43 +3079,54 @@
 
     "use strict";
 
-    node.widgets.register('GameBoard', GameBoard);
-
     var PlayerList = node.PlayerList;
 
-    // ## Defaults
-
-    GameBoard.defaults = {};
-    GameBoard.defaults.id = 'gboard';
-    GameBoard.defaults.fieldset = {
-        legend: 'Game Board'
-    };
+    node.widgets.register('GameBoard', GameBoard);
 
     // ## Meta-data
 
-    GameBoard.version = '0.4.0';
+    GameBoard.version = '0.4.1';
     GameBoard.description = 'Offer a visual representation of the state of ' +
                             'all players in the game.';
 
+    GameBoard.title = 'Game Board';
+    GameBoard.className = 'gameboard';
+
+    /**
+     * ## GameBoard constructor
+     *
+     * `GameBoard` shows the currently connected players
+     */
     function GameBoard(options) {
-
-        this.id = options.id || GameBoard.defaults.id;
-        this.status_id = this.id + '_statusbar';
-
+        /**
+         * ### GameBoard.board
+         *
+         * The DIV wherein to display the players
+         */
         this.board = null;
-        this.status = null;
-        this.root = null;
 
+        /**
+         * ### GameBoard.status
+         *
+         * The DIV wherein to display the status of the game board
+         */
+        this.status = null;
     }
 
-    GameBoard.prototype.append = function(root) {
-        this.root = root;
-        this.status = node.window.addDiv(root, this.status_id);
-        this.board = node.window.addDiv(root, this.id);
+    // ## GameBoard methods
+
+    /**
+     * ### GameBoard.append
+     *
+     * Appends widget to `this.bodyDiv` and updates the board
+     *
+     * @see GameBoard.updateBoard
+     */
+    GameBoard.prototype.append = function() {
+        this.status = node.window.addDiv(this.bodyDiv, 'gboard_status');
+        this.board = node.window.addDiv(this.bodyDiv, 'gboard');
 
         this.updateBoard(node.game.pl);
-
-        return root;
     };
 
     GameBoard.prototype.listeners = function() {
@@ -2904,10 +3134,51 @@
         node.on('UPDATED_PLIST', function() {
             that.updateBoard(node.game.pl);
         });
-
     };
 
-    GameBoard.prototype.printLine = function(p) {
+    /**
+     * ### GameBoard.updateBoard
+     *
+     * Updates the information on the game board
+     *
+     * @see printLine
+     */
+    GameBoard.prototype.updateBoard = function(pl) {
+        var player, separator;
+        var that = this;
+
+        this.status.innerHTML = 'Updating...';
+
+        if (pl.size()) {
+            that.board.innerHTML = '';
+            pl.forEach( function(p) {
+                player = printLine(p);
+
+                W.write(player, that.board);
+
+                separator = printSeparator();
+                W.write(separator, that.board);
+            });
+        }
+        this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
+    };
+
+    // ## Helper methods
+
+     /**
+     * ### printLine
+     *
+     * Returns a `String` describing the player passed in
+     *
+     * @param {Player} `p`. Player object which will be passed in by a call to
+     * `node.game.pl.forEach`.
+     *
+     * @return {String} A string describing the `Player` `p`.
+     *
+     * @see GameBoard.updateBoard
+     * @see nodegame-client/Player
+     */
+    function printLine(p) {
 
         var line, levels, level;
         levels = node.constants.stageLevels;
@@ -2952,34 +3223,11 @@
         }
 
         return line + '(' + level + ')';
-    };
+    }
 
-    GameBoard.prototype.printSeparator = function(p) {
+    function printSeparator() {
         return W.getElement('hr', null, {style: 'color: #CCC;'});
-    };
-
-
-    GameBoard.prototype.updateBoard = function(pl) {
-        var player, separator;
-        var that = this;
-
-        this.status.innerHTML = 'Updating...';
-
-        if (pl.size()) {
-            that.board.innerHTML = '';
-            pl.forEach( function(p) {
-                player = that.printLine(p);
-
-                W.write(player, that.board);
-
-                separator = that.printSeparator(p);
-                W.write(separator, that.board);
-            });
-        }
-
-
-        this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
-    };
+    }
 
 })(node);
 
@@ -2998,29 +3246,49 @@
 
     node.widgets.register('GameSummary', GameSummary);
 
-    // ## Defaults
-
-    GameSummary.defaults = {};
-    GameSummary.defaults.id = 'gamesummary';
-    GameSummary.defaults.fieldset = { legend: 'Game Summary' };
-
     // ## Meta-data
 
-    GameSummary.version = '0.3';
+    GameSummary.version = '0.3.1';
     GameSummary.description =
         'Show the general configuration options of the game.';
 
-    function GameSummary(options) {
+    GameSummary.title = 'Game Summary';
+    GameSummary.className = 'gamesummary';
+
+
+    /**
+     * ## GameSummary constructor
+     *
+     * `GameSummary` shows the configuration options of the game in a box
+     */
+    function GameSummary() {
+        /**
+         * ### GameSummary.summaryDiv
+         *
+         * The DIV in which to display the information
+         */
         this.summaryDiv = null;
     }
 
-    GameSummary.prototype.append = function(root) {
-        this.root = root;
-        this.summaryDiv = node.window.addDiv(root);
+    // ## GameSummary methods
+
+    /**
+     * ### GameSummary.append
+     *
+     * Appends the widget to `this.bodyDiv` and calls `this.writeSummary`
+     *
+     * @see GameSummary.writeSummary
+     */
+    GameSummary.prototype.append = function() {
+        this.summaryDiv = node.window.addDiv(this.bodyDiv);
         this.writeSummary();
-        return root;
     };
 
+    /**
+     * ### GameSummary.writeSummary
+     *
+     * Writes a summary of the game configuration into `this.summaryDiv`
+     */
     GameSummary.prototype.writeSummary = function(idState, idSummary) {
         var gName = document.createTextNode('Name: ' + node.game.metadata.name),
         gDescr = document.createTextNode(
@@ -3036,7 +3304,7 @@
         this.summaryDiv.appendChild(document.createElement('br'));
         this.summaryDiv.appendChild(gMaxP);
 
-        node.window.addDiv(this.root, this.summaryDiv, idSummary);
+        node.window.addDiv(this.bodyDiv, this.summaryDiv, idSummary);
     };
 
 })(node);
@@ -3216,10 +3484,10 @@
 
     "use strict";
 
-    node.widgets.register('LanguageSelector', LanguageSelector);
-
     var J = node.JSUS,
         game = node.game;
+
+    node.widgets.register('LanguageSelector', LanguageSelector);
 
     // ## Meta-data
 
@@ -3567,22 +3835,17 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.widgets.register('MoneyTalks', MoneyTalks);
-
-    var JSUS = node.JSUS;
-
-    // ## Defaults
-
-    MoneyTalks.defaults = {};
-    MoneyTalks.defaults.id = 'moneytalks';
-    MoneyTalks.defaults.fieldset = {
-        legend: 'Earnings'
-    };
 
     // ## Meta-data
 
-    MoneyTalks.version = '0.1.0';
-    MoneyTalks.description = 'Display the earnings of a player.';
+    MoneyTalks.version = '0.1.1';
+    MoneyTalks.description = 'Displays the earnings of a player.';
+
+    MoneyTalks.title = 'Earnings';
+    MoneyTalks.className = 'moneytalks';
 
     // ## Dependencies
 
@@ -3590,44 +3853,88 @@
         JSUS: {}
     };
 
+    /**
+     * ## MoneyTalks constructor
+     *
+     * `MoneyTalks` displays the earnings of the player so far
+     *
+     * @param {object} options Optional. Configuration options
+     * which is forwarded to MoneyTalks.init.
+     *
+     * @see MoneyTalks.init
+     */
     function MoneyTalks(options) {
-        this.id = options.id || MoneyTalks.defaults.id;
-
-        this.root = null;               // the parent element
-
+        /**
+         * ### MoneyTalks.spanCurrency
+         *
+         * The SPAN which holds information on the currency
+         */
         this.spanCurrency = document.createElement('span');
+
+        /**
+         * ### MoneyTalks.spanMoney
+         *
+         * The SPAN which holds information about the money earned so far
+         */
         this.spanMoney = document.createElement('span');
 
+        /**
+         * ### MoneyTalks.currency
+         *
+         * String describing the currency
+         */
         this.currency = 'EUR';
+
+        /**
+         * ### MoneyTalks.money
+         *
+         * Currently earned money
+         */
         this.money = 0;
+
+        /**
+         * ### MoneyTalks.precicison
+         *
+         * Precision of floating point number to display
+         */
         this.precision = 2;
+
         this.init(options);
     }
 
+    // ## MoneyTalks methods
 
+    /**
+     * ### MoneyTalks.init
+     *
+     * Initializes the widget
+     *
+     * @param {object} options Optional. Configuration options.
+     *
+     * The  options object can have the following attributes:
+     *   - `currency`: String describing currency to use.
+     *   - `money`: Current amount of money earned.
+     *   - `precision`: Precision of floating point output to use.
+     *   - `currencyClassName`: Class name to be set for this.spanCurrency.
+     *   - `moneyClassName`: Class name to be set for this.spanMoney;
+     */
     MoneyTalks.prototype.init = function(options) {
         this.currency = options.currency || this.currency;
         this.money = options.money || this.money;
         this.precision = options.precision || this.precision;
 
-        this.spanCurrency.id = options.idCurrency || this.spanCurrency.id ||
-            'moneytalks_currency';
-        this.spanMoney.id = options.idMoney || this.spanMoney.id ||
-            'moneytalks_money';
+        this.spanCurrency.className = options.currencyClassName ||
+            this.spanCurrency.className || 'moneytalkscurrency';
+        this.spanMoney.className = options.moneyClassName ||
+            this.spanMoney.className || 'moneytalksmoney';
 
         this.spanCurrency.innerHTML = this.currency;
         this.spanMoney.innerHTML = this.money;
     };
 
-    MoneyTalks.prototype.getRoot = function() {
-        return this.root;
-    };
-
-    MoneyTalks.prototype.append = function(root, ids) {
-        var PREF = this.id + '_';
-        root.appendChild(this.spanMoney);
-        root.appendChild(this.spanCurrency);
-        return root;
+    MoneyTalks.prototype.append = function() {
+        this.bodyDiv.appendChild(this.spanMoney);
+        this.bodyDiv.appendChild(this.spanCurrency);
     };
 
     MoneyTalks.prototype.listeners = function() {
@@ -3637,6 +3944,11 @@
         });
     };
 
+    /**
+     * ### MoneyTalks.update
+     *
+     * Updates the contents of this.money and this.spanMoney according to amount
+     */
     MoneyTalks.prototype.update = function(amount) {
         if ('number' !== typeof amount) {
             // Try to parse strings
@@ -3648,7 +3960,6 @@
         this.money += amount;
         this.spanMoney.innerHTML = this.money.toFixed(this.precision);
     };
-
 })(node);
 
 /**
@@ -4125,19 +4436,16 @@
 
     var J = node.JSUS;
 
-    // ## Defaults
-
-    Requirements.defaults = {};
-    Requirements.defaults.id = 'requirements';
-    Requirements.defaults.fieldset = {
-        legend: 'Requirements'
-    };
+    node.widgets.register('Requirements', Requirements);
 
     // ## Meta-data
 
-    Requirements.version = '0.5.0';
+    Requirements.version = '0.5.1';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
+
+    Requirements.title = 'Requirements';
+    Requirements.className = 'requirements';
 
     // ## Dependencies
 
@@ -4154,44 +4462,132 @@
      * @param {object} options
      */
     function Requirements(options) {
-        // The id of the widget.
-        this.id = options.id || Requirements.id;
-        // Array of all test callbacks.
+        /**
+         * ### Requirements.callbacks
+         *
+         * Array of all test callbacks
+         */
         this.callbacks = [];
-        // Number of tests still pending.
+
+        /**
+         * ### Requirements.stillChecking
+         *
+         * Number of tests still pending
+         */
         this.stillChecking = 0;
-        // If TRUE, a maximum timeout to the execution of ALL tests is set.
+
+        /**
+         * ### Requirements.withTimeout
+         *
+         * If TRUE, a maximum timeout to the execution of ALL tests is set
+         */
         this.withTimeout = options.withTimeout || true;
-        // The time in milliseconds for the timeout to expire.
+
+        /**
+         * ### Requirements.timeoutTime
+         *
+         * The time in milliseconds for the timeout to expire
+         */
         this.timeoutTime = options.timeoutTime || 10000;
-        // The id of the timeout, if created.
+
+        /**
+         * ### Requirements.timeoutId
+         *
+         * The id of the timeout, if created
+         */
         this.timeoutId = null;
 
-        // Span summarizing the status of the tests.
+        /**
+         * ### Requirements.summary
+         *
+         * Span summarizing the status of the tests
+         */
         this.summary = null;
-        // Span counting how many tests have been completed.
+
+        /**
+         * ### Requirements.summaryUpdate
+         *
+         * Span counting how many tests have been completed
+         */
         this.summaryUpdate = null;
-        // Looping dots to give the user the feeling of code execution.
+
+        /**
+         * ### Requirements.dots
+         *
+         * Looping dots to give the user the feeling of code execution
+         */
         this.dots = null;
 
-        // TRUE if at least one test has failed.
+        /**
+         * ### Requirements.hasFailed
+         *
+         * TRUE if at least one test has failed
+         */
         this.hasFailed = false;
 
-        // The outcomes of all tests.
+        /**
+         * ### Requirements.results
+         *
+         * The outcomes of all tests
+         */
         this.results = [];
 
-        // If true, the final result of the tests will be sent to the server.
+        /**
+         * ### Requirements.sayResult
+         *
+         * If true, the final result of the tests will be sent to the server
+         */
         this.sayResults = options.sayResults || false;
-        // The label of the SAY message that will be sent to the server.
+
+        /**
+         * ### Requirements.sayResultLabel
+         *
+         * The label of the SAY message that will be sent to the server
+         */
         this.sayResultsLabel = options.sayResultLabel || 'requirements';
-        // Callback to add properties to the result object to send to the
-        // server.
+
+        /**
+         * ### Requirements.addToResults
+         *
+         *  Callback to add properties to result object sent to server
+         */
         this.addToResults = options.addToResults || null;
 
-        // Callbacks to be executed at the end of all tests.
+        /**
+         * ### Requirements.onComplete
+         *
+         * Callback to be executed at the end of all tests
+         */
         this.onComplete = null;
+
+        /**
+         * ### Requirements.onSuccess
+         *
+         * Callback to be executed at the end of all tests
+         */
         this.onSuccess = null;
+
+        /**
+         * ### Requirements.onFail
+         *
+         * Callback to be executed at the end of all tests
+         */
         this.onFail = null;
+
+        /**
+         * ### Requirements.list
+         *
+         * `List` to render the results
+         *
+         * @see nodegame-server/List
+         */
+        // TODO: simplify render syntax.
+        this.list = new W.List({
+            render: {
+                pipeline: renderResult,
+                returnAt: 'first'
+            }
+        });
 
         function renderResult(o) {
             var imgPath, img, span, text;
@@ -4213,14 +4609,6 @@
             span.appendChild(text);
             return span;
         }
-
-        // TODO: simplify render syntax.
-        this.list = new W.List({
-            render: {
-                pipeline: renderResult,
-                returnAt: 'first'
-            }
-        });
     }
 
     // ## Requirements methods
@@ -4669,8 +5057,6 @@
         return errMsg;
     }
 
-    node.widgets.register('Requirements', Requirements);
-
 })(node);
 
 /**
@@ -4688,36 +5074,58 @@
 
     node.widgets.register('ServerInfoDisplay', ServerInfoDisplay);
 
-    // ## Defaults
-
-    ServerInfoDisplay.defaults = {};
-    ServerInfoDisplay.defaults.id = 'serverinfodisplay';
-    ServerInfoDisplay.defaults.fieldset = {
-        legend: 'Server Info',
-        id: 'serverinfo_fieldset'
-    };
-
     // ## Meta-data
 
-    ServerInfoDisplay.version = '0.4';
+    ServerInfoDisplay.version = '0.4.1';
+    ServerInfoDisplay.description = 'Displays information about the server.'
 
-    function ServerInfoDisplay(options) {
-        this.id = options.id;
+    ServerInfoDisplay.title = 'Server Info';
+    ServerInfoDisplay.className = 'serverinfodisplay';
 
-        this.root = null;
+    /**
+     * ## ServerInfoDisplay constructor
+     *
+     * `ServerInfoDisplay` shows information about the server
+     */
+    function ServerInfoDisplay() {
+        /**
+         * ### ServerInfoDisplay.div
+         *
+         * The DIV wherein to display the information
+         */
         this.div = document.createElement('div');
+
+        /**
+         * ### ServerInfoDisplay.table
+         *
+         * The table holding the information
+         */
         this.table = null; //new node.window.Table();
+
+        /**
+         * ### ServerInfoDisplay.button
+         *
+         * The button TODO
+         */
         this.button = null;
+
     }
 
-    ServerInfoDisplay.prototype.init = function(options) {
+    // ## ServerInfoDisplay methods
+
+    /**
+     * ### ServerInfoDisplay.init
+     *
+     * Initializes the widget
+     */
+    ServerInfoDisplay.prototype.init = function() {
         var that = this;
         if (!this.div) {
             this.div = document.createElement('div');
         }
         this.div.innerHTML = 'Waiting for the reply from Server...';
         if (!this.table) {
-            this.table = new node.window.Table(options);
+            this.table = new node.window.Table();
         }
         this.table.clear(true);
         this.button = document.createElement('button');
@@ -4726,16 +5134,21 @@
         this.button.onclick = function(){
             that.getInfo();
         };
-        this.root.appendChild(this.button);
+        this.bodyDiv.appendChild(this.button);
         this.getInfo();
     };
 
-    ServerInfoDisplay.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.div);
-        return root;
+    ServerInfoDisplay.prototype.append = function() {
+        this.bodyDiv.appendChild(this.div);
     };
 
+    /**
+     * ### ServerInfoDisplay.getInfo
+     *
+     * Updates current info
+     *
+     * @see ServerInfoDisplay.processInfo
+     */
     ServerInfoDisplay.prototype.getInfo = function() {
         var that = this;
         node.get('INFO', function(info) {
@@ -4744,6 +5157,11 @@
         });
     };
 
+    /**
+     * ### ServerInfoDisplay.processInfo
+     *
+     * Processes incoming server info and displays it in `this.table`
+     */
     ServerInfoDisplay.prototype.processInfo = function(info) {
         this.table.clear(true);
         for (var key in info) {
@@ -4787,17 +5205,27 @@
     StateBar.title = 'Change GameStage';
     StateBar.className = 'statebar';
 
-    function StateBar(options) {
-        this.id = options.id || StateBar.className;
-        this.recipient = null;
+
+    /**
+     * ## StateBar constructor
+     *
+     * `StateBar` provides a simple interface to change game stages
+     */
+    function StateBar() {
+        //this.recipient = null;
     }
 
+    /**
+     * ### StateBar.append
+     *
+     * Appends widget to `this.bodyDiv`
+     */
     StateBar.prototype.append = function() {
-        var prefix, that;
+        var prefix, that = this;
         var idButton, idStageField, idRecipientField;
         var sendButton, stageField, recipientField;
 
-        prefix = this.id + '_';
+        prefix = StateBar.className + '_';
 
         idButton = prefix + 'sendButton';
         idStageField = prefix + 'stageField';
@@ -4812,8 +5240,6 @@
         this.bodyDiv.appendChild(recipientField);
 
         sendButton = node.window.addButton(this.bodyDiv, idButton);
-
-        that = this;
 
         //node.on('UPDATED_PLIST', function() {
         //    node.window.populateRecipientSelector(
@@ -4872,11 +5298,32 @@
         Table: {}
     };
 
-    function StateDisplay(options) {
-        this.id = options.id;
+
+    /**
+     * ## StateDisplay constructor
+     *
+     * `StateDisplay` displays information about the state of a player
+     */
+    function StateDisplay() {
+        /**
+         * ### StateDisplay.table
+         *
+         * The `Table` which holds the information
+         *
+         * @See nodegame-window/Table
+         */
         this.table = new Table();
     }
 
+    // ## StateDisplay methods
+
+    /**
+     * ### StateDisplay.append
+     *
+     * Appends widget to `this.bodyDiv` and calls `this.updateAll`
+     *
+     * @see StateDisplay.updateAll
+     */
     StateDisplay.prototype.append = function() {
         var that, checkPlayerName;
         that = this;
@@ -4889,6 +5336,11 @@
         this.bodyDiv.appendChild(this.table.table);
     };
 
+    /**
+     * ### StateDisplay.updateAll
+     *
+     * Updates information in `this.table`
+     */
     StateDisplay.prototype.updateAll = function() {
         var stage, stageNo, stageId, playerId, tmp, miss;
         miss = '-';
@@ -4944,9 +5396,9 @@
 
     "use strict";
 
-    node.widgets.register('VisualRound', VisualRound);
-
     var J = node.JSUS;
+
+    node.widgets.register('VisualRound', VisualRound);
 
     // ## Meta-data
 
@@ -5161,7 +5613,7 @@
      * - `COUNT_UP_STAGES_TO_TOTAL`: Display current and total stage number.
      * - `COUNT_UP_ROUNDS_TO_TOTAL`: Display current and total round number.
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
-     * - `COUNT_DOWN_ROUNDS: Display number of rounds left in this stage.
+     * - `COUNT_DOWN_ROUNDS`: Display number of rounds left in this stage.
      *
      * @param {array} displayModeNames Array of strings representing the names
      *
@@ -6051,11 +6503,11 @@
 })(node);
 
 /**
- * # VisualState
+ * # VisualStage
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
- * Shows current, previous and next state.
+ * Shows current, previous and next stage.
  *
  * www.nodegame.org
  */
@@ -6063,56 +6515,71 @@
 
     "use strict";
 
-    node.widgets.register('VisualState', VisualState);
+    var JSUS = node.JSUS;
+    var Table = node.window.Table;
 
-    var JSUS = node.JSUS,
-    Table = node.window.Table;
+    node.widgets.register('VisualStage', VisualStage);
 
     // ## Meta-data
 
-    VisualState.version = '0.2.1';
-    VisualState.description =
-        'Visually display current, previous and next state of the game.';
+    VisualStage.version = '0.2.2';
+    VisualStage.description =
+        'Visually display current, previous and next stage of the game.';
 
-    VisualState.title = 'State';
-    VisualState.className = 'visualstate';
+    VisualStage.title = 'Stage';
+    VisualStage.className = 'visualstage';
 
     // ## Dependencies
 
-    VisualState.dependencies = {
+    VisualStage.dependencies = {
         JSUS: {},
         Table: {}
     };
 
-    function VisualState(options) {
-        this.id = options.id;
+    /**
+     * ## VisualStage constructor
+     *
+     * `VisualStage` displays current, previous and next stage of the game
+     */
+    function VisualStage() {
         this.table = new Table();
     }
 
-    VisualState.prototype.append = function() {
-        var that = this;
-        var PREF = this.id + '_';
+    // ## VisualStage methods
+
+    /**
+     * ### VisualStage.append
+     *
+     * Appends widget to `this.bodyDiv` and writes the stage
+     *
+     * @see VisualStage.writeStage
+     */
+    VisualStage.prototype.append = function() {
         this.bodyDiv.appendChild(this.table.table);
-        this.writeState();
+        this.writeStage();
     };
 
-    VisualState.prototype.listeners = function() {
+    VisualStage.prototype.listeners = function() {
         var that = this;
 
         node.on('STEP_CALLBACK_EXECUTED', function() {
-            that.writeState();
+            that.writeStage();
         });
-
         // Game over and init?
     };
 
-    VisualState.prototype.writeState = function() {
-        var miss, state, pr, nx, tmp;
+    /**
+     * ### VisualStage.writeStage
+     *
+     * Writes the current, previous and next stage into `this.table`
+     */
+    VisualStage.prototype.writeStage = function() {
+        var miss, stage, pr, nx, tmp;
         var curStep, nextStep, prevStep;
         var t;
 
         miss = '-';
-        state = 'Uninitialized';
+        stage = 'Uninitialized';
         pr = miss;
         nx = miss;
 
@@ -6120,7 +6587,7 @@
 
         if (curStep) {
             tmp = node.game.plot.getStep(curStep);
-            state = tmp ? tmp.id : miss;
+            stage = tmp ? tmp.id : miss;
 
             prevStep = node.game.plot.previous(curStep);
             if (prevStep) {
@@ -6138,7 +6605,7 @@
         this.table.clear(true);
 
         this.table.addRow(['Previous: ', pr]);
-        this.table.addRow(['Current: ', state]);
+        this.table.addRow(['Current: ', stage]);
         this.table.addRow(['Next: ', nx]);
 
         t = this.table.selexec('y', '=', 0);
@@ -6163,9 +6630,10 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.widgets.register('VisualTimer', VisualTimer);
 
-    var J = node.JSUS;
 
     // ## Meta-data
 
@@ -6192,8 +6660,8 @@
      * The options it can take are:
      *
      *   - any options that can be passed to a `GameTimer`
-     *   - waitBoxOptions: an option object to be passed to `TimerBox`
-     *   - mainBoxOptions: an option object to be passed to `TimerBox`
+     *   - `waitBoxOptions`: an option object to be passed to `TimerBox`
+     *   - `mainBoxOptions`: an option object to be passed to `TimerBox`
      *
      * @see TimerBox
      * @see GameTimer
@@ -6273,7 +6741,7 @@
         options = options || {};
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined');        
+                                'object or undefined');
         }
         J.mixout(options, this.options);
 
@@ -6329,7 +6797,7 @@
         }
         if ('undefined' === typeof this.options.startOnPlaying) {
             this.options.startOnPlaying = true;
-        } 
+        }
 
         if (!this.options.mainBoxOptions) {
             this.options.mainBoxOptions = {};
@@ -6390,22 +6858,10 @@
 
         node.timer.destroyTimer(this.gameTimer);
 
-        // TODO: avoid code duplication.
-        // ----- as in constructor -----
-        // this.options = options;
-        //this.options.update = ('undefined' === typeof this.options.update) ?
-        //    1000 : this.options.update;
-        //this.options.stopOnDone = ('undefined' ===
-        //    typeof this.options.stopOnDone) ? true : this.options.stopOnDone;
-        //this.options.startOnPlaying = ('undefined' ===
-        //    typeof this.options.startOnPlaying) ?
-        //    true : this.options.startOnPlaying;
-
         this.gameTimer = null;
         this.activeBox = null;
         this.isInitialized = false;
         this.init(options);
-        // ----- as in constructor ----
 
         return oldOptions;
     };
@@ -6871,21 +7327,18 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.widgets.register('Wall', Wall);
-
-    var JSUS = node.JSUS;
-
-    // ## Defaults
-
-    Wall.defaults = {};
-    Wall.defaults.id = 'wall';
-    Wall.defaults.fieldset = { legend: 'Game Log' };
 
     // ## Meta-data
 
-    Wall.version = '0.3';
-    Wall.description = 'Intercepts all LOG events and prints them into a DIV ' +
+    Wall.version = '0.3.1';
+    Wall.description = 'Intercepts all LOG events and prints them into a PRE ' +
                        'element with an ordinal number and a timestamp.';
+
+    Wall.title = 'Wall';
+    Wall.className = 'wall';
 
     // ## Dependencies
 
@@ -6893,28 +7346,78 @@
         JSUS: {}
     };
 
+    /**
+     * ## Wall constructor
+     *
+     * `Wall` prints all LOG events into a PRE.
+     *
+     * @param {object} options Optional. Configuration options
+     * The options it can take are:
+     *
+     *   - id: The id of the PRE in which to write.
+     *   - name: The name of this Wall.
+     */
     function Wall(options) {
-        this.id = options.id || Wall.id;
+        /**
+         * ### Wall.id
+         *
+         * The id of the PRE in which to write
+         */
+        this.id = options.id || 'wall';
+
+        /**
+         * ### Wall.name
+         *
+         * The name of this Wall
+         */
         this.name = options.name || this.name;
+
+        /**
+         * ### Wall.buffer
+         *
+         * Buffer for logs which are to be logged before the document is ready
+         */
         this.buffer = [];
+
+        /**
+         * ### Wall.counter
+         *
+         * Counts number of entries on wall
+         */
         this.counter = 0;
 
+        /**
+         * ### Wall.wall
+         *
+         * The PRE in which to write
+         */
         this.wall = node.window.getElement('pre', this.id);
     }
 
+    // ## Wall methods
+
+    /**
+     * ### Wall.init
+     *
+     * Initializes the instance.
+     *
+     * If options are provided, the counter is set to `options.counter`
+     * otherwise nothing happens.
+     */
     Wall.prototype.init = function(options) {
         options = options || {};
         this.counter = options.counter || this.counter;
     };
 
-    Wall.prototype.append = function(root) {
-        return root.appendChild(this.wall);
+    Wall.prototype.append = function() {
+        return this.bodyDiv.appendChild(this.wall);
     };
 
-    Wall.prototype.getRoot = function() {
-        return this.wall;
-    };
-
+    /**
+     * ### Wall.listeners
+     *
+     * Wall has a listener to the `LOG` event
+     */
     Wall.prototype.listeners = function() {
         var that = this;
         node.on('LOG', function(msg) {
@@ -6923,15 +7426,28 @@
         });
     };
 
+
+    /**
+     *  ### Wall.write
+     *
+     * Writes argument as first entry of this.wall if document is fully loaded
+     *
+     * Writes into this.buffer if document is not ready yet.
+     */
     Wall.prototype.write = function(text) {
         if (document.readyState !== 'complete') {
             this.buffer.push(s);
         } else {
-            var mark = this.counter++ + ') ' + JSUS.getTime() + ' ';
+            var mark = this.counter++ + ') ' + J.getTime() + ' ';
             this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
         }
     };
 
+    /**
+     * ### Wall.debuffer
+     *
+     * If the document is ready, the buffer content is written into this.wall
+     */
     Wall.prototype.debuffer = function() {
         if (document.readyState === 'complete' && this.buffer.length > 0) {
             for (var i=0; i < this.buffer.length; i++) {
