@@ -75,6 +75,7 @@ added as well, depending on widget configuration.</p>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setTitle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">tmp</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widget.setTitle: panelDiv is missing.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
@@ -122,10 +123,11 @@ added as well, depending on widget configuration.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
-<p>Move it to before the body.</p>
+<p>Move it to before the body (IE cannot have undefined).</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">headingDiv</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
+                <span class="nx">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">||</span> <span class="kc">null</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">headingDiv</span><span class="p">,</span> <span class="nx">tmp</span><span class="p">);</span>
             <span class="p">}</span>
 
 
