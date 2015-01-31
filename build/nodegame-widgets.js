@@ -136,7 +136,7 @@
         this.widgets = {};
 
         /**
-         * ### Widgets.widgets
+         * ### Widgets.instances
          *
          * Container of appended widget instances
          *
@@ -191,6 +191,7 @@
      * @param {string} w_str The name of the widget to load
      * @param {options} options Optional. Configuration options
      *   to be passed to the widgets
+     *
      * @return {object} widget The requested widget
      *
      * @see Widgets.add
@@ -258,15 +259,13 @@
      * In the latter case, dependencies are checked, and it returns FALSE if
      * conditions are not met.
      *
-     * It automatically creates a fieldset element around the widget if
-     * requested by the internal widget configuration, or if specified in the
-     * options parameter.
-     *
-     * @param {string} w_str The name of the widget to load
-     * @param {object} root. Optional. The HTML element under which the widget
-     *   will be appended. Default: `GameWindow.getFrameRoot()` or document.body
+     * @param {string|object} w The name of the widget to load or a loaded
+     *   widget object
+     * @param {object} root Optional. The HTML element under which the widget
+     *   will be appended. Default: `GameWindow.getFrameRoot()` or
+     *   `document.body`
      * @param {options} options Optional. Configuration options to be passed
-     *   to the widgets
+     *   to the widget
      *
      * @return {object|boolean} The requested widget, or FALSE is an error
      *   occurs
@@ -298,12 +297,6 @@
             w = this.get(w, options);
         }
 
-        // If fieldset option is null, a div is added instead.
-        // If fieldset option is undefined, default options are used.
-        //if (options.fieldset !== null) {
-        //    root = appendFieldset(root, options.fieldset ||
-        //                          w.defaults.fieldset, w);
-        //}
         w.panelDiv = appendDiv(root, {
             attributes: {
                 className: ['ng_widget', 'panel', 'panel-default', w.className]
@@ -383,7 +376,7 @@
      *
      * TODO: Check for version and other constraints.
      *
-     * @param {object} The widget to check
+     * @param {object} w The widget to check
      * @param {boolean} quiet Optional. If TRUE, no warning will be raised.
      *   Default: FALSE
      * @return {boolean} TRUE, if all dependencies are met
@@ -415,14 +408,6 @@
 
 
     // ## Helper functions
-
-    //function appendFieldset(root, options, w) {
-    //    var idFieldset, legend;
-    //    if (!options) return root;
-    //    idFieldset = options.id || w.id + '_fieldset';
-    //    legend = options.legend || w.legend;
-    //    return W.addFieldset(root, idFieldset, legend, options.attributes);
-    //}
 
     function appendDiv(root, options) {
         // TODO: Check every parameter
@@ -2770,114 +2755,6 @@
     };
 
     DynamicTable.prototype.listeners = function() {};
-
-})(node);
-
-/**
- * # EventButton
- * Copyright(c) 2014 Stefano Balietti
- * MIT Licensed
- *
- * Creates a clickable button that fires an event
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    var JSUS = node.JSUS;
-
-    node.widgets.register('EventButton', EventButton);
-
-    // ## Defaults
-
-    EventButton.defaults = {};
-    EventButton.defaults.id = 'eventbutton';
-    EventButton.defaults.fieldset = false;
-
-    // ## Meta-data
-
-    EventButton.version = '0.2';
-
-    // ## Dependencies
-
-    EventButton.dependencies = {
-        JSUS: {}
-    };
-
-    function EventButton(options) {
-        this.options = options;
-        this.id = options.id;
-
-        this.root = null;
-        this.text = 'Send';
-        this.button = document.createElement('button');
-        this.callback = null;
-        this.init(this.options);
-    }
-
-    EventButton.prototype.init = function(options) {
-        options = options || this.options;
-        this.button.id = options.id || this.id;
-        var text = options.text || this.text;
-        while (this.button.hasChildNodes()) {
-            this.button.removeChild(this.button.firstChild);
-        }
-        this.button.appendChild(document.createTextNode(text));
-        this.event = options.event || this.event;
-        this.callback = options.callback || this.callback;
-        var that = this;
-        if (this.event) {
-            // Emit Event only if callback is successful
-            this.button.onclick = function() {
-                var ok = true;
-                if (this.callback){
-                    ok = options.callback.call(node.game);
-                }
-                if (ok) node.emit(that.event);
-            };
-        }
-
-        //// Emit DONE only if callback is successful
-        //this.button.onclick = function() {
-        //        var ok = true;
-        //        if (options.exec) ok = options.exec.call(node.game);
-        //        if (ok) node.emit(that.event);
-        //}
-    };
-
-    EventButton.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.button);
-        return root;
-    };
-
-    EventButton.prototype.listeners = function() {};
-
-    // # DoneButton
-
-    node.widgets.register('DoneButton', DoneButton);
-
-    DoneButton.prototype.__proto__ = EventButton.prototype;
-    DoneButton.prototype.constructor = DoneButton;
-
-    // ## Meta-data
-
-    DoneButton.id = 'donebutton';
-    DoneButton.version = '0.1';
-
-    // ## Dependencies
-
-    DoneButton.dependencies = {
-        EventButton: {}
-    };
-
-    function DoneButton (options) {
-        options.event = 'DONE';
-        options.text = options.text || 'Done!';
-        EventButton.call(this, options);
-    }
 
 })(node);
 
@@ -6323,8 +6200,6 @@
      */
     function VisualTimer(options) {
         this.options = options || {};
-        this.options.update = ('undefined' === typeof this.options.update) ?
-            1000 : this.options.update;
 
         /**
          * ### VisualTimer.gameTimer
@@ -6371,6 +6246,7 @@
          * Indicates whether the instance has been initializded already
          */
         this.isInitialized = false;
+
         this.init(this.options);
     }
 
@@ -6394,9 +6270,10 @@
      */
     VisualTimer.prototype.init = function(options) {
         var t;
-
-        if (!options) {
-            options = {};
+        options = options || {};
+        if ('object' !== typeof options) {
+            throw new TypeError('VisualTimer.init: options must be ' +
+                                'object or undefined');        
         }
         J.mixout(options, this.options);
 
@@ -6441,7 +6318,18 @@
                 };
             }
         });
+
         this.options = options;
+
+        if ('undefined' === typeof this.options.update) {
+            this.options.update = 1000;
+        }
+        if ('undefined' === typeof this.options.stopOnDone) {
+            this.options.stopOnDone = true;
+        }
+        if ('undefined' === typeof this.options.startOnPlaying) {
+            this.options.startOnPlaying = true;
+        } 
 
         if (!this.options.mainBoxOptions) {
             this.options.mainBoxOptions = {};
@@ -6486,32 +6374,37 @@
     /**
      * ### VisualTimer.clear
      *
-     * Reverts state of `VisualTimer` to right after constructor call
+     * Reverts state of `VisualTimer` to right after a constructor call
      *
      * @param {object} options Configuration object
      *
-     * @return {object} Old options
+     * @return {object} oldOptions The Old options
      *
      * @see node.timer.destroyTimer
      * @see VisualTimer.init
      */
     VisualTimer.prototype.clear = function(options) {
-        var oldOptions = this.options;
-        if (!options) {
-            options = {};
-        }
+        var oldOptions;
+        options = options || {};
+        oldOptions = this.options;
 
         node.timer.destroyTimer(this.gameTimer);
 
+        // TODO: avoid code duplication.
         // ----- as in constructor -----
-        this.options = options;
-        this.options.update = ('undefined' === typeof this.options.update) ?
-            1000 : this.options.update;
-        this.gameTimer = null;
+        // this.options = options;
+        //this.options.update = ('undefined' === typeof this.options.update) ?
+        //    1000 : this.options.update;
+        //this.options.stopOnDone = ('undefined' ===
+        //    typeof this.options.stopOnDone) ? true : this.options.stopOnDone;
+        //this.options.startOnPlaying = ('undefined' ===
+        //    typeof this.options.startOnPlaying) ?
+        //    true : this.options.startOnPlaying;
 
+        this.gameTimer = null;
         this.activeBox = null;
         this.isInitialized = false;
-        this.init(this.options);
+        this.init(options);
         // ----- as in constructor ----
 
         return oldOptions;
@@ -6602,7 +6495,7 @@
     /**
       * ### VisualTimer.startWaiting
       *
-      * Changes the `VisualTimer` appearance to a max. wait timer
+      * Stops the timer and changes the appearance to a max. wait timer
       *
       * If options and/or options.milliseconds are undefined, the wait timer
       * will start with the current time left on the `gameTimer`. The mainBox
@@ -6637,7 +6530,7 @@
     /**
       * ### VisualTimer.startTiming
       *
-      * Changes the `VisualTimer` appearance to a regular countdown
+      * Starts the timer and changes appearance to a regular countdown
       *
       * The mainBox will be unstriked and set active, the waitBox will be
       * hidden. All other options are forwarded directly to
@@ -6710,18 +6603,22 @@
 
         node.on('PLAYING', function() {
             var stepObj, timer, options;
-            stepObj = node.game.getCurrentStep();
-            if (!stepObj) return;
-            timer = stepObj.timer;
-            if (timer) {
-                options = processOptions(timer, this.options);
-                that.startTiming(options);
+            if (that.options.startOnPlaying) {
+                stepObj = node.game.getCurrentStep();
+                if (!stepObj) return;
+                timer = stepObj.timer;
+                if (timer) {
+                    options = processOptions(timer, this.options);
+                    that.startTiming(options);
+                }
             }
         });
 
         node.on('REALLY_DONE', function() {
-            if (!that.gameTimer.isStopped()) {
-                that.startWaiting();
+            if (that.options.stopOnDone) {
+                if (!that.gameTimer.isStopped()) {
+                    that.startWaiting();
+                }
             }
        });
     };

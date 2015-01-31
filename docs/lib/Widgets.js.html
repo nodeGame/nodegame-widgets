@@ -28,7 +28,7 @@
         <a href="#widgets.widgets">Widgets.widgets</a>
       </div>
       <div class="heading h3">
-        <a href="#widgets.widgets">Widgets.widgets</a>
+        <a href="#widgets.instances">Widgets.instances</a>
       </div>
       <div class="heading h2">
         <a href="#widgets%20methods">Widgets methods</a>
@@ -135,10 +135,10 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="widgets.widgets">
+<div class="pilwrap" id="widgets.instances">
   <h3>
-    <a href="#widgets.widgets" name="widgets.widgets" class="pilcrow">&#182;</a>
-    Widgets.widgets
+    <a href="#widgets.instances" name="widgets.instances" class="pilcrow">&#182;</a>
+    Widgets.instances
   </h3>
 </div>
 
@@ -420,29 +420,28 @@ returns FALSE.</p>
 a valid widget already loaded, for example through Widgets.get.
 In the latter case, dependencies are checked, and it returns FALSE if
 conditions are not met.</p>
-
-<p>It automatically creates a fieldset element around the widget if
-requested by the internal widget configuration, or if specified in the
-options parameter.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
     <div class="dox_tag_detail">
-      <span class="dox_tag_name">w_str</span>
+      <span class="dox_tag_name">w</span>
       <span class="dox_type">string</span>
-      <span>The name of the widget to load</span>
+      <span class="dox_type">object</span>
+      <span>The name of the widget to load or a loaded
+  widget object</span>
     </div>
     <div class="dox_tag_detail">
-      <span class="dox_tag_name">root.</span>
+      <span class="dox_tag_name">root</span>
       <span class="dox_type">object</span>
       <span>Optional. The HTML element under which the widget
-  will be appended. Default: <code>GameWindow.getFrameRoot()</code> or document.body</span>
+  will be appended. Default: <code>GameWindow.getFrameRoot()</code> or
+  <code>document.body</code></span>
     </div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">options</span>
       <span class="dox_type">options</span>
       <span>Optional. Configuration options to be passed
-  to the widgets</span>
+  to the widget</span>
     </div>
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
@@ -508,23 +507,6 @@ In this case a dependencies check is done</p>
             <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
         <span class="p">}</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
-</div>
-<p>If fieldset option is null, a div is added instead.
-If fieldset option is undefined, default options are used.
-if (options.fieldset !== null) {
-   root = appendFieldset(root, options.fieldset ||
-                         w.defaults.fieldset, w);
-}</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span> <span class="o">=</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="p">{</span>
             <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span>
                 <span class="nx">className</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;ng_widget&#39;</span><span class="p">,</span> <span class="s1">&#39;panel&#39;</span><span class="p">,</span> <span class="s1">&#39;panel-default&#39;</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">className</span><span class="p">]</span>
@@ -538,7 +520,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>Optionally add title.</p>
         </td>
@@ -554,7 +536,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Add body.</p>
         </td>
@@ -570,7 +552,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Optionally add footer.</p>
         </td>
@@ -586,7 +568,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Optionally set context.</p>
         </td>
@@ -604,7 +586,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Store widget instance for destruction.</p>
         </td>
@@ -660,7 +642,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Remove the widget's div from its parent:</p>
         </td>
@@ -769,25 +751,6 @@ if (options.fieldset !== null) {
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
-</div>
-<p>function appendFieldset(root, options, w) {
-   var idFieldset, legend;
-   if (!options) return root;
-   idFieldset = options.id || w.id + '_fieldset';
-   legend = options.legend || w.legend;
-   return W.addFieldset(root, idFieldset, legend, options.attributes);
-}</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
     <span class="kd">function</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
@@ -796,7 +759,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>TODO: Check every parameter</p>
         </td>
@@ -839,7 +802,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Expose Widgets to the global object</p>
         </td>
@@ -854,7 +817,7 @@ if (options.fieldset !== null) {
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>

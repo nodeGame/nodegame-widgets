@@ -1,4 +1,15 @@
 # nodegame-widgets change log
 
-## 0.6.0
- - Change log of new version starts here
+## 0.6.6
+
+ - Fix bug `#VisualTimer.clear()` with the new option introduced in 0.6.5
+
+## 0.6.5
+
+ - Added options `startOnPlaying`, and `stopOnDone` to VisualTimer.
+
+## 0.6.4
+
+ - Documentation fixes.
+ - Removed EventButton.
+
