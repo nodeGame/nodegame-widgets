@@ -22,10 +22,46 @@
         <a href="#controls">Controls</a>
       </div>
       <div class="heading h2">
-        <a href="#defaults">Defaults</a>
+        <a href="#meta-data">Meta-data</a>
       </div>
       <div class="heading h2">
-        <a href="#meta-data">Meta-data</a>
+        <a href="#controls%20constructor">Controls constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#controls.listroot">Controls.listRoot</a>
+      </div>
+      <div class="heading h3">
+        <a href="#controls.submit">Controls.submit</a>
+      </div>
+      <div class="heading h3">
+        <a href="#controls.changeevent">Controls.changeEvent</a>
+      </div>
+      <div class="heading h3">
+        <a href="#controls.haschanged">Controls.hasChanged</a>
+      </div>
+      <div class="heading h2">
+        <a href="#controls%20methods">Controls methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#controls.init">Controls.init</a>
+      </div>
+      <div class="heading h3">
+        <a href="#controls.append">Controls.append</a>
+      </div>
+      <div class="heading h3">
+        <a href="#controls.populate">Controls.populate</a>
+      </div>
+      <div class="heading h2">
+        <a href="#sub-classes">Sub-classes</a>
+      </div>
+      <div class="heading h3">
+        <a href="#slider">Slider</a>
+      </div>
+      <div class="heading h3">
+        <a href="#jqueryslider">jQuerySlider</a>
+      </div>
+      <div class="heading h3">
+        <a href="#radiocontrols">RadioControls</a>
       </div>
     </div>
   </div>
@@ -70,31 +106,15 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
+    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">sliderControls</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">jQuerySlider</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">radioControls</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
+
+
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Controls&#39;</span><span class="p">,</span> <span class="nx">Controls</span><span class="p">);</span>
 
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="defaults">
-  <h2>
-    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
-    Defaults
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="kd">var</span> <span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;controls&#39;</span> <span class="p">};</span>
-
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="nx">defaults</span><span class="p">;</span>
-
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">Slider</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">jQuerySlider</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">Radio</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
 
 
 </pre></div>
@@ -112,19 +132,147 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.1&#39;</span><span class="p">;</span>
     <span class="nx">Controls</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Wraps a collection of user-inputs controls.&#39;</span><span class="p">;</span>
 
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Controls&#39;</span><span class="p">;</span>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;controls&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls%20constructor">
+  <h2>
+    <a href="#controls%20constructor" name="controls%20constructor" class="pilcrow">&#182;</a>
+    Controls constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>Control</code> wraps a collection of user-input controls</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options
+which is stored and forwarded to Controls.init.
+
+The  options object can have the following attributes:
+  - Any option that can be passed to <code>node.window.List</code> constructor.
+  - <code>change</code>: Event to fire when contents change.
+  - <code>features</code>: Collection of collection attributes for individual
+                controls.
+  - <code>submit</code>: Description of the submit button.
+              If submit.id is defined, the button will get that id and
+              the text on the button will be the text in submit.name.
+              If submit is a string, it will be the text on the button.
+  - <code>attributes</code>: Attributes of the submit button.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Controls.init
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="kd">function</span> <span class="nx">Controls</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="s1">&#39;controls&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls.listroot">
+  <h3>
+    <a href="#controls.listroot" name="controls.listroot" class="pilcrow">&#182;</a>
+    Controls.listRoot
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The list which holds the controls</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls.submit">
+  <h3>
+    <a href="#controls.submit" name="controls.submit" class="pilcrow">&#182;</a>
+    Controls.submit
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The submit button</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_change&#39;</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls.changeevent">
+  <h3>
+    <a href="#controls.changeevent" name="controls.changeevent" class="pilcrow">&#182;</a>
+    Controls.changeEvent
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The event to be fired when the list changes</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="s1">&#39;Controls_change&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls.haschanged">
+  <h3>
+    <a href="#controls.haschanged" name="controls.haschanged" class="pilcrow">&#182;</a>
+    Controls.hasChanged
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Flag to indicate whether the list has changed</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">hasChanged</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
     <span class="p">}</span>
@@ -137,7 +285,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>TODO: node.window.addTextInput
 return node.window.addTextInput(root, id, attributes);</p>
@@ -153,7 +301,7 @@ return node.window.addTextInput(root, id, attributes);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>TODO: node.window.addTextInput
 return node.window.getTextInput(id, attributes);</p>
@@ -161,11 +309,65 @@ return node.window.getTextInput(id, attributes);</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="p">};</span>
 
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="controls%20methods">
+  <h2>
+    <a href="#controls%20methods" name="controls%20methods" class="pilcrow">&#182;</a>
+    Controls methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls.init">
+  <h3>
+    <a href="#controls.init" name="controls.init" class="pilcrow">&#182;</a>
+    Controls.init
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes the widget</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options.
+
+The  options object can have the following attributes:
+  - Any option that can be passed to <code>node.window.List</code> constructor.
+  - <code>change</code>: Event to fire when contents change.
+  - <code>features</code>: Collection of collection attributes for individual
+                controls.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">nodegame-window/List
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">hasChanged</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// TODO: should this be inherited?</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
@@ -175,45 +377,99 @@ return node.window.getTextInput(id, attributes);</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">List</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">();</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
         <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">features</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">populate</span><span class="p">();</span>
     <span class="p">};</span>
 
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">toReturn</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls.append">
+  <h3>
+    <a href="#controls.append" name="controls.append" class="pilcrow">&#182;</a>
+    Controls.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Appends the widget to <code>this.bodyDiv</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Controls.init
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">idButton</span> <span class="o">=</span> <span class="s1">&#39;submit_Controls&#39;</span><span class="p">;</span>
+
+
         <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">idButton</span> <span class="o">=</span> <span class="s1">&#39;submit_&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">idButton</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-                <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">option</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">option</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">idButton</span><span class="p">,</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="nx">idButton</span><span class="p">,</span>
                     <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submit</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attributes</span><span class="p">);</span>
 
-            <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">node</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">};</span>
         <span class="p">}</span>
-
-        <span class="k">return</span> <span class="nx">toReturn</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
     <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="controls.populate">
+  <h3>
+    <a href="#controls.populate" name="controls.populate" class="pilcrow">&#182;</a>
+    Controls.populate
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Adds features to the list.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Controls.init
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">populate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">container</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">that</span><span class="p">;</span>
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">container</span><span class="p">,</span> <span class="nx">elem</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
         <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
@@ -224,7 +480,7 @@ return node.window.getTextInput(id, attributes);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>Prepare the attributes vector.</p>
         </td>
@@ -244,7 +500,7 @@ return node.window.getTextInput(id, attributes);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>Add a different element according
 to the subclass instantiated.</p>
@@ -259,7 +515,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Fire the onChange event, if one defined</p>
         </td>
@@ -281,7 +537,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Element added to the list.</p>
         </td>
@@ -300,12 +556,12 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>TODO: should this be inherited?</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">hasChanged</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">});</span>
 
@@ -324,7 +580,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>node.log('KEY: ' + key, 'DEBUG');
 node.log('VALUE: ' + el.value, 'DEBUG');</p>
@@ -338,7 +594,7 @@ node.log('VALUE: ' + el.value, 'DEBUG');</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>TODO: set all the other attributes
 TODO: remove/add elements</p>
@@ -374,10 +630,13 @@ TODO: remove/add elements</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+<div class="pilwrap" id="sub-classes">
+  <h2>
+    <a href="#sub-classes" name="sub-classes" class="pilcrow">&#182;</a>
+    Sub-classes
+  </h2>
 </div>
-<p>Sub-classes</p>
+
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
@@ -386,26 +645,38 @@ TODO: remove/add elements</p>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="slider">
+  <h3>
+    <a href="#slider" name="slider" class="pilcrow">&#182;</a>
+    Slider
+  </h3>
 </div>
-<p>Slider</p>
+
+  </div>
+  <div class="body">
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;SliderControls&#39;</span><span class="p">,</span> <span class="nx">SliderControls</span><span class="p">);</span>
 
     <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
     <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
 
-    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;slidercontrols&#39;</span><span class="p">;</span>
-    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span><span class="p">;</span>
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.1&#39;</span><span class="p">;</span>
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Collection of Sliders.&#39;</span><span class="p">;</span>
+
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Slider Controls&#39;</span><span class="p">;</span>
+    <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;slidercontrols&#39;</span><span class="p">;</span>
 
     <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
 
 
-    <span class="kd">function</span> <span class="nx">SliderControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">SliderControls</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
     <span class="p">}</span>
 
@@ -422,27 +693,38 @@ TODO: remove/add elements</p>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="jqueryslider">
+  <h3>
+    <a href="#jqueryslider" name="jqueryslider" class="pilcrow">&#182;</a>
+    jQuerySlider
+  </h3>
 </div>
-<p>jQuerySlider</p>
+
+  </div>
+  <div class="body">
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;jQuerySliderControls&#39;</span><span class="p">,</span> <span class="nx">jQuerySliderControls</span><span class="p">);</span>
 
     <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
     <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
 
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;jqueryslidercontrols&#39;</span><span class="p">;</span>
-    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.13&#39;</span><span class="p">;</span>
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.14&#39;</span><span class="p">;</span>
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Collection of jQuery Sliders.&#39;</span><span class="p">;</span>
+
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;jQuery Slider Controls&#39;</span><span class="p">;</span>
+    <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;jqueryslidercontrols&#39;</span><span class="p">;</span>
 
     <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">jQuery</span><span class="o">:</span> <span class="p">{},</span>
         <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
 
-
-    <span class="kd">function</span> <span class="nx">jQuerySliderControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">jQuerySliderControls</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
     <span class="p">}</span>
 
@@ -464,44 +746,42 @@ TODO: remove/add elements</p>
     <span class="p">};</span>
 
 
-
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="radiocontrols">
+  <h3>
+    <a href="#radiocontrols" name="radiocontrols" class="pilcrow">&#182;</a>
+    RadioControls
+  </h3>
 </div>
-<p>/////////////////////////</p>
+
+  </div>
+  <div class="body">
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
-</div>
-<p>Radio</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;RadioControls&#39;</span><span class="p">,</span> <span class="nx">RadioControls</span><span class="p">);</span>
 
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
 
-    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;radiocontrols&#39;</span><span class="p">;</span>
-    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.1&#39;</span><span class="p">;</span>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.2&#39;</span><span class="p">;</span>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Collection of Radio Controls.&#39;</span><span class="p">;</span>
+
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Radio Controls&#39;</span><span class="p">;</span>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;radiocontrols&#39;</span><span class="p">;</span>
 
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
 
-    <span class="kd">function</span> <span class="nx">RadioControls</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">RadioControls</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">groupName</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">:</span>
             <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">generateUniqueId</span><span class="p">();</span>
@@ -515,9 +795,9 @@ TODO: remove/add elements</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
-<p>overriding populare also. There is an error with the Label</p>
+<p>overriding populate also. There is an error with the Label</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">populate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -527,8 +807,8 @@ TODO: remove/add elements</p>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;radio&#39;</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">.</span><span class="nx">group</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="s2">&quot;radioGroup&quot;</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">.</span><span class="nx">group</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="s2">&quot;radioGroup&quot;</span><span class="p">;</span>
-            <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">.</span><span class="nx">group</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span> <span class="o">||</span> <span class="s2">&quot;radioGroup&quot;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
@@ -540,7 +820,7 @@ TODO: remove/add elements</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Prepare the attributes vector.</p>
         </td>
@@ -559,7 +839,7 @@ TODO: remove/add elements</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Add a different element according
 to the subclass instantiated.</p>
@@ -574,7 +854,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Fire the onChange event, if one defined</p>
         </td>
@@ -592,7 +872,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Element added to the list.</p>
         </td>
@@ -616,7 +896,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Adding the text for the radio button</p>
         </td>
@@ -633,7 +913,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>console.log('ADDDING radio');
 console.log(attributes);
@@ -649,7 +929,7 @@ TODO: is this a javascript bug?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code>             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
@@ -669,7 +949,7 @@ TODO: is this a javascript bug?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>console.log(attributes);</p>
         </td>
@@ -684,7 +964,7 @@ TODO: is this a javascript bug?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Override getAllValues for Radio Controls</p>
         </td>

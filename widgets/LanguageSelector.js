@@ -11,10 +11,10 @@
 
     "use strict";
 
-    node.widgets.register('LanguageSelector', LanguageSelector);
-
     var J = node.JSUS,
         game = node.game;
+
+    node.widgets.register('LanguageSelector', LanguageSelector);
 
     // ## Meta-data
 

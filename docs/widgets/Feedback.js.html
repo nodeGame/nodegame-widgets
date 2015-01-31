@@ -22,13 +22,25 @@
         <a href="#feedback">Feedback</a>
       </div>
       <div class="heading h2">
-        <a href="#defaults">Defaults</a>
-      </div>
-      <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
+      </div>
+      <div class="heading h2">
+        <a href="#feedback%20constructor">Feedback constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.textarea">Feedback.textarea</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.submit">Feedback.submit</a>
+      </div>
+      <div class="heading h2">
+        <a href="#feedback%20methods">Feedback methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.append">Feedback.append</a>
       </div>
     </div>
   </div>
@@ -62,27 +74,8 @@ MIT Licensed</p>
 
     <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
 
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">,</span> <span class="nx">Feedback</span><span class="p">);</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="defaults">
-  <h2>
-    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
-    Defaults
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;feedback&#39;</span><span class="p">;</span>
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Feedback&#39;</span>
-    <span class="p">};</span>
 
 
 </pre></div>
@@ -100,8 +93,12 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span><span class="p">;</span>
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a simple feedback form&#39;</span><span class="p">;</span>
+    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span><span class="p">;</span>
+    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a simple feedback form.&#39;</span><span class="p">;</span>
+
+    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Feedback&#39;</span><span class="p">;</span>
+    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;feedback&#39;</span><span class="p">;</span>
+
 
 
 </pre></div>
@@ -123,17 +120,111 @@ MIT Licensed</p>
         <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
 
-    <span class="kd">function</span> <span class="nx">Feedback</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">Feedback</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback%20constructor">
+  <h2>
+    <a href="#feedback%20constructor" name="feedback%20constructor" class="pilcrow">&#182;</a>
+    Feedback constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>Feedback</code> sends a feedback message to the server</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">Feedback</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.textarea">
+  <h3>
+    <a href="#feedback.textarea" name="feedback.textarea" class="pilcrow">&#182;</a>
+    Feedback.textarea
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The TEXTAREA wherein clients can enter feedback</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.submit">
+  <h3>
+    <a href="#feedback.submit" name="feedback.submit" class="pilcrow">&#182;</a>
+    Feedback.submit
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Button to submit the feedback form</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">label</span> <span class="o">||</span> <span class="s1">&#39;FEEDBACK&#39;</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="feedback%20methods">
+  <h2>
+    <a href="#feedback%20methods" name="feedback%20methods" class="pilcrow">&#182;</a>
+    Feedback methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.append">
+  <h3>
+    <a href="#feedback.append" name="feedback.append" class="pilcrow">&#182;</a>
+    Feedback.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Appends widget to this.bodyDiv</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
+
         <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Submit&#39;</span><span class="p">));</span>
@@ -161,21 +252,14 @@ MIT Licensed</p>
                 <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;An error has occurred, feedback not sent.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">};</span>
-        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
-        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">);</span>
     <span class="p">};</span>
 
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getRoot</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">;</span>
-    <span class="p">};</span>
 
     <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="p">};</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">,</span> <span class="nx">Feedback</span><span class="p">);</span>
-
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>
         </td>

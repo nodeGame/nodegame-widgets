@@ -22,10 +22,22 @@
         <a href="#gamesummary">GameSummary</a>
       </div>
       <div class="heading h2">
-        <a href="#defaults">Defaults</a>
+        <a href="#meta-data">Meta-data</a>
       </div>
       <div class="heading h2">
-        <a href="#meta-data">Meta-data</a>
+        <a href="#gamesummary%20constructor">GameSummary constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#gamesummary.summarydiv">GameSummary.summaryDiv</a>
+      </div>
+      <div class="heading h2">
+        <a href="#gamesummary%20methods">GameSummary methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#gamesummary.append">GameSummary.append</a>
+      </div>
+      <div class="heading h3">
+        <a href="#gamesummary.writesummary">GameSummary.writeSummary</a>
       </div>
     </div>
   </div>
@@ -65,26 +77,6 @@ MIT Licensed</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="defaults">
-  <h2>
-    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
-    Defaults
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;gamesummary&#39;</span><span class="p">;</span>
-    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Game Summary&#39;</span> <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
 <div class="pilwrap" id="meta-data">
   <h2>
     <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
@@ -95,21 +87,126 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
+    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.1&#39;</span><span class="p">;</span>
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
         <span class="s1">&#39;Show the general configuration options of the game.&#39;</span><span class="p">;</span>
 
-    <span class="kd">function</span> <span class="nx">GameSummary</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Game Summary&#39;</span><span class="p">;</span>
+    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;gamesummary&#39;</span><span class="p">;</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gamesummary%20constructor">
+  <h2>
+    <a href="#gamesummary%20constructor" name="gamesummary%20constructor" class="pilcrow">&#182;</a>
+    GameSummary constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>GameSummary</code> shows the configuration options of the game in a box</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">GameSummary</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gamesummary.summarydiv">
+  <h3>
+    <a href="#gamesummary.summarydiv" name="gamesummary.summarydiv" class="pilcrow">&#182;</a>
+    GameSummary.summaryDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The DIV in which to display the information</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="gamesummary%20methods">
+  <h2>
+    <a href="#gamesummary%20methods" name="gamesummary%20methods" class="pilcrow">&#182;</a>
+    GameSummary methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gamesummary.append">
+  <h3>
+    <a href="#gamesummary.append" name="gamesummary.append" class="pilcrow">&#182;</a>
+    GameSummary.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Appends the widget to <code>this.bodyDiv</code> and calls <code>this.writeSummary</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameSummary.writeSummary
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">writeSummary</span><span class="p">();</span>
-        <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
     <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="gamesummary.writesummary">
+  <h3>
+    <a href="#gamesummary.writesummary" name="gamesummary.writesummary" class="pilcrow">&#182;</a>
+    GameSummary.writeSummary
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Writes a summary of the game configuration into <code>this.summaryDiv</code></p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">GameSummary</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">writeSummary</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">idState</span><span class="p">,</span> <span class="nx">idSummary</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">gName</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Name: &#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">metadata</span><span class="p">.</span><span class="nx">name</span><span class="p">),</span>
         <span class="nx">gDescr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span>
@@ -125,7 +222,7 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">));</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">gMaxP</span><span class="p">);</span>
 
-        <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">,</span> <span class="nx">idSummary</span><span class="p">);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">summaryDiv</span><span class="p">,</span> <span class="nx">idSummary</span><span class="p">);</span>
     <span class="p">};</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>

@@ -14,9 +14,9 @@
 
     "use strict";
 
-    node.widgets.register('VisualRound', VisualRound);
-
     var J = node.JSUS;
+
+    node.widgets.register('VisualRound', VisualRound);
 
     // ## Meta-data
 
@@ -231,7 +231,7 @@
      * - `COUNT_UP_STAGES_TO_TOTAL`: Display current and total stage number.
      * - `COUNT_UP_ROUNDS_TO_TOTAL`: Display current and total round number.
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
-     * - `COUNT_DOWN_ROUNDS: Display number of rounds left in this stage.
+     * - `COUNT_DOWN_ROUNDS`: Display number of rounds left in this stage.
      *
      * @param {array} displayModeNames Array of strings representing the names
      *

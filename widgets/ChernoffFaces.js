@@ -11,24 +11,21 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
-    Table = node.window.Table;
+    var J = node.JSUS;
+    var Table = node.window.Table;
 
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
-    // ## Defaults
 
-    ChernoffFaces.defaults = {};
-    ChernoffFaces.defaults.id = 'ChernoffFaces';
-    ChernoffFaces.defaults.canvas = {};
-    ChernoffFaces.defaults.canvas.width = 100;
-    ChernoffFaces.defaults.canvas.heigth = 100;
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.3';
+    ChernoffFaces.version = '0.3.1';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
+
+    ChernoffFaces.title = 'ChernoffFaces';
+    ChernoffFaces.className = 'chernofffaces';
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -40,20 +37,21 @@
 
     ChernoffFaces.FaceVector = FaceVector;
     ChernoffFaces.FacePainter = FacePainter;
+    ChernoffFaces.width = 100;
+    ChernoffFaces.height = 100;
 
     function ChernoffFaces (options) {
+        var that = this;
+
         this.options = options;
-        this.id = options.id;
         this.table = new Table({id: 'cf_table'});
-        this.root = options.root || document.createElement('div');
-        this.root.id = this.id;
 
         this.sc = node.widgets.get('Controls.Slider');  // Slider Controls
         this.fp = null; // Face Painter
         this.canvas = null;
 
         this.change = 'CF_CHANGE';
-        var that = this;
+
         this.changeFunc = function() {
             that.draw(that.sc.getAllValues());
         };
@@ -66,8 +64,6 @@
 
     ChernoffFaces.prototype.init = function(options) {
         var that = this;
-        this.id = options.id || this.id;
-        var PREF = this.id + '_';
 
         this.features = options.features || this.features ||
                         FaceVector.random();
@@ -75,21 +71,15 @@
         this.controls = ('undefined' !== typeof options.controls) ?
             options.controls : true;
 
-        var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
-        var idButton = (options.idButton) ? options.idButton : PREF + 'button';
-
-        this.canvas = node.window.getCanvas(idCanvas, options.canvas);
+        this.canvas = node.window.getCanvas('ChernoffFaces_canvas', options.canvas);
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
         var sc_options = {
             id: 'cf_controls',
-            features: JSUS.mergeOnKey(FaceVector.defaults, this.features,
+            features: J.mergeOnKey(FaceVector.defaults, this.features,
                                       'value'),
             change: this.change,
-            fieldset: {id: this.id + '_controls_fieldest',
-                       legend: this.controls.legend || 'Controls'
-                      },
             submit: 'Send'
         };
 
@@ -114,19 +104,21 @@
         }
 
 
+        this.someDiv = document.createElement('div');
+        this.someDiv.appendChild(this.table.table);
+
+
         this.table.add(this.canvas);
         this.table.parse();
-        this.root.appendChild(this.table.table);
     };
 
     ChernoffFaces.prototype.getCanvas = function() {
         return this.canvas;
     };
 
-    ChernoffFaces.prototype.append = function(root) {
-        root.appendChild(this.root);
+    ChernoffFaces.prototype.append = function() {
+        this.bodyDiv.appendChild(this.someDiv);
         this.table.parse();
-        return this.root;
     };
 
     ChernoffFaces.prototype.draw = function(features) {
@@ -135,7 +127,7 @@
         this.fp.redraw(fv);
         // Without merging wrong values are passed as attributes
         this.sc.init({
-            features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')
+            features: J.mergeOnKey(FaceVector.defaults, features, 'value')
         });
         this.sc.refresh();
     };
@@ -150,7 +142,7 @@
         this.fp.redraw(fv);
 
         var sc_options = {
-            features: JSUS.mergeOnValue(FaceVector.defaults, fv),
+            features: J.mergeOnValue(FaceVector.defaults, fv),
             change: this.change
         };
         this.sc.init(sc_options);
@@ -166,8 +158,8 @@
 
         this.canvas = new node.window.Canvas(canvas);
 
-        this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
-        this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
+        this.scaleX = canvas.width / ChernoffFaces.width;
+        this.scaleY = canvas.height / ChernoffFaces.heigth;
     }
 
     //Draws a Chernoff face.
@@ -212,7 +204,7 @@
             return;
         }
 
-        var ration;
+        var ratio;
         if (this.canvas.width > this.canvas.height) {
             ratio = this.canvas.width / face.head_radius * face.head_scale_x;
         }
@@ -395,8 +387,6 @@
      * 1 that completely describe a Chernoff face.
      *
      */
-
-
     FaceVector.defaults = {
         // Head
         head_radius: {
@@ -558,7 +548,41 @@
             step: 0.01,
             value: 20,
             label: 'Lower lip'
+        },
+
+        scaleX: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'Scale X'
+        },
+
+        scaleY: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'Scale Y'
+        },
+
+        color: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'color'
+        },
+
+        lineWidth: {
+            min: 0,
+            max: 20,
+            step: 0.01,
+            value: 0.2,
+            label: 'lineWidth'
         }
+
+
     };
 
     //Constructs a random face vector.
@@ -566,7 +590,7 @@
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!JSUS.in_array(key,
+                if (!J.in_array(key,
                             ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
 
                     out[key] = FaceVector.defaults[key].min +
@@ -578,7 +602,7 @@
         out.scaleX = 1;
         out.scaleY = 1;
 
-        out.color = 'green';
+        out.color = 'red';
         out.lineWidth = 1;
 
         return new FaceVector(out);

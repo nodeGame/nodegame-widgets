@@ -13,20 +13,16 @@
 
     var J = node.JSUS;
 
-    // ## Defaults
-
-    Chat.defaults = {};
-    Chat.defaults.id = 'chat';
-    Chat.defaults.fieldset = { legend: 'Chat' };
-    Chat.defaults.mode = 'MANY_TO_MANY';
-    Chat.defaults.textarea_id = 'chat_textarea';
-    Chat.defaults.chat_id = 'chat_chat';
-    Chat.defaults.chat_event = 'CHAT';
-    Chat.defaults.submit_id = 'chat_submit';
-    Chat.defaults.submit_text = 'chat';
-
+    node.widgets.register('Chat', Chat);
 
     // ## Meta-data
+
+    Chat.version = '0.4.1';
+    Chat.description = 'Offers a uni-/bi-directional communication interface ' +
+        'between players, or between players and the experimenter.';
+
+    Chat.title = 'Chat';
+    Chat.className = 'chat';
 
     // ### Chat.modes
     //
@@ -36,10 +32,10 @@
     // - MANY_TO_ONE: everybody can see all the messages, private messages can
     //   be received, but not sent.
     //
-    // ONE_TO_ONE: everybody sees only personal messages, private messages can
+    // - ONE_TO_ONE: everybody sees only personal messages, private messages can
     //   be received, but not sent. All messages are sent to the SERVER.
     //
-    // RECEIVER_ONLY: messages can only be received, but not sent.
+    // - RECEIVER_ONLY: messages can only be received, but not sent.
     //
     Chat.modes = {
         MANY_TO_MANY: 'MANY_TO_MANY',
@@ -48,77 +44,176 @@
         RECEIVER_ONLY: 'RECEIVER_ONLY'
     };
 
-    Chat.version = '0.4';
-    Chat.description = 'Offers a uni-/bi-directional communication interface ' +
-        'between players, or between players and the experimenter.';
 
     // ## Dependencies
 
     Chat.dependencies = {
         JSUS: {}
+
     };
 
+    /**
+     * ## Chat constructor
+     *
+     * `Chat` is a simple configurable chat
+     *
+     * @param {object} options Optional. Configuration options
+     * which is forwarded to Chat.init.
+     *
+     * @see Chat.init
+     */
     function Chat (options) {
-        this.id = options.id || Chat.id;
-        this.mode = options.mode || Chat.defaults.mode;
+        /**
+         * ### Chat.mode
+         *
+         * Determines to mode of communication
+         *
+         * @see Chat.modes
+         */
+        this.mode = null;
 
-        this.root = null;
+        /**
+         * ### Chat.recipient
+         *
+         * Determines recipient of the messages
+         */
+        this.recipient = null;
 
-        this.textarea_id = options.textarea_id || Chat.defaults.textarea_id;
-        this.chat_id = options.chat_id || Chat.defaults.chat_id;
-        this.submit_id = options.submit_id || Chat.defaults.submit_id;
 
-        this.chat_event = options.chat_event || Chat.defaults.chat_event;
-        this.submit_text = options.submit_text || Chat.defaults.submit_text;
+        /**
+         * ### Chat.textarea
+         *
+         * The textarea wherein to write and read
+         */
+        this.textarea = null;
 
-        this.submit = W.getEventButton(this.chat_event, this.submit_text,
-                                       this.submit_id);
-        this.textarea = W.getElement('textarea', this.textarea_id);
-        this.chat = W.getElement('div', this.chat_id);
+        /**
+         * ### Chat.textareaId
+         *
+         * The id of the textarea
+         */
+        this.textareaId = null;
 
-        if ('undefined' !== typeof options.displayName) {
-            this.displayName = options.displayName;
-        }
 
-        switch(this.mode) {
+        /**
+         * ### Chat.chat
+         *
+         * The DIV wherein to display the chat
+         */
+        this.chat = null;
 
-        case Chat.modes.RECEIVER_ONLY:
-            this.recipient = {value: 'SERVER'};
-            break;
-        case Chat.modes.MANY_TO_ONE:
-            this.recipient = {value: 'ROOM'};
-            break;
-        case Chat.modes.ONE_TO_ONE:
-            this.recipient = {value: 'SERVER'};
-            break;
-        default:
-            this.recipient = W.getRecipientSelector();
-        }
+        /**
+         * ### Chat.chatId
+         *
+         * The id of the chat DIV
+         */
+        this.chatId = null;
+
+
+        /**
+         * ### Chat.submit
+         *
+         * The submit button
+         */
+        this.submit = null;
+
+        /**
+         * ### Chat.submitId
+         *
+         * The id of the submit butten
+         */
+        this.submitId = null;
+
+        /**
+         * ### Chat.submitText
+         *
+         * The text on the submit button
+         */
+        this.submitText = null;
+
+
+        /**
+         * ### Chat.chatEvent
+         *
+         * The event to fire when sending a message
+         */
+        this.chatEvent = null;
+
+        /**
+         * ### Chat.displayName
+         *
+         * Function which displays the sender's name
+         */
+        this.displayName = null;
+        this.init(options)
     }
 
+    // ## Chat methods
 
-    Chat.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.chat);
+    /**
+     * ### Chat.init
+     *
+     * Initializes the widget
+     *
+     * @param {object} options Optional. Configuration options.
+     *
+     * The  options object can have the following attributes:
+     *   - `mode`: Determines to mode of communication
+     *   - `textareaId`: The id of the textarea
+     *   - `chatId`: The id of the chat DIV
+     *   - `submitId`: The id of the submit butten
+     *   - `submitText`: The text on the submit button
+     *   - `chatEvent`: The event to fire when sending a message
+     *   - `displayName`: Function which displays the sender's name
+     */
+    Chat.prototype.init = function(options) {
+        options = options || {};
+        this.mode = options.mode || 'MANY_TO_MANY';
+
+        this.textareaId = options.textareaId || 'chat_textarea';
+        this.chatId = options.chatId || 'chat_chat';
+        this.submitId = options.submitId || 'chat_submit';
+
+        this.chatEvent = options.chatEvent || 'CHAT';
+        this.submitText = options.submitText || 'chat';
+
+        this.submit = W.getEventButton(this.chatEvent, this.submitText,
+                                       this.submitId);
+        this.textarea = W.getElement('textarea', this.textareaId);
+        this.chat = W.getElement('div', this.chatId);
+
+        this.displayName = options.displayName || function(from) {
+            return from;
+        };
+
+        switch(this.mode) {
+            case Chat.modes.RECEIVER_ONLY:
+                this.recipient = {value: 'SERVER'};
+                break;
+            case Chat.modes.MANY_TO_ONE:
+                this.recipient = {value: 'ROOM'};
+                break;
+            case Chat.modes.ONE_TO_ONE:
+                this.recipient = {value: 'SERVER'};
+                break;
+            default:
+                this.recipient = W.getRecipientSelector();
+        }
+    };
+
+
+    Chat.prototype.append = function() {
+        this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
-            W.writeln('', root);
-            root.appendChild(this.textarea);
-            W.writeln('', root);
-            root.appendChild(this.submit);
+            W.writeln('', this.bodyDiv);
+            this.bodyDiv.appendChild(this.textarea);
+            W.writeln('', this.bodyDiv);
+            this.bodyDiv.appendChild(this.submit);
             if (this.mode === Chat.modes.MANY_TO_MANY) {
-                root.appendChild(this.recipient);
+                this.bodyDiv.appendChild(this.recipient);
             }
         }
-        return root;
-    };
-
-    Chat.prototype.getRoot = function() {
-        return this.root;
-    };
-
-    Chat.prototype.displayName = function(from) {
-        return from;
     };
 
     Chat.prototype.readTA = function() {
@@ -136,7 +231,7 @@
     Chat.prototype.listeners = function() {
         var that = this;
 
-        node.on(this.chat_event, function() {
+        node.on(this.chatEvent, function() {
             var msg, to, args;
             msg = that.readTA();
             if (!msg) return;
@@ -152,7 +247,7 @@
                 '!txt': msg
             };
             that.writeTA('%sMe%s: %msg!txt%msg', args);
-            node.say(that.chat_event, to, msg.trim());
+            node.say(that.chatEvent, to, msg.trim());
         });
 
         if (this.mode === Chat.modes.MANY_TO_MANY) {
@@ -162,7 +257,7 @@
             });
         }
 
-        node.on.data(this.chat_event, function(msg) {
+        node.on.data(this.chatEvent, function(msg) {
             var from, args;
             if (msg.from === node.player.id || msg.from === node.player.sid) {
                 return;
@@ -189,7 +284,5 @@
             that.writeTA('%s!from%s: %msg!txt%msg', args);
         });
     };
-
-    node.widgets.register('Chat', Chat);
 
 })(node);
