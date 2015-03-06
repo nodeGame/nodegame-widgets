@@ -35,6 +35,7 @@
     Widget.prototype.destroy = function() {};
 
     Widget.prototype.setTitle = function(title) {
+        var tmp;
         if (!this.panelDiv) {
             throw new Error('Widget.setTitle: panelDiv is missing.');
         }
@@ -51,8 +52,9 @@
                 // Add heading.
                 this.headingDiv = W.addDiv(this.panelDiv, undefined,
                         {className: 'panel-heading'});
-                // Move it to before the body.
-                this.panelDiv.insertBefore(this.headingDiv, this.bodyDiv);
+                // Move it to before the body (IE cannot have undefined).
+                tmp = (this.bodyDiv && this.bodyDiv.childNodes[0]) || null;
+                this.panelDiv.insertBefore(this.headingDiv, tmp);
             }
 
             // Set title.
@@ -3633,7 +3635,7 @@
                             language + 'RadioButton', {
                                 type: 'radio',
                                 name: 'languageButton',
-                                value: msg.data[language].name,
+                                value: msg.data[language].name
                             }
                         );
 
