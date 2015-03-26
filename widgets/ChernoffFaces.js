@@ -1,6 +1,6 @@
 /**
  * # ChernoffFaces
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face
@@ -17,7 +17,6 @@
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
 
-
     // ## Meta-data
 
     ChernoffFaces.version = '0.3.1';
@@ -32,7 +31,7 @@
         JSUS: {},
         Table: {},
         Canvas: {},
-        'Controls.Slider': {}
+        SliderControls: {}
     };
 
     ChernoffFaces.FaceVector = FaceVector;
@@ -43,57 +42,84 @@
     function ChernoffFaces (options) {
         var that = this;
 
+        // ## Public Properties
+
+        // ### ChernoffFaces.options
+        // Configuration options
         this.options = options;
+
+        // ### ChernoffFaces.table
+        // The table containing everything
         this.table = new Table({id: 'cf_table'});
 
-        this.sc = node.widgets.get('Controls.Slider');  // Slider Controls
-        this.fp = null; // Face Painter
+        // ### ChernoffFaces.sc
+        // The slider controls of the interface
+        this.sc = node.widgets.get('SliderControls');
+
+        // ### ChernoffFaces.fp
+        // The object generating the Chernoff faces
+        this.fp = null;
+
+        // ### ChernoffFaces.canvas
+        // The HTMLElement canvas where the faces are created
         this.canvas = null;
 
+        // ### ChernoffFaces.change
+        // The name of the event emitted when a slider is moved
         this.change = 'CF_CHANGE';
 
+        // ### ChernoffFaces.changeFunc
+        // The callback executed when a slider is moved.
         this.changeFunc = function() {
             that.draw(that.sc.getAllValues());
         };
 
+        // ### ChernoffFaces.features
+        // The object containing all the features to draw Chernoff faces
         this.features = null;
+
+        // ### ChernoffFaces.controls
+        // Flag to determine whether the slider controls should be shown.
         this.controls = null;
 
+        // Init.
         this.init(this.options);
     }
 
     ChernoffFaces.prototype.init = function(options) {
         var that = this;
 
+        var controlsOptions;
+
         this.features = options.features || this.features ||
                         FaceVector.random();
 
-        this.controls = ('undefined' !== typeof options.controls) ?
+        this.controls = 'undefined' !== typeof options.controls ?
             options.controls : true;
 
-        this.canvas = node.window.getCanvas('ChernoffFaces_canvas', options.canvas);
+        this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
+
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
-        var sc_options = {
+        controlsOptions = {
             id: 'cf_controls',
-            features: J.mergeOnKey(FaceVector.defaults, this.features,
-                                      'value'),
+            features: J.mergeOnKey(FaceVector.defaults, this.features, 'value'),
             change: this.change,
             submit: 'Send'
         };
 
-        this.sc = node.widgets.get('Controls.Slider', sc_options);
+        this.sc = node.widgets.get('SliderControls', controlsOptions);
 
         // Controls are always there, but may not be visible
-        if (this.controls) {
-            this.table.add(this.sc);
-        }
+        if (this.controls) this.table.add(this.sc);
 
+        // TODO: need to check what to remove first.
         // Dealing with the onchange event
         if ('undefined' === typeof options.change) {
             node.on(this.change, this.changeFunc);
-        } else {
+        }
+        else {
             if (options.change) {
                 node.on(options.change, this.changeFunc);
             }
@@ -152,11 +178,11 @@
     };
 
 
-    // FacePainter
-    // The class that actually draws the faces on the Canvas
+    // # FacePainter
+    // The class that actually draws the faces on the Canvas.
     function FacePainter (canvas, settings) {
 
-        this.canvas = new node.window.Canvas(canvas);
+        this.canvas = new W.Canvas(canvas);
 
         this.scaleX = canvas.width / ChernoffFaces.width;
         this.scaleY = canvas.height / ChernoffFaces.heigth;

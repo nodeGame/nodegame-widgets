@@ -35,6 +35,7 @@
     Widget.prototype.destroy = function() {};
 
     Widget.prototype.setTitle = function(title) {
+        var tmp;
         if (!this.panelDiv) {
             throw new Error('Widget.setTitle: panelDiv is missing.');
         }
@@ -51,8 +52,9 @@
                 // Add heading.
                 this.headingDiv = W.addDiv(this.panelDiv, undefined,
                         {className: 'panel-heading'});
-                // Move it to before the body.
-                this.panelDiv.insertBefore(this.headingDiv, this.bodyDiv);
+                // Move it to before the body (IE cannot have undefined).
+                tmp = (this.bodyDiv && this.bodyDiv.childNodes[0]) || null;
+                this.panelDiv.insertBefore(this.headingDiv, tmp);
             }
 
             // Set title.
@@ -742,7 +744,7 @@
 
 /**
  * # ChernoffFaces
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face
@@ -759,7 +761,6 @@
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
 
-
     // ## Meta-data
 
     ChernoffFaces.version = '0.3.1';
@@ -774,7 +775,7 @@
         JSUS: {},
         Table: {},
         Canvas: {},
-        'Controls.Slider': {}
+        SliderControls: {}
     };
 
     ChernoffFaces.FaceVector = FaceVector;
@@ -784,12 +785,16 @@
 
     function ChernoffFaces (options) {
         var that = this;
-
+        debugger
         this.options = options;
         this.table = new Table({id: 'cf_table'});
 
-        this.sc = node.widgets.get('Controls.Slider');  // Slider Controls
-        this.fp = null; // Face Painter
+        // Slider Controls.
+        this.sc = node.widgets.get('SliderControls');
+
+        // Face Painter.
+        this.fp = null;
+
         this.canvas = null;
 
         this.change = 'CF_CHANGE';
@@ -825,7 +830,7 @@
             submit: 'Send'
         };
 
-        this.sc = node.widgets.get('Controls.Slider', sc_options);
+        this.sc = node.widgets.get('SliderControls', sc_options);
 
         // Controls are always there, but may not be visible
         if (this.controls) {
@@ -835,7 +840,8 @@
         // Dealing with the onchange event
         if ('undefined' === typeof options.change) {
             node.on(this.change, this.changeFunc);
-        } else {
+        }
+        else {
             if (options.change) {
                 node.on(options.change, this.changeFunc);
             }
