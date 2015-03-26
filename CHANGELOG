@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## 0.6.8
+
+- Controls subclasses are registered correctly
+
 ## 0.6.7
 
 - Many widgets have been ported (to check still)
