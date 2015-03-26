@@ -160,7 +160,7 @@
                             language + 'RadioButton', {
                                 type: 'radio',
                                 name: 'languageButton',
-                                value: msg.data[language].name,
+                                value: msg.data[language].name
                             }
                         );
 

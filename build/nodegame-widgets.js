@@ -785,58 +785,80 @@
 
     function ChernoffFaces (options) {
         var that = this;
-        debugger
+
+        // ## Public Properties
+
+        // ### ChernoffFaces.options
+        // Configuration options
         this.options = options;
+
+        // ### ChernoffFaces.table
+        // The table containing everything
         this.table = new Table({id: 'cf_table'});
 
-        // Slider Controls.
+        // ### ChernoffFaces.sc
+        // The slider controls of the interface
         this.sc = node.widgets.get('SliderControls');
 
-        // Face Painter.
+        // ### ChernoffFaces.fp
+        // The object generating the Chernoff faces
         this.fp = null;
 
+        // ### ChernoffFaces.canvas
+        // The HTMLElement canvas where the faces are created
         this.canvas = null;
 
+        // ### ChernoffFaces.change
+        // The name of the event emitted when a slider is moved
         this.change = 'CF_CHANGE';
 
+        // ### ChernoffFaces.changeFunc
+        // The callback executed when a slider is moved.
         this.changeFunc = function() {
             that.draw(that.sc.getAllValues());
         };
 
+        // ### ChernoffFaces.features
+        // The object containing all the features to draw Chernoff faces
         this.features = null;
+
+        // ### ChernoffFaces.controls
+        // Flag to determine whether the slider controls should be shown.
         this.controls = null;
 
+        // Init.
         this.init(this.options);
     }
 
     ChernoffFaces.prototype.init = function(options) {
         var that = this;
 
+        var controlsOptions;
+
         this.features = options.features || this.features ||
                         FaceVector.random();
 
-        this.controls = ('undefined' !== typeof options.controls) ?
+        this.controls = 'undefined' !== typeof options.controls ?
             options.controls : true;
 
-        this.canvas = node.window.getCanvas('ChernoffFaces_canvas', options.canvas);
+        this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
+
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
-        var sc_options = {
+        controlsOptions = {
             id: 'cf_controls',
-            features: J.mergeOnKey(FaceVector.defaults, this.features,
-                                      'value'),
+            features: J.mergeOnKey(FaceVector.defaults, this.features, 'value'),
             change: this.change,
             submit: 'Send'
         };
 
-        this.sc = node.widgets.get('SliderControls', sc_options);
+        this.sc = node.widgets.get('SliderControls', controlsOptions);
 
         // Controls are always there, but may not be visible
-        if (this.controls) {
-            this.table.add(this.sc);
-        }
+        if (this.controls) this.table.add(this.sc);
 
+        // TODO: need to check what to remove first.
         // Dealing with the onchange event
         if ('undefined' === typeof options.change) {
             node.on(this.change, this.changeFunc);
@@ -900,11 +922,11 @@
     };
 
 
-    // FacePainter
-    // The class that actually draws the faces on the Canvas
+    // # FacePainter
+    // The class that actually draws the faces on the Canvas.
     function FacePainter (canvas, settings) {
 
-        this.canvas = new node.window.Canvas(canvas);
+        this.canvas = new W.Canvas(canvas);
 
         this.scaleX = canvas.width / ChernoffFaces.width;
         this.scaleY = canvas.height / ChernoffFaces.heigth;
@@ -2115,10 +2137,7 @@
     var jQuerySlider = jQuerySliderControls;
     var radioControls = RadioControls;
 
-
     node.widgets.register('Controls', Controls);
-
-
 
     // ## Meta-data
 
@@ -2202,7 +2221,7 @@
      *
      * @param {object} options Optional. Configuration options.
      *
-     *  The  options object can have the following attributes:
+     * The  options object can have the following attributes:
      *   - Any option that can be passed to `node.window.List` constructor.
      *   - `change`: Event to fire when contents change.
      *   - `features`: Collection of collection attributes for individual
@@ -2220,7 +2239,7 @@
                 this.changeEvent = options.change;
             }
         }
-        this.list = new node.window.List(options);
+        this.list = new W.List(options);
         this.listRoot = this.list.getRoot();
 
         if (!options.features) {
@@ -2358,7 +2377,7 @@
     /**
      * ### Slider
      */
-    node.widgets.register('SliderControls', SliderControls);
+
 
     SliderControls.prototype.__proto__ = Controls.prototype;
     SliderControls.prototype.constructor = SliderControls;
@@ -2373,6 +2392,8 @@
         Controls: {}
     };
 
+    // Need to be after the prototype is inherited.
+    node.widgets.register('SliderControls', SliderControls);
 
     function SliderControls(options) {
         Controls.call(this, options);
@@ -2389,7 +2410,7 @@
     /**
      * ### jQuerySlider
      */
-     node.widgets.register('jQuerySliderControls', jQuerySliderControls);
+
 
     jQuerySliderControls.prototype.__proto__ = Controls.prototype;
     jQuerySliderControls.prototype.constructor = jQuerySliderControls;
@@ -2404,6 +2425,8 @@
         jQuery: {},
         Controls: {}
     };
+
+    node.widgets.register('jQuerySliderControls', jQuerySliderControls);
 
     function jQuerySliderControls(options) {
         Controls.call(this, options);
@@ -2430,8 +2453,6 @@
      * ### RadioControls
      */
 
-    node.widgets.register('RadioControls', RadioControls);
-
     RadioControls.prototype.__proto__ = Controls.prototype;
     RadioControls.prototype.constructor = RadioControls;
 
@@ -2444,6 +2465,8 @@
     RadioControls.dependencies = {
         Controls: {}
     };
+
+    node.widgets.register('RadioControls', RadioControls);
 
     function RadioControls(options) {
         Controls.call(this,options);
@@ -3639,7 +3662,7 @@
                             language + 'RadioButton', {
                                 type: 'radio',
                                 name: 'languageButton',
-                                value: msg.data[language].name,
+                                value: msg.data[language].name
                             }
                         );
 
