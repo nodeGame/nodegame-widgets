@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DisconnectBox.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "widgets/DisconnectBox.js", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#disconnectbox">DisconnectBox</a>
+      </div>
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+      <div class="heading h2">
+        <a href="#disconnectbox%20constructor">DisconnectBox constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#disconnectbox.disconnectbutton">DisconnectBox.disconnectButton</a>
+      </div>
+      <div class="heading h3">
+        <a href="#disconnectbox.ee">DisconnectBox.ee</a>
+      </div>
+      <div class="heading h2">
+        <a href="#disconnectbox%20methods">DisconnectBox methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#disconnectbox.append">DisconnectBox.append</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="disconnectbox">
+  <h1>
+    <a href="#disconnectbox" name="disconnectbox" class="pilcrow">&#182;</a>
+    DisconnectBox
+  </h1>
+</div>
+
+
+<p>Copyright(c) 2014 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Shows current, previous and next stage.</p>
+
+<p>www.nodegame.org</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">JSUS</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;DisconnectBox&#39;</span><span class="p">,</span> <span class="nx">DisconnectBox</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
+    Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">DisconnectBox</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.2&#39;</span><span class="p">;</span>
+    <span class="nx">DisconnectBox</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
+        <span class="s1">&#39;Visually display current, previous and next stage of the game.&#39;</span><span class="p">;</span>
+
+    <span class="nx">DisconnectBox</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Disconnect&#39;</span><span class="p">;</span>
+    <span class="nx">DisconnectBox</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;disconnectbox&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
+    Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">DisconnectBox</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="disconnectbox%20constructor">
+  <h2>
+    <a href="#disconnectbox%20constructor" name="disconnectbox%20constructor" class="pilcrow">&#182;</a>
+    DisconnectBox constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>DisconnectBox</code> displays current, previous and next stage of the game</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">DisconnectBox</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="disconnectbox.disconnectbutton">
+  <h3>
+    <a href="#disconnectbox.disconnectbutton" name="disconnectbox.disconnectbutton" class="pilcrow">&#182;</a>
+    DisconnectBox.disconnectButton
+  </h3>
+</div>
+
+
+<p>The button for disconnection</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">disconnectButton</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="disconnectbox.ee">
+  <h3>
+    <a href="#disconnectbox.ee" name="disconnectbox.ee" class="pilcrow">&#182;</a>
+    DisconnectBox.ee
+  </h3>
+</div>
+
+
+<p>The event emitter with whom the events are registered</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">ee</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="disconnectbox%20methods">
+  <h2>
+    <a href="#disconnectbox%20methods" name="disconnectbox%20methods" class="pilcrow">&#182;</a>
+    DisconnectBox methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="disconnectbox.append">
+  <h3>
+    <a href="#disconnectbox.append" name="disconnectbox.append" class="pilcrow">&#182;</a>
+    DisconnectBox.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Appends widget to <code>this.bodyDiv</code> and writes the stage</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">DisconnectBox.writeStage
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">DisconnectBox</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">disconnectButton</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getButton</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="s1">&#39;Leave Experiment&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">disconnectButton</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;btn btn-lg&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">disconnectButton</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">disconnectButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">();</span>
+        <span class="p">};</span>
+    <span class="p">};</span>
+
+    <span class="nx">DisconnectBox</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">ee</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">getCurrentEventEmitter</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">ee</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;SOCKET_DISCONNECT&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">DBdiscon</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;DB got socket_diconnect&#39;</span><span class="p">);</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">disconnectButton</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">});</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">ee</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;SOCKET_CONNECT&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">DBcon</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;DB got socket_connect&#39;</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="nx">DisconnectBox</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">ee</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;SOCKET_DISCONNECT&#39;</span><span class="p">,</span> <span class="s1">&#39;DBdiscon&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">ee</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;SOCKET_CONNECT&#39;</span><span class="p">,</span> <span class="s1">&#39;DBcon&#39;</span><span class="p">);</span>
+    <span class="p">};</span>
+
+
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

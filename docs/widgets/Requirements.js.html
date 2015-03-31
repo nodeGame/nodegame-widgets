@@ -1414,7 +1414,7 @@ in the results array.</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">loadFrameTest</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">that</span><span class="p">,</span> <span class="nx">testIframe</span><span class="p">,</span> <span class="nx">root</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">oldIframe</span><span class="p">,</span> <span class="nx">oldIframeName</span><span class="p">,</span> <span class="nx">oldIframeRoot</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">oldIframe</span><span class="p">,</span> <span class="nx">oldIframeName</span><span class="p">,</span> <span class="nx">oldIframeRoot</span><span class="p">,</span> <span class="nx">iframeName</span><span class="p">;</span>
         <span class="nx">errors</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">oldIframe</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrame</span><span class="p">();</span>
@@ -1429,9 +1429,10 @@ in the results array.</p>
         <span class="p">}</span>
 
         <span class="k">try</span> <span class="p">{</span>
-            <span class="nx">testIframe</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addIFrame</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="s1">&#39;testIFrame&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">iframeName</span> <span class="o">=</span> <span class="s1">&#39;testIFrame&#39;</span><span class="p">;</span>
+            <span class="nx">testIframe</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addIFrame</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">iframeName</span><span class="p">,</span> <span class="p">{</span>
                 <span class="nx">style</span><span class="o">:</span> <span class="p">{</span> <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;none&#39;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">);</span>
-            <span class="nx">W</span><span class="p">.</span><span class="nx">setFrame</span><span class="p">(</span><span class="nx">testIframe</span><span class="p">,</span> <span class="s1">&#39;testIframe&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="p">);</span>
+            <span class="nx">W</span><span class="p">.</span><span class="nx">setFrame</span><span class="p">(</span><span class="nx">testIframe</span><span class="p">,</span> <span class="nx">iframeName</span><span class="p">,</span> <span class="nx">root</span><span class="p">);</span>
             <span class="nx">W</span><span class="p">.</span><span class="nx">loadFrame</span><span class="p">(</span><span class="s1">&#39;/pages/testpage.htm&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                 <span class="kd">var</span> <span class="nx">found</span><span class="p">;</span>
                 <span class="nx">found</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">);</span>

@@ -35,7 +35,12 @@
      * `DisconnectBox` displays current, previous and next stage of the game
      */
     function DisconnectBox() {
+        // ### DisconnectBox.disconnectButton
+        // The button for disconnection
         this.disconnectButton = null;
+        // ### DisconnectBox.ee
+        // The event emitter with whom the events are registered
+        this.ee = null;
     }
 
     // ## DisconnectBox methods
@@ -60,14 +65,20 @@
     DisconnectBox.prototype.listeners = function() {
         var that = this;
 
-        node.on('SOCKET_DISCONNECT', function() {
-            console.log('AAAAAAAAAAA');
+        this.ee = node.getCurrentEventEmitter();
+        this.ee.on('SOCKET_DISCONNECT', function DBdiscon() {
+            console.log('DB got socket_diconnect');
             that.disconnectButton.disabled = true;
         });
 
-        node.on('SOCKET_CONNECT', function() {
-            console.log('BBBBBBBBB');
+        this.ee.on('SOCKET_CONNECT', function DBcon() {
+            console.log('DB got socket_connect');
         });
+    };
+
+    DisconnectBox.prototype.destroy = function() {
+        this.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
+        this.ee.off('SOCKET_CONNECT', 'DBcon');
     };
 
 

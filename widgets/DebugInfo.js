@@ -1,6 +1,6 @@
 /**
- * # StateDisplay
- * Copyright(c) 2014 Stefano Balietti
+ * # DebugInfo
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player
@@ -14,31 +14,31 @@
     var Table = node.window.Table,
     GameStage = node.GameStage;
 
-    node.widgets.register('StateDisplay', StateDisplay);
+    node.widgets.register('DebugInfo', DebugInfo);
 
     // ## Meta-data
 
-    StateDisplay.version = '0.5.0';
-    StateDisplay.description = 'Display basic info about player\'s status.';
+    DebugInfo.version = '0.5.0';
+    DebugInfo.description = 'Display basic info about player\'s status.';
 
-    StateDisplay.title = 'State Display';
-    StateDisplay.className = 'statedisplay';
+    DebugInfo.title = 'State Display';
+    DebugInfo.className = 'statedisplay';
 
     // ## Dependencies
 
-    StateDisplay.dependencies = {
+    DebugInfo.dependencies = {
         Table: {}
     };
 
 
     /**
-     * ## StateDisplay constructor
+     * ## DebugInfo constructor
      *
-     * `StateDisplay` displays information about the state of a player
+     * `DebugInfo` displays information about the state of a player
      */
-    function StateDisplay() {
+    function DebugInfo() {
         /**
-         * ### StateDisplay.table
+         * ### DebugInfo.table
          *
          * The `Table` which holds the information
          *
@@ -47,16 +47,16 @@
         this.table = new Table();
     }
 
-    // ## StateDisplay methods
+    // ## DebugInfo methods
 
     /**
-     * ### StateDisplay.append
+     * ### DebugInfo.append
      *
      * Appends widget to `this.bodyDiv` and calls `this.updateAll`
      *
-     * @see StateDisplay.updateAll
+     * @see DebugInfo.updateAll
      */
-    StateDisplay.prototype.append = function() {
+    DebugInfo.prototype.append = function() {
         var that, checkPlayerName;
         that = this;
         checkPlayerName = setInterval(function() {
@@ -69,11 +69,11 @@
     };
 
     /**
-     * ### StateDisplay.updateAll
+     * ### DebugInfo.updateAll
      *
      * Updates information in `this.table`
      */
-    StateDisplay.prototype.updateAll = function() {
+    DebugInfo.prototype.updateAll = function() {
         var stage, stageNo, stageId, playerId, tmp, miss;
         miss = '-';
 
@@ -100,14 +100,15 @@
 
     };
 
-    StateDisplay.prototype.listeners = function() {
+    DebugInfo.prototype.listeners = function() {
         var that = this;
         node.on('STEP_CALLBACK_EXECUTED', function() {
             that.updateAll();
         });
     };
 
-    StateDisplay.prototype.destroy = function() {
-        node.off('STEP_CALLBACK_EXECUTED', StateDisplay.prototype.updateAll);
+    DebugInfo.prototype.destroy = function() {
+        node.off('STEP_CALLBACK_EXECUTED', DebugInfo.prototype.updateAll);
     };
+
 })(node);

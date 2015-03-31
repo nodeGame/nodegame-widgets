@@ -560,7 +560,7 @@
      */
     Requirements.prototype.loadFrameTest = function(result) {
         var errors, that, testIframe, root;
-        var oldIframe, oldIframeName, oldIframeRoot;
+        var oldIframe, oldIframeName, oldIframeRoot, iframeName;
         errors = [];
         that = this;
         oldIframe = W.getFrame();
@@ -575,9 +575,10 @@
         }
 
         try {
-            testIframe = W.addIFrame(root, 'testIFrame', {
+            iframeName = 'testIFrame';
+            testIframe = W.addIFrame(root, iframeName, {
                 style: { display: 'none' } } );
-            W.setFrame(testIframe, 'testIframe', root);
+            W.setFrame(testIframe, iframeName, root);
             W.loadFrame('/pages/testpage.htm', function() {
                 var found;
                 found = W.getElementById('root');
