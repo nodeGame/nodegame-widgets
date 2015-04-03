@@ -2,6 +2,7 @@
 
 ## 0.6.8
 
+- Proper cleanup by loadFrameTest in Requirements.
 - Controls subclasses are registered correctly
 
 ## 0.6.7

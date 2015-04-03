@@ -582,14 +582,20 @@
             W.loadFrame('/pages/testpage.htm', function() {
                 var found;
                 found = W.getElementById('root');
-                if (oldIframe) {
-                    W.setFrame(oldIframe, oldIframeName, oldIframeRoot);
-                }
                 if (!found) {
                     errors.push('W.loadFrame failed to load a test frame ' +
                                 'correctly.');
                 }
                 root.removeChild(testIframe);
+                if (oldIframe) {
+                    W.setFrame(oldIframe, oldIframeName, oldIframeRoot);
+                }
+                else {
+                    W.frameElement = null;
+                    W.frameWindow = null;
+                    W.frameDocument = null;
+                    W.frameRoot = null;
+                }
                 result(errors);
             });
         }
