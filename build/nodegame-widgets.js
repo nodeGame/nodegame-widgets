@@ -2857,6 +2857,8 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     var Table = node.window.Table,
     GameStage = node.GameStage;
 
@@ -2864,11 +2866,11 @@
 
     // ## Meta-data
 
-    DebugInfo.version = '0.5.0';
-    DebugInfo.description = 'Display basic info about player\'s status.';
+    DebugInfo.version = '0.6.0';
+    DebugInfo.description = 'Display basic info a client\'s status.';
 
-    DebugInfo.title = 'State Display';
-    DebugInfo.className = 'statedisplay';
+    DebugInfo.title = 'Debug Info';
+    DebugInfo.className = 'debuginfo';
 
     // ## Dependencies
 
@@ -2920,16 +2922,16 @@
      * Updates information in `this.table`
      */
     DebugInfo.prototype.updateAll = function() {
-        var stage, stageNo, stageId, playerId, tmp, miss;
+        var stage, stageNo, stageId, playerId;
+        var stageLevel, stateLevel, winLevel;
+        var errMsg, connected;
+        var tmp, miss;
+
         miss = '-';
 
         stageId = miss;
         stageNo = miss;
         playerId = miss;
-
-        if (node.player.id) {
-            playerId = node.player.id;
-        }
 
         stage = node.game.getCurrentGameStage();
         if (stage) {
@@ -2938,23 +2940,62 @@
             stageNo = stage.toString();
         }
 
+        stageLevel = J.getKeyByValue(node.constants.stageLevels,
+                                     node.game.getStageLevel())
+
+        stateLevel = J.getKeyByValue(node.constants.stateLevels,
+                                     node.game.getStateLevel())
+
+        winLevel = J.getKeyByValue(node.constants.windowLevels,
+                                   W.getStateLevel())
+
+
+        errMsg = node.errorManager.lastErr || miss;
+
+        connected = node.socket.connected ? 'yes' : 'no';
+
         this.table.clear(true);
+        this.table.addRow(['Connected: ', connected]);
+        this.table.addRow(['Player Id: ', node.player.id]);
         this.table.addRow(['Stage  No: ', stageNo]);
         this.table.addRow(['Stage  Id: ', stageId]);
-        this.table.addRow(['Player Id: ', playerId]);
+        this.table.addRow(['Stage Lvl: ', stageLevel]);
+        this.table.addRow(['State Lvl: ', stateLevel]);
+        this.table.addRow(['Win   Lvl: ', winLevel]);
+        this.table.addRow(['Win Loads: ', W.areLoading]);
+        this.table.addRow(['Last  Err: ', errMsg]);
+
         this.table.parse();
 
     };
 
     DebugInfo.prototype.listeners = function() {
-        var that = this;
-        node.on('STEP_CALLBACK_EXECUTED', function() {
+        var that, ee;
+
+        that = this;
+
+        ee = node.getCurrentEventEmitter();
+
+        ee.on('STEP_CALLBACK_EXECUTED', function() {
             that.updateAll();
         });
+
+        ee.on('SOCKET_CONNECTED', function() {
+            that.updateAll();
+        });
+
+        ee.on('SOCKET_DICONNECTED', function() {
+            that.updateAll();
+        });
+
+        // TODO Write more listeners. Separate functions. Get event emitter.
+
     };
 
     DebugInfo.prototype.destroy = function() {
         node.off('STEP_CALLBACK_EXECUTED', DebugInfo.prototype.updateAll);
+        // TODO proper cleanup.
+
     };
 
 })(node);
