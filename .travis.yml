@@ -1,12 +1,14 @@
 language: node_js
 node_js:
   - 0.10
+
 before_install:
 # Get installer script.
   - cd bin
   - wget https://github.com/nodeGame/nodegame/raw/master/bin/install-nodegame-for-module.sh
   - chmod a+x install-nodegame-for-module.sh
   - cd ..
+
 install:
 # Share node_modules with nodeGame.
   - mkdir -p nodegame node_modules
@@ -14,6 +16,7 @@ install:
   - ln -s .. node_modules/nodegame-widgets
   - bin/install-nodegame-for-module.sh -g "nodegame-window JSUS NDDB shelf.js nodegame-client nodegame-server descil-mturk nodegame-db nodegame-mongodb"
   - npm install
+
 script:
 # Add nodegame-widgets tests here.
 
