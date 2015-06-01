@@ -2,6 +2,7 @@
 
 ## 0.6.8
 
+- Improved Requirements widget. Some functions are moved into separate repo (nodegame-requirements).
 - Proper cleanup by loadFrameTest in Requirements.
 - Controls subclasses are registered correctly
 
