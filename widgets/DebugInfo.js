@@ -149,9 +149,8 @@
     };
 
     DebugInfo.prototype.destroy = function() {
-        node.off('STEP_CALLBACK_EXECUTED', DebugInfo.prototype.updateAll);
         // TODO proper cleanup.
-
+        console.log('DebugInfo destroyed.');
     };
 
 })(node);

@@ -1,5 +1,5 @@
 /**
- * # Requirements
+ * # WaitingRoom
  * Copyright(c) 2014 Stefano Balietti
  * MIT Licensed
  *
@@ -13,147 +13,118 @@
 
     var J = node.JSUS;
 
-    node.widgets.register('Requirements', Requirements);
+    node.widgets.register('WaitingRoom', WaitingRoom);
 
     // ## Meta-data
 
-    Requirements.version = '0.6.0';
-    Requirements.description = 'Checks a set of requirements and display the ' +
-        'results';
+    WaitingRoom.version = '0.1.0';
+    WaitingRoom.description = 'Displays a waiting room for clients.';
 
-    Requirements.title = 'Requirements';
-    Requirements.className = 'requirements';
+    WaitingRoom.title = 'WaitingRoom';
+    WaitingRoom.className = 'waitingRoom';
 
     // ## Dependencies
 
-    Requirements.dependencies = {
+    WaitingRoom.dependencies = {
         JSUS: {},
         List: {}
     };
 
     /**
-     * ## Requirements constructor
+     * ## WaitingRoom constructor
      *
-     * Instantiates a new Requirements object
+     * Instantiates a new WaitingRoom object
      *
      * @param {object} options
      */
-    function Requirements(options) {
+    function WaitingRoom(options) {
 
         /**
-         * ### Requirements.callbacks
+         * ### WaitingRoom.callbacks
          *
          * Array of all test callbacks
          */
-        this.requirements = [];
+        this.connected = 0;
 
         /**
-         * ### Requirements.stillChecking
+         * ### WaitingRoom.stillChecking
          *
          * Number of tests still pending
          */
-        this.stillChecking = 0;
+        this.poolSize = 0;
 
         /**
-         * ### Requirements.withTimeout
+         * ### WaitingRoom.withTimeout
          *
          * If TRUE, a maximum timeout to the execution of ALL tests is set
          */
-        this.withTimeout = options.withTimeout || true;
+        this.groupSize = 0;
 
         /**
-         * ### Requirements.timeoutTime
+         * ### WaitingRoom.timeoutTime
          *
          * The time in milliseconds for the timeout to expire
          */
-        this.timeoutTime = options.timeoutTime || 10000;
+        this.timeoutTime = null;
 
         /**
-         * ### Requirements.timeoutId
+         * ### WaitingRoom.timeoutId
          *
          * The id of the timeout, if created
          */
         this.timeoutId = null;
 
         /**
-         * ### Requirements.summary
+         * ### WaitingRoom.summary
          *
          * Span summarizing the status of the tests
          */
         this.summary = null;
 
         /**
-         * ### Requirements.summaryUpdate
-         *
-         * Span counting how many tests have been completed
-         */
-        this.summaryUpdate = null;
-
-        /**
-         * ### Requirements.dots
+         * ### WaitingRoom.dots
          *
          * Looping dots to give the user the feeling of code execution
          */
         this.dots = null;
 
         /**
-         * ### Requirements.hasFailed
-         *
-         * TRUE if at least one test has failed
-         */
-        this.hasFailed = false;
-
-        /**
-         * ### Requirements.results
-         *
-         * The outcomes of all tests
-         */
-        this.results = [];
-
-        /**
-         * ### Requirements.sayResult
-         *
-         * If true, the final result of the tests will be sent to the server
-         */
-        this.sayResults = options.sayResults || false;
-
-        /**
-         * ### Requirements.sayResultLabel
+         * ### WaitingRoom.sayResultLabel
          *
          * The label of the SAY message that will be sent to the server
          */
         this.sayResultsLabel = options.sayResultLabel || 'requirements';
 
         /**
-         * ### Requirements.addToResults
+         * ### WaitingRoom.addToResults
          *
          *  Callback to add properties to result object sent to server
          */
         this.addToResults = options.addToResults || null;
 
         /**
-         * ### Requirements.onComplete
+         * ### WaitingRoom.onComplete
          *
          * Callback to be executed at the end of all tests
          */
         this.onComplete = null;
 
         /**
-         * ### Requirements.onSuccess
+         * ### WaitingRoom.onSuccess
          *
          * Callback to be executed at the end of all tests
          */
         this.onSuccess = null;
 
         /**
-         * ### Requirements.onFailure
+         * ### WaitingRoom.onFailure
          *
          * Callback to be executed at the end of all tests
          */
         this.onFailure = null;
 
         /**
-         * ### Requirements.list
+         * ### WaitingRoom.list
          *
          * `List` to render the results
          *
@@ -189,10 +160,10 @@
         }
     }
 
-    // ## Requirements methods
+    // ## WaitingRoom methods
 
     /**
-     * ### Requirements.init
+     * ### WaitingRoom.init
      *
      * Setups the requirements widget
      *
@@ -207,13 +178,13 @@
      *
      * @param {object} conf Configuration object.
      */
-    Requirements.prototype.init = function(conf) {
+    WaitingRoom.prototype.init = function(conf) {
         if ('object' !== typeof conf) {
-            throw new TypeError('Requirements.init: conf must be object.');
+            throw new TypeError('WaitingRoom.init: conf must be object.');
         }
         if (conf.requirements) {
             if (!J.isArray(conf.requirements)) {
-                throw new TypeError('Requirements.init: conf.requirements ' +
+                throw new TypeError('WaitingRoom.init: conf.requirements ' +
                                     'must be array or undefined.');
             }
             this.requirements = conf.requirements;
@@ -222,7 +193,7 @@
             if (null !== conf.onComplete &&
                 'function' !== typeof conf.onComplete) {
 
-                throw new TypeError('Requirements.init: conf.onComplete must ' +
+                throw new TypeError('WaitingRoom.init: conf.onComplete must ' +
                                     'be function, null or undefined.');
             }
             this.onComplete = conf.onComplete;
@@ -231,7 +202,7 @@
             if (null !== conf.onSuccess &&
                 'function' !== typeof conf.onSuccess) {
 
-                throw new TypeError('Requirements.init: conf.onSuccess must ' +
+                throw new TypeError('WaitingRoom.init: conf.onSuccess must ' +
                                     'be function, null or undefined.');
             }
             this.onSuccess = conf.onSuccess;
@@ -240,7 +211,7 @@
             if (null !== conf.onFailure &&
                 'function' !== typeof conf.onFailure) {
 
-                throw new TypeError('Requirements.init: conf.onFailure must ' +
+                throw new TypeError('WaitingRoom.init: conf.onFailure must ' +
                                     'be function, null or undefined.');
             }
             this.onFailure = conf.onFailure;
@@ -249,7 +220,7 @@
             if (null !== conf.maxExecTime &&
                 'number' !== typeof conf.maxExecTime) {
 
-                throw new TypeError('Requirements.init: conf.onMaxExecTime ' +
+                throw new TypeError('WaitingRoom.init: conf.onMaxExecTime ' +
                                     'must be number, null or undefined.');
             }
             this.withTimeout = !!conf.maxExecTime;
@@ -258,7 +229,7 @@
     };
 
     /**
-     * ### Requirements.addRequirements
+     * ### WaitingRoom.addWaitingRoom
      *
      * Adds any number of requirements to the requirements array
      *
@@ -274,14 +245,14 @@
      *
      * @see this.requirements
      */
-    Requirements.prototype.addRequirements = function() {
+    WaitingRoom.prototype.addWaitingRoom = function() {
         var i, len;
         i = -1, len = arguments.length;
         for ( ; ++i < len ; ) {
             if ('function' !== typeof arguments[i] &&
                 'object' !== typeof arguments[i] ) {
 
-                throw new TypeError('Requirements.addRequirements: ' +
+                throw new TypeError('WaitingRoom.addWaitingRoom: ' +
                                     'requirements must be function or object.');
             }
             this.requirements.push(arguments[i]);
@@ -289,7 +260,7 @@
     };
 
     /**
-     * ### Requirements.checkRequirements
+     * ### WaitingRoom.checkWaitingRoom
      *
      * Asynchronously or synchronously checks all registered callbacks
      *
@@ -305,11 +276,11 @@
      * @see this.withTimeout
      * @see this.requirements
      */
-    Requirements.prototype.checkRequirements = function(display) {
+    WaitingRoom.prototype.checkWaitingRoom = function(display) {
         var i, len;
         var errors, cbErrors, cbName, errMsg;
         if (!this.requirements.length) {
-            throw new Error('Requirements.checkRequirements: no requirements ' +
+            throw new Error('WaitingRoom.checkWaitingRoom: no requirements ' +
                             'to check found.');
         }
 
@@ -353,7 +324,7 @@
     };
 
     /**
-     * ### Requirements.addTimeout
+     * ### WaitingRoom.addTimeout
      *
      * Starts a timeout for the max execution time of the requirements
      *
@@ -363,7 +334,7 @@
      * @see this.withTimeout
      * @see this.requirements
      */
-    Requirements.prototype.addTimeout = function() {
+    WaitingRoom.prototype.addTimeout = function() {
         var that = this;
         var errStr = 'One or more function is taking too long. This is ' +
             'likely to be due to a compatibility issue with your browser ' +
@@ -380,7 +351,7 @@
     };
 
     /**
-     * ### Requirements.clearTimeout
+     * ### WaitingRoom.clearTimeout
      *
      * Clears the timeout for the max execution time of the requirements
      *
@@ -388,7 +359,7 @@
      * @see this.stillCheckings
      * @see this.requirements
      */
-    Requirements.prototype.clearTimeout = function() {
+    WaitingRoom.prototype.clearTimeout = function() {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
             this.timeoutId = null;
@@ -396,7 +367,7 @@
     };
 
     /**
-     * ### Requirements.updateStillChecking
+     * ### WaitingRoom.updateStillChecking
      *
      * Updates the number of requirements still running on the display
      *
@@ -409,7 +380,7 @@
      * @see this.stillCheckings
      * @see this.requirements
      */
-    Requirements.prototype.updateStillChecking = function(update, absolute) {
+    WaitingRoom.prototype.updateStillChecking = function(update, absolute) {
         var total, remaining;
 
         this.stillChecking = absolute ? update : this.stillChecking + update;
@@ -420,19 +391,19 @@
     };
 
     /**
-     * ### Requirements.isCheckingFinished
+     * ### WaitingRoom.isCheckingFinished
      *
      * Returns TRUE if all requirements have returned
      *
      * @see this.stillCheckings
      * @see this.requirements
      */
-    Requirements.prototype.isCheckingFinished = function() {
+    WaitingRoom.prototype.isCheckingFinished = function() {
         return this.stillChecking <= 0;
     };
 
     /**
-     * ### Requirements.CheckingFinished
+     * ### WaitingRoom.CheckingFinished
      *
      * Cleans up timer and dots, and executes final requirements accordingly
      *
@@ -446,7 +417,7 @@
      * @see this.stillCheckings
      * @see this.requirements
      */
-    Requirements.prototype.checkingFinished = function() {
+    WaitingRoom.prototype.checkingFinished = function() {
         var results;
 
         if (this.timeoutId) {
@@ -480,7 +451,7 @@
     };
 
     /**
-     * ### Requirements.displayResults
+     * ### WaitingRoom.displayResults
      *
      * Displays the results of the requirements on the screen
      *
@@ -498,16 +469,16 @@
      * @see this.stillCheckings
      * @see this.requirements
      */
-    Requirements.prototype.displayResults = function(results) {
+    WaitingRoom.prototype.displayResults = function(results) {
         var i, len;
 
         if (!this.list) {
-            throw new Error('Requirements.displayResults: list not found. ' +
+            throw new Error('WaitingRoom.displayResults: list not found. ' +
                             'Have you called .append() first?');
         }
 
         if (!J.isArray(results)) {
-            throw new TypeError('Requirements.displayResults: results must ' +
+            throw new TypeError('WaitingRoom.displayResults: results must ' +
                                 'be array.');
         }
 
@@ -536,7 +507,7 @@
         this.list.parse();
     };
 
-    Requirements.prototype.append = function() {
+    WaitingRoom.prototype.append = function() {
 
         this.summary = document.createElement('span');
         this.summary.appendChild(
@@ -554,7 +525,7 @@
         this.bodyDiv.appendChild(this.list.getRoot());
     };
 
-    Requirements.prototype.listeners = function() {
+    WaitingRoom.prototype.listeners = function() {
         var that;
         that = this;
         node.registerSetup('requirements', function(conf) {
@@ -566,13 +537,13 @@
             // Configure all requirements.
             that.init(conf);
             // Start a checking immediately if requested.
-            if (conf.doChecking) that.checkRequirements();
+            if (conf.doChecking) that.checkWaitingRoom();
 
             return conf;
         });
     };
 
-    Requirements.prototype.destroy = function() {
+    WaitingRoom.prototype.destroy = function() {
         node.deregisterSetup('requirements');
     };
 
@@ -589,7 +560,7 @@
 
             if (errors) {
                 if (!J.isArray(errors)) {
-                    throw new Error('Requirements.checkRequirements: ' +
+                    throw new Error('WaitingRoom.checkWaitingRoom: ' +
                                     'errors must be array or undefined.');
                 }
                 that.displayResults(errors);
@@ -615,7 +586,7 @@
             res = req.cb(update, req.params || {});
         }
         else {
-            throw new TypeError('Requirements.checkRequirements: invalid ' +
+            throw new TypeError('WaitingRoom.checkWaitingRoom: invalid ' +
                                 'requirement: ' + name + '.');
         }
         // Synchronous checking.

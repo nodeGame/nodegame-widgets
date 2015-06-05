@@ -1374,6 +1374,8 @@ in the results array.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">doChecking</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">checkRequirements</span><span class="p">();</span>
+
+            <span class="k">return</span> <span class="nx">conf</span><span class="p">;</span>
         <span class="p">});</span>
     <span class="p">};</span>
 
@@ -1403,7 +1405,6 @@ in the results array.</p>
         <span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">,</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
-                <span class="kr">debugger</span>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
             <span class="p">}</span>
 
