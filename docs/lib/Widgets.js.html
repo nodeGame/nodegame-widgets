@@ -480,6 +480,20 @@ returns FALSE.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
+<p>Add random unique widget id.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">wid</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">J</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000000000000000000</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
 <p>Call listeners.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -491,7 +505,7 @@ returns FALSE.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Start recording changes.</p>
         </td>
@@ -505,26 +519,12 @@ returns FALSE.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Register listeners.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">widget</span><span class="p">.</span><span class="nx">listeners</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
-</div>
-<p>Add random unique widget id.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">wid</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">J</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000000000000000000</span><span class="p">);</span>
 
 
 </pre></div>
@@ -629,9 +629,7 @@ The widget is also automatically removed from parent.</p>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-
         <span class="p">};</span>
-
 
 
 </pre></div>
