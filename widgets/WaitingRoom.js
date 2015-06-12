@@ -1,9 +1,9 @@
 /**
  * # WaitingRoom
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
- * Checks a list of requirements and displays the results
+ * Display the number of connected / required players to start a game
  *
  * www.nodegame.org
  */
@@ -27,7 +27,7 @@
 
     WaitingRoom.dependencies = {
         JSUS: {},
-        List: {}
+        VisualTimer: {}
     };
 
     /**
@@ -56,16 +56,16 @@
         /**
          * ### WaitingRoom.withTimeout
          *
-         * If TRUE, a maximum timeout to the execution of ALL tests is set
+         * The size of the group
          */
         this.groupSize = 0;
 
         /**
-         * ### WaitingRoom.timeoutTime
+         * ### WaitingRoom.maxWaitTime
          *
          * The time in milliseconds for the timeout to expire
          */
-        this.timeoutTime = null;
+        this.maxWaitTime = null;
 
         /**
          * ### WaitingRoom.timeoutId
@@ -77,9 +77,16 @@
         /**
          * ### WaitingRoom.summary
          *
-         * Span summarizing the status of the tests
+         * Span summarizing the status of the wait room
          */
         this.summary = null;
+
+        /**
+         * ### WaitingRoom.summaryUpdate
+         *
+         * Span displaying the number of connected players
+         */
+        this.summaryUpdate = null;
 
         /**
          * ### WaitingRoom.dots
@@ -87,20 +94,6 @@
          * Looping dots to give the user the feeling of code execution
          */
         this.dots = null;
-
-        /**
-         * ### WaitingRoom.sayResultLabel
-         *
-         * The label of the SAY message that will be sent to the server
-         */
-        this.sayResultsLabel = options.sayResultLabel || 'requirements';
-
-        /**
-         * ### WaitingRoom.addToResults
-         *
-         *  Callback to add properties to result object sent to server
-         */
-        this.addToResults = options.addToResults || null;
 
         /**
          * ### WaitingRoom.onComplete
@@ -117,47 +110,22 @@
         this.onSuccess = null;
 
         /**
-         * ### WaitingRoom.onFailure
+         * ### WaitingRoom.onTimeout
          *
          * Callback to be executed at the end of all tests
          */
-        this.onFailure = null;
+        this.onTimeout = null;
+
 
         /**
-         * ### WaitingRoom.list
+         * ### WaitingRoom.timer
          *
-         * `List` to render the results
+         * VisualTimer instance for max wait time.
          *
-         * @see nodegame-server/List
+         * @see VisualTimer
          */
-        // TODO: simplify render syntax.
-        this.list = new W.List({
-            render: {
-                pipeline: renderResult,
-                returnAt: 'first'
-            }
-        });
+        this.timer = null;
 
-        function renderResult(o) {
-            var imgPath, img, span, text;
-            imgPath = '/images/' + (o.content.success ?
-                                    'success-icon.png' : 'delete-icon.png');
-            img = document.createElement('img');
-            img.src = imgPath;
-
-            // Might be the full exception object.
-            if ('object' === typeof o.content.text) {
-                o.content.text = extractErrorMsg(o.content.text);
-            }
-
-            text = document.createTextNode(o.content.text);
-            span = document.createElement('span');
-            span.className = 'requirement';
-            span.appendChild(img);
-
-            span.appendChild(text);
-            return span;
-        }
     }
 
     // ## WaitingRoom methods
@@ -169,10 +137,8 @@
      *
      * Available options:
      *
-     *   - requirements: array of callback functions or objects formatted as
-     *      { cb: function [, params: object] [, name: string] };
      *   - onComplete: function executed with either failure or success
-     *   - onFailure: function executed when at least one test fails
+     *   - onTimeout: function executed when at least one test fails
      *   - onSuccess: function executed when all tests succeed
      *   - maxWaitTime: max waiting time to execute all tests (in milliseconds)
      *
@@ -181,13 +147,6 @@
     WaitingRoom.prototype.init = function(conf) {
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object.');
-        }
-        if (conf.requirements) {
-            if (!J.isArray(conf.requirements)) {
-                throw new TypeError('WaitingRoom.init: conf.requirements ' +
-                                    'must be array or undefined.');
-            }
-            this.requirements = conf.requirements;
         }
         if ('undefined' !== typeof conf.onComplete) {
             if (null !== conf.onComplete &&
@@ -207,147 +166,67 @@
             }
             this.onSuccess = conf.onSuccess;
         }
-        if ('undefined' !== typeof conf.onFailure) {
-            if (null !== conf.onFailure &&
-                'function' !== typeof conf.onFailure) {
+        if ('undefined' !== typeof conf.onTimeout) {
+            if (null !== conf.onTimeout &&
+                'function' !== typeof conf.onTimeout) {
 
-                throw new TypeError('WaitingRoom.init: conf.onFailure must ' +
+                throw new TypeError('WaitingRoom.init: conf.onTimeout must ' +
                                     'be function, null or undefined.');
             }
-            this.onFailure = conf.onFailure;
+            this.onTimeout = conf.onTimeout;
         }
-        if (conf.maxExecTime) {
-            if (null !== conf.maxExecTime &&
-                'number' !== typeof conf.maxExecTime) {
+        if (conf.maxWaitTime) {
+            if (null !== conf.maxWaitTime &&
+                'number' !== typeof conf.maxWaitTime) {
 
                 throw new TypeError('WaitingRoom.init: conf.onMaxExecTime ' +
                                     'must be number, null or undefined.');
             }
-            this.withTimeout = !!conf.maxExecTime;
-            this.timeoutTime = conf.maxExecTime;
+            this.maxWaitTime = conf.maxWaitTime;
+            this.startTimer();
         }
-    };
 
-    /**
-     * ### WaitingRoom.addWaitingRoom
-     *
-     * Adds any number of requirements to the requirements array
-     *
-     * Callbacks can be asynchronous or synchronous.
-     *
-     * An asynchronous callback must call the `results` function
-     * passed as input parameter to communicate the outcome of the test.
-     *
-     * A synchronous callback must return the value immediately.
-     *
-     * In both cases the return is an array, where every item is an
-     * error message. Empty array means test passed.
-     *
-     * @see this.requirements
-     */
-    WaitingRoom.prototype.addWaitingRoom = function() {
-        var i, len;
-        i = -1, len = arguments.length;
-        for ( ; ++i < len ; ) {
-            if ('function' !== typeof arguments[i] &&
-                'object' !== typeof arguments[i] ) {
-
-                throw new TypeError('WaitingRoom.addWaitingRoom: ' +
-                                    'requirements must be function or object.');
+        if (conf.poolSize) {
+            if (conf.poolSize && 'number' !== typeof conf.poolSize) {
+                throw new TypeError('WaitingRoom.init: conf.poolSize ' +
+                                    'must be number or undefined.');
             }
-            this.requirements.push(arguments[i]);
-        }
-    };
-
-    /**
-     * ### WaitingRoom.checkWaitingRoom
-     *
-     * Asynchronously or synchronously checks all registered callbacks
-     *
-     * Can add a timeout for the max execution time of the callbacks, if the
-     * corresponding option is set.
-     *
-     * Results are displayed conditionally
-     *
-     * @param {boolean} display If TRUE, results are displayed
-     *
-     * @return {array} The array containing the errors
-     *
-     * @see this.withTimeout
-     * @see this.requirements
-     */
-    WaitingRoom.prototype.checkWaitingRoom = function(display) {
-        var i, len;
-        var errors, cbErrors, cbName, errMsg;
-        if (!this.requirements.length) {
-            throw new Error('WaitingRoom.checkWaitingRoom: no requirements ' +
-                            'to check found.');
+            this.poolSize = conf.poolSize;
         }
 
-        this.updateStillChecking(this.requirements.length, true);
-
-        errors = [];
-        i = -1, len = this.requirements.length;
-        for ( ; ++i < len ; ) {
-            // Get Test Name.
-            if (this.requirements[i] && this.requirements[i].name) {
-                cbName = this.requirements[i].name;
+        if (conf.groupSize) {
+            if (conf.groupSize && 'number' !== typeof conf.groupSize) {
+                throw new TypeError('WaitingRoom.init: conf.groupSize ' +
+                                    'must be number or undefined.');
             }
-            else {
-                cbName = i + 1;
+            this.groupSize = conf.groupSize
+        }
+
+        if (conf.connected) {
+            if (conf.connected && 'number' !== typeof conf.connected) {
+                throw new TypeError('WaitingRoom.init: conf.connected ' +
+                                    'must be number or undefined.');
             }
-            try {
-                resultCb(this, name, i);
-            }
-            catch(e) {
-                errMsg = extractErrorMsg(e);
-                this.updateStillChecking(-1);
-
-                errors.push('An exception occurred in requirement n.' +
-                            cbName + ': ' + errMsg);
-            }
+            this.connected = conf.connected
         }
-
-        if (this.withTimeout) {
-            this.addTimeout();
-        }
-
-        if ('undefined' === typeof display ? true : false) {
-            this.displayResults(errors);
-        }
-
-        if (this.isCheckingFinished()) {
-            this.checkingFinished();
-        }
-
-        return errors;
     };
 
     /**
      * ### WaitingRoom.addTimeout
      *
-     * Starts a timeout for the max execution time of the requirements
+     * Starts a timeout for the max waiting time
      *
-     * Upon time out results are checked, and eventually displayed.
-     *
-     * @see this.stillCheckings
-     * @see this.withTimeout
-     * @see this.requirements
      */
-    WaitingRoom.prototype.addTimeout = function() {
+    WaitingRoom.prototype.startTimer = function() {
         var that = this;
-        var errStr = 'One or more function is taking too long. This is ' +
-            'likely to be due to a compatibility issue with your browser ' +
-            'or to bad network connectivity.';
-
-        this.timeoutId = setTimeout(function() {
-            if (that.stillChecking > 0) {
-                that.displayResults([errStr]);
-            }
-            that.timeoutId = null;
-            that.hasFailed = true;
-            that.checkingFinished();
-        }, this.timeoutTime);
+        if (this.timer) return;
+        if (!this.maxWaitTime) return;
+        this.timer = node.widgets.append('VisualTimer', this.summary, {
+            milliseconds: this.maxWaitTime,
+            timeup: this.onTimeup,
+            update: 1000
+        });
+        this.timer.start();
     };
 
     /**
@@ -367,151 +246,41 @@
     };
 
     /**
-     * ### WaitingRoom.updateStillChecking
+     * ### WaitingRoom.updateDisplay
      *
-     * Updates the number of requirements still running on the display
+     * Displays the state of the waiting room on screen
      *
-     * @param {number} update The number of requirements still running, or an
-     *   increment as compared to the current value
-     * @param {boolean} absolute TRUE, if `update` is to be interpreted as an
-     *   absolute value
-     *
-     * @see this.summaryUpdate
-     * @see this.stillCheckings
-     * @see this.requirements
+     * @see WaitingRoom.updateState
      */
-    WaitingRoom.prototype.updateStillChecking = function(update, absolute) {
-        var total, remaining;
-
-        this.stillChecking = absolute ? update : this.stillChecking + update;
-
-        total = this.requirements.length;
-        remaining = total - this.stillChecking;
-        this.summaryUpdate.innerHTML = ' (' +  remaining + ' / ' + total + ')';
-    };
-
-    /**
-     * ### WaitingRoom.isCheckingFinished
-     *
-     * Returns TRUE if all requirements have returned
-     *
-     * @see this.stillCheckings
-     * @see this.requirements
-     */
-    WaitingRoom.prototype.isCheckingFinished = function() {
-        return this.stillChecking <= 0;
-    };
-
-    /**
-     * ### WaitingRoom.CheckingFinished
-     *
-     * Cleans up timer and dots, and executes final requirements accordingly
-     *
-     * First, executes the `onComplete` callback in any case. Then if no
-     * errors have been raised executes the `onSuccess` callback, otherwise
-     * the `onFailure` callback.
-     *
-     * @see this.onComplete
-     * @see this.onSuccess
-     * @see this.onFailure
-     * @see this.stillCheckings
-     * @see this.requirements
-     */
-    WaitingRoom.prototype.checkingFinished = function() {
-        var results;
-
-        if (this.timeoutId) {
-            clearTimeout(this.timeoutId);
+    WaitingRoom.prototype.updateState = function(update) {
+        if (!update) return;
+        if ('number' === typeof update.connected) {
+            this.connected = update.connected;
         }
-
-        this.dots.stop();
-
-        if (this.sayResults) {
-            results = {
-                success: !this.hasFailed,
-                results: this.results
-            };
-
-            if (this.addToResults) {
-                J.mixin(results, this.addToResults());
-            }
-            node.say(this.sayResultsLabel, 'SERVER', results);
+        if ('number' === typeof update.poolSize) {
+            this.poolSize = update.poolSize;
         }
-
-        if (this.onComplete) {
-            this.onComplete();
-        }
-
-        if (this.hasFailed) {
-            if (this.onFailure) this.onFailure();
-        }
-        else if (this.onSuccess) {
-            this.onSuccess();
+        if ('number' === typeof update.groupSize) {
+            this.groupSize = update.groupSize;
         }
     };
 
     /**
-     * ### WaitingRoom.displayResults
+     * ### WaitingRoom.updateDisplay
      *
-     * Displays the results of the requirements on the screen
+     * Displays the state of the waiting room on screen
      *
-     * Creates a new item in the list of results for every error found
-     * in the results array.
-     *
-     * If no error was raised, the results array should be empty.
-     *
-     * @param {array} results The array containing the return values of all
-     *   the requirements
-     *
-     * @see this.onComplete
-     * @see this.onSuccess
-     * @see this.onFailure
-     * @see this.stillCheckings
-     * @see this.requirements
+     * @see WaitingRoom.updateState
      */
-    WaitingRoom.prototype.displayResults = function(results) {
-        var i, len;
-
-        if (!this.list) {
-            throw new Error('WaitingRoom.displayResults: list not found. ' +
-                            'Have you called .append() first?');
-        }
-
-        if (!J.isArray(results)) {
-            throw new TypeError('WaitingRoom.displayResults: results must ' +
-                                'be array.');
-        }
-
-        // No errors.
-        if (!results.length) {
-            // Last check and no previous errors.
-            if (!this.hasFailed && this.stillChecking <= 0) {
-                // All tests passed.
-                this.list.addDT({
-                    success: true,
-                    text:'All tests passed.'
-                });
-            }
-        }
-        else {
-            // Add the errors.
-            i = -1, len = results.length;
-            for ( ; ++i < len ; ) {
-                this.list.addDT({
-                    success: false,
-                    text: results[i]
-                });
-            }
-        }
-        // Parse deletes previously existing nodes in the list.
-        this.list.parse();
+    WaitingRoom.prototype.updateDisplay = function() {
+        this.summaryUpdate.innerHTML = this.connected + ' / ' + this.poolSize;
     };
 
     WaitingRoom.prototype.append = function() {
 
         this.summary = document.createElement('span');
         this.summary.appendChild(
-            document.createTextNode('Evaluating requirements'));
+            document.createTextNode('Waiting for all players to connect: '));
 
         this.summaryUpdate = document.createElement('span');
         this.summary.appendChild(this.summaryUpdate);
@@ -520,94 +289,147 @@
 
         this.summary.appendChild(this.dots.span);
 
+        if (this.maxWaitTime) {
+            this.startTimer();
+        }
+
         this.bodyDiv.appendChild(this.summary);
 
-        this.bodyDiv.appendChild(this.list.getRoot());
+
     };
 
     WaitingRoom.prototype.listeners = function() {
         var that;
         that = this;
-        node.registerSetup('requirements', function(conf) {
+        node.registerSetup('waitroom', function(conf) {
             if (!conf) return;
             if ('object' !== typeof conf) {
-                node.warn('requirements widget: invalid setup object: ' + conf);
+                node.warn('waiting room widget: invalid setup object: ' + conf);
                 return;
             }
             // Configure all requirements.
             that.init(conf);
-            // Start a checking immediately if requested.
-            if (conf.doChecking) that.checkWaitingRoom();
 
             return conf;
+        });
+
+        // NodeGame Listeners.
+        node.on.data('PLAYERSCONNECTED', function(msg) {
+
+            if (!msg.data) return;
+            that.connected = msg.data;
+            that.updateDisplay();
+        });
+
+        node.on.data('TIME', function(msg) {
+            timeIsUp(msg.data);
+        });
+
+
+        // Start waiting time timer.
+        node.on.data('WAITTIME', function(msg) {
+
+            // Avoid running multiple timers.
+            // if (timeCheck) clearInterval(timeCheck);
+
+            that.updateState(msg.data);
+            that.updateDisplay();
+
+        });
+
+        node.on('SOCKET_DISCONNECT', function() {
+            var connStatus;
+            // Terminate countdown.
+            // clearInterval(timeCheck);
+            // Write about disconnection in page.
+            connStatus = document.getElementById('connectionStatus');
+            if (connStatus) {
+                connStatus. innerHTML =
+                    '<span style="color: red">You have been ' +
+                    '<strong>disconnected</strong>. Please try again later.' +
+                    '</span><br><br>';
+            }
+            // Enough to not display it in case of page refresh.
+            setTimeout(function() {
+                alert('Disconnection from server detected!');
+            }, 200);
         });
     };
 
     WaitingRoom.prototype.destroy = function() {
-        node.deregisterSetup('requirements');
+        node.deregisterSetup('waitroom');
     };
 
     // ## Helper methods
 
-    function resultCb(that, name, i) {
-        var req, update, res;
+    function Countdown() {
+        var PrevMin = (minutes < 10) ? "0" : ":";
+        var PrevSec = (seconds < 10) ? ":0" : ":";
+        var TimeNow = PrevMin + minutes + PrevSec + seconds;
 
-        update = function(success, errors, data) {
-            that.updateStillChecking(-1);
-            if (!success) {
-                that.hasFailed = true;
+        if (DHTML) {
+            if (NS4) {
+                setContent("id", "Uhr", null,
+                           '<span class="Uhr">' + TimeNow + "<\/span>");
             }
-
-            if (errors) {
-                if (!J.isArray(errors)) {
-                    throw new Error('WaitingRoom.checkWaitingRoom: ' +
-                                    'errors must be array or undefined.');
-                }
-                that.displayResults(errors);
+            else {
+                setContent("id", "Uhr", null, TimeNow);
             }
-
-            that.results.push({
-                name: name,
-                success: success,
-                errors: errors,
-                data: data
-            });
-
-            if (that.isCheckingFinished()) {
-                that.checkingFinished();
+            if (minutes > 0 && seconds == 0) {
+                minutes--;
+                seconds = 59;
             }
-        };
-
-        req = that.requirements[i];
-        if ('function' === typeof req) {
-            res = req(update);
+            else seconds--;
         }
-        else if ('object' === typeof req) {
-            res = req.cb(update, req.params || {});
-        }
-        else {
-            throw new TypeError('WaitingRoom.checkWaitingRoom: invalid ' +
-                                'requirement: ' + name + '.');
-        }
-        // Synchronous checking.
-        if (res) update(res.success, res.errors, res.data);
     }
 
-    function extractErrorMsg(e) {
-        var errMsg;
-        if (e.msg) {
-            errMsg = e.msg;
+    function timeIsUp(data) {
+        var timeOut;
+
+        console.log('TIME IS UP!');
+        return;
+
+        // if (alreadyTimeUp) return;
+        // alreadyTimeUp = true;
+
+        // clearInterval(timeCheck);
+
+        // All players have connected. Game starts.
+        if (data && data.over === 'AllPlayersConnected') return;
+
+        node.socket.disconnect();
+
+        // Enough Time passed, not enough players connected.
+        if (data && data.over === 'Time elapsed!!!') {
+
+            timeOut = "<h3 align='center'>Thank you for your patience.<br>";
+            timeOut += "Unfortunately, there are not enough participants in ";
+            timeOut += "your group to start the experiment.<br>";
+
+            timeOut += "You will be payed out a fix amount for your ";
+            timeOut += "participation up to this point.<br><br>";
+
+            timeOut += "Please go back to Amazon Mechanical Turk ";
+            timeOut += "web site and submit the hit.<br>";
+
+            timeOut += "We usually pay within 24 hours. <br>For any ";
+            timeOut += "problems, please look for a HIT called ";
+            timeOut += "<strong>ETH Descil Trouble Ticket</strong> and file ";
+            timtOut += "a new trouble ticket reporting the exit code ";
+            timeOut += "as written below.<br><br>";
+
+            timeOut += "Exit Code: " + data.exit + "<br> </h3>";
         }
-        else if (e.message) {
-            errMsg = e.message;
-        }
-        else if (e.description) {
-            errMsg.description;
-        }
+
+        // Too much time passed, but no message from server received.
         else {
-            errMsg = e.toString();
+            timeOut = "An error has occurred. You seem to be ";
+            timeOut += "waiting for too long. Please look for a HIT called ";
+            timeOut += "<strong>ETH Descil Trouble Ticket</strong> and file ";
+            timeOut += "a new trouble ticket reporting your experience."
         }
-        return errMsg;
+
+        document.getElementById("startPage").innerHTML = timeOut;
     }
 
 })(node);
