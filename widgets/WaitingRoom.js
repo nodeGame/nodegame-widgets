@@ -20,7 +20,7 @@
     WaitingRoom.version = '0.1.0';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
-    WaitingRoom.title = 'WaitingRoom';
+    WaitingRoom.title = 'Waiting Room';
     WaitingRoom.className = 'waitingRoom';
 
     // ## Dependencies
@@ -338,17 +338,17 @@
         });
 
         node.on('SOCKET_DISCONNECT', function() {
-            var connStatus;
             // Terminate countdown.
-            // clearInterval(timeCheck);
-            // Write about disconnection in page.
-            connStatus = document.getElementById('connectionStatus');
-            if (connStatus) {
-                connStatus. innerHTML =
-                    '<span style="color: red">You have been ' +
-                    '<strong>disconnected</strong>. Please try again later.' +
-                    '</span><br><br>';
+            if (that.timer) {
+                that.timer.stop();
+                that.timer.destroy();
             }
+
+            // Write about disconnection in page.
+            that.summary.innerHTML = '<span style="color: red">You have been ' +
+                '<strong>disconnected</strong>. Please try again later.' +
+                '</span><br><br>';
+
             // Enough to not display it in case of page refresh.
             setTimeout(function() {
                 alert('Disconnection from server detected!');

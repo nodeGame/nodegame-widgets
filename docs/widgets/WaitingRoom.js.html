@@ -140,7 +140,7 @@ MIT Licensed</p>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">;</span>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a waiting room for clients.&#39;</span><span class="p">;</span>
 
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;WaitingRoom&#39;</span><span class="p">;</span>
+    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Waiting Room&#39;</span><span class="p">;</span>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;waitingRoom&#39;</span><span class="p">;</span>
 
 
@@ -839,7 +839,6 @@ if (timeCheck) clearInterval(timeCheck);</p>
         <span class="p">});</span>
 
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;SOCKET_DISCONNECT&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">connStatus</span><span class="p">;</span>
 
 </pre></div>
         </td>
@@ -849,18 +848,14 @@ if (timeCheck) clearInterval(timeCheck);</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
-<p>Terminate countdown.
-clearInterval(timeCheck);
-Write about disconnection in page.</p>
+<p>Terminate countdown.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">connStatus</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;connectionStatus&#39;</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">connStatus</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">connStatus</span><span class="p">.</span> <span class="nx">innerHTML</span> <span class="o">=</span>
-                    <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt;You have been &#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;&lt;strong&gt;disconnected&lt;/strong&gt;. Please try again later.&#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">timer</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">destroy</span><span class="p">();</span>
             <span class="p">}</span>
+
 
 </pre></div>
         </td>
@@ -869,6 +864,22 @@ Write about disconnection in page.</p>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+</div>
+<p>Write about disconnection in page.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt;You have been &#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;strong&gt;disconnected&lt;/strong&gt;. Please try again later.&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Enough to not display it in case of page refresh.</p>
         </td>
@@ -933,7 +944,7 @@ Write about disconnection in page.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>if (alreadyTimeUp) return;
 alreadyTimeUp = true;</p>
@@ -947,7 +958,7 @@ alreadyTimeUp = true;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>clearInterval(timeCheck);</p>
         </td>
@@ -960,7 +971,7 @@ alreadyTimeUp = true;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>All players have connected. Game starts.</p>
         </td>
@@ -976,7 +987,7 @@ alreadyTimeUp = true;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>Enough Time passed, not enough players connected.</p>
         </td>
@@ -1009,7 +1020,7 @@ alreadyTimeUp = true;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Too much time passed, but no message from server received.</p>
         </td>

@@ -44,7 +44,7 @@
         if (!title) {
             if (this.headingDiv) {
                 this.panelDiv.removeChild(this.headingDiv);
-                delete this.headingDiv;
+                this.headingDiv = null;
             }
         }
         else {
@@ -291,6 +291,9 @@
         widget.className = wProto.className;
         widget.context = wProto.context;
 
+        // Add random unique widget id.
+        widget.wid = '' + J.randomInt(0,10000000000000000000);
+
         // Call listeners.
 
         // Start recording changes.
@@ -298,9 +301,6 @@
 
         // Register listeners.
         widget.listeners.call(widget);
-
-        // Add random unique widget id.
-        widget.wid = '' + J.randomInt(0,10000000000000000000);
 
         // Get registered listeners, clear changes, and stop recording.
         changes = node.events.getChanges(true);
@@ -350,9 +350,7 @@
                     break;
                 }
             }
-
         };
-
 
         // User listeners.
         attachListeners(options, widget);
@@ -7346,7 +7344,6 @@
     };
 
     VisualTimer.prototype.destroy = function() {
-        console.log('VTTTTTTTTTTTTTTTT Original Destroy!');
         node.timer.destroyTimer(this.gameTimer);
         this.bodyDiv.removeChild(this.mainBox.boxDiv);
         this.bodyDiv.removeChild(this.waitBox.boxDiv);
@@ -7602,7 +7599,7 @@
     WaitingRoom.version = '0.1.0';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
-    WaitingRoom.title = 'WaitingRoom';
+    WaitingRoom.title = 'Waiting Room';
     WaitingRoom.className = 'waitingRoom';
 
     // ## Dependencies
@@ -7920,16 +7917,17 @@
         });
 
         node.on('SOCKET_DISCONNECT', function() {
-            var connStatus;
             // Terminate countdown.
-            // clearInterval(timeCheck);
-            // Write about disconnection in page.
-            connStatus = document.getElementById('connectionStatus');
-            if (connStatus) {
-                connStatus. innerHTML = '<span style="color: red">You have been ' +
-                    '<strong>disconnected</strong>. Please try again later.' +
-                    '</span><br><br>';
+            if (that.timer) {
+                that.timer.stop();
+                that.timer.destroy();
             }
+
+            // Write about disconnection in page.
+            that.summary.innerHTML = '<span style="color: red">You have been ' +
+                '<strong>disconnected</strong>. Please try again later.' +
+                '</span><br><br>';
+
             // Enough to not display it in case of page refresh.
             setTimeout(function() {
                 alert('Disconnection from server detected!');
@@ -7950,7 +7948,8 @@
 
         if (DHTML) {
             if (NS4) {
-                setContent("id", "Uhr", null, '<span class="Uhr">' + TimeNow + "<\/span>");
+                setContent("id", "Uhr", null,
+                           '<span class="Uhr">' + TimeNow + "<\/span>");
             }
             else {
                 setContent("id", "Uhr", null, TimeNow);
@@ -7983,17 +7982,30 @@
         if (data && data.over === 'Time elapsed!!!') {
 
             timeOut = "<h3 align='center'>Thank you for your patience.<br>";
-            timeOut += "Unfortunately, there are not enough participants in your group to start the experiment.<br>";
-            timeOut += "You will be payed out a fix amount for your participation up to this point.<br><br>";
-            timeOut += "Please go back to Amazon Mechanical Turk web site and submit the hit.<br>";
-            timeOut += "We usually pay within 24 hours. <br>For any problems, please look for a HIT called <strong>ETH Descil Trouble Ticket</strong> and file a new trouble ticket reporting the exit code as written below.<br><br>";
+            timeOut += "Unfortunately, there are not enough participants in ";
+            timeOut += "your group to start the experiment.<br>";
+
+            timeOut += "You will be payed out a fix amount for your ";
+            timeOut += "participation up to this point.<br><br>";
+
+            timeOut += "Please go back to Amazon Mechanical Turk ";
+            timeOut += "web site and submit the hit.<br>";
+
+            timeOut += "We usually pay within 24 hours. <br>For any ";
+            timeOut += "problems, please look for a HIT called ";
+            timeOut += "<strong>ETH Descil Trouble Ticket</strong> and file ";
+            timtOut += "a new trouble ticket reporting the exit code ";
+            timeOut += "as written below.<br><br>";
+
             timeOut += "Exit Code: " + data.exit + "<br> </h3>";
         }
 
         // Too much time passed, but no message from server received.
         else {
-            timeOut = "An error has occurred. You seem to be waiting for too long. ";
-            timeOut += "Please look for a HIT called <strong>ETH Descil Trouble Ticket</strong> and file a new trouble ticket reporting your experience."
+            timeOut = "An error has occurred. You seem to be ";
+            timeOut += "waiting for too long. Please look for a HIT called ";
+            timeOut += "<strong>ETH Descil Trouble Ticket</strong> and file ";
+            timeOut += "a new trouble ticket reporting your experience."
         }
 
         document.getElementById("startPage").innerHTML = timeOut;
