@@ -4886,6 +4886,13 @@
         this.summaryUpdate = null;
 
         /**
+         * ### Requirements.summaryResults
+         *
+         * Span displaying the results of the tests
+         */
+        this.summaryResults = null;
+
+        /**
          * ### Requirements.dots
          *
          * Looping dots to give the user the feeling of code execution
@@ -5308,15 +5315,12 @@
         }
 
         // No errors.
-        if (!results.length) {
-            // Last check and no previous errors.
-            if (!this.hasFailed && this.stillChecking <= 0) {
-                // All tests passed.
-                this.list.addDT({
-                    success: true,
-                    text:'All tests passed.'
-                });
-            }
+        if (!this.hasFailed && this.stillChecking <= 0) {
+            // All tests passed.
+            this.list.addDT({
+                success: true,
+                text:'All tests passed.'
+            });
         }
         else {
             // Add the errors.
@@ -5342,11 +5346,14 @@
         this.summary.appendChild(this.summaryUpdate);
 
         this.dots = W.getLoadingDots();
-
         this.summary.appendChild(this.dots.span);
 
-        this.bodyDiv.appendChild(this.summary);
+        this.summaryResults = document.createElement('div');
+        this.summary.appendChild(document.createElement('br'));
+        this.summary.appendChild(this.summaryResults);
 
+
+        this.bodyDiv.appendChild(this.summary);
         this.bodyDiv.appendChild(this.list.getRoot());
     };
 
