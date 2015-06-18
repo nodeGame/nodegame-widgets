@@ -116,25 +116,18 @@
         this.dots = null;
 
         /**
-         * ### WaitingRoom.onComplete
+         * ### WaitingRoom.ontTimeout
          *
-         * Callback to be executed at the end of all tests
+         * Callback to be executed if the timer expires
          */
-        this.onComplete = null;
-
-        /**
-         * ### WaitingRoom.onSuccess
-         *
-         * Callback to be executed at the end of all tests
-         */
-        this.onSuccess = null;
+        this.ontTimeout = null;
 
         /**
          * ### WaitingRoom.onTimeout
          *
-         * Callback to be executed at the end of all tests
+         * TRUE if the timer expired
          */
-        this.onTimeout = null;
+        this.alreadyTimeUp = null;
 
     }
 
@@ -157,24 +150,6 @@
     WaitingRoom.prototype.init = function(conf) {
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object.');
-        }
-        if ('undefined' !== typeof conf.onComplete) {
-            if (null !== conf.onComplete &&
-                'function' !== typeof conf.onComplete) {
-
-                throw new TypeError('WaitingRoom.init: conf.onComplete must ' +
-                                    'be function, null or undefined.');
-            }
-            this.onComplete = conf.onComplete;
-        }
-        if ('undefined' !== typeof conf.onSuccess) {
-            if (null !== conf.onSuccess &&
-                'function' !== typeof conf.onSuccess) {
-
-                throw new TypeError('WaitingRoom.init: conf.onSuccess must ' +
-                                    'be function, null or undefined.');
-            }
-            this.onSuccess = conf.onSuccess;
         }
         if ('undefined' !== typeof conf.onTimeout) {
             if (null !== conf.onTimeout &&
@@ -323,6 +298,7 @@
     WaitingRoom.prototype.listeners = function() {
         var that;
         that = this;
+
         node.registerSetup('waitroom', function(conf) {
             if (!conf) return;
             if ('object' !== typeof conf) {
@@ -337,14 +313,13 @@
 
         // NodeGame Listeners.
         node.on.data('PLAYERSCONNECTED', function(msg) {
-
             if (!msg.data) return;
             that.connected = msg.data;
             that.updateDisplay();
         });
 
         node.on.data('TIME', function(msg) {
-            timeIsUp(msg.data);
+            timeIsUp.call(that, msg.data);
         });
 
 
@@ -360,6 +335,8 @@
         });
 
         node.on('SOCKET_DISCONNECT', function() {
+            if (that.alreadyTimeUp) return;
+
             // Terminate countdown.
             if (that.timer) {
                 that.timer.stop();
@@ -371,10 +348,10 @@
                 '<strong>disconnected</strong>. Please try again later.' +
                 '</span><br><br>';
 
-            // Enough to not display it in case of page refresh.
-            setTimeout(function() {
-                alert('Disconnection from server detected!');
-            }, 200);
+//             // Enough to not display it in case of page refresh.
+//             setTimeout(function() {
+//                 alert('Disconnection from server detected!');
+//             }, 200);
         });
     };
 
@@ -384,74 +361,23 @@
 
     // ## Helper methods
 
-    function Countdown() {
-        var PrevMin = (minutes < 10) ? "0" : ":";
-        var PrevSec = (seconds < 10) ? ":0" : ":";
-        var TimeNow = PrevMin + minutes + PrevSec + seconds;
-
-        if (DHTML) {
-            if (NS4) {
-                setContent("id", "Uhr", null,
-                           '<span class="Uhr">' + TimeNow + "<\/span>");
-            }
-            else {
-                setContent("id", "Uhr", null, TimeNow);
-            }
-            if (minutes > 0 && seconds == 0) {
-                minutes--;
-                seconds = 59;
-            }
-            else seconds--;
-        }
-    }
-
     function timeIsUp(data) {
         var timeOut;
-
         console.log('TIME IS UP!');
-        return;
 
-        // if (alreadyTimeUp) return;
-        // alreadyTimeUp = true;
+        if (this.alreadyTimeUp) return;
+        this.alreadyTimeUp = true;
+        if (this.timer) this.timer.stop();
 
-        // clearInterval(timeCheck);
+        data = data || {};
 
         // All players have connected. Game starts.
-        if (data && data.over === 'AllPlayersConnected') return;
+        if (data.over === 'AllPlayersConnected') return;
 
         node.socket.disconnect();
 
-        // Enough Time passed, not enough players connected.
-        if (data && data.over === 'Time elapsed!!!') {
 
-            timeOut = "<h3 align='center'>Thank you for your patience.<br>";
-            timeOut += "Unfortunately, there are not enough participants in ";
-            timeOut += "your group to start the experiment.<br>";
-
-            timeOut += "You will be payed out a fix amount for your ";
-            timeOut += "participation up to this point.<br><br>";
-
-            timeOut += "Please go back to Amazon Mechanical Turk ";
-            timeOut += "web site and submit the hit.<br>";
-
-            timeOut += "We usually pay within 24 hours. <br>For any ";
-            timeOut += "problems, please look for a HIT called ";
-            timeOut += "<strong>ETH Descil Trouble Ticket</strong> and file ";
-            timtOut += "a new trouble ticket reporting the exit code ";
-            timeOut += "as written below.<br><br>";
-
-            timeOut += "Exit Code: " + data.exit + "<br> </h3>";
-        }
-
-        // Too much time passed, but no message from server received.
-        else {
-            timeOut = "An error has occurred. You seem to be ";
-            timeOut += "waiting for too long. Please look for a HIT called ";
-            timeOut += "<strong>ETH Descil Trouble Ticket</strong> and file ";
-            timeOut += "a new trouble ticket reporting your experience."
-        }
-
-        document.getElementById("startPage").innerHTML = timeOut;
+        if (this.onTimeout) this.onTimeout(data);
     }
 
 })(node);
