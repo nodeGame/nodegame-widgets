@@ -21,7 +21,7 @@
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
-    WaitingRoom.className = 'waitingRoom';
+    WaitingRoom.className = 'waitingroom';
 
     // ## Dependencies
 
@@ -75,18 +75,38 @@
         this.timeoutId = null;
 
         /**
-         * ### WaitingRoom.summary
+         * ### WaitingRoom.playerCountDiv
          *
-         * Span summarizing the status of the wait room
+         * Div containing the span for displaying the number of players
+         *
+         * @see WaitingRoom.playerCount
          */
-        this.summary = null;
+        this.playerCountDiv = null;
 
         /**
-         * ### WaitingRoom.summaryUpdate
+         * ### WaitingRoom.playerCount
          *
          * Span displaying the number of connected players
          */
-        this.summaryUpdate = null;
+        this.playerCount = null;
+
+        /**
+         * ### WaitingRoom.timerDiv
+         *
+         * Div containing the timer
+         *
+         * @see WaitingRoom.timer
+         */
+        this.timerDiv = null;
+
+        /**
+         * ### WaitingRoom.timer
+         *
+         * VisualTimer instance for max wait time.
+         *
+         * @see VisualTimer
+         */
+        this.timer = null;
 
         /**
          * ### WaitingRoom.dots
@@ -115,16 +135,6 @@
          * Callback to be executed at the end of all tests
          */
         this.onTimeout = null;
-
-
-        /**
-         * ### WaitingRoom.timer
-         *
-         * VisualTimer instance for max wait time.
-         *
-         * @see VisualTimer
-         */
-        this.timer = null;
 
     }
 
@@ -221,11 +231,23 @@
         var that = this;
         if (this.timer) return;
         if (!this.maxWaitTime) return;
-        this.timer = node.widgets.append('VisualTimer', this.summary, {
+        if (!this.timerDiv) {
+            this.timerDiv = document.createElement('div');
+            this.timerDiv.id = 'timer-div';
+        }
+        this.timerDiv.appendChild(document.createTextNode(
+            'Maximum Waiting Time: '
+        ));
+        this.timer = node.widgets.append('VisualTimer', this.timerDiv, {
             milliseconds: this.maxWaitTime,
             timeup: this.onTimeup,
             update: 1000
         });
+        // Style up: delete title and border;
+        this.timer.setTitle();
+        this.timer.panelDiv.className = 'ng_widget visualtimer';
+        // Append to bodyDiv.
+        this.bodyDiv.appendChild(this.timerDiv);
         this.timer.start();
     };
 
@@ -273,28 +295,28 @@
      * @see WaitingRoom.updateState
      */
     WaitingRoom.prototype.updateDisplay = function() {
-        this.summaryUpdate.innerHTML = this.connected + ' / ' + this.poolSize;
+        this.playerCount.innerHTML = this.connected + ' / ' + this.poolSize;
     };
 
     WaitingRoom.prototype.append = function() {
+        this.playerCountDiv = document.createElement('div');
+        this.playerCountDiv.id = 'player-count-div';
 
-        this.summary = document.createElement('span');
-        this.summary.appendChild(
-            document.createTextNode('Waiting for all players to connect: '));
+        this.playerCountDiv.appendChild(
+            document.createTextNode('Waiting for All Players to Connect: '));
 
-        this.summaryUpdate = document.createElement('span');
-        this.summary.appendChild(this.summaryUpdate);
+        this.playerCount = document.createElement('p');
+        this.playerCount.id = 'player-count';
+        this.playerCountDiv.appendChild(this.playerCount);
 
         this.dots = W.getLoadingDots();
+        this.playerCountDiv.appendChild(this.dots.span);
 
-        this.summary.appendChild(this.dots.span);
+        this.bodyDiv.appendChild(this.playerCountDiv);
 
         if (this.maxWaitTime) {
             this.startTimer();
         }
-
-        this.bodyDiv.appendChild(this.summary);
-
 
     };
 
@@ -345,7 +367,7 @@
             }
 
             // Write about disconnection in page.
-            that.summary.innerHTML = '<span style="color: red">You have been ' +
+            that.bodyDiv.innerHTML = '<span style="color: red">You have been ' +
                 '<strong>disconnected</strong>. Please try again later.' +
                 '</span><br><br>';
 
