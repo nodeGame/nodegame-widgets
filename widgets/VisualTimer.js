@@ -149,6 +149,11 @@
             this.gameTimer = node.timer.createTimer();
         }
 
+        // TODO: make it consistent with processOptions.
+        if ('function' === typeof options.milliseconds) {
+            options.milliseconds = options.milliseconds.call(node.game);
+        }
+
         this.gameTimer.init(options);
 
         t = this.gameTimer;
