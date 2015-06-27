@@ -7340,6 +7340,7 @@
                 if (!stepObj) return;
                 timer = stepObj.timer;
                 if (timer) {
+                    // TODO: should be that.options.
                     options = processOptions(timer, this.options);
                     that.startTiming(options);
                 }
