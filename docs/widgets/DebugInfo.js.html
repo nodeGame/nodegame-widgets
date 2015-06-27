@@ -343,7 +343,6 @@ MIT Licensed</p>
     <span class="p">};</span>
 
     <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;STEP_CALLBACK_EXECUTED&#39;</span><span class="p">,</span> <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateAll</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -356,7 +355,7 @@ MIT Licensed</p>
 <p>TODO proper cleanup.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;DebugInfo destroyed.&#39;</span><span class="p">);</span>
     <span class="p">};</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>

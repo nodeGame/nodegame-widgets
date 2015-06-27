@@ -1,6 +1,6 @@
 /**
  * # Widget
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Prototype of a widget class
@@ -44,7 +44,7 @@
         if (!title) {
             if (this.headingDiv) {
                 this.panelDiv.removeChild(this.headingDiv);
-                delete this.headingDiv;
+                this.headingDiv = null;
             }
         }
         else {
@@ -113,10 +113,12 @@
 
 /**
  * # Widgets
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Helper class to interact with nodeGame widgets
+ *
+ * http://nodegame.org
  */
 (function(window, node) {
 
@@ -127,6 +129,7 @@
     // ## Widgets constructor
 
     function Widgets() {
+        var that;
 
         /**
          * ### Widgets.widgets
@@ -146,8 +149,49 @@
          */
         this.instances = [];
 
+        that = this;
+        node.registerSetup('widgets', function(conf) {
+            var name, root;
+            if (!conf) return;
 
-        node.silly('node-widgets: loading.');
+            // Add new widgets.
+            if (conf.widgets) {
+                for (name in conf.widgets) {
+                    if (conf.widgets.hasOwnProperty(name)) {
+                        that.register(name, conf.widgets[name]);
+                    }
+                }
+            }
+
+            // Destroy all existing widgets.
+            if (conf.destroyAll) {
+                that.destroyAll();
+            }
+
+            // Append existing widgets.
+            if (conf.append) {
+                for (name in conf.append) {
+                    if (conf.append.hasOwnProperty(name)) {
+                        // Determine root.
+                        if ('string' === typeof conf.append[name].root) {
+                            root = W.getElementById(conf.append[name].root);
+                        }
+                        if (!root) root = W.getScreen();
+                        if (!root) {
+                            node.warn('setup widgets: could not find a root ' +
+                                      'for widget ' + name + '.');
+                        }
+                        else {
+                            that.append(name, root, conf.append[name]);
+                        }
+                    }
+                }
+            }
+
+            return conf;
+        });
+
+        node.info('node-widgets: loading.');
     }
 
     // ## Widgets methods
@@ -165,6 +209,7 @@
      *
      * @param {string} name The id under which to register the widget
      * @param {function} w The widget to add
+     *
      * @return {object|boolean} The registered widget,
      *   or FALSE if an error occurs
      */
@@ -176,7 +221,7 @@
         if ('function' !== typeof w) {
             throw new TypeError('Widgets.register: w must be function.');
         }
-        // Add default properties to widget prototype
+        // Add default properties to widget prototype.
         J.mixout(w.prototype, new node.Widget());
         this.widgets[name] = w;
         return this.widgets[name];
@@ -193,7 +238,7 @@
      * The dependencies are checked, and if the conditions are not met,
      * returns FALSE.
      *
-     * @param {string} w_str The name of the widget to load
+     * @param {string} widgetName The name of the widget to load
      * @param {options} options Optional. Configuration options
      *   to be passed to the widgets
      *
@@ -204,11 +249,12 @@
      * @TODO: add supports for any listener. Maybe requires some refactoring.
      * @TODO: add example.
      */
-    Widgets.prototype.get = function(w_str, options) {
+    Widgets.prototype.get = function(widgetName, options) {
         var wProto, widget;
+        var changes, origDestroy;
         var that;
-        if ('string' !== typeof w_str) {
-            throw new TypeError('Widgets.get: w_str must be string.');
+        if ('string' !== typeof widgetName) {
+            throw new TypeError('Widgets.get: widgetName must be string.');
         }
         if (options && 'object' !== typeof options) {
             throw new TypeError('Widgets.get: options must be object or ' +
@@ -218,24 +264,26 @@
         that = this;
         options = options || {};
 
-        wProto = J.getNestedValue(w_str, this.widgets);
+        wProto = J.getNestedValue(widgetName, this.widgets);
 
         if (!wProto) {
-            throw new Error('Widgets.get: ' + w_str + ' not found.');
+            throw new Error('Widgets.get: ' + widgetName + ' not found.');
         }
 
-        node.info('registering ' + wProto.name + ' v.' +  wProto.version);
+        node.info('creating widget ' + wProto.name + ' v.' +  wProto.version);
 
         if (!this.checkDependencies(wProto)) {
-            throw new Error('Widgets.get: ' + w_str + ' has unmet ' +
-                            'dependecies.');
+            throw new Error('Widgets.get: ' + widgetName + ' has unmet ' +
+                            'dependencies.');
         }
 
         // Add missing properties to the user options
         J.mixout(options, J.clone(wProto.defaults));
 
+        // Create widget.
         widget = new wProto(options);
-        // Re-inject defaults
+
+        // Re-inject defaults.
         widget.defaults = options;
 
         widget.title = wProto.title;
@@ -243,10 +291,68 @@
         widget.className = wProto.className;
         widget.context = wProto.context;
 
-        // Call listeners
+        // Add random unique widget id.
+        widget.wid = '' + J.randomInt(0,10000000000000000000);
+
+        // Call listeners.
+
+        // Start recording changes.
+        node.events.setRecordChanges(true);
+
+        // Register listeners.
         widget.listeners.call(widget);
 
-        // user listeners
+        // Get registered listeners, clear changes, and stop recording.
+        changes = node.events.getChanges(true);
+        node.events.setRecordChanges(false);
+
+        origDestroy = widget.destroy;
+
+        // If any listener was added or removed, the original situation will
+        // be restored when the widget is destroyed.
+        // The widget is also automatically removed from parent.
+        widget.destroy = function() {
+            var i, len, ee, eeName;
+
+            try {
+                // Call original function.
+                origDestroy.call(widget);
+                // Remove the widget's div from its parent.
+                widget.panelDiv.parentNode.removeChild(widget.panelDiv);
+            }
+            catch(e) {
+                node.warn(widgetName + '.destroy(): error caught. ' + e + '.');
+            }
+
+            if (changes) {
+                for (eeName in changes) {
+                    if (changes.hasOwnProperty(eeName)) {
+                        ee = changes[eeName];
+                        i = -1, len = ee.added.length;
+                        for ( ; ++i < len ; ) {
+                            node.events.ee[eeName].off(ee.added[i].type,
+                                                       ee.added[i].listener);
+                        }
+                        i = -1, len = changes[eeName].removed.length;
+                        for ( ; ++i < len ; ) {
+                            node.events.ee[eeName].on(ee.removed[i].type,
+                                                      ee.removed[i].listener);
+                        }
+                    }
+                }
+            }
+
+            // Remove widget from current instances, if found.
+            i = -1, len = node.widgets.instances.length;
+            for ( ; ++i < len ; ) {
+                if (node.widgets.instances[i].wid === widget.wid) {
+                    node.widgets.instances.splice(i,1);
+                    break;
+                }
+            }
+        };
+
+        // User listeners.
         attachListeners(options, widget);
 
         return widget;
@@ -346,25 +452,17 @@
      * @see Widgets.append
      */
     Widgets.prototype.destroyAll = function() {
-        var i, widget;
-
-        for (i in this.instances) {
-            if (this.instances.hasOwnProperty(i)) {
-                widget = this.instances[i];
-
-                try {
-                    widget.destroy();
-
-                    // Remove the widget's div from its parent:
-                    widget.panelDiv.parentNode.removeChild(widget.panelDiv);
-                }
-                catch (e) {
-                    node.warn('Widgets.destroyAll: Error caught. ' + e + '.');
-                }
-            }
+        var i, len;
+        i = -1, len = this.instances.length;
+        // Nested widgets can be destroyed by previous calls to destroy,
+        // and each call to destroy modify the array of instances.
+        for ( ; ++i < len ; ) {
+            this.instances[0].destroy();
         }
-
-        this.instances = [];
+        if (this.instances.length) {
+            node.warn('node.widgets.destroyAll: some widgets could ' +
+                      'not be destroyed.');
+        }
     };
 
     /**
@@ -434,7 +532,7 @@
                   'onsubmit', 'onload', 'onunload', 'onmouseover'];
         for (i in options) {
             if (options.hasOwnProperty(i)) {
-                isEvent = J.in_array(i, events);
+                isEvent = J.inArray(i, events);
                 if (isEvent && 'function' === typeof options[i]) {
                     createListenerFunction(w, i, options[i]);
                 }
@@ -447,7 +545,7 @@
         node.err(d + ' not found. ' + name + ' cannot be loaded.');
     }
 
-    //Expose Widgets to the global object
+    //Expose Widgets to the global object.
     node.widgets = new Widgets();
 
 })(
@@ -2995,9 +3093,8 @@
     };
 
     DebugInfo.prototype.destroy = function() {
-        node.off('STEP_CALLBACK_EXECUTED', DebugInfo.prototype.updateAll);
         // TODO proper cleanup.
-
+        console.log('DebugInfo destroyed.');
     };
 
 })(node);
@@ -4789,6 +4886,13 @@
         this.summaryUpdate = null;
 
         /**
+         * ### Requirements.summaryResults
+         *
+         * Span displaying the results of the tests
+         */
+        this.summaryResults = null;
+
+        /**
          * ### Requirements.dots
          *
          * Looping dots to give the user the feeling of code execution
@@ -5211,15 +5315,12 @@
         }
 
         // No errors.
-        if (!results.length) {
-            // Last check and no previous errors.
-            if (!this.hasFailed && this.stillChecking <= 0) {
-                // All tests passed.
-                this.list.addDT({
-                    success: true,
-                    text:'All tests passed.'
-                });
-            }
+        if (!this.hasFailed && this.stillChecking <= 0) {
+            // All tests passed.
+            this.list.addDT({
+                success: true,
+                text:'All tests passed.'
+            });
         }
         else {
             // Add the errors.
@@ -5245,11 +5346,14 @@
         this.summary.appendChild(this.summaryUpdate);
 
         this.dots = W.getLoadingDots();
-
         this.summary.appendChild(this.dots.span);
 
-        this.bodyDiv.appendChild(this.summary);
+        this.summaryResults = document.createElement('div');
+        this.summary.appendChild(document.createElement('br'));
+        this.summary.appendChild(this.summaryResults);
 
+
+        this.bodyDiv.appendChild(this.summary);
         this.bodyDiv.appendChild(this.list.getRoot());
     };
 
@@ -5266,6 +5370,8 @@
             that.init(conf);
             // Start a checking immediately if requested.
             if (conf.doChecking) that.checkRequirements();
+
+            return conf;
         });
     };
 
@@ -5281,7 +5387,6 @@
         update = function(success, errors, data) {
             that.updateStillChecking(-1);
             if (!success) {
-                debugger
                 that.hasFailed = true;
             }
 
@@ -6933,6 +7038,11 @@
             this.gameTimer = node.timer.createTimer();
         }
 
+        // TODO: make it consistent with processOptions.
+        if ('function' === typeof options.milliseconds) {
+            options.milliseconds = options.milliseconds.call(node.game);
+        }
+
         this.gameTimer.init(options);
 
         t = this.gameTimer;
@@ -7476,6 +7586,390 @@
     TimerBox.prototype.setClassNameBody = function(className) {
         this.bodyDiv.className = className;
     };
+
+})(node);
+
+/**
+ * # WaitingRoom
+ * Copyright(c) 2015 Stefano Balietti
+ * MIT Licensed
+ *
+ * Display the number of connected / required players to start a game
+ *
+ * www.nodegame.org
+ */
+(function(node) {
+
+    "use strict";
+
+    var J = node.JSUS;
+
+    node.widgets.register('WaitingRoom', WaitingRoom);
+
+    // ## Meta-data
+
+    WaitingRoom.version = '0.1.0';
+    WaitingRoom.description = 'Displays a waiting room for clients.';
+
+    WaitingRoom.title = 'Waiting Room';
+    WaitingRoom.className = 'waitingroom';
+
+    // ## Dependencies
+
+    WaitingRoom.dependencies = {
+        JSUS: {},
+        VisualTimer: {}
+    };
+
+    /**
+     * ## WaitingRoom constructor
+     *
+     * Instantiates a new WaitingRoom object
+     *
+     * @param {object} options
+     */
+    function WaitingRoom(options) {
+
+        /**
+         * ### WaitingRoom.callbacks
+         *
+         * Array of all test callbacks
+         */
+        this.connected = 0;
+
+        /**
+         * ### WaitingRoom.stillChecking
+         *
+         * Number of tests still pending
+         */
+        this.poolSize = 0;
+
+        /**
+         * ### WaitingRoom.withTimeout
+         *
+         * The size of the group
+         */
+        this.groupSize = 0;
+
+        /**
+         * ### WaitingRoom.maxWaitTime
+         *
+         * The time in milliseconds for the timeout to expire
+         */
+        this.maxWaitTime = null;
+
+        /**
+         * ### WaitingRoom.timeoutId
+         *
+         * The id of the timeout, if created
+         */
+        this.timeoutId = null;
+
+        /**
+         * ### WaitingRoom.playerCountDiv
+         *
+         * Div containing the span for displaying the number of players
+         *
+         * @see WaitingRoom.playerCount
+         */
+        this.playerCountDiv = null;
+
+        /**
+         * ### WaitingRoom.playerCount
+         *
+         * Span displaying the number of connected players
+         */
+        this.playerCount = null;
+
+        /**
+         * ### WaitingRoom.timerDiv
+         *
+         * Div containing the timer
+         *
+         * @see WaitingRoom.timer
+         */
+        this.timerDiv = null;
+
+        /**
+         * ### WaitingRoom.timer
+         *
+         * VisualTimer instance for max wait time.
+         *
+         * @see VisualTimer
+         */
+        this.timer = null;
+
+        /**
+         * ### WaitingRoom.dots
+         *
+         * Looping dots to give the user the feeling of code execution
+         */
+        this.dots = null;
+
+        /**
+         * ### WaitingRoom.ontTimeout
+         *
+         * Callback to be executed if the timer expires
+         */
+        this.ontTimeout = null;
+
+        /**
+         * ### WaitingRoom.onTimeout
+         *
+         * TRUE if the timer expired
+         */
+        this.alreadyTimeUp = null;
+
+    }
+
+    // ## WaitingRoom methods
+
+    /**
+     * ### WaitingRoom.init
+     *
+     * Setups the requirements widget
+     *
+     * Available options:
+     *
+     *   - onComplete: function executed with either failure or success
+     *   - onTimeout: function executed when at least one test fails
+     *   - onSuccess: function executed when all tests succeed
+     *   - maxWaitTime: max waiting time to execute all tests (in milliseconds)
+     *
+     * @param {object} conf Configuration object.
+     */
+    WaitingRoom.prototype.init = function(conf) {
+        if ('object' !== typeof conf) {
+            throw new TypeError('WaitingRoom.init: conf must be object.');
+        }
+        if ('undefined' !== typeof conf.onTimeout) {
+            if (null !== conf.onTimeout &&
+                'function' !== typeof conf.onTimeout) {
+
+                throw new TypeError('WaitingRoom.init: conf.onTimeout must ' +
+                                    'be function, null or undefined.');
+            }
+            this.onTimeout = conf.onTimeout;
+        }
+        if (conf.maxWaitTime) {
+            if (null !== conf.maxWaitTime &&
+                'number' !== typeof conf.maxWaitTime) {
+
+                throw new TypeError('WaitingRoom.init: conf.onMaxExecTime ' +
+                                    'must be number, null or undefined.');
+            }
+            this.maxWaitTime = conf.maxWaitTime;
+            this.startTimer();
+        }
+
+        if (conf.poolSize) {
+            if (conf.poolSize && 'number' !== typeof conf.poolSize) {
+                throw new TypeError('WaitingRoom.init: conf.poolSize ' +
+                                    'must be number or undefined.');
+            }
+            this.poolSize = conf.poolSize;
+        }
+
+        if (conf.groupSize) {
+            if (conf.groupSize && 'number' !== typeof conf.groupSize) {
+                throw new TypeError('WaitingRoom.init: conf.groupSize ' +
+                                    'must be number or undefined.');
+            }
+            this.groupSize = conf.groupSize
+        }
+
+        if (conf.connected) {
+            if (conf.connected && 'number' !== typeof conf.connected) {
+                throw new TypeError('WaitingRoom.init: conf.connected ' +
+                                    'must be number or undefined.');
+            }
+            this.connected = conf.connected
+        }
+    };
+
+    /**
+     * ### WaitingRoom.addTimeout
+     *
+     * Starts a timeout for the max waiting time
+     *
+     */
+    WaitingRoom.prototype.startTimer = function() {
+        var that = this;
+        if (this.timer) return;
+        if (!this.maxWaitTime) return;
+        if (!this.timerDiv) {
+            this.timerDiv = document.createElement('div');
+            this.timerDiv.id = 'timer-div';
+        }
+        this.timerDiv.appendChild(document.createTextNode(
+            'Maximum Waiting Time: '
+        ));
+        this.timer = node.widgets.append('VisualTimer', this.timerDiv, {
+            milliseconds: this.maxWaitTime,
+            timeup: this.onTimeup,
+            update: 1000
+        });
+        // Style up: delete title and border;
+        this.timer.setTitle();
+        this.timer.panelDiv.className = 'ng_widget visualtimer';
+        // Append to bodyDiv.
+        this.bodyDiv.appendChild(this.timerDiv);
+        this.timer.start();
+    };
+
+    /**
+     * ### WaitingRoom.clearTimeout
+     *
+     * Clears the timeout for the max execution time of the requirements
+     *
+     * @see this.timeoutId
+     * @see this.stillCheckings
+     * @see this.requirements
+     */
+    WaitingRoom.prototype.clearTimeout = function() {
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+            this.timeoutId = null;
+        }
+    };
+
+    /**
+     * ### WaitingRoom.updateDisplay
+     *
+     * Displays the state of the waiting room on screen
+     *
+     * @see WaitingRoom.updateState
+     */
+    WaitingRoom.prototype.updateState = function(update) {
+        if (!update) return;
+        if ('number' === typeof update.connected) {
+            this.connected = update.connected;
+        }
+        if ('number' === typeof update.poolSize) {
+            this.poolSize = update.poolSize;
+        }
+        if ('number' === typeof update.groupSize) {
+            this.groupSize = update.groupSize;
+        }
+    };
+
+    /**
+     * ### WaitingRoom.updateDisplay
+     *
+     * Displays the state of the waiting room on screen
+     *
+     * @see WaitingRoom.updateState
+     */
+    WaitingRoom.prototype.updateDisplay = function() {
+        this.playerCount.innerHTML = this.connected + ' / ' + this.poolSize;
+    };
+
+    WaitingRoom.prototype.append = function() {
+        this.playerCountDiv = document.createElement('div');
+        this.playerCountDiv.id = 'player-count-div';
+
+        this.playerCountDiv.appendChild(
+            document.createTextNode('Waiting for All Players to Connect: '));
+
+        this.playerCount = document.createElement('p');
+        this.playerCount.id = 'player-count';
+        this.playerCountDiv.appendChild(this.playerCount);
+
+        this.dots = W.getLoadingDots();
+        this.playerCountDiv.appendChild(this.dots.span);
+
+        this.bodyDiv.appendChild(this.playerCountDiv);
+
+        if (this.maxWaitTime) {
+            this.startTimer();
+        }
+
+    };
+
+    WaitingRoom.prototype.listeners = function() {
+        var that;
+        that = this;
+
+        node.registerSetup('waitroom', function(conf) {
+            if (!conf) return;
+            if ('object' !== typeof conf) {
+                node.warn('waiting room widget: invalid setup object: ' + conf);
+                return;
+            }
+            // Configure all requirements.
+            that.init(conf);
+
+            return conf;
+        });
+
+        // NodeGame Listeners.
+        node.on.data('PLAYERSCONNECTED', function(msg) {
+            if (!msg.data) return;
+            that.connected = msg.data;
+            that.updateDisplay();
+        });
+
+        node.on.data('TIME', function(msg) {
+            timeIsUp.call(that, msg.data);
+        });
+
+
+        // Start waiting time timer.
+        node.on.data('WAITTIME', function(msg) {
+
+            // Avoid running multiple timers.
+            // if (timeCheck) clearInterval(timeCheck);
+
+            that.updateState(msg.data);
+            that.updateDisplay();
+
+        });
+
+        node.on('SOCKET_DISCONNECT', function() {
+            if (that.alreadyTimeUp) return;
+
+            // Terminate countdown.
+            if (that.timer) {
+                that.timer.stop();
+                that.timer.destroy();
+            }
+
+            // Write about disconnection in page.
+            that.bodyDiv.innerHTML = '<span style="color: red">You have been ' +
+                '<strong>disconnected</strong>. Please try again later.' +
+                '</span><br><br>';
+
+//             // Enough to not display it in case of page refresh.
+//             setTimeout(function() {
+//                 alert('Disconnection from server detected!');
+//             }, 200);
+        });
+    };
+
+    WaitingRoom.prototype.destroy = function() {
+        node.deregisterSetup('waitroom');
+    };
+
+    // ## Helper methods
+
+    function timeIsUp(data) {
+        var timeOut;
+        console.log('TIME IS UP!');
+
+        if (this.alreadyTimeUp) return;
+        this.alreadyTimeUp = true;
+        if (this.timer) this.timer.stop();
+
+        data = data || {};
+
+        // All players have connected. Game starts.
+        if (data.over === 'AllPlayersConnected') return;
+
+        node.socket.disconnect();
+
+
+        if (this.onTimeout) this.onTimeout(data);
+    }
 
 })(node);
 

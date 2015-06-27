@@ -5,6 +5,10 @@
 - Improved Requirements widget. Some functions are moved into separate repo (nodegame-requirements).
 - Proper cleanup by loadFrameTest in Requirements.
 - Controls subclasses are registered correctly
+- Automatic destroy of widget: widgets are removed from page, and any modification to event emitters made during the call to the Widget.listeners() method is restored. If in node.widgets.instances, it will be removed from there.
+- New widgets: DebugInfo, WaitingRoom. Updated: Requirements.
+- Every widget has a unique widget id: .wid.
+- Added setup functions to setup widgets (also remotely).
 
 ## 0.6.7
 

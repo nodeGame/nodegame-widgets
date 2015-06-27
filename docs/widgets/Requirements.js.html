@@ -52,6 +52,9 @@
         <a href="#requirements.summaryupdate">Requirements.summaryUpdate</a>
       </div>
       <div class="heading h3">
+        <a href="#requirements.summaryresults">Requirements.summaryResults</a>
+      </div>
+      <div class="heading h3">
         <a href="#requirements.dots">Requirements.dots</a>
       </div>
       <div class="heading h3">
@@ -383,6 +386,28 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="requirements.summaryresults">
+  <h3>
+    <a href="#requirements.summaryresults" name="requirements.summaryresults" class="pilcrow">&#182;</a>
+    Requirements.summaryResults
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Span displaying the results of the tests</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="requirements.dots">
   <h3>
     <a href="#requirements.dots" name="requirements.dots" class="pilcrow">&#182;</a>
@@ -624,7 +649,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Might be the full exception object.</p>
         </td>
@@ -867,7 +892,7 @@ corresponding option is set.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Get Test Name.</p>
         </td>
@@ -1248,25 +1273,12 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>No errors.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">results</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
-</div>
-<p>Last check and no previous errors.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -1279,11 +1291,10 @@ in the results array.</p>
 <p>All tests passed.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">({</span>
-                    <span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-                    <span class="nx">text</span><span class="o">:</span><span class="s1">&#39;All tests passed.&#39;</span>
-                <span class="p">});</span>
-            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">({</span>
+                <span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">text</span><span class="o">:</span><span class="s1">&#39;All tests passed.&#39;</span>
+            <span class="p">});</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
 
@@ -1331,11 +1342,14 @@ in the results array.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span><span class="p">);</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">dots</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getLoadingDots</span><span class="p">();</span>
-
         <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dots</span><span class="p">.</span><span class="nx">span</span><span class="p">);</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">));</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span><span class="p">);</span>
 
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">());</span>
     <span class="p">};</span>
 
@@ -1374,6 +1388,8 @@ in the results array.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">doChecking</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">checkRequirements</span><span class="p">();</span>
+
+            <span class="k">return</span> <span class="nx">conf</span><span class="p">;</span>
         <span class="p">});</span>
     <span class="p">};</span>
 
@@ -1403,7 +1419,6 @@ in the results array.</p>
         <span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">,</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
-                <span class="kr">debugger</span>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
             <span class="p">}</span>
 
