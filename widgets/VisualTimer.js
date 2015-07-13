@@ -434,7 +434,7 @@
      *
      * @see GameTimer.isTimeup
      */
-    VisualTimer.prototype.setToZero = function() {
+    VisualTimer.prototype.isTimeup = function() {
         return this.gameTimer.isTimeup();
     };
 
