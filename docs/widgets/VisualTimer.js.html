@@ -82,6 +82,9 @@
         <a href="#visualtimer.settozero">VisualTimer.setToZero</a>
       </div>
       <div class="heading h3">
+        <a href="#visualtimer.istimeup">VisualTimer.isTimeup</a>
+      </div>
+      <div class="heading h3">
         <a href="#visualtimer.dotimeup">VisualTimer.doTimeUp</a>
       </div>
       <div class="heading h2">
@@ -1057,6 +1060,39 @@ hidden. All other options are forwarded directly to
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="visualtimer.istimeup">
+  <h3>
+    <a href="#visualtimer.istimeup" name="visualtimer.istimeup" class="pilcrow">&#182;</a>
+    VisualTimer.isTimeup
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Returns TRUE if the timer expired</p>
+
+<p>This method is added for backward compatibility.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameTimer.isTimeup
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setToZero</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">isTimeup</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="visualtimer.dotimeup">
   <h3>
     <a href="#visualtimer.dotimeup" name="visualtimer.dotimeup" class="pilcrow">&#182;</a>
@@ -1106,7 +1142,7 @@ hidden. All other options are forwarded directly to
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>TODO: should be that.options.</p>
         </td>

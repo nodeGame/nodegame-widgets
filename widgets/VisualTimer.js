@@ -426,6 +426,19 @@
     };
 
     /**
+     * ### VisualTimer.isTimeup
+     *
+     * Returns TRUE if the timer expired
+     *
+     * This method is added for backward compatibility.
+     *
+     * @see GameTimer.isTimeup
+     */
+    VisualTimer.prototype.setToZero = function() {
+        return this.gameTimer.isTimeup();
+    };
+
+    /**
      * ### VisualTimer.doTimeUp
      *
      * Stops the timer and calls the timeup

@@ -119,6 +119,11 @@
          */
         this.languagesLoaded = false;
 
+        /**
+         * ## LanguageSelector.usingButtons
+         *
+         * Flag indicating if the interface should have buttons
+         */
         this.usingButtons = null;
 
         /**
@@ -148,7 +153,7 @@
             that.availableLanguages = msg.data;
             if (that.usingButtons) {
 
-                // Creates labled buttons.
+                // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
                         that.optionsLabel[language] = W.getElement('label',
