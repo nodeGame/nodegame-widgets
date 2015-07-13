@@ -3965,6 +3965,11 @@
          */
         this.languagesLoaded = false;
 
+        /**
+         * ## LanguageSelector.usingButtons
+         *
+         * Flag indicating if the interface should have buttons
+         */
         this.usingButtons = null;
 
         /**
@@ -3994,7 +3999,7 @@
             that.availableLanguages = msg.data;
             if (that.usingButtons) {
 
-                // Creates labled buttons.
+                // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
                         that.optionsLabel[language] = W.getElement('label',
@@ -7312,6 +7317,19 @@
         this.stop();
         this.activeBox.bodyDiv.innerHTML = '00:00';
         this.activeBox.setClassNameBody('strike');
+    };
+
+    /**
+     * ### VisualTimer.isTimeup
+     *
+     * Returns TRUE if the timer expired
+     *
+     * This method is added for backward compatibility.
+     *
+     * @see GameTimer.isTimeup
+     */
+    VisualTimer.prototype.setToZero = function() {
+        return this.gameTimer.isTimeup();
     };
 
     /**
