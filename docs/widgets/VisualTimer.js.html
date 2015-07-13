@@ -87,11 +87,8 @@
       <div class="heading h3">
         <a href="#visualtimer.dotimeup">VisualTimer.doTimeUp</a>
       </div>
-      <div class="heading h2">
-        <a href="#helper%20functions">Helper functions</a>
-      </div>
       <div class="heading h3">
-        <a href="#processoptions">processOptions</a>
+        <a href="#visualtimer.processoptions">VisualTimer.processOptions</a>
       </div>
       <div class="heading h1">
         <a href="#timerbox">TimerBox</a>
@@ -175,7 +172,6 @@ Only for countdown smaller than 1h.</p>
     <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;VisualTimer&#39;</span><span class="p">,</span> <span class="nx">VisualTimer</span><span class="p">);</span>
-
 
 
 </pre></div>
@@ -914,10 +910,9 @@ options are forwarded directly to <code>VisualTimer.restart</code>.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">startWaiting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        <span class="nx">options</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">timeLeft</span><span class="p">;</span>
         <span class="p">}</span>
@@ -972,14 +967,13 @@ hidden. All other options are forwarded directly to
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">startTiming</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        <span class="nx">options</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
         <span class="nx">options</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span><span class="p">;</span>
@@ -1129,25 +1123,12 @@ hidden. All other options are forwarded directly to
         <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;PLAYING&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">stepObj</span><span class="p">,</span> <span class="nx">timer</span><span class="p">,</span> <span class="nx">options</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">timer</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">step</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">startOnPlaying</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">stepObj</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentStep</span><span class="p">();</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">stepObj</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-                <span class="nx">timer</span> <span class="o">=</span> <span class="nx">stepObj</span><span class="p">.</span><span class="nx">timer</span><span class="p">;</span>
+                <span class="nx">step</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentGameStage</span><span class="p">();</span>
+                <span class="nx">timer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">step</span><span class="p">,</span> <span class="s1">&#39;timer&#39;</span><span class="p">);</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">timer</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
-</div>
-<p>TODO: should be that.options.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                    <span class="nx">options</span> <span class="o">=</span> <span class="nx">processOptions</span><span class="p">(</span><span class="nx">timer</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+                    <span class="nx">options</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">processOptions</span><span class="p">(</span><span class="nx">timer</span><span class="p">);</span>
                     <span class="nx">that</span><span class="p">.</span><span class="nx">startTiming</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -1173,35 +1154,19 @@ hidden. All other options are forwarded directly to
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap" id="helper%20functions">
-  <h2>
-    <a href="#helper%20functions" name="helper%20functions" class="pilcrow">&#182;</a>
-    Helper functions
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="processoptions">
+<div class="pilwrap" id="visualtimer.processoptions">
   <h3>
-    <a href="#processoptions" name="processoptions" class="pilcrow">&#182;</a>
-    processOptions
+    <a href="#visualtimer.processoptions" name="visualtimer.processoptions" class="pilcrow">&#182;</a>
+    VisualTimer.processOptions
   </h3>
 </div>
 
   </div>
-  <div class="body"><p>Clones and mixes in user options with current options</p>
+  <div class="body"><p>Clones and cleans user options</p>
 
-<p>Return object is transformed accordingly.</p>
+<p>Adds the default 'timeup' function as <code>node.done</code>.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -1209,11 +1174,6 @@ hidden. All other options are forwarded directly to
       <span class="dox_tag_name">options</span>
       <span class="dox_type">object</span>
       <span>Configuration options</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">curOptions</span>
-      <span class="dox_type">object</span>
-      <span>Current configuration of VisualTimer</span>
     </div>
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
@@ -1225,10 +1185,9 @@ hidden. All other options are forwarded directly to
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">processOptions</span><span class="p">(</span><span class="nx">inOptions</span><span class="p">,</span> <span class="nx">curOptions</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processOptions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">inOptions</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">typeofOptions</span><span class="p">;</span>
         <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
-        <span class="nx">inOptions</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">inOptions</span><span class="p">);</span>
         <span class="nx">typeofOptions</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">inOptions</span><span class="p">;</span>
         <span class="k">switch</span> <span class="p">(</span><span class="nx">typeofOptions</span><span class="p">)</span> <span class="p">{</span>
 
@@ -1236,7 +1195,7 @@ hidden. All other options are forwarded directly to
             <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="nx">inOptions</span><span class="p">;</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="s1">&#39;object&#39;</span><span class="o">:</span>
-            <span class="nx">options</span> <span class="o">=</span> <span class="nx">inOptions</span><span class="p">;</span>
+            <span class="nx">options</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">inOptions</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">);</span>
             <span class="p">}</span>
@@ -1249,18 +1208,18 @@ hidden. All other options are forwarded directly to
             <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">curOptions</span> <span class="o">||</span> <span class="p">{});</span>
-
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;VisualTimer processOptions: milliseconds cannot &#39;</span> <span class="o">+</span>
                             <span class="s1">&#39;be 0 or undefined.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeup</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">timeup</span> <span class="o">=</span> <span class="s1">&#39;DONE&#39;</span><span class="p">;</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">timeup</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+            <span class="p">}</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">options</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
 
 
 </pre></div>
