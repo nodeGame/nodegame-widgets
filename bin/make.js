@@ -18,7 +18,6 @@ J = require('JSUS').JSUS;
 var pkg = require('../package.json'),
 version = pkg.version;
 
-
 var build = require('./build.js').build;
 
 var rootDir = path.resolve(__dirname, '..') + '/';
@@ -66,8 +65,8 @@ program
         var command = dockerDir + 'docker -i ' + rootDir +
             ' index.js lib/ widgets/ -s true -o ' + rootDir + 'docs/ -u';
         var child = exec(command, function (error, stdout, stderr) {
-            util.print(stdout);
-            util.print(stderr);
+            console.log(stdout);
+            console.log(stderr);
             if (error !== null) {
                 console.log('build error: ' + error);
             }

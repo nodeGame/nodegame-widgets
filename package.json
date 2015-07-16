@@ -14,9 +14,6 @@
     "mocha": ">= 0.3.0",
     "should": ">= 0.5.1"
   },
-  "optionalDependencies": {
-    "docker": "0.2.2"
-  },
   "engines": { "node":  ">=0.10.0" },
   "repository": {
     "type": "git",
