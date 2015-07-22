@@ -1,6 +1,6 @@
 /**
  * # Controls
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -12,11 +12,6 @@
     "use strict";
 
     // TODO: handle different events, beside onchange
-
-    var J = node.JSUS;
-    var sliderControls = SliderControls;
-    var jQuerySlider = jQuerySliderControls;
-    var radioControls = RadioControls;
 
     node.widgets.register('Controls', Controls);
 
@@ -358,7 +353,7 @@
 
     // overriding populate also. There is an error with the Label
     RadioControls.prototype.populate = function() {
-        var key, id, attributes, container, elem, that;
+        var key, id, attributes, elem, that;
         that = this;
 
         if (!this.radioElem) {

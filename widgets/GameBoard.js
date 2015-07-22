@@ -1,6 +1,6 @@
 /**
  * # GameBoard
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays a table of currently connected players
@@ -10,8 +10,6 @@
 (function(node) {
 
     "use strict";
-
-    var PlayerList = node.PlayerList;
 
     node.widgets.register('GameBoard', GameBoard);
 

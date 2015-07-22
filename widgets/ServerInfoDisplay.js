@@ -16,7 +16,7 @@
     // ## Meta-data
 
     ServerInfoDisplay.version = '0.4.1';
-    ServerInfoDisplay.description = 'Displays information about the server.'
+    ServerInfoDisplay.description = 'Displays information about the server.';
 
     ServerInfoDisplay.title = 'Server Info';
     ServerInfoDisplay.className = 'serverinfodisplay';

@@ -87,8 +87,6 @@
     }
 
     ChernoffFaces.prototype.init = function(options) {
-        var that = this;
-
         var controlsOptions;
 
         this.features = options.features || this.features ||

@@ -145,7 +145,7 @@
          * Function which displays the sender's name
          */
         this.displayName = null;
-        this.init(options)
+        this.init(options);
     }
 
     // ## Chat methods

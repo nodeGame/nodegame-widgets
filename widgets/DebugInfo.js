@@ -13,8 +13,7 @@
 
     var J = node.JSUS;
 
-    var Table = node.window.Table,
-    GameStage = node.GameStage;
+    var Table = node.window.Table;
 
     node.widgets.register('DebugInfo', DebugInfo);
 
@@ -95,13 +94,13 @@
         }
 
         stageLevel = J.getKeyByValue(node.constants.stageLevels,
-                                     node.game.getStageLevel())
+                                     node.game.getStageLevel());
 
         stateLevel = J.getKeyByValue(node.constants.stateLevels,
-                                     node.game.getStateLevel())
+                                     node.game.getStateLevel());
 
         winLevel = J.getKeyByValue(node.constants.windowLevels,
-                                   W.getStateLevel())
+                                   W.getStateLevel());
 
 
         errMsg = node.errorManager.lastErr || miss;

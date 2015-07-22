@@ -1,6 +1,6 @@
 /**
  * # VisualTimer
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events.
@@ -523,7 +523,7 @@
         if ('undefined' === typeof options.timeup) {
             options.timeup = function() {
                 node.done();
-            }
+            };
         }
         return options;
     };

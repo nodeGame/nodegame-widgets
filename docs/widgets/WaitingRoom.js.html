@@ -117,8 +117,6 @@ MIT Licensed</p>
 
     <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
-
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;WaitingRoom&#39;</span><span class="p">,</span> <span class="nx">WaitingRoom</span><span class="p">);</span>
 
 
@@ -571,7 +569,7 @@ MIT Licensed</p>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.groupSize &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">)</span> <span class="p">{</span>
@@ -579,7 +577,7 @@ MIT Licensed</p>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.connected &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">};</span>
 
@@ -604,7 +602,6 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">startTimer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timer</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">maxWaitTime</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span><span class="p">)</span> <span class="p">{</span>
@@ -946,7 +943,6 @@ if (timeCheck) clearInterval(timeCheck);</p>
         <td class="code highlight"><div class="highlight"><pre>
 
     <span class="kd">function</span> <span class="nx">timeIsUp</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">timeOut</span><span class="p">;</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;TIME IS UP!&#39;</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">alreadyTimeUp</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>

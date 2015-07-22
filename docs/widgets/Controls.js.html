@@ -80,7 +80,7 @@
 </div>
 
 
-<p>Copyright(c) 2014 Stefano Balietti
+<p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Creates and manipulates a set of forms</p>
@@ -105,11 +105,6 @@ MIT Licensed</p>
 <p>TODO: handle different events, beside onchange</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">sliderControls</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">jQuerySlider</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">radioControls</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Controls&#39;</span><span class="p">,</span> <span class="nx">Controls</span><span class="p">);</span>
 
@@ -813,7 +808,7 @@ TODO: remove/add elements</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">populate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">container</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">that</span><span class="p">;</span>
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">)</span> <span class="p">{</span>

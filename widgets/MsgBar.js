@@ -1,6 +1,6 @@
 /**
  * # MsgBar
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -11,9 +11,7 @@
 
     "use strict";
 
-    var GameMsg = node.GameMsg,
-        GameStage = node.GameStage,
-        JSUS = node.JSUS,
+    var JSUS = node.JSUS,
         Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);

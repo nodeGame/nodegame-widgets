@@ -74,8 +74,7 @@ MIT Licensed</p>
 
     <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
 
-    <span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">,</span>
-    <span class="nx">GameStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameStage</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;DebugInfo&#39;</span><span class="p">,</span> <span class="nx">DebugInfo</span><span class="p">);</span>
 
@@ -267,13 +266,13 @@ MIT Licensed</p>
         <span class="p">}</span>
 
         <span class="nx">stageLevel</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getKeyByValue</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">constants</span><span class="p">.</span><span class="nx">stageLevels</span><span class="p">,</span>
-                                     <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getStageLevel</span><span class="p">())</span>
+                                     <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getStageLevel</span><span class="p">());</span>
 
         <span class="nx">stateLevel</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getKeyByValue</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">constants</span><span class="p">.</span><span class="nx">stateLevels</span><span class="p">,</span>
-                                     <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getStateLevel</span><span class="p">())</span>
+                                     <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getStateLevel</span><span class="p">());</span>
 
         <span class="nx">winLevel</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getKeyByValue</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">constants</span><span class="p">.</span><span class="nx">windowLevels</span><span class="p">,</span>
-                                   <span class="nx">W</span><span class="p">.</span><span class="nx">getStateLevel</span><span class="p">())</span>
+                                   <span class="nx">W</span><span class="p">.</span><span class="nx">getStateLevel</span><span class="p">());</span>
 
 
         <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">errorManager</span><span class="p">.</span><span class="nx">lastErr</span> <span class="o">||</span> <span class="nx">miss</span><span class="p">;</span>

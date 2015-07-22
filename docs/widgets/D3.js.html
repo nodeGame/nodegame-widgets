@@ -239,21 +239,18 @@ MIT Licensed</p>
         <span class="nx">y</span><span class="o">:</span> <span class="p">[</span><span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="p">};</span>
 
-    <span class="kd">function</span> <span class="nx">D3ts</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">D3ts</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">o</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">;</span>
         <span class="nx">D3</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
 
-
-        <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-
-        <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">n</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">n</span><span class="p">;</span>
-
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">D3ts</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">n</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">n</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">margin</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">margin</span><span class="p">;</span>
 
-        <span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">width</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">left</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">right</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">height</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">top</span> <span class="o">-</span>
-                     <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">bottom</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">width</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">left</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">right</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">height</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">top</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">margin</span><span class="p">.</span><span class="nx">bottom</span><span class="p">;</span>
 
 
 </pre></div>
@@ -264,14 +261,14 @@ MIT Licensed</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
-<p>identity function</p>
+<p>Identity function.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
             <span class="p">.</span><span class="nx">domain</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">domain</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">range</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">range</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span>
 
-        <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
             <span class="p">.</span><span class="nx">domain</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">domain</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">range</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">range</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
 

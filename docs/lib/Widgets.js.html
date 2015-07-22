@@ -313,7 +313,6 @@ are added.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.register: name must be string.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
@@ -397,7 +396,7 @@ returns FALSE.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">widgetName</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">wProto</span><span class="p">,</span> <span class="nx">widget</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">WidgetPrototype</span><span class="p">,</span> <span class="nx">widget</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">changes</span><span class="p">,</span> <span class="nx">origDestroy</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">widgetName</span><span class="p">)</span> <span class="p">{</span>
@@ -411,15 +410,16 @@ returns FALSE.</p>
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
 
-        <span class="nx">wProto</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getNestedValue</span><span class="p">(</span><span class="nx">widgetName</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">);</span>
+        <span class="nx">WidgetPrototype</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getNestedValue</span><span class="p">(</span><span class="nx">widgetName</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">);</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">wProto</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">WidgetPrototype</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">widgetName</span> <span class="o">+</span> <span class="s1">&#39; not found.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;creating widget &#39;</span> <span class="o">+</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; v.&#39;</span> <span class="o">+</span>  <span class="nx">wProto</span><span class="p">.</span><span class="nx">version</span><span class="p">);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;creating widget &#39;</span> <span class="o">+</span> <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span>
+                  <span class="s1">&#39; v.&#39;</span> <span class="o">+</span>  <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">version</span><span class="p">);</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">checkDependencies</span><span class="p">(</span><span class="nx">wProto</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">checkDependencies</span><span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">))</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">widgetName</span> <span class="o">+</span> <span class="s1">&#39; has unmet &#39;</span> <span class="o">+</span>
                             <span class="s1">&#39;dependencies.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
@@ -436,7 +436,7 @@ returns FALSE.</p>
 <p>Add missing properties to the user options</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">wProto</span><span class="p">.</span><span class="nx">defaults</span><span class="p">));</span>
+        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">defaults</span><span class="p">));</span>
 
 
 </pre></div>
@@ -450,7 +450,7 @@ returns FALSE.</p>
 <p>Create widget.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wProto</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+        <span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WidgetPrototype</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
 
 
 </pre></div>
@@ -466,10 +466,10 @@ returns FALSE.</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">widget</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
 
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">footer</span><span class="p">;</span>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="nx">wProto</span><span class="p">.</span><span class="nx">context</span><span class="p">;</span>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">footer</span><span class="p">;</span>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">context</span><span class="p">;</span>
 
 
 </pre></div>

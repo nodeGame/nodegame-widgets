@@ -874,7 +874,7 @@ corresponding option is set.</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkRequirements</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">display</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">cbErrors</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">errMsg</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">errMsg</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: no requirements &#39;</span> <span class="o">+</span>
                             <span class="s1">&#39;to check found.&#39;</span><span class="p">);</span>
@@ -904,7 +904,7 @@ corresponding option is set.</p>
                 <span class="nx">cbName</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="k">try</span> <span class="p">{</span>
-                <span class="nx">resultCb</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+                <span class="nx">resultCb</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">extractErrorMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
@@ -1477,7 +1477,7 @@ in the results array.</p>
             <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">description</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errMsg</span><span class="p">.</span><span class="nx">description</span><span class="p">;</span>
+            <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">errMsg</span><span class="p">.</span><span class="nx">description</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
             <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>

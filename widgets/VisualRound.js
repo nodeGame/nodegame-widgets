@@ -240,7 +240,7 @@
      * @see VisualRound.init
      */
     VisualRound.prototype.setDisplayMode = function(displayModeNames) {
-        var index, compoundDisplayModeName, compoundDisplayMode, displayModes;
+        var index, compoundDisplayModeName, displayModes;
 
         // Validation of input parameter.
         if (!J.isArray(displayModeNames)) {

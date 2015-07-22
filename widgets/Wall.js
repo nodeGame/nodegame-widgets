@@ -120,10 +120,12 @@
      * Writes into this.buffer if document is not ready yet.
      */
     Wall.prototype.write = function(text) {
+        var mark;
         if (document.readyState !== 'complete') {
-            this.buffer.push(s);
-        } else {
-            var mark = this.counter++ + ') ' + J.getTime() + ' ';
+            this.buffer.push(text);
+        }
+        else {
+            mark = this.counter++ + ') ' + J.getTime() + ' ';
             this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
         }
     };

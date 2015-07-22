@@ -38,7 +38,7 @@
 </div>
 
 
-<p>Copyright(c) 2014 Stefano Balietti
+<p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Extends the GameTable widgets by allowing dynamic reshaping</p>
@@ -63,9 +63,10 @@ www.nodegame.org
     <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
     <span class="kd">var</span> <span class="nx">GameStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">GameStage</span><span class="p">,</span>
-    <span class="nx">PlayerList</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">PlayerList</span><span class="p">,</span>
     <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">,</span>
-    <span class="nx">HTMLRenderer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">HTMLRenderer</span><span class="p">;</span>
+    <span class="nx">HTMLRenderer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">HTMLRenderer</span><span class="p">,</span>
+    <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;DynamicTable&#39;</span><span class="p">,</span> <span class="nx">DynamicTable</span><span class="p">);</span>
 
@@ -252,7 +253,7 @@ console.log(y);</p>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="k">if</span> <span class="p">(</span><span class="nx">bindings</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span> <span class="p">{</span>
                 <span class="kd">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">left</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">left</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">inArray</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">left</span><span class="p">))</span> <span class="p">{</span>
                     <span class="nx">that</span><span class="p">.</span><span class="nx">header</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">l</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">}</span>

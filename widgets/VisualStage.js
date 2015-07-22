@@ -1,6 +1,6 @@
 /**
  * # VisualStage
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Shows current, previous and next stage.
@@ -11,7 +11,6 @@
 
     "use strict";
 
-    var JSUS = node.JSUS;
     var Table = node.window.Table;
 
     node.widgets.register('VisualStage', VisualStage);

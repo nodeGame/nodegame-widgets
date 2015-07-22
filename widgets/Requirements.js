@@ -314,7 +314,7 @@
      */
     Requirements.prototype.checkRequirements = function(display) {
         var i, len;
-        var errors, cbErrors, cbName, errMsg;
+        var errors, cbName, errMsg;
         if (!this.requirements.length) {
             throw new Error('Requirements.checkRequirements: no requirements ' +
                             'to check found.');
@@ -333,7 +333,7 @@
                 cbName = i + 1;
             }
             try {
-                resultCb(this, name, i);
+                resultCb(this, cbName, i);
             }
             catch(e) {
                 errMsg = extractErrorMsg(e);
@@ -638,7 +638,7 @@
             errMsg = e.message;
         }
         else if (e.description) {
-            errMsg.description;
+            errMsg = errMsg.description;
         }
         else {
             errMsg = e.toString();

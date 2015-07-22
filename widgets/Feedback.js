@@ -93,8 +93,6 @@
         this.bodyDiv.appendChild(this.submit);
     };
 
+    Feedback.prototype.listeners = function() {};
 
-    Feedback.prototype.listeners = function() {
-        var that = this;
-    };
 })(node);

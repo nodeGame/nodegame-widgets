@@ -13,8 +13,7 @@
 
     node.widgets.register('NDDBBrowser', NDDBBrowser);
 
-    var JSUS = node.JSUS,
-    NDDB = node.NDDB,
+    var NDDB = node.NDDB,
     TriggerManager = node.TriggerManager;
 
     // ## Defaults

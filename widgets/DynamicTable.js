@@ -1,6 +1,6 @@
 /**
  * # DynamicTable
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Extends the GameTable widgets by allowing dynamic reshaping
@@ -16,9 +16,10 @@
     "use strict";
 
     var GameStage = node.GameStage,
-    PlayerList = node.PlayerList,
     Table = node.window.Table,
-    HTMLRenderer = node.window.HTMLRenderer;
+    HTMLRenderer = node.window.HTMLRenderer,
+    J = node.JSUS;
+
 
     node.widgets.register('DynamicTable', DynamicTable);
 
@@ -128,7 +129,7 @@
             // Left
             if (bindings.left) {
                 var l = bindings.left.call(that, msg);
-                if (!JSUS.in_array(l, that.left)) {
+                if (!J.inArray(l, that.left)) {
                     that.header.push(l);
                 }
             }

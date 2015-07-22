@@ -1,18 +1,15 @@
 /**
  * # DisconnectBox
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
- * Shows current, previous and next stage.
+ * Shows a disconnect button
  *
  * www.nodegame.org
  */
 (function(node) {
 
     "use strict";
-
-    var JSUS = node.JSUS;
-    var Table = W.Table;
 
     node.widgets.register('DisconnectBox', DisconnectBox);
 

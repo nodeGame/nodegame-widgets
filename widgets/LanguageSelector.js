@@ -11,8 +11,7 @@
 
     "use strict";
 
-    var J = node.JSUS,
-        game = node.game;
+    var J = node.JSUS;
 
     node.widgets.register('LanguageSelector', LanguageSelector);
 
@@ -249,8 +248,6 @@
      * @see LanguageSelector.onLangCallback
      */
     LanguageSelector.prototype.init = function(options) {
-        var that = this;
-
         J.mixout(options, this.options);
         this.options = options;
 

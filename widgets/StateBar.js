@@ -38,7 +38,7 @@
      * Appends widget to `this.bodyDiv`
      */
     StateBar.prototype.append = function() {
-        var prefix, that = this;
+        var prefix;
         var idButton, idStageField, idRecipientField;
         var sendButton, stageField, recipientField;
 
@@ -57,11 +57,6 @@
         this.bodyDiv.appendChild(recipientField);
 
         sendButton = node.window.addButton(this.bodyDiv, idButton);
-
-        //node.on('UPDATED_PLIST', function() {
-        //    node.window.populateRecipientSelector(
-        //        that.recipient, node.game.pl);
-        //});
 
         sendButton.onclick = function() {
             var to;

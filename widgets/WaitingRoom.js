@@ -11,8 +11,6 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('WaitingRoom', WaitingRoom);
 
     // ## Meta-data
@@ -184,7 +182,7 @@
                 throw new TypeError('WaitingRoom.init: conf.groupSize ' +
                                     'must be number or undefined.');
             }
-            this.groupSize = conf.groupSize
+            this.groupSize = conf.groupSize;
         }
 
         if (conf.connected) {
@@ -192,7 +190,7 @@
                 throw new TypeError('WaitingRoom.init: conf.connected ' +
                                     'must be number or undefined.');
             }
-            this.connected = conf.connected
+            this.connected = conf.connected;
         }
     };
 
@@ -203,7 +201,6 @@
      *
      */
     WaitingRoom.prototype.startTimer = function() {
-        var that = this;
         if (this.timer) return;
         if (!this.maxWaitTime) return;
         if (!this.timerDiv) {
@@ -362,7 +359,6 @@
     // ## Helper methods
 
     function timeIsUp(data) {
-        var timeOut;
         console.log('TIME IS UP!');
 
         if (this.alreadyTimeUp) return;
