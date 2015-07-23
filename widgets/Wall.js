@@ -1,6 +1,6 @@
 /**
  * # Wall
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where log and other information is added

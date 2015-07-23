@@ -1,6 +1,6 @@
 /**
  * # NDDBBrowser
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates an interface to interact with an NDDB database

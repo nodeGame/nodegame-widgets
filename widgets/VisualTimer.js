@@ -531,7 +531,7 @@
    /**
      * # TimerBox
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Represents a box wherin to display a `VisualTimer`

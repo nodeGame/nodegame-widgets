@@ -1,6 +1,6 @@
 /**
  * # D3
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Integrates nodeGame with the D3 library to plot a real-time chart

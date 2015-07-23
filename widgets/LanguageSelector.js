@@ -1,6 +1,6 @@
 /**
  * # LanguageSelector
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Manages and displays information about languages available and selected

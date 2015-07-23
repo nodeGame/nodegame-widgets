@@ -1,6 +1,6 @@
 /**
  * # VisualRound
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -413,7 +413,7 @@
    /**
      * # EmptyDisplayMode
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays nothing
@@ -489,7 +489,7 @@
     /**
      * # CountUpStages
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
@@ -634,7 +634,7 @@
    /**
      * # CountDownStages
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
@@ -739,7 +739,7 @@
    /**
      * # CountUpRounds
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
@@ -884,7 +884,7 @@
    /**
      * # CountDownRounds
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
@@ -989,7 +989,7 @@
     /**
      * # CompoundDisplayMode
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the

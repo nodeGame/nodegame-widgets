@@ -214,7 +214,6 @@
      *   or FALSE if an error occurs
      */
     Widgets.prototype.register = function(name, w) {
-        var i;
         if ('string' !== typeof name) {
             throw new TypeError('Widgets.register: name must be string.');
         }
@@ -250,7 +249,7 @@
      * @TODO: add example.
      */
     Widgets.prototype.get = function(widgetName, options) {
-        var wProto, widget;
+        var WidgetPrototype, widget;
         var changes, origDestroy;
         var that;
         if ('string' !== typeof widgetName) {
@@ -264,32 +263,33 @@
         that = this;
         options = options || {};
 
-        wProto = J.getNestedValue(widgetName, this.widgets);
+        WidgetPrototype = J.getNestedValue(widgetName, this.widgets);
 
-        if (!wProto) {
+        if (!WidgetPrototype) {
             throw new Error('Widgets.get: ' + widgetName + ' not found.');
         }
 
-        node.info('creating widget ' + wProto.name + ' v.' +  wProto.version);
+        node.info('creating widget ' + WidgetPrototype.name +
+                  ' v.' +  WidgetPrototype.version);
 
-        if (!this.checkDependencies(wProto)) {
+        if (!this.checkDependencies(WidgetPrototype)) {
             throw new Error('Widgets.get: ' + widgetName + ' has unmet ' +
                             'dependencies.');
         }
 
         // Add missing properties to the user options
-        J.mixout(options, J.clone(wProto.defaults));
+        J.mixout(options, J.clone(WidgetPrototype.defaults));
 
         // Create widget.
-        widget = new wProto(options);
+        widget = new WidgetPrototype(options);
 
         // Re-inject defaults.
         widget.defaults = options;
 
-        widget.title = wProto.title;
-        widget.footer = wProto.footer;
-        widget.className = wProto.className;
-        widget.context = wProto.context;
+        widget.title = WidgetPrototype.title;
+        widget.footer = WidgetPrototype.footer;
+        widget.className = WidgetPrototype.className;
+        widget.context = WidgetPrototype.context;
 
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
@@ -556,7 +556,7 @@
 
 /**
  * # Chat
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -701,7 +701,7 @@
          * Function which displays the sender's name
          */
         this.displayName = null;
-        this.init(options)
+        this.init(options);
     }
 
     // ## Chat methods
@@ -932,8 +932,6 @@
     }
 
     ChernoffFaces.prototype.init = function(options) {
-        var that = this;
-
         var controlsOptions;
 
         this.features = options.features || this.features ||
@@ -1551,7 +1549,7 @@
 
 /**
  * # ChernoffFacesSimple
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -1578,7 +1576,7 @@
 
     ChernoffFaces.version = '0.3';
     ChernoffFaces.description =
-        'Display parametric data in the form of a Chernoff Face.'
+        'Display parametric data in the form of a Chernoff Face.';
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -1616,7 +1614,6 @@
     }
 
     ChernoffFaces.prototype.init = function(options) {
-        var that = this;
         this.id = options.id || this.id;
         var PREF = this.id + '_';
 
@@ -1627,7 +1624,6 @@
                         options.controls : true;
 
         var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
-        var idButton = (options.idButton) ? options.idButton : PREF + 'button';
 
         this.dims = {
             width:  options.width ?
@@ -1725,15 +1721,13 @@
 
     // FacePainter
     // The class that actually draws the faces on the Canvas
-    function FacePainter (canvas, settings) {
-
+    function FacePainter(canvas, settings) {
         this.canvas = new node.window.Canvas(canvas);
-
         this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
         this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
-    };
+    }
 
-    //Draws a Chernoff face.
+    // Draws a Chernoff face.
     FacePainter.prototype.draw = function(face, x, y) {
         if (!face) return;
         this.face = face;
@@ -1762,31 +1756,30 @@
     FacePainter.prototype.redraw = function(face, x, y) {
         this.canvas.clear();
         this.draw(face,x,y);
-    }
+    };
 
     FacePainter.prototype.scale = function(x, y) {
         this.canvas.scale(this.scaleX, this.scaleY);
-    }
+    };
 
     // TODO: Improve. It eats a bit of the margins
     FacePainter.prototype.fit2Canvas = function(face) {
+        var ratio;
         if (!this.canvas) {
             console.log('No canvas found');
             return;
         }
 
         if (this.canvas.width > this.canvas.height) {
-            var ratio = this.canvas.width / face.head_radius *
-                face.head_scale_x;
+            ratio = this.canvas.width / face.head_radius * face.head_scale_x;
         }
         else {
-            var ratio = this.canvas.height / face.head_radius *
-                face.head_scale_y;
+            ratio = this.canvas.height / face.head_radius * face.head_scale_y;
         }
 
         face.scaleX = ratio / 2;
         face.scaleY = ratio / 2;
-    }
+    };
 
     FacePainter.prototype.drawHead = function(face, x, y) {
 
@@ -1830,7 +1823,7 @@
             color: face.color,
             lineWidth: face.lineWidth
         });
-    }
+    };
 
     FacePainter.prototype.drawPupils = function(face, x, y) {
 
@@ -2148,8 +2141,8 @@
         return new FaceVector(out);
     };
 
-    function FaceVector (faceVector) {
-        var faceVector = faceVector || {};
+    function FaceVector(faceVector) {
+        faceVector = faceVector || {};
 
         this.scaleX = faceVector.scaleX || 1;
         this.scaleY = faceVector.scaleY || 1;
@@ -2170,7 +2163,7 @@
             }
         }
 
-    };
+    }
 
     //Constructs a random face vector.
     FaceVector.prototype.shuffle = function() {
@@ -2212,7 +2205,7 @@
             if (this.hasOwnProperty(key)) {
                 out += key + ' ' + this[key];
             }
-        };
+        }
         return out;
     };
 
@@ -2220,7 +2213,7 @@
 
 /**
  * # Controls
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -2232,11 +2225,6 @@
     "use strict";
 
     // TODO: handle different events, beside onchange
-
-    var J = node.JSUS;
-    var sliderControls = SliderControls;
-    var jQuerySlider = jQuerySliderControls;
-    var radioControls = RadioControls;
 
     node.widgets.register('Controls', Controls);
 
@@ -2578,7 +2566,7 @@
 
     // overriding populate also. There is an error with the Label
     RadioControls.prototype.populate = function() {
-        var key, id, attributes, container, elem, that;
+        var key, id, attributes, elem, that;
         that = this;
 
         if (!this.radioElem) {
@@ -2660,7 +2648,7 @@
 
 /**
  * # D3
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Integrates nodeGame with the D3 library to plot a real-time chart
@@ -2757,28 +2745,25 @@
         y: [D3ts.defaults.height, 0]
     };
 
-    function D3ts (options) {
+    function D3ts(options) {
+        var o, x, y;
         D3.call(this, options);
 
-
-        var o = this.options = JSUS.merge(D3ts.defaults, options);
-
-        var n = this.n = o.n;
-
+        this.options = o = JSUS.merge(D3ts.defaults, options);
+        this.n = o.n;
         this.data = [0];
 
         this.margin = o.margin;
 
-        var width = this.width = o.width - this.margin.left - this.margin.right;
-        var height = this.height = o.height - this.margin.top -
-                     this.margin.bottom;
+        this.width = o.width - this.margin.left - this.margin.right;
+        this.height = o.height - this.margin.top - this.margin.bottom;
 
-        // identity function
-        var x = this.x = d3.scale.linear()
+        // Identity function.
+        this.x = x = d3.scale.linear()
             .domain(o.domain.x)
             .range(o.range.x);
 
-        var y = this.y = d3.scale.linear()
+        this.y = y = d3.scale.linear()
             .domain(o.domain.y)
             .range(o.range.y);
 
@@ -2870,7 +2855,7 @@
 
 /**
  * # DataBar
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a form to send DATA packages to other clients / SERVER
@@ -2957,8 +2942,7 @@
 
     var J = node.JSUS;
 
-    var Table = node.window.Table,
-    GameStage = node.GameStage;
+    var Table = node.window.Table;
 
     node.widgets.register('DebugInfo', DebugInfo);
 
@@ -3039,13 +3023,13 @@
         }
 
         stageLevel = J.getKeyByValue(node.constants.stageLevels,
-                                     node.game.getStageLevel())
+                                     node.game.getStageLevel());
 
         stateLevel = J.getKeyByValue(node.constants.stateLevels,
-                                     node.game.getStateLevel())
+                                     node.game.getStateLevel());
 
         winLevel = J.getKeyByValue(node.constants.windowLevels,
-                                   W.getStateLevel())
+                                   W.getStateLevel());
 
 
         errMsg = node.errorManager.lastErr || miss;
@@ -3101,19 +3085,16 @@
 
 /**
  * # DisconnectBox
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
- * Shows current, previous and next stage.
+ * Shows a disconnect button
  *
  * www.nodegame.org
  */
 (function(node) {
 
     "use strict";
-
-    var JSUS = node.JSUS;
-    var Table = W.Table;
 
     node.widgets.register('DisconnectBox', DisconnectBox);
 
@@ -3187,7 +3168,7 @@
 
 /**
  * # DynamicTable
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Extends the GameTable widgets by allowing dynamic reshaping
@@ -3203,9 +3184,10 @@
     "use strict";
 
     var GameStage = node.GameStage,
-    PlayerList = node.PlayerList,
     Table = node.window.Table,
-    HTMLRenderer = node.window.HTMLRenderer;
+    HTMLRenderer = node.window.HTMLRenderer,
+    J = node.JSUS;
+
 
     node.widgets.register('DynamicTable', DynamicTable);
 
@@ -3315,7 +3297,7 @@
             // Left
             if (bindings.left) {
                 var l = bindings.left.call(that, msg);
-                if (!JSUS.in_array(l, that.left)) {
+                if (!J.inArray(l, that.left)) {
                     that.header.push(l);
                 }
             }
@@ -3340,7 +3322,7 @@
 
 /**
  * # Feedback
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -3433,15 +3415,13 @@
         this.bodyDiv.appendChild(this.submit);
     };
 
+    Feedback.prototype.listeners = function() {};
 
-    Feedback.prototype.listeners = function() {
-        var that = this;
-    };
 })(node);
 
 /**
  * # GameBoard
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays a table of currently connected players
@@ -3451,8 +3431,6 @@
 (function(node) {
 
     "use strict";
-
-    var PlayerList = node.PlayerList;
 
     node.widgets.register('GameBoard', GameBoard);
 
@@ -3606,7 +3584,7 @@
 
 /**
  * # GameSummary
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Shows the configuration options of a game in a box
@@ -3684,7 +3662,7 @@
 
 /**
  * # GameTable
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that renders in each cell data captured by fired events
@@ -3846,7 +3824,7 @@
 
 /**
  * # LanguageSelector
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Manages and displays information about languages available and selected
@@ -3857,8 +3835,7 @@
 
     "use strict";
 
-    var J = node.JSUS,
-        game = node.game;
+    var J = node.JSUS;
 
     node.widgets.register('LanguageSelector', LanguageSelector);
 
@@ -4095,8 +4072,6 @@
      * @see LanguageSelector.onLangCallback
      */
     LanguageSelector.prototype.init = function(options) {
-        var that = this;
-
         J.mixout(options, this.options);
         this.options = options;
 
@@ -4202,7 +4177,7 @@
 
 /**
  * # MoneyTalks
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays a box for formatting currency
@@ -4212,8 +4187,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('MoneyTalks', MoneyTalks);
 
@@ -4330,8 +4303,8 @@
     MoneyTalks.prototype.update = function(amount) {
         if ('number' !== typeof amount) {
             // Try to parse strings
-            amount = parseInt(amount);
-            if (isNaN(n) || !isFinite(n)) {
+            amount = parseInt(amount, 10);
+            if (isNaN(amount) || !isFinite(amount)) {
                 return;
             }
         }
@@ -4342,7 +4315,7 @@
 
 /**
  * # MsgBar
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -4353,9 +4326,7 @@
 
     "use strict";
 
-    var GameMsg = node.GameMsg,
-        GameStage = node.GameStage,
-        JSUS = node.JSUS,
+    var JSUS = node.JSUS,
         Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
@@ -4564,7 +4535,7 @@
 
 /**
  * # NDDBBrowser
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates an interface to interact with an NDDB database
@@ -4577,8 +4548,7 @@
 
     node.widgets.register('NDDBBrowser', NDDBBrowser);
 
-    var JSUS = node.JSUS,
-    NDDB = node.NDDB,
+    var NDDB = node.NDDB,
     TriggerManager = node.TriggerManager;
 
     // ## Defaults
@@ -4724,7 +4694,7 @@
 
 /**
  * # NextPreviousState
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Simple widget to step through the stages of the game
@@ -4801,7 +4771,7 @@
 
 /**
  * # Requirements
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Checks a list of requirements and displays the results
@@ -5115,7 +5085,7 @@
      */
     Requirements.prototype.checkRequirements = function(display) {
         var i, len;
-        var errors, cbErrors, cbName, errMsg;
+        var errors, cbName, errMsg;
         if (!this.requirements.length) {
             throw new Error('Requirements.checkRequirements: no requirements ' +
                             'to check found.');
@@ -5134,7 +5104,7 @@
                 cbName = i + 1;
             }
             try {
-                resultCb(this, name, i);
+                resultCb(this, cbName, i);
             }
             catch(e) {
                 errMsg = extractErrorMsg(e);
@@ -5439,7 +5409,7 @@
             errMsg = e.message;
         }
         else if (e.description) {
-            errMsg.description;
+            errMsg = errMsg.description;
         }
         else {
             errMsg = e.toString();
@@ -5451,7 +5421,7 @@
 
 /**
  * # ServerInfoDisplay
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays information about the server
@@ -5467,7 +5437,7 @@
     // ## Meta-data
 
     ServerInfoDisplay.version = '0.4.1';
-    ServerInfoDisplay.description = 'Displays information about the server.'
+    ServerInfoDisplay.description = 'Displays information about the server.';
 
     ServerInfoDisplay.title = 'Server Info';
     ServerInfoDisplay.className = 'serverinfodisplay';
@@ -5573,7 +5543,7 @@
 
 /**
  * # StateBar
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Provides a simple interface to change the game stages
@@ -5611,7 +5581,7 @@
      * Appends widget to `this.bodyDiv`
      */
     StateBar.prototype.append = function() {
-        var prefix, that = this;
+        var prefix;
         var idButton, idStageField, idRecipientField;
         var sendButton, stageField, recipientField;
 
@@ -5630,11 +5600,6 @@
         this.bodyDiv.appendChild(recipientField);
 
         sendButton = node.window.addButton(this.bodyDiv, idButton);
-
-        //node.on('UPDATED_PLIST', function() {
-        //    node.window.populateRecipientSelector(
-        //        that.recipient, node.game.pl);
-        //});
 
         sendButton.onclick = function() {
             var to;
@@ -5658,7 +5623,7 @@
 
 /**
  * # VisualRound
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -5898,7 +5863,7 @@
      * @see VisualRound.init
      */
     VisualRound.prototype.setDisplayMode = function(displayModeNames) {
-        var index, compoundDisplayModeName, compoundDisplayMode, displayModes;
+        var index, compoundDisplayModeName, displayModes;
 
         // Validation of input parameter.
         if (!J.isArray(displayModeNames)) {
@@ -6071,7 +6036,7 @@
    /**
      * # EmptyDisplayMode
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays nothing
@@ -6147,7 +6112,7 @@
     /**
      * # CountUpStages
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
@@ -6292,7 +6257,7 @@
    /**
      * # CountDownStages
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
@@ -6397,7 +6362,7 @@
    /**
      * # CountUpRounds
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
@@ -6542,7 +6507,7 @@
    /**
      * # CountDownRounds
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
@@ -6647,7 +6612,7 @@
     /**
      * # CompoundDisplayMode
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the
@@ -6780,7 +6745,7 @@
 
 /**
  * # VisualStage
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Shows current, previous and next stage.
@@ -6791,7 +6756,6 @@
 
     "use strict";
 
-    var JSUS = node.JSUS;
     var Table = node.window.Table;
 
     node.widgets.register('VisualStage', VisualStage);
@@ -6894,7 +6858,7 @@
 
 /**
  * # VisualTimer
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events.
@@ -7417,7 +7381,7 @@
         if ('undefined' === typeof options.timeup) {
             options.timeup = function() {
                 node.done();
-            }
+            };
         }
         return options;
     };
@@ -7425,7 +7389,7 @@
    /**
      * # TimerBox
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Represents a box wherin to display a `VisualTimer`
@@ -7612,8 +7576,6 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('WaitingRoom', WaitingRoom);
 
     // ## Meta-data
@@ -7785,7 +7747,7 @@
                 throw new TypeError('WaitingRoom.init: conf.groupSize ' +
                                     'must be number or undefined.');
             }
-            this.groupSize = conf.groupSize
+            this.groupSize = conf.groupSize;
         }
 
         if (conf.connected) {
@@ -7793,7 +7755,7 @@
                 throw new TypeError('WaitingRoom.init: conf.connected ' +
                                     'must be number or undefined.');
             }
-            this.connected = conf.connected
+            this.connected = conf.connected;
         }
     };
 
@@ -7804,7 +7766,6 @@
      *
      */
     WaitingRoom.prototype.startTimer = function() {
-        var that = this;
         if (this.timer) return;
         if (!this.maxWaitTime) return;
         if (!this.timerDiv) {
@@ -7963,7 +7924,6 @@
     // ## Helper methods
 
     function timeIsUp(data) {
-        var timeOut;
         console.log('TIME IS UP!');
 
         if (this.alreadyTimeUp) return;
@@ -7985,7 +7945,7 @@
 
 /**
  * # Wall
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where log and other information is added
@@ -8105,10 +8065,12 @@
      * Writes into this.buffer if document is not ready yet.
      */
     Wall.prototype.write = function(text) {
+        var mark;
         if (document.readyState !== 'complete') {
-            this.buffer.push(s);
-        } else {
-            var mark = this.counter++ + ') ' + J.getTime() + ' ';
+            this.buffer.push(text);
+        }
+        else {
+            mark = this.counter++ + ') ' + J.getTime() + ' ';
             this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
         }
     };

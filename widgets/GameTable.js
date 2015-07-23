@@ -1,6 +1,6 @@
 /**
  * # GameTable
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that renders in each cell data captured by fired events

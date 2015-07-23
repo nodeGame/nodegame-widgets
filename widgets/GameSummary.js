@@ -1,6 +1,6 @@
 /**
  * # GameSummary
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Shows the configuration options of a game in a box
