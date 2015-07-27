@@ -469,7 +469,8 @@
         node.on('REALLY_DONE', function() {
             if (that.options.stopOnDone) {
                 if (!that.gameTimer.isStopped()) {
-                    that.startWaiting();
+                    // that.startWaiting();
+                    that.stop();
                 }
             }
        });
