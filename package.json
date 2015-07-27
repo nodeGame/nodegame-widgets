@@ -6,7 +6,7 @@
   "author": "Stefano Balietti <futur.dorko@gmail.com>",
   "licenses": "MIT",
   "dependencies": {
-    "commander": "1.0.0",
+    "commander": ">= 2.8.1",
     "smoosh": "0.4.0"
   },
   "devDependencies": {
