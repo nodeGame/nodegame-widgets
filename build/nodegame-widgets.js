@@ -5643,7 +5643,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.2.0';
+    VisualRound.version = '0.2.1';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -6020,7 +6020,9 @@
             this.curRound = node.player.stage.round;
 
             if (stage) {
-                this.curStage = idseq.indexOf(stage.id)+1;
+                // TODO: Check the change. It was:
+                // this.curStage = idseq.indexOf(stage.id)+1;
+                this.curStage = node.player.stage.stage;
                 this.totRound = this.stager.sequence[this.curStage -1].num || 1;
             }
             else {
