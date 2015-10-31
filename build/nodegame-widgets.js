@@ -7937,11 +7937,9 @@
 
         // All players have connected. Game starts.
         if (data.over === 'AllPlayersConnected') return;
-
-        node.socket.disconnect();
-
-
-        if (this.onTimeout) this.onTimeout(data);
+        if (data.over === 'Time elapsed!!!') {
+            if (this.onTimeout) this.onTimeout(data);
+        }
     }
 
 })(node);
