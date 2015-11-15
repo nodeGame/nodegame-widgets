@@ -281,7 +281,7 @@
 </div>
 
 
-<p>Copyright(c) 2014 Stefano Balietti
+<p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Display information about rounds and/or stage in the game</p>
@@ -317,7 +317,7 @@ See <code>VisualRound</code> constructor for a list of all available options.</p
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.0&#39;</span><span class="p">;</span>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.1&#39;</span><span class="p">;</span>
     <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display number of current round and/or stage.&#39;</span> <span class="o">+</span>
         <span class="s1">&#39;Can also display countdown and total number of rounds and/or stages.&#39;</span><span class="p">;</span>
 
@@ -823,7 +823,7 @@ the new one is activated.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setDisplayMode</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">displayModeNames</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">compoundDisplayModeName</span><span class="p">,</span> <span class="nx">compoundDisplayMode</span><span class="p">,</span> <span class="nx">displayModes</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">compoundDisplayModeName</span><span class="p">,</span> <span class="nx">displayModes</span><span class="p">;</span>
 
 
 </pre></div>
@@ -1168,7 +1168,20 @@ calls <code>VisualRound.updateDisplay</code>.</p>
             <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">round</span><span class="p">;</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="nx">idseq</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+</div>
+<p>TODO: Check the change. It was:
+this.curStage = idseq.indexOf(stage.id)+1;</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">stage</span><span class="p">;</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">num</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
@@ -1196,7 +1209,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
 </div>
 
   </div>
-  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+  <div class="body"><p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
 
 <p>Defines a displayMode for the <code>VisualRound</code> which displays nothing</p>
@@ -1423,7 +1436,7 @@ MIT Licensed</p>
 </div>
 
   </div>
-  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+  <div class="body"><p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
 
 <p>Defines a displayMode for the <code>VisualRound</code> which displays the current
@@ -1779,7 +1792,7 @@ and, possibly, the total number of stages</p>
 </div>
 
   </div>
-  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+  <div class="body"><p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
 
 <p>Defines a displayMode for the <code>VisualRound</code> which displays the remaining
@@ -2065,7 +2078,7 @@ number of stages</p>
 </div>
 
   </div>
-  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+  <div class="body"><p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
 
 <p>Defines a displayMode for the <code>VisualRound</code> which displays the current
@@ -2421,7 +2434,7 @@ and possibly the total number of rounds</p>
 </div>
 
   </div>
-  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+  <div class="body"><p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
 
 <p>Defines a displayMode for the <code>VisualRound</code> which displays the remaining
@@ -2707,7 +2720,7 @@ number of rounds</p>
 </div>
 
   </div>
-  <div class="body"><p>Copyright(c) 2014 Stefano Balietti
+  <div class="body"><p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
 
 <p>Defines a displayMode for the <code>VisualRound</code> which displays the

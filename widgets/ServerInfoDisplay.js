@@ -1,6 +1,6 @@
 /**
  * # ServerInfoDisplay
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays information about the server
@@ -16,7 +16,7 @@
     // ## Meta-data
 
     ServerInfoDisplay.version = '0.4.1';
-    ServerInfoDisplay.description = 'Displays information about the server.'
+    ServerInfoDisplay.description = 'Displays information about the server.';
 
     ServerInfoDisplay.title = 'Server Info';
     ServerInfoDisplay.className = 'serverinfodisplay';

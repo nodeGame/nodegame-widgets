@@ -1,6 +1,6 @@
 /**
  * # ChernoffFacesSimple
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -27,7 +27,7 @@
 
     ChernoffFaces.version = '0.3';
     ChernoffFaces.description =
-        'Display parametric data in the form of a Chernoff Face.'
+        'Display parametric data in the form of a Chernoff Face.';
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -65,7 +65,6 @@
     }
 
     ChernoffFaces.prototype.init = function(options) {
-        var that = this;
         this.id = options.id || this.id;
         var PREF = this.id + '_';
 
@@ -76,7 +75,6 @@
                         options.controls : true;
 
         var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
-        var idButton = (options.idButton) ? options.idButton : PREF + 'button';
 
         this.dims = {
             width:  options.width ?
@@ -174,15 +172,13 @@
 
     // FacePainter
     // The class that actually draws the faces on the Canvas
-    function FacePainter (canvas, settings) {
-
+    function FacePainter(canvas, settings) {
         this.canvas = new node.window.Canvas(canvas);
-
         this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
         this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
-    };
+    }
 
-    //Draws a Chernoff face.
+    // Draws a Chernoff face.
     FacePainter.prototype.draw = function(face, x, y) {
         if (!face) return;
         this.face = face;
@@ -211,31 +207,30 @@
     FacePainter.prototype.redraw = function(face, x, y) {
         this.canvas.clear();
         this.draw(face,x,y);
-    }
+    };
 
     FacePainter.prototype.scale = function(x, y) {
         this.canvas.scale(this.scaleX, this.scaleY);
-    }
+    };
 
     // TODO: Improve. It eats a bit of the margins
     FacePainter.prototype.fit2Canvas = function(face) {
+        var ratio;
         if (!this.canvas) {
             console.log('No canvas found');
             return;
         }
 
         if (this.canvas.width > this.canvas.height) {
-            var ratio = this.canvas.width / face.head_radius *
-                face.head_scale_x;
+            ratio = this.canvas.width / face.head_radius * face.head_scale_x;
         }
         else {
-            var ratio = this.canvas.height / face.head_radius *
-                face.head_scale_y;
+            ratio = this.canvas.height / face.head_radius * face.head_scale_y;
         }
 
         face.scaleX = ratio / 2;
         face.scaleY = ratio / 2;
-    }
+    };
 
     FacePainter.prototype.drawHead = function(face, x, y) {
 
@@ -279,7 +274,7 @@
             color: face.color,
             lineWidth: face.lineWidth
         });
-    }
+    };
 
     FacePainter.prototype.drawPupils = function(face, x, y) {
 
@@ -597,8 +592,8 @@
         return new FaceVector(out);
     };
 
-    function FaceVector (faceVector) {
-        var faceVector = faceVector || {};
+    function FaceVector(faceVector) {
+        faceVector = faceVector || {};
 
         this.scaleX = faceVector.scaleX || 1;
         this.scaleY = faceVector.scaleY || 1;
@@ -619,7 +614,7 @@
             }
         }
 
-    };
+    }
 
     //Constructs a random face vector.
     FaceVector.prototype.shuffle = function() {
@@ -661,7 +656,7 @@
             if (this.hasOwnProperty(key)) {
                 out += key + ' ' + this[key];
             }
-        };
+        }
         return out;
     };
 

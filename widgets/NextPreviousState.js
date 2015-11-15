@@ -1,6 +1,6 @@
 /**
  * # NextPreviousState
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Simple widget to step through the stages of the game

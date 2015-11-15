@@ -1,6 +1,6 @@
 /**
  * # Controls
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -13,15 +13,7 @@
 
     // TODO: handle different events, beside onchange
 
-    var J = node.JSUS;
-    var sliderControls = SliderControls;
-    var jQuerySlider = jQuerySliderControls;
-    var radioControls = RadioControls;
-
-
     node.widgets.register('Controls', Controls);
-
-
 
     // ## Meta-data
 
@@ -105,7 +97,7 @@
      *
      * @param {object} options Optional. Configuration options.
      *
-     *  The  options object can have the following attributes:
+     * The  options object can have the following attributes:
      *   - Any option that can be passed to `node.window.List` constructor.
      *   - `change`: Event to fire when contents change.
      *   - `features`: Collection of collection attributes for individual
@@ -123,7 +115,7 @@
                 this.changeEvent = options.change;
             }
         }
-        this.list = new node.window.List(options);
+        this.list = new W.List(options);
         this.listRoot = this.list.getRoot();
 
         if (!options.features) {
@@ -261,7 +253,7 @@
     /**
      * ### Slider
      */
-    node.widgets.register('SliderControls', SliderControls);
+
 
     SliderControls.prototype.__proto__ = Controls.prototype;
     SliderControls.prototype.constructor = SliderControls;
@@ -276,6 +268,8 @@
         Controls: {}
     };
 
+    // Need to be after the prototype is inherited.
+    node.widgets.register('SliderControls', SliderControls);
 
     function SliderControls(options) {
         Controls.call(this, options);
@@ -292,7 +286,7 @@
     /**
      * ### jQuerySlider
      */
-     node.widgets.register('jQuerySliderControls', jQuerySliderControls);
+
 
     jQuerySliderControls.prototype.__proto__ = Controls.prototype;
     jQuerySliderControls.prototype.constructor = jQuerySliderControls;
@@ -307,6 +301,8 @@
         jQuery: {},
         Controls: {}
     };
+
+    node.widgets.register('jQuerySliderControls', jQuerySliderControls);
 
     function jQuerySliderControls(options) {
         Controls.call(this, options);
@@ -333,8 +329,6 @@
      * ### RadioControls
      */
 
-    node.widgets.register('RadioControls', RadioControls);
-
     RadioControls.prototype.__proto__ = Controls.prototype;
     RadioControls.prototype.constructor = RadioControls;
 
@@ -348,6 +342,8 @@
         Controls: {}
     };
 
+    node.widgets.register('RadioControls', RadioControls);
+
     function RadioControls(options) {
         Controls.call(this,options);
         this.groupName = ('undefined' !== typeof options.name) ? options.name :
@@ -357,7 +353,7 @@
 
     // overriding populate also. There is an error with the Label
     RadioControls.prototype.populate = function() {
-        var key, id, attributes, container, elem, that;
+        var key, id, attributes, elem, that;
         that = this;
 
         if (!this.radioElem) {

@@ -1,6 +1,6 @@
 /**
  * # Widget
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Prototype of a widget class
@@ -35,6 +35,7 @@
     Widget.prototype.destroy = function() {};
 
     Widget.prototype.setTitle = function(title) {
+        var tmp;
         if (!this.panelDiv) {
             throw new Error('Widget.setTitle: panelDiv is missing.');
         }
@@ -43,7 +44,7 @@
         if (!title) {
             if (this.headingDiv) {
                 this.panelDiv.removeChild(this.headingDiv);
-                delete this.headingDiv;
+                this.headingDiv = null;
             }
         }
         else {
@@ -51,8 +52,9 @@
                 // Add heading.
                 this.headingDiv = W.addDiv(this.panelDiv, undefined,
                         {className: 'panel-heading'});
-                // Move it to before the body.
-                this.panelDiv.insertBefore(this.headingDiv, this.bodyDiv);
+                // Move it to before the body (IE cannot have undefined).
+                tmp = (this.bodyDiv && this.bodyDiv.childNodes[0]) || null;
+                this.panelDiv.insertBefore(this.headingDiv, tmp);
             }
 
             // Set title.
@@ -111,10 +113,12 @@
 
 /**
  * # Widgets
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Helper class to interact with nodeGame widgets
+ *
+ * http://nodegame.org
  */
 (function(window, node) {
 
@@ -125,6 +129,7 @@
     // ## Widgets constructor
 
     function Widgets() {
+        var that;
 
         /**
          * ### Widgets.widgets
@@ -143,6 +148,50 @@
          * @see Widgets.append
          */
         this.instances = [];
+
+        that = this;
+        node.registerSetup('widgets', function(conf) {
+            var name, root;
+            if (!conf) return;
+
+            // Add new widgets.
+            if (conf.widgets) {
+                for (name in conf.widgets) {
+                    if (conf.widgets.hasOwnProperty(name)) {
+                        that.register(name, conf.widgets[name]);
+                    }
+                }
+            }
+
+            // Destroy all existing widgets.
+            if (conf.destroyAll) {
+                that.destroyAll();
+            }
+
+            // Append existing widgets.
+            if (conf.append) {
+                for (name in conf.append) {
+                    if (conf.append.hasOwnProperty(name)) {
+                        // Determine root.
+                        if ('string' === typeof conf.append[name].root) {
+                            root = W.getElementById(conf.append[name].root);
+                        }
+                        if (!root) root = W.getScreen();
+                        if (!root) {
+                            node.warn('setup widgets: could not find a root ' +
+                                      'for widget ' + name + '.');
+                        }
+                        else {
+                            that.append(name, root, conf.append[name]);
+                        }
+                    }
+                }
+            }
+
+            return conf;
+        });
+
+        node.info('node-widgets: loading.');
     }
 
     // ## Widgets methods
@@ -160,18 +209,18 @@
      *
      * @param {string} name The id under which to register the widget
      * @param {function} w The widget to add
+     *
      * @return {object|boolean} The registered widget,
      *   or FALSE if an error occurs
      */
     Widgets.prototype.register = function(name, w) {
-        var i;
         if ('string' !== typeof name) {
             throw new TypeError('Widgets.register: name must be string.');
         }
         if ('function' !== typeof w) {
             throw new TypeError('Widgets.register: w must be function.');
         }
-        // Add default properties to widget prototype
+        // Add default properties to widget prototype.
         J.mixout(w.prototype, new node.Widget());
         this.widgets[name] = w;
         return this.widgets[name];
@@ -188,7 +237,7 @@
      * The dependencies are checked, and if the conditions are not met,
      * returns FALSE.
      *
-     * @param {string} w_str The name of the widget to load
+     * @param {string} widgetName The name of the widget to load
      * @param {options} options Optional. Configuration options
      *   to be passed to the widgets
      *
@@ -199,11 +248,12 @@
      * @TODO: add supports for any listener. Maybe requires some refactoring.
      * @TODO: add example.
      */
-    Widgets.prototype.get = function(w_str, options) {
-        var wProto, widget;
+    Widgets.prototype.get = function(widgetName, options) {
+        var WidgetPrototype, widget;
+        var changes, origDestroy;
         var that;
-        if ('string' !== typeof w_str) {
-            throw new TypeError('Widgets.get: w_str must be string.');
+        if ('string' !== typeof widgetName) {
+            throw new TypeError('Widgets.get: widgetName must be string.');
         }
         if (options && 'object' !== typeof options) {
             throw new TypeError('Widgets.get: options must be object or ' +
@@ -213,35 +263,96 @@
         that = this;
         options = options || {};
 
-        wProto = J.getNestedValue(w_str, this.widgets);
+        WidgetPrototype = J.getNestedValue(widgetName, this.widgets);
 
-        if (!wProto) {
-            throw new Error('Widgets.get: ' + w_str + ' not found.');
+        if (!WidgetPrototype) {
+            throw new Error('Widgets.get: ' + widgetName + ' not found.');
         }
 
-        node.info('registering ' + wProto.name + ' v.' +  wProto.version);
+        node.info('creating widget ' + WidgetPrototype.name +
+                  ' v.' +  WidgetPrototype.version);
 
-        if (!this.checkDependencies(wProto)) {
-            throw new Error('Widgets.get: ' + w_str + ' has unmet ' +
-                            'dependecies.');
+        if (!this.checkDependencies(WidgetPrototype)) {
+            throw new Error('Widgets.get: ' + widgetName + ' has unmet ' +
+                            'dependencies.');
         }
 
         // Add missing properties to the user options
-        J.mixout(options, J.clone(wProto.defaults));
+        J.mixout(options, J.clone(WidgetPrototype.defaults));
 
-        widget = new wProto(options);
-        // Re-inject defaults
+        // Create widget.
+        widget = new WidgetPrototype(options);
+
+        // Re-inject defaults.
         widget.defaults = options;
 
-        widget.title = wProto.title;
-        widget.footer = wProto.footer;
-        widget.className = wProto.className;
-        widget.context = wProto.context;
+        widget.title = WidgetPrototype.title;
+        widget.footer = WidgetPrototype.footer;
+        widget.className = WidgetPrototype.className;
+        widget.context = WidgetPrototype.context;
 
-        // Call listeners
+        // Add random unique widget id.
+        widget.wid = '' + J.randomInt(0,10000000000000000000);
+
+        // Call listeners.
+
+        // Start recording changes.
+        node.events.setRecordChanges(true);
+
+        // Register listeners.
         widget.listeners.call(widget);
 
-        // user listeners
+        // Get registered listeners, clear changes, and stop recording.
+        changes = node.events.getChanges(true);
+        node.events.setRecordChanges(false);
+
+        origDestroy = widget.destroy;
+
+        // If any listener was added or removed, the original situation will
+        // be restored when the widget is destroyed.
+        // The widget is also automatically removed from parent.
+        widget.destroy = function() {
+            var i, len, ee, eeName;
+
+            try {
+                // Call original function.
+                origDestroy.call(widget);
+                // Remove the widget's div from its parent.
+                widget.panelDiv.parentNode.removeChild(widget.panelDiv);
+            }
+            catch(e) {
+                node.warn(widgetName + '.destroy(): error caught. ' + e + '.');
+            }
+
+            if (changes) {
+                for (eeName in changes) {
+                    if (changes.hasOwnProperty(eeName)) {
+                        ee = changes[eeName];
+                        i = -1, len = ee.added.length;
+                        for ( ; ++i < len ; ) {
+                            node.events.ee[eeName].off(ee.added[i].type,
+                                                       ee.added[i].listener);
+                        }
+                        i = -1, len = changes[eeName].removed.length;
+                        for ( ; ++i < len ; ) {
+                            node.events.ee[eeName].on(ee.removed[i].type,
+                                                      ee.removed[i].listener);
+                        }
+                    }
+                }
+            }
+
+            // Remove widget from current instances, if found.
+            i = -1, len = node.widgets.instances.length;
+            for ( ; ++i < len ; ) {
+                if (node.widgets.instances[i].wid === widget.wid) {
+                    node.widgets.instances.splice(i,1);
+                    break;
+                }
+            }
+        };
+
+        // User listeners.
         attachListeners(options, widget);
 
         return widget;
@@ -341,25 +452,17 @@
      * @see Widgets.append
      */
     Widgets.prototype.destroyAll = function() {
-        var i, widget;
-
-        for (i in this.instances) {
-            if (this.instances.hasOwnProperty(i)) {
-                widget = this.instances[i];
-
-                try {
-                    widget.destroy();
-
-                    // Remove the widget's div from its parent:
-                    widget.panelDiv.parentNode.removeChild(widget.panelDiv);
-                }
-                catch (e) {
-                    node.warn('Widgets.destroyAll: Error caught. ' + e + '.');
-                }
-            }
+        var i, len;
+        i = -1, len = this.instances.length;
+        // Nested widgets can be destroyed by previous calls to destroy,
+        // and each call to destroy modify the array of instances.
+        for ( ; ++i < len ; ) {
+            this.instances[0].destroy();
         }
-
-        this.instances = [];
+        if (this.instances.length) {
+            node.warn('node.widgets.destroyAll: some widgets could ' +
+                      'not be destroyed.');
+        }
     };
 
     /**
@@ -429,7 +532,7 @@
                   'onsubmit', 'onload', 'onunload', 'onmouseover'];
         for (i in options) {
             if (options.hasOwnProperty(i)) {
-                isEvent = J.in_array(i, events);
+                isEvent = J.inArray(i, events);
                 if (isEvent && 'function' === typeof options[i]) {
                     createListenerFunction(w, i, options[i]);
                 }
@@ -442,7 +545,7 @@
         node.err(d + ' not found. ' + name + ' cannot be loaded.');
     }
 
-    //Expose Widgets to the global object
+    //Expose Widgets to the global object.
     node.widgets = new Widgets();
 
 })(
@@ -453,7 +556,7 @@
 
 /**
  * # Chat
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -598,7 +701,7 @@
          * Function which displays the sender's name
          */
         this.displayName = null;
-        this.init(options)
+        this.init(options);
     }
 
     // ## Chat methods
@@ -742,7 +845,7 @@
 
 /**
  * # ChernoffFaces
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face
@@ -759,7 +862,6 @@
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
 
-
     // ## Meta-data
 
     ChernoffFaces.version = '0.3.1';
@@ -774,7 +876,7 @@
         JSUS: {},
         Table: {},
         Canvas: {},
-        'Controls.Slider': {}
+        SliderControls: {}
     };
 
     ChernoffFaces.FaceVector = FaceVector;
@@ -785,57 +887,82 @@
     function ChernoffFaces (options) {
         var that = this;
 
+        // ## Public Properties
+
+        // ### ChernoffFaces.options
+        // Configuration options
         this.options = options;
+
+        // ### ChernoffFaces.table
+        // The table containing everything
         this.table = new Table({id: 'cf_table'});
 
-        this.sc = node.widgets.get('Controls.Slider');  // Slider Controls
-        this.fp = null; // Face Painter
+        // ### ChernoffFaces.sc
+        // The slider controls of the interface
+        this.sc = node.widgets.get('SliderControls');
+
+        // ### ChernoffFaces.fp
+        // The object generating the Chernoff faces
+        this.fp = null;
+
+        // ### ChernoffFaces.canvas
+        // The HTMLElement canvas where the faces are created
         this.canvas = null;
 
+        // ### ChernoffFaces.change
+        // The name of the event emitted when a slider is moved
         this.change = 'CF_CHANGE';
 
+        // ### ChernoffFaces.changeFunc
+        // The callback executed when a slider is moved.
         this.changeFunc = function() {
             that.draw(that.sc.getAllValues());
         };
 
+        // ### ChernoffFaces.features
+        // The object containing all the features to draw Chernoff faces
         this.features = null;
+
+        // ### ChernoffFaces.controls
+        // Flag to determine whether the slider controls should be shown.
         this.controls = null;
 
+        // Init.
         this.init(this.options);
     }
 
     ChernoffFaces.prototype.init = function(options) {
-        var that = this;
+        var controlsOptions;
 
         this.features = options.features || this.features ||
                         FaceVector.random();
 
-        this.controls = ('undefined' !== typeof options.controls) ?
+        this.controls = 'undefined' !== typeof options.controls ?
             options.controls : true;
 
-        this.canvas = node.window.getCanvas('ChernoffFaces_canvas', options.canvas);
+        this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
+
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
-        var sc_options = {
+        controlsOptions = {
             id: 'cf_controls',
-            features: J.mergeOnKey(FaceVector.defaults, this.features,
-                                      'value'),
+            features: J.mergeOnKey(FaceVector.defaults, this.features, 'value'),
             change: this.change,
             submit: 'Send'
         };
 
-        this.sc = node.widgets.get('Controls.Slider', sc_options);
+        this.sc = node.widgets.get('SliderControls', controlsOptions);
 
         // Controls are always there, but may not be visible
-        if (this.controls) {
-            this.table.add(this.sc);
-        }
+        if (this.controls) this.table.add(this.sc);
 
+        // TODO: need to check what to remove first.
         // Dealing with the onchange event
         if ('undefined' === typeof options.change) {
             node.on(this.change, this.changeFunc);
-        } else {
+        }
+        else {
             if (options.change) {
                 node.on(options.change, this.changeFunc);
             }
@@ -894,11 +1021,11 @@
     };
 
 
-    // FacePainter
-    // The class that actually draws the faces on the Canvas
+    // # FacePainter
+    // The class that actually draws the faces on the Canvas.
     function FacePainter (canvas, settings) {
 
-        this.canvas = new node.window.Canvas(canvas);
+        this.canvas = new W.Canvas(canvas);
 
         this.scaleX = canvas.width / ChernoffFaces.width;
         this.scaleY = canvas.height / ChernoffFaces.heigth;
@@ -1422,7 +1549,7 @@
 
 /**
  * # ChernoffFacesSimple
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -1449,7 +1576,7 @@
 
     ChernoffFaces.version = '0.3';
     ChernoffFaces.description =
-        'Display parametric data in the form of a Chernoff Face.'
+        'Display parametric data in the form of a Chernoff Face.';
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
@@ -1487,7 +1614,6 @@
     }
 
     ChernoffFaces.prototype.init = function(options) {
-        var that = this;
         this.id = options.id || this.id;
         var PREF = this.id + '_';
 
@@ -1498,7 +1624,6 @@
                         options.controls : true;
 
         var idCanvas = (options.idCanvas) ? options.idCanvas : PREF + 'canvas';
-        var idButton = (options.idButton) ? options.idButton : PREF + 'button';
 
         this.dims = {
             width:  options.width ?
@@ -1596,15 +1721,13 @@
 
     // FacePainter
     // The class that actually draws the faces on the Canvas
-    function FacePainter (canvas, settings) {
-
+    function FacePainter(canvas, settings) {
         this.canvas = new node.window.Canvas(canvas);
-
         this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
         this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
-    };
+    }
 
-    //Draws a Chernoff face.
+    // Draws a Chernoff face.
     FacePainter.prototype.draw = function(face, x, y) {
         if (!face) return;
         this.face = face;
@@ -1633,31 +1756,30 @@
     FacePainter.prototype.redraw = function(face, x, y) {
         this.canvas.clear();
         this.draw(face,x,y);
-    }
+    };
 
     FacePainter.prototype.scale = function(x, y) {
         this.canvas.scale(this.scaleX, this.scaleY);
-    }
+    };
 
     // TODO: Improve. It eats a bit of the margins
     FacePainter.prototype.fit2Canvas = function(face) {
+        var ratio;
         if (!this.canvas) {
             console.log('No canvas found');
             return;
         }
 
         if (this.canvas.width > this.canvas.height) {
-            var ratio = this.canvas.width / face.head_radius *
-                face.head_scale_x;
+            ratio = this.canvas.width / face.head_radius * face.head_scale_x;
         }
         else {
-            var ratio = this.canvas.height / face.head_radius *
-                face.head_scale_y;
+            ratio = this.canvas.height / face.head_radius * face.head_scale_y;
         }
 
         face.scaleX = ratio / 2;
         face.scaleY = ratio / 2;
-    }
+    };
 
     FacePainter.prototype.drawHead = function(face, x, y) {
 
@@ -1701,7 +1823,7 @@
             color: face.color,
             lineWidth: face.lineWidth
         });
-    }
+    };
 
     FacePainter.prototype.drawPupils = function(face, x, y) {
 
@@ -2019,8 +2141,8 @@
         return new FaceVector(out);
     };
 
-    function FaceVector (faceVector) {
-        var faceVector = faceVector || {};
+    function FaceVector(faceVector) {
+        faceVector = faceVector || {};
 
         this.scaleX = faceVector.scaleX || 1;
         this.scaleY = faceVector.scaleY || 1;
@@ -2041,7 +2163,7 @@
             }
         }
 
-    };
+    }
 
     //Constructs a random face vector.
     FaceVector.prototype.shuffle = function() {
@@ -2083,7 +2205,7 @@
             if (this.hasOwnProperty(key)) {
                 out += key + ' ' + this[key];
             }
-        };
+        }
         return out;
     };
 
@@ -2091,7 +2213,7 @@
 
 /**
  * # Controls
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -2104,15 +2226,7 @@
 
     // TODO: handle different events, beside onchange
 
-    var J = node.JSUS;
-    var sliderControls = SliderControls;
-    var jQuerySlider = jQuerySliderControls;
-    var radioControls = RadioControls;
-
-
     node.widgets.register('Controls', Controls);
-
-
 
     // ## Meta-data
 
@@ -2196,7 +2310,7 @@
      *
      * @param {object} options Optional. Configuration options.
      *
-     *  The  options object can have the following attributes:
+     * The  options object can have the following attributes:
      *   - Any option that can be passed to `node.window.List` constructor.
      *   - `change`: Event to fire when contents change.
      *   - `features`: Collection of collection attributes for individual
@@ -2214,7 +2328,7 @@
                 this.changeEvent = options.change;
             }
         }
-        this.list = new node.window.List(options);
+        this.list = new W.List(options);
         this.listRoot = this.list.getRoot();
 
         if (!options.features) {
@@ -2352,7 +2466,7 @@
     /**
      * ### Slider
      */
-    node.widgets.register('SliderControls', SliderControls);
+
 
     SliderControls.prototype.__proto__ = Controls.prototype;
     SliderControls.prototype.constructor = SliderControls;
@@ -2367,6 +2481,8 @@
         Controls: {}
     };
 
+    // Need to be after the prototype is inherited.
+    node.widgets.register('SliderControls', SliderControls);
 
     function SliderControls(options) {
         Controls.call(this, options);
@@ -2383,7 +2499,7 @@
     /**
      * ### jQuerySlider
      */
-     node.widgets.register('jQuerySliderControls', jQuerySliderControls);
+
 
     jQuerySliderControls.prototype.__proto__ = Controls.prototype;
     jQuerySliderControls.prototype.constructor = jQuerySliderControls;
@@ -2398,6 +2514,8 @@
         jQuery: {},
         Controls: {}
     };
+
+    node.widgets.register('jQuerySliderControls', jQuerySliderControls);
 
     function jQuerySliderControls(options) {
         Controls.call(this, options);
@@ -2424,8 +2542,6 @@
      * ### RadioControls
      */
 
-    node.widgets.register('RadioControls', RadioControls);
-
     RadioControls.prototype.__proto__ = Controls.prototype;
     RadioControls.prototype.constructor = RadioControls;
 
@@ -2439,6 +2555,8 @@
         Controls: {}
     };
 
+    node.widgets.register('RadioControls', RadioControls);
+
     function RadioControls(options) {
         Controls.call(this,options);
         this.groupName = ('undefined' !== typeof options.name) ? options.name :
@@ -2448,7 +2566,7 @@
 
     // overriding populate also. There is an error with the Label
     RadioControls.prototype.populate = function() {
-        var key, id, attributes, container, elem, that;
+        var key, id, attributes, elem, that;
         that = this;
 
         if (!this.radioElem) {
@@ -2530,7 +2648,7 @@
 
 /**
  * # D3
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Integrates nodeGame with the D3 library to plot a real-time chart
@@ -2627,28 +2745,25 @@
         y: [D3ts.defaults.height, 0]
     };
 
-    function D3ts (options) {
+    function D3ts(options) {
+        var o, x, y;
         D3.call(this, options);
 
-
-        var o = this.options = JSUS.merge(D3ts.defaults, options);
-
-        var n = this.n = o.n;
-
+        this.options = o = JSUS.merge(D3ts.defaults, options);
+        this.n = o.n;
         this.data = [0];
 
         this.margin = o.margin;
 
-        var width = this.width = o.width - this.margin.left - this.margin.right;
-        var height = this.height = o.height - this.margin.top -
-                     this.margin.bottom;
+        this.width = o.width - this.margin.left - this.margin.right;
+        this.height = o.height - this.margin.top - this.margin.bottom;
 
-        // identity function
-        var x = this.x = d3.scale.linear()
+        // Identity function.
+        this.x = x = d3.scale.linear()
             .domain(o.domain.x)
             .range(o.range.x);
 
-        var y = this.y = d3.scale.linear()
+        this.y = y = d3.scale.linear()
             .domain(o.domain.y)
             .range(o.range.y);
 
@@ -2740,7 +2855,7 @@
 
 /**
  * # DataBar
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a form to send DATA packages to other clients / SERVER
@@ -2813,8 +2928,247 @@
 })(node);
 
 /**
+ * # DebugInfo
+ * Copyright(c) 2015 Stefano Balietti
+ * MIT Licensed
+ *
+ * Display information about the state of a player
+ *
+ * www.nodegame.org
+ */
+(function(node) {
+
+    "use strict";
+
+    var J = node.JSUS;
+
+    var Table = node.window.Table;
+
+    node.widgets.register('DebugInfo', DebugInfo);
+
+    // ## Meta-data
+
+    DebugInfo.version = '0.6.0';
+    DebugInfo.description = 'Display basic info a client\'s status.';
+
+    DebugInfo.title = 'Debug Info';
+    DebugInfo.className = 'debuginfo';
+
+    // ## Dependencies
+
+    DebugInfo.dependencies = {
+        Table: {}
+    };
+
+
+    /**
+     * ## DebugInfo constructor
+     *
+     * `DebugInfo` displays information about the state of a player
+     */
+    function DebugInfo() {
+        /**
+         * ### DebugInfo.table
+         *
+         * The `Table` which holds the information
+         *
+         * @See nodegame-window/Table
+         */
+        this.table = new Table();
+    }
+
+    // ## DebugInfo methods
+
+    /**
+     * ### DebugInfo.append
+     *
+     * Appends widget to `this.bodyDiv` and calls `this.updateAll`
+     *
+     * @see DebugInfo.updateAll
+     */
+    DebugInfo.prototype.append = function() {
+        var that, checkPlayerName;
+        that = this;
+        checkPlayerName = setInterval(function() {
+            if (node.player && node.player.id) {
+                clearInterval(checkPlayerName);
+                that.updateAll();
+            }
+        }, 100);
+        this.bodyDiv.appendChild(this.table.table);
+    };
+
+    /**
+     * ### DebugInfo.updateAll
+     *
+     * Updates information in `this.table`
+     */
+    DebugInfo.prototype.updateAll = function() {
+        var stage, stageNo, stageId, playerId;
+        var stageLevel, stateLevel, winLevel;
+        var errMsg, connected;
+        var tmp, miss;
+
+        miss = '-';
+
+        stageId = miss;
+        stageNo = miss;
+        playerId = miss;
+
+        stage = node.game.getCurrentGameStage();
+        if (stage) {
+            tmp = node.game.plot.getStep(stage);
+            stageId = tmp ? tmp.id : '-';
+            stageNo = stage.toString();
+        }
+
+        stageLevel = J.getKeyByValue(node.constants.stageLevels,
+                                     node.game.getStageLevel());
+
+        stateLevel = J.getKeyByValue(node.constants.stateLevels,
+                                     node.game.getStateLevel());
+
+        winLevel = J.getKeyByValue(node.constants.windowLevels,
+                                   W.getStateLevel());
+
+
+        errMsg = node.errorManager.lastErr || miss;
+
+        connected = node.socket.connected ? 'yes' : 'no';
+
+        this.table.clear(true);
+        this.table.addRow(['Connected: ', connected]);
+        this.table.addRow(['Player Id: ', node.player.id]);
+        this.table.addRow(['Stage  No: ', stageNo]);
+        this.table.addRow(['Stage  Id: ', stageId]);
+        this.table.addRow(['Stage Lvl: ', stageLevel]);
+        this.table.addRow(['State Lvl: ', stateLevel]);
+        this.table.addRow(['Win   Lvl: ', winLevel]);
+        this.table.addRow(['Win Loads: ', W.areLoading]);
+        this.table.addRow(['Last  Err: ', errMsg]);
+
+        this.table.parse();
+
+    };
+
+    DebugInfo.prototype.listeners = function() {
+        var that, ee;
+
+        that = this;
+
+        // Should get the game ?
+
+        ee = node.getCurrentEventEmitter();
+
+        ee.on('STEP_CALLBACK_EXECUTED', function() {
+            that.updateAll();
+        });
+
+        ee.on('SOCKET_CONNECT', function() {
+            that.updateAll();
+        });
+
+        ee.on('SOCKET_DICONNECT', function() {
+            that.updateAll();
+        });
+
+        // TODO Write more listeners. Separate functions. Get event emitter.
+
+    };
+
+    DebugInfo.prototype.destroy = function() {
+        // TODO proper cleanup.
+        console.log('DebugInfo destroyed.');
+    };
+
+})(node);
+
+/**
+ * # DisconnectBox
+ * Copyright(c) 2015 Stefano Balietti
+ * MIT Licensed
+ *
+ * Shows a disconnect button
+ *
+ * www.nodegame.org
+ */
+(function(node) {
+
+    "use strict";
+
+    node.widgets.register('DisconnectBox', DisconnectBox);
+
+    // ## Meta-data
+
+    DisconnectBox.version = '0.2.2';
+    DisconnectBox.description =
+        'Visually display current, previous and next stage of the game.';
+
+    DisconnectBox.title = 'Disconnect';
+    DisconnectBox.className = 'disconnectbox';
+
+    // ## Dependencies
+
+    DisconnectBox.dependencies = {};
+
+    /**
+     * ## DisconnectBox constructor
+     *
+     * `DisconnectBox` displays current, previous and next stage of the game
+     */
+    function DisconnectBox() {
+        // ### DisconnectBox.disconnectButton
+        // The button for disconnection
+        this.disconnectButton = null;
+        // ### DisconnectBox.ee
+        // The event emitter with whom the events are registered
+        this.ee = null;
+    }
+
+    // ## DisconnectBox methods
+
+    /**
+     * ### DisconnectBox.append
+     *
+     * Appends widget to `this.bodyDiv` and writes the stage
+     *
+     * @see DisconnectBox.writeStage
+     */
+    DisconnectBox.prototype.append = function() {
+        this.disconnectButton = W.getButton(undefined, 'Leave Experiment');
+        this.disconnectButton.className = 'btn btn-lg';
+        this.bodyDiv.appendChild(this.disconnectButton);
+
+        this.disconnectButton.onclick = function() {
+            node.socket.disconnect();
+        };
+    };
+
+    DisconnectBox.prototype.listeners = function() {
+        var that = this;
+
+        this.ee = node.getCurrentEventEmitter();
+        this.ee.on('SOCKET_DISCONNECT', function DBdiscon() {
+            console.log('DB got socket_diconnect');
+            that.disconnectButton.disabled = true;
+        });
+
+        this.ee.on('SOCKET_CONNECT', function DBcon() {
+            console.log('DB got socket_connect');
+        });
+    };
+
+    DisconnectBox.prototype.destroy = function() {
+        this.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
+        this.ee.off('SOCKET_CONNECT', 'DBcon');
+    };
+
+
+})(node);
+
+/**
  * # DynamicTable
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Extends the GameTable widgets by allowing dynamic reshaping
@@ -2830,9 +3184,10 @@
     "use strict";
 
     var GameStage = node.GameStage,
-    PlayerList = node.PlayerList,
     Table = node.window.Table,
-    HTMLRenderer = node.window.HTMLRenderer;
+    HTMLRenderer = node.window.HTMLRenderer,
+    J = node.JSUS;
+
 
     node.widgets.register('DynamicTable', DynamicTable);
 
@@ -2942,7 +3297,7 @@
             // Left
             if (bindings.left) {
                 var l = bindings.left.call(that, msg);
-                if (!JSUS.in_array(l, that.left)) {
+                if (!J.inArray(l, that.left)) {
                     that.header.push(l);
                 }
             }
@@ -2967,7 +3322,7 @@
 
 /**
  * # Feedback
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -3060,15 +3415,13 @@
         this.bodyDiv.appendChild(this.submit);
     };
 
+    Feedback.prototype.listeners = function() {};
 
-    Feedback.prototype.listeners = function() {
-        var that = this;
-    };
 })(node);
 
 /**
  * # GameBoard
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays a table of currently connected players
@@ -3078,8 +3431,6 @@
 (function(node) {
 
     "use strict";
-
-    var PlayerList = node.PlayerList;
 
     node.widgets.register('GameBoard', GameBoard);
 
@@ -3233,7 +3584,7 @@
 
 /**
  * # GameSummary
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Shows the configuration options of a game in a box
@@ -3311,7 +3662,7 @@
 
 /**
  * # GameTable
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that renders in each cell data captured by fired events
@@ -3473,7 +3824,7 @@
 
 /**
  * # LanguageSelector
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Manages and displays information about languages available and selected
@@ -3484,8 +3835,7 @@
 
     "use strict";
 
-    var J = node.JSUS,
-        game = node.game;
+    var J = node.JSUS;
 
     node.widgets.register('LanguageSelector', LanguageSelector);
 
@@ -3592,6 +3942,11 @@
          */
         this.languagesLoaded = false;
 
+        /**
+         * ## LanguageSelector.usingButtons
+         *
+         * Flag indicating if the interface should have buttons
+         */
         this.usingButtons = null;
 
         /**
@@ -3621,7 +3976,7 @@
             that.availableLanguages = msg.data;
             if (that.usingButtons) {
 
-                // Creates labled buttons.
+                // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
                         that.optionsLabel[language] = W.getElement('label',
@@ -3633,7 +3988,7 @@
                             language + 'RadioButton', {
                                 type: 'radio',
                                 name: 'languageButton',
-                                value: msg.data[language].name,
+                                value: msg.data[language].name
                             }
                         );
 
@@ -3717,8 +4072,6 @@
      * @see LanguageSelector.onLangCallback
      */
     LanguageSelector.prototype.init = function(options) {
-        var that = this;
-
         J.mixout(options, this.options);
         this.options = options;
 
@@ -3824,7 +4177,7 @@
 
 /**
  * # MoneyTalks
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays a box for formatting currency
@@ -3834,8 +4187,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('MoneyTalks', MoneyTalks);
 
@@ -3952,8 +4303,8 @@
     MoneyTalks.prototype.update = function(amount) {
         if ('number' !== typeof amount) {
             // Try to parse strings
-            amount = parseInt(amount);
-            if (isNaN(n) || !isFinite(n)) {
+            amount = parseInt(amount, 10);
+            if (isNaN(amount) || !isFinite(amount)) {
                 return;
             }
         }
@@ -3964,7 +4315,7 @@
 
 /**
  * # MsgBar
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -3975,9 +4326,7 @@
 
     "use strict";
 
-    var GameMsg = node.GameMsg,
-        GameStage = node.GameStage,
-        JSUS = node.JSUS,
+    var JSUS = node.JSUS,
         Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
@@ -4186,7 +4535,7 @@
 
 /**
  * # NDDBBrowser
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates an interface to interact with an NDDB database
@@ -4199,8 +4548,7 @@
 
     node.widgets.register('NDDBBrowser', NDDBBrowser);
 
-    var JSUS = node.JSUS,
-    NDDB = node.NDDB,
+    var NDDB = node.NDDB,
     TriggerManager = node.TriggerManager;
 
     // ## Defaults
@@ -4346,7 +4694,7 @@
 
 /**
  * # NextPreviousState
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Simple widget to step through the stages of the game
@@ -4423,7 +4771,7 @@
 
 /**
  * # Requirements
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Checks a list of requirements and displays the results
@@ -4440,7 +4788,7 @@
 
     // ## Meta-data
 
-    Requirements.version = '0.5.1';
+    Requirements.version = '0.6.0';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
@@ -4462,12 +4810,13 @@
      * @param {object} options
      */
     function Requirements(options) {
+
         /**
          * ### Requirements.callbacks
          *
          * Array of all test callbacks
          */
-        this.callbacks = [];
+        this.requirements = [];
 
         /**
          * ### Requirements.stillChecking
@@ -4510,6 +4859,13 @@
          * Span counting how many tests have been completed
          */
         this.summaryUpdate = null;
+
+        /**
+         * ### Requirements.summaryResults
+         *
+         * Span displaying the results of the tests
+         */
+        this.summaryResults = null;
 
         /**
          * ### Requirements.dots
@@ -4568,11 +4924,11 @@
         this.onSuccess = null;
 
         /**
-         * ### Requirements.onFail
+         * ### Requirements.onFailure
          *
          * Callback to be executed at the end of all tests
          */
-        this.onFail = null;
+        this.onFailure = null;
 
         /**
          * ### Requirements.list
@@ -4614,9 +4970,75 @@
     // ## Requirements methods
 
     /**
+     * ### Requirements.init
+     *
+     * Setups the requirements widget
+     *
+     * Available options:
+     *
+     *   - requirements: array of callback functions or objects formatted as
+     *      { cb: function [, params: object] [, name: string] };
+     *   - onComplete: function executed with either failure or success
+     *   - onFailure: function executed when at least one test fails
+     *   - onSuccess: function executed when all tests succeed
+     *   - maxWaitTime: max waiting time to execute all tests (in milliseconds)
+     *
+     * @param {object} conf Configuration object.
+     */
+    Requirements.prototype.init = function(conf) {
+        if ('object' !== typeof conf) {
+            throw new TypeError('Requirements.init: conf must be object.');
+        }
+        if (conf.requirements) {
+            if (!J.isArray(conf.requirements)) {
+                throw new TypeError('Requirements.init: conf.requirements ' +
+                                    'must be array or undefined.');
+            }
+            this.requirements = conf.requirements;
+        }
+        if ('undefined' !== typeof conf.onComplete) {
+            if (null !== conf.onComplete &&
+                'function' !== typeof conf.onComplete) {
+
+                throw new TypeError('Requirements.init: conf.onComplete must ' +
+                                    'be function, null or undefined.');
+            }
+            this.onComplete = conf.onComplete;
+        }
+        if ('undefined' !== typeof conf.onSuccess) {
+            if (null !== conf.onSuccess &&
+                'function' !== typeof conf.onSuccess) {
+
+                throw new TypeError('Requirements.init: conf.onSuccess must ' +
+                                    'be function, null or undefined.');
+            }
+            this.onSuccess = conf.onSuccess;
+        }
+        if ('undefined' !== typeof conf.onFailure) {
+            if (null !== conf.onFailure &&
+                'function' !== typeof conf.onFailure) {
+
+                throw new TypeError('Requirements.init: conf.onFailure must ' +
+                                    'be function, null or undefined.');
+            }
+            this.onFailure = conf.onFailure;
+        }
+        if (conf.maxExecTime) {
+            if (null !== conf.maxExecTime &&
+                'number' !== typeof conf.maxExecTime) {
+
+                throw new TypeError('Requirements.init: conf.onMaxExecTime ' +
+                                    'must be number, null or undefined.');
+            }
+            this.withTimeout = !!conf.maxExecTime;
+            this.timeoutTime = conf.maxExecTime;
+        }
+    };
+
+    /**
      * ### Requirements.addRequirements
      *
-     * Adds any number of callbacks checking the requirements
+     * Adds any number of requirements to the requirements array
      *
      * Callbacks can be asynchronous or synchronous.
      *
@@ -4628,17 +5050,19 @@
      * In both cases the return is an array, where every item is an
      * error message. Empty array means test passed.
      *
-     * @see this.callbacks
+     * @see this.requirements
      */
     Requirements.prototype.addRequirements = function() {
         var i, len;
         i = -1, len = arguments.length;
         for ( ; ++i < len ; ) {
-            if ('function' !== typeof arguments[i]) {
+            if ('function' !== typeof arguments[i] &&
+                'object' !== typeof arguments[i] ) {
+
                 throw new TypeError('Requirements.addRequirements: ' +
-                                    'all requirements must be function.');
+                                    'requirements must be function or object.');
             }
-            this.callbacks.push(arguments[i]);
+            this.requirements.push(arguments[i]);
         }
     };
 
@@ -4657,39 +5081,37 @@
      * @return {array} The array containing the errors
      *
      * @see this.withTimeout
-     * @see this.callbacks
+     * @see this.requirements
      */
     Requirements.prototype.checkRequirements = function(display) {
         var i, len;
-        var errors, cbErrors, cbName, errMsg;
-        if (!this.callbacks.length) {
-            throw new Error('Requirements.checkRequirements: no callback ' +
-                            'found.');
+        var errors, cbName, errMsg;
+        if (!this.requirements.length) {
+            throw new Error('Requirements.checkRequirements: no requirements ' +
+                            'to check found.');
         }
 
-        this.updateStillChecking(this.callbacks.length, true);
+        this.updateStillChecking(this.requirements.length, true);
 
         errors = [];
-        i = -1, len = this.callbacks.length;
+        i = -1, len = this.requirements.length;
         for ( ; ++i < len ; ) {
+            // Get Test Name.
+            if (this.requirements[i] && this.requirements[i].name) {
+                cbName = this.requirements[i].name;
+            }
+            else {
+                cbName = i + 1;
+            }
             try {
-                cbErrors = resultCb(this, i);
+                resultCb(this, cbName, i);
             }
             catch(e) {
                 errMsg = extractErrorMsg(e);
                 this.updateStillChecking(-1);
-                if (this.callbacks[i] && this.callbacks[i].name) {
-                    cbName = this.callbacks[i].name;
-                }
-                else {
-                    cbName = i + 1;
-                }
+
                 errors.push('An exception occurred in requirement n.' +
                             cbName + ': ' + errMsg);
-            }
-            if (cbErrors) {
-                this.updateStillChecking(-1);
-                errors = errors.concat(cbErrors);
             }
         }
 
@@ -4711,13 +5133,13 @@
     /**
      * ### Requirements.addTimeout
      *
-     * Starts a timeout for the max execution time of the callbacks
+     * Starts a timeout for the max execution time of the requirements
      *
      * Upon time out results are checked, and eventually displayed.
      *
      * @see this.stillCheckings
      * @see this.withTimeout
-     * @see this.callbacks
+     * @see this.requirements
      */
     Requirements.prototype.addTimeout = function() {
         var that = this;
@@ -4738,11 +5160,11 @@
     /**
      * ### Requirements.clearTimeout
      *
-     * Clears the timeout for the max execution time of the callbacks
+     * Clears the timeout for the max execution time of the requirements
      *
      * @see this.timeoutId
      * @see this.stillCheckings
-     * @see this.callbacks
+     * @see this.requirements
      */
     Requirements.prototype.clearTimeout = function() {
         if (this.timeoutId) {
@@ -4754,23 +5176,23 @@
     /**
      * ### Requirements.updateStillChecking
      *
-     * Updates the number of callbacks still running on the display
+     * Updates the number of requirements still running on the display
      *
-     * @param {number} update The number of callbacks still running, or an
+     * @param {number} update The number of requirements still running, or an
      *   increment as compared to the current value
      * @param {boolean} absolute TRUE, if `update` is to be interpreted as an
      *   absolute value
      *
      * @see this.summaryUpdate
      * @see this.stillCheckings
-     * @see this.callbacks
+     * @see this.requirements
      */
     Requirements.prototype.updateStillChecking = function(update, absolute) {
         var total, remaining;
 
         this.stillChecking = absolute ? update : this.stillChecking + update;
 
-        total = this.callbacks.length;
+        total = this.requirements.length;
         remaining = total - this.stillChecking;
         this.summaryUpdate.innerHTML = ' (' +  remaining + ' / ' + total + ')';
     };
@@ -4778,10 +5200,10 @@
     /**
      * ### Requirements.isCheckingFinished
      *
-     * Returns TRUE if all callbacks have returned
+     * Returns TRUE if all requirements have returned
      *
      * @see this.stillCheckings
-     * @see this.callbacks
+     * @see this.requirements
      */
     Requirements.prototype.isCheckingFinished = function() {
         return this.stillChecking <= 0;
@@ -4790,17 +5212,17 @@
     /**
      * ### Requirements.CheckingFinished
      *
-     * Cleans up timer and dots, and executes final callbacks accordingly
+     * Cleans up timer and dots, and executes final requirements accordingly
      *
      * First, executes the `onComplete` callback in any case. Then if no
      * errors have been raised executes the `onSuccess` callback, otherwise
-     * the `onFail` callback.
+     * the `onFailure` callback.
      *
      * @see this.onComplete
      * @see this.onSuccess
-     * @see this.onFail
+     * @see this.onFailure
      * @see this.stillCheckings
-     * @see this.callbacks
+     * @see this.requirements
      */
     Requirements.prototype.checkingFinished = function() {
         var results;
@@ -4813,8 +5235,8 @@
 
         if (this.sayResults) {
             results = {
-                userAgent: navigator.userAgent,
-                result: this.results
+                success: !this.hasFailed,
+                results: this.results
             };
 
             if (this.addToResults) {
@@ -4828,7 +5250,7 @@
         }
 
         if (this.hasFailed) {
-            if (this.onFail) this.onFail();
+            if (this.onFailure) this.onFailure();
         }
         else if (this.onSuccess) {
             this.onSuccess();
@@ -4838,7 +5260,7 @@
     /**
      * ### Requirements.displayResults
      *
-     * Displays the results of the callbacks on the screen
+     * Displays the results of the requirements on the screen
      *
      * Creates a new item in the list of results for every error found
      * in the results array.
@@ -4846,13 +5268,13 @@
      * If no error was raised, the results array should be empty.
      *
      * @param {array} results The array containing the return values of all
-     *   the callbacks
+     *   the requirements
      *
      * @see this.onComplete
      * @see this.onSuccess
-     * @see this.onFail
+     * @see this.onFailure
      * @see this.stillCheckings
-     * @see this.callbacks
+     * @see this.requirements
      */
     Requirements.prototype.displayResults = function(results) {
         var i, len;
@@ -4868,20 +5290,14 @@
         }
 
         // No errors.
-        if (!results.length) {
-            // Last check and no previous errors.
-            if (!this.hasFailed && this.stillChecking <= 0) {
-                // All tests passed.
-                this.list.addDT({
-                    success: true,
-                    text:'All tests passed.'
-                });
-                // Add to the array of results.
-                this.results.push('All tests passed.');
-            }
+        if (!this.hasFailed && this.stillChecking <= 0) {
+            // All tests passed.
+            this.list.addDT({
+                success: true,
+                text:'All tests passed.'
+            });
         }
         else {
-            this.hasFailed = true;
             // Add the errors.
             i = -1, len = results.length;
             for ( ; ++i < len ; ) {
@@ -4889,8 +5305,6 @@
                     success: false,
                     text: results[i]
                 });
-                // Add to the array of results.
-                this.results.push(results[i]);
             }
         }
         // Parse deletes previously existing nodes in the list.
@@ -4907,137 +5321,83 @@
         this.summary.appendChild(this.summaryUpdate);
 
         this.dots = W.getLoadingDots();
-
         this.summary.appendChild(this.dots.span);
 
-        this.bodyDiv.appendChild(this.summary);
+        this.summaryResults = document.createElement('div');
+        this.summary.appendChild(document.createElement('br'));
+        this.summary.appendChild(this.summaryResults);
 
+
+        this.bodyDiv.appendChild(this.summary);
         this.bodyDiv.appendChild(this.list.getRoot());
     };
 
-    Requirements.prototype.listeners = function() {};
-
-    // ## Default Requirement Functions
-
-    /**
-     * ### Requirements.nodeGameRequirements
-     *
-     * Checks whether the basic dependencies of nodeGame are satisfied
-     *
-     * @param {function} result The asynchronous result function
-     *
-     * @return {array} Array of synchronous errors
-     */
-    Requirements.prototype.nodeGameRequirements = function(result) {
-        var errors, db;
-        errors = [];
-
-        if ('undefined' === typeof NDDB) {
-            errors.push('NDDB not found.');
-        }
-
-        if ('undefined' === typeof JSUS) {
-            errors.push('JSUS not found.');
-        }
-
-        if ('undefined' === typeof node.window) {
-            errors.push('node.window not found.');
-        }
-
-        if ('undefined' === typeof W) {
-            errors.push('W not found.');
-        }
-
-        if ('undefined' === typeof node.widgets) {
-            errors.push('node.widgets not found.');
-        }
-
-        if ('undefined' !== typeof NDDB) {
-            try {
-                db = new NDDB();
+    Requirements.prototype.listeners = function() {
+        var that;
+        that = this;
+        node.registerSetup('requirements', function(conf) {
+            if (!conf) return;
+            if ('object' !== typeof conf) {
+                node.warn('requirements widget: invalid setup object: ' + conf);
+                return;
             }
-            catch(e) {
-                errors.push('An error occurred manipulating the NDDB object: ' +
-                            e.message);
-            }
-        }
+            // Configure all requirements.
+            that.init(conf);
+            // Start a checking immediately if requested.
+            if (conf.doChecking) that.checkRequirements();
 
-        // We need to test node.Stager because it will be used in other tests.
-        if ('undefined' === typeof node.Stager) {
-            errors.push('node.Stager not found.');
-        }
-
-        return errors;
+            return conf;
+        });
     };
 
-    /**
-     * ### Requirements.loadFrameTest
-     *
-     * Checks whether the iframe can be created and used
-     *
-     * Requires an active connection.
-     *
-     * @param {function} result The asynchronous result function
-     *
-     * @return {array} Array of synchronous errors
-     */
-    Requirements.prototype.loadFrameTest = function(result) {
-        var errors, that, testIframe, root;
-        var oldIframe, oldIframeName, oldIframeRoot;
-        errors = [];
-        that = this;
-        oldIframe = W.getFrame();
-
-        if (oldIframe) {
-            oldIframeName = W.getFrameName();
-            oldIframeRoot = W.getFrameRoot();
-            root = W.getIFrameAnyChild(oldIframe);
-        }
-        else {
-            root = document.body;
-        }
-
-        try {
-            testIframe = W.addIFrame(root, 'testIFrame', {
-                style: { display: 'none' } } );
-            W.setFrame(testIframe, 'testIframe', root);
-            W.loadFrame('/pages/testpage.htm', function() {
-                var found;
-                found = W.getElementById('root');
-                if (oldIframe) {
-                    W.setFrame(oldIframe, oldIframeName, oldIframeRoot);
-                }
-                if (!found) {
-                    errors.push('W.loadFrame failed to load a test frame ' +
-                                'correctly.');
-                }
-                root.removeChild(testIframe);
-                result(errors);
-            });
-        }
-        catch(e) {
-            errors.push('W.loadFrame raised an error: ' + extractErrorMsg(e));
-            return errors;
-        }
+    Requirements.prototype.destroy = function() {
+        node.deregisterSetup('requirements');
     };
 
     // ## Helper methods
 
-    function resultCb(that, i) {
-        var update = function(result) {
+    function resultCb(that, name, i) {
+        var req, update, res;
+
+        update = function(success, errors, data) {
             that.updateStillChecking(-1);
-            if (result) {
-                if (!J.isArray(result)) {
-                    throw new Error('Requirements.checkRequirements: ' +
-                                    'result must be array or undefined.');
-                }
-                that.displayResults(result);
+            if (!success) {
+                that.hasFailed = true;
             }
+
+            if (errors) {
+                if (!J.isArray(errors)) {
+                    throw new Error('Requirements.checkRequirements: ' +
+                                    'errors must be array or undefined.');
+                }
+                that.displayResults(errors);
+            }
+
+            that.results.push({
+                name: name,
+                success: success,
+                errors: errors,
+                data: data
+            });
+
             if (that.isCheckingFinished()) {
                 that.checkingFinished();
             }
         };
-        return that.callbacks[i](update);
+
+        req = that.requirements[i];
+        if ('function' === typeof req) {
+            res = req(update);
+        }
+        else if ('object' === typeof req) {
+            res = req.cb(update, req.params || {});
+        }
+        else {
+            throw new TypeError('Requirements.checkRequirements: invalid ' +
+                                'requirement: ' + name + '.');
+        }
+        // Synchronous checking.
+        if (res) update(res.success, res.errors, res.data);
     }
 
     function extractErrorMsg(e) {
@@ -5049,7 +5409,7 @@
             errMsg = e.message;
         }
         else if (e.description) {
-            errMsg.description;
+            errMsg = errMsg.description;
         }
         else {
             errMsg = e.toString();
@@ -5061,7 +5421,7 @@
 
 /**
  * # ServerInfoDisplay
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Displays information about the server
@@ -5077,7 +5437,7 @@
     // ## Meta-data
 
     ServerInfoDisplay.version = '0.4.1';
-    ServerInfoDisplay.description = 'Displays information about the server.'
+    ServerInfoDisplay.description = 'Displays information about the server.';
 
     ServerInfoDisplay.title = 'Server Info';
     ServerInfoDisplay.className = 'serverinfodisplay';
@@ -5183,7 +5543,7 @@
 
 /**
  * # StateBar
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Provides a simple interface to change the game stages
@@ -5221,7 +5581,7 @@
      * Appends widget to `this.bodyDiv`
      */
     StateBar.prototype.append = function() {
-        var prefix, that = this;
+        var prefix;
         var idButton, idStageField, idRecipientField;
         var sendButton, stageField, recipientField;
 
@@ -5240,11 +5600,6 @@
         this.bodyDiv.appendChild(recipientField);
 
         sendButton = node.window.addButton(this.bodyDiv, idButton);
-
-        //node.on('UPDATED_PLIST', function() {
-        //    node.window.populateRecipientSelector(
-        //        that.recipient, node.game.pl);
-        //});
 
         sendButton.onclick = function() {
             var to;
@@ -5267,122 +5622,8 @@
 })(node);
 
 /**
- * # StateDisplay
- * Copyright(c) 2014 Stefano Balietti
- * MIT Licensed
- *
- * Display information about the state of a player
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    var Table = node.window.Table,
-    GameStage = node.GameStage;
-
-    node.widgets.register('StateDisplay', StateDisplay);
-
-    // ## Meta-data
-
-    StateDisplay.version = '0.5.0';
-    StateDisplay.description = 'Display basic info about player\'s status.';
-
-    StateDisplay.title = 'State Display';
-    StateDisplay.className = 'statedisplay';
-
-    // ## Dependencies
-
-    StateDisplay.dependencies = {
-        Table: {}
-    };
-
-
-    /**
-     * ## StateDisplay constructor
-     *
-     * `StateDisplay` displays information about the state of a player
-     */
-    function StateDisplay() {
-        /**
-         * ### StateDisplay.table
-         *
-         * The `Table` which holds the information
-         *
-         * @See nodegame-window/Table
-         */
-        this.table = new Table();
-    }
-
-    // ## StateDisplay methods
-
-    /**
-     * ### StateDisplay.append
-     *
-     * Appends widget to `this.bodyDiv` and calls `this.updateAll`
-     *
-     * @see StateDisplay.updateAll
-     */
-    StateDisplay.prototype.append = function() {
-        var that, checkPlayerName;
-        that = this;
-        checkPlayerName = setInterval(function() {
-            if (node.player && node.player.id) {
-                clearInterval(checkPlayerName);
-                that.updateAll();
-            }
-        }, 100);
-        this.bodyDiv.appendChild(this.table.table);
-    };
-
-    /**
-     * ### StateDisplay.updateAll
-     *
-     * Updates information in `this.table`
-     */
-    StateDisplay.prototype.updateAll = function() {
-        var stage, stageNo, stageId, playerId, tmp, miss;
-        miss = '-';
-
-        stageId = miss;
-        stageNo = miss;
-        playerId = miss;
-
-        if (node.player.id) {
-            playerId = node.player.id;
-        }
-
-        stage = node.game.getCurrentGameStage();
-        if (stage) {
-            tmp = node.game.plot.getStep(stage);
-            stageId = tmp ? tmp.id : '-';
-            stageNo = stage.toString();
-        }
-
-        this.table.clear(true);
-        this.table.addRow(['Stage  No: ', stageNo]);
-        this.table.addRow(['Stage  Id: ', stageId]);
-        this.table.addRow(['Player Id: ', playerId]);
-        this.table.parse();
-
-    };
-
-    StateDisplay.prototype.listeners = function() {
-        var that = this;
-        node.on('STEP_CALLBACK_EXECUTED', function() {
-            that.updateAll();
-        });
-    };
-
-    StateDisplay.prototype.destroy = function() {
-        node.off('STEP_CALLBACK_EXECUTED', StateDisplay.prototype.updateAll);
-    };
-})(node);
-
-/**
  * # VisualRound
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -5402,7 +5643,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.2.0';
+    VisualRound.version = '0.2.1';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -5622,7 +5863,7 @@
      * @see VisualRound.init
      */
     VisualRound.prototype.setDisplayMode = function(displayModeNames) {
-        var index, compoundDisplayModeName, compoundDisplayMode, displayModes;
+        var index, compoundDisplayModeName, displayModes;
 
         // Validation of input parameter.
         if (!J.isArray(displayModeNames)) {
@@ -5779,7 +6020,9 @@
             this.curRound = node.player.stage.round;
 
             if (stage) {
-                this.curStage = idseq.indexOf(stage.id)+1;
+                // TODO: Check the change. It was:
+                // this.curStage = idseq.indexOf(stage.id)+1;
+                this.curStage = node.player.stage.stage;
                 this.totRound = this.stager.sequence[this.curStage -1].num || 1;
             }
             else {
@@ -5795,7 +6038,7 @@
    /**
      * # EmptyDisplayMode
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays nothing
@@ -5871,7 +6114,7 @@
     /**
      * # CountUpStages
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
@@ -6016,7 +6259,7 @@
    /**
      * # CountDownStages
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
@@ -6121,7 +6364,7 @@
    /**
      * # CountUpRounds
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
@@ -6266,7 +6509,7 @@
    /**
      * # CountDownRounds
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
@@ -6371,7 +6614,7 @@
     /**
      * # CompoundDisplayMode
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the
@@ -6504,7 +6747,7 @@
 
 /**
  * # VisualStage
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Shows current, previous and next stage.
@@ -6515,7 +6758,6 @@
 
     "use strict";
 
-    var JSUS = node.JSUS;
     var Table = node.window.Table;
 
     node.widgets.register('VisualStage', VisualStage);
@@ -6618,7 +6860,7 @@
 
 /**
  * # VisualTimer
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events.
@@ -6633,7 +6875,6 @@
     var J = node.JSUS;
 
     node.widgets.register('VisualTimer', VisualTimer);
-
 
     // ## Meta-data
 
@@ -6765,6 +7006,11 @@
 
         if (!this.gameTimer) {
             this.gameTimer = node.timer.createTimer();
+        }
+
+        // TODO: make it consistent with processOptions.
+        if ('function' === typeof options.milliseconds) {
+            options.milliseconds = options.milliseconds.call(node.game);
         }
 
         this.gameTimer.init(options);
@@ -6963,10 +7209,9 @@
       * @see VisualTimer.restart
       */
     VisualTimer.prototype.startWaiting = function(options) {
-        if (typeof options === 'undefined') {
+        if ('undefined' === typeof options) {
             options = {};
         }
-        options = J.clone(options);
         if (typeof options.milliseconds === 'undefined') {
             options.milliseconds = this.gameTimer.timeLeft;
         }
@@ -6997,14 +7242,13 @@
       * @see VisualTimer.restart
       */
     VisualTimer.prototype.startTiming = function(options) {
-        if (typeof options === 'undefined') {
+        if ('undefined' === typeof options) {
             options = {};
         }
-        options = J.clone(options);
-        if (typeof options.mainBoxOptions === 'undefined') {
+        if ('undefined' === typeof options.mainBoxOptions) {
             options.mainBoxOptions = {};
         }
-        if (typeof options.waitBoxOptions === 'undefined') {
+        if ('undefined' === typeof options.waitBoxOptions) {
             options.waitBoxOptions = {};
         }
         options.activeBox = this.mainBox;
@@ -7039,6 +7283,19 @@
     };
 
     /**
+     * ### VisualTimer.isTimeup
+     *
+     * Returns TRUE if the timer expired
+     *
+     * This method is added for backward compatibility.
+     *
+     * @see GameTimer.isTimeup
+     */
+    VisualTimer.prototype.isTimeup = function() {
+        return this.gameTimer.isTimeup();
+    };
+
+    /**
      * ### VisualTimer.doTimeUp
      *
      * Stops the timer and calls the timeup
@@ -7058,13 +7315,12 @@
         var that = this;
 
         node.on('PLAYING', function() {
-            var stepObj, timer, options;
+            var timer, options, step;
             if (that.options.startOnPlaying) {
-                stepObj = node.game.getCurrentStep();
-                if (!stepObj) return;
-                timer = stepObj.timer;
+                step = node.game.getCurrentGameStage();
+                timer = node.game.plot.getProperty(step, 'timer');
                 if (timer) {
-                    options = processOptions(timer, this.options);
+                    options = that.processOptions(timer);
                     that.startTiming(options);
                 }
             }
@@ -7073,7 +7329,8 @@
         node.on('REALLY_DONE', function() {
             if (that.options.stopOnDone) {
                 if (!that.gameTimer.isStopped()) {
-                    that.startWaiting();
+                    // that.startWaiting();
+                    that.stop();
                 }
             }
        });
@@ -7085,24 +7342,20 @@
         this.bodyDiv.removeChild(this.waitBox.boxDiv);
     };
 
-    // ## Helper functions
-
     /**
-     * ### processOptions
+     * ### VisualTimer.processOptions
      *
-     * Clones and mixes in user options with current options
+     * Clones and cleans user options
      *
-     * Return object is transformed accordingly.
+     * Adds the default 'timeup' function as `node.done`.
      *
      * @param {object} options Configuration options
-     * @param {object} curOptions Current configuration of VisualTimer
      *
      * @return {object} Clean, valid configuration object
      */
-    function processOptions(inOptions, curOptions) {
+    VisualTimer.prototype.processOptions = function(inOptions) {
         var options, typeofOptions;
         options = {};
-        inOptions = J.clone(inOptions);
         typeofOptions = typeof inOptions;
         switch (typeofOptions) {
 
@@ -7110,7 +7363,7 @@
             options.milliseconds = inOptions;
             break;
         case 'object':
-            options = inOptions;
+            options = J.clone(inOptions);
             if ('function' === typeof options.milliseconds) {
                 options.milliseconds = options.milliseconds.call(node.game);
             }
@@ -7123,23 +7376,23 @@
             break;
         }
 
-        J.mixout(options, curOptions || {});
-
         if (!options.milliseconds) {
             throw new Error('VisualTimer processOptions: milliseconds cannot ' +
                             'be 0 or undefined.');
         }
 
         if ('undefined' === typeof options.timeup) {
-            options.timeup = 'DONE';
+            options.timeup = function() {
+                node.done();
+            };
         }
         return options;
-    }
+    };
 
    /**
      * # TimerBox
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Represents a box wherin to display a `VisualTimer`
@@ -7314,8 +7567,388 @@
 })(node);
 
 /**
+ * # WaitingRoom
+ * Copyright(c) 2015 Stefano Balietti
+ * MIT Licensed
+ *
+ * Display the number of connected / required players to start a game
+ *
+ * www.nodegame.org
+ */
+(function(node) {
+
+    "use strict";
+
+    node.widgets.register('WaitingRoom', WaitingRoom);
+
+    // ## Meta-data
+
+    WaitingRoom.version = '0.1.0';
+    WaitingRoom.description = 'Displays a waiting room for clients.';
+
+    WaitingRoom.title = 'Waiting Room';
+    WaitingRoom.className = 'waitingroom';
+
+    // ## Dependencies
+
+    WaitingRoom.dependencies = {
+        JSUS: {},
+        VisualTimer: {}
+    };
+
+    /**
+     * ## WaitingRoom constructor
+     *
+     * Instantiates a new WaitingRoom object
+     *
+     * @param {object} options
+     */
+    function WaitingRoom(options) {
+
+        /**
+         * ### WaitingRoom.callbacks
+         *
+         * Array of all test callbacks
+         */
+        this.connected = 0;
+
+        /**
+         * ### WaitingRoom.stillChecking
+         *
+         * Number of tests still pending
+         */
+        this.poolSize = 0;
+
+        /**
+         * ### WaitingRoom.withTimeout
+         *
+         * The size of the group
+         */
+        this.groupSize = 0;
+
+        /**
+         * ### WaitingRoom.maxWaitTime
+         *
+         * The time in milliseconds for the timeout to expire
+         */
+        this.maxWaitTime = null;
+
+        /**
+         * ### WaitingRoom.timeoutId
+         *
+         * The id of the timeout, if created
+         */
+        this.timeoutId = null;
+
+        /**
+         * ### WaitingRoom.playerCountDiv
+         *
+         * Div containing the span for displaying the number of players
+         *
+         * @see WaitingRoom.playerCount
+         */
+        this.playerCountDiv = null;
+
+        /**
+         * ### WaitingRoom.playerCount
+         *
+         * Span displaying the number of connected players
+         */
+        this.playerCount = null;
+
+        /**
+         * ### WaitingRoom.timerDiv
+         *
+         * Div containing the timer
+         *
+         * @see WaitingRoom.timer
+         */
+        this.timerDiv = null;
+
+        /**
+         * ### WaitingRoom.timer
+         *
+         * VisualTimer instance for max wait time.
+         *
+         * @see VisualTimer
+         */
+        this.timer = null;
+
+        /**
+         * ### WaitingRoom.dots
+         *
+         * Looping dots to give the user the feeling of code execution
+         */
+        this.dots = null;
+
+        /**
+         * ### WaitingRoom.ontTimeout
+         *
+         * Callback to be executed if the timer expires
+         */
+        this.ontTimeout = null;
+
+        /**
+         * ### WaitingRoom.onTimeout
+         *
+         * TRUE if the timer expired
+         */
+        this.alreadyTimeUp = null;
+
+    }
+
+    // ## WaitingRoom methods
+
+    /**
+     * ### WaitingRoom.init
+     *
+     * Setups the requirements widget
+     *
+     * Available options:
+     *
+     *   - onComplete: function executed with either failure or success
+     *   - onTimeout: function executed when at least one test fails
+     *   - onSuccess: function executed when all tests succeed
+     *   - maxWaitTime: max waiting time to execute all tests (in milliseconds)
+     *
+     * @param {object} conf Configuration object.
+     */
+    WaitingRoom.prototype.init = function(conf) {
+        if ('object' !== typeof conf) {
+            throw new TypeError('WaitingRoom.init: conf must be object.');
+        }
+        if ('undefined' !== typeof conf.onTimeout) {
+            if (null !== conf.onTimeout &&
+                'function' !== typeof conf.onTimeout) {
+
+                throw new TypeError('WaitingRoom.init: conf.onTimeout must ' +
+                                    'be function, null or undefined.');
+            }
+            this.onTimeout = conf.onTimeout;
+        }
+        if (conf.maxWaitTime) {
+            if (null !== conf.maxWaitTime &&
+                'number' !== typeof conf.maxWaitTime) {
+
+                throw new TypeError('WaitingRoom.init: conf.onMaxExecTime ' +
+                                    'must be number, null or undefined.');
+            }
+            this.maxWaitTime = conf.maxWaitTime;
+            this.startTimer();
+        }
+
+        if (conf.poolSize) {
+            if (conf.poolSize && 'number' !== typeof conf.poolSize) {
+                throw new TypeError('WaitingRoom.init: conf.poolSize ' +
+                                    'must be number or undefined.');
+            }
+            this.poolSize = conf.poolSize;
+        }
+
+        if (conf.groupSize) {
+            if (conf.groupSize && 'number' !== typeof conf.groupSize) {
+                throw new TypeError('WaitingRoom.init: conf.groupSize ' +
+                                    'must be number or undefined.');
+            }
+            this.groupSize = conf.groupSize;
+        }
+
+        if (conf.connected) {
+            if (conf.connected && 'number' !== typeof conf.connected) {
+                throw new TypeError('WaitingRoom.init: conf.connected ' +
+                                    'must be number or undefined.');
+            }
+            this.connected = conf.connected;
+        }
+    };
+
+    /**
+     * ### WaitingRoom.addTimeout
+     *
+     * Starts a timeout for the max waiting time
+     *
+     */
+    WaitingRoom.prototype.startTimer = function() {
+        if (this.timer) return;
+        if (!this.maxWaitTime) return;
+        if (!this.timerDiv) {
+            this.timerDiv = document.createElement('div');
+            this.timerDiv.id = 'timer-div';
+        }
+        this.timerDiv.appendChild(document.createTextNode(
+            'Maximum Waiting Time: '
+        ));
+        this.timer = node.widgets.append('VisualTimer', this.timerDiv, {
+            milliseconds: this.maxWaitTime,
+            timeup: this.onTimeup,
+            update: 1000
+        });
+        // Style up: delete title and border;
+        this.timer.setTitle();
+        this.timer.panelDiv.className = 'ng_widget visualtimer';
+        // Append to bodyDiv.
+        this.bodyDiv.appendChild(this.timerDiv);
+        this.timer.start();
+    };
+
+    /**
+     * ### WaitingRoom.clearTimeout
+     *
+     * Clears the timeout for the max execution time of the requirements
+     *
+     * @see this.timeoutId
+     * @see this.stillCheckings
+     * @see this.requirements
+     */
+    WaitingRoom.prototype.clearTimeout = function() {
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+            this.timeoutId = null;
+        }
+    };
+
+    /**
+     * ### WaitingRoom.updateDisplay
+     *
+     * Displays the state of the waiting room on screen
+     *
+     * @see WaitingRoom.updateState
+     */
+    WaitingRoom.prototype.updateState = function(update) {
+        if (!update) return;
+        if ('number' === typeof update.connected) {
+            this.connected = update.connected;
+        }
+        if ('number' === typeof update.poolSize) {
+            this.poolSize = update.poolSize;
+        }
+        if ('number' === typeof update.groupSize) {
+            this.groupSize = update.groupSize;
+        }
+    };
+
+    /**
+     * ### WaitingRoom.updateDisplay
+     *
+     * Displays the state of the waiting room on screen
+     *
+     * @see WaitingRoom.updateState
+     */
+    WaitingRoom.prototype.updateDisplay = function() {
+        this.playerCount.innerHTML = this.connected + ' / ' + this.poolSize;
+    };
+
+    WaitingRoom.prototype.append = function() {
+        this.playerCountDiv = document.createElement('div');
+        this.playerCountDiv.id = 'player-count-div';
+
+        this.playerCountDiv.appendChild(
+            document.createTextNode('Waiting for All Players to Connect: '));
+
+        this.playerCount = document.createElement('p');
+        this.playerCount.id = 'player-count';
+        this.playerCountDiv.appendChild(this.playerCount);
+
+        this.dots = W.getLoadingDots();
+        this.playerCountDiv.appendChild(this.dots.span);
+
+        this.bodyDiv.appendChild(this.playerCountDiv);
+
+        if (this.maxWaitTime) {
+            this.startTimer();
+        }
+
+    };
+
+    WaitingRoom.prototype.listeners = function() {
+        var that;
+        that = this;
+
+        node.registerSetup('waitroom', function(conf) {
+            if (!conf) return;
+            if ('object' !== typeof conf) {
+                node.warn('waiting room widget: invalid setup object: ' + conf);
+                return;
+            }
+            // Configure all requirements.
+            that.init(conf);
+
+            return conf;
+        });
+
+        // NodeGame Listeners.
+        node.on.data('PLAYERSCONNECTED', function(msg) {
+            if (!msg.data) return;
+            that.connected = msg.data;
+            that.updateDisplay();
+        });
+
+        node.on.data('TIME', function(msg) {
+            timeIsUp.call(that, msg.data);
+        });
+
+
+        // Start waiting time timer.
+        node.on.data('WAITTIME', function(msg) {
+
+            // Avoid running multiple timers.
+            // if (timeCheck) clearInterval(timeCheck);
+
+            that.updateState(msg.data);
+            that.updateDisplay();
+
+        });
+
+        node.on('SOCKET_DISCONNECT', function() {
+            if (that.alreadyTimeUp) return;
+
+            // Terminate countdown.
+            if (that.timer) {
+                that.timer.stop();
+                that.timer.destroy();
+            }
+
+            // Write about disconnection in page.
+            that.bodyDiv.innerHTML = '<span style="color: red">You have been ' +
+                '<strong>disconnected</strong>. Please try again later.' +
+                '</span><br><br>';
+
+//             // Enough to not display it in case of page refresh.
+//             setTimeout(function() {
+//                 alert('Disconnection from server detected!');
+//             }, 200);
+        });
+    };
+
+    WaitingRoom.prototype.destroy = function() {
+        node.deregisterSetup('waitroom');
+    };
+
+    // ## Helper methods
+
+    function timeIsUp(data) {
+        console.log('TIME IS UP!');
+
+        if (this.alreadyTimeUp) return;
+        this.alreadyTimeUp = true;
+        if (this.timer) this.timer.stop();
+
+        data = data || {};
+
+        // All players have connected. Game starts.
+        if (data.over === 'AllPlayersConnected') return;
+
+        node.socket.disconnect();
+
+
+        if (this.onTimeout) this.onTimeout(data);
+    }
+
+})(node);
+
+/**
  * # Wall
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where log and other information is added
@@ -7435,10 +8068,12 @@
      * Writes into this.buffer if document is not ready yet.
      */
     Wall.prototype.write = function(text) {
+        var mark;
         if (document.readyState !== 'complete') {
-            this.buffer.push(s);
-        } else {
-            var mark = this.counter++ + ') ' + J.getTime() + ' ';
+            this.buffer.push(text);
+        }
+        else {
+            mark = this.counter++ + ') ' + J.getTime() + ' ';
             this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
         }
     };

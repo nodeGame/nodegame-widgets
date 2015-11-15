@@ -47,7 +47,7 @@
 </div>
 
 
-<p>Copyright(c) 2014 Stefano Balietti
+<p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Provides a simple interface to change the game stages</p>
@@ -142,7 +142,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">StateBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">prefix</span><span class="p">,</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">prefix</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">idButton</span><span class="p">,</span> <span class="nx">idStageField</span><span class="p">,</span> <span class="nx">idRecipientField</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">sendButton</span><span class="p">,</span> <span class="nx">stageField</span><span class="p">,</span> <span class="nx">recipientField</span><span class="p">;</span>
 
@@ -162,22 +162,6 @@ MIT Licensed</p>
 
         <span class="nx">sendButton</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="nx">idButton</span><span class="p">);</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
-</div>
-<p>node.on('UPDATED_PLIST', function() {
-   node.window.populateRecipientSelector(
-       that.recipient, node.game.pl);
-});</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
         <span class="nx">sendButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">to</span><span class="p">;</span>
             <span class="kd">var</span> <span class="nx">stage</span><span class="p">;</span>
@@ -189,7 +173,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>Should be within the range of valid values
 but we should add a check</p>

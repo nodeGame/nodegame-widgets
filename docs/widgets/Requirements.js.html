@@ -52,6 +52,9 @@
         <a href="#requirements.summaryupdate">Requirements.summaryUpdate</a>
       </div>
       <div class="heading h3">
+        <a href="#requirements.summaryresults">Requirements.summaryResults</a>
+      </div>
+      <div class="heading h3">
         <a href="#requirements.dots">Requirements.dots</a>
       </div>
       <div class="heading h3">
@@ -76,13 +79,16 @@
         <a href="#requirements.onsuccess">Requirements.onSuccess</a>
       </div>
       <div class="heading h3">
-        <a href="#requirements.onfail">Requirements.onFail</a>
+        <a href="#requirements.onfailure">Requirements.onFailure</a>
       </div>
       <div class="heading h3">
         <a href="#requirements.list">Requirements.list</a>
       </div>
       <div class="heading h2">
         <a href="#requirements%20methods">Requirements methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#requirements.init">Requirements.init</a>
       </div>
       <div class="heading h3">
         <a href="#requirements.addrequirements">Requirements.addRequirements</a>
@@ -109,15 +115,6 @@
         <a href="#requirements.displayresults">Requirements.displayResults</a>
       </div>
       <div class="heading h2">
-        <a href="#default%20requirement%20functions">Default Requirement Functions</a>
-      </div>
-      <div class="heading h3">
-        <a href="#requirements.nodegamerequirements">Requirements.nodeGameRequirements</a>
-      </div>
-      <div class="heading h3">
-        <a href="#requirements.loadframetest">Requirements.loadFrameTest</a>
-      </div>
-      <div class="heading h2">
         <a href="#helper%20methods">Helper methods</a>
       </div>
     </div>
@@ -137,7 +134,7 @@
 </div>
 
 
-<p>Copyright(c) 2014 Stefano Balietti
+<p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Checks a list of requirements and displays the results</p>
@@ -170,7 +167,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.1&#39;</span><span class="p">;</span>
+    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.6.0&#39;</span><span class="p">;</span>
     <span class="nx">Requirements</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Checks a set of requirements and display the &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;results&#39;</span><span class="p">;</span>
 
@@ -228,6 +225,7 @@ MIT Licensed</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="kd">function</span> <span class="nx">Requirements</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
 
+
 </pre></div>
         </td>
       </tr>
@@ -247,7 +245,7 @@ MIT Licensed</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span> <span class="o">=</span> <span class="p">[];</span>
 
 
 </pre></div>
@@ -380,6 +378,28 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="requirements.summaryresults">
+  <h3>
+    <a href="#requirements.summaryresults" name="requirements.summaryresults" class="pilcrow">&#182;</a>
+    Requirements.summaryResults
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Span displaying the results of the tests</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
 </pre></div>
@@ -564,10 +584,10 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="requirements.onfail">
+<div class="pilwrap" id="requirements.onfailure">
   <h3>
-    <a href="#requirements.onfail" name="requirements.onfail" class="pilcrow">&#182;</a>
-    Requirements.onFail
+    <a href="#requirements.onfailure" name="requirements.onfailure" class="pilcrow">&#182;</a>
+    Requirements.onFailure
   </h3>
 </div>
 
@@ -577,7 +597,7 @@ MIT Licensed</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onFail</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">onFailure</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
 </pre></div>
@@ -629,7 +649,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Might be the full exception object.</p>
         </td>
@@ -671,6 +691,95 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="requirements.init">
+  <h3>
+    <a href="#requirements.init" name="requirements.init" class="pilcrow">&#182;</a>
+    Requirements.init
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Setups the requirements widget</p>
+
+<p>Available options:</p>
+
+<ul>
+<li>requirements: array of callback functions or objects formatted as
+ { cb: function [, params: object] [, name: string] };
+<ul><li>onComplete: function executed with either failure or success</li>
+<li>onFailure: function executed when at least one test fails</li>
+<li>onSuccess: function executed when all tests succeed</li>
+<li>maxWaitTime: max waiting time to execute all tests (in milliseconds)</li></ul></li>
+</ul>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">conf</span>
+      <span class="dox_type">object</span>
+      <span>Configuration object.</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf must be object.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">requirements</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">requirements</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.requirements &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;must be array or undefined.&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">requirements</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onComplete</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onComplete</span> <span class="o">&amp;&amp;</span>
+                <span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onComplete</span><span class="p">)</span> <span class="p">{</span>
+
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.onComplete must &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;be function, null or undefined.&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onComplete</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onComplete</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">&amp;&amp;</span>
+                <span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">)</span> <span class="p">{</span>
+
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.onSuccess must &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;be function, null or undefined.&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onFailure</span> <span class="o">&amp;&amp;</span>
+                <span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">)</span> <span class="p">{</span>
+
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.onFailure must &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;be function, null or undefined.&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onFailure</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span> <span class="o">&amp;&amp;</span>
+                <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span><span class="p">)</span> <span class="p">{</span>
+
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.onMaxExecTime &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;must be number, null or undefined.&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">withTimeout</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">timeoutTime</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="requirements.addrequirements">
   <h3>
     <a href="#requirements.addrequirements" name="requirements.addrequirements" class="pilcrow">&#182;</a>
@@ -679,7 +788,7 @@ MIT Licensed</p>
 </div>
 
   </div>
-  <div class="body"><p>Adds any number of callbacks checking the requirements</p>
+  <div class="body"><p>Adds any number of requirements to the requirements array</p>
 
 <p>Callbacks can be asynchronous or synchronous.</p>
 
@@ -694,7 +803,7 @@ error message. Empty array means test passed.</p>
   <div class="details">
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.callbacks
+      <span class="dox_type">this.requirements
 </span>
     </div>
   </div>
@@ -705,11 +814,13 @@ error message. Empty array means test passed.</p>
         <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span>
+                <span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
+
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.addRequirements: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;all requirements must be function.&#39;</span><span class="p">);</span>
+                                    <span class="s1">&#39;requirements must be function or object.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
         <span class="p">}</span>
     <span class="p">};</span>
 
@@ -754,7 +865,7 @@ corresponding option is set.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.callbacks
+      <span class="dox_type">this.requirements
 </span>
     </div>
   </div>
@@ -763,35 +874,44 @@ corresponding option is set.</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkRequirements</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">display</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">cbErrors</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">errMsg</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: no callback &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;found.&#39;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">errMsg</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: no requirements &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;to check found.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 
         <span class="nx">errors</span> <span class="o">=</span> <span class="p">[];</span>
-        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+</div>
+<p>Get Test Name.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">cbName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">cbName</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
             <span class="k">try</span> <span class="p">{</span>
-                <span class="nx">cbErrors</span> <span class="o">=</span> <span class="nx">resultCb</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+                <span class="nx">resultCb</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">extractErrorMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">cbName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">cbName</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="p">}</span>
+
                 <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;An exception occurred in requirement n.&#39;</span> <span class="o">+</span>
                             <span class="nx">cbName</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nx">errMsg</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">cbErrors</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-                <span class="nx">errors</span> <span class="o">=</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">cbErrors</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -825,7 +945,7 @@ corresponding option is set.</p>
 </div>
 
   </div>
-  <div class="body"><p>Starts a timeout for the max execution time of the callbacks</p>
+  <div class="body"><p>Starts a timeout for the max execution time of the requirements</p>
 
 <p>Upon time out results are checked, and eventually displayed.</p>
   </div>
@@ -840,7 +960,7 @@ corresponding option is set.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.callbacks
+      <span class="dox_type">this.requirements
 </span>
     </div>
   </div>
@@ -878,7 +998,7 @@ corresponding option is set.</p>
 </div>
 
   </div>
-  <div class="body"><p>Clears the timeout for the max execution time of the callbacks</p>
+  <div class="body"><p>Clears the timeout for the max execution time of the requirements</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
@@ -891,7 +1011,7 @@ corresponding option is set.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.callbacks
+      <span class="dox_type">this.requirements
 </span>
     </div>
   </div>
@@ -920,14 +1040,14 @@ corresponding option is set.</p>
 </div>
 
   </div>
-  <div class="body"><p>Updates the number of callbacks still running on the display</p>
+  <div class="body"><p>Updates the number of requirements still running on the display</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">update</span>
       <span class="dox_type">number</span>
-      <span>The number of callbacks still running, or an
+      <span>The number of requirements still running, or an
   increment as compared to the current value</span>
     </div>
     <div class="dox_tag_detail">
@@ -946,7 +1066,7 @@ corresponding option is set.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.callbacks
+      <span class="dox_type">this.requirements
 </span>
     </div>
   </div>
@@ -958,7 +1078,7 @@ corresponding option is set.</p>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">=</span> <span class="nx">absolute</span> <span class="o">?</span> <span class="nx">update</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">+</span> <span class="nx">update</span><span class="p">;</span>
 
-        <span class="nx">total</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="nx">total</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="nx">remaining</span> <span class="o">=</span> <span class="nx">total</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39; (&#39;</span> <span class="o">+</span>  <span class="nx">remaining</span> <span class="o">+</span> <span class="s1">&#39; / &#39;</span> <span class="o">+</span> <span class="nx">total</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">;</span>
     <span class="p">};</span>
@@ -978,7 +1098,7 @@ corresponding option is set.</p>
 </div>
 
   </div>
-  <div class="body"><p>Returns TRUE if all callbacks have returned</p>
+  <div class="body"><p>Returns TRUE if all requirements have returned</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
@@ -987,7 +1107,7 @@ corresponding option is set.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.callbacks
+      <span class="dox_type">this.requirements
 </span>
     </div>
   </div>
@@ -1013,11 +1133,11 @@ corresponding option is set.</p>
 </div>
 
   </div>
-  <div class="body"><p>Cleans up timer and dots, and executes final callbacks accordingly</p>
+  <div class="body"><p>Cleans up timer and dots, and executes final requirements accordingly</p>
 
 <p>First, executes the <code>onComplete</code> callback in any case. Then if no
 errors have been raised executes the <code>onSuccess</code> callback, otherwise
-the <code>onFail</code> callback.</p>
+the <code>onFailure</code> callback.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
@@ -1030,7 +1150,7 @@ the <code>onFail</code> callback.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.onFail</span>
+      <span class="dox_type">this.onFailure</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -1038,7 +1158,7 @@ the <code>onFail</code> callback.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.callbacks
+      <span class="dox_type">this.requirements
 </span>
     </div>
   </div>
@@ -1056,8 +1176,8 @@ the <code>onFail</code> callback.</p>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sayResults</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">results</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">userAgent</span><span class="o">:</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">,</span>
-                <span class="nx">result</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">results</span>
+                <span class="nx">success</span><span class="o">:</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span><span class="p">,</span>
+                <span class="nx">results</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">results</span>
             <span class="p">};</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">addToResults</span><span class="p">)</span> <span class="p">{</span>
@@ -1071,7 +1191,7 @@ the <code>onFail</code> callback.</p>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onFail</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">onFail</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">();</span>
@@ -1093,7 +1213,7 @@ the <code>onFail</code> callback.</p>
 </div>
 
   </div>
-  <div class="body"><p>Displays the results of the callbacks on the screen</p>
+  <div class="body"><p>Displays the results of the requirements on the screen</p>
 
 <p>Creates a new item in the list of results for every error found
 in the results array.</p>
@@ -1106,7 +1226,7 @@ in the results array.</p>
       <span class="dox_tag_name">results</span>
       <span class="dox_type">array</span>
       <span>The array containing the return values of all
-  the callbacks</span>
+  the requirements</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -1118,7 +1238,7 @@ in the results array.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.onFail</span>
+      <span class="dox_type">this.onFailure</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -1126,7 +1246,7 @@ in the results array.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">this.callbacks
+      <span class="dox_type">this.requirements
 </span>
     </div>
   </div>
@@ -1153,58 +1273,12 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>No errors.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">results</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
-</div>
-<p>Last check and no previous errors.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
-</div>
-<p>All tests passed.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">({</span>
-                    <span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-                    <span class="nx">text</span><span class="o">:</span><span class="s1">&#39;All tests passed.&#39;</span>
-                <span class="p">});</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
-</div>
-<p>Add to the array of results.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">this</span><span class="p">.</span><span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;All tests passed.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -1213,6 +1287,24 @@ in the results array.</p>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+</div>
+<p>All tests passed.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">({</span>
+                <span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">text</span><span class="o">:</span><span class="s1">&#39;All tests passed.&#39;</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>Add the errors.</p>
         </td>
@@ -1223,19 +1315,6 @@ in the results array.</p>
                     <span class="nx">success</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
                     <span class="nx">text</span><span class="o">:</span> <span class="nx">results</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
                 <span class="p">});</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
-</div>
-<p>Add to the array of results.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">this</span><span class="p">.</span><span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">results</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -1263,100 +1342,26 @@ in the results array.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span><span class="p">);</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">dots</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getLoadingDots</span><span class="p">();</span>
-
         <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dots</span><span class="p">.</span><span class="nx">span</span><span class="p">);</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">));</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span><span class="p">);</span>
 
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">());</span>
     <span class="p">};</span>
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="default%20requirement%20functions">
-  <h2>
-    <a href="#default%20requirement%20functions" name="default%20requirement%20functions" class="pilcrow">&#182;</a>
-    Default Requirement Functions
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="requirements.nodegamerequirements">
-  <h3>
-    <a href="#requirements.nodegamerequirements" name="requirements.nodegamerequirements" class="pilcrow">&#182;</a>
-    Requirements.nodeGameRequirements
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Checks whether the basic dependencies of nodeGame are satisfied</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">result</span>
-      <span class="dox_type">function</span>
-      <span>The asynchronous result function</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">array</span>
-      <span>Array of synchronous errors</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">nodeGameRequirements</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">db</span><span class="p">;</span>
-        <span class="nx">errors</span> <span class="o">=</span> <span class="p">[];</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">NDDB</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;NDDB not found.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">JSUS</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;JSUS not found.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;node.window not found.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">W</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;W not found.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;node.widgets not found.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">NDDB</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">try</span> <span class="p">{</span>
-                <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">NDDB</span><span class="p">();</span>
+    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">registerSetup</span><span class="p">(</span><span class="s1">&#39;requirements&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">conf</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;requirements widget: invalid setup object: &#39;</span> <span class="o">+</span> <span class="nx">conf</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;An error occurred manipulating the NDDB object: &#39;</span> <span class="o">+</span>
-                            <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
 
 </pre></div>
         </td>
@@ -1364,92 +1369,32 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
-<p>We need to test node.Stager because it will be used in other tests.</p>
+<p>Configure all requirements.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">node</span><span class="p">.</span><span class="nx">Stager</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;node.Stager not found.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="nx">errors</span><span class="p">;</span>
-    <span class="p">};</span>
-
+            <span class="nx">that</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">conf</span><span class="p">);</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="requirements.loadframetest">
-  <h3>
-    <a href="#requirements.loadframetest" name="requirements.loadframetest" class="pilcrow">&#182;</a>
-    Requirements.loadFrameTest
-  </h3>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
-
-  </div>
-  <div class="body"><p>Checks whether the iframe can be created and used</p>
-
-<p>Requires an active connection.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">result</span>
-      <span class="dox_type">function</span>
-      <span>The asynchronous result function</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">array</span>
-      <span>Array of synchronous errors</span>
-    </div>
-  </div>
-</div>
+<p>Start a checking immediately if requested.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">loadFrameTest</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">that</span><span class="p">,</span> <span class="nx">testIframe</span><span class="p">,</span> <span class="nx">root</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">oldIframe</span><span class="p">,</span> <span class="nx">oldIframeName</span><span class="p">,</span> <span class="nx">oldIframeRoot</span><span class="p">;</span>
-        <span class="nx">errors</span> <span class="o">=</span> <span class="p">[];</span>
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="nx">oldIframe</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrame</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">doChecking</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">checkRequirements</span><span class="p">();</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">oldIframe</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">oldIframeName</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrameName</span><span class="p">();</span>
-            <span class="nx">oldIframeRoot</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrameRoot</span><span class="p">();</span>
-            <span class="nx">root</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getIFrameAnyChild</span><span class="p">(</span><span class="nx">oldIframe</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">root</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
-        <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">conf</span><span class="p">;</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
 
-        <span class="k">try</span> <span class="p">{</span>
-            <span class="nx">testIframe</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addIFrame</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="s1">&#39;testIFrame&#39;</span><span class="p">,</span> <span class="p">{</span>
-                <span class="nx">style</span><span class="o">:</span> <span class="p">{</span> <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;none&#39;</span> <span class="p">}</span> <span class="p">}</span> <span class="p">);</span>
-            <span class="nx">W</span><span class="p">.</span><span class="nx">setFrame</span><span class="p">(</span><span class="nx">testIframe</span><span class="p">,</span> <span class="s1">&#39;testIframe&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="p">);</span>
-            <span class="nx">W</span><span class="p">.</span><span class="nx">loadFrame</span><span class="p">(</span><span class="s1">&#39;/pages/testpage.htm&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="kd">var</span> <span class="nx">found</span><span class="p">;</span>
-                <span class="nx">found</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">oldIframe</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">W</span><span class="p">.</span><span class="nx">setFrame</span><span class="p">(</span><span class="nx">oldIframe</span><span class="p">,</span> <span class="nx">oldIframeName</span><span class="p">,</span> <span class="nx">oldIframeRoot</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">found</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;W.loadFrame failed to load a test frame &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;correctly.&#39;</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="nx">root</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">testIframe</span><span class="p">);</span>
-                <span class="nx">result</span><span class="p">(</span><span class="nx">errors</span><span class="p">);</span>
-            <span class="p">});</span>
-        <span class="p">}</span>
-        <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;W.loadFrame raised an error: &#39;</span> <span class="o">+</span> <span class="nx">extractErrorMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">));</span>
-            <span class="k">return</span> <span class="nx">errors</span><span class="p">;</span>
-        <span class="p">}</span>
+    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">deregisterSetup</span><span class="p">(</span><span class="s1">&#39;requirements&#39;</span><span class="p">);</span>
     <span class="p">};</span>
 
 
@@ -1468,21 +1413,59 @@ in the results array.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="kd">function</span> <span class="nx">resultCb</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">resultCb</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">update</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
+
+        <span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">,</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;result must be array or undefined.&#39;</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">displayResults</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
             <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">errors</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;errors must be array or undefined.&#39;</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">displayResults</span><span class="p">(</span><span class="nx">errors</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="nx">that</span><span class="p">.</span><span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+                <span class="nx">name</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
+                <span class="nx">success</span><span class="o">:</span> <span class="nx">success</span><span class="p">,</span>
+                <span class="nx">errors</span><span class="o">:</span> <span class="nx">errors</span><span class="p">,</span>
+                <span class="nx">data</span><span class="o">:</span> <span class="nx">data</span>
+            <span class="p">});</span>
+
             <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">isCheckingFinished</span><span class="p">())</span> <span class="p">{</span>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">checkingFinished</span><span class="p">();</span>
             <span class="p">}</span>
         <span class="p">};</span>
-        <span class="k">return</span> <span class="nx">that</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">[</span><span class="nx">i</span><span class="p">](</span><span class="nx">update</span><span class="p">);</span>
+
+        <span class="nx">req</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">requirements</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="nx">req</span><span class="p">(</span><span class="nx">update</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">cb</span><span class="p">(</span><span class="nx">update</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span> <span class="o">||</span> <span class="p">{});</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: invalid &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;requirement: &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+</div>
+<p>Synchronous checking.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="nx">update</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">success</span><span class="p">,</span> <span class="nx">res</span><span class="p">.</span><span class="nx">errors</span><span class="p">,</span> <span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kd">function</span> <span class="nx">extractErrorMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
@@ -1494,7 +1477,7 @@ in the results array.</p>
             <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">description</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errMsg</span><span class="p">.</span><span class="nx">description</span><span class="p">;</span>
+            <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">errMsg</span><span class="p">.</span><span class="nx">description</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
             <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>

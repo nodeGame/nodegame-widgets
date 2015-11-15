@@ -80,7 +80,7 @@
 </div>
 
 
-<p>Copyright(c) 2014 Stefano Balietti
+<p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Creates and manipulates a set of forms</p>
@@ -106,15 +106,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">sliderControls</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">jQuerySlider</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">radioControls</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
-
-
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Controls&#39;</span><span class="p">,</span> <span class="nx">Controls</span><span class="p">);</span>
-
-
 
 
 </pre></div>
@@ -374,7 +366,7 @@ The  options object can have the following attributes:
                 <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">List</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">W</span><span class="p">.</span><span class="nx">List</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">listRoot</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">();</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
@@ -660,7 +652,7 @@ TODO: remove/add elements</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;SliderControls&#39;</span><span class="p">,</span> <span class="nx">SliderControls</span><span class="p">);</span>
+
 
     <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
     <span class="nx">SliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">SliderControls</span><span class="p">;</span>
@@ -675,6 +667,19 @@ TODO: remove/add elements</p>
         <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>Need to be after the prototype is inherited.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;SliderControls&#39;</span><span class="p">,</span> <span class="nx">SliderControls</span><span class="p">);</span>
 
     <span class="kd">function</span> <span class="nx">SliderControls</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
@@ -708,7 +713,7 @@ TODO: remove/add elements</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;jQuerySliderControls&#39;</span><span class="p">,</span> <span class="nx">jQuerySliderControls</span><span class="p">);</span>
+
 
     <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
     <span class="nx">jQuerySliderControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">jQuerySliderControls</span><span class="p">;</span>
@@ -723,6 +728,8 @@ TODO: remove/add elements</p>
         <span class="nx">jQuery</span><span class="o">:</span> <span class="p">{},</span>
         <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;jQuerySliderControls&#39;</span><span class="p">,</span> <span class="nx">jQuerySliderControls</span><span class="p">);</span>
 
     <span class="kd">function</span> <span class="nx">jQuerySliderControls</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
@@ -766,8 +773,6 @@ TODO: remove/add elements</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;RadioControls&#39;</span><span class="p">,</span> <span class="nx">RadioControls</span><span class="p">);</span>
-
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">RadioControls</span><span class="p">;</span>
 
@@ -780,6 +785,8 @@ TODO: remove/add elements</p>
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;RadioControls&#39;</span><span class="p">,</span> <span class="nx">RadioControls</span><span class="p">);</span>
 
     <span class="kd">function</span> <span class="nx">RadioControls</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Controls</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
@@ -795,13 +802,13 @@ TODO: remove/add elements</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>overriding populate also. There is an error with the Label</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">populate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">container</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">that</span><span class="p">;</span>
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">radioElem</span><span class="p">)</span> <span class="p">{</span>
@@ -820,7 +827,7 @@ TODO: remove/add elements</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Prepare the attributes vector.</p>
         </td>
@@ -839,7 +846,7 @@ TODO: remove/add elements</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Add a different element according
 to the subclass instantiated.</p>
@@ -854,7 +861,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Fire the onChange event, if one defined</p>
         </td>
@@ -872,7 +879,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Element added to the list.</p>
         </td>
@@ -896,7 +903,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Adding the text for the radio button</p>
         </td>
@@ -913,7 +920,7 @@ to the subclass instantiated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>console.log('ADDDING radio');
 console.log(attributes);
@@ -929,7 +936,7 @@ TODO: is this a javascript bug?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code>             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
@@ -949,7 +956,7 @@ TODO: is this a javascript bug?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>console.log(attributes);</p>
         </td>
@@ -964,7 +971,7 @@ TODO: is this a javascript bug?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Override getAllValues for Radio Controls</p>
         </td>

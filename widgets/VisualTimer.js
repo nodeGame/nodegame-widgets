@@ -1,6 +1,6 @@
 /**
  * # VisualTimer
- * Copyright(c) 2014 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events.
@@ -15,7 +15,6 @@
     var J = node.JSUS;
 
     node.widgets.register('VisualTimer', VisualTimer);
-
 
     // ## Meta-data
 
@@ -147,6 +146,11 @@
 
         if (!this.gameTimer) {
             this.gameTimer = node.timer.createTimer();
+        }
+
+        // TODO: make it consistent with processOptions.
+        if ('function' === typeof options.milliseconds) {
+            options.milliseconds = options.milliseconds.call(node.game);
         }
 
         this.gameTimer.init(options);
@@ -345,10 +349,9 @@
       * @see VisualTimer.restart
       */
     VisualTimer.prototype.startWaiting = function(options) {
-        if (typeof options === 'undefined') {
+        if ('undefined' === typeof options) {
             options = {};
         }
-        options = J.clone(options);
         if (typeof options.milliseconds === 'undefined') {
             options.milliseconds = this.gameTimer.timeLeft;
         }
@@ -379,14 +382,13 @@
       * @see VisualTimer.restart
       */
     VisualTimer.prototype.startTiming = function(options) {
-        if (typeof options === 'undefined') {
+        if ('undefined' === typeof options) {
             options = {};
         }
-        options = J.clone(options);
-        if (typeof options.mainBoxOptions === 'undefined') {
+        if ('undefined' === typeof options.mainBoxOptions) {
             options.mainBoxOptions = {};
         }
-        if (typeof options.waitBoxOptions === 'undefined') {
+        if ('undefined' === typeof options.waitBoxOptions) {
             options.waitBoxOptions = {};
         }
         options.activeBox = this.mainBox;
@@ -421,6 +423,19 @@
     };
 
     /**
+     * ### VisualTimer.isTimeup
+     *
+     * Returns TRUE if the timer expired
+     *
+     * This method is added for backward compatibility.
+     *
+     * @see GameTimer.isTimeup
+     */
+    VisualTimer.prototype.isTimeup = function() {
+        return this.gameTimer.isTimeup();
+    };
+
+    /**
      * ### VisualTimer.doTimeUp
      *
      * Stops the timer and calls the timeup
@@ -440,13 +455,12 @@
         var that = this;
 
         node.on('PLAYING', function() {
-            var stepObj, timer, options;
+            var timer, options, step;
             if (that.options.startOnPlaying) {
-                stepObj = node.game.getCurrentStep();
-                if (!stepObj) return;
-                timer = stepObj.timer;
+                step = node.game.getCurrentGameStage();
+                timer = node.game.plot.getProperty(step, 'timer');
                 if (timer) {
-                    options = processOptions(timer, this.options);
+                    options = that.processOptions(timer);
                     that.startTiming(options);
                 }
             }
@@ -455,7 +469,8 @@
         node.on('REALLY_DONE', function() {
             if (that.options.stopOnDone) {
                 if (!that.gameTimer.isStopped()) {
-                    that.startWaiting();
+                    // that.startWaiting();
+                    that.stop();
                 }
             }
        });
@@ -467,24 +482,20 @@
         this.bodyDiv.removeChild(this.waitBox.boxDiv);
     };
 
-    // ## Helper functions
-
     /**
-     * ### processOptions
+     * ### VisualTimer.processOptions
      *
-     * Clones and mixes in user options with current options
+     * Clones and cleans user options
      *
-     * Return object is transformed accordingly.
+     * Adds the default 'timeup' function as `node.done`.
      *
      * @param {object} options Configuration options
-     * @param {object} curOptions Current configuration of VisualTimer
      *
      * @return {object} Clean, valid configuration object
      */
-    function processOptions(inOptions, curOptions) {
+    VisualTimer.prototype.processOptions = function(inOptions) {
         var options, typeofOptions;
         options = {};
-        inOptions = J.clone(inOptions);
         typeofOptions = typeof inOptions;
         switch (typeofOptions) {
 
@@ -492,7 +503,7 @@
             options.milliseconds = inOptions;
             break;
         case 'object':
-            options = inOptions;
+            options = J.clone(inOptions);
             if ('function' === typeof options.milliseconds) {
                 options.milliseconds = options.milliseconds.call(node.game);
             }
@@ -505,23 +516,23 @@
             break;
         }
 
-        J.mixout(options, curOptions || {});
-
         if (!options.milliseconds) {
             throw new Error('VisualTimer processOptions: milliseconds cannot ' +
                             'be 0 or undefined.');
         }
 
         if ('undefined' === typeof options.timeup) {
-            options.timeup = 'DONE';
+            options.timeup = function() {
+                node.done();
+            };
         }
         return options;
-    }
+    };
 
    /**
      * # TimerBox
      *
-     * Copyright(c) 2014 Stefano Balietti
+     * Copyright(c) 2015 Stefano Balietti
      * MIT Licensed
      *
      * Represents a box wherin to display a `VisualTimer`

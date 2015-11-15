@@ -47,7 +47,7 @@
 </div>
 
 
-<p>Copyright(c) 2014 Stefano Balietti
+<p>Copyright(c) 2015 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Displays multidimensional data in the shape of a Chernoff Face.</p>
@@ -104,7 +104,7 @@ MIT Licensed</p>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3&#39;</span><span class="p">;</span>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
-        <span class="s1">&#39;Display parametric data in the form of a Chernoff Face.&#39;</span>
+        <span class="s1">&#39;Display parametric data in the form of a Chernoff Face.&#39;</span><span class="p">;</span>
 
 
 </pre></div>
@@ -156,7 +156,6 @@ MIT Licensed</p>
     <span class="p">}</span>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">PREF</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="p">;</span>
 
@@ -167,7 +166,6 @@ MIT Licensed</p>
                         <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span> <span class="o">:</span> <span class="kc">true</span><span class="p">;</span>
 
         <span class="kd">var</span> <span class="nx">idCanvas</span> <span class="o">=</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">idCanvas</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">idCanvas</span> <span class="o">:</span> <span class="nx">PREF</span> <span class="o">+</span> <span class="s1">&#39;canvas&#39;</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">idButton</span> <span class="o">=</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">idButton</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">idButton</span> <span class="o">:</span> <span class="nx">PREF</span> <span class="o">+</span> <span class="s1">&#39;button&#39;</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">dims</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">width</span><span class="o">:</span>  <span class="nx">options</span><span class="p">.</span><span class="nx">width</span> <span class="o">?</span>
@@ -320,13 +318,11 @@ MIT Licensed</p>
 The class that actually draws the faces on the Canvas</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">FacePainter</span> <span class="p">(</span><span class="nx">canvas</span><span class="p">,</span> <span class="nx">settings</span><span class="p">)</span> <span class="p">{</span>
-
+    <span class="kd">function</span> <span class="nx">FacePainter</span><span class="p">(</span><span class="nx">canvas</span><span class="p">,</span> <span class="nx">settings</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Canvas</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
-
         <span class="k">this</span><span class="p">.</span><span class="nx">scaleX</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">scaleY</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">heigth</span><span class="p">;</span>
-    <span class="p">};</span>
+    <span class="p">}</span>
 
 
 </pre></div>
@@ -379,11 +375,11 @@ The class that actually draws the faces on the Canvas</p>
     <span class="nx">FacePainter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">redraw</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">face</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">clear</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="nx">face</span><span class="p">,</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
 
     <span class="nx">FacePainter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">scale</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">scaleX</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">scaleY</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
 
 
 </pre></div>
@@ -398,23 +394,22 @@ The class that actually draws the faces on the Canvas</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">FacePainter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fit2Canvas</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">face</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">ratio</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;No canvas found&#39;</span><span class="p">);</span>
             <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">ratio</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_radius</span> <span class="o">*</span>
-                <span class="nx">face</span><span class="p">.</span><span class="nx">head_scale_x</span><span class="p">;</span>
+            <span class="nx">ratio</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_radius</span> <span class="o">*</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_scale_x</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">ratio</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_radius</span> <span class="o">*</span>
-                <span class="nx">face</span><span class="p">.</span><span class="nx">head_scale_y</span><span class="p">;</span>
+            <span class="nx">ratio</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_radius</span> <span class="o">*</span> <span class="nx">face</span><span class="p">.</span><span class="nx">head_scale_y</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="nx">face</span><span class="p">.</span><span class="nx">scaleX</span> <span class="o">=</span> <span class="nx">ratio</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
         <span class="nx">face</span><span class="p">.</span><span class="nx">scaleY</span> <span class="o">=</span> <span class="nx">ratio</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
 
     <span class="nx">FacePainter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">drawHead</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">face</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
 
@@ -480,7 +475,7 @@ The class that actually draws the faces on the Canvas</p>
             <span class="nx">color</span><span class="o">:</span> <span class="nx">face</span><span class="p">.</span><span class="nx">color</span><span class="p">,</span>
             <span class="nx">lineWidth</span><span class="o">:</span> <span class="nx">face</span><span class="p">.</span><span class="nx">lineWidth</span>
         <span class="p">});</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
 
     <span class="nx">FacePainter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">drawPupils</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">face</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
 
@@ -964,8 +959,8 @@ The class that actually draws the faces on the Canvas</p>
         <span class="k">return</span> <span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="nx">out</span><span class="p">);</span>
     <span class="p">};</span>
 
-    <span class="kd">function</span> <span class="nx">FaceVector</span> <span class="p">(</span><span class="nx">faceVector</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">faceVector</span> <span class="o">=</span> <span class="nx">faceVector</span> <span class="o">||</span> <span class="p">{};</span>
+    <span class="kd">function</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="nx">faceVector</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">faceVector</span> <span class="o">=</span> <span class="nx">faceVector</span> <span class="o">||</span> <span class="p">{};</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">scaleX</span> <span class="o">=</span> <span class="nx">faceVector</span><span class="p">.</span><span class="nx">scaleX</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">scaleY</span> <span class="o">=</span> <span class="nx">faceVector</span><span class="p">.</span><span class="nx">scaleY</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
@@ -997,7 +992,7 @@ The class that actually draws the faces on the Canvas</p>
             <span class="p">}</span>
         <span class="p">}</span>
 
-    <span class="p">};</span>
+    <span class="p">}</span>
 
 
 </pre></div>
@@ -1061,7 +1056,7 @@ The class that actually draws the faces on the Canvas</p>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
                 <span class="nx">out</span> <span class="o">+=</span> <span class="nx">key</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
             <span class="p">}</span>
-        <span class="p">};</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="nx">out</span><span class="p">;</span>
     <span class="p">};</span>
 
