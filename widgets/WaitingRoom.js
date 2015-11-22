@@ -127,6 +127,13 @@
          */
         this.alreadyTimeUp = null;
 
+        /**
+         * ### WaitingRoom.disconnectMessage
+         *
+         * String to be put into `this.bodyDiv.innerHTML` when player
+         * is disconnected.
+         */
+        this.disconnectMessage = null;
     }
 
     // ## WaitingRoom methods
@@ -192,6 +199,19 @@
             }
             this.connected = conf.connected;
         }
+        if (conf.disconnectMessage) {
+            if ('string' !== typeof conf.disconnectMessage) {
+                throw new TypeError('WaitingRoom.init: ' +
+                        'conf.disconnectMessage must be string or undefined.');
+            }
+            this.discnnectMessage = conf.disconnectMessage
+        }
+        else {
+            this.disconnectMessage = '<span style="color: red">You have been ' +
+                '<strong>disconnected</strong>. Please try again later.' +
+                '</span><br><br>';
+        }
+
     };
 
     /**
@@ -341,14 +361,19 @@
             }
 
             // Write about disconnection in page.
-            that.bodyDiv.innerHTML = '<span style="color: red">You have been ' +
-                '<strong>disconnected</strong>. Please try again later.' +
-                '</span><br><br>';
+            that.bodyDiv.innerHTML = this.disconnectMessage;
 
 //             // Enough to not display it in case of page refresh.
 //             setTimeout(function() {
 //                 alert('Disconnection from server detected!');
 //             }, 200);
+        });
+        node.on.data('ROOM_CLOSED', function() {
+             this.disconnectMessage = '<span style="color: red"> The waiting ' +
+                'room is <strong>CLOSED</strong>. You have been disconnected.' +
+                ' Please try again later.' +
+                '</span><br><br>';
+            node.socket.disconnect();
         });
     };
 
@@ -364,6 +389,7 @@
         if (this.alreadyTimeUp) return;
         this.alreadyTimeUp = true;
         if (this.timer) this.timer.stop();
+
 
         data = data || {};
 
