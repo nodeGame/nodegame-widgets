@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## 0.6.8
+## 0.7.0
 
 - Improved Requirements widget. Some functions are moved into separate repo (nodegame-requirements).
 - Proper cleanup by loadFrameTest in Requirements.
