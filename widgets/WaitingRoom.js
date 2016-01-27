@@ -148,6 +148,13 @@
          * is disconnected.
          */
         this.disconnectMessage = null;
+
+        /**
+         * ### WaitingRoom.disconnectOnNotConnected
+         *
+         * Flag that indicates whether to disconnect an not selected player
+         */
+        this.disconnectMessage = null;
     }
 
     // ## WaitingRoom methods
@@ -270,6 +277,18 @@
             this.disconnectMessage = '<span style="color: red">You have been ' +
                 '<strong>disconnected</strong>. Please try again later.' +
                 '</span><br><br>';
+        }
+
+        if (conf.disconnectOnNotSelected) {
+            if ('boolean' !== typeof conf.disconnectOnNotSelected) {
+                throw new TypeError('WaitingRoom.init: ' +
+                    'conf.disconnectOnNotSelected must be boolean or ' +
+                    'undefined.');
+            }
+            this.disconnectOnNotSelected = conf.disconnectOnNotSelected;
+        }
+        else {
+            this.disconnectOnNotSelected = false;
         }
 
     };
@@ -487,7 +506,7 @@
         if (data.over === 'AllPlayersConnected') return;
 
         if (data.over === 'Not selected') {
-             disconnect = true;
+             disconnect = this.disconnectOnNotSelected;
         }
 
         if (data.over === 'Time elapsed, disconnect') {

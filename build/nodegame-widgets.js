@@ -7751,10 +7751,10 @@
                 var timeOut;
                 // Enough Time passed, not enough players connected.
                 if (data.over === 'Time elapsed, disconnect') {
-
-                    timeOut = "<h3 align='center'>Thank you for your patience.<br>";
-                    timeOut += "Unfortunately, there are not enough participants in ";
-                    timeOut += "your group to start the experiment.<br>";
+                    timeOut = "<h3 align='center'>" +
+                        "Thank you for your patience.<br>" +
+                        "Unfortunately, there are not enough participants in " +
+                        "your group to start the experiment.<br>";
                 }
                 else if (data.over === "Time elapsed!!!") {
                     if (data.nPlayers && data.nPlayers < this.POOL_SIZE) {
@@ -7765,17 +7765,19 @@
                     }
                 }
                 else if (data.over === 'Not selected') {
-                    timeOut  = '<h3 align="center"><span style="color: red"> You were ' +
+                    timeOut  = '<h3 align="center">' +
+                        '<span style="color: red"> You were ' +
                         '<strong>not selected</strong> to start the game.' +
                         'Thank you for your participation.' +
                         '</span><br><br>';
                 }
                 // Too much time passed, but no message from server received.
                 else {
-                    timeOut = "<h3 align='center'>An error has occurred. You seem to be ";
-                    timeOut += "waiting for too long. Please look for a HIT called ";
-                    timeOut += "<strong>ETH Descil Trouble Ticket</strong> and file ";
-                    timeOut += "a new trouble ticket reporting your experience.";
+                    timeOut = "<h3 align='center'>" +
+                        "An error has occurred. You seem to be ";
+                        "waiting for too long. Please look for a HIT called " +
+                        "<strong>ETH Descil Trouble Ticket</strong> and file " +
+                        "a new trouble ticket reporting your experience.";
                 }
 
                 if (data.exit) {
@@ -7914,7 +7916,8 @@
      */
     WaitingRoom.prototype.updateDisplay = function() {
         if (this.connected > this.poolSize) {
-            this.playerCount.innerHTML = '<span style="color:red">' + this.connected + '</span>' + ' / ' + this.poolSize;
+            this.playerCount.innerHTML = '<span style="color:red">' +
+                this.connected + '</span>' + ' / ' + this.poolSize;
             this.playerCountTooHigh.style.display = '';
             this.playerCountTooHigh.innerHTML = 'There are more players in ' +
                 'this waiting room than there are playslots in the game. ' +
