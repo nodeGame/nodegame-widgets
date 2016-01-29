@@ -492,7 +492,7 @@
     // ## Helper methods
 
     function timeIsUp(data) {
-        var disconnect;
+        var disconnect, timeout;
         console.log('TIME IS UP!');
 
         if (this.alreadyTimeUp) return;
@@ -507,15 +507,17 @@
 
         if (data.over === 'Not selected') {
              disconnect = this.disconnectOnNotSelected;
+             timeout = true;
         }
 
         if (data.over === 'Time elapsed, disconnect') {
             disconnect = true;
+            timeout = true;
         }
         if (disconnect) {
             node.socket.disconnect();
-            if (this.onTimeout) this.onTimeout(data);
         }
+        if (timeout && this.onTimeout) this.onTimeout(data);
     }
 
 })(node);

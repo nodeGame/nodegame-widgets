@@ -1192,7 +1192,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
         <td class="code highlight"><div class="highlight"><pre>
 
     <span class="kd">function</span> <span class="nx">timeIsUp</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">disconnect</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">disconnect</span><span class="p">,</span> <span class="nx">timeout</span><span class="p">;</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;TIME IS UP!&#39;</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">alreadyTimeUp</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
@@ -1218,15 +1218,17 @@ if (timeCheck) clearInterval(timeCheck);</p>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">over</span> <span class="o">===</span> <span class="s1">&#39;Not selected&#39;</span><span class="p">)</span> <span class="p">{</span>
              <span class="nx">disconnect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">disconnectOnNotSelected</span><span class="p">;</span>
+             <span class="nx">timeout</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">over</span> <span class="o">===</span> <span class="s1">&#39;Time elapsed, disconnect&#39;</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">disconnect</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">timeout</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">disconnect</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
         <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">timeout</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
     <span class="p">}</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
