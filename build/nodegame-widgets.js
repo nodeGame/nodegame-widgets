@@ -3055,10 +3055,7 @@
         var that, ee;
 
         that = this;
-
-        // Should get the game ?
-
-        ee = node.getCurrentEventEmitter();
+        ee = node.events.game;
 
         ee.on('STEP_CALLBACK_EXECUTED', function() {
             that.updateAll();
@@ -3068,7 +3065,7 @@
             that.updateAll();
         });
 
-        ee.on('SOCKET_DICONNECT', function() {
+        ee.on('SOCKET_DISCONNECT', function() {
             that.updateAll();
         });
 
@@ -8085,7 +8082,7 @@
         if (disconnect) {
             node.socket.disconnect();
         }
-	if (timeout && this.onTimeout) this.onTimeout(data);
+        if (timeout && this.onTimeout) this.onTimeout(data);
     }
 
 })(node);
