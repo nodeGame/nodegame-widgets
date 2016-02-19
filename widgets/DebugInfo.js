@@ -126,10 +126,7 @@
         var that, ee;
 
         that = this;
-
-        // Should get the game ?
-
-        ee = node.getCurrentEventEmitter();
+        ee = node.events.game;
 
         ee.on('STEP_CALLBACK_EXECUTED', function() {
             that.updateAll();
@@ -139,7 +136,7 @@
             that.updateAll();
         });
 
-        ee.on('SOCKET_DICONNECT', function() {
+        ee.on('SOCKET_DISCONNECT', function() {
             that.updateAll();
         });
 
