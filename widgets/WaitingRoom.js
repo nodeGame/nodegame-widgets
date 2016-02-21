@@ -59,11 +59,11 @@
         this.groupSize = 0;
 
         /**
-         * ### WaitingRoom.maxWaitTime
+         * ### WaitingRoom.waitTime
          *
          * The time in milliseconds for the timeout to expire
          */
-        this.maxWaitTime = null;
+        this.waitTime = null;
 
         /**
          * ### WaitingRoom.startDate
@@ -169,7 +169,7 @@
      *   - onComplete: function executed with either failure or success
      *   - onTimeout: function executed when at least one test fails
      *   - onSuccess: function executed when all tests succeed
-     *   - maxWaitTime: max waiting time to execute all tests (in milliseconds)
+     *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *
      * @param {object} conf Configuration object.
      */
@@ -228,14 +228,14 @@
                 this.bodyDiv.innerHTML = timeOut;
             };
         }
-        if (conf.maxWaitTime) {
-            if (null !== conf.maxWaitTime &&
-                'number' !== typeof conf.maxWaitTime) {
+        if (conf.waitTime) {
+            if (null !== conf.waitTime &&
+                'number' !== typeof conf.waitTime) {
 
                 throw new TypeError('WaitingRoom.init: conf.onMaxExecTime ' +
                                     'must be number, null or undefined.');
             }
-            this.maxWaitTime = conf.maxWaitTime;
+            this.waitTime = conf.waitTime;
             this.startTimer();
         }
         // TODO: check conditions?
@@ -301,7 +301,7 @@
      */
     WaitingRoom.prototype.startTimer = function() {
         if (this.timer) return;
-        if (!this.maxWaitTime) return;
+        if (!this.waitTime) return;
         if (!this.timerDiv) {
             this.timerDiv = document.createElement('div');
             this.timerDiv.id = 'timer-div';
@@ -310,7 +310,7 @@
             'Maximum Waiting Time: '
         ));
         this.timer = node.widgets.append('VisualTimer', this.timerDiv, {
-            milliseconds: this.maxWaitTime,
+            milliseconds: this.waitTime,
             timeup: this.onTimeup,
             update: 1000
         });
@@ -408,7 +408,7 @@
         if (this.startDate) {
             this.setStartDate(this.startDate);
         }
-        if (this.maxWaitTime) {
+        if (this.waitTime) {
             this.startTimer();
         }
 
