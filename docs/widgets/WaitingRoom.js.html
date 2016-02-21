@@ -76,7 +76,7 @@
         <a href="#waitingroom.disconnectmessage">WaitingRoom.disconnectMessage</a>
       </div>
       <div class="heading h3">
-        <a href="#waitingroom.disconnectonnotconnected">WaitingRoom.disconnectOnNotConnected</a>
+        <a href="#waitingroom.disconnectifnotselected">WaitingRoom.disconnectIfNotSelected</a>
       </div>
       <div class="heading h2">
         <a href="#waitingroom%20methods">WaitingRoom methods</a>
@@ -563,10 +563,10 @@ is disconnected.</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="waitingroom.disconnectonnotconnected">
+<div class="pilwrap" id="waitingroom.disconnectifnotselected">
   <h3>
-    <a href="#waitingroom.disconnectonnotconnected" name="waitingroom.disconnectonnotconnected" class="pilcrow">&#182;</a>
-    WaitingRoom.disconnectOnNotConnected
+    <a href="#waitingroom.disconnectifnotselected" name="waitingroom.disconnectifnotselected" class="pilcrow">&#182;</a>
+    WaitingRoom.disconnectIfNotSelected
   </h3>
 </div>
 
@@ -576,7 +576,7 @@ is disconnected.</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
 
 
@@ -782,16 +782,16 @@ is disconnected.</p>
                 <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectOnNotSelected</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectOnNotSelected</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;conf.disconnectOnNotSelected must be boolean or &#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;conf.disconnectIfNotSelected must be boolean or &#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectOnNotSelected</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectOnNotSelected</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectOnNotSelected</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="p">}</span>
 
     <span class="p">};</span>
@@ -1217,7 +1217,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
         <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">over</span> <span class="o">===</span> <span class="s1">&#39;AllPlayersConnected&#39;</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">over</span> <span class="o">===</span> <span class="s1">&#39;Not selected&#39;</span><span class="p">)</span> <span class="p">{</span>
-             <span class="nx">disconnect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">disconnectOnNotSelected</span><span class="p">;</span>
+             <span class="nx">disconnect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">;</span>
              <span class="nx">timeout</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">}</span>
 

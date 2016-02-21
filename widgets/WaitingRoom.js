@@ -150,11 +150,11 @@
         this.disconnectMessage = null;
 
         /**
-         * ### WaitingRoom.disconnectOnNotConnected
+         * ### WaitingRoom.disconnectIfNotSelected
          *
          * Flag that indicates whether to disconnect an not selected player
          */
-        this.disconnectMessage = null;
+        this.disconnectIfNotSelected = null;
     }
 
     // ## WaitingRoom methods
@@ -279,16 +279,16 @@
                 '</span><br><br>';
         }
 
-        if (conf.disconnectOnNotSelected) {
-            if ('boolean' !== typeof conf.disconnectOnNotSelected) {
+        if (conf.disconnectIfNotSelected) {
+            if ('boolean' !== typeof conf.disconnectIfNotSelected) {
                 throw new TypeError('WaitingRoom.init: ' +
-                    'conf.disconnectOnNotSelected must be boolean or ' +
+                    'conf.disconnectIfNotSelected must be boolean or ' +
                     'undefined.');
             }
-            this.disconnectOnNotSelected = conf.disconnectOnNotSelected;
+            this.disconnectIfNotSelected = conf.disconnectIfNotSelected;
         }
         else {
-            this.disconnectOnNotSelected = false;
+            this.disconnectIfNotSelected = false;
         }
 
     };
@@ -506,7 +506,7 @@
         if (data.over === 'AllPlayersConnected') return;
 
         if (data.over === 'Not selected') {
-             disconnect = this.disconnectOnNotSelected;
+             disconnect = this.disconnectIfNotSelected;
              timeout = true;
         }
 
