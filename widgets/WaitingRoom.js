@@ -506,8 +506,13 @@
         if (data.over === 'AllPlayersConnected') return;
 
         if (data.over === 'Not selected') {
-             disconnect = this.disconnectIfNotSelected;
-             timeout = true;
+            if (false === data.isDispatchable) {
+                disconnect = true;
+            }
+            else {
+                disconnect = this.disconnectIfNotSelected;
+            }
+            timeout = true;
         }
 
         if (data.over === 'Time elapsed, disconnect') {
