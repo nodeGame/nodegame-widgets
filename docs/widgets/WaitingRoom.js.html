@@ -769,12 +769,13 @@ is disconnected.</p>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">;</span>
         <span class="p">}</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
                         <span class="s1">&#39;conf.disconnectMessage must be string or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectMessage</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt;You have been &#39;</span> <span class="o">+</span>
@@ -1134,7 +1135,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
 <p>Write about disconnection in page.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">;</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">;</span>
 
 
 </pre></div>
@@ -1156,6 +1157,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="p">});</span>
+
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ROOM_CLOSED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
              <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt; The waiting &#39;</span> <span class="o">+</span>
                 <span class="s1">&#39;room is &lt;strong&gt;CLOSED&lt;/strong&gt;. You have been disconnected.&#39;</span> <span class="o">+</span>

@@ -266,12 +266,13 @@
             }
             this.connected = conf.connected;
         }
+
         if (conf.disconnectMessage) {
             if ('string' !== typeof conf.disconnectMessage) {
                 throw new TypeError('WaitingRoom.init: ' +
                         'conf.disconnectMessage must be string or undefined.');
             }
-            this.disconnectMessage = conf.disconnectMessage
+            this.disconnectMessage = conf.disconnectMessage;
         }
         else {
             this.disconnectMessage = '<span style="color: red">You have been ' +
@@ -463,13 +464,14 @@
             }
 
             // Write about disconnection in page.
-            that.bodyDiv.innerHTML = this.disconnectMessage;
+            that.bodyDiv.innerHTML = that.disconnectMessage;
 
 //             // Enough to not display it in case of page refresh.
 //             setTimeout(function() {
 //                 alert('Disconnection from server detected!');
 //             }, 200);
         });
+
         node.on.data('ROOM_CLOSED', function() {
              this.disconnectMessage = '<span style="color: red"> The waiting ' +
                 'room is <strong>CLOSED</strong>. You have been disconnected.' +
