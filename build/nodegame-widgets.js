@@ -7693,18 +7693,12 @@
         this.dots = null;
 
         /**
-         * ### WaitingRoom.ontTimeout
+         * ### WaitingRoom.onTimeout
          *
          * Callback to be executed if the timer expires
          */
         this.onTimeout = null;
 
-        /**
-         * ### WaitingRoom.onTimeout
-         *
-         * TRUE if the timer expired
-         */
-        this.alreadyTimeUp = null;
 
         /**
          * ### WaitingRoom.disconnectMessage
@@ -7732,7 +7726,7 @@
      * Available options:
      *
      *   - onComplete: function executed with either failure or success
-     *   - onTimeout: function executed when at least one test fails
+     *   - onTimeout: function executed when timer runs out
      *   - onSuccess: function executed when all tests succeed
      *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *
@@ -7748,50 +7742,6 @@
                                     'be function, null or undefined.');
             }
             this.onTimeout = conf.onTimeout;
-        }
-        else {
-            // Default onTimeout?
-            this.onTimeout = function(data) {
-                var timeOut;
-                // Enough Time passed, not enough players connected.
-                if (data.over === 'Time elapsed, disconnect') {
-                    timeOut = "<h3 align='center'>" +
-                        "Thank you for your patience.<br>" +
-                        "Unfortunately, there are not enough participants in " +
-                        "your group to start the experiment.<br>";
-                }
-                else if (data.over === "Time elapsed!!!") {
-                    if (data.nPlayers && data.nPlayers < this.POOL_SIZE) {
-                        return; // Text here?
-                    }
-                    else {
-                        return;
-                    }
-                }
-                else if (data.over === 'Not selected') {
-                    timeOut  = '<h3 align="center">' +
-                        '<span style="color: red"> You were ' +
-                        '<strong>not selected</strong> to start the game.' +
-                        'Thank you for your participation.' +
-                        '</span><br><br>';
-                }
-                // Too much time passed, but no message from server received.
-                else {
-                    timeOut = "<h3 align='center'>" +
-                        "An error has occurred. You seem to be ";
-                        "waiting for too long. Please look for a HIT called " +
-                        "<strong>ETH Descil Trouble Ticket</strong> and file " +
-                        "a new trouble ticket reporting your experience.";
-                }
-
-                if (data.exit) {
-                    timeOut += "<br>Please report this exit code: " + data.exit;
-                }
-
-                timeOut += "<br></h3>";
-
-                this.bodyDiv.innerHTML = timeOut;
-            };
         }
         if (conf.waitTime) {
             if (null !== conf.waitTime &&
@@ -7866,6 +7816,7 @@
      *
      */
     WaitingRoom.prototype.startTimer = function() {
+        var that = this;
         if (this.timer) return;
         if (!this.waitTime) return;
         if (!this.timerDiv) {
@@ -7877,7 +7828,12 @@
         ));
         this.timer = node.widgets.append('VisualTimer', this.timerDiv, {
             milliseconds: this.waitTime,
-            timeup: this.onTimeup,
+            timeup: function() {
+                that.bodyDiv.innerHTML = 
+                    "waiting for too long. Please look for a HIT called " +
+                    "<strong>ETH Descil Trouble Ticket</strong> and file" +
+                    " a new trouble ticket reporting your experience.";
+            },
             update: 1000
         });
         // Style up: delete title and border;
@@ -8003,8 +7959,50 @@
             that.updateDisplay();
         });
 
+        node.on.data('DISPATCH', function(msg) {
+            var data, reportExitCode;
+            msg = msg || {};
+            data = msg.data || {}; 
+
+            reportExitCode = '<br>You have been disconnected. ' + 
+                'Please report this exit code: ' + 
+                data.exit + '<br></h3>';
+
+            if (data.action === 'AllPlayersConnected') {
+                that.alertPlayer();
+            }
+
+            else if (data.action === 'NotEnoughPlayers') {
+                that.bodyDiv.innerHTML = "<h3 align='center'>" +
+                    "Thank you for your patience.<br>" +
+                    "Unfortunately, there are not enough participants in " +
+                    "your group to start the experiment.<br>"; 
+
+                that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+            }
+
+            else if (data.action === 'NotSelected') {
+                that.bodyDiv.innerHTML = '<h3 align="center">' +
+                    '<span style="color: red"> You were ' +
+                    '<strong>not selected</strong> to start the game.' +
+                    'Thank you for your participation.' +
+                    '</span><br><br>';
+                if (false === data.isDispatchable 
+                    || that.disconnectIfNotSelected) {
+                    that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                }
+            }
+
+            else if (data.action === 'Disconnect') {
+                that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+            }
+        });
+
         node.on.data('TIME', function(msg) {
-            timeIsUp.call(that, msg.data);
+            msg = msg || {};
+            console.log('TIME IS UP!');
+            that.stopTimer();
+            if (this.onTimeout) this.onTimeout(msg.data);
         });
 
 
@@ -8020,13 +8018,9 @@
         });
 
         node.on('SOCKET_DISCONNECT', function() {
-            if (that.alreadyTimeUp) return;
 
             // Terminate countdown.
-            if (that.timer) {
-                that.timer.stop();
-                that.timer.destroy();
-            }
+            that.stopTimer();
 
             // Write about disconnection in page.
             that.bodyDiv.innerHTML = that.disconnectMessage;
@@ -8038,11 +8032,10 @@
         });
 
         node.on.data('ROOM_CLOSED', function() {
-             this.disconnectMessage = '<span style="color: red"> The waiting ' +
+            that.disconnect('<span style="color: red"> The waiting ' +
                 'room is <strong>CLOSED</strong>. You have been disconnected.' +
                 ' Please try again later.' +
-                '</span><br><br>';
-            node.socket.disconnect();
+                '</span><br><br>');
         });
     };
 
@@ -8050,6 +8043,27 @@
         this.startDate = new Date(startDate).toString();
         this.startDateDiv.innerHTML = "Game starts at: <br>" + this.startDate;
         this.startDateDiv.style.display = '';
+    };
+    
+    WaitingRoom.prototype.stopTimer = function() {
+        if (this.timer) {
+            console.log('STOPPING TIMER');
+            this.timer.stop();
+            this.timer.destroy();
+            if (this.onTimeout) {
+                this.onTimeout();
+            }
+        }
+    };
+
+    WaitingRoom.prototype.disconnect = function(msg) {
+        if (msg) this.disconnectMessage = msg;
+        node.socket.disconnect();
+    };
+
+    WaitingRoom.prototype.alertPlayer = function() {
+        JSUS.playSound('doorbell.ogg');
+        JSUS.changeTitle('GAME STARTS!');
     };
 
     WaitingRoom.prototype.destroy = function() {
@@ -8059,37 +8073,6 @@
     // ## Helper methods
 
     function timeIsUp(data) {
-        var disconnect, timeout;
-        console.log('TIME IS UP!');
-
-        if (this.alreadyTimeUp) return;
-        this.alreadyTimeUp = true;
-        if (this.timer) this.timer.stop();
-
-
-        data = data || {};
-
-        // All players have connected. Game starts.
-        if (data.over === 'AllPlayersConnected') return;
-
-        if (data.over === 'Not selected') {
-            if (false === data.isDispatchable) {
-                disconnect = true;
-            }
-            else {
-                disconnect = this.disconnectIfNotSelected;
-            }
-            timeout = true;
-        }
-
-        if (data.over === 'Time elapsed, disconnect') {
-            disconnect = true;
-            timeout = true;
-        }
-        if (disconnect) {
-            node.socket.disconnect();
-        }
-        if (timeout && this.onTimeout) this.onTimeout(data);
     }
 
 })(node);
