@@ -8050,9 +8050,6 @@
             console.log('STOPPING TIMER');
             this.timer.stop();
             this.timer.destroy();
-            if (this.onTimeout) {
-                this.onTimeout();
-            }
         }
     };
 
