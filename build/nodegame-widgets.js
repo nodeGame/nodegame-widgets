@@ -7830,7 +7830,7 @@
             milliseconds: this.waitTime,
             timeup: function() {
                 that.bodyDiv.innerHTML = 
-                    "waiting for too long. Please look for a HIT called " +
+                    "Waiting for too long. Please look for a HIT called " +
                     "<strong>ETH Descil Trouble Ticket</strong> and file" +
                     " a new trouble ticket reporting your experience.";
             },
@@ -8063,7 +8063,7 @@
 
     WaitingRoom.prototype.alertPlayer = function() {
         JSUS.playSound('doorbell.ogg');
-        JSUS.changeTitle('GAME STARTS!');
+        JSUS.blinkTitle(document.title, 'GAME STARTS!', {stopOnFocus: true});
     };
 
     WaitingRoom.prototype.destroy = function() {
