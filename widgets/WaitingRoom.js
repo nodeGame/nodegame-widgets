@@ -213,7 +213,7 @@
                 // Too much time passed, but no message from server received.
                 else {
                     timeOut = "<h3 align='center'>" +
-                        "An error has occurred. You seem to be ";
+                        "An error has occurred. You seem to be " + 
                         "waiting for too long. Please look for a HIT called " +
                         "<strong>ETH Descil Trouble Ticket</strong> and file " +
                         "a new trouble ticket reporting your experience.";
@@ -513,6 +513,8 @@
             }
             else {
                 disconnect = this.disconnectIfNotSelected;
+                console.log('Warning. There are more players than available' + 
+                ' seats in the game. Some players will be disconnected.');
             }
             timeout = true;
         }

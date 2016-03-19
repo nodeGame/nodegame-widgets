@@ -1224,6 +1224,8 @@ if (timeCheck) clearInterval(timeCheck);</p>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
                 <span class="nx">disconnect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">;</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Warning. There are more players than available&#39;</span>
+                <span class="s1">&#39; seats in the game. Some players will be disconnected.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="nx">timeout</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">}</span>
