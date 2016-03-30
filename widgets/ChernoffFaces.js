@@ -1,9 +1,9 @@
 /**
  * # ChernoffFaces
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
- * Displays multidimensional data in the shape of a Chernoff Face
+ * Displays multidimensional data in the shape of a Chernoff Face.
  *
  * www.nodegame.org
  */
@@ -122,7 +122,7 @@
                 node.on(options.change, this.changeFunc);
             }
             else {
-                node.removeListener(this.change, this.changeFunc);
+                node.off(this.change, this.changeFunc);
             }
             this.change = options.change;
         }
@@ -223,12 +223,12 @@
 
     // TODO: Improve. It eats a bit of the margins
     FacePainter.prototype.fit2Canvas = function(face) {
+        var ratio;
         if (!this.canvas) {
             console.log('No canvas found');
             return;
         }
 
-        var ratio;
         if (this.canvas.width > this.canvas.height) {
             ratio = this.canvas.width / face.head_radius * face.head_scale_x;
         }
