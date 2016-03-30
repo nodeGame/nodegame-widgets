@@ -631,20 +631,6 @@ The widget is also automatically removed from parent.</p>
             <span class="p">}</span>
         <span class="p">};</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
-</div>
-<p>User listeners.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">widget</span><span class="p">);</span>
-
         <span class="k">return</span> <span class="nx">widget</span><span class="p">;</span>
     <span class="p">};</span>
 
@@ -732,7 +718,7 @@ conditions are not met.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Init default values.</p>
         </td>
@@ -747,7 +733,7 @@ conditions are not met.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Check if it is a object (new widget)
 If it is a string is the name of an existing widget
@@ -771,7 +757,7 @@ In this case a dependencies check is done</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Optionally add title.</p>
         </td>
@@ -787,7 +773,7 @@ In this case a dependencies check is done</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Add body.</p>
         </td>
@@ -803,7 +789,7 @@ In this case a dependencies check is done</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Optionally add footer.</p>
         </td>
@@ -819,7 +805,7 @@ In this case a dependencies check is done</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Optionally set context.</p>
         </td>
@@ -827,6 +813,20 @@ In this case a dependencies check is done</p>
         <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">w</span><span class="p">.</span><span class="nx">setContext</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">);</span>
         <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+</div>
+<p>User listeners.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
 
         <span class="nx">w</span><span class="p">.</span><span class="nx">append</span><span class="p">();</span>
 
@@ -1012,22 +1012,19 @@ and each call to destroy modify the array of instances.</p>
 
     <span class="kd">function</span> <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">w</span> <span class="o">||</span> <span class="o">!</span><span class="nx">e</span> <span class="o">||</span> <span class="o">!</span><span class="nx">l</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">[</span><span class="nx">e</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">l</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
-        <span class="p">};</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">[</span><span class="nx">e</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">l</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span> <span class="p">};</span>
     <span class="p">}</span>
 
-    <span class="kd">function</span> <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">events</span><span class="p">,</span> <span class="nx">isEvent</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span> <span class="o">||</span> <span class="o">!</span><span class="nx">w</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="nx">isEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="nx">events</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;onclick&#39;</span><span class="p">,</span> <span class="s1">&#39;onfocus&#39;</span><span class="p">,</span> <span class="s1">&#39;onblur&#39;</span><span class="p">,</span> <span class="s1">&#39;onchange&#39;</span><span class="p">,</span>
                   <span class="s1">&#39;onsubmit&#39;</span><span class="p">,</span> <span class="s1">&#39;onload&#39;</span><span class="p">,</span> <span class="s1">&#39;onunload&#39;</span><span class="p">,</span> <span class="s1">&#39;onmouseover&#39;</span><span class="p">];</span>
-        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="p">{</span>
                 <span class="nx">isEvent</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">inArray</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">events</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">isEvent</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
-                    <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">isEvent</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
