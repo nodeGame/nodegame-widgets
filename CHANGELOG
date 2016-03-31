@@ -1,5 +1,10 @@
 # nodegame-widgets change log
 
+## 0.7.1
+
+- Improved ChernoffFaces.
+- Added option totStageOffset for VisualRound.
+
 ## 0.7.0
 
 - Improved Requirements widget. Some functions are moved into separate repo (nodegame-requirements).
