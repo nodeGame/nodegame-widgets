@@ -900,6 +900,7 @@
 
         // ### ChernoffFaces.fp
         // The object generating the Chernoff faces
+        // @see FacePainter
         this.fp = null;
 
         // ### ChernoffFaces.canvas
@@ -920,10 +921,6 @@
         // The object containing all the features to draw Chernoff faces
         this.features = null;
 
-        // ### ChernoffFaces.controls
-        // Flag to determine whether the slider controls should be shown.
-        this.controls = null;
-
         // Init.
         this.init(this.options);
     }
@@ -931,13 +928,7 @@
     ChernoffFaces.prototype.init = function(options) {
         var controlsOptions, f;
 
-        this.features = options.features || this.features ||
-                        FaceVector.random();
-
-        this.controls = 'undefined' !== typeof options.controls ?
-            options.controls : true;
-
-        // Set canvas options.
+        // Canvas.
         if (!options.canvas) {
             options.canvas = {};
             if ('undefined' !== typeof options.height) {
@@ -947,13 +938,17 @@
                 options.canvas.width = options.width;
             }
         }
-
         this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
 
+        // Face Painter.
+        this.features = options.features || this.features ||
+                        FaceVector.random();
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
-        if (this.controls) {
+        // Controls.
+        if ('undefined' === typeof options.controls || options.controls) {
+            // Sc options.
             f = J.mergeOnKey(FaceVector.defaults, this.features, 'value');
             controlsOptions = {
                 id: 'cf_controls',
@@ -961,15 +956,13 @@
                 change: this.change,
                 submit: 'Send'
             };
-
+            // Create them.
             this.sc = node.widgets.get('SliderControls', controlsOptions);
-
-            // Controls are always there, but may not be visible
-            if (this.controls) this.table.add(this.sc);
+            // Add them to table.
+            this.table.add(this.sc);
         }
 
-        // TODO: need to check what to remove first.
-        // Dealing with the onchange event
+        // Change Event. You might have change event without sliders.
         if ('undefined' === typeof options.change) {
             node.on(this.change, this.changeFunc);
         }
@@ -983,11 +976,8 @@
             this.change = options.change;
         }
 
-
-        this.someDiv = document.createElement('div');
-        this.someDiv.appendChild(this.table.table);
-
-
+        // this.someDiv = document.createElement('div');
+        // this.someDiv.appendChild(this.table.table);
         this.table.add(this.canvas);
         this.table.parse();
     };
@@ -997,8 +987,8 @@
     };
 
     ChernoffFaces.prototype.append = function() {
-        this.bodyDiv.appendChild(this.someDiv);
         this.table.parse();
+        this.bodyDiv.appendChild(this.table.table);
     };
 
     ChernoffFaces.prototype.draw = function(features) {
