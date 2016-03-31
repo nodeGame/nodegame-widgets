@@ -39,7 +39,7 @@
     ChernoffFaces.width = 100;
     ChernoffFaces.height = 100;
 
-    function ChernoffFaces (options) {
+    function ChernoffFaces(options) {
         var that = this;
 
         // ## Public Properties
@@ -94,6 +94,17 @@
 
         this.controls = 'undefined' !== typeof options.controls ?
             options.controls : true;
+
+        // Set canvas options.
+        if (!options.canvas) {
+            options.canvas = {};
+            if ('undefined' !== typeof options.height) {
+                options.canvas.height = options.height;
+            }
+            if ('undefined' !== typeof options.width) {
+                options.canvas.width = options.width;
+            }
+        }
 
         this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
 
@@ -178,7 +189,7 @@
 
     // # FacePainter
     // The class that actually draws the faces on the Canvas.
-    function FacePainter (canvas, settings) {
+    function FacePainter(canvas, settings) {
 
         this.canvas = new W.Canvas(canvas);
 

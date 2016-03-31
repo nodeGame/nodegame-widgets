@@ -352,9 +352,6 @@
             }
         };
 
-        // User listeners.
-        attachListeners(options, widget);
-
         return widget;
     };
 
@@ -433,6 +430,9 @@
         if (w.context) {
             w.setContext(w.context);
         }
+
+        // User listeners.
+        attachListeners(w);
 
         w.append();
 
@@ -519,22 +519,19 @@
 
     function createListenerFunction(w, e, l) {
         if (!w || !e || !l) return;
-        w.panelDiv[e] = function() {
-            l.call(w);
-        };
+        w.panelDiv[e] = function() { l.call(w); };
     }
 
-    function attachListeners(options, w) {
+    function attachListeners(w) {
         var events, isEvent, i;
-        if (!options || !w) return;
         isEvent = false;
         events = ['onclick', 'onfocus', 'onblur', 'onchange',
                   'onsubmit', 'onload', 'onunload', 'onmouseover'];
-        for (i in options) {
-            if (options.hasOwnProperty(i)) {
+        for (i in w.options) {
+            if (w.options.hasOwnProperty(i)) {
                 isEvent = J.inArray(i, events);
-                if (isEvent && 'function' === typeof options[i]) {
-                    createListenerFunction(w, i, options[i]);
+                if (isEvent && 'function' === typeof w.options[i]) {
+                    createListenerFunction(w, i, w.options[i]);
                 }
             }
         }
@@ -884,7 +881,7 @@
     ChernoffFaces.width = 100;
     ChernoffFaces.height = 100;
 
-    function ChernoffFaces (options) {
+    function ChernoffFaces(options) {
         var that = this;
 
         // ## Public Properties
@@ -939,6 +936,17 @@
 
         this.controls = 'undefined' !== typeof options.controls ?
             options.controls : true;
+
+        // Set canvas options.
+        if (!options.canvas) {
+            options.canvas = {};
+            if ('undefined' !== typeof options.height) {
+                options.canvas.height = options.height;
+            }
+            if ('undefined' !== typeof options.width) {
+                options.canvas.width = options.width;
+            }
+        }
 
         this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
 
@@ -1023,7 +1031,7 @@
 
     // # FacePainter
     // The class that actually draws the faces on the Canvas.
-    function FacePainter (canvas, settings) {
+    function FacePainter(canvas, settings) {
 
         this.canvas = new W.Canvas(canvas);
 
