@@ -286,10 +286,15 @@
         // Re-inject defaults.
         widget.defaults = options;
 
-        widget.title = WidgetPrototype.title;
-        widget.footer = WidgetPrototype.footer;
-        widget.className = WidgetPrototype.className;
-        widget.context = WidgetPrototype.context;
+        // Set prototype values or options values.
+        widget.title = 'undefined' === typeof options.title ?
+            WidgetPrototype.title : options.title;
+        widget.footer = 'undefined' === typeof options.footer ?
+            WidgetPrototype.footer : options.footer;
+        widget.className = 'undefined' === typeof options.className ?
+            WidgetPrototype.className : options.className;
+        widget.context = 'undefined' === typeof options.context ?
+            WidgetPrototype.context : options.context;
 
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
@@ -858,10 +863,9 @@
 
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
-
     // ## Meta-data
 
-    ChernoffFaces.version = '0.3.1';
+    ChernoffFaces.version = '0.5.1';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -897,6 +901,8 @@
 
         // ### ChernoffFaces.sc
         // The slider controls of the interface
+        // Can be set manually via options.controls.
+        // @see SliderControls
         this.sc = null;
 
         // ### ChernoffFaces.fp
@@ -909,12 +915,11 @@
         this.canvas = null;
 
         // ### ChernoffFaces.onChange
-        // Variable containing the name of the event to emit to
-        // update the canvas, or falsy to disable it.
+        // Name of the event to emit to update the canvas (falsy disabled)
         this.onChange = null;
 
         // ### ChernoffFaces.onChangeCb
-        // Updates the canvas when the onChange event is emitted.
+        // Updates the canvas when the onChange event is emitted
         this.onChangeCb = function(f) {
             // Draw what passed as parameter,
             // or what is the current value of sliders,
@@ -978,21 +983,18 @@
             };
             // Create them.
             if ('object' === typeof options.controls) {
-		this.sc = options.controls;
-	    }
-	    else {
+                this.sc = options.controls;
+            }
+            else {
                 this.sc = node.widgets.get('SliderControls', controlsOptions);
             }
             // Add them to table.
             this.table.add(this.sc);
         }
 
-        // this.someDiv = document.createElement('div');
-        // this.someDiv.appendChild(this.table.table);
+        // Table.
         this.table.add(this.canvas);
         this.table.parse();
-
-        this.state = 'inited';
     };
 
     ChernoffFaces.prototype.getCanvas = function() {
