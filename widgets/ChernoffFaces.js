@@ -54,7 +54,7 @@
 
         // ### ChernoffFaces.sc
         // The slider controls of the interface
-        this.sc = node.widgets.get('SliderControls');
+        this.sc = null;
 
         // ### ChernoffFaces.fp
         // The object generating the Chernoff faces
@@ -87,7 +87,7 @@
     }
 
     ChernoffFaces.prototype.init = function(options) {
-        var controlsOptions;
+        var controlsOptions, f;
 
         this.features = options.features || this.features ||
                         FaceVector.random();
@@ -111,17 +111,20 @@
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
-        controlsOptions = {
-            id: 'cf_controls',
-            features: J.mergeOnKey(FaceVector.defaults, this.features, 'value'),
-            change: this.change,
-            submit: 'Send'
-        };
+        if (this.controls) {
+            f = J.mergeOnKey(FaceVector.defaults, this.features, 'value');
+            controlsOptions = {
+                id: 'cf_controls',
+                features: f,
+                change: this.change,
+                submit: 'Send'
+            };
 
-        this.sc = node.widgets.get('SliderControls', controlsOptions);
+            this.sc = node.widgets.get('SliderControls', controlsOptions);
 
-        // Controls are always there, but may not be visible
-        if (this.controls) this.table.add(this.sc);
+            // Controls are always there, but may not be visible
+            if (this.controls) this.table.add(this.sc);
+        }
 
         // TODO: need to check what to remove first.
         // Dealing with the onchange event
@@ -160,29 +163,30 @@
         if (!features) return;
         var fv = new FaceVector(features);
         this.fp.redraw(fv);
-        // Without merging wrong values are passed as attributes
-        this.sc.init({
-            features: J.mergeOnKey(FaceVector.defaults, features, 'value')
-        });
-        this.sc.refresh();
+        if (this.sc) {
+            // Without merging wrong values are passed as attributes.
+            this.sc.init({
+                features: J.mergeOnKey(FaceVector.defaults, features, 'value')
+            });
+            this.sc.refresh();
+        }
     };
 
     ChernoffFaces.prototype.getAllValues = function() {
-        //if (this.sc) return this.sc.getAllValues();
         return this.fp.face;
     };
 
     ChernoffFaces.prototype.randomize = function() {
         var fv = FaceVector.random();
         this.fp.redraw(fv);
-
-        var sc_options = {
-            features: J.mergeOnValue(FaceVector.defaults, fv),
-            change: this.change
-        };
-        this.sc.init(sc_options);
-        this.sc.refresh();
-
+        // If controls are visible, updates them.
+        if (this.sc) {
+            this.sc.init({
+                features: J.mergeOnValue(FaceVector.defaults, fv),
+                change: this.change
+            });
+            this.sc.refresh();
+        }
         return true;
     };
 

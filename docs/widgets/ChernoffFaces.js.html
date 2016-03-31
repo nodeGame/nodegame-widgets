@@ -220,7 +220,7 @@ MIT Licensed</p>
 <p>The slider controls of the interface</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SliderControls&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
 </pre></div>
@@ -354,7 +354,7 @@ MIT Licensed</p>
     <span class="p">}</span>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">controlsOptions</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">controlsOptions</span><span class="p">,</span> <span class="nx">f</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span>
                         <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
@@ -389,14 +389,16 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FacePainter</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">));</span>
 
-        <span class="nx">controlsOptions</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;cf_controls&#39;</span><span class="p">,</span>
-            <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">),</span>
-            <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span><span class="p">,</span>
-            <span class="nx">submit</span><span class="o">:</span> <span class="s1">&#39;Send&#39;</span>
-        <span class="p">};</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">controls</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">f</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">);</span>
+            <span class="nx">controlsOptions</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;cf_controls&#39;</span><span class="p">,</span>
+                <span class="nx">features</span><span class="o">:</span> <span class="nx">f</span><span class="p">,</span>
+                <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span><span class="p">,</span>
+                <span class="nx">submit</span><span class="o">:</span> <span class="s1">&#39;Send&#39;</span>
+            <span class="p">};</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SliderControls&#39;</span><span class="p">,</span> <span class="nx">controlsOptions</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SliderControls&#39;</span><span class="p">,</span> <span class="nx">controlsOptions</span><span class="p">);</span>
 
 
 </pre></div>
@@ -410,7 +412,8 @@ MIT Licensed</p>
 <p>Controls are always there, but may not be visible</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">controls</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">controls</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">);</span>
+        <span class="p">}</span>
 
 
 </pre></div>
@@ -460,6 +463,7 @@ Dealing with the onchange event</p>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">features</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">fv</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="nx">features</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">redraw</span><span class="p">(</span><span class="nx">fv</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -469,16 +473,23 @@ Dealing with the onchange event</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
-<p>Without merging wrong values are passed as attributes</p>
+<p>Without merging wrong values are passed as attributes.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-            <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
-        <span class="p">});</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">refresh</span><span class="p">();</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+                <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnKey</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">features</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+            <span class="p">});</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">refresh</span><span class="p">();</span>
+        <span class="p">}</span>
     <span class="p">};</span>
 
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">face</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">randomize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">fv</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">redraw</span><span class="p">(</span><span class="nx">fv</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -488,23 +499,16 @@ Dealing with the onchange event</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
-<p>if (this.sc) return this.sc.getAllValues();</p>
+<p>If controls are visible, updates them.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">face</span><span class="p">;</span>
-    <span class="p">};</span>
-
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">randomize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">fv</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">redraw</span><span class="p">(</span><span class="nx">fv</span><span class="p">);</span>
-
-        <span class="kd">var</span> <span class="nx">sc_options</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnValue</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">fv</span><span class="p">),</span>
-            <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span>
-        <span class="p">};</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">sc_options</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">refresh</span><span class="p">();</span>
-
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+                <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnValue</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">fv</span><span class="p">),</span>
+                <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span>
+            <span class="p">});</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">refresh</span><span class="p">();</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">};</span>
 
