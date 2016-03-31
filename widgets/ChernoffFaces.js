@@ -141,12 +141,11 @@
             else {
                 this.sc = node.widgets.get('SliderControls', controlsOptions);
             }
-            // Add them to table.
-            this.table.add(this.sc);
         }
 
         // Table.
-        this.table.add(this.canvas);
+        if (this.sc) this.table.addRow([this.sc, this.canvas]);
+        else this.table.add(this.canvas);
         this.table.parse();
     };
 
