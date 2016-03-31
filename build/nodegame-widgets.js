@@ -888,6 +888,7 @@
 
     function ChernoffFaces(options) {
         var that = this;
+        var tblOptions;
 
         // ## Public Properties
 
@@ -895,9 +896,20 @@
         // Configuration options
         this.options = options;
 
+        // Building table options.
+        tblOptions = {};
+        if ('string' === typeof options.id) tblOptions.id = options.id;
+        else if (options.id !== false) tblOptions.id = 'cf_table';
+        if ('string' === typeof options.className) {
+            tblOptions.id = options.className;
+        }
+        else if (options.className !== false) {
+            tblOptions.className = 'cf_table';
+        }
+
         // ### ChernoffFaces.table
         // The table containing everything
-        this.table = new Table({id: 'cf_table'});
+        this.table = new Table(tblOptions);
 
         // ### ChernoffFaces.sc
         // The slider controls of the interface
@@ -5656,7 +5668,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.2.1';
+    VisualRound.version = '0.5.1';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -5770,6 +5782,15 @@
         this.stageOffset = null;
 
         /**
+         * ### VisualRound.totStageOffset
+         *
+         * Total number of stages displayed minus totStageOffset
+         *
+         * If not set, and it is set equal to stageOffset
+         */
+        this.totStageOffset = null;
+
+        /**
          * ### VisualRound.oldStageId
          *
          * Stage id of the previous stage
@@ -5802,6 +5823,9 @@
         this.options = options;
 
         this.stageOffset = this.options.stageOffset || 0;
+        this.totStageOffset =
+            'undefined' === typeof this.options.totStageOffset ?
+            this.stageOffset : this.options.totStageOffset;
 
         if (this.options.flexibleMode) {
             this.curStage = this.options.curStage || 1;
@@ -6029,12 +6053,10 @@
             idseq = J.map(this.stager.sequence, function(obj){return obj.id;});
 
             // Every round has an identifier.
-            this.totStage = idseq.filter(function(obj){return obj;}).length;
+            this.totStage = this.stager.sequence.length;
             this.curRound = node.player.stage.round;
 
             if (stage) {
-                // TODO: Check the change. It was:
-                // this.curStage = idseq.indexOf(stage.id)+1;
                 this.curStage = node.player.stage.stage;
                 this.totRound = this.stager.sequence[this.curStage -1].num || 1;
             }
@@ -6042,8 +6064,8 @@
                 this.curStage = 1;
                 this.totRound = 1;
             }
-            this.totStage -= this.stageOffset;
             this.curStage -= this.stageOffset;
+            this.totStage -= this.totStageOffset;
         }
         this.updateDisplay();
     };
