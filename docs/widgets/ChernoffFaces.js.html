@@ -46,10 +46,10 @@
         <a href="#chernofffaces.canvas">ChernoffFaces.canvas</a>
       </div>
       <div class="heading h3">
-        <a href="#chernofffaces.change">ChernoffFaces.change</a>
+        <a href="#chernofffaces.onchange">ChernoffFaces.onChange</a>
       </div>
       <div class="heading h3">
-        <a href="#chernofffaces.changefunc">ChernoffFaces.changeFunc</a>
+        <a href="#chernofffaces.onchangecb">ChernoffFaces.onChangeCb</a>
       </div>
       <div class="heading h3">
         <a href="#chernofffaces.features">ChernoffFaces.features</a>
@@ -93,7 +93,6 @@ MIT Licensed</p>
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;ChernoffFaces&#39;</span><span class="p">,</span> <span class="nx">ChernoffFaces</span><span class="p">);</span>
 
 
-
 </pre></div>
         </td>
       </tr>
@@ -109,7 +108,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.1&#39;</span><span class="p">;</span>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.1&#39;</span><span class="p">;</span>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
         <span class="s1">&#39;Display parametric data in the form of a Chernoff Face.&#39;</span><span class="p">;</span>
 
@@ -142,6 +141,7 @@ MIT Licensed</p>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">FacePainter</span> <span class="o">=</span> <span class="nx">FacePainter</span><span class="p">;</span>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">onChange</span> <span class="o">=</span> <span class="s1">&#39;CF_CHANGE&#39;</span><span class="p">;</span>
 
     <span class="kd">function</span> <span class="nx">ChernoffFaces</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
@@ -214,7 +214,9 @@ MIT Licensed</p>
 </div>
 
 
-<p>The slider controls of the interface</p>
+<p>The slider controls of the interface
+Can be set manually via options.controls.
+@see SliderControls</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -264,18 +266,18 @@ MIT Licensed</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="chernofffaces.change">
+<div class="pilwrap" id="chernofffaces.onchange">
   <h3>
-    <a href="#chernofffaces.change" name="chernofffaces.change" class="pilcrow">&#182;</a>
-    ChernoffFaces.change
+    <a href="#chernofffaces.onchange" name="chernofffaces.onchange" class="pilcrow">&#182;</a>
+    ChernoffFaces.onChange
   </h3>
 </div>
 
 
-<p>The name of the event emitted when a slider is moved</p>
+<p>Name of the event to emit to update the canvas (falsy disabled)</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">change</span> <span class="o">=</span> <span class="s1">&#39;CF_CHANGE&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
 </pre></div>
@@ -283,19 +285,35 @@ MIT Licensed</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="chernofffaces.changefunc">
+<div class="pilwrap" id="chernofffaces.onchangecb">
   <h3>
-    <a href="#chernofffaces.changefunc" name="chernofffaces.changefunc" class="pilcrow">&#182;</a>
-    ChernoffFaces.changeFunc
+    <a href="#chernofffaces.onchangecb" name="chernofffaces.onchangecb" class="pilcrow">&#182;</a>
+    ChernoffFaces.onChangeCb
   </h3>
 </div>
 
 
-<p>The callback executed when a slider is moved.</p>
+<p>Updates the canvas when the onChange event is emitted</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">changeFunc</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">());</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">onChangeCb</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>Draw what passed as parameter,
+or what is the current value of sliders,
+or a random face.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">f</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">f</span><span class="p">)</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="nx">f</span><span class="p">);</span>
         <span class="p">};</span>
 
 
@@ -324,7 +342,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>Init.</p>
         </td>
@@ -342,7 +360,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>Canvas.</p>
         </td>
@@ -365,13 +383,13 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>Face Painter.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span> <span class="o">||</span>
-                        <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+            <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FacePainter</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">));</span>
 
@@ -382,7 +400,31 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>onChange event.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">onChange</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">||</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onChange</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">onChangeCb</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onChange</span> <span class="o">?</span>
+                <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">onChange</span> <span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onChange</span><span class="p">;</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">onChangeCb</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Controls.</p>
         </td>
@@ -395,7 +437,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Sc options.</p>
         </td>
@@ -404,7 +446,7 @@ MIT Licensed</p>
             <span class="nx">controlsOptions</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;cf_controls&#39;</span><span class="p">,</span>
                 <span class="nx">features</span><span class="o">:</span> <span class="nx">f</span><span class="p">,</span>
-                <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span><span class="p">,</span>
+                <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span><span class="p">,</span>
                 <span class="nx">submit</span><span class="o">:</span> <span class="s1">&#39;Send&#39;</span>
             <span class="p">};</span>
 
@@ -414,12 +456,17 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Create them.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SliderControls&#39;</span><span class="p">,</span> <span class="nx">controlsOptions</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">controls</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SliderControls&#39;</span><span class="p">,</span> <span class="nx">controlsOptions</span><span class="p">);</span>
+            <span class="p">}</span>
 
 </pre></div>
         </td>
@@ -427,7 +474,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Add them to table.</p>
         </td>
@@ -442,35 +489,9 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
-<p>Change Event. You might have change event without sliders.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">change</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">changeFunc</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">changeFunc</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">change</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">changeFunc</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">change</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">change</span><span class="p">;</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
-</div>
-<p>this.someDiv = document.createElement('div');
-this.someDiv.appendChild(this.table.table);</p>
+<p>Table.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">);</span>
@@ -498,7 +519,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Without merging wrong values are passed as attributes.</p>
         </td>
@@ -524,7 +545,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>If controls are visible, updates them.</p>
         </td>
@@ -532,7 +553,7 @@ this.someDiv.appendChild(this.table.table);</p>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
                 <span class="nx">features</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mergeOnValue</span><span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">fv</span><span class="p">),</span>
-                <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">change</span>
+                <span class="nx">change</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">onChange</span>
             <span class="p">});</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">refresh</span><span class="p">();</span>
         <span class="p">}</span>
@@ -572,7 +593,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Draws a Chernoff face.</p>
         </td>
@@ -590,7 +611,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>console.log('Face Scale ' + face.scaleY + ' ' + face.scaleX );</p>
         </td>
@@ -629,7 +650,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>TODO: Improve. It eats a bit of the margins</p>
         </td>
@@ -680,7 +701,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>console.log(face);</p>
         </td>
@@ -702,7 +723,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>console.log(face);</p>
         </td>
@@ -798,7 +819,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>this.canvas.ctx.closePath();</p>
         </td>
@@ -824,7 +845,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Upper Lip</p>
         </td>
@@ -840,7 +861,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Lower Lip</p>
         </td>
@@ -859,7 +880,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>TODO Scaling ?</p>
         </td>
@@ -873,7 +894,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>var pos = y - face.head_radius * face.scaleY +
          face.head_radius * face.scaleY * 2 * offset;</p>
@@ -887,7 +908,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>console.log('POS: ' + pos);</p>
         </td>
@@ -910,7 +931,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <div class="dox">
   <div class="summary"><p>!</p>
@@ -931,7 +952,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>Head</p>
         </td>
@@ -944,7 +965,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>id can be specified otherwise is taken head_radius</p>
         </td>
@@ -976,7 +997,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
 <p>Eye</p>
         </td>
@@ -1023,7 +1044,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>Pupil</p>
         </td>
@@ -1056,7 +1077,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
 </div>
 <p>Eyebrow</p>
         </td>
@@ -1096,7 +1117,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
 </div>
 <p>Nose</p>
         </td>
@@ -1129,7 +1150,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
 </div>
 <p>Mouth</p>
         </td>
@@ -1205,7 +1226,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
 </div>
 <p>Constructs a random face vector.</p>
         </td>
@@ -1215,7 +1236,7 @@ this.someDiv.appendChild(this.table.table);</p>
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span>
-                            <span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;lineWidth&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleX&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleY&#39;</span><span class="p">]))</span> <span class="p">{</span>
+                                <span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;lineWidth&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleX&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleY&#39;</span><span class="p">]))</span> <span class="p">{</span>
 
                     <span class="nx">out</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">min</span> <span class="o">+</span>
                         <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">max</span><span class="p">;</span>
@@ -1249,7 +1270,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 <p>Merge on key</p>
         </td>
@@ -1274,7 +1295,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
 </div>
 <p>Constructs a random face vector.</p>
         </td>
@@ -1299,7 +1320,7 @@ this.someDiv.appendChild(this.table.table);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>Computes the Euclidean distance between two FaceVectors.</p>
         </td>

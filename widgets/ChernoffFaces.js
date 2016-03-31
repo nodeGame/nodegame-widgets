@@ -16,10 +16,9 @@
 
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
-
     // ## Meta-data
 
-    ChernoffFaces.version = '0.3.1';
+    ChernoffFaces.version = '0.5.1';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -38,6 +37,7 @@
     ChernoffFaces.FacePainter = FacePainter;
     ChernoffFaces.width = 100;
     ChernoffFaces.height = 100;
+    ChernoffFaces.onChange = 'CF_CHANGE';
 
     function ChernoffFaces(options) {
         var that = this;
@@ -54,6 +54,8 @@
 
         // ### ChernoffFaces.sc
         // The slider controls of the interface
+        // Can be set manually via options.controls.
+        // @see SliderControls
         this.sc = null;
 
         // ### ChernoffFaces.fp
@@ -65,14 +67,19 @@
         // The HTMLElement canvas where the faces are created
         this.canvas = null;
 
-        // ### ChernoffFaces.change
-        // The name of the event emitted when a slider is moved
-        this.change = 'CF_CHANGE';
+        // ### ChernoffFaces.onChange
+        // Name of the event to emit to update the canvas (falsy disabled)
+        this.onChange = null;
 
-        // ### ChernoffFaces.changeFunc
-        // The callback executed when a slider is moved.
-        this.changeFunc = function() {
-            that.draw(that.sc.getAllValues());
+        // ### ChernoffFaces.onChangeCb
+        // Updates the canvas when the onChange event is emitted
+        this.onChangeCb = function(f) {
+            // Draw what passed as parameter,
+            // or what is the current value of sliders,
+            // or a random face.
+            if (!f && that.sc) f = that.sc.getAllValues();
+            if (!f) f = FaceVector.random();
+            that.draw(f);
         };
 
         // ### ChernoffFaces.features
@@ -100,9 +107,22 @@
 
         // Face Painter.
         this.features = options.features || this.features ||
-                        FaceVector.random();
+            FaceVector.random();
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
+
+        // onChange event.
+        if (options.onChange === false || options.onChange === null) {
+            if (this.onChange) {
+                node.off(this.onChange, this.onChangeCb);
+                this.onChange = null;
+            }
+        }
+        else {
+            this.onChange = 'undefined' === typeof options.onChange ?
+                ChernoffFaces.onChange : options.onChange;
+            node.on(this.onChange, this.onChangeCb);
+        }
 
         // Controls.
         if ('undefined' === typeof options.controls || options.controls) {
@@ -111,31 +131,21 @@
             controlsOptions = {
                 id: 'cf_controls',
                 features: f,
-                change: this.change,
+                change: this.onChange,
                 submit: 'Send'
             };
             // Create them.
-            this.sc = node.widgets.get('SliderControls', controlsOptions);
+            if ('object' === typeof options.controls) {
+                this.sc = options.controls;
+            }
+            else {
+                this.sc = node.widgets.get('SliderControls', controlsOptions);
+            }
             // Add them to table.
             this.table.add(this.sc);
         }
 
-        // Change Event. You might have change event without sliders.
-        if ('undefined' === typeof options.change) {
-            node.on(this.change, this.changeFunc);
-        }
-        else {
-            if (options.change) {
-                node.on(options.change, this.changeFunc);
-            }
-            else {
-                node.off(this.change, this.changeFunc);
-            }
-            this.change = options.change;
-        }
-
-        // this.someDiv = document.createElement('div');
-        // this.someDiv.appendChild(this.table.table);
+        // Table.
         this.table.add(this.canvas);
         this.table.parse();
     };
@@ -173,7 +183,7 @@
         if (this.sc) {
             this.sc.init({
                 features: J.mergeOnValue(FaceVector.defaults, fv),
-                change: this.change
+                change: this.onChange
             });
             this.sc.refresh();
         }
@@ -620,7 +630,7 @@
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
                 if (!J.in_array(key,
-                            ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
+                                ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
 
                     out[key] = FaceVector.defaults[key].min +
                         Math.random() * FaceVector.defaults[key].max;
