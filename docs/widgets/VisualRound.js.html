@@ -55,6 +55,9 @@
         <a href="#visualround.stageoffset">VisualRound.stageOffset</a>
       </div>
       <div class="heading h3">
+        <a href="#visualround.totstageoffset">VisualRound.totStageOffset</a>
+      </div>
+      <div class="heading h3">
         <a href="#visualround.oldstageid">VisualRound.oldStageId</a>
       </div>
       <div class="heading h2">
@@ -618,6 +621,30 @@ the displayMode.</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="visualround.totstageoffset">
+  <h3>
+    <a href="#visualround.totstageoffset" name="visualround.totstageoffset" class="pilcrow">&#182;</a>
+    VisualRound.totStageOffset
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Total number of stages displayed minus totStageOffset</p>
+
+<p>If not set, and it is set equal to stageOffset</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">totStageOffset</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="visualround.oldstageid">
   <h3>
     <a href="#visualround.oldstageid" name="visualround.oldstageid" class="pilcrow">&#182;</a>
@@ -697,6 +724,9 @@ settings. See <code>VisualRound</code> constructor for which options are allowed
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">stageOffset</span> <span class="o">||</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">totStageOffset</span> <span class="o">=</span>
+            <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">totStageOffset</span> <span class="o">?</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">totStageOffset</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">flexibleMode</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
@@ -832,7 +862,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Validation of input parameter.</p>
         </td>
@@ -848,7 +878,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Build compound name.</p>
         </td>
@@ -867,7 +897,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Remove trailing '&amp;'.</p>
         </td>
@@ -891,7 +921,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Build <code>CompoundDisplayMode</code>.</p>
         </td>
@@ -1059,7 +1089,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>TODO: Game over and init?</p>
         </td>
@@ -1107,7 +1137,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Flexible mode.</p>
         </td>
@@ -1132,7 +1162,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Normal mode.</p>
         </td>
@@ -1145,7 +1175,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Extracts only id attribute from array of objects.</p>
         </td>
@@ -1159,28 +1189,15 @@ calls <code>VisualRound.updateDisplay</code>.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Every round has an identifier.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">=</span> <span class="nx">idseq</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span><span class="k">return</span> <span class="nx">obj</span><span class="p">;}).</span><span class="nx">length</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">round</span><span class="p">;</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
-</div>
-<p>TODO: Check the change. It was:
-this.curStage = idseq.indexOf(stage.id)+1;</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
                 <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">stage</span><span class="p">;</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">num</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
@@ -1188,8 +1205,8 @@ this.curStage = idseq.indexOf(stage.id)+1;</p>
                 <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">-=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">-=</span> <span class="k">this</span><span class="p">.</span><span class="nx">totStageOffset</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
     <span class="p">};</span>

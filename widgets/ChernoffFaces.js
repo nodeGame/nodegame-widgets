@@ -41,6 +41,7 @@
 
     function ChernoffFaces(options) {
         var that = this;
+        var tblOptions;
 
         // ## Public Properties
 
@@ -48,9 +49,20 @@
         // Configuration options
         this.options = options;
 
+        // Building table options.
+        tblOptions = {};
+        if ('string' === typeof options.id) tblOptions.id = options.id;
+        else if (options.id !== false) tblOptions.id = 'cf_table';
+        if ('string' === typeof options.className) {
+            tblOptions.id = options.className;
+        }
+        else if (options.className !== false) {
+            tblOptions.className = 'cf_table';
+        }
+
         // ### ChernoffFaces.table
         // The table containing everything
-        this.table = new Table({id: 'cf_table'});
+        this.table = new Table(tblOptions);
 
         // ### ChernoffFaces.sc
         // The slider controls of the interface
