@@ -886,6 +886,38 @@
     ChernoffFaces.height = 100;
     ChernoffFaces.onChange = 'CF_CHANGE';
 
+    /**
+     * ## ChernoffFaces constructor
+     *
+     * Creates a new instance of ChernoffFaces
+     *
+     * @param {object} options Configuration options. Accepted options:
+     *
+     * - canvas {object} containing all options for canvas
+     *
+     * - width {number} width of the canvas (read only if canvas is not set)
+     *
+     * - height {number} height of the canvas (read only if canvas is not set)
+     *
+     * - features {FaceVector} vector of face-features. Default: random
+     *
+     * - onChange {string|boolean} The name of the event that will trigger
+     *      redrawing the canvas, or null/false to disable event listener
+     *
+     * - controls {object|false} the controls (usually a set of sliders)
+     *      offering the user the ability to manipulate the canvas. If equal
+     *      to false no controls will be created. Default: SlidersControls.
+     *      Any custom implementation must provide the following methods:
+     *
+     *          - getAllValues: returns the current features vector
+     *          - refresh: redraws the current feature vector
+     *          - init: accepts a configuration object containing a
+     *               features and onChange as specified above.
+     *
+     *
+     * @see ChernoffFaces.init
+     * @see Canvas constructor
+     */
     function ChernoffFaces(options) {
         var that = this;
         var tblOptions;
@@ -998,7 +1030,7 @@
             controlsOptions = {
                 id: 'cf_controls',
                 features: f,
-                change: this.onChange,
+                onChange: this.onChange,
                 submit: 'Send'
             };
             // Create them.
@@ -1063,7 +1095,7 @@
         if (this.sc) {
             this.sc.init({
                 features: J.mergeOnValue(FaceVector.defaults, fv),
-                change: this.onChange
+                onChange: this.onChange
             });
             this.sc.refresh();
         }
@@ -1504,30 +1536,33 @@
 
     };
 
-    //Constructs a random face vector.
+    // Constructs a random face vector.
     FaceVector.random = function() {
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!J.in_array(key,
-                                ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
-
+                if (key === 'color') {
+                    out.color = 'red';
+                }
+                else if (key === 'lineWidth') {
+                    out.lineWidth = 1;
+                }
+                else if (key === 'scaleX') {
+                    out.scaleX = 1;
+                }
+                else if (key === 'scaleY') {
+                    out.scaleY = 1;
+                }
+                else {
                     out[key] = FaceVector.defaults[key].min +
                         Math.random() * FaceVector.defaults[key].max;
                 }
             }
         }
-
-        out.scaleX = 1;
-        out.scaleY = 1;
-
-        out.color = 'red';
-        out.lineWidth = 1;
-
         return new FaceVector(out);
     };
 
-    function FaceVector (faceVector) {
+    function FaceVector(faceVector) {
         faceVector = faceVector || {};
 
         this.scaleX = faceVector.scaleX || 1;
@@ -1567,7 +1602,7 @@
 
     //Computes the Euclidean distance between two FaceVectors.
     FaceVector.prototype.distance = function(face) {
-        return FaceVector.distance(this,face);
+        return FaceVector.distance(this, face);
     };
 
 
