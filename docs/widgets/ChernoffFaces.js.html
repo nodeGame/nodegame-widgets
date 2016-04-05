@@ -54,6 +54,9 @@
       <div class="heading h3">
         <a href="#chernofffaces.features">ChernoffFaces.features</a>
       </div>
+      <div class="heading h3">
+        <a href="#chernofffaces.draw">ChernoffFaces.draw</a>
+      </div>
       <div class="heading h1">
         <a href="#facepainter">FacePainter</a>
       </div>
@@ -319,7 +322,8 @@ Can be set manually via options.controls.
 <p>Updates the canvas when the onChange event is emitted</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onChangeCb</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">onChangeCb</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">updateControls</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">updateControls</span><span class="p">;</span>
 
 </pre></div>
         </td>
@@ -334,9 +338,16 @@ or what is the current value of sliders,
 or a random face.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">f</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">f</span><span class="p">)</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="nx">f</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">f</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">f</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">sc</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">updateControls</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">updateControls</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">f</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">updateControls</span><span class="p">);</span>
         <span class="p">};</span>
 
 
@@ -518,11 +529,53 @@ or a random face.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
     <span class="p">};</span>
 
-    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">draw</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="chernofffaces.draw">
+  <h3>
+    <a href="#chernofffaces.draw" name="chernofffaces.draw" class="pilcrow">&#182;</a>
+    ChernoffFaces.draw
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Draw a face on canvas and optionally updates the controls</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">features</span>
+      <span class="dox_type">object</span>
+      <span>The features to draw</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">updateControls</span>
+      <span class="dox_type">boolean</span>
+      <span>Optional. If equal to false,
+   controls are not updated. Default: true</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">this.sc
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">draw</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">features</span><span class="p">,</span> <span class="nx">updateControls</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">fv</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">features</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">fv</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="nx">features</span><span class="p">);</span>
+        <span class="nx">updateControls</span> <span class="o">=</span>
+            <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">updateControls</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="nx">updateControls</span><span class="p">;</span>
+        <span class="nx">fv</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="nx">features</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fp</span><span class="p">.</span><span class="nx">redraw</span><span class="p">(</span><span class="nx">fv</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span> <span class="o">&amp;&amp;</span> <span class="nx">updateControls</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -530,7 +583,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Without merging wrong values are passed as attributes.</p>
         </td>
@@ -556,7 +609,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>If controls are visible, updates them.</p>
         </td>
@@ -604,7 +657,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Draws a Chernoff face.</p>
         </td>
@@ -622,7 +675,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>console.log('Face Scale ' + face.scaleY + ' ' + face.scaleX );</p>
         </td>
@@ -661,7 +714,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>TODO: Improve. It eats a bit of the margins</p>
         </td>
@@ -712,7 +765,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>console.log(face);</p>
         </td>
@@ -734,7 +787,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>console.log(face);</p>
         </td>
@@ -830,7 +883,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>this.canvas.ctx.closePath();</p>
         </td>
@@ -856,7 +909,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Upper Lip</p>
         </td>
@@ -872,7 +925,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>Lower Lip</p>
         </td>
@@ -891,7 +944,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>TODO Scaling ?</p>
         </td>
@@ -905,7 +958,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>var pos = y - face.head_radius * face.scaleY +
          face.head_radius * face.scaleY * 2 * offset;</p>
@@ -919,7 +972,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>console.log('POS: ' + pos);</p>
         </td>
@@ -942,7 +995,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <div class="dox">
   <div class="summary"><p>!</p>
@@ -963,7 +1016,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>Head</p>
         </td>
@@ -976,7 +1029,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
 <p>id can be specified otherwise is taken head_radius</p>
         </td>
@@ -1008,7 +1061,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>Eye</p>
         </td>
@@ -1055,7 +1108,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
 </div>
 <p>Pupil</p>
         </td>
@@ -1088,7 +1141,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
 </div>
 <p>Eyebrow</p>
         </td>
@@ -1128,7 +1181,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
 </div>
 <p>Nose</p>
         </td>
@@ -1161,7 +1214,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
 </div>
 <p>Mouth</p>
         </td>
@@ -1237,7 +1290,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 <p>Constructs a random face vector.</p>
         </td>
@@ -1281,7 +1334,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
 </div>
 <p>Merge on key</p>
         </td>
@@ -1306,7 +1359,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>Constructs a random face vector.</p>
         </td>
@@ -1331,7 +1384,7 @@ or a random face.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
 </div>
 <p>Computes the Euclidean distance between two FaceVectors.</p>
         </td>

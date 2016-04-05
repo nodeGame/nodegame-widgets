@@ -85,13 +85,21 @@
 
         // ### ChernoffFaces.onChangeCb
         // Updates the canvas when the onChange event is emitted
-        this.onChangeCb = function(f) {
+        this.onChangeCb = function(f, updateControls) {
+            var updateControls;
             // Draw what passed as parameter,
             // or what is the current value of sliders,
             // or a random face.
-            if (!f && that.sc) f = that.sc.getAllValues();
-            if (!f) f = FaceVector.random();
-            that.draw(f);
+            if (!f && that.sc) {
+                f = that.sc.getAllValues();
+                if ('undefined' === typeof updateControls) {
+                    updateControls = false;
+                }
+            }
+            else {
+                f = FaceVector.random();
+            }
+            that.draw(f, updateControls);
         };
 
         // ### ChernoffFaces.features
@@ -170,11 +178,25 @@
         this.bodyDiv.appendChild(this.table.table);
     };
 
-    ChernoffFaces.prototype.draw = function(features) {
+    /**
+     * ### ChernoffFaces.draw
+     *
+     * Draw a face on canvas and optionally updates the controls
+     *
+     * @param {object} features The features to draw
+     * @param {boolean} updateControls Optional. If equal to false,
+     *    controls are not updated. Default: true
+     *
+     * @see this.sc
+     */
+    ChernoffFaces.prototype.draw = function(features, updateControls) {
+        var fv;
         if (!features) return;
-        var fv = new FaceVector(features);
+        updateControls =
+            'undefined' === typeof updateControls ? true : updateControls;
+        fv = new FaceVector(features);
         this.fp.redraw(fv);
-        if (this.sc) {
+        if (this.sc && updateControls) {
             // Without merging wrong values are passed as attributes.
             this.sc.init({
                 features: J.mergeOnKey(FaceVector.defaults, features, 'value')
