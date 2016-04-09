@@ -118,6 +118,20 @@
     text-align: center;
 }
 
+/* Done Button */
+
+.donebutton {
+    float: right;
+    width: auto;
+    min-width: 100px;
+}
+
+.donebutton > .panel-body  {
+    font-size: 20px;
+    text-align: center;
+}
+
+
 /* Chat */
 
 
