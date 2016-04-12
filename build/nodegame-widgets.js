@@ -3388,7 +3388,7 @@
             tmp = DoneButton.text;
         }
         else if ('string' === typeof options.text) {
-            tmp = text;
+            tmp = options.text;
         }
         else  {
             throw new TypeError('DoneButton.init: options.text must ' +
