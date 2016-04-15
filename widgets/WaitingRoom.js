@@ -264,7 +264,7 @@
         this.timer = node.widgets.append('VisualTimer', this.timerDiv, {
             milliseconds: this.waitTime,
             timeup: function() {
-                that.bodyDiv.innerHTML = 
+                that.bodyDiv.innerHTML =
                     "Waiting for too long. Please look for a HIT called " +
                     "<strong>ETH Descil Trouble Ticket</strong> and file" +
                     " a new trouble ticket reporting your experience.";
@@ -397,11 +397,12 @@
         node.on.data('DISPATCH', function(msg) {
             var data, reportExitCode;
             msg = msg || {};
-            data = msg.data || {}; 
+            data = msg.data || {};
 
-            reportExitCode = '<br>You have been disconnected. ' + 
-                'Please report this exit code: ' + 
-                data.exit + '<br></h3>';
+            reportExitCode = '<br>You have been disconnected. ' +
+                ('undefined' !== typeof data.exit ?
+                'Please report this exit code: ' + data.exit : '') +
+                '<br></h3>';
 
             if (data.action === 'AllPlayersConnected') {
                 that.alertPlayer();
@@ -411,7 +412,7 @@
                 that.bodyDiv.innerHTML = "<h3 align='center'>" +
                     "Thank you for your patience.<br>" +
                     "Unfortunately, there are not enough participants in " +
-                    "your group to start the experiment.<br>"; 
+                    "your group to start the experiment.<br>";
 
                 that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
             }
@@ -422,7 +423,7 @@
                     '<strong>not selected</strong> to start the game.' +
                     'Thank you for your participation.' +
                     '</span><br><br>';
-                if (false === data.isDispatchable 
+                if (false === data.isDispatchable
                     || that.disconnectIfNotSelected) {
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
                 }
@@ -479,7 +480,7 @@
         this.startDateDiv.innerHTML = "Game starts at: <br>" + this.startDate;
         this.startDateDiv.style.display = '';
     };
-    
+
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
             console.log('STOPPING TIMER');
