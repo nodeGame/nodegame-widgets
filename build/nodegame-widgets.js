@@ -3406,14 +3406,23 @@
     DoneButton.prototype.listeners = function() {
         var that = this;
 
+        // This is normally executed after the PLAYING listener of
+        // GameWindow where lockUnlockedInputs takes place.
+        // In case of a timeup, the donebutton will be locked and
+        // then unlocked by GameWindow, but otherwise it must be
+        // done here.
         node.on('PLAYING', function() {
             var prop, step;
             step = node.game.getCurrentGameStage();
             prop = node.game.plot.getProperty(step, 'donebutton');
-            if (prop === false || prop && prop.enableOnPlaying === false) {
-                return;
+            if (prop === false || (prop && prop.enableOnPlaying === false)) {
+                // It might be disabled already, but we do it again.
+                that.disable();
             }
-            that.enable();
+            else {
+                // It might be enabled already, but we do it again.
+                that.enable();
+            }
         });
     };
 
