@@ -93,9 +93,6 @@
       <div class="heading h3">
         <a href="#waitingroom.updatedisplay">WaitingRoom.updateDisplay</a>
       </div>
-      <div class="heading h2">
-        <a href="#helper%20methods">Helper methods</a>
-      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -731,9 +728,9 @@ is disconnected.</p>
             <span class="nx">milliseconds</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">waitTime</span><span class="p">,</span>
             <span class="nx">timeup</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span>
-                    <span class="s2">&quot;Waiting for too long. Please look for a HIT called &quot;</span> <span class="o">+</span>
-                    <span class="s2">&quot;&lt;strong&gt;ETH Descil Trouble Ticket&lt;/strong&gt; and file&quot;</span> <span class="o">+</span>
-                    <span class="s2">&quot; a new trouble ticket reporting your experience.&quot;</span><span class="p">;</span>
+                    <span class="s1">&#39;Waiting for too long. Please look for a HIT called &#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;&lt;strong&gt;ETH Descil Trouble Ticket&lt;/strong&gt; and file&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39; a new trouble ticket reporting your experience.&#39;</span><span class="p">;</span>
             <span class="p">},</span>
             <span class="nx">update</span><span class="o">:</span> <span class="mi">1000</span>
         <span class="p">});</span>
@@ -877,7 +874,13 @@ is disconnected.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">numberOfGameslots</span><span class="p">,</span> <span class="nx">numberOfGames</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">numberOfGames</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">/</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">);</span>
+            <span class="nx">numberOfGames</span> <span class="o">=</span> <span class="nx">numberOfGames</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">?</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">:</span> <span class="nx">numberOfGames</span><span class="p">;</span>
+            <span class="nx">numberOfGameslots</span> <span class="o">=</span> <span class="nx">numberOfGames</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">;</span>
+
             <span class="k">this</span><span class="p">.</span><span class="nx">playerCount</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;span style=&quot;color:red&quot;&gt;&#39;</span> <span class="o">+</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span> <span class="o">+</span> <span class="s1">&#39; / &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">playerCountTooHigh</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
@@ -985,10 +988,11 @@ is disconnected.</p>
             <span class="p">}</span>
 
             <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">action</span> <span class="o">===</span> <span class="s1">&#39;NotEnoughPlayers&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3 align=&#39;center&#39;&gt;&quot;</span> <span class="o">+</span>
-                    <span class="s2">&quot;Thank you for your patience.&lt;br&gt;&quot;</span> <span class="o">+</span>
-                    <span class="s2">&quot;Unfortunately, there are not enough participants in &quot;</span> <span class="o">+</span>
-                    <span class="s2">&quot;your group to start the experiment.&lt;br&gt;&quot;</span><span class="p">;</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span>
+                    <span class="s1">&#39;&lt;h3 align=&quot;center&quot; style=&quot;color: red&quot;&gt;&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;Thank you for your patience.&lt;br&gt;&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;Unfortunately, there are not enough participants in &#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;your group to start the experiment.&lt;br&gt;&#39;</span><span class="p">;</span>
 
                 <span class="nx">that</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="nx">reportExitCode</span><span class="p">);</span>
             <span class="p">}</span>
@@ -1137,25 +1141,6 @@ if (timeCheck) clearInterval(timeCheck);</p>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">node</span><span class="p">.</span><span class="nx">deregisterSetup</span><span class="p">(</span><span class="s1">&#39;waitroom&#39;</span><span class="p">);</span>
     <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="helper%20methods">
-  <h2>
-    <a href="#helper%20methods" name="helper%20methods" class="pilcrow">&#182;</a>
-    Helper methods
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="kd">function</span> <span class="nx">timeIsUp</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">}</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>

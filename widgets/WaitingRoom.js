@@ -265,9 +265,9 @@
             milliseconds: this.waitTime,
             timeup: function() {
                 that.bodyDiv.innerHTML =
-                    "Waiting for too long. Please look for a HIT called " +
-                    "<strong>ETH Descil Trouble Ticket</strong> and file" +
-                    " a new trouble ticket reporting your experience.";
+                    'Waiting for too long. Please look for a HIT called ' +
+                    '<strong>ETH Descil Trouble Ticket</strong> and file' +
+                    ' a new trouble ticket reporting your experience.';
             },
             update: 1000
         });
@@ -323,7 +323,13 @@
      * @see WaitingRoom.updateState
      */
     WaitingRoom.prototype.updateDisplay = function() {
+        var numberOfGameslots, numberOfGames;
         if (this.connected > this.poolSize) {
+            numberOfGames = Math.floor(this.connected / this.groupSize);
+            numberOfGames = numberOfGames > this.nGames ?
+                this.nGames : numberOfGames;
+            numberOfGameslots = numberOfGames * this.groupSize;
+
             this.playerCount.innerHTML = '<span style="color:red">' +
                 this.connected + '</span>' + ' / ' + this.poolSize;
             this.playerCountTooHigh.style.display = '';
@@ -409,10 +415,11 @@
             }
 
             else if (data.action === 'NotEnoughPlayers') {
-                that.bodyDiv.innerHTML = "<h3 align='center'>" +
-                    "Thank you for your patience.<br>" +
-                    "Unfortunately, there are not enough participants in " +
-                    "your group to start the experiment.<br>";
+                that.bodyDiv.innerHTML =
+                    '<h3 align="center" style="color: red">' +
+                    'Thank you for your patience.<br>' +
+                    'Unfortunately, there are not enough participants in ' +
+                    'your group to start the experiment.<br>';
 
                 that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
             }
@@ -502,10 +509,5 @@
     WaitingRoom.prototype.destroy = function() {
         node.deregisterSetup('waitroom');
     };
-
-    // ## Helper methods
-
-    function timeIsUp(data) {
-    }
 
 })(node);
