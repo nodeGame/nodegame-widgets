@@ -1134,8 +1134,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateInformation</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">idseq</span><span class="p">,</span> <span class="nx">stage</span><span class="p">;</span>
-        <span class="nx">stage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">.</span><span class="nx">getStage</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">stage</span><span class="p">;</span>
 
 
 </pre></div>
@@ -1146,21 +1145,11 @@ calls <code>VisualRound.updateDisplay</code>.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
-<p>Flexible mode.</p>
+<p>TODO CHECK: was:
+stage = this.gamePlot.getStage(node.player.stage);</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">flexibleMode</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">id</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span> <span class="o">=</span> <span class="nx">stage</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+        <span class="nx">stage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">;</span>
 
 
 </pre></div>
@@ -1171,10 +1160,14 @@ calls <code>VisualRound.updateDisplay</code>.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
-<p>Normal mode.</p>
+<p>Game not started.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">else</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">stage</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
 
 </pre></div>
         </td>
@@ -1184,11 +1177,10 @@ calls <code>VisualRound.updateDisplay</code>.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
-<p>Extracts only id attribute from array of objects.</p>
+<p>Flexible mode.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">idseq</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span><span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">id</span><span class="p">;});</span>
-
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">flexibleMode</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -1198,14 +1190,18 @@ calls <code>VisualRound.updateDisplay</code>.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
-<p>Every round has an identifier.</p>
+<p>Was:
+if (stage) {</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">round</span><span class="p">;</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">stage</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">id</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span> <span class="o">=</span> <span class="nx">stage</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
 
 </pre></div>
         </td>
@@ -1215,22 +1211,58 @@ calls <code>VisualRound.updateDisplay</code>.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
+<p>}</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+</div>
+<p>Normal mode.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">else</span> <span class="p">{</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="nx">stage</span><span class="p">.</span><span class="nx">stage</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+</div>
 <p>Stage can be indexed by id or number in the sequence.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span>
-                        <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">.</span><span class="nx">normalizeGameStage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">curStage</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">num</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">.</span><span class="nx">normalizeGameStage</span><span class="p">(</span><span class="nx">stage</span><span class="p">).</span><span class="nx">stage</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">curRound</span> <span class="o">=</span> <span class="nx">stage</span><span class="p">.</span><span class="nx">round</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">num</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stageOffset</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">-=</span> <span class="k">this</span><span class="p">.</span><span class="nx">totStageOffset</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">totStage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">totStageOffset</span><span class="p">;</span>
         <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+</div>
+<p>Update display.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
     <span class="p">};</span>
 
