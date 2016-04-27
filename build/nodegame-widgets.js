@@ -5934,7 +5934,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.5.1';
+    VisualRound.version = '0.5.2';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -6102,13 +6102,9 @@
             this.oldStageId = this.options.oldStageId;
         }
 
-        if (!this.gamePlot) {
-            this.gamePlot = node.game.plot;
-        }
-
-        if (!this.stager) {
-            this.stager = this.gamePlot.stager;
-        }
+        // Save references to gamePlot and stager for convenience.
+        if (!this.gamePlot) this.gamePlot = node.game.plot;
+        if (!this.stager) this.stager = this.gamePlot.stager;
 
         this.updateInformation();
 
@@ -6324,6 +6320,11 @@
 
             if (stage) {
                 this.curStage = node.player.stage.stage;
+                // Stage can be indexed by id or number in the sequence.
+                if ('string' === typeof this.curStage) {
+                    this.curStage =
+                        this.gamePlot.normalizeGameStage(this.curStage);
+                }
                 this.totRound = this.stager.sequence[this.curStage -1].num || 1;
             }
             else {
