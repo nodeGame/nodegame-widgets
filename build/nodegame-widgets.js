@@ -3267,7 +3267,7 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.1.0';
+    DoneButton.version = '0.2.0';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
@@ -3285,13 +3285,13 @@
     /**
      * ## DoneButton constructor
      *
-     * `DoneButton` displays and manages a `GameTimer`
+     * Creates a new instance of DoneButton
      *
-     * @param {object} options Optional. Configuration options
-     * The options it can take are:
+     * @param {object} options Optional. Configuration options.
+     *   If a `button` option is specified, it sets it as the clickable
+     *   button. All other options are passed to the init method.
      *
-     *   - `button`
-     *
+     * @see DoneButton.init
      */
     function DoneButton(options) {
         var that;
@@ -3384,19 +3384,7 @@
 
 
         // Button text.
-        if ('undefined' === typeof options.text) {
-            tmp = DoneButton.text;
-        }
-        else if ('string' === typeof options.text) {
-            tmp = options.text;
-        }
-        else  {
-            throw new TypeError('DoneButton.init: options.text must ' +
-                                'be string or undefined. Found: ' +
-                                options.text);
-        }
-        this.button.value = tmp;
-
+        this.setText(options.text);
     };
 
     DoneButton.prototype.append = function() {
@@ -3423,6 +3411,9 @@
                 // It might be enabled already, but we do it again.
                 that.enable();
             }
+            if (prop && prop.text) {
+                that.button.value = prop.text;
+            }
         });
     };
 
@@ -3442,6 +3433,26 @@
      */
     DoneButton.prototype.enable = function() {
         this.button.disabled = false;
+    };
+
+    /**
+     * ### DoneButton.enable
+     *
+     * Set the text for the done button
+     *
+     * @param {string} text Optional. The text of the button.
+     *   Default: DoneButton.text
+     */
+    DoneButton.prototype.setText = function(text) {
+        if ('undefined' === typeof text) {
+            text = DoneButton.text;
+        }
+        else if ('string' !== typeof text) {
+            throw new TypeError('DoneButton.setText: text must ' +
+                                'be string or undefined. Found: ' +
+                                typeof text);
+        }
+        this.button.value = text;
     };
 
 })(node);
