@@ -320,7 +320,7 @@ See <code>VisualRound</code> constructor for a list of all available options.</p
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.1&#39;</span><span class="p">;</span>
+    <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.2&#39;</span><span class="p">;</span>
     <span class="nx">VisualRound</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display number of current round and/or stage.&#39;</span> <span class="o">+</span>
         <span class="s1">&#39;Can also display countdown and total number of rounds and/or stages.&#39;</span><span class="p">;</span>
 
@@ -737,13 +737,20 @@ settings. See <code>VisualRound</code> constructor for which options are allowed
             <span class="k">this</span><span class="p">.</span><span class="nx">oldStageId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">oldStageId</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">;</span>
-        <span class="p">}</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">stager</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">.</span><span class="nx">stager</span><span class="p">;</span>
-        <span class="p">}</span>
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>Save references to gamePlot and stager for convenience.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">.</span><span class="nx">stager</span><span class="p">;</span>        
 
         <span class="k">this</span><span class="p">.</span><span class="nx">updateInformation</span><span class="p">();</span>
 
@@ -862,7 +869,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Validation of input parameter.</p>
         </td>
@@ -878,7 +885,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Build compound name.</p>
         </td>
@@ -897,7 +904,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Remove trailing '&amp;'.</p>
         </td>
@@ -921,7 +928,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Build <code>CompoundDisplayMode</code>.</p>
         </td>
@@ -1089,7 +1096,7 @@ the new one is activated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>TODO: Game over and init?</p>
         </td>
@@ -1137,7 +1144,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Flexible mode.</p>
         </td>
@@ -1162,7 +1169,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Normal mode.</p>
         </td>
@@ -1175,7 +1182,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Extracts only id attribute from array of objects.</p>
         </td>
@@ -1189,7 +1196,7 @@ calls <code>VisualRound.updateDisplay</code>.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Every round has an identifier.</p>
         </td>
@@ -1199,6 +1206,22 @@ calls <code>VisualRound.updateDisplay</code>.</p>
 
             <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">stage</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+</div>
+<p>Stage can be indexed by id or number in the sequence.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">=</span> 
+                        <span class="k">this</span><span class="p">.</span><span class="nx">gamePlot</span><span class="p">.</span><span class="nx">normalizeGameStage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">curStage</span><span class="p">);</span>
+                <span class="p">}</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">totRound</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stager</span><span class="p">.</span><span class="nx">sequence</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">curStage</span> <span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">num</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>

@@ -45,6 +45,9 @@
       <div class="heading h3">
         <a href="#donebutton.enable">DoneButton.enable</a>
       </div>
+      <div class="heading h3">
+        <a href="#donebutton.enable">DoneButton.enable</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -95,7 +98,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">;</span>
+    <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.0&#39;</span><span class="p">;</span>
     <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Creates a button that if &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;pressed emits node.done().&#39;</span><span class="p">;</span>
 
@@ -139,19 +142,21 @@ MIT Licensed</p>
 </div>
 
   </div>
-  <div class="body"><p><code>DoneButton</code> displays and manages a <code>GameTimer</code></p>
+  <div class="body"><p>Creates a new instance of DoneButton</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">options</span>
       <span class="dox_type">object</span>
-      <span>Optional. Configuration options
-The options it can take are:
-
-<ul>
-<li><code>button</code></li>
-</ul></span>
+      <span>Optional. Configuration options.
+  If a <code>button</code> option is specified, it sets it as the clickable
+  button. All other options are passed to the init method.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">DoneButton.init
+</span>
     </div>
   </div>
 </div>
@@ -333,19 +338,7 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
 <p>Button text.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>  <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;DoneButton.init: options.text must &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;be string or undefined. Found: &#39;</span> <span class="o">+</span>
-                                <span class="nx">options</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
-
+        <span class="k">this</span><span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
     <span class="p">};</span>
 
     <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -405,6 +398,9 @@ done here.</p>
         <td class="code highlight"><div class="highlight"><pre>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span>
             <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">prop</span> <span class="o">&amp;&amp;</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">});</span>
     <span class="p">};</span>
 
@@ -454,6 +450,47 @@ done here.</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="donebutton.enable">
+  <h3>
+    <a href="#donebutton.enable" name="donebutton.enable" class="pilcrow">&#182;</a>
+    DoneButton.enable
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Set the text for the done button</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">text</span>
+      <span class="dox_type">string</span>
+      <span>Optional. The text of the button.
+  Default: DoneButton.text</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setText</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">text</span> <span class="o">=</span> <span class="nx">DoneButton</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;DoneButton.setText: text must &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be string or undefined. Found: &#39;</span> <span class="o">+</span>
+                                <span class="k">typeof</span> <span class="nx">text</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">button</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">text</span><span class="p">;</span>
     <span class="p">};</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
