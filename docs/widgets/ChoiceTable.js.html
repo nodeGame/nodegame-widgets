@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ChoiceTable.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "widgets/ChoiceTable.js", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#choicetable">ChoiceTable</a>
+      </div>
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+      <div class="heading h2">
+        <a href="#choicetable%20constructor">ChoiceTable constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.table">ChoiceTable.table</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.">ChoiceTable.</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.maintext">ChoiceTable.mainText</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.secondarytext">ChoiceTable.secondaryText</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.choices">ChoiceTable.choices</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.choicecells">ChoiceTable.choiceCells</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.numberofclicks">ChoiceTable.numberOfClicks</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.selected">ChoiceTable.selected</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.currentchoice">ChoiceTable.currentChoice</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.selectmultiple">ChoiceTable.selectMultiple</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.shufflechoices">ChoiceTable.shuffleChoices</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.renderer">ChoiceTable.renderer</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.orientation">ChoiceTable.orientation</a>
+      </div>
+      <div class="heading h2">
+        <a href="#choicetable%20methods">ChoiceTable methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.init">ChoiceTable.init</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.disable">ChoiceTable.disable</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.enable">ChoiceTable.enable</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.enable">ChoiceTable.enable</a>
+      </div>
+      <div class="heading h2">
+        <a href="#helper%20methods.">Helper methods.</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable">
+  <h1>
+    <a href="#choicetable" name="choicetable" class="pilcrow">&#182;</a>
+    ChoiceTable
+  </h1>
+</div>
+
+
+<p>Copyright(c) 2016 Stefano Balietti
+MIT Licensed</p>
+  </div>
+  <div class="body"><p>Creates a table that if pressed emits node.done()</p>
+
+<p>www.nodegame.org</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;ChoiceTable&#39;</span><span class="p">,</span> <span class="nx">ChoiceTable</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
+    Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">;</span>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Creates a configurable table where &#39;</span> <span class="o">+</span>
+        <span class="s1">&#39;each cell is a selectable choice.&#39;</span><span class="p">;</span>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Make your choice&#39;</span><span class="p">;</span>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;choicetable&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
+    Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable%20constructor">
+  <h2>
+    <a href="#choicetable%20constructor" name="choicetable%20constructor" class="pilcrow">&#182;</a>
+    ChoiceTable constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Creates a new instance of ChoiceTable</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options.
+  If a <code>table</code> option is specified, it sets it as the clickable
+  table. All other options are passed to the init method.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTable.init
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">ChoiceTable</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.table">
+  <h3>
+    <a href="#choicetable.table" name="choicetable.table" class="pilcrow">&#182;</a>
+    ChoiceTable.table
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The HTML element triggering node.done() when pressed</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">table</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable constructor: options.table must &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be object or undefined. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">makeChoiceTD</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.">
+  <h3>
+    <a href="#choicetable." name="choicetable." class="pilcrow">&#182;</a>
+    ChoiceTable.
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The main text introducing the choices</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.maintext">
+  <h3>
+    <a href="#choicetable.maintext" name="choicetable.maintext" class="pilcrow">&#182;</a>
+    ChoiceTable.mainText
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The main text introducing the choices</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">mainText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.secondarytext">
+  <h3>
+    <a href="#choicetable.secondarytext" name="choicetable.secondarytext" class="pilcrow">&#182;</a>
+    ChoiceTable.secondaryText
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>A secondary text to display when needed</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">secondaryText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.choices">
+  <h3>
+    <a href="#choicetable.choices" name="choicetable.choices" class="pilcrow">&#182;</a>
+    ChoiceTable.choices
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The array available choices</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">choices</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.choicecells">
+  <h3>
+    <a href="#choicetable.choicecells" name="choicetable.choicecells" class="pilcrow">&#182;</a>
+    ChoiceTable.choiceCells
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The cells of the table associated with each choice</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">choiceCells</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.numberofclicks">
+  <h3>
+    <a href="#choicetable.numberofclicks" name="choicetable.numberofclicks" class="pilcrow">&#182;</a>
+    ChoiceTable.numberOfClicks
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Total number of clicks on different choices</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">numberOfClicks</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.selected">
+  <h3>
+    <a href="#choicetable.selected" name="choicetable.selected" class="pilcrow">&#182;</a>
+    ChoiceTable.selected
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Currently selected cell/s</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTable.currentChoice
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">selected</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.currentchoice">
+  <h3>
+    <a href="#choicetable.currentchoice" name="choicetable.currentchoice" class="pilcrow">&#182;</a>
+    ChoiceTable.currentChoice
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Choice/s associated with currently selected cell/s</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTable.selected
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.selectmultiple">
+  <h3>
+    <a href="#choicetable.selectmultiple" name="choicetable.selectmultiple" class="pilcrow">&#182;</a>
+    ChoiceTable.selectMultiple
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>If TRUE, it allows to select multiple cells</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">selectMultiple</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.shufflechoices">
+  <h3>
+    <a href="#choicetable.shufflechoices" name="choicetable.shufflechoices" class="pilcrow">&#182;</a>
+    ChoiceTable.shuffleChoices
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>If TRUE, choices are randomly assigned to cells</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">shuffleChoices</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.renderer">
+  <h3>
+    <a href="#choicetable.renderer" name="choicetable.renderer" class="pilcrow">&#182;</a>
+    ChoiceTable.renderer
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>A callback that renders the content of each cell</p>
+
+<p>The callback must accept three parameters:</p>
+
+<ul>
+<li>a td HTML element,
+<ul><li>a choice</li>
+<li>the index of the choice element within the choices array</li></ul></li>
+</ul>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.orientation">
+  <h3>
+    <a href="#choicetable.orientation" name="choicetable.orientation" class="pilcrow">&#182;</a>
+    ChoiceTable.orientation
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Orientation of display of choices: vertical ('V') or horizontal ('H')</p>
+
+<p>Default orientation is horizontal.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>Init.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="choicetable%20methods">
+  <h2>
+    <a href="#choicetable%20methods" name="choicetable%20methods" class="pilcrow">&#182;</a>
+    ChoiceTable methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.init">
+  <h3>
+    <a href="#choicetable.init" name="choicetable.init" class="pilcrow">&#182;</a>
+    ChoiceTable.init
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Initializes the instance</p>
+
+<p>Available options are:</p>
+
+<ul>
+<li>id: id of the HTML table, or false to have none. Default:
+ChoiceTable.className</li>
+<li>className: the className of the table (string, array), or false
+to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
+<li>text: the text on the table. Default: ChoiceTable.text</li>
+</ul>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">tmp</span><span class="p">;</span>
+        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>Table id.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.id must &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be string or undefined. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
+<p>Table className.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">className</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>  <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.className must &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be string, array, or undefined. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+<p>Option orientation, default 'H'.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">orientation</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">orientation</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.orientation must &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be string, or undefined. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">orientation</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">orientation</span><span class="p">.</span><span class="nx">lowercase</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">tmp</span> <span class="o">===</span> <span class="s1">&#39;horizontal&#39;</span> <span class="o">||</span> <span class="nx">tmp</span> <span class="o">===</span> <span class="s1">&#39;h&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">tmp</span> <span class="o">===</span> <span class="s1">&#39;vertical&#39;</span> <span class="o">||</span> <span class="nx">tmp</span> <span class="o">===</span> <span class="s1">&#39;v&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;V&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.orientation is &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;invalid: &#39;</span> <span class="o">+</span> <span class="nx">tmp</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>Option selectMultiple, default false.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selectMultiple</span><span class="p">)</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">else</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">options</span><span class="p">.</span><span class="nx">selectMultiple</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">selectMultiple</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+</div>
+<p>Add the choices.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">choices</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">setChoices</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">choices</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setChoices</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">tr</span><span class="p">,</span> <span class="nx">td</span><span class="p">,</span> <span class="nx">H</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">choices</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: choices must be array.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">choices</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.setChoices: choices is empty array.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">choices</span> <span class="o">=</span> <span class="nx">choices</span><span class="p">;</span>
+        <span class="nx">len</span> <span class="o">=</span> <span class="nx">choices</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>Pre-allocate the choiceCells array.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">choiceCells</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>Save the order in which the choices will be added.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">seq</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">len</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">shuffleChoices</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+</div>
+<p>Start adding tr/s and tds based on the orientation.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">H</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">===</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">tr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">);</span>
+            <span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">tr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">);</span>
+                <span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="nx">td</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderChoice</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">choices</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">[</span><span class="nx">i</span><span class="p">]],</span> <span class="nx">i</span><span class="p">);</span>
+            <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">td</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+</div>
+<p>Save reference to cell.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">choiceCells</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">td</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">renderChoice</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">choice</span><span class="p">,</span> <span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">td</span><span class="p">,</span> <span class="nx">value</span><span class="p">;</span>
+        <span class="nx">td</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;td&#39;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+</div>
+<p>If a callback is defined, use it.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">renderer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">renderer</span><span class="p">(</span><span class="nx">td</span><span class="p">,</span> <span class="nx">choice</span><span class="p">,</span> <span class="nx">idx</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">choice</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">value</span> <span class="o">=</span> <span class="nx">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nx">choice</span> <span class="o">=</span> <span class="nx">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">choice</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">td</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">choice</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">isElement</span><span class="p">(</span><span class="nx">choice</span><span class="p">)</span> <span class="o">||</span> <span class="nx">J</span><span class="p">.</span><span class="nx">isNode</span><span class="p">(</span><span class="nx">choice</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">td</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">choice</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.renderChoice: invalid choice: &#39;</span> <span class="o">+</span>
+                            <span class="nx">choice</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nx">td</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span>
+
+    <span class="p">};</span>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setCorrectChoices</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">choices</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">choices</span><span class="p">))</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+</div>
+<p>Array of strings or object {key: value}.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: option.choices must be &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;array or object.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+    <span class="p">};</span>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.disable">
+  <h3>
+    <a href="#choicetable.disable" name="choicetable.disable" class="pilcrow">&#182;</a>
+    ChoiceTable.disable
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Disables the done table</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">disable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+</div>
+<p>this.table.disabled = 'disabled';</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.enable">
+  <h3>
+    <a href="#choicetable.enable" name="choicetable.enable" class="pilcrow">&#182;</a>
+    ChoiceTable.enable
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Enables the done table</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+</div>
+<p>this.table.disabled = false;</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.enable">
+  <h3>
+    <a href="#choicetable.enable" name="choicetable.enable" class="pilcrow">&#182;</a>
+    ChoiceTable.enable
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Set the text for the done table</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">text</span>
+      <span class="dox_type">string</span>
+      <span>Optional. The text of the table.
+  Default: ChoiceTable.text</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span> <span class="k">this</span><span class="p">.</span><span class="nx">makeChoiceTD</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">td</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">oldSelected</span><span class="p">,</span> <span class="nx">form</span><span class="p">;</span>
+        <span class="nx">e</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
+        <span class="nx">td</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">srcElement</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+</div>
+<p>Id of elements are in the form of name_value or name_item_value.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">value</span> <span class="o">=</span> <span class="nx">td</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">name</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="nx">q</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">questionnaire</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">name</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nx">item</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+</div>
+<p>TODO: improve here.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">q</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">questionnaire</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+            <span class="nx">name</span> <span class="o">=</span> <span class="nx">item</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">q</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="nx">q</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">numberOfClicks</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="nx">oldSelected</span> <span class="o">=</span> <span class="nx">q</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">oldSelected</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">oldSelected</span><span class="p">)</span> <span class="nx">oldSelected</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="o">++</span><span class="nx">q</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">numberOfClicks</span><span class="p">;</span>
+        <span class="nx">q</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">currentAnswer</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+
+        <span class="nx">td</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;selected&#39;</span><span class="p">;</span>
+        <span class="nx">q</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">oldSelected</span> <span class="o">=</span> <span class="nx">td</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+</div>
+<p>Remove any warning/error from form on click.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">form</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">form</span><span class="p">)</span> <span class="nx">form</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+</div>
+<p>In case we want to add a radio table.
+input = td.children[0];
+input.checked = true;</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="helper%20methods.">
+  <h2>
+    <a href="#helper%20methods." name="helper%20methods." class="pilcrow">&#182;</a>
+    Helper methods.
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="kd">function</span> <span class="nx">makeId</span><span class="p">(</span><span class="nx">td</span><span class="p">,</span> <span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="p">}</span>
+
+<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
