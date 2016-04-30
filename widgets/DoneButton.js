@@ -186,7 +186,7 @@
     };
 
     /**
-     * ### DoneButton.enable
+     * ### DoneButton.setText
      *
      * Set the text for the done button
      *
