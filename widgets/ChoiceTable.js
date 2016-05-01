@@ -256,6 +256,12 @@
          */
         this.group = null;
 
+        /**
+         * ### ChoiceTable.textarea
+         *
+         *
+         */
+        this.textarea = null;
 
         // Init.
         this.init(options);
@@ -552,6 +558,8 @@
      */
     ChoiceTable.prototype.getAllValues = function() {
         return {
+            id: this.table.id,
+            freetext: 'NA',
             choice: J.clone(this.currentChoice),
             time: 'NA',
             attempts: 'NA',
