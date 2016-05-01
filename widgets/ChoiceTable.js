@@ -360,61 +360,63 @@
     ChoiceTable.prototype.disable = function() {
         if (this.disabled) return;
         this.disabled = true;
-        this.table.removeEventListener('click', this.makeChoiceTD);
+        this.table.removeEventListener('click', this._cb);
     };
 
     /**
      * ### ChoiceTable.enable
      *
      * Enables clicking on the table
+     *
+     * Creates the event listener function with a reference
+     * to `this` instance in the scope, saves it under `_cb`
+     * and returns it.
+     *
+     * @return {function} cb The event listener function
+     *
+     * @see ChoiceTable._cb
      */
     ChoiceTable.prototype.enable = function() {
-        if (!this.disabled) return;
+        var that, cb;
+        if (!this.disabled) return this._cb;
         this.disabled = false;
-        this.table.addEventListener('click', this.makeChoiceTD);
-    };
+        that = this;
+        // The listener function.
+        cb = function(e) {
+            var item, name, value, td, q, oldSelected, form;
+            e = e || window.event;
+            td = e.target || e.srcElement;
 
-    /**
-     * ### ChoiceTable.enable
-     *
-     * Set the text for the done table
-     *
-     * @param {string} text Optional. The text of the table.
-     *   Default: ChoiceTable.text
-     */
-    ChoiceTable.prototype.makeChoiceTD = function(e) {
-        var item, name, value, td, q, oldSelected, form;
-        e = e || window.event;
-        td = e.target || e.srcElement;
-        // Id of elements are in the form of name_value or name_item_value.
-        value = td.id.split('_');
-        if (value.length === 2) {
-            name = value[0];
-            value = value[1];
-            q = node.game.questionnaire;
-        }
-        else {
-            name = value[0];
-            item = value[1];
-            value = value[2];
-            // TODO: improve here.
-            q = node.game.questionnaire[name];
-            name = item;
-            if (!q[name]) q[name] = { numberOfClicks: 0 };
-        }
+            // Id of elements are in the form of name_value or name_item_value.
+            value = td.id.split('_');
 
-        oldSelected = q[name].oldSelected;
-        if (oldSelected) oldSelected.className = ''
+            if (value.length === 2) {
+                name = value[0];
+                value = value[1];
+            }
+            else {
+                name = value[0];
+                item = value[1];
+                value = value[2];
 
-        ++q[name].numberOfClicks;
-        q[name].currentAnswer = value;
+                name = item;
+            }
 
-        td.className = 'selected';
-        q[name].oldSelected = td;
+            oldSelected = that.selected;
+            if (oldSelected) J.removeClass(oldSelected, 'selected');
 
-        // Remove any warning/error from form on click.
-        form = W.getElementById(name);
-        if (form) form.style.border = '';
+            that.numberOfClicks++;
+            that.currentChoice = value;
+
+            J.addClass(td, 'selected');
+            that.selected = td;
+
+            // Remove any warning/error from form on click.
+            form = W.getElementById(name);
+            if (form) form.style.border = '';
+        };
+        this._cb = cb;
+        this.table.addEventListener('click', cb);
     };
 
     // ## Helper methods.
