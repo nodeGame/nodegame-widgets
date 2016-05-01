@@ -2829,7 +2829,7 @@
     };
 
     /**
-     * ### ChoiceTable.isSelected
+     * ### ChoiceTable.isCellSelected
      *
      * Returns TRUE if a value is currently selected
      *
@@ -2840,6 +2840,22 @@
                                 'string or number.');
         }
         return this.currentChoice === value;
+    };
+
+    /**
+     * ### ChoiceTable.getAllValues
+     *
+     * Returns the values for current selection and other paradata
+     *
+     */
+    ChoiceTable.prototype.getAllValues = function() {
+        return {
+            choice: J.clone(this.currentChoice),
+            time: 'NA',
+            attempts: 'NA',
+            nClicks: this.numberOfClicks,
+            order: this.order
+        };
     };
 
     // ## Helper methods.

@@ -109,7 +109,10 @@
         <a href="#choicetable.unselectcell">ChoiceTable.unselectCell</a>
       </div>
       <div class="heading h3">
-        <a href="#choicetable.isselected">ChoiceTable.isSelected</a>
+        <a href="#choicetable.iscellselected">ChoiceTable.isCellSelected</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.getallvalues">ChoiceTable.getAllValues</a>
       </div>
       <div class="heading h2">
         <a href="#helper%20methods.">Helper methods.</a>
@@ -1453,10 +1456,10 @@ TODO: continue describing all parameters.</li></ul></li>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="choicetable.isselected">
+<div class="pilwrap" id="choicetable.iscellselected">
   <h3>
-    <a href="#choicetable.isselected" name="choicetable.isselected" class="pilcrow">&#182;</a>
-    ChoiceTable.isSelected
+    <a href="#choicetable.iscellselected" name="choicetable.iscellselected" class="pilcrow">&#182;</a>
+    ChoiceTable.isCellSelected
   </h3>
 </div>
 
@@ -1472,6 +1475,36 @@ TODO: continue describing all parameters.</li></ul></li>
                                 <span class="s1">&#39;string or number.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span> <span class="o">===</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.getallvalues">
+  <h3>
+    <a href="#choicetable.getallvalues" name="choicetable.getallvalues" class="pilcrow">&#182;</a>
+    ChoiceTable.getAllValues
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Returns the values for current selection and other paradata</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">choice</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span><span class="p">),</span>
+            <span class="nx">time</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span>
+            <span class="nx">attempts</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span>
+            <span class="nx">nClicks</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">numberOfClicks</span><span class="p">,</span>
+            <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span>
+        <span class="p">};</span>
     <span class="p">};</span>
 
 
