@@ -63,11 +63,11 @@
         }
 
         /**
-         * ### ChoiceTable.enabled
+         * ### ChoiceTable.disabled
          *
          * Flag indicating if the event listener onclick is active
          */
-        this.enabled = false;
+        this.disabled = true;
 
         // Enable onclick listener.
         this.enable();
@@ -354,8 +354,8 @@
      * Disables clicking on the table
      */
     ChoiceTable.prototype.disable = function() {
-        if (!this.enabled) return;
-        this.enabled = false;
+        if (this.disabled) return;
+        this.disabled = true;
         this.table.removeEventListener('click', this.makeChoiceTD);
     };
 
@@ -365,8 +365,8 @@
      * Enables clicking on the table
      */
     ChoiceTable.prototype.enable = function() {
-        if (this.enabled) return;
-        this.enabled = true;
+        if (!this.disabled) return;
+        this.disabled = false;
         this.table.addEventListener('click', this.makeChoiceTD);
     };
 

@@ -34,7 +34,7 @@
         <a href="#choicetable.table">ChoiceTable.table</a>
       </div>
       <div class="heading h3">
-        <a href="#choicetable.enabled">ChoiceTable.enabled</a>
+        <a href="#choicetable.disabled">ChoiceTable.disabled</a>
       </div>
       <div class="heading h3">
         <a href="#choicetable.">ChoiceTable.</a>
@@ -245,10 +245,10 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="choicetable.enabled">
+<div class="pilwrap" id="choicetable.disabled">
   <h3>
-    <a href="#choicetable.enabled" name="choicetable.enabled" class="pilcrow">&#182;</a>
-    ChoiceTable.enabled
+    <a href="#choicetable.disabled" name="choicetable.disabled" class="pilcrow">&#182;</a>
+    ChoiceTable.disabled
   </h3>
 </div>
 
@@ -258,7 +258,7 @@ MIT Licensed</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
 
 </pre></div>
@@ -932,8 +932,8 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">disable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">enabled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">disabled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">makeChoiceTD</span><span class="p">);</span>
     <span class="p">};</span>
 
@@ -958,8 +958,8 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">enabled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">disabled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">makeChoiceTD</span><span class="p">);</span>
     <span class="p">};</span>
 
