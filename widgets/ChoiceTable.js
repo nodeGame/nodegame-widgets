@@ -197,7 +197,7 @@
         if ('string' === typeof options.id) {
             this.table.id = tmp;
         }
-        if ('undefined' !== typeof options.id) {
+        else if ('undefined' !== typeof options.id) {
             throw new TypeError('ChoiceTable.init: options.id must ' +
                                 'be string or undefined. Found: ' +
                                 options.id);
@@ -213,7 +213,7 @@
         else if (J.isArray(options.className)) {
             tmp = options.className.join(' ');
         }
-        else  {
+        else if ('undefined' !== typeof options.className) {
             throw new TypeError('ChoiceTable.init: options.className must ' +
                                 'be string, array, or undefined. Found: ' +
                                 options.className);
@@ -275,6 +275,7 @@
 
         // Start adding tr/s and tds based on the orientation.
         i = -1, H = this.orientation === 'H';
+
         if (H) {
             tr = document.createElement('tr');
             this.table.appendChild(tr);
@@ -305,7 +306,7 @@
             choice = choice[1];
         }
 
-        if ('string' === typeof choice) {
+        if ('string' === typeof choice || 'number' === typeof choice) {
             td.innerHTML = choice;
         }
         else if (J.isElement(choice) || J.isNode(choice)) {
@@ -319,6 +320,7 @@
         // TODO: continue here.
         // td.id =
 
+        return td;
     };
 
     ChoiceTable.prototype.setCorrectChoices = function(choices) {
