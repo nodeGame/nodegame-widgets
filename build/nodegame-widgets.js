@@ -2381,7 +2381,7 @@
          * @see GameChoice.disable
          */
         this.listener = function(e) {
-            var item, name, value, td, q, oldSelected, form;
+            var item, name, value, td, q, oldSelected, unset;
             e = e || window.event;
             td = e.target || e.srcElement;
 
@@ -2401,18 +2401,27 @@
 //                 name = item;
 //             }
 
-            oldSelected = that.selected;
-            if (oldSelected) J.removeClass(oldSelected, 'selected');
-
+            // One more click.
             that.numberOfClicks++;
-            that.currentChoice = value;
 
-            J.addClass(td, 'selected');
-            that.selected = td;
+            // If only 1 selection allowed, remove selection from oldSelected.
+            if (!that.selectMultiple) {
+                oldSelected = that.selected;
+                if (oldSelected) J.removeClass(oldSelected, 'selected');
+
+                if (that.isCellSelected(value)) {
+                    that.unselectCell(value);
+                }
+                else {
+                    that.currentChoice = value;
+                    J.addClass(td, 'selected');
+                    that.selected = td;
+                }
+            }
 
             // Remove any warning/error from form on click.
-            form = W.getElementById(name);
-            if (form) form.style.border = '';
+            // form = W.getElementById(name);
+            // if (form) form.style.border = '';
         };
 
         /**
@@ -2447,6 +2456,25 @@
         this.choices = null;
 
         /**
+         * ### ChoiceTable.correctChoice
+         *
+         * The array of correct choice/s
+         *
+         * The field is an array or number|string depending
+         * on the value of ChoiceTable.selectMultiple
+         *
+         * @see ChoiceTable.selectMultiple
+         */
+        this.correctChoice = null;
+
+        /**
+         * ### ChoiceTable.attempts
+         *
+         * List of currentChoices at the moment of verifying correct answers
+         */
+        this.attempts = [];
+
+        /**
          * ### ChoiceTable.choiceCells
          *
          * The cells of the table associated with each choice
@@ -2473,6 +2501,11 @@
          * ### ChoiceTable.currentChoice
          *
          * Choice/s associated with currently selected cell/s
+         *
+         * The field is an array or number|string depending
+         * on the value of ChoiceTable.selectMultiple
+         *
+         * @see ChoiceTable.selectMultiple
          *
          * @see ChoiceTable.selected
          */
@@ -2698,6 +2731,15 @@
         return td;
     };
 
+    /**
+     * ### ChoiceTable.setCorrectChoices
+     *
+     * Set the correct choice/s
+     *
+     * @param {number|array}
+     *
+     * @see ChoiceTable.
+     */
     ChoiceTable.prototype.setCorrectChoices = function(choices) {
         if (!choices) return;
 
@@ -2753,11 +2795,55 @@
         this.table.addEventListener('click', this.listener);
     };
 
+    /**
+     * ### ChoiceTable.verifyChoices
+     *
+     * Enables clicking on the table and adds CSS 'clicklable' class
+     *
+     * @return {function} cb The event listener function
+     */
+    ChoiceTable.prototype.verifyChoices = function() {
+        var i, len;
+        if (!this.selectMultiple) {
+            if ('undefined' === typeof this.correctChoice)
+            return this.currentChoice === this.correctChoice;
+        }
+    };
+
+    /**
+     * ### ChoiceTable.selectCell
+     *
+     * Marks a cell as selected
+     */
+    ChoiceTable.prototype.selectCell = function(curChoice) {
+        this.currentChoice = curChoice;
+    };
+
+    /**
+     * ### ChoiceTable.unselectCell
+     *
+     * Marks a cell as selected
+     */
+    ChoiceTable.prototype.unselectCell = function(curChoice) {
+        this.currentChoice = null;
+    };
+
+    /**
+     * ### ChoiceTable.isSelected
+     *
+     * Returns TRUE if a value is currently selected
+     *
+     */
+    ChoiceTable.prototype.isCellSelected = function(value) {
+        if ('string' !== typeof value && 'number' !== typeof value) {
+            throw new TypeError('ChoiceTable.isSelected: value must be ' +
+                                'string or number.');
+        }
+        return this.currentChoice === value;
+    };
+
     // ## Helper methods.
 
-    function makeId(td, idx) {
-
-    }
 
 })(node);
 
