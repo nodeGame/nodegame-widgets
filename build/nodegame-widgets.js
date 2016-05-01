@@ -2360,6 +2360,15 @@
                                 options.table);
         }
 
+        // Table id.
+        if ('string' === typeof options.tableId) {
+            this.table.id = options.tableId;
+        }
+        else {
+            throw new TypeError('ChoiceTable.init: options.tableId must ' +
+                                'be string. Found: ' + options.tableId);
+        }
+
         // Add 'choicetable' class to table.
         J.addClass(this.table, ChoiceTable.className);
 
@@ -2379,17 +2388,18 @@
             // Id of elements are in the form of name_value or name_item_value.
             value = td.id.split('_');
 
-            if (value.length === 2) {
+//            if (value.length === 2) {
                 name = value[0];
                 value = value[1];
-            }
-            else {
-                name = value[0];
-                item = value[1];
-                value = value[2];
-
-                name = item;
-            }
+//            }
+// For multiple rows.
+//             else {
+//                 name = value[0];
+//                 item = value[1];
+//                 value = value[2];
+//
+//                 name = item;
+//             }
 
             oldSelected = that.selected;
             if (oldSelected) J.removeClass(oldSelected, 'selected');
@@ -2414,13 +2424,6 @@
 
         // Enable onclick listener.
         this.enable();
-
-        /**
-         * ### ChoiceTable.
-         *
-         * The main text introducing the choices
-         */
-        this.id = null;
 
         /**
          * ### ChoiceTable.mainText
@@ -2511,6 +2514,14 @@
          */
         this.orientation = 'H';
 
+        /**
+         * ### ChoiceTable.group
+         *
+         * The name of the group where the table belongs, if any
+         */
+        this.group = null;
+
+
         // Init.
         this.init(options);
     }
@@ -2524,27 +2535,17 @@
      *
      * Available options are:
      *
-     * - id: id of the HTML table, or false to have none. Default:
-     *     ChoiceTable.className
-     * - className: the className of the table (string, array), or false
-     *     to have none. Default bootstrap classes: 'btn btn-lg btn-primary'
-     * - text: the text on the table. Default: ChoiceTable.text
+     *   - className: the className of the table (string, array), or false
+     *       to have none.
+     *   - orientation: orientation of the table: vertical (v) or horizontal (h)
+     *   - group: the name of the group (number or string), if any
+     *   TODO: continue describing all parameters.
      *
      * @param {object} options Optional. Configuration options
      */
     ChoiceTable.prototype.init = function(options) {
         var tmp;
         options = options || {};
-
-        // Table id.
-        if ('string' === typeof options.id) {
-            this.table.id = tmp;
-        }
-        else if ('undefined' !== typeof options.id) {
-            throw new TypeError('ChoiceTable.init: options.id must ' +
-                                'be string or undefined. Found: ' +
-                                options.id);
-        }
 
         // Table className.
         if ('undefined' !== typeof options.className) {
@@ -2596,6 +2597,18 @@
         if ('undefined' !== typeof options.choices) {
             this.setChoices(options.choices);
         }
+
+        // Set the group, if any.
+        if ('string' === typeof options.group ||
+            'number' === typeof options.group) {
+
+            this.group = options.group
+        }
+        else if ('undefined' !== typeof options.group) {
+            throw new TypeError('ChoiceTable.init: options.group must ' +
+                                'be string, number or undefined. Found: ' +
+                                options.group);
+        }
     };
 
     ChoiceTable.prototype.setChoices = function(choices) {
@@ -2635,6 +2648,22 @@
         }
     };
 
+    /**
+     * ### ChoiceTable.renderChoice
+     *
+     * Transforms a choice element into a cell of the table
+     *
+     * @param {mixed} choice The choice element. It must be string or number,
+     *   or array where the first element is the 'value' (incorporated in the
+     *   `id` field) and the second the text to display as choice. If a
+     *   If renderer function is defined there are no restriction on the
+     *   format of choice
+     * @param {number} idx The position of the choice within the choice array
+     *
+     * @return {HTMLElement} td The newly created cell of the table
+     *
+     * @see ChoiceTable.renderer
+     */
     ChoiceTable.prototype.renderChoice = function(choice, idx) {
         var td, value;
         td = document.createElement('td');
@@ -2660,8 +2689,11 @@
                             choice);
         }
 
-        // TODO: continue here.
-        // td.id =
+        // Add the id if not added already by the renderer function.
+        if (!td.id || td.id === '') {
+            td.id = this.table.id + '_' +
+                ('undefined' !== typeof value ? value : idx);
+        }
 
         return td;
     };
