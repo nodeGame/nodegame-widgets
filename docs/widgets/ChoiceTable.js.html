@@ -754,10 +754,10 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
 
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setChoices</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">tr</span><span class="p">,</span> <span class="nx">td</span><span class="p">,</span> <span class="nx">H</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">choices</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">choices</span><span class="p">))</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: choices must be array.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">choices</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">choices</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.setChoices: choices is empty array.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">choices</span> <span class="o">=</span> <span class="nx">choices</span><span class="p">;</span>
@@ -807,12 +807,12 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">H</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">===</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">tr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">);</span>
-            <span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">tr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">);</span>
-                <span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="nx">td</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderChoice</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">choices</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">[</span><span class="nx">i</span><span class="p">]],</span> <span class="nx">i</span><span class="p">);</span>
             <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">td</span><span class="p">);</span>
@@ -868,14 +868,6 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
                             <span class="nx">choice</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="nx">td</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span>
-
-    <span class="p">};</span>
-
-    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setCorrectChoices</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">choices</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">choices</span><span class="p">))</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -884,6 +876,26 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+</div>
+<p>TODO: continue here.
+td.id =</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="p">};</span>
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setCorrectChoices</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">choices</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">choices</span><span class="p">))</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>Array of strings or object {key: value}.</p>
         </td>
@@ -894,6 +906,18 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
                                 <span class="s1">&#39;array or object.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+</div>
+<p>TODO: continue here.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 
     <span class="p">};</span>
 
@@ -1003,7 +1027,7 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>Id of elements are in the form of name_value or name_item_value.</p>
         </td>
@@ -1025,7 +1049,7 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
 <p>TODO: improve here.</p>
         </td>
@@ -1051,7 +1075,7 @@ to have none. Default bootstrap classes: 'btn btn-lg btn-primary'</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>Remove any warning/error from form on click.</p>
         </td>

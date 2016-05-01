@@ -257,10 +257,10 @@
 
     ChoiceTable.prototype.setChoices = function(choices) {
         var i, len, tr, td, H;
-        if (!J.isArray(options.choices)) {
+        if (!J.isArray(choices)) {
             throw new TypeError('ChoiceTable.init: choices must be array.');
         }
-        if (!options.choices.length) {
+        if (!choices.length) {
             throw new Error('ChoiceTable.setChoices: choices is empty array.');
         }
         this.choices = choices;
@@ -277,12 +277,12 @@
         i = -1, H = this.orientation === 'H';
         if (H) {
             tr = document.createElement('tr');
-            table.appendChild(tr);
+            this.table.appendChild(tr);
         }
         for ( ; ++i < len ; ) {
             if (!H) {
                 tr = document.createElement('tr');
-                table.appendChild(tr);
+                this.table.appendChild(tr);
             }
             td = this.renderChoice(this.choices[this.order[i]], i);
             tr.appendChild(td);
@@ -316,14 +316,15 @@
                             choice);
         }
 
-        td.id =
+        // TODO: continue here.
+        // td.id =
 
     };
 
     ChoiceTable.prototype.setCorrectChoices = function(choices) {
         if (!choices) return;
 
-        if (J.isArray(options.choices)) {
+        if (J.isArray(choices)) {
             // Array of strings or object {key: value}.
         }
         else {
@@ -331,6 +332,7 @@
                                 'array or object.');
         }
 
+        // TODO: continue here.
 
     };
 
