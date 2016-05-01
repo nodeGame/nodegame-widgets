@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '0.1.0';
+    ChoiceTable.version = '0.2.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -61,6 +61,51 @@
                                 'be object or undefined. Found: ' +
                                 options.table);
         }
+
+        // Add 'choicetable' class to table.
+        J.addClass(this.table, ChoiceTable.className);
+
+        /**
+         * ## ChoiceTable.listener
+         *
+         * The listener function
+         *
+         * @see GameChoice.enable
+         * @see GameChoice.disable
+         */
+        this.listener = function(e) {
+            var item, name, value, td, q, oldSelected, form;
+            e = e || window.event;
+            td = e.target || e.srcElement;
+
+            // Id of elements are in the form of name_value or name_item_value.
+            value = td.id.split('_');
+
+            if (value.length === 2) {
+                name = value[0];
+                value = value[1];
+            }
+            else {
+                name = value[0];
+                item = value[1];
+                value = value[2];
+
+                name = item;
+            }
+
+            oldSelected = that.selected;
+            if (oldSelected) J.removeClass(oldSelected, 'selected');
+
+            that.numberOfClicks++;
+            that.currentChoice = value;
+
+            J.addClass(td, 'selected');
+            that.selected = td;
+
+            // Remove any warning/error from form on click.
+            form = W.getElementById(name);
+            if (form) form.style.border = '';
+        };
 
         /**
          * ### ChoiceTable.disabled
@@ -204,21 +249,21 @@
         }
 
         // Table className.
-        if (options.className === false) {
-            tmp = '';
+        if ('undefined' !== typeof options.className) {
+            if (options.className === false) {
+                this.table.className = '';
+            }
+            else if ('string' === typeof options.className ||
+                     J.isArray(options.className)) {
+
+                J.addClass(this.table, options.className);
+            }
+            else {
+                throw new TypeError('ChoiceTable.init: options.className ' +
+                                    'must be string, array, or undefined. ' +
+                                    'Found: ' + options.className);
+            }
         }
-        else if ('string' === typeof options.className) {
-            tmp = options.className;
-        }
-        else if (J.isArray(options.className)) {
-            tmp = options.className.join(' ');
-        }
-        else if ('undefined' !== typeof options.className) {
-            throw new TypeError('ChoiceTable.init: options.className must ' +
-                                'be string, array, or undefined. Found: ' +
-                                options.className);
-        }
-        this.table.className = tmp;
 
         // Option orientation, default 'H'.
         if ('undefined' === typeof options.orientation) {
@@ -230,7 +275,7 @@
                                 options.orientation);
         }
         else {
-            tmp = options.orientation.lowercase().trim();
+            tmp = options.orientation.toLowerCase().trim();
             if (tmp === 'horizontal' || tmp === 'h') {
                 tmp = 'H';
             }
@@ -355,68 +400,27 @@
     /**
      * ### ChoiceTable.disable
      *
-     * Disables clicking on the table
+     * Disables clicking on the table and removes CSS 'clicklable' class
      */
     ChoiceTable.prototype.disable = function() {
         if (this.disabled) return;
         this.disabled = true;
-        this.table.removeEventListener('click', this._cb);
+        J.removeClass(this.table, 'clickable');
+        this.table.removeEventListener('click', this.listener);
     };
 
     /**
      * ### ChoiceTable.enable
      *
-     * Enables clicking on the table
-     *
-     * Creates the event listener function with a reference
-     * to `this` instance in the scope, saves it under `_cb`
-     * and returns it.
+     * Enables clicking on the table and adds CSS 'clicklable' class
      *
      * @return {function} cb The event listener function
-     *
-     * @see ChoiceTable._cb
      */
     ChoiceTable.prototype.enable = function() {
-        var that, cb;
-        if (!this.disabled) return this._cb;
+        if (!this.disabled) return;
+        J.addClass(this.table, 'clickable');
         this.disabled = false;
-        that = this;
-        // The listener function.
-        cb = function(e) {
-            var item, name, value, td, q, oldSelected, form;
-            e = e || window.event;
-            td = e.target || e.srcElement;
-
-            // Id of elements are in the form of name_value or name_item_value.
-            value = td.id.split('_');
-
-            if (value.length === 2) {
-                name = value[0];
-                value = value[1];
-            }
-            else {
-                name = value[0];
-                item = value[1];
-                value = value[2];
-
-                name = item;
-            }
-
-            oldSelected = that.selected;
-            if (oldSelected) J.removeClass(oldSelected, 'selected');
-
-            that.numberOfClicks++;
-            that.currentChoice = value;
-
-            J.addClass(td, 'selected');
-            that.selected = td;
-
-            // Remove any warning/error from form on click.
-            form = W.getElementById(name);
-            if (form) form.style.border = '';
-        };
-        this._cb = cb;
-        this.table.addEventListener('click', cb);
+        this.table.addEventListener('click', this.listener);
     };
 
     // ## Helper methods.
