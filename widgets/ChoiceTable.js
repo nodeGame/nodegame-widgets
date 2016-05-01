@@ -62,7 +62,15 @@
                                 options.table);
         }
 
-        this.table.addEventListener('click', this.makeChoiceTD);
+        /**
+         * ### ChoiceTable.enabled
+         *
+         * Flag indicating if the event listener onclick is active
+         */
+        this.enabled = false;
+
+        // Enable onclick listener.
+        this.enable();
 
         /**
          * ### ChoiceTable.
@@ -332,25 +340,34 @@
 
     ChoiceTable.prototype.listeners = function() {
         var that = this;
-
+        node.on('INPUT_DISABLE', function() {
+            that.disable();
+        });
+        node.on('INPUT_ENABLE', function() {
+            that.enable();
+        });
     };
 
     /**
      * ### ChoiceTable.disable
      *
-     * Disables the done table
+     * Disables clicking on the table
      */
     ChoiceTable.prototype.disable = function() {
-        // this.table.disabled = 'disabled';
+        if (!this.enabled) return;
+        this.enabled = false;
+        this.table.removeEventListener('click', this.makeChoiceTD);
     };
 
     /**
      * ### ChoiceTable.enable
      *
-     * Enables the done table
+     * Enables clicking on the table
      */
     ChoiceTable.prototype.enable = function() {
-        // this.table.disabled = false;
+        if (this.enabled) return;
+        this.enabled = true;
+        this.table.addEventListener('click', this.makeChoiceTD);
     };
 
     /**
@@ -361,7 +378,7 @@
      * @param {string} text Optional. The text of the table.
      *   Default: ChoiceTable.text
      */
-    ChoiceTable.prototype. this.makeChoiceTD = function(e) {
+    ChoiceTable.prototype.makeChoiceTD = function(e) {
         var item, name, value, td, q, oldSelected, form;
         e = e || window.event;
         td = e.target || e.srcElement;
@@ -394,11 +411,6 @@
         // Remove any warning/error from form on click.
         form = W.getElementById(name);
         if (form) form.style.border = '';
-
-
-        // In case we want to add a radio table.
-        // input = td.children[0];
-        // input.checked = true;
     };
 
     // ## Helper methods.
