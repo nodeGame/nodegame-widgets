@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '0.2.0';
+    ChoiceTable.version = '0.5.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -111,8 +111,8 @@
                 oldSelected = that.selected;
                 if (oldSelected) J.removeClass(oldSelected, 'selected');
 
-                if (that.isCellSelected(value)) {
-                    that.unselectCell(value);
+                if (that.isChoiceCurrent(value)) {
+                    that.unsetCurrentChoice(value);
                 }
                 else {
                     that.currentChoice = value;
@@ -142,13 +142,6 @@
          * The main text introducing the choices
          */
         this.mainText = null;
-
-        /**
-         * ### ChoiceTable.secondaryText
-         *
-         * A secondary text to display when needed
-         */
-        this.secondaryText = null;
 
         /**
          * ### ChoiceTable.choices
@@ -237,6 +230,9 @@
          *   - a td HTML element,
          *   - a choice
          *   - the index of the choice element within the choices array
+         *
+         * and optionally return the _value_ for the choice (otherwise
+         * the order in the choices array is used as value).
          */
         this.renderer = null;
 
@@ -257,11 +253,28 @@
         this.group = null;
 
         /**
+         * ### ChoiceTable.freeText
+         *
+         * If truthy, a textarea for free-text comment will be added
+         *
+         * If 'string', the text will be added inside the the textarea
+         */
+        this.freeText = null;
+
+        /**
          * ### ChoiceTable.textarea
          *
-         *
+         * Textarea for free-text comment
          */
         this.textarea = null;
+
+        /**
+         * ### ChoiceTable.textareaUsed
+         *
+         * If TRUE, the user has written something in the textarea
+         */
+        this.textareaUsed = null;
+
 
         // Init.
         this.init(options);
@@ -280,13 +293,27 @@
      *       to have none.
      *   - orientation: orientation of the table: vertical (v) or horizontal (h)
      *   - group: the name of the group (number or string), if any
-     *   TODO: continue describing all parameters.
+     *   - onclick: a custom onclick listener function. Context is
+     *       `this` instance
+     *   - mainText: a text to be displayed above the table
+     *   - choices: the array of available choices. See
+     *       `ChoiceTable.renderChoice` for info about the format
+     *   - correctChoice: the array|number|string of correct choices. See
+     *       `ChoiceTable.setCorrectChoice` for info about the format
+     *   - selectMultiple: if TRUE multiple cells can be selected
+     *   - shuffleChoices: if TRUE, choices are shuffled before being added
+     *       to the table
+     *   - renderer: a function that will render the choices. See
+     *       ChoiceTable.renderer for info about the format
+     *   - freeText: if TRUE, a textarea will be added under the table,
+     *       if 'string', the text will be added inside the the textarea
      *
      * @param {object} options Optional. Configuration options
      */
     ChoiceTable.prototype.init = function(options) {
-        var tmp;
+        var tmp, that;
         options = options || {};
+        that = this;
 
         // Table className.
         if ('undefined' !== typeof options.className) {
@@ -329,7 +356,7 @@
         }
         this.orientation = tmp;
 
-        // Option selectMultiple, default false.
+        // Option shuffleChoices, default false.
         if ('undefined' === typeof options.shuffleChoices) tmp = false;
         else tmp = !!options.shuffleChoices;
         this.shuffleChoices = tmp;
@@ -344,19 +371,77 @@
             this.setChoices(options.choices);
         }
 
+        // Add the correct choices.
+        if ('undefined' !== typeof options.correctChoice) {
+            this.setCorrectChoices(options.correctChoice);
+        }
+
         // Set the group, if any.
         if ('string' === typeof options.group ||
             'number' === typeof options.group) {
 
-            this.group = options.group
+            this.group = options.group;
         }
         else if ('undefined' !== typeof options.group) {
             throw new TypeError('ChoiceTable.init: options.group must ' +
                                 'be string, number or undefined. Found: ' +
                                 options.group);
         }
+
+        // Set the group, if any.
+        if ('function' === typeof options.onclick) {
+            this.listener = function(e) {
+                options.onclick.call(this, e);
+            };
+        }
+        else if ('undefined' !== typeof options.onclick) {
+            throw new TypeError('ChoiceTable.init: options.onclick must ' +
+                                'be function or undefined. Found: ' +
+                                options.onclick);
+        }
+
+        // Set the group, if any.
+        if ('string' === typeof options.mainText) {
+            this.mainText = options.mainText;
+        }
+        else if ('undefined' !== typeof options.mainText) {
+            throw new TypeError('ChoiceTable.init: options.group must ' +
+                                'be string, undefined. Found: ' +
+                                options.mainText);
+        }
+
+        // Creates a free-text textarea, possibly with an initial text
+        if (options.freeText) {
+
+            this.textarea = document.createElement('textarea');
+            this.textarea.id = this.table.id + '_text';
+
+            if ('string' === typeof options.freeText) {
+                this.textarea.innerHTML = options.freeText;
+                this.freeText = options.freeText;
+// TODO: handle Text introducing textarea.
+//                 this.textarea.onclick = function() {
+//                     if (!that.textareaUsed) that.textarea.innerHTML = '';
+//                     that.textAreaUsed = true;
+//                     that.texta
+//                 };
+            }
+            else {
+                this.freeText = !!options.freeText;
+            }
+        }
     };
 
+    /**
+     * ### ChoiceTable.setChoices
+     *
+     * Sets the available choices and builds the table accordingly
+     *
+     * @param {array} choices The array of choices
+     *
+     * @see ChoiceTable.renderChoice
+     * @see ChoiceTable.orientation
+     */
     ChoiceTable.prototype.setChoices = function(choices) {
         var i, len, tr, td, H;
         if (!J.isArray(choices)) {
@@ -414,15 +499,25 @@
         var td, value;
         td = document.createElement('td');
 
-        // If a callback is defined, use it.
+        // Get value and choice.
         if (this.renderer) {
-            this.renderer(td, choice, idx);
+            // If a callback is defined, use it.
+            value = this.renderer(td, choice, idx);
         }
-
         else if (J.isArray(choice)) {
             value = choice[0];
             choice = choice[1];
         }
+        else {
+            value = idx;
+        }
+
+        // Map a value to the index.
+        if ('undefined' !== typeof this.choicesValues[value]) {
+            throw new Error('ChoiceTable.renderChoice: value already ' +
+                            'in use: ' + value);
+        }
+        this.choicesValues[value] = idx;
 
         if ('string' === typeof choice || 'number' === typeof choice) {
             td.innerHTML = choice;
@@ -436,36 +531,40 @@
         }
 
         // Add the id if not added already by the renderer function.
-        if (!td.id || td.id === '') {
-            td.id = this.table.id + '_' +
-                ('undefined' !== typeof value ? value : idx);
-        }
+        if (!td.id || td.id === '') td.id = this.table.id + '_' + value;
 
         return td;
     };
 
     /**
-     * ### ChoiceTable.setCorrectChoices
+     * ### ChoiceTable.setCorrectChoice
      *
      * Set the correct choice/s
      *
-     * @param {number|array}
+     * @param {number|string|array} If `selectMultiple` is set, param must
+     *   be an array, otherwise a string or a number. Each correct choice
+     *   must have been already defined as choice (value)
      *
-     * @see ChoiceTable.
+     * @see ChoiceTable.setChoices
      */
-    ChoiceTable.prototype.setCorrectChoices = function(choices) {
-        if (!choices) return;
-
-        if (J.isArray(choices)) {
-            // Array of strings or object {key: value}.
+    ChoiceTable.prototype.setCorrectChoice = function(choice) {
+        var i, len;
+        if (!this.selectMultiple) {
+            checkCorrectChoiceParam(this, choice);
         }
         else {
-            throw new TypeError('ChoiceTable.init: option.choices must be ' +
-                                'array or object.');
+            if (J.isArray(choice) && choice.length) {
+                i = -1, len = choice.length;
+                for ( ; ++i < len ; ) {
+                    checkCorrectChoiceParam(this, choice[i]);
+                }
+            }
+            else {
+                throw new TypeError('ChoiceTable.setCorrectChoice: choices ' +
+                                    'must be non-empty array.');
+            }
         }
-
-        // TODO: continue here.
-
+        this.correctChoice = choice;
     };
 
     ChoiceTable.prototype.append = function() {
@@ -516,43 +615,113 @@
      * @return {function} cb The event listener function
      */
     ChoiceTable.prototype.verifyChoices = function() {
-        var i, len;
+        var i, len, j, lenJ, c, clone, found;
         if (!this.selectMultiple) {
             if ('undefined' === typeof this.correctChoice)
             return this.currentChoice === this.correctChoice;
         }
-    };
-
-    /**
-     * ### ChoiceTable.selectCell
-     *
-     * Marks a cell as selected
-     */
-    ChoiceTable.prototype.selectCell = function(curChoice) {
-        this.currentChoice = curChoice;
-    };
-
-    /**
-     * ### ChoiceTable.unselectCell
-     *
-     * Marks a cell as selected
-     */
-    ChoiceTable.prototype.unselectCell = function(curChoice) {
-        this.currentChoice = null;
-    };
-
-    /**
-     * ### ChoiceTable.isCellSelected
-     *
-     * Returns TRUE if a value is currently selected
-     *
-     */
-    ChoiceTable.prototype.isCellSelected = function(value) {
-        if ('string' !== typeof value && 'number' !== typeof value) {
-            throw new TypeError('ChoiceTable.isSelected: value must be ' +
-                                'string or number.');
+        else {
+            len = this.correctChoice.length;
+            lenJ = this.currentChoice.length;
+            // Quick check.
+            if (len !== lenJ) return false;
+            // Check every item
+            i = -1;
+            clone = this.currentChoice.slice(0);
+            for ( ; ++i < len ; ) {
+                found = false;
+                c = this.correctChoices[i];
+                j = -1;
+                for ( ; ++j < lenJ ; ) {
+                    if (clone[j] === c) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) return false;
+            }
+            return true;
         }
-        return this.currentChoice === value;
+    };
+
+    /**
+     * ### ChoiceTable.setCurrentChoice
+     *
+     * Marks a choice as current
+     *
+     * If `ChoiceTable.selectMultiple` is set multiple choices can be current.
+     *
+     * @param {number|string} The choice to mark as current
+     *
+     * @see ChoiceTable.currentChoice
+     * @see ChoiceTable.selectMultiple
+     */
+    ChoiceTable.prototype.setCurrentChoice = function(choice) {
+        if (!this.selectMultiple) this.currentChoice = choice;
+        else this.currentChoice.push(choice);
+    };
+
+    /**
+     * ### ChoiceTable.unsetCurrentChoice
+     *
+     * Deletes the value for currentChoice
+     *
+     * If `ChoiceTable.selectMultiple` is set the
+     *
+     * @param {number|string} Optional. The choice to delete from currentChoice
+     *   when multiple selections are allowed
+     *
+     * @see ChoiceTable.currentChoice
+     * @see ChoiceTable.selectMultiple
+     */
+    ChoiceTable.prototype.unsetCurrentChoice = function(choice) {
+        var i, len;
+        if (!this.selectMultiple || 'undefined' === typeof choice) {
+            this.currentChoice = null;
+        }
+        else {
+            if ('string' !== typeof choice && 'number' !== typeof choice) {
+                throw new TypeError('ChoiceTable.unsetCurrentChoice: choice ' +
+                                    'must be string, number or undefined.');
+            }
+            i = -1, len = this.currentChoice.length;
+            for ( ; ++i < len ; ) {
+                if (this.currentChoice[i] === choice) {
+                    this.currentChoice.splice(i,1);
+                    break;
+                }
+            }
+        }
+    };
+
+    /**
+     * ### ChoiceTable.isChoiceCurrent
+     *
+     * Returns TRUE if a choice is currently selected
+     *
+     * @param {number|string} The choice to check
+     *
+     * @return {boolean} TRUE, if the choice is currently selected
+     */
+    ChoiceTable.prototype.isChoiceCurrent = function(choice) {
+        var i, len;
+        if ('string' !== typeof choice && 'number' !== typeof choice) {
+            throw new TypeError('ChoiceTable.isChoiceCurrent: choice ' +
+                                'must be string or number.');
+        }
+        if (!this.selectMultiple) {
+            return this.currentChoice === choice;
+        }
+        else {
+            i = -1, len = this.currentChoice.length;
+            for ( ; ++i < len ; ) {
+                if (this.currentChoice[i] === choice) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     };
 
     /**
@@ -560,20 +729,48 @@
      *
      * Returns the values for current selection and other paradata
      *
+     * @return {object} Object containing the choice and paradata
      */
     ChoiceTable.prototype.getAllValues = function() {
-        return {
+        var obj;
+        obj = {
             id: this.table.id,
             freetext: 'NA',
             choice: J.clone(this.currentChoice),
             time: 'NA',
             attempts: 'NA',
             nClicks: this.numberOfClicks,
-            order: this.order
+            order: this.order,
+            group: this.group
         };
+        if (this.textarea) obj.freetext = this.textarea.value;
+        return obj;
     };
 
     // ## Helper methods.
 
+    /**
+     * ### checkCorrectChoiceParam
+     *
+     * Checks the input parameters of method ChoiceTable.setCorrectChoice
+     *
+     * If `ChoiceTable.selectMultiple` is set, the function checks each
+     * value of the array separately.
+     *
+     * @param {ChoiceTable} that This instance
+     * @param {string|value} An already existing value of a choice
+     */
+    function checkCorrectChoiceParam(that, choice) {
+        var toc; // type of choice
+        toc = typeof choice;
+        if (toc !== 'string' && toc !== 'number') {
+            throw new TypeError('ChoiceTable.setCorrectChoice: each choice ' +
+                                'must be number or string. Found: ' + choice);
+        }
+        if ('undefined' === typeof that.choicesValues[choice]) {
+            throw new TypeError('ChoiceTable.setCorrectChoice: choice ' +
+                                'not found: ' + choice);
+        }
+    }
 
 })(node);
