@@ -400,8 +400,9 @@ The  options object can have the following attributes:
 <p>Try to parse strings.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">amount</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+            <span class="nx">amount</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="nb">isFinite</span><span class="p">(</span><span class="nx">amount</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;MoneyTalks.update: invalid amount received: amount&#39;</span><span class="p">);</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
