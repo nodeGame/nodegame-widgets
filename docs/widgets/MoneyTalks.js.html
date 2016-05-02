@@ -227,7 +227,7 @@ which is forwarded to MoneyTalks.init.</span>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">currency</span> <span class="o">=</span> <span class="s1">&#39;ECU&#39;</span><span class="p">;</span>
 
 
 </pre></div>
@@ -328,9 +328,12 @@ The  options object can have the following attributes:
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">currency</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">currency</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">currency</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">money</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">precision</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">precision</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">precision</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">currency</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">currency</span> <span class="o">?</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">currency</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">currency</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">money</span> <span class="o">?</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">money</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">precision</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">precision</span> <span class="o">?</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">precision</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">precision</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">spanCurrency</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">currencyClassName</span> <span class="o">||</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">spanCurrency</span><span class="p">.</span><span class="nx">className</span> <span class="o">||</span> <span class="s1">&#39;moneytalkscurrency&#39;</span><span class="p">;</span>
@@ -370,6 +373,16 @@ The  options object can have the following attributes:
   </div>
   <div class="body"><p>Updates the contents of this.money and this.spanMoney according to amount</p>
   </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">amount</span>
+      <span class="dox_type">string</span>
+      <span class="dox_type">number</span>
+      <span>The amount to add. If string it will be
+  parsed.</span>
+    </div>
+  </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -384,7 +397,7 @@ The  options object can have the following attributes:
 <div class="pilwrap">
   <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
-<p>Try to parse strings</p>
+<p>Try to parse strings.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">amount</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>

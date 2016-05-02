@@ -57,7 +57,7 @@
          *
          * String describing the currency
          */
-        this.currency = 'EUR';
+        this.currency = 'ECU';
 
         /**
          * ### MoneyTalks.money
@@ -93,9 +93,12 @@
      *   - `moneyClassName`: Class name to be set for this.spanMoney;
      */
     MoneyTalks.prototype.init = function(options) {
-        this.currency = options.currency || this.currency;
-        this.money = options.money || this.money;
-        this.precision = options.precision || this.precision;
+        this.currency = 'string' === typeof options.currency ?
+            options.currency : this.currency;
+        this.money = 'number' === typeof options.money ?
+            options.money : this.money;
+        this.precision = 'number' === typeof options.precision ?
+            options.precision : this.precision;
 
         this.spanCurrency.className = options.currencyClassName ||
             this.spanCurrency.className || 'moneytalkscurrency';
@@ -122,10 +125,13 @@
      * ### MoneyTalks.update
      *
      * Updates the contents of this.money and this.spanMoney according to amount
+     *
+     * @param {string|number} amount The amount to add. If string it will be
+     *   parsed.
      */
     MoneyTalks.prototype.update = function(amount) {
         if ('number' !== typeof amount) {
-            // Try to parse strings
+            // Try to parse strings.
             amount = parseInt(amount, 10);
             if (isNaN(amount) || !isFinite(amount)) {
                 return;
