@@ -122,8 +122,7 @@
             }
 
             // Remove any warning/error from form on click.
-            // form = W.getElementById(name);
-            // if (form) form.style.border = '';
+            if (that.isHighlighted()) that.unhighlight();
         };
 
         /**
@@ -149,6 +148,13 @@
          * The array available choices
          */
         this.choices = null;
+
+        /**
+         * ### ChoiceTable.values
+         *
+         * Map of choices' values to indexes in the choices array
+         */
+        this.choicesValues = {};
 
         /**
          * ### ChoiceTable.correctChoice
@@ -272,6 +278,15 @@
          * ### ChoiceTable.textareaUsed
          *
          * If TRUE, the user has written something in the textarea
+         */
+        this.textareaUsed = null;
+
+        /**
+         * ### ChoiceTable.highlighted
+         *
+         * TRUE, when the choice table was highlighted
+         *
+         * @see ChoiceTable.highlight
          */
         this.textareaUsed = null;
 
@@ -721,7 +736,49 @@
             }
             return false;
         }
+    };
 
+    /**
+     * ### ChoiceTable.highlight
+     *
+     * Highlights the choice table
+     *
+     * @param {string} The type of highlight: 'info', 'warn', 'err'
+     *
+     * @see ChoiceTable.highlighted
+     * @see JSUS.highlight
+     */
+    ChoiceTable.prototype.highlight = function(type) {
+        type = type || 'err';
+        if (type !== 'info' && type !== 'warn' && type !== 'err') {
+            throw new TypeError('ChoiceTable.highlight: type must be ' +
+                                'info|warn|err. Found: ' + type);
+        }
+        J.highlight(this.table, type);
+        this.highlighted = true;
+    };
+
+    /**
+     * ### ChoiceTable.unhighlight
+     *
+     * Removes highlight from the choice table
+     *
+     * @see ChoiceTable.highlighted
+     */
+    ChoiceTable.prototype.unhighlight = function() {
+        this.table.style.border = '';
+        this.highlighted = false;
+    };
+
+    /**
+     * ### ChoiceTable.isHighlighted
+     *
+     * Returns TRUE if the choice table is highlighted
+     *
+     * @return {boolean} ChoiceTable.highlighted
+     */
+    ChoiceTable.prototype.isHighlighted = function() {
+        return this.highlighted;
     };
 
     /**
