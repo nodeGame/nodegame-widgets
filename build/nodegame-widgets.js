@@ -5175,8 +5175,9 @@
     MoneyTalks.prototype.update = function(amount) {
         if ('number' !== typeof amount) {
             // Try to parse strings.
-            amount = parseInt(amount, 10);
+            amount = parseFloat(amount, 10);
             if (isNaN(amount) || !isFinite(amount)) {
+                node.err('MoneyTalks.update: invalid amount received: amount');
                 return;
             }
         }
