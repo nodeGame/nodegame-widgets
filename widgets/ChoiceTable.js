@@ -330,6 +330,11 @@
         this.orientation = tmp;
 
         // Option selectMultiple, default false.
+        if ('undefined' === typeof options.shuffleChoices) tmp = false;
+        else tmp = !!options.shuffleChoices;
+        this.shuffleChoices = tmp;
+
+        // Option selectMultiple, default false.
         if ('undefined' === typeof options.selectMultiple) tmp = false;
         else tmp = !!options.selectMultiple;
         this.selectMultiple = tmp;
