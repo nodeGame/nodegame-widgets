@@ -52,6 +52,12 @@
         <a href="#choicetable.values">ChoiceTable.values</a>
       </div>
       <div class="heading h3">
+        <a href="#choicetable.timecurrentchoice">ChoiceTable.timeCurrentChoice</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.timefrom">ChoiceTable.timeFrom</a>
+      </div>
+      <div class="heading h3">
         <a href="#choicetable.order">ChoiceTable.order</a>
       </div>
       <div class="heading h3">
@@ -200,7 +206,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.7.0&#39;</span><span class="p">;</span>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.7.5&#39;</span><span class="p">;</span>
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Creates a configurable table where &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;each cell is a selectable choice.&#39;</span><span class="p">;</span>
 
@@ -226,6 +232,21 @@ MIT Licensed</p>
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
     <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>TODO: verifyChoices and attemps (but not on GetValues)
+TODO: getValues in general to be improved
+TODO: tableId containing '_'</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 
 
 </pre></div>
@@ -305,7 +326,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>Table id.</p>
         </td>
@@ -325,7 +346,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>Add 'choicetable' class to table.</p>
         </td>
@@ -365,6 +386,39 @@ MIT Licensed</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">listener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">td</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">oldSelected</span><span class="p">,</span> <span class="nx">unset</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Relative time.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">timeCurrentChoice</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">getTimeSince</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">);</span>
+            <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p>Absolute time.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">timeCurrentChoice</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span> <span class="o">?</span>
+                    <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+            <span class="p">}</span>
+
             <span class="nx">e</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
             <span class="nx">td</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">srcElement</span><span class="p">;</span>
 
@@ -375,7 +429,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>Id of elements are in the form of name_value or name_item_value.</p>
         </td>
@@ -389,7 +443,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code>       <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
@@ -407,7 +461,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code>       <span class="p">}</span>
@@ -437,7 +491,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>One more click.</p>
         </td>
@@ -451,7 +505,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>If only 1 selection allowed, remove selection from oldSelected.</p>
         </td>
@@ -477,7 +531,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Remove any warning/error from form on click.</p>
         </td>
@@ -514,7 +568,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Enable onclick listener.</p>
         </td>
@@ -615,6 +669,60 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">choicesValues</span> <span class="o">=</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.timecurrentchoice">
+  <h3>
+    <a href="#choicetable.timecurrentchoice" name="choicetable.timecurrentchoice" class="pilcrow">&#182;</a>
+    ChoiceTable.timeCurrentChoice
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Time when the last choice was made</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timeCurrentChoice</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.timefrom">
+  <h3>
+    <a href="#choicetable.timefrom" name="choicetable.timefrom" class="pilcrow">&#182;</a>
+    ChoiceTable.timeFrom
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Time is measured from timestamp as saved by node.timer</p>
+
+<p>Default event is a new step is loaded (user can interact with
+the screen). Set it to FALSE, to have absolute time.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">node.timer.getTimeSince
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="s1">&#39;step&#39;</span><span class="p">;</span>
 
 
 </pre></div>
@@ -1037,7 +1145,7 @@ the order in the choices array is used as value).</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
 </div>
 <p>Init.</p>
         </td>
@@ -1085,6 +1193,7 @@ the order in the choices array is used as value).</p>
   to have none.
 <ul><li>orientation: orientation of the table: vertical (v) or horizontal (h)</li>
 <li>group: the name of the group (number or string), if any</li>
+<li>groupOrder: the order of the table in the group, if any</li>
 <li>onclick: a custom onclick listener function. Context is
 <code>this</code> instance</li>
 <li>mainText: a text to be displayed above the table</li>
@@ -1098,7 +1207,9 @@ to the table</li>
 <li>renderer: a function that will render the choices. See
 ChoiceTable.renderer for info about the format</li>
 <li>freeText: if TRUE, a textarea will be added under the table,
-if 'string', the text will be added inside the the textarea</li></ul></li>
+if 'string', the text will be added inside the the textarea</li>
+<li>timeFrom: The timestamp as recorded by <code>node.timer.setTimestamp</code>
+or FALSE, to measure absolute time for current choice</li></ul></li>
 </ul>
   </div>
   <div class="details">
@@ -1124,7 +1235,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
 </div>
 <p>Table className.</p>
         </td>
@@ -1152,7 +1263,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 <p>Option orientation, default 'H'.</p>
         </td>
@@ -1187,7 +1298,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
 </div>
 <p>Option shuffleChoices, default false.</p>
         </td>
@@ -1203,7 +1314,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>Option selectMultiple, default false.</p>
         </td>
@@ -1219,7 +1330,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
 </div>
 <p>Add the choices.</p>
         </td>
@@ -1235,7 +1346,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
 </div>
 <p>Add the correct choices.</p>
         </td>
@@ -1251,7 +1362,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
 </div>
 <p>Set the group, if any.</p>
         </td>
@@ -1274,9 +1385,31 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
 </div>
-<p>Set the group, if any.</p>
+<p>Set the groupOrder, if any.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">groupOrder</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">groupOrder</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">groupOrder</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">group</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.groupOrder must &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be number or undefined. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">groupOrder</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
+</div>
+<p>Set the onclick listener, if any.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onclick</span><span class="p">)</span> <span class="p">{</span>
@@ -1297,16 +1430,16 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
+  <a class="pilcrow" href="#section-54" id="section-54">&#182;</a>
 </div>
-<p>Set the group, if any.</p>
+<p>Set the mainText, if any.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">mainText</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.group must &#39;</span> <span class="o">+</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.mainText must &#39;</span> <span class="o">+</span>
                                 <span class="s1">&#39;be string, undefined. Found: &#39;</span> <span class="o">+</span>
                                 <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">);</span>
         <span class="p">}</span>
@@ -1318,7 +1451,30 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
+  <a class="pilcrow" href="#section-55" id="section-55">&#182;</a>
+</div>
+<p>Set the timeFrom, if any.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">||</span>
+            <span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.timeFrom must &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be string, false, or undefined. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
 </div>
 <p>Creates a free-text textarea, possibly with an initial text</p>
         </td>
@@ -1394,7 +1550,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
+  <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
 </div>
 <p>Pre-allocate the choiceCells array.</p>
         </td>
@@ -1408,7 +1564,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
+  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
 </div>
 <p>Save the order in which the choices will be added.</p>
         </td>
@@ -1423,7 +1579,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
+  <a class="pilcrow" href="#section-60" id="section-60">&#182;</a>
 </div>
 <p>Start adding tr/s and tds based on the orientation.</p>
         </td>
@@ -1448,7 +1604,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-54" id="section-54">&#182;</a>
+  <a class="pilcrow" href="#section-61" id="section-61">&#182;</a>
 </div>
 <p>Save reference to cell.</p>
         </td>
@@ -1516,7 +1672,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
+  <a class="pilcrow" href="#section-63" id="section-63">&#182;</a>
 </div>
 <p>Get value and choice.</p>
         </td>
@@ -1529,7 +1685,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-57" id="section-57">&#182;</a>
+  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
 </div>
 <p>If a callback is defined, use it.</p>
         </td>
@@ -1551,7 +1707,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
+  <a class="pilcrow" href="#section-65" id="section-65">&#182;</a>
 </div>
 <p>Map a value to the index.</p>
         </td>
@@ -1580,7 +1736,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
+  <a class="pilcrow" href="#section-66" id="section-66">&#182;</a>
 </div>
 <p>Add the id if not added already by the renderer function.</p>
         </td>
@@ -1775,7 +1931,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
+  <a class="pilcrow" href="#section-71" id="section-71">&#182;</a>
 </div>
 <p>Quick check.</p>
         </td>
@@ -1788,7 +1944,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-65" id="section-65">&#182;</a>
+  <a class="pilcrow" href="#section-72" id="section-72">&#182;</a>
 </div>
 <p>Check every item</p>
         </td>
@@ -2114,13 +2270,15 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
             <span class="nx">freetext</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span>
             <span class="nx">choice</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span><span class="p">),</span>
             <span class="nx">time</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span>
-            <span class="nx">attempts</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span>
             <span class="nx">nClicks</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">numberOfClicks</span><span class="p">,</span>
             <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">,</span>
             <span class="nx">group</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">group</span><span class="p">,</span>
             <span class="nx">groupOrder</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupOrder</span>
         <span class="p">};</span>
-        <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">isCorrect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyChoices</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">attempts</span> <span class="o">=</span> <span class="s1">&#39;NA&#39;</span><span class="p">;</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">isCorrect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyChoices</span><span class="p">();</span>
+        <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">freetext</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
     <span class="p">};</span>

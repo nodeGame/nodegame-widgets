@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '0.7.0';
+    ChoiceTable.version = '0.7.5';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -29,6 +29,10 @@
     ChoiceTable.dependencies = {
         JSUS: {}
     };
+
+    // TODO: verifyChoices and attemps (but not on GetValues)
+    // TODO: getValues in general to be improved
+    // TODO: tableId containing '_'
 
     /**
      * ## ChoiceTable constructor
@@ -84,6 +88,17 @@
          */
         this.listener = function(e) {
             var item, name, value, td, q, oldSelected, unset;
+
+            // Relative time.
+            if ('string' === typeof that.timeFrom) {
+                that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
+            }
+            // Absolute time.
+            else {
+                that.timeCurrentChoice = Date.now ?
+                    Date.now() : new Date().getTime();
+            }
+
             e = e || window.event;
             td = e.target || e.srcElement;
 
@@ -164,6 +179,25 @@
          * Map of choices' values to indexes in the choices array
          */
         this.choicesValues = {};
+
+        /**
+         * ### ChoiceTable.timeCurrentChoice
+         *
+         * Time when the last choice was made
+         */
+        this.timeCurrentChoice = null;
+
+        /**
+         * ### ChoiceTable.timeFrom
+         *
+         * Time is measured from timestamp as saved by node.timer
+         *
+         * Default event is a new step is loaded (user can interact with
+         * the screen). Set it to FALSE, to have absolute time.
+         *
+         * @see node.timer.getTimeSince
+         */
+        this.timeFrom = 'step';
 
         /**
          * ### ChoiceTable.order
@@ -326,6 +360,7 @@
      *       to have none.
      *   - orientation: orientation of the table: vertical (v) or horizontal (h)
      *   - group: the name of the group (number or string), if any
+     *   - groupOrder: the order of the table in the group, if any
      *   - onclick: a custom onclick listener function. Context is
      *       `this` instance
      *   - mainText: a text to be displayed above the table
@@ -340,6 +375,8 @@
      *       ChoiceTable.renderer for info about the format
      *   - freeText: if TRUE, a textarea will be added under the table,
      *       if 'string', the text will be added inside the the textarea
+     *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
+     *       or FALSE, to measure absolute time for current choice
      *
      * @param {object} options Optional. Configuration options
      */
@@ -421,7 +458,18 @@
                                 options.group);
         }
 
-        // Set the group, if any.
+        // Set the groupOrder, if any.
+        if ('number' === typeof options.groupOrder) {
+
+            this.groupOrder = options.groupOrder;
+        }
+        else if ('undefined' !== typeof options.group) {
+            throw new TypeError('ChoiceTable.init: options.groupOrder must ' +
+                                'be number or undefined. Found: ' +
+                                options.groupOrder);
+        }
+
+        // Set the onclick listener, if any.
         if ('function' === typeof options.onclick) {
             this.listener = function(e) {
                 options.onclick.call(this, e);
@@ -433,14 +481,26 @@
                                 options.onclick);
         }
 
-        // Set the group, if any.
+        // Set the mainText, if any.
         if ('string' === typeof options.mainText) {
             this.mainText = options.mainText;
         }
         else if ('undefined' !== typeof options.mainText) {
-            throw new TypeError('ChoiceTable.init: options.group must ' +
+            throw new TypeError('ChoiceTable.init: options.mainText must ' +
                                 'be string, undefined. Found: ' +
                                 options.mainText);
+        }
+
+        // Set the timeFrom, if any.
+        if (options.timeFrom === false ||
+            'string' === typeof options.timeFrom) {
+
+            this.timeFrom = options.timeFrom;
+        }
+        else if ('undefined' !== typeof options.timeFrom) {
+            throw new TypeError('ChoiceTable.init: options.timeFrom must ' +
+                                'be string, false, or undefined. Found: ' +
+                                options.timeFrom);
         }
 
         // Creates a free-text textarea, possibly with an initial text
@@ -815,13 +875,15 @@
             freetext: 'NA',
             choice: J.clone(this.currentChoice),
             time: 'NA',
-            attempts: 'NA',
             nClicks: this.numberOfClicks,
             order: this.order,
             group: this.group,
             groupOrder: this.groupOrder
         };
-        if (null !== this.correctChoice) obj.isCorrect = this.verifyChoices();
+        if (null !== this.correctChoice) {
+            obj.attempts = 'NA';
+            obj.isCorrect = this.verifyChoices();
+        }
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
