@@ -2315,7 +2315,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '0.5.0';
+    ChoiceTable.version = '0.6.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -2573,13 +2573,6 @@
         this.textarea = null;
 
         /**
-         * ### ChoiceTable.textareaUsed
-         *
-         * If TRUE, the user has written something in the textarea
-         */
-        this.textareaUsed = null;
-
-        /**
          * ### ChoiceTable.highlighted
          *
          * TRUE, when the choice table was highlighted
@@ -2728,16 +2721,11 @@
 
             this.textarea = document.createElement('textarea');
             this.textarea.id = this.table.id + '_text';
+            this.textarea.className = ChoiceTable.className + '-freetext';
 
             if ('string' === typeof options.freeText) {
-                this.textarea.innerHTML = options.freeText;
+                this.textarea.placeholder = options.freeText;
                 this.freeText = options.freeText;
-// TODO: handle Text introducing textarea.
-//                 this.textarea.onclick = function() {
-//                     if (!that.textareaUsed) that.textarea.innerHTML = '';
-//                     that.textAreaUsed = true;
-//                     that.texta
-//                 };
             }
             else {
                 this.freeText = !!options.freeText;
@@ -2882,6 +2870,7 @@
 
     ChoiceTable.prototype.append = function() {
         this.bodyDiv.appendChild(this.table);
+        if (this.textarea) this.bodyDiv.appendChild(this.textarea);
     };
 
     ChoiceTable.prototype.listeners = function() {
