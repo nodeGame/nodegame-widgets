@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '0.6.0';
+    ChoiceTable.version = '0.7.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -139,8 +139,17 @@
          * ### ChoiceTable.mainText
          *
          * The main text introducing the choices
+         *
+         * @see ChoiceTable.spanMainText
          */
         this.mainText = null;
+
+        /**
+         * ### ChoiceTable.spanMainText
+         *
+         * The span containing the main text
+         */
+        this.spanMainText = null;
 
         /**
          * ### ChoiceTable.choices
@@ -155,6 +164,13 @@
          * Map of choices' values to indexes in the choices array
          */
         this.choicesValues = {};
+
+        /**
+         * ### ChoiceTable.order
+         *
+         * The order of the choices as displayed (if shuffled)
+         */
+        this.order = null;
 
         /**
          * ### ChoiceTable.correctChoice
@@ -223,6 +239,8 @@
          * ### ChoiceTable.shuffleChoices
          *
          * If TRUE, choices are randomly assigned to cells
+         *
+         * @see ChoiceTable.order
          */
         this.shuffleChoices = null;
 
@@ -257,6 +275,13 @@
          * The name of the group where the table belongs, if any
          */
         this.group = null;
+
+        /**
+         * ### ChoiceTable.groupOrder
+         *
+         * The order of the choice table within the group
+         */
+        this.groupOrder = null;
 
         /**
          * ### ChoiceTable.freeText
@@ -381,7 +406,7 @@
 
         // Add the correct choices.
         if ('undefined' !== typeof options.correctChoice) {
-            this.setCorrectChoices(options.correctChoice);
+            this.setCorrectChoice(options.correctChoice);
         }
 
         // Set the group, if any.
@@ -512,7 +537,7 @@
             choice = choice[1];
         }
         else {
-            value = idx;
+            value = this.shuffleChoices ? this.order[idx] : idx;
         }
 
         // Map a value to the index.
@@ -553,13 +578,13 @@
     ChoiceTable.prototype.setCorrectChoice = function(choice) {
         var i, len;
         if (!this.selectMultiple) {
-            checkCorrectChoiceParam(this, choice);
+            choice = checkCorrectChoiceParam(this, choice);
         }
         else {
             if (J.isArray(choice) && choice.length) {
                 i = -1, len = choice.length;
                 for ( ; ++i < len ; ) {
-                    checkCorrectChoiceParam(this, choice[i]);
+                    choice[i] = checkCorrectChoiceParam(this, choice[i]);
                 }
             }
             else {
@@ -571,6 +596,14 @@
     };
 
     ChoiceTable.prototype.append = function() {
+
+        if (this.mainText) {
+            this.spanMainText = document.createElement('span');
+            this.spanMainText.className = ChoiceTable.className + '-maintext';
+            this.spanMainText.innerHTML = this.mainText;
+            this.bodyDiv.appendChild(this.spanMainText);
+        }
+
         this.bodyDiv.appendChild(this.table);
         if (this.textarea) this.bodyDiv.appendChild(this.textarea);
     };
@@ -621,7 +654,6 @@
     ChoiceTable.prototype.verifyChoices = function() {
         var i, len, j, lenJ, c, clone, found;
         if (!this.selectMultiple) {
-            if ('undefined' === typeof this.correctChoice)
             return this.currentChoice === this.correctChoice;
         }
         else {
@@ -732,18 +764,17 @@
      *
      * Highlights the choice table
      *
-     * @param {string} The type of highlight: 'info', 'warn', 'err'
+     * @param {string} The style for the table's border.
+     *   Default '1px solid red'
      *
      * @see ChoiceTable.highlighted
-     * @see JSUS.highlight
      */
-    ChoiceTable.prototype.highlight = function(type) {
-        type = type || 'err';
-        if (type !== 'info' && type !== 'warn' && type !== 'err') {
-            throw new TypeError('ChoiceTable.highlight: type must be ' +
-                                'info|warn|err. Found: ' + type);
+    ChoiceTable.prototype.highlight = function(border) {
+        if (border && 'string' !== typeof border) {
+            throw new TypeError('ChoiceTable.highlight: border must be ' +
+                                'string or undefined. Found: ' + border);
         }
-        J.highlight(this.table, type);
+        this.table.style.border = border || '3px solid red';
         this.highlighted = true;
     };
 
@@ -787,8 +818,10 @@
             attempts: 'NA',
             nClicks: this.numberOfClicks,
             order: this.order,
-            group: this.group
+            group: this.group,
+            groupOrder: this.groupOrder
         };
+        if (null !== this.correctChoice) obj.isCorrect = this.verifyChoices();
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
@@ -800,16 +833,20 @@
      *
      * Checks the input parameters of method ChoiceTable.setCorrectChoice
      *
+     * The function transforms numbers into string, because then the checking
+     * is done with strings (they are serialized in the id property of tds).
+     *
      * If `ChoiceTable.selectMultiple` is set, the function checks each
      * value of the array separately.
      *
      * @param {ChoiceTable} that This instance
-     * @param {string|value} An already existing value of a choice
+     * @param {string|number} An already existing value of a choice
+     *
+     * @return {string} The checked choice
      */
     function checkCorrectChoiceParam(that, choice) {
-        var toc; // type of choice
-        toc = typeof choice;
-        if (toc !== 'string' && toc !== 'number') {
+        if ('number' === typeof choice) choice = '' + choice;
+        if ('string' !== typeof choice) {
             throw new TypeError('ChoiceTable.setCorrectChoice: each choice ' +
                                 'must be number or string. Found: ' + choice);
         }
@@ -817,6 +854,7 @@
             throw new TypeError('ChoiceTable.setCorrectChoice: choice ' +
                                 'not found: ' + choice);
         }
+        return choice;
     }
 
 })(node);
