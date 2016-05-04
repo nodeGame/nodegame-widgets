@@ -127,7 +127,7 @@
         <a href="#choicetable.enable">ChoiceTable.enable</a>
       </div>
       <div class="heading h3">
-        <a href="#choicetable.verifychoices">ChoiceTable.verifyChoices</a>
+        <a href="#choicetable.verifychoice">ChoiceTable.verifyChoice</a>
       </div>
       <div class="heading h3">
         <a href="#choicetable.setcurrentchoice">ChoiceTable.setCurrentChoice</a>
@@ -242,7 +242,7 @@ MIT Licensed</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
-<p>TODO: verifyChoices and attemps (but not on GetValues)
+<p>TODO: verifyChoice and attemps (but not on GetValues)
 TODO: getValues in general to be improved
 TODO: tableId containing '_'</p>
         </td>
@@ -1762,6 +1762,10 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
 
   </div>
   <div class="body"><p>Set the correct choice/s</p>
+
+<p>Correct choice/s are always stored as 'strings', or not number
+because then they are compared against the valued saved in
+the <code>id</code> field of the cell</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -1776,7 +1780,11 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">ChoiceTable.setChoices
+      <span class="dox_type">ChoiceTable.setChoices</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">checkCorrectChoiceParam
 </span>
     </div>
   </div>
@@ -1895,29 +1903,55 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="choicetable.verifychoices">
+<div class="pilwrap" id="choicetable.verifychoice">
   <h3>
-    <a href="#choicetable.verifychoices" name="choicetable.verifychoices" class="pilcrow">&#182;</a>
-    ChoiceTable.verifyChoices
+    <a href="#choicetable.verifychoice" name="choicetable.verifychoice" class="pilcrow">&#182;</a>
+    ChoiceTable.verifyChoice
   </h3>
 </div>
 
   </div>
-  <div class="body"><p>Enables clicking on the table and adds CSS 'clicklable' class</p>
+  <div class="body"><p>Compares the current choice/s with the correct ones</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name"></span>
-      <span class="dox_type">function</span>
-      <span>cb The event listener function</span>
+      <span class="dox_type">boolean</span>
+      <span class="dox_type">null</span>
+      <span>TRUE if current choice is correct,
+  FALSE if it is not correct, or NULL if no correct choice
+  was set</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTable.attempts</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTable.setCorrectChoice
+</span>
     </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">verifyChoices</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">verifyChoice</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">lenJ</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">clone</span><span class="p">,</span> <span class="nx">found</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-71" id="section-71">&#182;</a>
+</div>
+<p>If no correct choice is set return null.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">attemps</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">selectMultiple</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">;</span>
         <span class="p">}</span>
@@ -1931,7 +1965,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-71" id="section-71">&#182;</a>
+  <a class="pilcrow" href="#section-72" id="section-72">&#182;</a>
 </div>
 <p>Quick check.</p>
         </td>
@@ -1944,7 +1978,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-72" id="section-72">&#182;</a>
+  <a class="pilcrow" href="#section-73" id="section-73">&#182;</a>
 </div>
 <p>Check every item</p>
         </td>
@@ -2251,6 +2285,8 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
 
   </div>
   <div class="body"><p>Returns the values for current selection and other paradata</p>
+
+<p>Paradata that is not set or recorded will be omitted</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Returns</div>
@@ -2267,17 +2303,22 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
         <span class="kd">var</span> <span class="nx">obj</span><span class="p">;</span>
         <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
-            <span class="nx">freetext</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span>
             <span class="nx">choice</span><span class="o">:</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span><span class="p">),</span>
-            <span class="nx">time</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span>
+            <span class="nx">time</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeCurrentChoice</span><span class="p">,</span>
             <span class="nx">nClicks</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">numberOfClicks</span><span class="p">,</span>
-            <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">,</span>
-            <span class="nx">group</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">group</span><span class="p">,</span>
-            <span class="nx">groupOrder</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupOrder</span>
         <span class="p">};</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">shuffleChoices</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">group</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">group</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">group</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">group</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">groupOrder</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupOrder</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">groupOrder</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupOrder</span><span class="p">;</span>
+        <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">obj</span><span class="p">.</span><span class="nx">attempts</span> <span class="o">=</span> <span class="s1">&#39;NA&#39;</span><span class="p">;</span>
-            <span class="nx">obj</span><span class="p">.</span><span class="nx">isCorrect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyChoices</span><span class="p">();</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">isCorrect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyChoice</span><span class="p">();</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">attemps</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">attemps</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">freetext</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>

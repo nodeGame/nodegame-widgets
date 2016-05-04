@@ -2328,7 +2328,7 @@
         JSUS: {}
     };
 
-    // TODO: verifyChoices and attemps (but not on GetValues)
+    // TODO: verifyChoice and attemps (but not on GetValues)
     // TODO: getValues in general to be improved
     // TODO: tableId containing '_'
 
@@ -2927,11 +2927,16 @@
      *
      * Set the correct choice/s
      *
+     * Correct choice/s are always stored as 'strings', or not number
+     * because then they are compared against the valued saved in
+     * the `id` field of the cell
+     *
      * @param {number|string|array} If `selectMultiple` is set, param must
      *   be an array, otherwise a string or a number. Each correct choice
      *   must have been already defined as choice (value)
      *
      * @see ChoiceTable.setChoices
+     * @see checkCorrectChoiceParam
      */
     ChoiceTable.prototype.setCorrectChoice = function(choice) {
         var i, len;
@@ -3003,14 +3008,22 @@
     };
 
     /**
-     * ### ChoiceTable.verifyChoices
+     * ### ChoiceTable.verifyChoice
      *
-     * Enables clicking on the table and adds CSS 'clicklable' class
+     * Compares the current choice/s with the correct ones
      *
-     * @return {function} cb The event listener function
+     * @return {boolean|null} TRUE if current choice is correct,
+     *   FALSE if it is not correct, or NULL if no correct choice
+     *   was set
+     *
+     * @see ChoiceTable.attempts
+     * @see ChoiceTable.setCorrectChoice
      */
-    ChoiceTable.prototype.verifyChoices = function() {
+    ChoiceTable.prototype.verifyChoice = function() {
         var i, len, j, lenJ, c, clone, found;
+        // If no correct choice is set return null.
+        if (!this.correctChoice) return null;
+        this.attemps.push(this.currentChoice);
         if (!this.selectMultiple) {
             return this.currentChoice === this.correctChoice;
         }
@@ -3164,23 +3177,30 @@
      *
      * Returns the values for current selection and other paradata
      *
+     * Paradata that is not set or recorded will be omitted
+     *
      * @return {object} Object containing the choice and paradata
      */
     ChoiceTable.prototype.getAllValues = function() {
         var obj;
         obj = {
             id: this.table.id,
-            freetext: 'NA',
             choice: J.clone(this.currentChoice),
-            time: 'NA',
+            time: this.timeCurrentChoice,
             nClicks: this.numberOfClicks,
-            order: this.order,
-            group: this.group,
-            groupOrder: this.groupOrder
         };
+        if (this.shuffleChoices) {
+            obj.order = this.order;
+        }
+        if (this.group === 0 || this.group) {
+            obj.group = this.group;
+        }
+        if (this.groupOrder === 0 || this.groupOrder) {
+            obj.groupOrder = this.groupOrder;
+        }
         if (null !== this.correctChoice) {
-            obj.attempts = 'NA';
-            obj.isCorrect = this.verifyChoices();
+            obj.isCorrect = this.verifyChoice();
+            obj.attemps = this.attemps;
         }
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
