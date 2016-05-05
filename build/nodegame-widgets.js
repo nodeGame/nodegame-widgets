@@ -2322,15 +2322,13 @@
     ChoiceTable.title = 'Make your choice';
     ChoiceTable.className = 'choicetable';
 
+    ChoiceTable.separator = '::';
+
     // ## Dependencies
 
     ChoiceTable.dependencies = {
         JSUS: {}
     };
-
-    // TODO: verifyChoice and attemps (but not on GetValues)
-    // TODO: getValues in general to be improved
-    // TODO: tableId containing '_'
 
     /**
      * ## ChoiceTable constructor
@@ -2400,8 +2398,14 @@
             e = e || window.event;
             td = e.target || e.srcElement;
 
+            // Not a clickable choice.
+            if (!td.id || td.id === '') return;
+
             // Id of elements are in the form of name_value or name_item_value.
-            value = td.id.split('_');
+            value = td.id.split(that.separator);
+
+            // Separator not found, not a clickable cell.
+            if (value.length === 1) return;
 
 //            if (value.length === 2) {
                 name = value[0];
@@ -2632,14 +2636,13 @@
         this.textarea = null;
 
         /**
-         * ### ChoiceTable.highlighted
+         * ### ChoiceTable.separator
          *
-         * TRUE, when the choice table was highlighted
+         * Symbol used to separate tokens in the id attribute of every cell
          *
-         * @see ChoiceTable.highlight
+         * Default ChoiceTable.separator
          */
-        this.textareaUsed = null;
-
+        this.separator = ChoiceTable.separator;
 
         // Init.
         this.init(options);
@@ -2734,15 +2737,7 @@
         else tmp = !!options.selectMultiple;
         this.selectMultiple = tmp;
 
-        // Add the choices.
-        if ('undefined' !== typeof options.choices) {
-            this.setChoices(options.choices);
-        }
 
-        // Add the correct choices.
-        if ('undefined' !== typeof options.correctChoice) {
-            this.setCorrectChoice(options.correctChoice);
-        }
 
         // Set the group, if any.
         if ('string' === typeof options.group ||
@@ -2800,6 +2795,37 @@
                                 'be string, false, or undefined. Found: ' +
                                 options.timeFrom);
         }
+
+        // Set the separator, if any.
+        if ('string' === typeof options.separator) {
+
+            if (this.id.indexOf(options.separator) !== -1) {
+                throw new Error('ChoiceTable.init: options.separator ' +
+                                'cannot be a sequence of characters ' +
+                                'included in the table id. Found: ' +
+                                options.separator);
+            }
+
+            this.separator = options.separator;
+        }
+        else if ('undefined' !== typeof options.separator) {
+            throw new TypeError('ChoiceTable.init: options.separator must ' +
+                                'be string, or undefined. Found: ' +
+                                options.separator);
+        }
+
+        // After all configuration options are evaluated, add choices.
+
+        // Add the choices.
+        if ('undefined' !== typeof options.choices) {
+            this.setChoices(options.choices);
+        }
+
+        // Add the correct choices.
+        if ('undefined' !== typeof options.correctChoice) {
+            this.setCorrectChoice(options.correctChoice);
+        }
+
 
         // Creates a free-text textarea, possibly with an initial text
         if (options.freeText) {
@@ -2880,6 +2906,7 @@
      * @return {HTMLElement} td The newly created cell of the table
      *
      * @see ChoiceTable.renderer
+     * @see ChoiceTable.separator
      */
     ChoiceTable.prototype.renderChoice = function(choice, idx) {
         var td, value;
@@ -2917,7 +2944,9 @@
         }
 
         // Add the id if not added already by the renderer function.
-        if (!td.id || td.id === '') td.id = this.table.id + '_' + value;
+        if (!td.id || td.id === '') {
+            td.id = this.table.id + this.separator + value;
+        }
 
         return td;
     };
@@ -3010,7 +3039,10 @@
     /**
      * ### ChoiceTable.verifyChoice
      *
-     * Compares the current choice/s with the correct ones
+     * Compares the current choice/s with the correct one/s
+     *
+     * @param {boolean} markAttempt Optional. If TRUE, the value of
+     *   current choice is added to the attempts array. Default
      *
      * @return {boolean|null} TRUE if current choice is correct,
      *   FALSE if it is not correct, or NULL if no correct choice
@@ -3019,11 +3051,13 @@
      * @see ChoiceTable.attempts
      * @see ChoiceTable.setCorrectChoice
      */
-    ChoiceTable.prototype.verifyChoice = function() {
+    ChoiceTable.prototype.verifyChoice = function(markAttempt) {
         var i, len, j, lenJ, c, clone, found;
         // If no correct choice is set return null.
         if (!this.correctChoice) return null;
-        this.attemps.push(this.currentChoice);
+        // Mark attempt by default.
+        markAttempt = 'undefined' === typeof markAttempt ? true : markAttempt;
+        if (markAttempt) this.attempts.push(this.currentChoice);
         if (!this.selectMultiple) {
             return this.currentChoice === this.correctChoice;
         }
@@ -3179,9 +3213,17 @@
      *
      * Paradata that is not set or recorded will be omitted
      *
+     * @param {object} opts Optional. Configures the return value.
+     *   Available optionts:
+     *
+     *   - markAttempt: If TRUE, getting the value counts as an attempt
+     *      to find the correct answer. Default: TRUE.
+     *
      * @return {object} Object containing the choice and paradata
+     *
+     * @see ChoiceTable.verifyChoice
      */
-    ChoiceTable.prototype.getAllValues = function() {
+    ChoiceTable.prototype.getAllValues = function(opts) {
         var obj;
         obj = {
             id: this.table.id,
@@ -3189,6 +3231,7 @@
             time: this.timeCurrentChoice,
             nClicks: this.numberOfClicks,
         };
+        opts = opts || {};
         if (this.shuffleChoices) {
             obj.order = this.order;
         }
@@ -3199,7 +3242,7 @@
             obj.groupOrder = this.groupOrder;
         }
         if (null !== this.correctChoice) {
-            obj.isCorrect = this.verifyChoice();
+            obj.isCorrect = this.verifyChoice(opts.markAttempt);
             obj.attemps = this.attemps;
         }
         if (this.textarea) obj.freetext = this.textarea.value;
