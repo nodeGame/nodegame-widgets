@@ -1,6 +1,6 @@
 /**
  * # Chat
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -49,7 +49,6 @@
 
     Chat.dependencies = {
         JSUS: {}
-
     };
 
     /**
@@ -62,7 +61,8 @@
      *
      * @see Chat.init
      */
-    function Chat (options) {
+    function Chat(options) {
+
         /**
          * ### Chat.mode
          *
