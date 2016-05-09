@@ -3,7 +3,7 @@
  * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
- * Creates a table that if pressed emits node.done()
+ * Creates a configurable table where each cell is a selectable choice
  *
  * www.nodegame.org
  */
@@ -68,7 +68,7 @@
         /**
          * ### ChoiceTable.table
          *
-         * The HTML element triggering node.done() when pressed
+         * The HTML element triggering the listener function when clicked
          */
         this.table = null;
 
@@ -168,7 +168,14 @@
         this.choicesValues = {};
 
         /**
-         * ### ChoiceTable.choicesTitle
+         * ### ChoiceTable.choicesCells
+         *
+         * The cells of the table associated with each choice
+         */
+        this.choicesCells = null;
+
+        /**
+         * ### ChoiceTable.description
          *
          * A title included in the first cell of the row/column
          *
@@ -177,16 +184,16 @@
          *
          * @see ChoiceTable.orientation
          */
-        this.choicesTitle = null;
+        this.description = null;
 
         /**
-         * ### ChoiceTable.choicesTitleCell
+         * ### ChoiceTable.descriptionCell
          *
          * The rendered title cell
          *
          * @see ChoiceTable.renderChoicesTitle
          */
-        this.choicesTitleCell = null;
+        this.descriptionCell = null;
 
         /**
          * ### ChoiceTable.timeCurrentChoice
@@ -232,13 +239,6 @@
          * List of currentChoices at the moment of verifying correct answers
          */
         this.attempts = [];
-
-        /**
-         * ### ChoiceTable.choiceCells
-         *
-         * The cells of the table associated with each choice
-         */
-        this.choiceCells = null;
 
         /**
          * ### ChoiceTable.numberOfClicks
@@ -392,23 +392,6 @@
         options = options || {};
         that = this;
 
-        // Table className.
-        if ('undefined' !== typeof options.className) {
-            if (options.className === false) {
-                this.table.className = '';
-            }
-            else if ('string' === typeof options.className ||
-                     J.isArray(options.className)) {
-
-                J.addClass(this.table, options.className);
-            }
-            else {
-                throw new TypeError('ChoiceTable.init: options.className ' +
-                                    'must be string, array, or undefined. ' +
-                                    'Found: ' + options.className);
-            }
-        }
-
         // Option orientation, default 'H'.
         if ('undefined' === typeof options.orientation) {
             tmp = 'H';
@@ -519,16 +502,16 @@
                             options.separator);
         }
 
-        // Set the choicesTitle, if any.
-        if ('string' === typeof options.choicesTitle ||
-            'number' === typeof options.choicesTitle) {
+        // Set the description, if any.
+        if ('string' === typeof options.description ||
+            'number' === typeof options.description) {
 
-            this.choicesTitle = options.choicesTitle;
+            this.description = '' + options.description;
         }
-        else if ('undefined' !== typeof options.choicesTitle) {
-            throw new TypeError('ChoiceTable.init: options.choicesTitle must ' +
+        else if ('undefined' !== typeof options.description) {
+            throw new TypeError('ChoiceTable.init: options.description must ' +
                                 'be string, number or undefined. Found: ' +
-                                options.choicesTitle);
+                                options.description);
         }
 
         // After all configuration options are evaluated, add choices.
@@ -550,8 +533,27 @@
             // Set table id.
             this.table.id = this.id;
 
-            // Add 'choicetable' class to table.
-            J.addClass(this.table, ChoiceTable.className);
+            // Table className.
+            if ('undefined' !== typeof options.className) {
+                if (options.className === false) {
+                    this.table.className = '';
+                }
+                else if ('string' === typeof options.className ||
+                         J.isArray(options.className)) {
+
+                    J.addClass(this.table, options.className);
+                }
+                else {
+                    throw new TypeError('ChoiceTable.init: options.' +
+                                        'className must be string, array, ' +
+                                        'or undefined. Found: ' +
+                                        options.className);
+                }
+            }
+            else {
+                // Add default 'choicetable' class to table.
+                J.addClass(this.table, ChoiceTable.className);
+            }
         }
 
         // Add the choices.
@@ -623,27 +625,23 @@
     /**
      * ### ChoiceTable.buildChoices
      *
-     * Render every choice and stores cell in `choiceCells` array
+     * Render every choice and stores cell in `choicesCells` array
      *
      * Follows a shuffled order, if set
      *
      * @see ChoiceTable.order
      * @see ChoiceTable.renderChoice
-     * @see ChoiceTable.choiceCells
-     * @see ChoiceTable.choicesTitleCell
+     * @see ChoiceTable.descriptionCell
      */
     ChoiceTable.prototype.buildChoices = function() {
-        var i, len, td;
+        var i, len;
         i = -1, len = this.choices.length;
-        // Pre-allocate the choiceCells array.
-        this.choiceCells = new Array(len);
+        // Pre-allocate the choicesCells array.
+        this.choicesCells = new Array(len);
         for ( ; ++i < len ; ) {
-            td = this.renderChoice(this.choices[this.order[i]], i);
-            this.choiceCells[i] = td;
+            this.renderChoice(this.choices[this.order[i]], i);
         }
-        if (this.choicesTitle) {
-            this.choicesTitleCell = this.renderChoicesTitle(this.choicesTitle);
-        }
+        if (this.description) this.renderChoicesTitle(this.description);
     };
 
     /**
@@ -654,7 +652,6 @@
      * Must be called after choices have been set already.
      *
      * @see ChoiceTable.setChoices
-     * @see ChoiceTable.choiceCells
      * @see ChoiceTable.order
      * @see ChoiceTable.renderChoice
      * @see ChoiceTable.orientation
@@ -662,7 +659,7 @@
     ChoiceTable.prototype.buildTable = function() {
         var i, len, tr, H;
 
-        len = this.choiceCells.length;
+        len = this.choicesCells.length;
 
         // Start adding tr/s and tds based on the orientation.
         i = -1, H = this.orientation === 'H';
@@ -671,7 +668,7 @@
             tr = document.createElement('tr');
             this.table.appendChild(tr);
             // Add horizontal choices title.
-            if (this.choicesTitleCell) tr.appendChild(this.choicesTitleCell);
+            if (this.descriptionCell) tr.appendChild(this.descriptionCell);
         }
         // Main loop.
         for ( ; ++i < len ; ) {
@@ -679,14 +676,14 @@
                 tr = document.createElement('tr');
                 this.table.appendChild(tr);
                 // Add vertical choices title.
-                if (i === 0 && this.choicesTitleCell) {
-                    tr.appendChild(this.choicesTitleCell);
+                if (i === 0 && this.descriptionCell) {
+                    tr.appendChild(this.descriptionCell);
                     tr = document.createElement('tr');
                     this.table.appendChild(tr);
                 }
             }
             // Clickable cell.
-            tr.appendChild(this.choiceCells[i]);
+            tr.appendChild(this.choicesCells[i]);
         }
         // Enable onclick listener.
         this.enable();
@@ -706,8 +703,8 @@
         var i, len, tr, td, H;
 
         len = this.choices.length;
-        // Pre-allocate the choiceCells array.
-        this.choiceCells = new Array(len);
+        // Pre-allocate the choicesCells array.
+        this.choicesCells = new Array(len);
 
         // Start adding tr/s and tds based on the orientation.
         i = -1, H = this.orientation === 'H';
@@ -715,9 +712,9 @@
         if (H) {
             tr = document.createElement('tr');
             this.table.appendChild(tr);
-            // Add horizontal choices title.
-            if (this.choicesTitle) {
-                td = this.renderChoicesTitle(this.choicesTitle);
+            // Add horizontal choices description.
+            if (this.description) {
+                td = this.renderDescription(this.description);
                 tr.appendChild(td);
             }
         }
@@ -726,9 +723,9 @@
             if (!H) {
                 tr = document.createElement('tr');
                 this.table.appendChild(tr);
-                // Add vertical choices title.
-                if (i === 0 && this.choicesTitle) {
-                    td = this.renderChoicesTitle(this.choicesTitle);
+                // Add vertical choices description.
+                if (i === 0 && this.description) {
+                    td = this.renderDescription(this.description);
                     tr.appendChild(td);
                     tr = document.createElement('tr');
                     this.table.appendChild(tr);
@@ -737,8 +734,6 @@
             // Clickable cell.
             td = this.renderChoice(this.choices[this.order[i]], i);
             tr.appendChild(td);
-            // Save reference to cell.
-            this.choiceCells[i] = td;
         }
 
         // Enable onclick listener.
@@ -746,11 +741,11 @@
     };
 
     /**
-     * ### ChoiceTable.renderChoicesTitle
+     * ### ChoiceTable.renderDescription
      *
      * Transforms a choice element into a cell of the table
      *
-     * @param {mixed} title The title element. It must be string or number,
+     * @param {mixed} descr The description. It must be string or number,
      *   or array where the first element is the 'value' (incorporated in the
      *   `id` field) and the second the text to display as choice. If a
      *   If renderer function is defined there are no restriction on the
@@ -758,13 +753,14 @@
      *
      * @return {HTMLElement} td The newly created cell of the table
      *
-     * @see ChoiceTable.choicesTitle
+     * @see ChoiceTable.description
      */
-    ChoiceTable.prototype.renderChoicesTitle = function(title) {
+    ChoiceTable.prototype.renderDescription = function(title) {
         var td;
         td = document.createElement('td');
         td.innerHTML = title;
-        td.className = this.className + '-title';
+        td.className = this.className + '-descr';
+        this.descriptionCell = td;
         return td;
     };
 
@@ -772,6 +768,8 @@
      * ### ChoiceTable.renderChoice
      *
      * Transforms a choice element into a cell of the table
+     *
+     * A reference to the cell is saved in `choicesCells`.
      *
      * @param {mixed} choice The choice element. It must be string or number,
      *   or array where the first element is the 'value' (incorporated in the
@@ -784,6 +782,7 @@
      *
      * @see ChoiceTable.renderer
      * @see ChoiceTable.separator
+     * @see ChoiceTable.choicesCells
      */
     ChoiceTable.prototype.renderChoice = function(choice, idx) {
         var td, value;
@@ -807,7 +806,6 @@
             throw new Error('ChoiceTable.renderChoice: value already ' +
                             'in use: ' + value);
         }
-        this.choicesValues[value] = idx;
 
         if ('string' === typeof choice || 'number' === typeof choice) {
             td.innerHTML = choice;
@@ -824,6 +822,10 @@
         if (!td.id || td.id === '') {
             td.id = this.id + this.separator + value;
         }
+
+        // All fine, updates global variables.
+        this.choicesValues[value] = idx;
+        this.choicesCells[idx] = td;
 
         return td;
     };
