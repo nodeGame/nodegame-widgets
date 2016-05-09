@@ -300,16 +300,16 @@
         widget.wid = '' + J.randomInt(0,10000000000000000000);
 
         // Call listeners.
+        if (options.listeners !== false) {
+            // Start recording changes.
+            node.events.setRecordChanges(true);
 
-        // Start recording changes.
-        node.events.setRecordChanges(true);
+            widget.listeners.call(widget);
 
-        // Register listeners.
-        widget.listeners.call(widget);
-
-        // Get registered listeners, clear changes, and stop recording.
-        changes = node.events.getChanges(true);
-        node.events.setRecordChanges(false);
+            // Get registered listeners, clear changes, and stop recording.
+            changes = node.events.getChanges(true);
+            node.events.setRecordChanges(false);
+        }
 
         origDestroy = widget.destroy;
 
@@ -558,7 +558,7 @@
 
 /**
  * # Chat
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -607,7 +607,6 @@
 
     Chat.dependencies = {
         JSUS: {}
-
     };
 
     /**
@@ -620,7 +619,8 @@
      *
      * @see Chat.init
      */
-    function Chat (options) {
+    function Chat(options) {
+
         /**
          * ### Chat.mode
          *
@@ -2315,7 +2315,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '0.7.5';
+    ChoiceTable.version = '1.0.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -2345,34 +2345,30 @@
         var that;
         that = this;
 
+        if ('string' !== typeof options.id) {
+            throw new TypeError('ChoiceTable constructor: options.id must ' +
+                                'be string. Found: ' + options.id);
+        }
+        if (W.getElementById(options.id)) {
+            throw new TypeError('ChoiceTable constructor: options.id is not ' +
+                                'unique: ' + options.id);
+        }
+
+        /**
+         * ### ChoiceTable.id
+         *
+         * The ID of the instance
+         *
+         * Will be used as the table id, and as prefix for all choice TDs
+         */
+        this.id = options.id;
+
         /**
          * ### ChoiceTable.table
          *
          * The HTML element triggering node.done() when pressed
          */
-        if ('object' === typeof options.table) {
-            this.table = options.table;
-        }
-        else if ('undefined' === typeof options.table) {
-            this.table = document.createElement('table');
-        }
-        else {
-            throw new TypeError('ChoiceTable constructor: options.table must ' +
-                                'be object or undefined. Found: ' +
-                                options.table);
-        }
-
-        // Table id.
-        if ('string' === typeof options.tableId) {
-            this.table.id = options.tableId;
-        }
-        else {
-            throw new TypeError('ChoiceTable.init: options.tableId must ' +
-                                'be string. Found: ' + options.tableId);
-        }
-
-        // Add 'choicetable' class to table.
-        J.addClass(this.table, ChoiceTable.className);
+        this.table = null;
 
         /**
          * ## ChoiceTable.listener
@@ -2383,7 +2379,7 @@
          * @see GameChoice.disable
          */
         this.listener = function(e) {
-            var item, name, value, td, q, oldSelected, unset;
+            var name, value, td, oldSelected;
 
             // Relative time.
             if ('string' === typeof that.timeFrom) {
@@ -2407,18 +2403,8 @@
             // Separator not found, not a clickable cell.
             if (value.length === 1) return;
 
-//            if (value.length === 2) {
-                name = value[0];
-                value = value[1];
-//            }
-// For multiple rows.
-//             else {
-//                 name = value[0];
-//                 item = value[1];
-//                 value = value[2];
-//
-//                 name = item;
-//             }
+            name = value[0];
+            value = value[1];
 
             // One more click.
             that.numberOfClicks++;
@@ -2449,9 +2435,6 @@
          */
         this.disabled = true;
 
-        // Enable onclick listener.
-        this.enable();
-
         /**
          * ### ChoiceTable.mainText
          *
@@ -2481,6 +2464,27 @@
          * Map of choices' values to indexes in the choices array
          */
         this.choicesValues = {};
+
+        /**
+         * ### ChoiceTable.choicesTitle
+         *
+         * A title included in the first cell of the row/column
+         *
+         * It will be placed to the left of the choices if orientation
+         * is horizontal, or above the choices if orientation is vertical
+         *
+         * @see ChoiceTable.orientation
+         */
+        this.choicesTitle = null;
+
+        /**
+         * ### ChoiceTable.choicesTitleCell
+         *
+         * The rendered title cell
+         *
+         * @see ChoiceTable.renderChoicesTitle
+         */
+        this.choicesTitleCell = null;
 
         /**
          * ### ChoiceTable.timeCurrentChoice
@@ -2737,8 +2741,6 @@
         else tmp = !!options.selectMultiple;
         this.selectMultiple = tmp;
 
-
-
         // Set the group, if any.
         if ('string' === typeof options.group ||
             'number' === typeof options.group) {
@@ -2798,14 +2800,6 @@
 
         // Set the separator, if any.
         if ('string' === typeof options.separator) {
-
-            if (this.id.indexOf(options.separator) !== -1) {
-                throw new Error('ChoiceTable.init: options.separator ' +
-                                'cannot be a sequence of characters ' +
-                                'included in the table id. Found: ' +
-                                options.separator);
-            }
-
             this.separator = options.separator;
         }
         else if ('undefined' !== typeof options.separator) {
@@ -2814,7 +2808,49 @@
                                 options.separator);
         }
 
+        // Conflict might be generated by id or seperator,
+        // as specified by user.
+        if (this.id.indexOf(options.separator) !== -1) {
+            throw new Error('ChoiceTable.init: options.separator ' +
+                            'cannot be a sequence of characters ' +
+                            'included in the table id. Found: ' +
+                            options.separator);
+        }
+
+        // Set the choicesTitle, if any.
+        if ('string' === typeof options.choicesTitle ||
+            'number' === typeof options.choicesTitle) {
+
+            this.choicesTitle = options.choicesTitle;
+        }
+        else if ('undefined' !== typeof options.choicesTitle) {
+            throw new TypeError('ChoiceTable.init: options.choicesTitle must ' +
+                                'be string, number or undefined. Found: ' +
+                                options.choicesTitle);
+        }
+
         // After all configuration options are evaluated, add choices.
+
+        // Create/set table, if requested.
+        if (options.table !== false) {
+            if ('object' === typeof options.table) {
+                this.table = options.table;
+            }
+            else if ('undefined' === typeof options.table) {
+                this.table = document.createElement('table');
+            }
+            else {
+                throw new TypeError('ChoiceTable constructor: options.table ' +
+                                    'must be object, false or undefined. ' +
+                                    'Found: ' + options.table);
+            }
+
+            // Set table id.
+            this.table.id = this.id;
+
+            // Add 'choicetable' class to table.
+            J.addClass(this.table, ChoiceTable.className);
+        }
 
         // Add the choices.
         if ('undefined' !== typeof options.choices) {
@@ -2826,12 +2862,11 @@
             this.setCorrectChoice(options.correctChoice);
         }
 
-
         // Creates a free-text textarea, possibly with an initial text
         if (options.freeText) {
 
             this.textarea = document.createElement('textarea');
-            this.textarea.id = this.table.id + '_text';
+            this.textarea.id = this.id + '_text';
             this.textarea.className = ChoiceTable.className + '-freetext';
 
             if ('string' === typeof options.freeText) {
@@ -2847,17 +2882,24 @@
     /**
      * ### ChoiceTable.setChoices
      *
-     * Sets the available choices and builds the table accordingly
+     * Sets the available choices and optionally builds the table
+     *
+     * If a table is defined, it will automatically append the choices
+     * as TD cells. Otherwise, the choices will be built but not appended.
      *
      * @param {array} choices The array of choices
      *
-     * @see ChoiceTable.renderChoice
-     * @see ChoiceTable.orientation
+     * @see ChoiceTable.table
+     * @see ChoiceTable.shuffleChoices
+     * @see ChoiceTable.order
+     * @see ChoiceTable.buildChoices
+     * @see ChoiceTable.buildTableAndChoices
      */
     ChoiceTable.prototype.setChoices = function(choices) {
-        var i, len, tr, td, H;
+        var len;
         if (!J.isArray(choices)) {
-            throw new TypeError('ChoiceTable.init: choices must be array.');
+            throw new TypeError('ChoiceTable.setChoices: choices ' +
+                                'must be array.');
         }
         if (!choices.length) {
             throw new Error('ChoiceTable.setChoices: choices is empty array.');
@@ -2865,12 +2907,60 @@
         this.choices = choices;
         len = choices.length;
 
-        // Pre-allocate the choiceCells array.
-        this.choiceCells = new Array(len);
-
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
         if (this.shuffleChoices) this.order = J.shuffle(this.order);
+
+        // Build the table and choices at once (faster).
+        if (this.table) this.buildTableAndChoices();
+        // Or just build choices.
+        else this.buildChoices();
+    };
+
+
+    /**
+     * ### ChoiceTable.buildChoices
+     *
+     * Render every choice and stores cell in `choiceCells` array
+     *
+     * Follows a shuffled order, if set
+     *
+     * @see ChoiceTable.order
+     * @see ChoiceTable.renderChoice
+     * @see ChoiceTable.choiceCells
+     * @see ChoiceTable.choicesTitleCell
+     */
+    ChoiceTable.prototype.buildChoices = function() {
+        var i, len, td;
+        i = -1, len = this.choices.length;
+        // Pre-allocate the choiceCells array.
+        this.choiceCells = new Array(len);
+        for ( ; ++i < len ; ) {
+            td = this.renderChoice(this.choices[this.order[i]], i);
+            this.choiceCells[i] = td;
+        }
+        if (this.choicesTitle) {
+            this.choicesTitleCell = this.renderChoicesTitle(this.choicesTitle);
+        }
+    };
+
+    /**
+     * ### ChoiceTable.buildTable
+     *
+     * Builds the table of clickable choices and enables it
+     *
+     * Must be called after choices have been set already.
+     *
+     * @see ChoiceTable.setChoices
+     * @see ChoiceTable.choiceCells
+     * @see ChoiceTable.order
+     * @see ChoiceTable.renderChoice
+     * @see ChoiceTable.orientation
+     */
+    ChoiceTable.prototype.buildTable = function() {
+        var i, len, tr, H;
+
+        len = this.choiceCells.length;
 
         // Start adding tr/s and tds based on the orientation.
         i = -1, H = this.orientation === 'H';
@@ -2878,17 +2968,102 @@
         if (H) {
             tr = document.createElement('tr');
             this.table.appendChild(tr);
+            // Add horizontal choices title.
+            if (this.choicesTitleCell) tr.appendChild(this.choicesTitleCell);
         }
+        // Main loop.
         for ( ; ++i < len ; ) {
             if (!H) {
                 tr = document.createElement('tr');
                 this.table.appendChild(tr);
+                // Add vertical choices title.
+                if (i === 0 && this.choicesTitleCell) {
+                    tr.appendChild(this.choicesTitleCell);
+                    tr = document.createElement('tr');
+                    this.table.appendChild(tr);
+                }
             }
+            // Clickable cell.
+            tr.appendChild(this.choiceCells[i]);
+        }
+        // Enable onclick listener.
+        this.enable();
+    };
+
+    /**
+     * ### ChoiceTable.buildTableAndChoices
+     *
+     * Builds the table of clickable choices
+     *
+     * @see ChoiceTable.choices
+     * @see ChoiceTable.order
+     * @see ChoiceTable.renderChoice
+     * @see ChoiceTable.orientation
+     */
+    ChoiceTable.prototype.buildTableAndChoices = function() {
+        var i, len, tr, td, H;
+
+        len = this.choices.length;
+        // Pre-allocate the choiceCells array.
+        this.choiceCells = new Array(len);
+
+        // Start adding tr/s and tds based on the orientation.
+        i = -1, H = this.orientation === 'H';
+
+        if (H) {
+            tr = document.createElement('tr');
+            this.table.appendChild(tr);
+            // Add horizontal choices title.
+            if (this.choicesTitle) {
+                td = this.renderChoicesTitle(this.choicesTitle);
+                tr.appendChild(td);
+            }
+        }
+        // Main loop.
+        for ( ; ++i < len ; ) {
+            if (!H) {
+                tr = document.createElement('tr');
+                this.table.appendChild(tr);
+                // Add vertical choices title.
+                if (i === 0 && this.choicesTitle) {
+                    td = this.renderChoicesTitle(this.choicesTitle);
+                    tr.appendChild(td);
+                    tr = document.createElement('tr');
+                    this.table.appendChild(tr);
+                }
+            }
+            // Clickable cell.
             td = this.renderChoice(this.choices[this.order[i]], i);
             tr.appendChild(td);
             // Save reference to cell.
             this.choiceCells[i] = td;
         }
+
+        // Enable onclick listener.
+        this.enable();
+    };
+
+    /**
+     * ### ChoiceTable.renderChoicesTitle
+     *
+     * Transforms a choice element into a cell of the table
+     *
+     * @param {mixed} title The title element. It must be string or number,
+     *   or array where the first element is the 'value' (incorporated in the
+     *   `id` field) and the second the text to display as choice. If a
+     *   If renderer function is defined there are no restriction on the
+     *   format of choice
+     *
+     * @return {HTMLElement} td The newly created cell of the table
+     *
+     * @see ChoiceTable.choicesTitle
+     */
+    ChoiceTable.prototype.renderChoicesTitle = function(title) {
+        var td;
+        td = document.createElement('td');
+        td.innerHTML = title;
+        td.className = this.className + '-title';
+        return td;
     };
 
     /**
@@ -2945,7 +3120,7 @@
 
         // Add the id if not added already by the renderer function.
         if (!td.id || td.id === '') {
-            td.id = this.table.id + this.separator + value;
+            td.id = this.id + this.separator + value;
         }
 
         return td;
@@ -2995,8 +3170,7 @@
             this.spanMainText.innerHTML = this.mainText;
             this.bodyDiv.appendChild(this.spanMainText);
         }
-
-        this.bodyDiv.appendChild(this.table);
+        if (this.table) this.bodyDiv.appendChild(this.table);
         if (this.textarea) this.bodyDiv.appendChild(this.textarea);
     };
 
@@ -3018,8 +3192,10 @@
     ChoiceTable.prototype.disable = function() {
         if (this.disabled) return;
         this.disabled = true;
-        J.removeClass(this.table, 'clickable');
-        this.table.removeEventListener('click', this.listener);
+        if (this.table) {
+            J.removeClass(this.table, 'clickable');
+            this.table.removeEventListener('click', this.listener);
+        }
     };
 
     /**
@@ -3031,8 +3207,11 @@
      */
     ChoiceTable.prototype.enable = function() {
         if (!this.disabled) return;
-        J.addClass(this.table, 'clickable');
+        if (!this.table) {
+            throw new Error('ChoiceTable.enable: table not defined.');
+        }
         this.disabled = false;
+        J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
     };
 
@@ -3175,6 +3354,7 @@
      * @see ChoiceTable.highlighted
      */
     ChoiceTable.prototype.highlight = function(border) {
+        if (!this.table) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('ChoiceTable.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
@@ -3191,6 +3371,7 @@
      * @see ChoiceTable.highlighted
      */
     ChoiceTable.prototype.unhighlight = function() {
+        if (!this.table) return;
         this.table.style.border = '';
         this.highlighted = false;
     };
@@ -3226,10 +3407,10 @@
     ChoiceTable.prototype.getAllValues = function(opts) {
         var obj;
         obj = {
-            id: this.table.id,
+            id: this.id,
             choice: J.clone(this.currentChoice),
             time: this.timeCurrentChoice,
-            nClicks: this.numberOfClicks,
+            nClicks: this.numberOfClicks
         };
         opts = opts || {};
         if (this.shuffleChoices) {
@@ -3274,6 +3455,7 @@
                                 'must be number or string. Found: ' + choice);
         }
         if ('undefined' === typeof that.choicesValues[choice]) {
+
             throw new TypeError('ChoiceTable.setCorrectChoice: choice ' +
                                 'not found: ' + choice);
         }
