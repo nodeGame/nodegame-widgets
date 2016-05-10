@@ -31,13 +31,16 @@
         <a href="#waitingroom%20constructor">WaitingRoom constructor</a>
       </div>
       <div class="heading h3">
-        <a href="#waitingroom.callbacks">WaitingRoom.callbacks</a>
+        <a href="#waitingroom.connected">WaitingRoom.connected</a>
       </div>
       <div class="heading h3">
-        <a href="#waitingroom.stillchecking">WaitingRoom.stillChecking</a>
+        <a href="#waitingroom.poolsize">WaitingRoom.poolSize</a>
       </div>
       <div class="heading h3">
-        <a href="#waitingroom.withtimeout">WaitingRoom.withTimeout</a>
+        <a href="#waitingroom.ngames">WaitingRoom.nGames</a>
+      </div>
+      <div class="heading h3">
+        <a href="#waitingroom.groupsize">WaitingRoom.groupSize</a>
       </div>
       <div class="heading h3">
         <a href="#waitingroom.waittime">WaitingRoom.waitTime</a>
@@ -205,15 +208,15 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="waitingroom.callbacks">
+<div class="pilwrap" id="waitingroom.connected">
   <h3>
-    <a href="#waitingroom.callbacks" name="waitingroom.callbacks" class="pilcrow">&#182;</a>
-    WaitingRoom.callbacks
+    <a href="#waitingroom.connected" name="waitingroom.connected" class="pilcrow">&#182;</a>
+    WaitingRoom.connected
   </h3>
 </div>
 
   </div>
-  <div class="body"><p>Array of all test callbacks</p>
+  <div class="body"><p>Number of players connected</p>
   </div>
 </div>
         </td>
@@ -227,15 +230,15 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="waitingroom.stillchecking">
+<div class="pilwrap" id="waitingroom.poolsize">
   <h3>
-    <a href="#waitingroom.stillchecking" name="waitingroom.stillchecking" class="pilcrow">&#182;</a>
-    WaitingRoom.stillChecking
+    <a href="#waitingroom.poolsize" name="waitingroom.poolsize" class="pilcrow">&#182;</a>
+    WaitingRoom.poolSize
   </h3>
 </div>
 
   </div>
-  <div class="body"><p>Number of tests still pending</p>
+  <div class="body"><p>Number of players connected before groups are made</p>
   </div>
 </div>
         </td>
@@ -249,10 +252,32 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="waitingroom.withtimeout">
+<div class="pilwrap" id="waitingroom.ngames">
   <h3>
-    <a href="#waitingroom.withtimeout" name="waitingroom.withtimeout" class="pilcrow">&#182;</a>
-    WaitingRoom.withTimeout
+    <a href="#waitingroom.ngames" name="waitingroom.ngames" class="pilcrow">&#182;</a>
+    WaitingRoom.nGames
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Total number of games to be dispatched</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="waitingroom.groupsize">
+  <h3>
+    <a href="#waitingroom.groupsize" name="waitingroom.groupsize" class="pilcrow">&#182;</a>
+    WaitingRoom.groupSize
   </h3>
 </div>
 
@@ -633,7 +658,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>TODO: check conditions?</p>
         </td>
@@ -656,6 +681,13 @@ is disconnected.</p>
                                     <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.nGames &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">)</span> <span class="p">{</span>
@@ -741,7 +773,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Style up: delete title and border;</p>
         </td>
@@ -755,7 +787,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Append to bodyDiv.</p>
         </td>
@@ -874,19 +906,19 @@ is disconnected.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">numberOfGameslots</span><span class="p">,</span> <span class="nx">numberOfGames</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">numberOfGameSlots</span><span class="p">,</span> <span class="nx">numberOfGames</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">numberOfGames</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">/</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">);</span>
             <span class="nx">numberOfGames</span> <span class="o">=</span> <span class="nx">numberOfGames</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">?</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">:</span> <span class="nx">numberOfGames</span><span class="p">;</span>
-            <span class="nx">numberOfGameslots</span> <span class="o">=</span> <span class="nx">numberOfGames</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">;</span>
+            <span class="nx">numberOfGameSlots</span> <span class="o">=</span> <span class="nx">numberOfGames</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">;</span>
 
             <span class="k">this</span><span class="p">.</span><span class="nx">playerCount</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;span style=&quot;color:red&quot;&gt;&#39;</span> <span class="o">+</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span> <span class="o">+</span> <span class="s1">&#39; / &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">playerCountTooHigh</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">playerCountTooHigh</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;There are more players in &#39;</span> <span class="o">+</span>
                 <span class="s1">&#39;this waiting room than there are playslots in the game. &#39;</span> <span class="o">+</span>
-                <span class="s1">&#39;Only &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span> <span class="o">+</span> <span class="s1">&#39; players will be selected to &#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;Only &#39;</span> <span class="o">+</span> <span class="nx">numberOfGameSlots</span> <span class="o">+</span> <span class="s1">&#39; players will be selected to &#39;</span> <span class="o">+</span>
                 <span class="s1">&#39;play the game.&#39;</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
@@ -945,7 +977,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Configure all requirements.</p>
         </td>
@@ -962,7 +994,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>NodeGame Listeners.</p>
         </td>
@@ -1029,7 +1061,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Start waiting time timer.</p>
         </td>
@@ -1043,7 +1075,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Avoid running multiple timers.
 if (timeCheck) clearInterval(timeCheck);</p>
@@ -1064,7 +1096,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>Terminate countdown.</p>
         </td>
@@ -1078,7 +1110,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Write about disconnection in page.</p>
         </td>
@@ -1092,7 +1124,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code>        <span class="c1">// Enough to not display it in case of page refresh.</span>
@@ -1134,7 +1166,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
     <span class="p">};</span>
 
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">alertPlayer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="p">.</span><span class="nx">playSound</span><span class="p">(</span><span class="s1">&#39;doorbell.ogg&#39;</span><span class="p">);</span>
+        <span class="nx">JSUS</span><span class="p">.</span><span class="nx">playSound</span><span class="p">(</span><span class="s1">&#39;/sounds/doorbell.ogg&#39;</span><span class="p">);</span>
         <span class="nx">JSUS</span><span class="p">.</span><span class="nx">blinkTitle</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s1">&#39;GAME STARTS!&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">stopOnFocus</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
     <span class="p">};</span>
 
