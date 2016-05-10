@@ -750,6 +750,7 @@
         s.groupOrder = i+1;
         s.orientation = that.orientation;
         s.title = false;
+        s.listeners = false;
 
         // TODO: more.
         return s;

@@ -509,7 +509,13 @@
                             options.separator);
         }
 
-        // Set the description, if any.
+        // Copy short-form for description (only if not defined).
+        if ('undefined' !== typeof options.descr &&
+            'undefined' === typeof options.description) {
+
+            options.description = options.descr;
+        }
+
         if ('string' === typeof options.description ||
             'number' === typeof options.description) {
 
