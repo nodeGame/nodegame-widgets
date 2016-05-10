@@ -771,6 +771,7 @@
     var test = {
         id: 'ok',
         title: false,
+        orientation: 'V',
         items: [
             {
                 id: 'one',

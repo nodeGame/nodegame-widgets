@@ -66,6 +66,13 @@
         this.id = options.id;
 
         /**
+         * ### ChoiceTable.className
+         *
+         * The className of the instance
+         */
+        this.className = null;
+
+        /**
          * ### ChoiceTable.table
          *
          * The HTML element triggering the listener function when clicked
@@ -514,6 +521,22 @@
                                 options.description);
         }
 
+        // Set the className, if not use default.
+        if ('undefined' === typeof options.className) {
+            this.className = ChoiceTable.className;
+        }
+        else if (options.className === false ||
+                 'string' === typeof options.className ||
+                 J.isArray(options.className)) {
+
+            this.className = options.className;
+        }
+        else {
+            throw new TypeError('ChoiceTable.init: options.' +
+                                'className must be string, array, ' +
+                                'or undefined. Found: ' + options.className);
+        }
+
         // After all configuration options are evaluated, add choices.
 
         // Create/set table, if requested.
@@ -533,27 +556,8 @@
             // Set table id.
             this.table.id = this.id;
 
-            // Table className.
-            if ('undefined' !== typeof options.className) {
-                if (options.className === false) {
-                    this.table.className = '';
-                }
-                else if ('string' === typeof options.className ||
-                         J.isArray(options.className)) {
-
-                    J.addClass(this.table, options.className);
-                }
-                else {
-                    throw new TypeError('ChoiceTable.init: options.' +
-                                        'className must be string, array, ' +
-                                        'or undefined. Found: ' +
-                                        options.className);
-                }
-            }
-            else {
-                // Add default 'choicetable' class to table.
-                J.addClass(this.table, ChoiceTable.className);
-            }
+            if (this.className) J.addClass(this.table, this.className);
+            else this.table.className = '';
         }
 
         // Add the choices.
@@ -571,7 +575,8 @@
 
             this.textarea = document.createElement('textarea');
             this.textarea.id = this.id + '_text';
-            this.textarea.className = ChoiceTable.className + '-freetext';
+            tmp = this.className ? this.className + '-freetext' : 'freetext';
+            this.textarea.className = tmp;
 
             if ('string' === typeof options.freeText) {
                 this.textarea.placeholder = options.freeText;
@@ -759,7 +764,7 @@
         var td;
         td = document.createElement('td');
         td.innerHTML = title;
-        td.className = this.className + '-descr';
+        td.className = this.className ? this.className + '-descr' : 'descr';
         this.descriptionCell = td;
         return td;
     };
@@ -870,7 +875,8 @@
 
         if (this.mainText) {
             this.spanMainText = document.createElement('span');
-            this.spanMainText.className = ChoiceTable.className + '-maintext';
+            this.spanMainText.className = this.className ?
+                ChoiceTable.className + '-maintext' : 'maintext';
             this.spanMainText.innerHTML = this.mainText;
             this.bodyDiv.appendChild(this.spanMainText);
         }
