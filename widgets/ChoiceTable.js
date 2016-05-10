@@ -47,9 +47,10 @@
         var that;
         that = this;
 
+        if ('number' === typeof options.id) options.id = '' + options.id;
         if ('string' !== typeof options.id) {
             throw new TypeError('ChoiceTable constructor: options.id must ' +
-                                'be string. Found: ' + options.id);
+                                'be string or number. Found: ' + options.id);
         }
         if (W.getElementById(options.id)) {
             throw new TypeError('ChoiceTable constructor: options.id is not ' +
@@ -474,7 +475,7 @@
         }
         else if ('undefined' !== typeof options.mainText) {
             throw new TypeError('ChoiceTable.init: options.mainText must ' +
-                                'be string, undefined. Found: ' +
+                                'be string or undefined. Found: ' +
                                 options.mainText);
         }
 
@@ -521,10 +522,12 @@
 
             this.description = '' + options.description;
         }
-        else if ('undefined' !== typeof options.description) {
+        else if ('undefined' !== typeof options.description &&
+                 !(J.isNode(descr) || J.isElement(descr))) {
+
             throw new TypeError('ChoiceTable.init: options.description must ' +
-                                'be string, number or undefined. Found: ' +
-                                options.description);
+                                'be string, number, an HTML Element or ' +
+                                'undefined. Found: ' + options.description);
         }
 
         // Set the className, if not use default.
@@ -541,6 +544,16 @@
             throw new TypeError('ChoiceTable.init: options.' +
                                 'className must be string, array, ' +
                                 'or undefined. Found: ' + options.className);
+        }
+
+        // Set the renderer, if any.
+        if ('function' === typeof options.renderer) {
+            this.renderer = options.renderer;
+        }
+        else if ('undefined' !== typeof options.renderer) {
+            throw new TypeError('ChoiceTable.init: options.renderer must ' +
+                                'be function or undefined. Found: ' +
+                                options.renderer);
         }
 
         // After all configuration options are evaluated, add choices.
@@ -766,10 +779,12 @@
      *
      * @see ChoiceTable.description
      */
-    ChoiceTable.prototype.renderDescription = function(title) {
+    ChoiceTable.prototype.renderDescription = function(descr) {
         var td;
         td = document.createElement('td');
-        td.innerHTML = title;
+        if ('string' === typeof descr) td.innerHTML = descr;
+        // HTML element (checked before).
+        else td.appendChild(descr);
         td.className = this.className ? this.className + '-descr' : 'descr';
         this.descriptionCell = td;
         return td;
@@ -799,34 +814,37 @@
         var td, value;
         td = document.createElement('td');
 
-        // Get value and choice.
+        // Use custom renderer.
         if (this.renderer) {
-            // If a callback is defined, use it.
             value = this.renderer(td, choice, idx);
+            if ('undefined' === typeof value) value = idx;
         }
-        else if (J.isArray(choice)) {
-            value = choice[0];
-            choice = choice[1];
-        }
+        // Or use standard format.
         else {
-            value = this.shuffleChoices ? this.order[idx] : idx;
+            if (J.isArray(choice)) {
+                value = choice[0];
+                choice = choice[1];
+            }
+            else {
+                value = this.shuffleChoices ? this.order[idx] : idx;
+            }
+
+            if ('string' === typeof choice || 'number' === typeof choice) {
+                td.innerHTML = choice;
+            }
+            else if (J.isElement(choice) || J.isNode(choice)) {
+                td.appendChild(choice);
+            }
+            else {
+                throw new Error('ChoiceTable.renderChoice: invalid choice: ' +
+                                choice);
+            }
         }
 
         // Map a value to the index.
         if ('undefined' !== typeof this.choicesValues[value]) {
             throw new Error('ChoiceTable.renderChoice: value already ' +
                             'in use: ' + value);
-        }
-
-        if ('string' === typeof choice || 'number' === typeof choice) {
-            td.innerHTML = choice;
-        }
-        else if (J.isElement(choice) || J.isNode(choice)) {
-            td.appendChild(choice);
-        }
-        else {
-            throw new Error('ChoiceTable.renderChoice: invalid choice: ' +
-                            choice);
         }
 
         // Add the id if not added already by the renderer function.

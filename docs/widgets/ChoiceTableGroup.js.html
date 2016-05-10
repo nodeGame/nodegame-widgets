@@ -58,10 +58,10 @@
         <a href="#choicetablegroup.itemssettings">ChoiceTableGroup.itemsSettings</a>
       </div>
       <div class="heading h3">
-        <a href="#choicetablegroup.timefrom">ChoiceTableGroup.timeFrom</a>
+        <a href="#choicetablegroup.order">ChoiceTableGroup.order</a>
       </div>
       <div class="heading h3">
-        <a href="#choicetablegroup.order">ChoiceTableGroup.order</a>
+        <a href="#choicetable.shufflechoices">ChoiceTable.shuffleChoices</a>
       </div>
       <div class="heading h3">
         <a href="#choicetablegroup.orientation">ChoiceTableGroup.orientation</a>
@@ -77,6 +77,15 @@
       </div>
       <div class="heading h3">
         <a href="#choicetablegroup.textarea">ChoiceTableGroup.textarea</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetablegroup.timefrom">ChoiceTableGroup.timeFrom</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetablegroup.selectmultiple">ChoiceTableGroup.selectMultiple</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.renderer">ChoiceTable.renderer</a>
       </div>
       <div class="heading h3">
         <a href="#choicetablegroup.separator">ChoiceTableGroup.separator</a>
@@ -119,6 +128,12 @@
       </div>
       <div class="heading h2">
         <a href="#helper%20methods.">Helper methods.</a>
+      </div>
+      <div class="heading h3">
+        <a href="#mixinsettings">mixinSettings</a>
+      </div>
+      <div class="heading h3">
+        <a href="#getchoicetable">getChoiceTable</a>
       </div>
     </div>
   </div>
@@ -250,9 +265,11 @@ MIT Licensed</p>
 <p>TODO: move them in the Widgets as a check?</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup constructor: options.id &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;must be string. Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+                                <span class="s1">&#39;must be string or number. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup constructor: options.id &#39;</span> <span class="o">+</span>
@@ -622,38 +639,6 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="choicetablegroup.timefrom">
-  <h3>
-    <a href="#choicetablegroup.timefrom" name="choicetablegroup.timefrom" class="pilcrow">&#182;</a>
-    ChoiceTableGroup.timeFrom
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Time is measured from timestamp as saved by node.timer</p>
-
-<p>Default event is a new step is loaded (user can interact with
-the screen). Set it to FALSE, to have absolute time.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">node.timer.getTimeSince
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="s1">&#39;step&#39;</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
 <div class="pilwrap" id="choicetablegroup.order">
   <h3>
     <a href="#choicetablegroup.order" name="choicetablegroup.order" class="pilcrow">&#182;</a>
@@ -668,6 +653,35 @@ the screen). Set it to FALSE, to have absolute time.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.shufflechoices">
+  <h3>
+    <a href="#choicetable.shufflechoices" name="choicetable.shufflechoices" class="pilcrow">&#182;</a>
+    ChoiceTable.shuffleChoices
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>If TRUE, items are inserted in random order</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTableGroup.order
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">shuffleItems</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
 </pre></div>
@@ -788,6 +802,131 @@ the screen). Set it to FALSE, to have absolute time.</p>
         </td>
       </tr>
       <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+</div>
+<p>Options passed to each individual item.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetablegroup.timefrom">
+  <h3>
+    <a href="#choicetablegroup.timefrom" name="choicetablegroup.timefrom" class="pilcrow">&#182;</a>
+    ChoiceTableGroup.timeFrom
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Time is measured from timestamp as saved by node.timer</p>
+
+<p>Default event is a new step is loaded (user can interact with
+the screen). Set it to FALSE, to have absolute time.</p>
+
+<p>This option is passed to each individual item.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">mixinSettings
+</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">node.timer.getTimeSince
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="s1">&#39;step&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetablegroup.selectmultiple">
+  <h3>
+    <a href="#choicetablegroup.selectmultiple" name="choicetablegroup.selectmultiple" class="pilcrow">&#182;</a>
+    ChoiceTableGroup.selectMultiple
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>If TRUE, it allows to select multiple cells</p>
+
+<p>This option is passed to each individual item.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">mixinSettings
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">selectMultiple</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.renderer">
+  <h3>
+    <a href="#choicetable.renderer" name="choicetable.renderer" class="pilcrow">&#182;</a>
+    ChoiceTable.renderer
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>A callback that renders the content of each cell</p>
+
+<p>The callback must accept three parameters:</p>
+
+<ul>
+<li>a td HTML element,
+<ul><li>a choice</li>
+<li>the index of the choice element within the choices array</li></ul></li>
+</ul>
+
+<p>and optionally return the <em>value</em> for the choice (otherwise
+the order in the choices array is used as value).</p>
+
+<p>This option is passed to each individual item.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">mixinSettings
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
 <div class="pilwrap" id="choicetablegroup.separator">
@@ -801,6 +940,15 @@ the screen). Set it to FALSE, to have absolute time.</p>
   <div class="body"><p>Symbol used to separate tokens in the id attribute of every cell</p>
 
 <p>Default ChoiceTableGroup.separator</p>
+
+<p>This option is passed to each individual item.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">mixinSettings
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -814,7 +962,7 @@ the screen). Set it to FALSE, to have absolute time.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Init.</p>
         </td>
@@ -866,7 +1014,7 @@ the screen). Set it to FALSE, to have absolute time.</p>
 <li>onclick: a custom onclick listener function. Context is
 <code>this</code> instance</li>
 <li>mainText: a text to be displayed above the table</li>
-<li>shuffleTables: if TRUE, items are shuffled before being added
+<li>shuffleItems: if TRUE, items are shuffled before being added
 to the table</li>
 <li>freeText: if TRUE, a textarea will be added under the table,
 if 'string', the text will be added inside the the textarea</li>
@@ -897,7 +1045,21 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+</div>
+<p>TODO: many options checking are replicated. Skip them all?
+Have a method in ChoiceTable?</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>Option orientation, default 'H'.</p>
         </td>
@@ -932,14 +1094,14 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
-<p>Option shuffleTables, default false.</p>
+<p>Option shuffleItems, default false.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">shuffleTables</span><span class="p">)</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="k">else</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">options</span><span class="p">.</span><span class="nx">shuffleTables</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">shuffleTables</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">shuffleItems</span><span class="p">)</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">else</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">options</span><span class="p">.</span><span class="nx">shuffleItems</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">shuffleItems</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
 
 
 
@@ -949,7 +1111,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>Set the group, if any.</p>
         </td>
@@ -972,7 +1134,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
 </div>
 <p>Set the groupOrder, if any.</p>
         </td>
@@ -994,7 +1156,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
 </div>
 <p>Set the onclick listener, if any.</p>
         </td>
@@ -1017,7 +1179,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
 </div>
 <p>Set the mainText, if any.</p>
         </td>
@@ -1038,7 +1200,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
 </div>
 <p>Set the timeFrom, if any.</p>
         </td>
@@ -1056,6 +1218,26 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
 
 
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+</div>
+<p>Set the renderer, if any.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">renderer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">renderer</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">renderer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.init: options.renderer must &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be function or undefined. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">renderer</span><span class="p">);</span>
+        <span class="p">}</span>
+
 
 
 </pre></div>
@@ -1064,7 +1246,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
 </div>
 <p>After all configuration options are evaluated, add items.</p>
         </td>
@@ -1077,7 +1259,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>Create/set table, if requested.</p>
         </td>
@@ -1102,7 +1284,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
 </div>
 <p>Set table id.</p>
         </td>
@@ -1115,7 +1297,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
 </div>
 <p>Table className.</p>
         </td>
@@ -1144,7 +1326,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
 </div>
 <p>Add default 'choicetable' class to table.</p>
         </td>
@@ -1160,7 +1342,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
 </div>
 <p>Add the items.</p>
         </td>
@@ -1176,7 +1358,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
 </div>
 <p>Creates a free-text textarea, possibly with an initial text</p>
         </td>
@@ -1264,7 +1446,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
+  <a class="pilcrow" href="#section-55" id="section-55">&#182;</a>
 </div>
 <p>Save the order in which the choices will be added.</p>
         </td>
@@ -1279,7 +1461,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
+  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
 </div>
 <p>Build the table and choices at once (faster).</p>
         </td>
@@ -1335,7 +1517,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
+  <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
 </div>
 <p>Add new TR.</p>
         </td>
@@ -1350,7 +1532,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
+  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
 </div>
 <p>Get item, append choices for item.</p>
         </td>
@@ -1370,7 +1552,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-54" id="section-54">&#182;</a>
+  <a class="pilcrow" href="#section-60" id="section-60">&#182;</a>
 </div>
 <p>Make sure all items have same number of choices.</p>
         </td>
@@ -1390,7 +1572,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-55" id="section-55">&#182;</a>
+  <a class="pilcrow" href="#section-61" id="section-61">&#182;</a>
 </div>
 <p>TODO: might optimize. There are two loops (+1 inside ct).</p>
         </td>
@@ -1409,7 +1591,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
+  <a class="pilcrow" href="#section-62" id="section-62">&#182;</a>
 </div>
 <p>Add new TR.</p>
         </td>
@@ -1424,7 +1606,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-57" id="section-57">&#182;</a>
+  <a class="pilcrow" href="#section-63" id="section-63">&#182;</a>
 </div>
 <p>Build all items first.</p>
         </td>
@@ -1438,7 +1620,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
+  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
 </div>
 <p>Get item, append choices for item.</p>
         </td>
@@ -1456,7 +1638,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
+  <a class="pilcrow" href="#section-65" id="section-65">&#182;</a>
 </div>
 <p>Make sure all items have same number of choices.</p>
         </td>
@@ -1478,7 +1660,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-60" id="section-60">&#182;</a>
+  <a class="pilcrow" href="#section-66" id="section-66">&#182;</a>
 </div>
 <p>Add titles.</p>
         </td>
@@ -1495,7 +1677,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-61" id="section-61">&#182;</a>
+  <a class="pilcrow" href="#section-67" id="section-67">&#182;</a>
 </div>
 <p>Add new TR.</p>
         </td>
@@ -1511,7 +1693,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-62" id="section-62">&#182;</a>
+  <a class="pilcrow" href="#section-68" id="section-68">&#182;</a>
 </div>
 <p>TODO: might optimize. There are two loops (+1 inside ct).</p>
         </td>
@@ -1529,7 +1711,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-63" id="section-63">&#182;</a>
+  <a class="pilcrow" href="#section-69" id="section-69">&#182;</a>
 </div>
 <p>Enable onclick listener.</p>
         </td>
@@ -1540,7 +1722,6 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
 
 
     <span class="nx">ChoiceTableGroup</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span>
@@ -1686,7 +1867,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-67" id="section-67">&#182;</a>
+  <a class="pilcrow" href="#section-73" id="section-73">&#182;</a>
 </div>
 <p>Mark attempt by default.</p>
         </td>
@@ -1908,13 +2089,15 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
         <span class="kd">var</span> <span class="nx">obj</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">tbl</span><span class="p">;</span>
         <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
-            <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span>
+            <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">,</span>
+            <span class="nx">items</span><span class="o">:</span> <span class="p">{}</span>
         <span class="p">};</span>
         <span class="nx">opts</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">||</span> <span class="p">{};</span>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="nx">tbl</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-            <span class="nx">obj</span><span class="p">[</span><span class="nx">tbl</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">tbl</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">tbl</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">tbl</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">tbl</span><span class="p">.</span><span class="nx">id</span><span class="p">].</span><span class="nx">choice</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">missValues</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">freetext</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
@@ -1936,28 +2119,130 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="mixinsettings">
+  <h3>
+    <a href="#mixinsettings" name="mixinsettings" class="pilcrow">&#182;</a>
+    mixinSettings
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Mix-ins global settings with local settings for specific choice tables</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">that</span>
+      <span class="dox_type">ChoiceTableGroup</span>
+      <span>This instance</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">s</span>
+      <span class="dox_type">object</span>
+      <span>The local settings for choice table</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">i</span>
+      <span class="dox_type">number</span>
+      <span>The ordinal position of the table in the group</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">object</span>
+      <span>s The mixed-in settings</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="kd">function</span> <span class="nx">mixinSettings</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">s</span><span class="p">.</span><span class="nx">group</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
         <span class="nx">s</span><span class="p">.</span><span class="nx">groupOrder</span> <span class="o">=</span> <span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
         <span class="nx">s</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">orientation</span><span class="p">;</span>
         <span class="nx">s</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="nx">s</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">s</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">renderer</span><span class="p">)</span> <span class="nx">s</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">renderer</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">s</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">&amp;&amp;</span>
+            <span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="p">)</span> <span class="p">{</span>
+
+            <span class="nx">s</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">;</span>
+
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">s</span><span class="p">.</span><span class="nx">selectMultiple</span> <span class="o">&amp;&amp;</span>
+            <span class="kc">null</span> <span class="o">!==</span> <span class="nx">that</span><span class="p">.</span><span class="nx">selectMultiple</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="nx">s</span><span class="p">.</span><span class="nx">selectMultiple</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">selectMultiple</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">s</span><span class="p">.</span><span class="nx">separator</span> <span class="o">&amp;&amp;</span>
+            <span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">that</span><span class="p">.</span><span class="nx">separator</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="nx">s</span><span class="p">.</span><span class="nx">separator</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">separator</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">s</span><span class="p">;</span>
+    <span class="p">}</span>
 
 
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-74" id="section-74">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="getchoicetable">
+  <h3>
+    <a href="#getchoicetable" name="getchoicetable" class="pilcrow">&#182;</a>
+    getChoiceTable
+  </h3>
 </div>
-<p>TODO: more.</p>
+
+  </div>
+  <div class="body"><p>Creates a instance i-th of choice table with relative settings</p>
+
+<p>Stores a reference of each table in <code>itemsById</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">that</span>
+      <span class="dox_type">ChoiceTableGroup</span>
+      <span>This instance</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">i</span>
+      <span class="dox_type">number</span>
+      <span>The ordinal position of the table in the group</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">object</span>
+      <span>ct The requested choice table</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTable.itemsSettings</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTable.itemsById</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">mixinSettings
+</span>
+    </div>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">return</span> <span class="nx">s</span><span class="p">;</span>
-    <span class="p">}</span>
-
     <span class="kd">function</span> <span class="nx">getChoiceTable</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">ct</span><span class="p">,</span> <span class="nx">s</span><span class="p">;</span>
         <span class="nx">s</span> <span class="o">=</span> <span class="nx">mixinSettings</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">itemsSettings</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">i</span><span class="p">);</span>
@@ -1969,33 +2254,6 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
         <span class="nx">that</span><span class="p">.</span><span class="nx">itemsById</span><span class="p">[</span><span class="nx">ct</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">ct</span><span class="p">;</span>
         <span class="nx">that</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">ct</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">ct</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span>
-        <span class="nx">title</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nx">orientation</span><span class="o">:</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span>
-        <span class="nx">items</span><span class="o">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-                <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span>
-                <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
-                <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;one&#39;</span>
-            <span class="p">},</span>
-            <span class="p">{</span>
-                <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;three&#39;</span><span class="p">,</span>
-                <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
-                <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;three&#39;</span>
-            <span class="p">},</span>
-            <span class="p">{</span>
-                <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;four&#39;</span><span class="p">,</span>
-                <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
-                <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;four&#39;</span>
-            <span class="p">}</span>
-        <span class="p">]</span>
-    <span class="p">};</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">stage</span><span class="p">.</span><span class="nx">stage</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup&#39;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">test</span><span class="p">);</span>
     <span class="p">}</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>

@@ -48,9 +48,11 @@
         that = this;
 
         // TODO: move them in the Widgets as a check?
+        if ('number' === typeof options.id) options.id = '' + options.id;
         if ('string' !== typeof options.id) {
             throw new TypeError('ChoiceTableGroup constructor: options.id ' +
-                                'must be string. Found: ' + options.id);
+                                'must be string or number. Found: ' +
+                                options.id);
         }
         if (W.getElementById(options.id)) {
             throw new TypeError('ChoiceTableGroup constructor: options.id ' +
@@ -178,23 +180,20 @@
         this.itemsSettings = null;
 
         /**
-         * ### ChoiceTableGroup.timeFrom
-         *
-         * Time is measured from timestamp as saved by node.timer
-         *
-         * Default event is a new step is loaded (user can interact with
-         * the screen). Set it to FALSE, to have absolute time.
-         *
-         * @see node.timer.getTimeSince
-         */
-        this.timeFrom = 'step';
-
-        /**
          * ### ChoiceTableGroup.order
          *
          * The order of the items as displayed (if shuffled)
          */
         this.order = null;
+
+        /**
+         * ### ChoiceTable.shuffleChoices
+         *
+         * If TRUE, items are inserted in random order
+         *
+         * @see ChoiceTableGroup.order
+         */
+        this.shuffleItems = null;
 
         /**
          * ### ChoiceTableGroup.orientation
@@ -235,12 +234,65 @@
          */
         this.textarea = null;
 
+        // Options passed to each individual item.
+
+        /**
+         * ### ChoiceTableGroup.timeFrom
+         *
+         * Time is measured from timestamp as saved by node.timer
+         *
+         * Default event is a new step is loaded (user can interact with
+         * the screen). Set it to FALSE, to have absolute time.
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         *
+         * @see node.timer.getTimeSince
+         */
+        this.timeFrom = 'step';
+
+        /**
+         * ### ChoiceTableGroup.selectMultiple
+         *
+         * If TRUE, it allows to select multiple cells
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         */
+        this.selectMultiple = null;
+
+        /**
+         * ### ChoiceTable.renderer
+         *
+         * A callback that renders the content of each cell
+         *
+         * The callback must accept three parameters:
+         *
+         *   - a td HTML element,
+         *   - a choice
+         *   - the index of the choice element within the choices array
+         *
+         * and optionally return the _value_ for the choice (otherwise
+         * the order in the choices array is used as value).
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         */
+        this.renderer = null;
+
         /**
          * ### ChoiceTableGroup.separator
          *
          * Symbol used to separate tokens in the id attribute of every cell
          *
          * Default ChoiceTableGroup.separator
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
          */
         this.separator = ChoiceTableGroup.separator;
 
@@ -265,7 +317,7 @@
      *   - onclick: a custom onclick listener function. Context is
      *       `this` instance
      *   - mainText: a text to be displayed above the table
-     *   - shuffleTables: if TRUE, items are shuffled before being added
+     *   - shuffleItems: if TRUE, items are shuffled before being added
      *       to the table
      *   - freeText: if TRUE, a textarea will be added under the table,
      *       if 'string', the text will be added inside the the textarea
@@ -278,6 +330,9 @@
         var tmp, that;
         options = options || {};
         that = this;
+
+        // TODO: many options checking are replicated. Skip them all?
+        // Have a method in ChoiceTable?
 
         // Option orientation, default 'H'.
         if ('undefined' === typeof options.orientation) {
@@ -303,10 +358,10 @@
         }
         this.orientation = tmp;
 
-        // Option shuffleTables, default false.
-        if ('undefined' === typeof options.shuffleTables) tmp = false;
-        else tmp = !!options.shuffleTables;
-        this.shuffleTables = tmp;
+        // Option shuffleItems, default false.
+        if ('undefined' === typeof options.shuffleItems) tmp = false;
+        else tmp = !!options.shuffleItems;
+        this.shuffleItems = tmp;
 
 
         // Set the group, if any.
@@ -367,6 +422,15 @@
         }
 
 
+        // Set the renderer, if any.
+        if ('function' === typeof options.renderer) {
+            this.renderer = options.renderer;
+        }
+        else if ('undefined' !== typeof options.renderer) {
+            throw new TypeError('ChoiceTable.init: options.renderer must ' +
+                                'be function or undefined. Found: ' +
+                                options.renderer);
+        }
 
 
         // After all configuration options are evaluated, add items.
@@ -565,7 +629,6 @@
 
 
     ChoiceTableGroup.prototype.append = function() {
-
         if (this.mainText) {
             this.spanMainText = document.createElement('span');
             this.spanMainText.className =
@@ -731,13 +794,15 @@
         var obj, i, len, tbl;
         obj = {
             id: this.id,
-            order: this.order
+            order: this.order,
+            items: {}
         };
         opts = opts || {};
         i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
             tbl = this.items[i];
-            obj[tbl.id] = tbl.getAllValues(opts);
+            obj.items[tbl.id] = tbl.getAllValues(opts);
+            if (obj.items[tbl.id].choice === null) obj.missValues = true;
         }
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
@@ -745,17 +810,59 @@
 
     // ## Helper methods.
 
+    /**
+     * ### mixinSettings
+     *
+     * Mix-ins global settings with local settings for specific choice tables
+     *
+     * @param {ChoiceTableGroup} that This instance
+     * @param {object} s The local settings for choice table
+     * @param {number} i The ordinal position of the table in the group
+     *
+     * @return {object} s The mixed-in settings
+     */
     function mixinSettings(that, s, i) {
         s.group = that.id;
         s.groupOrder = i+1;
         s.orientation = that.orientation;
         s.title = false;
         s.listeners = false;
+        if (!s.renderer && that.renderer) s.renderer = that.renderer;
+        if ('undefined' === typeof s.timeFrom &&
+            'undefined' !== typeof that.timeFrom ) {
 
-        // TODO: more.
+            s.timeFrom = that.timeFrom;
+
+        }
+        if ('undefined' === typeof s.selectMultiple &&
+            null !== that.selectMultiple) {
+
+            s.selectMultiple = that.selectMultiple;
+        }
+        if ('undefined' === typeof s.separator &&
+            'string' === typeof that.separator) {
+
+            s.separator = that.separator;
+        }
         return s;
     }
 
+    /**
+     * ### getChoiceTable
+     *
+     * Creates a instance i-th of choice table with relative settings
+     *
+     * Stores a reference of each table in `itemsById`
+     *
+     * @param {ChoiceTableGroup} that This instance
+     * @param {number} i The ordinal position of the table in the group
+     *
+     * @return {object} ct The requested choice table
+     *
+     * @see ChoiceTable.itemsSettings
+     * @see ChoiceTable.itemsById
+     * @see mixinSettings
+     */
     function getChoiceTable(that, i) {
         var ct, s;
         s = mixinSettings(that, that.itemsSettings[i], i);
@@ -767,33 +874,6 @@
         that.itemsById[ct.id] = ct;
         that.items[i] = ct;
         return ct;
-    }
-
-    var test = {
-        id: 'ok',
-        title: false,
-        orientation: 'V',
-        items: [
-            {
-                id: 'one',
-                choices: [1,2,3,4,5],
-                description: 'one'
-            },
-            {
-                id: 'three',
-                choices: [1,2,3,4,5],
-                description: 'three'
-            },
-            {
-                id: 'four',
-                choices: [1,2,3,4,5],
-                description: 'four'
-            }
-        ]
-    };
-
-    if (node.player.stage.stage !== 0) {
-        node.widgets.append('ChoiceTableGroup', document.body, test);
     }
 
 })(node);

@@ -3,7 +3,7 @@
  * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
- * Displays a box for formatting currency
+ * Displays an interface to query users about mood, emotions and well-being
  *
  * www.nodegame.org
  */
@@ -21,10 +21,6 @@
 
     MoodGauge.title = 'Mood Gauge';
     MoodGauge.className = 'moodgauge';
-
-    MoodGauge.method = {
-        JSUS: {}
-    };
 
     // ## Dependencies
 
@@ -53,12 +49,8 @@
          *
          * Each function is called with `this` instance as context,
          * and accepts the `options` parameters passed to constructor.
-         * Each method must create:
-         *
-         *   - `this.gauge`: the widget-like object storing all values,
-         *        implementing functions: enable, disable, getAllValues
-         *   - `this.gaugeRoot`: the HTML element to be appended to
-         *        `this.bodyDiv`
+         * Each method must return widget-like gauge object
+         * implementing functions: append, enable, disable, getAllValues
          *
          * or an error will be thrown
          */
@@ -94,9 +86,9 @@
      * Initializes the widget
      *
      * @param {object} options Optional. Configuration options.
-     *
      */
     MoodGauge.prototype.init = function(options) {
+        var gauge;
         if ('undefined' !== typeof options.method) {
             if ('string' !== typeof options.method) {
                 throw new TypeError('MoodGauge.init: options.method must be ' +
@@ -110,32 +102,15 @@
         }
 
         // Call method.
-        this.methods[this.method].call(this, options);
-
-        if (!this.gauge) {
-            throw new Error('MoodGauge.init: method ' + this.method +
-                            'did not create element gauge.');
-        }
-        if ('function' !== typeof this.gauge.getAllValues) {
-            throw new Error('MoodGauge.init: method ' + this.method +
-                            ': gauge missing function getAllValues.');
-        }
-        if ('function' !== typeof this.gauge.enable) {
-            throw new Error('MoodGauge.init: method ' + this.method +
-                            ': gauge missing function enable.');
-        }
-        if ('function' !== typeof this.gauge.enable) {
-            throw new Error('MoodGauge.init: method ' + this.method +
-                            ': gauge missing function disable.');
-        }
-        if (!this.gaugeRoot) {
-            throw new Error('MoodGauge.init: method ' + this.method +
-                            'did not create element gaugeRoot.');
-        }
+        gauge = this.methods[this.method].call(this, options);
+        // Check properties.
+        checkGauge(this.method, gauge);
+        // Approved.
+        this.gauge = gauge;
     };
 
     MoodGauge.prototype.append = function() {
-        this.bodyDiv.appendChild(this.gaugeRoot);
+        node.widgets.append(this.gauge, this.bodyDiv);
     };
 
     MoodGauge.prototype.listeners = function() {};
@@ -175,16 +150,56 @@
         return this.gauge.disable();
     };
 
+    // ## Helper functions.
+
+    /**
+     * ### checkGauge
+     *
+     * Checks if a gauge is properly constructed, throws an error otherwise
+     *
+     * @param {string} method The name of the method creating it
+     * @param {object} gauge The object to check
+     *
+     * @see ModdGauge.init
+     */
+    function checkGauge(method, gauge) {
+        if (!gauge) {
+            throw new Error('MoodGauge.init: method ' + method +
+                            'did not create element gauge.');
+        }
+        if ('function' !== typeof gauge.getAllValues) {
+            throw new Error('MoodGauge.init: method ' + method +
+                            ': gauge missing function getAllValues.');
+        }
+        if ('function' !== typeof gauge.enable) {
+            throw new Error('MoodGauge.init: method ' + method +
+                            ': gauge missing function enable.');
+        }
+        if ('function' !== typeof gauge.disable) {
+            throw new Error('MoodGauge.init: method ' + method +
+                            ': gauge missing function disable.');
+        }
+        if ('function' !== typeof gauge.append) {
+            throw new Error('MoodGauge.init: method ' + method +
+                            ': gauge missing function append.');
+        }
+    }
+
+    // ## Available methods.
+
+    // ### I_PANAS_SF
     function I_PANAS_SF(options) {
         var items, emotions, mainText, choices;
-        var i, len;
+        var gauge, i, len;
 
-        mainText = 'Thinking about yourself and how you normally feel, ' +
+        mainText = options.mainText ||
+            'Thinking about yourself and how you normally feel, ' +
             'to what extent do you generally feel: ';
 
-        choices = [ 'never', '1', '2', '3', '4', '5', 'always' ];
+        choices = options.choices ||
+            [ 'never', '1', '2', '3', '4', '5', 'always' ];
 
-        emotions = [
+        emotions = options.emotions || [
             'Upset',
             'Hostile',
             'Alert',
@@ -210,14 +225,16 @@
             };
         }
 
-        this.gauge = node.widgets.get('ChoiceTableGroup', {
+        gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'ipnassf',
             items: items,
             mainText: mainText,
             title: false
         });
 
-        this.gaugeRoot = this.gauge.table;
+        return gauge;
     }
+
+
 
 })(node);
