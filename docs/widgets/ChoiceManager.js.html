@@ -36,9 +36,6 @@
       <div class="heading h3">
         <a href="#choicemanager.dl">ChoiceManager.dl</a>
       </div>
-      <div class="heading h2">
-        <a href="#choicemanager.listener">ChoiceManager.listener</a>
-      </div>
       <div class="heading h3">
         <a href="#choicemanager.disabled">ChoiceManager.disabled</a>
       </div>
@@ -50,9 +47,6 @@
       </div>
       <div class="heading h3">
         <a href="#choicemanager.forms">ChoiceManager.forms</a>
-      </div>
-      <div class="heading h3">
-        <a href="#choicemanager.timefrom">ChoiceManager.timeFrom</a>
       </div>
       <div class="heading h3">
         <a href="#choicemanager.order">ChoiceManager.order</a>
@@ -69,9 +63,6 @@
       <div class="heading h3">
         <a href="#choicemanager.textarea">ChoiceManager.textarea</a>
       </div>
-      <div class="heading h3">
-        <a href="#choicemanager.separator">ChoiceManager.separator</a>
-      </div>
       <div class="heading h2">
         <a href="#choicemanager%20methods">ChoiceManager methods</a>
       </div>
@@ -82,10 +73,7 @@
         <a href="#choicemanager.setforms">ChoiceManager.setForms</a>
       </div>
       <div class="heading h3">
-        <a href="#choicemanager.buildforms">ChoiceManager.buildForms</a>
-      </div>
-      <div class="heading h3">
-        <a href="#choicemanager.buildtable">ChoiceManager.buildTable</a>
+        <a href="#choicemanager.builddl">ChoiceManager.buildDl</a>
       </div>
       <div class="heading h3">
         <a href="#choicemanager.disable">ChoiceManager.disable</a>
@@ -134,7 +122,7 @@
 <p>Copyright(c) 2016 Stefano Balietti
 MIT Licensed</p>
   </div>
-  <div class="body"><p>Creates a table that if pressed emits node.done()</p>
+  <div class="body"><p>Creates and manages a set of selectable choices forms (e.g. ChoiceTable).</p>
 
 <p>www.nodegame.org</p>
   </div>
@@ -165,7 +153,7 @@ MIT Licensed</p>
         <td class="code highlight"><div class="highlight"><pre>
 
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">;</span>
-    <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Groups together and manages sets of &#39;</span> <span class="o">+</span>
+    <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Groups together and manages a set of &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;selectable choices forms (e.g. ChoiceTable).&#39;</span><span class="p">;</span>
 
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Complete the forms below&#39;</span><span class="p">;</span>
@@ -213,9 +201,7 @@ MIT Licensed</p>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">options</span>
       <span class="dox_type">object</span>
-      <span>Optional. Configuration options.
-  If a <code>table</code> option is specified, it sets it as the clickable
-  table. All other options are passed to the init method.</span>
+      <span>Optional. Configuration options.</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -268,7 +254,7 @@ MIT Licensed</p>
   </div>
   <div class="body"><p>The ID of the instance</p>
 
-<p>Will be used as the table id, and as prefix for all choice TDs</p>
+<p>Will be used as the dl id, and as prefix for all choice TDs</p>
   </div>
 </div>
         </td>
@@ -296,175 +282,6 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">dl</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="choicemanager.listener">
-  <h2>
-    <a href="#choicemanager.listener" name="choicemanager.listener" class="pilcrow">&#182;</a>
-    ChoiceManager.listener
-  </h2>
-</div>
-
-  </div>
-  <div class="body"><p>The listener function</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">GameChoice.enable</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">GameChoice.disable
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">listener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">td</span><span class="p">,</span> <span class="nx">oldSelected</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
-</div>
-<p>Relative time.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">timeCurrentChoice</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">getTimeSince</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">);</span>
-            <span class="p">}</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
-</div>
-<p>Absolute time.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">timeCurrentChoice</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span> <span class="o">?</span>
-                    <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
-            <span class="p">}</span>
-
-            <span class="nx">e</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
-            <span class="nx">td</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">srcElement</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
-</div>
-<p>Not a clickable choice.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">td</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">td</span><span class="p">.</span><span class="nx">id</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
-</div>
-<p>Id of elements are in the form of name_value or name_item_value.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">value</span> <span class="o">=</span> <span class="nx">td</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">separator</span><span class="p">);</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
-</div>
-<p>Separator not found, not a clickable cell.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-
-            <span class="nx">name</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-            <span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
-</div>
-<p>One more click.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">numberOfClicks</span><span class="o">++</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
-</div>
-<p>If only 1 selection allowed, remove selection from oldSelected.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">that</span><span class="p">.</span><span class="nx">selectMultiple</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">oldSelected</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">selected</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">oldSelected</span><span class="p">)</span> <span class="nx">J</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="nx">oldSelected</span><span class="p">,</span> <span class="s1">&#39;selected&#39;</span><span class="p">);</span>
-
-                <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">isChoiceCurrent</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">unsetCurrentChoice</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">currentChoice</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-                    <span class="nx">J</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">td</span><span class="p">,</span> <span class="s1">&#39;selected&#39;</span><span class="p">);</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">selected</span> <span class="o">=</span> <span class="nx">td</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
-</div>
-<p>Remove any warning/error from form on click.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">isHighlighted</span><span class="p">())</span> <span class="nx">that</span><span class="p">.</span><span class="nx">unhighlight</span><span class="p">();</span>
-        <span class="p">};</span>
 
 
 </pre></div>
@@ -562,37 +379,6 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="choicemanager.timefrom">
-  <h3>
-    <a href="#choicemanager.timefrom" name="choicemanager.timefrom" class="pilcrow">&#182;</a>
-    ChoiceManager.timeFrom
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Time is measured from timestamp as saved by node.timer</p>
-
-<p>Default event is a new step is loaded (user can interact with
-the screen). Set it to FALSE, to have absolute time.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">node.timer.getTimeSince
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="s1">&#39;step&#39;</span><span class="p">;</span>
-
 
 </pre></div>
         </td>
@@ -630,7 +416,7 @@ the screen). Set it to FALSE, to have absolute time.</p>
 </div>
 
   </div>
-  <div class="body"><p>The name of the group where the table belongs, if any</p>
+  <div class="body"><p>The name of the group where the list belongs, if any</p>
   </div>
 </div>
         </td>
@@ -652,7 +438,7 @@ the screen). Set it to FALSE, to have absolute time.</p>
 </div>
 
   </div>
-  <div class="body"><p>The order of the choice table within the group</p>
+  <div class="body"><p>The order of the list within the group</p>
   </div>
 </div>
         </td>
@@ -706,29 +492,6 @@ the screen). Set it to FALSE, to have absolute time.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="choicemanager.separator">
-  <h3>
-    <a href="#choicemanager.separator" name="choicemanager.separator" class="pilcrow">&#182;</a>
-    ChoiceManager.separator
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Symbol used to separate tokens in the id attribute of every cell</p>
-
-<p>Default ChoiceManager.separator</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">separator</span> <span class="o">=</span> <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">separator</span><span class="p">;</span>
-
 
 </pre></div>
         </td>
@@ -736,7 +499,7 @@ the screen). Set it to FALSE, to have absolute time.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Init.</p>
         </td>
@@ -780,16 +543,16 @@ the screen). Set it to FALSE, to have absolute time.</p>
 <p>Available options are:</p>
 
 <ul>
-<li>className: the className of the table (string, array), or false
+<li>className: the className of the list (string, array), or false
   to have none.
 <ul><li>group: the name of the group (number or string), if any</li>
-<li>groupOrder: the order of the table in the group, if any</li>
+<li>groupOrder: the order of the list in the group, if any</li>
 <li>onclick: a custom onclick listener function. Context is
 <code>this</code> instance</li>
-<li>mainText: a text to be displayed above the table</li>
+<li>mainText: a text to be displayed above the list</li>
 <li>shuffleForms: if TRUE, forms are shuffled before being added
-to the table</li>
-<li>freeText: if TRUE, a textarea will be added under the table,
+to the list</li>
+<li>freeText: if TRUE, a textarea will be added under the list,
 if 'string', the text will be added inside the the textarea</li>
 <li>timeFrom: The timestamp as recorded by <code>node.timer.setTimestamp</code>
 or FALSE, to measure absolute time for current choice</li></ul></li>
@@ -818,35 +581,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
-</div>
-<p>Table className.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">className</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span> <span class="o">||</span>
-                     <span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">))</span> <span class="p">{</span>
-
-                <span class="nx">J</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceManager.init: options.className &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be string, array, or undefined. &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Option shuffleForms, default false.</p>
         </td>
@@ -863,7 +598,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Set the group, if any.</p>
         </td>
@@ -886,7 +621,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Set the groupOrder, if any.</p>
         </td>
@@ -908,30 +643,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
-</div>
-<p>Set the onclick listener, if any.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onclick</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">listener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">options</span><span class="p">.</span><span class="nx">onclick</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">e</span><span class="p">);</span>
-            <span class="p">};</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onclick</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceManager.init: options.onclick must &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;be function or undefined. Found: &#39;</span> <span class="o">+</span>
-                                <span class="nx">options</span><span class="p">.</span><span class="nx">onclick</span><span class="p">);</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Set the mainText, if any.</p>
         </td>
@@ -952,47 +664,20 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
-</div>
-<p>Set the timeFrom, if any.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">||</span>
-            <span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">)</span> <span class="p">{</span>
-
-            <span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceManager.init: options.timeFrom must &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;be string, false, or undefined. Found: &#39;</span> <span class="o">+</span>
-                                <span class="nx">options</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">);</span>
-        <span class="p">}</span>
-
-
-
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>After all configuration options are evaluated, add forms.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
 
-
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Add the forms.</p>
         </td>
@@ -1008,7 +693,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Creates a free-text textarea, possibly with an initial text</p>
         </td>
@@ -1044,10 +729,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
 </div>
 
   </div>
-  <div class="body"><p>Sets the available forms and optionally builds the table</p>
-
-<p>If a table is defined, it will automatically append the forms
-as TD cells. Otherwise, the forms will be built but not appended.</p>
+  <div class="body"><p>Sets the available forms</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -1058,15 +740,11 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">ChoiceManager.table</span>
+      <span class="dox_type">ChoiceManager.order</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
       <span class="dox_type">ChoiceManager.shuffleForms</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">ChoiceManager.order</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -1083,45 +761,33 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setForms</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">forms</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">len</span><span class="p">;</span>
-    <span class="p">};</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">forms</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.setForms: &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;forms must be array.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.setForms: &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;forms is empty array.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
 
+        <span class="nx">len</span> <span class="o">=</span> <span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">formsSettings</span> <span class="o">=</span> <span class="nx">forms</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">);</span>
 
 
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="choicemanager.buildforms">
-  <h3>
-    <a href="#choicemanager.buildforms" name="choicemanager.buildforms" class="pilcrow">&#182;</a>
-    ChoiceManager.buildForms
-  </h3>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
-
-  </div>
-  <div class="body"><p>Render every choice and stores cell in <code>choiceCells</code> array</p>
-
-<p>Follows a shuffled order, if set</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">ChoiceManager.order</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">ChoiceManager.renderChoice
-</span>
-    </div>
-  </div>
-</div>
+<p>Save the order in which the choices will be added.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">buildForms</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">td</span><span class="p">;</span>
-
+        <span class="k">this</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">seq</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">len</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">shuffleForms</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">);</span>
     <span class="p">};</span>
 
 
@@ -1131,15 +797,15 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="choicemanager.buildtable">
+<div class="pilwrap" id="choicemanager.builddl">
   <h3>
-    <a href="#choicemanager.buildtable" name="choicemanager.buildtable" class="pilcrow">&#182;</a>
-    ChoiceManager.buildTable
+    <a href="#choicemanager.builddl" name="choicemanager.builddl" class="pilcrow">&#182;</a>
+    ChoiceManager.buildDl
   </h3>
 </div>
 
   </div>
-  <div class="body"><p>Builds the table of clickable forms and enables it</p>
+  <div class="body"><p>Builds the list of all forms</p>
 
 <p>Must be called after forms have been set already.</p>
   </div>
@@ -1157,25 +823,18 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">buildTable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">tr</span><span class="p">,</span> <span class="nx">H</span><span class="p">;</span>
+    <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">buildDl</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">dt</span><span class="p">,</span> <span class="nx">dd</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">form</span><span class="p">;</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
-</div>
-<p>Enable onclick listener.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">dt</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;dt&#39;</span><span class="p">);</span>
+            <span class="nx">dt</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;question&#39;</span><span class="p">;</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">[</span><span class="nx">i</span><span class="p">]],</span> <span class="nx">dt</span><span class="p">);</span>
+            <span class="nx">dl</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dt</span><span class="p">);</span>
+        <span class="p">}</span>
     <span class="p">};</span>
-
-
 
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
@@ -1186,18 +845,11 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
             <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">);</span>
         <span class="p">}</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
-</div>
-<p>TODO: append all forms.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dl</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">dl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;dl&#39;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">buildDl</span><span class="p">();</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dl</span><span class="p">);</span>
+        <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
     <span class="p">};</span>
@@ -1227,17 +879,17 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
 </div>
 
   </div>
-  <div class="body"><p>Disables clicking on the table and removes CSS 'clicklable' class</p>
+  <div class="body"><p>Disables each form</p>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">disable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">disabled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">J</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">,</span> <span class="s1">&#39;clickable&#39;</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">listener</span><span class="p">);</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">disable</span><span class="p">();</span>
         <span class="p">}</span>
     <span class="p">};</span>
 
@@ -1256,27 +908,18 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
 </div>
 
   </div>
-  <div class="body"><p>Enables clicking on the table and adds CSS 'clicklable' class</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">function</span>
-      <span>cb The event listener function</span>
-    </div>
+  <div class="body"><p>Enables each form</p>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">disabled</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceManager.enable: table not defined.&#39;</span><span class="p">);</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">disable</span><span class="p">();</span>
         <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="nx">J</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">,</span> <span class="s1">&#39;clickable&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">listener</span><span class="p">);</span>
     <span class="p">};</span>
 
 
@@ -1327,7 +970,32 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">verifyChoice</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">markAttempt</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">obj</span><span class="p">,</span> <span class="nx">form</span><span class="p">;</span>
+        <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
+            <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">,</span>
+            <span class="nx">items</span><span class="o">:</span> <span class="p">{}</span>
+        <span class="p">};</span>
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+</div>
+<p>Mark attempt by default.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">markAttempt</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">markAttempt</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="nx">markAttempt</span><span class="p">;</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">verifyChoice</span><span class="p">(</span><span class="nx">markAttempt</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">obj</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">])</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">fail</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
     <span class="p">};</span>
 
 
@@ -1414,7 +1082,7 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">The</span>
       <span class="dox_type">string</span>
-      <span>style for the table's border.
+      <span>style for the dl's border.
   Default '1px solid red'</span>
     </div>
     <div class="dox_tag_title">See</div>
@@ -1427,12 +1095,12 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">highlight</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">border</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">dl</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">border</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">border</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceManager.highlight: border must be &#39;</span> <span class="o">+</span>
                                 <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">border</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="nx">border</span> <span class="o">||</span> <span class="s1">&#39;3px solid red&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">dl</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="nx">border</span> <span class="o">||</span> <span class="s1">&#39;3px solid red&#39;</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">highlighted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">};</span>
 
@@ -1451,7 +1119,7 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
 </div>
 
   </div>
-  <div class="body"><p>Removes highlight from the choice table</p>
+  <div class="body"><p>Removes highlight from the choice dl</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
@@ -1464,8 +1132,8 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">unhighlight</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">dl</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">dl</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">highlighted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">};</span>
 
@@ -1484,7 +1152,7 @@ as TD cells. Otherwise, the forms will be built but not appended.</p>
 </div>
 
   </div>
-  <div class="body"><p>Returns TRUE if the choice table is highlighted</p>
+  <div class="body"><p>Returns TRUE if the choice dl is highlighted</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Returns</div>

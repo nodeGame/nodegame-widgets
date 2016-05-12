@@ -4188,15 +4188,15 @@
          */
         this.listener = function(e) {
             var name, value, item, td, oldSelected;
+            var time;
 
             // Relative time.
             if ('string' === typeof that.timeFrom) {
-                that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
+                time = node.timer.getTimeSince(that.timeFrom);
             }
             // Absolute time.
             else {
-                that.timeCurrentChoice = Date.now ?
-                    Date.now() : new Date().getTime();
+                time = Date.now ? Date.now() : new Date().getTime();
             }
 
             e = e || window.event;
@@ -4215,6 +4215,8 @@
             value = value[1];
 
             item = that.itemsById[name];
+
+            item.timeCurrentChoice = time;
 
             // One more click.
             item.numberOfClicks++;
@@ -4930,23 +4932,17 @@
         s.orientation = that.orientation;
         s.title = false;
         s.listeners = false;
+        s.timeFrom = that.timeFrom;
+        s.separator = that.separator;
+
         if (!s.renderer && that.renderer) s.renderer = that.renderer;
-        if ('undefined' === typeof s.timeFrom &&
-            'undefined' !== typeof that.timeFrom ) {
 
-            s.timeFrom = that.timeFrom;
-
-        }
         if ('undefined' === typeof s.selectMultiple &&
             null !== that.selectMultiple) {
 
             s.selectMultiple = that.selectMultiple;
         }
-        if ('undefined' === typeof s.separator &&
-            'string' === typeof that.separator) {
 
-            s.separator = that.separator;
-        }
         return s;
     }
 

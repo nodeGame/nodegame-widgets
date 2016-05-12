@@ -3,7 +3,7 @@
  * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
- * Creates a table that if pressed emits node.done()
+ * Creates and manages a set of selectable choices forms (e.g. ChoiceTable).
  *
  * www.nodegame.org
  */
@@ -18,7 +18,7 @@
     // ## Meta-data
 
     ChoiceManager.version = '1.0.0';
-    ChoiceManager.description = 'Groups together and manages sets of ' +
+    ChoiceManager.description = 'Groups together and manages a set of ' +
         'selectable choices forms (e.g. ChoiceTable).';
 
     ChoiceManager.title = 'Complete the forms below';
@@ -36,8 +36,6 @@
      * Creates a new instance of ChoiceManager
      *
      * @param {object} options Optional. Configuration options.
-     *   If a `table` option is specified, it sets it as the clickable
-     *   table. All other options are passed to the init method.
      *
      * @see ChoiceManager.init
      */
@@ -60,7 +58,7 @@
          *
          * The ID of the instance
          *
-         * Will be used as the table id, and as prefix for all choice TDs
+         * Will be used as the dl id, and as prefix for all choice TDs
          */
         this.id = options.id;
 
@@ -70,64 +68,6 @@
          * The clickable list containing all the forms
          */
         this.dl = null;
-
-        /**
-         * ## ChoiceManager.listener
-         *
-         * The listener function
-         *
-         * @see GameChoice.enable
-         * @see GameChoice.disable
-         */
-        this.listener = function(e) {
-            var name, value, td, oldSelected;
-
-            // Relative time.
-            if ('string' === typeof that.timeFrom) {
-                that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
-            }
-            // Absolute time.
-            else {
-                that.timeCurrentChoice = Date.now ?
-                    Date.now() : new Date().getTime();
-            }
-
-            e = e || window.event;
-            td = e.target || e.srcElement;
-
-            // Not a clickable choice.
-            if (!td.id || td.id === '') return;
-
-            // Id of elements are in the form of name_value or name_item_value.
-            value = td.id.split(that.separator);
-
-            // Separator not found, not a clickable cell.
-            if (value.length === 1) return;
-
-            name = value[0];
-            value = value[1];
-
-            // One more click.
-            that.numberOfClicks++;
-
-            // If only 1 selection allowed, remove selection from oldSelected.
-            if (!that.selectMultiple) {
-                oldSelected = that.selected;
-                if (oldSelected) J.removeClass(oldSelected, 'selected');
-
-                if (that.isChoiceCurrent(value)) {
-                    that.unsetCurrentChoice(value);
-                }
-                else {
-                    that.currentChoice = value;
-                    J.addClass(td, 'selected');
-                    that.selected = td;
-                }
-            }
-
-            // Remove any warning/error from form on click.
-            if (that.isHighlighted()) that.unhighlight();
-        };
 
         /**
          * ### ChoiceManager.disabled
@@ -159,17 +99,6 @@
          */
         this.forms = null;
 
-        /**
-         * ### ChoiceManager.timeFrom
-         *
-         * Time is measured from timestamp as saved by node.timer
-         *
-         * Default event is a new step is loaded (user can interact with
-         * the screen). Set it to FALSE, to have absolute time.
-         *
-         * @see node.timer.getTimeSince
-         */
-        this.timeFrom = 'step';
 
         /**
          * ### ChoiceManager.order
@@ -181,14 +110,14 @@
         /**
          * ### ChoiceManager.group
          *
-         * The name of the group where the table belongs, if any
+         * The name of the group where the list belongs, if any
          */
         this.group = null;
 
         /**
          * ### ChoiceManager.groupOrder
          *
-         * The order of the choice table within the group
+         * The order of the list within the group
          */
         this.groupOrder = null;
 
@@ -208,14 +137,6 @@
          */
         this.textarea = null;
 
-        /**
-         * ### ChoiceManager.separator
-         *
-         * Symbol used to separate tokens in the id attribute of every cell
-         *
-         * Default ChoiceManager.separator
-         */
-        this.separator = ChoiceManager.separator;
 
         // Init.
         this.init(options);
@@ -230,16 +151,16 @@
      *
      * Available options are:
      *
-     *   - className: the className of the table (string, array), or false
+     *   - className: the className of the list (string, array), or false
      *       to have none.
      *   - group: the name of the group (number or string), if any
-     *   - groupOrder: the order of the table in the group, if any
+     *   - groupOrder: the order of the list in the group, if any
      *   - onclick: a custom onclick listener function. Context is
      *       `this` instance
-     *   - mainText: a text to be displayed above the table
+     *   - mainText: a text to be displayed above the list
      *   - shuffleForms: if TRUE, forms are shuffled before being added
-     *       to the table
-     *   - freeText: if TRUE, a textarea will be added under the table,
+     *       to the list
+     *   - freeText: if TRUE, a textarea will be added under the list,
      *       if 'string', the text will be added inside the the textarea
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
@@ -250,23 +171,6 @@
         var tmp, that;
         options = options || {};
         that = this;
-
-        // Table className.
-        if ('undefined' !== typeof options.className) {
-            if (options.className === false) {
-                this.table.className = '';
-            }
-            else if ('string' === typeof options.className ||
-                     J.isArray(options.className)) {
-
-                J.addClass(this.table, options.className);
-            }
-            else {
-                throw new TypeError('ChoiceManager.init: options.className ' +
-                                    'must be string, array, or undefined. ' +
-                                    'Found: ' + options.className);
-            }
-        }
 
         // Option shuffleForms, default false.
         if ('undefined' === typeof options.shuffleForms) tmp = false;
@@ -297,18 +201,6 @@
                                 options.groupOrder);
         }
 
-        // Set the onclick listener, if any.
-        if ('function' === typeof options.onclick) {
-            this.listener = function(e) {
-                options.onclick.call(this, e);
-            };
-        }
-        else if ('undefined' !== typeof options.onclick) {
-            throw new TypeError('ChoiceManager.init: options.onclick must ' +
-                                'be function or undefined. Found: ' +
-                                options.onclick);
-        }
-
         // Set the mainText, if any.
         if ('string' === typeof options.mainText) {
             this.mainText = options.mainText;
@@ -319,23 +211,7 @@
                                 options.mainText);
         }
 
-        // Set the timeFrom, if any.
-        if (options.timeFrom === false ||
-            'string' === typeof options.timeFrom) {
-
-            this.timeFrom = options.timeFrom;
-        }
-        else if ('undefined' !== typeof options.timeFrom) {
-            throw new TypeError('ChoiceManager.init: options.timeFrom must ' +
-                                'be string, false, or undefined. Found: ' +
-                                options.timeFrom);
-        }
-
-
-
-
         // After all configuration options are evaluated, add forms.
-
 
         // Add the forms.
         if ('undefined' !== typeof options.forms) {
@@ -362,57 +238,57 @@
     /**
      * ### ChoiceManager.setForms
      *
-     * Sets the available forms and optionally builds the table
-     *
-     * If a table is defined, it will automatically append the forms
-     * as TD cells. Otherwise, the forms will be built but not appended.
+     * Sets the available forms
      *
      * @param {array} forms The array of forms
      *
-     * @see ChoiceManager.table
-     * @see ChoiceManager.shuffleForms
      * @see ChoiceManager.order
+     * @see ChoiceManager.shuffleForms
      * @see ChoiceManager.buildForms
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
         var len;
+        if (!J.isArray(forms)) {
+            throw new TypeError('ChoiceTableGroup.setForms: ' +
+                                'forms must be array.');
+        }
+        if (!forms.length) {
+            throw new Error('ChoiceTableGroup.setForms: ' +
+                            'forms is empty array.');
+        }
+
+        len = forms.length;
+        this.formsSettings = forms;
+        this.forms = new Array(len);
+
+        // Save the order in which the choices will be added.
+        this.order = J.seq(0, len-1);
+        if (this.shuffleForms) this.order = J.shuffle(this.order);
     };
 
-
     /**
-     * ### ChoiceManager.buildForms
+     * ### ChoiceManager.buildDl
      *
-     * Render every choice and stores cell in `choiceCells` array
-     *
-     * Follows a shuffled order, if set
-     *
-     * @see ChoiceManager.order
-     * @see ChoiceManager.renderChoice
-     */
-    ChoiceManager.prototype.buildForms = function() {
-        var i, len, td;
-
-    };
-
-    /**
-     * ### ChoiceManager.buildTable
-     *
-     * Builds the table of clickable forms and enables it
+     * Builds the list of all forms
      *
      * Must be called after forms have been set already.
      *
      * @see ChoiceManager.setForms
      * @see ChoiceManager.order
      */
-    ChoiceManager.prototype.buildTable = function() {
-        var i, len, tr, H;
+    ChoiceManager.prototype.buildDl = function() {
+        var i, len, dt, dd;
+        var form;
 
-        // Enable onclick listener.
-        this.enable();
+        i = -1, len = this.forms.length;
+        for ( ; ++i < len ; ) {
+            dt = document.createElement('dt');
+            dt.className = 'question';
+            node.widgets.append(this.forms[this.order[i]], dt);
+            dl.appendChild(dt);
+        }
     };
-
-
 
     ChoiceManager.prototype.append = function() {
 
@@ -423,7 +299,11 @@
             this.bodyDiv.appendChild(this.spanMainText);
         }
 
-        // TODO: append all forms.
+        if (this.dl) {
+            this.dl = document.createElement('dl');
+            this.buildDl();
+            this.bodyDiv.appendChild(this.dl);
+        }
 
         if (this.textarea) this.bodyDiv.appendChild(this.textarea);
     };
@@ -441,32 +321,29 @@
     /**
      * ### ChoiceManager.disable
      *
-     * Disables clicking on the table and removes CSS 'clicklable' class
+     * Disables each form
      */
     ChoiceManager.prototype.disable = function() {
+        var i, len;
         if (this.disabled) return;
-        this.disabled = true;
-        if (this.table) {
-            J.removeClass(this.table, 'clickable');
-            this.table.removeEventListener('click', this.listener);
+        i = -1, len = this.forms.length;
+        for ( ; ++i < len ; ) {
+            this.forms[i].disable();
         }
     };
 
     /**
      * ### ChoiceManager.enable
      *
-     * Enables clicking on the table and adds CSS 'clicklable' class
-     *
-     * @return {function} cb The event listener function
+     * Enables each form
      */
     ChoiceManager.prototype.enable = function() {
+        var i, len;
         if (!this.disabled) return;
-        if (!this.table) {
-            throw new Error('ChoiceManager.enable: table not defined.');
+        i = -1, len = this.forms.length;
+        for ( ; ++i < len ; ) {
+            this.forms[i].disable();
         }
-        this.disabled = false;
-        J.addClass(this.table, 'clickable');
-        this.table.addEventListener('click', this.listener);
     };
 
     /**
@@ -485,7 +362,21 @@
      * @see ChoiceManager.setCorrectChoice
      */
     ChoiceManager.prototype.verifyChoice = function(markAttempt) {
-
+        var i, len, obj, form;
+        obj = {
+            id: this.id,
+            order: this.order,
+            items: {}
+        };
+        // Mark attempt by default.
+        markAttempt = 'undefined' === typeof markAttempt ? true : markAttempt;
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            form = this.items[i];
+            obj.items[form.id] = form.verifyChoice(markAttempt);
+            if (!obj.items[form.id]) obj.fail = true;
+        }
+        return obj;
     };
 
     /**
@@ -527,38 +418,38 @@
      *
      * Highlights the choice table
      *
-     * @param {string} The style for the table's border.
+     * @param {string} The style for the dl's border.
      *   Default '1px solid red'
      *
      * @see ChoiceManager.highlighted
      */
     ChoiceManager.prototype.highlight = function(border) {
-        if (!this.table) return;
+        if (!this.dl) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('ChoiceManager.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        this.table.style.border = border || '3px solid red';
+        this.dl.style.border = border || '3px solid red';
         this.highlighted = true;
     };
 
     /**
      * ### ChoiceManager.unhighlight
      *
-     * Removes highlight from the choice table
+     * Removes highlight from the choice dl
      *
      * @see ChoiceManager.highlighted
      */
     ChoiceManager.prototype.unhighlight = function() {
-        if (!this.table) return;
-        this.table.style.border = '';
+        if (!this.dl) return;
+        this.dl.style.border = '';
         this.highlighted = false;
     };
 
     /**
      * ### ChoiceManager.isHighlighted
      *
-     * Returns TRUE if the choice table is highlighted
+     * Returns TRUE if the choice dl is highlighted
      *
      * @return {boolean} ChoiceManager.highlighted
      */

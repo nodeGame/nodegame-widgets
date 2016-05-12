@@ -355,6 +355,7 @@ MIT Licensed</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">listener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">td</span><span class="p">,</span> <span class="nx">oldSelected</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">time</span><span class="p">;</span>
 
 
 </pre></div>
@@ -369,7 +370,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">timeCurrentChoice</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">getTimeSince</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">);</span>
+                <span class="nx">time</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">getTimeSince</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">);</span>
             <span class="p">}</span>
 
 </pre></div>
@@ -384,8 +385,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">timeCurrentChoice</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span> <span class="o">?</span>
-                    <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+                <span class="nx">time</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span> <span class="o">?</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
             <span class="p">}</span>
 
             <span class="nx">e</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
@@ -437,6 +437,8 @@ MIT Licensed</p>
             <span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
 
             <span class="nx">item</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">itemsById</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+
+            <span class="nx">item</span><span class="p">.</span><span class="nx">timeCurrentChoice</span> <span class="o">=</span> <span class="nx">time</span><span class="p">;</span>
 
 
 </pre></div>
@@ -2169,23 +2171,17 @@ Have a method in ChoiceTable?</p>
         <span class="nx">s</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">orientation</span><span class="p">;</span>
         <span class="nx">s</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="nx">s</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nx">s</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">;</span>
+        <span class="nx">s</span><span class="p">.</span><span class="nx">separator</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">separator</span><span class="p">;</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">s</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">renderer</span><span class="p">)</span> <span class="nx">s</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">renderer</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">s</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">&amp;&amp;</span>
-            <span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="p">)</span> <span class="p">{</span>
 
-            <span class="nx">s</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">;</span>
-
-        <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">s</span><span class="p">.</span><span class="nx">selectMultiple</span> <span class="o">&amp;&amp;</span>
             <span class="kc">null</span> <span class="o">!==</span> <span class="nx">that</span><span class="p">.</span><span class="nx">selectMultiple</span><span class="p">)</span> <span class="p">{</span>
 
             <span class="nx">s</span><span class="p">.</span><span class="nx">selectMultiple</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">selectMultiple</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">s</span><span class="p">.</span><span class="nx">separator</span> <span class="o">&amp;&amp;</span>
-            <span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">that</span><span class="p">.</span><span class="nx">separator</span><span class="p">)</span> <span class="p">{</span>
 
-            <span class="nx">s</span><span class="p">.</span><span class="nx">separator</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">separator</span><span class="p">;</span>
-        <span class="p">}</span>
         <span class="k">return</span> <span class="nx">s</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -2245,7 +2241,7 @@ Have a method in ChoiceTable?</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="kd">function</span> <span class="nx">getChoiceTable</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">ct</span><span class="p">,</span> <span class="nx">s</span><span class="p">;</span>
-        <span class="nx">s</span> <span class="o">=</span> <span class="nx">mixinSettings</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">itemsSettings</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">i</span><span class="p">);</span>
+        <span class="nx">s</span> <span class="o">=</span> <span class="nx">mixinSettings</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">itemsSettings</span><span class="p">[</span><span class="nx">that</span><span class="p">.</span><span class="nx">order</span><span class="p">[</span><span class="nx">i</span><span class="p">]],</span> <span class="nx">i</span><span class="p">);</span>
         <span class="nx">ct</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ChoiceTable&#39;</span><span class="p">,</span> <span class="nx">s</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">itemsById</span><span class="p">[</span><span class="nx">ct</span><span class="p">.</span><span class="nx">id</span><span class="p">])</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup: an item with the same id &#39;</span> <span class="o">+</span>
