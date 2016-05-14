@@ -32,7 +32,8 @@
 
     Widget.prototype.highlight = function() {};
 
-    Widget.prototype.destroy = function() {};
+    // Added by Widgets.get().
+    // Widget.prototype.destroy = function() {};
 
     Widget.prototype.setTitle = function(title) {
         var tmp;
@@ -231,26 +232,51 @@
      *
      * Retrieves, instantiates and returns the specified widget
      *
-     * It can attach standard javascript listeners to the root element of
-     * the widget if specified in the options.
+     * Performs the following checkings:
      *
-     * The dependencies are checked, and if the conditions are not met,
-     * returns FALSE.
+     *   - dependencies, as specified by widget prototype, must exist
+     *   - id, if specified in options, must be string
+     *
+     * and throws an error if conditions are not met.
+     *
+     * Adds the following properties to the widget object:
+     *
+     *   - title: as specified by the user or as found in the prototype
+     *   - footer: as specified by the user or as found in the prototype
+     *   - context: as specified by the user or as found in the prototype
+     *   - className: as specified by the user or as found in the prototype
+     *   - id: user-defined id, if specified in options
+     *   - wid: random unique widget id
+     *
+     * Calls the `listeners` method of the widget. Any event listener
+     * registered here will be automatically removed when the widget
+     * is destroyed. !Important: it will erase previously recorded changes
+     * by the event listener. If `options.listeners` is equal to false, the
+     * listeners method is skipped.
+     *
+     * A `.destroy` method is added to the widget that perform the
+     * following operations:
+     *
+     *   - calls original widget.destroy method, if defined,
+     *   - removes the widget from DOM (if it was appended),
+     *   - removes listeners defined during the creation,
+     *   - and remove the widget from Widget.instances
+     *
+     * Finally a reference to the widget is kept in `Widgets.instances`.
      *
      * @param {string} widgetName The name of the widget to load
-     * @param {options} options Optional. Configuration options
-     *   to be passed to the widgets
+     * @param {object} options Optional. Configuration options, will be
+     *    mixed out with attributes in the `defaults` property
+     *    of the widget prototype.
      *
      * @return {object} widget The requested widget
      *
-     * @see Widgets.add
-     *
-     * @TODO: add supports for any listener. Maybe requires some refactoring.
-     * @TODO: add example.
+     * @see Widgets.append
+     * @see Widgets.instances
      */
     Widgets.prototype.get = function(widgetName, options) {
         var WidgetPrototype, widget;
-        var changes, origDestroy;
+        var changes, isRecording, origDestroy;
         var that;
         if ('string' !== typeof widgetName) {
             throw new TypeError('Widgets.get: widgetName must be string.');
@@ -259,9 +285,8 @@
             throw new TypeError('Widgets.get: options must be object or ' +
                                 'undefined.');
         }
-
-        that = this;
         options = options || {};
+        that = this;
 
         WidgetPrototype = J.getNestedValue(widgetName, this.widgets);
 
@@ -269,7 +294,7 @@
             throw new Error('Widgets.get: ' + widgetName + ' not found.');
         }
 
-        node.info('creating widget ' + WidgetPrototype.name +
+        node.info('creating widget ' + widgetName  +
                   ' v.' +  WidgetPrototype.version);
 
         if (!this.checkDependencies(WidgetPrototype)) {
@@ -277,14 +302,29 @@
                             'dependencies.');
         }
 
-        // Add missing properties to the user options
-        J.mixout(options, J.clone(WidgetPrototype.defaults));
+        // Add default properties to the user options.
+        if (WidgetPrototype.defaults) {
+            J.mixout(options, J.clone(WidgetPrototype.defaults));
+        }
 
         // Create widget.
         widget = new WidgetPrototype(options);
 
+        // TODO: check do we need this?
         // Re-inject defaults.
-        widget.defaults = options;
+        // widget.defaults = options;
+
+        // Set ID.
+        if ('undefined' !== options.id) {
+            if ('string' === options.id) {
+                widget.id = options.id;
+            }
+            else {
+                throw new TypeError('Widgets.get: options.id must be ' +
+                                    'string or undefined. Found: ' +
+                                    options.id);
+            }
+        }
 
         // Set prototype values or options values.
         widget.title = 'undefined' === typeof options.title ?
@@ -321,12 +361,14 @@
 
             try {
                 // Call original function.
-                origDestroy.call(widget);
+                if ('function' === typeof origDestroy) origDestroy.call(widget);
                 // Remove the widget's div from its parent.
-                widget.panelDiv.parentNode.removeChild(widget.panelDiv);
+                if (widget.panelDiv && widget.panelDiv.parentNode) {
+                    widget.panelDiv.parentNode.removeChild(widget.panelDiv);
+                }
             }
             catch(e) {
-                node.warn(widgetName + '.destroy(): error caught. ' + e + '.');
+                node.warn(widgetName + '.destroy: error caught. ' + e + '.');
             }
 
             if (changes) {
@@ -357,6 +399,9 @@
             }
         };
 
+        // Store widget instance (e.g. used for destruction).
+        this.instances.push(w);
+
         return widget;
     };
 
@@ -385,8 +430,7 @@
      *
      * @see Widgets.get
      */
-    Widgets.prototype.append = Widgets.prototype.add = function(w, root,
-                                                                options) {
+    Widgets.prototype.append = function(w, root, options) {
         if ('string' !== typeof w && 'object' !== typeof w) {
             throw new TypeError('Widgets.append: w must be string or object.');
         }
@@ -403,12 +447,10 @@
         root = root || W.getFrameRoot() || document.body;
         options = options || {};
 
-        // Check if it is a object (new widget)
-        // If it is a string is the name of an existing widget
-        // In this case a dependencies check is done
-        if ('string' === typeof w) {
-            w = this.get(w, options);
-        }
+        // Check if it is a object (new widget).
+        // If it is a string is the name of an existing widget.
+        // In this case a dependencies check is done.
+        if ('string' === typeof w) w = this.get(w, options);
 
         w.panelDiv = appendDiv(root, {
             attributes: {
@@ -417,9 +459,7 @@
         });
 
         // Optionally add title.
-        if (w.title) {
-            w.setTitle(w.title);
-        }
+        if (w.title) w.setTitle(w.title);
 
         // Add body.
         w.bodyDiv = appendDiv(w.panelDiv, {
@@ -427,34 +467,33 @@
         });
 
         // Optionally add footer.
-        if (w.footer) {
-            w.setFooter(w.footer);
-        }
+        if (w.footer) w.setFooter(w.footer);
 
         // Optionally set context.
-        if (w.context) {
-            w.setContext(w.context);
-        }
+        if (w.context) w.setContext(w.context);
 
         // User listeners.
-        attachListeners(w);
+        // attachListeners(w);
 
         w.append();
 
-        // Store widget instance for destruction.
-        this.instances.push(w);
-
         return w;
+    };
+
+    Widgets.prototype.add = function(w, root, options) {
+        console.log('***Widgets.add is deprecated. Use ' +
+                    'Widgets.append instead.***');
+        return this.append(w, root, options);
     };
 
     /**
      * ### Widgets.destroyAll
      *
-     * Removes all widgets that have been appended with Widgets.append
+     * Removes all widgets that have been created through Widgets.get
      *
      * Exceptions thrown in the widgets' destroy methods are caught.
      *
-     * @see Widgets.append
+     * @see Widgets.get
      */
     Widgets.prototype.destroyAll = function() {
         var i, len;
@@ -522,25 +561,25 @@
         return W.addDiv(root, undefined, options.attributes);
     }
 
-    function createListenerFunction(w, e, l) {
-        if (!w || !e || !l) return;
-        w.panelDiv[e] = function() { l.call(w); };
-    }
-
-    function attachListeners(w) {
-        var events, isEvent, i;
-        isEvent = false;
-        events = ['onclick', 'onfocus', 'onblur', 'onchange',
-                  'onsubmit', 'onload', 'onunload', 'onmouseover'];
-        for (i in w.options) {
-            if (w.options.hasOwnProperty(i)) {
-                isEvent = J.inArray(i, events);
-                if (isEvent && 'function' === typeof w.options[i]) {
-                    createListenerFunction(w, i, w.options[i]);
-                }
-            }
-        }
-    }
+//     function createListenerFunction(w, e, l) {
+//         if (!w || !e || !l) return;
+//         w.panelDiv[e] = function() { l.call(w); };
+//     }
+//
+//     function attachListeners(w) {
+//         var events, isEvent, i;
+//         isEvent = false;
+//         events = ['onclick', 'onfocus', 'onblur', 'onchange',
+//                   'onsubmit', 'onload', 'onunload', 'onmouseover'];
+//         for (i in w.options) {
+//             if (w.options.hasOwnProperty(i)) {
+//                 isEvent = J.inArray(i, events);
+//                 if (isEvent && 'function' === typeof w.options[i]) {
+//                     createListenerFunction(w, i, w.options[i]);
+//                 }
+//             }
+//         }
+//     }
 
     function checkDepErrMsg(w, d) {
         var name = w.name || w.id;// || w.toString();
@@ -2301,7 +2340,7 @@
  * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
- * Creates a table that if pressed emits node.done()
+ * Creates and manages a set of selectable choices forms (e.g. ChoiceTable).
  *
  * www.nodegame.org
  */
@@ -2316,7 +2355,7 @@
     // ## Meta-data
 
     ChoiceManager.version = '1.0.0';
-    ChoiceManager.description = 'Groups together and manages sets of ' +
+    ChoiceManager.description = 'Groups together and manages a set of ' +
         'selectable choices forms (e.g. ChoiceTable).';
 
     ChoiceManager.title = 'Complete the forms below';
@@ -2334,8 +2373,6 @@
      * Creates a new instance of ChoiceManager
      *
      * @param {object} options Optional. Configuration options.
-     *   If a `table` option is specified, it sets it as the clickable
-     *   table. All other options are passed to the init method.
      *
      * @see ChoiceManager.init
      */
@@ -2358,7 +2395,7 @@
          *
          * The ID of the instance
          *
-         * Will be used as the table id, and as prefix for all choice TDs
+         * Will be used as the dl id, and as prefix for all choice TDs
          */
         this.id = options.id;
 
@@ -2368,64 +2405,6 @@
          * The clickable list containing all the forms
          */
         this.dl = null;
-
-        /**
-         * ## ChoiceManager.listener
-         *
-         * The listener function
-         *
-         * @see GameChoice.enable
-         * @see GameChoice.disable
-         */
-        this.listener = function(e) {
-            var name, value, td, oldSelected;
-
-            // Relative time.
-            if ('string' === typeof that.timeFrom) {
-                that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
-            }
-            // Absolute time.
-            else {
-                that.timeCurrentChoice = Date.now ?
-                    Date.now() : new Date().getTime();
-            }
-
-            e = e || window.event;
-            td = e.target || e.srcElement;
-
-            // Not a clickable choice.
-            if (!td.id || td.id === '') return;
-
-            // Id of elements are in the form of name_value or name_item_value.
-            value = td.id.split(that.separator);
-
-            // Separator not found, not a clickable cell.
-            if (value.length === 1) return;
-
-            name = value[0];
-            value = value[1];
-
-            // One more click.
-            that.numberOfClicks++;
-
-            // If only 1 selection allowed, remove selection from oldSelected.
-            if (!that.selectMultiple) {
-                oldSelected = that.selected;
-                if (oldSelected) J.removeClass(oldSelected, 'selected');
-
-                if (that.isChoiceCurrent(value)) {
-                    that.unsetCurrentChoice(value);
-                }
-                else {
-                    that.currentChoice = value;
-                    J.addClass(td, 'selected');
-                    that.selected = td;
-                }
-            }
-
-            // Remove any warning/error from form on click.
-            if (that.isHighlighted()) that.unhighlight();
-        };
 
         /**
          * ### ChoiceManager.disabled
@@ -2457,17 +2436,6 @@
          */
         this.forms = null;
 
-        /**
-         * ### ChoiceManager.timeFrom
-         *
-         * Time is measured from timestamp as saved by node.timer
-         *
-         * Default event is a new step is loaded (user can interact with
-         * the screen). Set it to FALSE, to have absolute time.
-         *
-         * @see node.timer.getTimeSince
-         */
-        this.timeFrom = 'step';
 
         /**
          * ### ChoiceManager.order
@@ -2479,14 +2447,14 @@
         /**
          * ### ChoiceManager.group
          *
-         * The name of the group where the table belongs, if any
+         * The name of the group where the list belongs, if any
          */
         this.group = null;
 
         /**
          * ### ChoiceManager.groupOrder
          *
-         * The order of the choice table within the group
+         * The order of the list within the group
          */
         this.groupOrder = null;
 
@@ -2506,14 +2474,6 @@
          */
         this.textarea = null;
 
-        /**
-         * ### ChoiceManager.separator
-         *
-         * Symbol used to separate tokens in the id attribute of every cell
-         *
-         * Default ChoiceManager.separator
-         */
-        this.separator = ChoiceManager.separator;
 
         // Init.
         this.init(options);
@@ -2528,16 +2488,16 @@
      *
      * Available options are:
      *
-     *   - className: the className of the table (string, array), or false
+     *   - className: the className of the list (string, array), or false
      *       to have none.
      *   - group: the name of the group (number or string), if any
-     *   - groupOrder: the order of the table in the group, if any
+     *   - groupOrder: the order of the list in the group, if any
      *   - onclick: a custom onclick listener function. Context is
      *       `this` instance
-     *   - mainText: a text to be displayed above the table
+     *   - mainText: a text to be displayed above the list
      *   - shuffleForms: if TRUE, forms are shuffled before being added
-     *       to the table
-     *   - freeText: if TRUE, a textarea will be added under the table,
+     *       to the list
+     *   - freeText: if TRUE, a textarea will be added under the list,
      *       if 'string', the text will be added inside the the textarea
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
@@ -2548,23 +2508,6 @@
         var tmp, that;
         options = options || {};
         that = this;
-
-        // Table className.
-        if ('undefined' !== typeof options.className) {
-            if (options.className === false) {
-                this.table.className = '';
-            }
-            else if ('string' === typeof options.className ||
-                     J.isArray(options.className)) {
-
-                J.addClass(this.table, options.className);
-            }
-            else {
-                throw new TypeError('ChoiceManager.init: options.className ' +
-                                    'must be string, array, or undefined. ' +
-                                    'Found: ' + options.className);
-            }
-        }
 
         // Option shuffleForms, default false.
         if ('undefined' === typeof options.shuffleForms) tmp = false;
@@ -2595,18 +2538,6 @@
                                 options.groupOrder);
         }
 
-        // Set the onclick listener, if any.
-        if ('function' === typeof options.onclick) {
-            this.listener = function(e) {
-                options.onclick.call(this, e);
-            };
-        }
-        else if ('undefined' !== typeof options.onclick) {
-            throw new TypeError('ChoiceManager.init: options.onclick must ' +
-                                'be function or undefined. Found: ' +
-                                options.onclick);
-        }
-
         // Set the mainText, if any.
         if ('string' === typeof options.mainText) {
             this.mainText = options.mainText;
@@ -2617,23 +2548,7 @@
                                 options.mainText);
         }
 
-        // Set the timeFrom, if any.
-        if (options.timeFrom === false ||
-            'string' === typeof options.timeFrom) {
-
-            this.timeFrom = options.timeFrom;
-        }
-        else if ('undefined' !== typeof options.timeFrom) {
-            throw new TypeError('ChoiceManager.init: options.timeFrom must ' +
-                                'be string, false, or undefined. Found: ' +
-                                options.timeFrom);
-        }
-
-
-
-
         // After all configuration options are evaluated, add forms.
-
 
         // Add the forms.
         if ('undefined' !== typeof options.forms) {
@@ -2660,57 +2575,57 @@
     /**
      * ### ChoiceManager.setForms
      *
-     * Sets the available forms and optionally builds the table
-     *
-     * If a table is defined, it will automatically append the forms
-     * as TD cells. Otherwise, the forms will be built but not appended.
+     * Sets the available forms
      *
      * @param {array} forms The array of forms
      *
-     * @see ChoiceManager.table
-     * @see ChoiceManager.shuffleForms
      * @see ChoiceManager.order
+     * @see ChoiceManager.shuffleForms
      * @see ChoiceManager.buildForms
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
         var len;
+        if (!J.isArray(forms)) {
+            throw new TypeError('ChoiceTableGroup.setForms: ' +
+                                'forms must be array.');
+        }
+        if (!forms.length) {
+            throw new Error('ChoiceTableGroup.setForms: ' +
+                            'forms is empty array.');
+        }
+
+        len = forms.length;
+        this.formsSettings = forms;
+        this.forms = new Array(len);
+
+        // Save the order in which the choices will be added.
+        this.order = J.seq(0, len-1);
+        if (this.shuffleForms) this.order = J.shuffle(this.order);
     };
 
-
     /**
-     * ### ChoiceManager.buildForms
+     * ### ChoiceManager.buildDl
      *
-     * Render every choice and stores cell in `choiceCells` array
-     *
-     * Follows a shuffled order, if set
-     *
-     * @see ChoiceManager.order
-     * @see ChoiceManager.renderChoice
-     */
-    ChoiceManager.prototype.buildForms = function() {
-        var i, len, td;
-
-    };
-
-    /**
-     * ### ChoiceManager.buildTable
-     *
-     * Builds the table of clickable forms and enables it
+     * Builds the list of all forms
      *
      * Must be called after forms have been set already.
      *
      * @see ChoiceManager.setForms
      * @see ChoiceManager.order
      */
-    ChoiceManager.prototype.buildTable = function() {
-        var i, len, tr, H;
+    ChoiceManager.prototype.buildDl = function() {
+        var i, len, dt, dd;
+        var form;
 
-        // Enable onclick listener.
-        this.enable();
+        i = -1, len = this.forms.length;
+        for ( ; ++i < len ; ) {
+            dt = document.createElement('dt');
+            dt.className = 'question';
+            node.widgets.append(this.forms[this.order[i]], dt);
+            dl.appendChild(dt);
+        }
     };
-
-
 
     ChoiceManager.prototype.append = function() {
 
@@ -2721,7 +2636,11 @@
             this.bodyDiv.appendChild(this.spanMainText);
         }
 
-        // TODO: append all forms.
+        if (this.dl) {
+            this.dl = document.createElement('dl');
+            this.buildDl();
+            this.bodyDiv.appendChild(this.dl);
+        }
 
         if (this.textarea) this.bodyDiv.appendChild(this.textarea);
     };
@@ -2739,32 +2658,29 @@
     /**
      * ### ChoiceManager.disable
      *
-     * Disables clicking on the table and removes CSS 'clicklable' class
+     * Disables each form
      */
     ChoiceManager.prototype.disable = function() {
+        var i, len;
         if (this.disabled) return;
-        this.disabled = true;
-        if (this.table) {
-            J.removeClass(this.table, 'clickable');
-            this.table.removeEventListener('click', this.listener);
+        i = -1, len = this.forms.length;
+        for ( ; ++i < len ; ) {
+            this.forms[i].disable();
         }
     };
 
     /**
      * ### ChoiceManager.enable
      *
-     * Enables clicking on the table and adds CSS 'clicklable' class
-     *
-     * @return {function} cb The event listener function
+     * Enables each form
      */
     ChoiceManager.prototype.enable = function() {
+        var i, len;
         if (!this.disabled) return;
-        if (!this.table) {
-            throw new Error('ChoiceManager.enable: table not defined.');
+        i = -1, len = this.forms.length;
+        for ( ; ++i < len ; ) {
+            this.forms[i].disable();
         }
-        this.disabled = false;
-        J.addClass(this.table, 'clickable');
-        this.table.addEventListener('click', this.listener);
     };
 
     /**
@@ -2783,7 +2699,21 @@
      * @see ChoiceManager.setCorrectChoice
      */
     ChoiceManager.prototype.verifyChoice = function(markAttempt) {
-
+        var i, len, obj, form;
+        obj = {
+            id: this.id,
+            order: this.order,
+            items: {}
+        };
+        // Mark attempt by default.
+        markAttempt = 'undefined' === typeof markAttempt ? true : markAttempt;
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            form = this.items[i];
+            obj.items[form.id] = form.verifyChoice(markAttempt);
+            if (!obj.items[form.id]) obj.fail = true;
+        }
+        return obj;
     };
 
     /**
@@ -2825,38 +2755,38 @@
      *
      * Highlights the choice table
      *
-     * @param {string} The style for the table's border.
+     * @param {string} The style for the dl's border.
      *   Default '1px solid red'
      *
      * @see ChoiceManager.highlighted
      */
     ChoiceManager.prototype.highlight = function(border) {
-        if (!this.table) return;
+        if (!this.dl) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('ChoiceManager.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        this.table.style.border = border || '3px solid red';
+        this.dl.style.border = border || '3px solid red';
         this.highlighted = true;
     };
 
     /**
      * ### ChoiceManager.unhighlight
      *
-     * Removes highlight from the choice table
+     * Removes highlight from the choice dl
      *
      * @see ChoiceManager.highlighted
      */
     ChoiceManager.prototype.unhighlight = function() {
-        if (!this.table) return;
-        this.table.style.border = '';
+        if (!this.dl) return;
+        this.dl.style.border = '';
         this.highlighted = false;
     };
 
     /**
      * ### ChoiceManager.isHighlighted
      *
-     * Returns TRUE if the choice table is highlighted
+     * Returns TRUE if the choice dl is highlighted
      *
      * @return {boolean} ChoiceManager.highlighted
      */
@@ -4964,7 +4894,7 @@
      */
     function getChoiceTable(that, i) {
         var ct, s;
-        s = mixinSettings(that, that.itemsSettings[i], i);
+        s = mixinSettings(that, that.itemsSettings[that.order[i]], i);
         ct = node.widgets.get('ChoiceTable', s);
         if (that.itemsById[ct.id]) {
             throw new Error('ChoiceTableGroup: an item with the same id ' +

@@ -353,11 +353,43 @@ are added.</p>
   </div>
   <div class="body"><p>Retrieves, instantiates and returns the specified widget</p>
 
-<p>It can attach standard javascript listeners to the root element of
-the widget if specified in the options.</p>
+<p>Performs the following checkings:</p>
 
-<p>The dependencies are checked, and if the conditions are not met,
-returns FALSE.</p>
+<ul>
+<li>dependencies, as specified by widget prototype, must exist
+<ul><li>id, if specified in options, must be string</li></ul></li>
+</ul>
+
+<p>and throws an error if conditions are not met.</p>
+
+<p>Adds the following properties to the widget object:</p>
+
+<ul>
+<li>title: as specified by the user or as found in the prototype
+<ul><li>footer: as specified by the user or as found in the prototype</li>
+<li>context: as specified by the user or as found in the prototype</li>
+<li>className: as specified by the user or as found in the prototype</li>
+<li>id: user-defined id, if specified in options</li>
+<li>wid: random unique widget id</li></ul></li>
+</ul>
+
+<p>Calls the <code>listeners</code> method of the widget. Any event listener
+registered here will be automatically removed when the widget
+is destroyed. !Important: it will erase previously recorded changes
+by the event listener. If <code>options.listeners</code> is equal to false, the
+listeners method is skipped.</p>
+
+<p>A <code>.destroy</code> method is added to the widget that perform the
+following operations:</p>
+
+<ul>
+<li>calls original widget.destroy method, if defined,
+<ul><li>removes the widget from DOM (if it was appended),</li>
+<li>removes listeners defined during the creation,</li>
+<li>and remove the widget from Widget.instances</li></ul></li>
+</ul>
+
+<p>Finally a reference to the widget is kept in <code>Widgets.instances</code>.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -368,9 +400,10 @@ returns FALSE.</p>
     </div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">options</span>
-      <span class="dox_type">options</span>
-      <span>Optional. Configuration options
-  to be passed to the widgets</span>
+      <span class="dox_type">object</span>
+      <span>Optional. Configuration options, will be
+   mixed out with attributes in the <code>defaults</code> property
+   of the widget prototype.</span>
     </div>
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
@@ -380,16 +413,12 @@ returns FALSE.</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.add
+      <span class="dox_type">Widgets.append</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.instances
 </span>
-    </div>
-    <div class="dox_tag_title">TODO:</div>
-    <div class="dox_tag_detail">
-      <span>add supports for any listener. Maybe requires some refactoring.</span>
-    </div>
-    <div class="dox_tag_title">TODO:</div>
-    <div class="dox_tag_detail">
-      <span>add example.</span>
     </div>
   </div>
 </div>
@@ -397,7 +426,7 @@ returns FALSE.</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">widgetName</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">WidgetPrototype</span><span class="p">,</span> <span class="nx">widget</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">changes</span><span class="p">,</span> <span class="nx">origDestroy</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">changes</span><span class="p">,</span> <span class="nx">isRecording</span><span class="p">,</span> <span class="nx">origDestroy</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">widgetName</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: widgetName must be string.&#39;</span><span class="p">);</span>
@@ -406,9 +435,8 @@ returns FALSE.</p>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: options must be object or &#39;</span> <span class="o">+</span>
                                 <span class="s1">&#39;undefined.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
-
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
         <span class="nx">WidgetPrototype</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getNestedValue</span><span class="p">(</span><span class="nx">widgetName</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">);</span>
 
@@ -416,7 +444,7 @@ returns FALSE.</p>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">widgetName</span> <span class="o">+</span> <span class="s1">&#39; not found.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;creating widget &#39;</span> <span class="o">+</span> <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;creating widget &#39;</span> <span class="o">+</span> <span class="nx">widgetName</span>  <span class="o">+</span>
                   <span class="s1">&#39; v.&#39;</span> <span class="o">+</span>  <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">version</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">checkDependencies</span><span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">))</span> <span class="p">{</span>
@@ -433,10 +461,12 @@ returns FALSE.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
-<p>Add missing properties to the user options</p>
+<p>Add default properties to the user options.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">defaults</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">defaults</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">defaults</span><span class="p">));</span>
+        <span class="p">}</span>
 
 
 </pre></div>
@@ -461,10 +491,11 @@ returns FALSE.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
-<p>Re-inject defaults.</p>
+<p>TODO: check do we need this?
+Re-inject defaults.
+widget.defaults = options;</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
 
 
 </pre></div>
@@ -474,6 +505,29 @@ returns FALSE.</p>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>Set ID.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">widget</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: options.id must be &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span>
+                                    <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Set prototype values or options values.</p>
         </td>
@@ -494,7 +548,7 @@ returns FALSE.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Add random unique widget id.</p>
         </td>
@@ -508,7 +562,7 @@ returns FALSE.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Call listeners.</p>
         </td>
@@ -521,7 +575,7 @@ returns FALSE.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Start recording changes.</p>
         </td>
@@ -537,7 +591,7 @@ returns FALSE.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Get registered listeners, clear changes, and stop recording.</p>
         </td>
@@ -555,7 +609,7 @@ returns FALSE.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>If any listener was added or removed, the original situation will
 be restored when the widget is destroyed.
@@ -573,12 +627,12 @@ The widget is also automatically removed from parent.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Call original function.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-                <span class="nx">origDestroy</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">origDestroy</span><span class="p">)</span> <span class="nx">origDestroy</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -586,15 +640,17 @@ The widget is also automatically removed from parent.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Remove the widget's div from its parent.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-                <span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span> <span class="o">&amp;&amp;</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">);</span>
+                <span class="p">}</span>
             <span class="p">}</span>
             <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">widgetName</span> <span class="o">+</span> <span class="s1">&#39;.destroy(): error caught. &#39;</span> <span class="o">+</span> <span class="nx">e</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">widgetName</span> <span class="o">+</span> <span class="s1">&#39;.destroy: error caught. &#39;</span> <span class="o">+</span> <span class="nx">e</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
@@ -622,7 +678,7 @@ The widget is also automatically removed from parent.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Remove widget from current instances, if found.</p>
         </td>
@@ -635,6 +691,20 @@ The widget is also automatically removed from parent.</p>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>Store widget instance (e.g. used for destruction).</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="nx">widget</span><span class="p">;</span>
     <span class="p">};</span>
@@ -702,8 +772,7 @@ conditions are not met.</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span>
-                                                                <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.append: w must be string or object.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
@@ -723,7 +792,7 @@ conditions are not met.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Init default values.</p>
         </td>
@@ -738,16 +807,14 @@ conditions are not met.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
-<p>Check if it is a object (new widget)
-If it is a string is the name of an existing widget
-In this case a dependencies check is done</p>
+<p>Check if it is a object (new widget).
+If it is a string is the name of an existing widget.
+In this case a dependencies check is done.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
 
         <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span> <span class="o">=</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="p">{</span>
             <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span>
@@ -762,14 +829,12 @@ In this case a dependencies check is done</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Optionally add title.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">w</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span> <span class="nx">w</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span>
 
 
 </pre></div>
@@ -778,7 +843,7 @@ In this case a dependencies check is done</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Add body.</p>
         </td>
@@ -794,46 +859,12 @@ In this case a dependencies check is done</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Optionally add footer.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">footer</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">w</span><span class="p">.</span><span class="nx">setFooter</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">footer</span><span class="p">);</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
-</div>
-<p>Optionally set context.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">w</span><span class="p">.</span><span class="nx">setContext</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">);</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
-</div>
-<p>User listeners.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
-
-        <span class="nx">w</span><span class="p">.</span><span class="nx">append</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">footer</span><span class="p">)</span> <span class="nx">w</span><span class="p">.</span><span class="nx">setFooter</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">footer</span><span class="p">);</span>
 
 
 </pre></div>
@@ -844,12 +875,34 @@ In this case a dependencies check is done</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
-<p>Store widget instance for destruction.</p>
+<p>Optionally set context.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">)</span> <span class="nx">w</span><span class="p">.</span><span class="nx">setContext</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+</div>
+<p>User listeners.
+attachListeners(w);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+        <span class="nx">w</span><span class="p">.</span><span class="nx">append</span><span class="p">();</span>
 
         <span class="k">return</span> <span class="nx">w</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;***Widgets.add is deprecated. Use &#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;Widgets.append instead.***&#39;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
     <span class="p">};</span>
 
 
@@ -867,14 +920,14 @@ In this case a dependencies check is done</p>
 </div>
 
   </div>
-  <div class="body"><p>Removes all widgets that have been appended with Widgets.append</p>
+  <div class="body"><p>Removes all widgets that have been created through Widgets.get</p>
 
 <p>Exceptions thrown in the widgets' destroy methods are caught.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.append
+      <span class="dox_type">Widgets.get
 </span>
     </div>
   </div>
@@ -891,7 +944,7 @@ In this case a dependencies check is done</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Nested widgets can be destroyed by previous calls to destroy,
 and each call to destroy modify the array of instances.</p>
@@ -1007,7 +1060,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>TODO: Check every parameter</p>
         </td>
@@ -1015,25 +1068,40 @@ and each call to destroy modify the array of instances.</p>
         <span class="k">return</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">attributes</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="kd">function</span> <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">w</span> <span class="o">||</span> <span class="o">!</span><span class="nx">e</span> <span class="o">||</span> <span class="o">!</span><span class="nx">l</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">[</span><span class="nx">e</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">l</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span> <span class="p">};</span>
-    <span class="p">}</span>
 
-    <span class="kd">function</span> <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">events</span><span class="p">,</span> <span class="nx">isEvent</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
-        <span class="nx">isEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="nx">events</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;onclick&#39;</span><span class="p">,</span> <span class="s1">&#39;onfocus&#39;</span><span class="p">,</span> <span class="s1">&#39;onblur&#39;</span><span class="p">,</span> <span class="s1">&#39;onchange&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;onsubmit&#39;</span><span class="p">,</span> <span class="s1">&#39;onload&#39;</span><span class="p">,</span> <span class="s1">&#39;onunload&#39;</span><span class="p">,</span> <span class="s1">&#39;onmouseover&#39;</span><span class="p">];</span>
-        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="p">{</span>
-                <span class="nx">isEvent</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">inArray</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">events</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">isEvent</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
-                    <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
-                <span class="p">}</span>
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+</div>
+
+<div class="highlight"><pre><code><span class="kd">function</span> <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">w</span> <span class="o">||</span> <span class="o">!</span><span class="nx">e</span> <span class="o">||</span> <span class="o">!</span><span class="nx">l</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">[</span><span class="nx">e</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">l</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span> <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">events</span><span class="p">,</span> <span class="nx">isEvent</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
+    <span class="nx">isEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="nx">events</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;onclick&#39;</span><span class="p">,</span> <span class="s1">&#39;onfocus&#39;</span><span class="p">,</span> <span class="s1">&#39;onblur&#39;</span><span class="p">,</span> <span class="s1">&#39;onchange&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;onsubmit&#39;</span><span class="p">,</span> <span class="s1">&#39;onload&#39;</span><span class="p">,</span> <span class="s1">&#39;onunload&#39;</span><span class="p">,</span> <span class="s1">&#39;onmouseover&#39;</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">isEvent</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">inArray</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">events</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">isEvent</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 
     <span class="kd">function</span> <span class="nx">checkDepErrMsg</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">w</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">w</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span><span class="c1">// || w.toString();</span>
@@ -1047,7 +1115,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>Expose Widgets to the global object.</p>
         </td>
@@ -1062,7 +1130,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>
