@@ -1,18 +1,28 @@
 /**
  * # Widget
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Prototype of a widget class
  *
- * The methods of the prototype will be injected in every new widget, if
- * missing.
- * Properties: _headingDiv_, _bodyDiv_, and _footer_ might be automatically
- * added as well, depending on widget configuration.
+ * Prototype methods will be injected in every new widget, if missing.
+ *
+ * Properties:
+ *
+ *  - headingDiv,
+ *  - bodyDiv,
+ *  - footer
+ *
+ * can be automatically, depending on widget configuration.
+ *
+ * @see Widgets.get
+ * @see Widgets.append
  */
 (function(node) {
 
     "use strict";
+
+    var J = node.JSUS;
 
     node.Widget = Widget;
 
@@ -32,9 +42,56 @@
 
     Widget.prototype.highlight = function() {};
 
-    // Added by Widgets.get().
-    // Widget.prototype.destroy = function() {};
+    Widget.prototype.unhighlight = function() {};
 
+    Widget.prototype.isHighlighted = function() {};
+
+    Widget.prototype.enable = function() {};
+
+    Widget.prototype.disable = function() {};
+
+    /**
+     * ### Widget.isEnabled
+     *
+     * Returns TRUE if widget is enabled
+     *
+     * `Widgets.get` wraps this method in an outer callback performing
+     * default cleanup operations.
+     *
+     * @return {boolean} TRUE if
+     *
+     * @see Widget.enable
+     * @see Widget.disable
+     * @see Widget.enabled
+     */
+    Widget.prototype.isEnabled = function() {
+        return this.enabled;
+    };
+
+    /**
+     * ### Widget.destroy
+     *
+     * Performs cleanup operations
+     *
+     * `Widgets.get` wraps this method in an outer callback performing
+     * default cleanup operations.
+     *
+     * @see Widgets.get
+     */
+    Widget.prototype.destroy = null;
+
+    /**
+     * ### Widget.setTitle
+     *
+     * Creates/removes an heading div with a given title
+     *
+     * Adds/removes a div with class `panel-heading` to the `panelDiv`.
+     *
+     * @param {string|HTMLElement|false} Optional. The title for the heading,
+     *    div an HTML element, or false to remove the header completely.
+     *
+     * @see Widget.headingDiv
+     */
     Widget.prototype.setTitle = function(title) {
         var tmp;
         if (!this.panelDiv) {
@@ -64,12 +121,29 @@
                 this.headingDiv.innerHTML = '';
                 this.headingDiv.appendChild(title);
             }
-            else {
+            else if ('string' === typeof title) {
                 this.headingDiv.innerHTML = title;
+            }
+            else {
+                throw new TypeError(J.funcName(this) + '.setTitle: ' +
+                                    'title must be string, HTML element or ' +
+                                    'falsy. Found: ' + title);
             }
         }
     };
 
+    /**
+     * ### Widget.setFooter
+     *
+     * Creates/removes a footer div with a given content
+     *
+     * Adds/removes a div with class `panel-footer` to the `panelDiv`.
+     *
+     * @param {string|HTMLElement|false} Optional. The title for the header,
+     *    an HTML element, or false to remove the header completely.
+     *
+     * @see Widget.footerDiv
+     */
     Widget.prototype.setFooter = function(footer) {
         if (!this.panelDiv) {
             throw new Error('Widget.setFooter: panelDiv is missing.');
@@ -95,14 +169,32 @@
                 this.footerDiv.innerHTML = '';
                 this.footerDiv.appendChild(footer);
             }
-            else {
+            else if ('string' === typeof footer) {
                 this.footerDiv.innerHTML = footer;
+            }
+            else {
+                throw new TypeError(J.funcName(this) + '.setFooter: ' +
+                                    'footer must be string, HTML element or ' +
+                                    'falsy. Found: ' + title);
             }
         }
     };
 
+    /**
+     * ### Widget.setContext
+     *
+     * Changes the default context of the class 'panel-' + context
+     *
+     * Context are defined in Bootstrap framework.
+     *
+     * @param {string} context The type of the context
+     */
     Widget.prototype.setContext = function(context) {
-        // TODO: Check parameter
+        if ('string' !== typeof context) {
+            throw new TypeError(J.funcName(this) + '.setContext: ' +
+                                'footer must be string. Found: ' + context);
+
+        }
         W.removeClass(this.panelDiv, 'panel-[a-z]*');
         W.addClass(this.panelDiv, 'panel-' + context);
     };
@@ -247,6 +339,9 @@
      *   - className: as specified by the user or as found in the prototype
      *   - id: user-defined id, if specified in options
      *   - wid: random unique widget id
+     *   - enabled: boolean flag indicating the widget state, set to TRUE
+     *   - highlighted: boolean flag indicating whether the panelDiv is
+     *        highlighted, set to FALSE
      *
      * Calls the `listeners` method of the widget. Any event listener
      * registered here will be automatically removed when the widget
@@ -276,7 +371,7 @@
      */
     Widgets.prototype.get = function(widgetName, options) {
         var WidgetPrototype, widget;
-        var changes, isRecording, origDestroy;
+        var changes, origDestroy;
         var that;
         if ('string' !== typeof widgetName) {
             throw new TypeError('Widgets.get: widgetName must be string.');
@@ -315,8 +410,8 @@
         // widget.defaults = options;
 
         // Set ID.
-        if ('undefined' !== options.id) {
-            if ('string' === options.id) {
+        if ('undefined' !== typeof options.id) {
+            if ('string' === typeof options.id) {
                 widget.id = options.id;
             }
             else {
@@ -336,8 +431,16 @@
         widget.context = 'undefined' === typeof options.context ?
             WidgetPrototype.context : options.context;
 
+        // Fixed properties.
+
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
+        // Add enabled.
+        widget.enabled = true;
+        // Add highlighted.
+        widget.highlighted = false;
+
+        // TODO: Call the INIT method.
 
         // Call listeners.
         if (options.listeners !== false) {
@@ -400,7 +503,7 @@
         };
 
         // Store widget instance (e.g. used for destruction).
-        this.instances.push(w);
+        this.instances.push(widget);
 
         return widget;
     };
