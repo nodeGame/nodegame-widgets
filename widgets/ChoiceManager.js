@@ -34,33 +34,10 @@
      * ## ChoiceManager constructor
      *
      * Creates a new instance of ChoiceManager
-     *
-     * @param {object} options Optional. Configuration options.
-     *
-     * @see ChoiceManager.init
      */
-    function ChoiceManager(options) {
+    function ChoiceManager() {
         var that;
         that = this;
-
-        // TODO: move them in the Widgets as a check?
-        if ('string' !== typeof options.id) {
-            throw new TypeError('ChoiceManager constructor: options.id must ' +
-                                'be string. Found: ' + options.id);
-        }
-        if (W.getElementById(options.id)) {
-            throw new TypeError('ChoiceManager constructor: options.id is ' +
-                                'not unique: ' + options.id);
-        }
-
-        /**
-         * ### ChoiceManager.id
-         *
-         * The ID of the instance
-         *
-         * Will be used as the dl id, and as prefix for all choice TDs
-         */
-        this.id = options.id;
 
         /**
          * ### ChoiceManager.dl
@@ -68,13 +45,6 @@
          * The clickable list containing all the forms
          */
         this.dl = null;
-
-        /**
-         * ### ChoiceManager.disabled
-         *
-         * Flag indicating if the event listener onclick is active
-         */
-        this.disabled = true;
 
         /**
          * ### ChoiceManager.mainText
@@ -98,7 +68,6 @@
          * The array available forms
          */
         this.forms = null;
-
 
         /**
          * ### ChoiceManager.order
@@ -136,10 +105,6 @@
          * Textarea for free-text comment
          */
         this.textarea = null;
-
-
-        // Init.
-        this.init(options);
     }
 
     // ## ChoiceManager methods
@@ -165,11 +130,10 @@
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Configuration options
      */
     ChoiceManager.prototype.init = function(options) {
         var tmp, that;
-        options = options || {};
         that = this;
 
         // Option shuffleForms, default false.
@@ -213,25 +177,16 @@
 
         // After all configuration options are evaluated, add forms.
 
+        this.freeText = 'string' === typeof options.freeText ?
+            options.freeText : !!options.freeText;
+
         // Add the forms.
         if ('undefined' !== typeof options.forms) {
             this.setForms(options.forms);
         }
-
-        // Creates a free-text textarea, possibly with an initial text
-        if (options.freeText) {
-
-            this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
-            this.textarea.className = ChoiceManager.className + '-freetext';
-
-            if ('string' === typeof options.freeText) {
-                this.textarea.placeholder = options.freeText;
-                this.freeText = options.freeText;
-            }
-            else {
-                this.freeText = !!options.freeText;
-            }
+        if (W.getElementById(this.id)) {
+            throw new TypeError('ChoiceManager.append: id is ' +
+                                'not unique: ' + this.id);
         }
     };
 
@@ -291,23 +246,51 @@
     };
 
     ChoiceManager.prototype.append = function() {
+        // Id must be unique.
+        if (W.getElementById(this.id)) {
+            throw new Error('ChoiceManager.append: id is not ' +
+                            'unique: ' + this.id);
+        }
 
+        // MainText.
         if (this.mainText) {
             this.spanMainText = document.createElement('span');
             this.spanMainText.className = ChoiceManager.className + '-maintext';
             this.spanMainText.innerHTML = this.mainText;
+            // Append mainText.
             this.bodyDiv.appendChild(this.spanMainText);
         }
 
-        if (this.dl) {
-            this.dl = document.createElement('dl');
-            this.buildDl();
-            this.bodyDiv.appendChild(this.dl);
-        }
+        // Dl.
+        this.dl = document.createElement('dl');
+        this.buildDl();
+        // Append Dl.
+        this.bodyDiv.appendChild(this.dl);
 
-        if (this.textarea) this.bodyDiv.appendChild(this.textarea);
+        // Creates a free-text textarea, possibly with placeholder text.
+        if (this.freeText) {
+            this.textarea = document.createElement('textarea');
+            this.textarea.id = this.id + '_text';
+            if ('string' === typeof this.freeText) {
+                this.textarea.placeholder = options.freeText;
+            }
+            tmp = this.className ? this.className + '-freetext' : 'freetext';
+            this.textarea.className = tmp;
+            // Append textarea.
+            if this.bodyDiv.appendChild(this.textarea);
+        }
     };
 
+    /**
+     * ### ChoiceManager.listeners
+     *
+     * Implements Widget.listeners
+     *
+     * Adds two listeners two disable/enable the widget on events:
+     * INPUT_DISABLE, INPUT_ENABLE
+     *
+     * @see Widget.listeners
+     */
     ChoiceManager.prototype.listeners = function() {
         var that = this;
         node.on('INPUT_DISABLE', function() {
@@ -321,7 +304,7 @@
     /**
      * ### ChoiceManager.disable
      *
-     * Disables each form
+     * Disables all forms
      */
     ChoiceManager.prototype.disable = function() {
         var i, len;
@@ -335,7 +318,7 @@
     /**
      * ### ChoiceManager.enable
      *
-     * Enables each form
+     * Enables all forms
      */
     ChoiceManager.prototype.enable = function() {
         var i, len;
@@ -447,18 +430,7 @@
     };
 
     /**
-     * ### ChoiceManager.isHighlighted
-     *
-     * Returns TRUE if the choice dl is highlighted
-     *
-     * @return {boolean} ChoiceManager.highlighted
-     */
-    ChoiceManager.prototype.isHighlighted = function() {
-        return this.highlighted;
-    };
-
-    /**
-     * ### ChoiceManager.getAllValues
+     * ### ChoiceManager.getValues
      *
      * Returns the values for current selection and other paradata
      *
@@ -474,7 +446,7 @@
      *
      * @see ChoiceManager.verifyChoice
      */
-    ChoiceManager.prototype.getAllValues = function(opts) {
+    ChoiceManager.prototype.getValues = function(opts) {
         var obj, i, len;
         obj = {
             id: this.id,
@@ -483,7 +455,7 @@
         opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
-            obj[this.forms[i].id] = this.forms[i].getAllValues(opts);
+            obj[this.forms[i].id] = this.forms[i].getValues(opts);
         }
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;

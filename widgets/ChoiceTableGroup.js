@@ -42,8 +42,6 @@
      * @param {object} options Optional. Configuration options.
      *   If a `table` option is specified, it sets it as the clickable
      *   table. All other options are passed to the init method.
-     *
-     * @see ChoiceTableGroup.init
      */
     function ChoiceTableGroup(options) {
         var that;
@@ -297,7 +295,7 @@
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Configuration options
      */
     ChoiceTableGroup.prototype.init = function(options) {
         var tmp, that;
