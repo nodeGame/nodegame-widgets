@@ -701,8 +701,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">buildDl</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">dt</span><span class="p">,</span> <span class="nx">dd</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">form</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">dl</span><span class="p">,</span> <span class="nx">dt</span><span class="p">;</span>
 
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
@@ -714,6 +713,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
     <span class="p">};</span>
 
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">tmp</span><span class="p">;</span>
 
 </pre></div>
         </td>
@@ -806,7 +806,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
             <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_text&#39;</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">freeText</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">placeholder</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">freeText</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">placeholder</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">freeText</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="nx">tmp</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span> <span class="o">+</span> <span class="s1">&#39;-freetext&#39;</span> <span class="o">:</span> <span class="s1">&#39;freetext&#39;</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
@@ -822,7 +822,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
 <p>Append textarea.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">};</span>
 

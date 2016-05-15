@@ -1353,7 +1353,7 @@ Have a method in ChoiceTable?</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceTableGroup</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">buildTable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">tr</span><span class="p">,</span> <span class="nx">H</span><span class="p">,</span> <span class="nx">ct</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">lenJ</span><span class="p">,</span> <span class="nx">lenJOld</span><span class="p">,</span> <span class="nx">titleOld</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">lenJ</span><span class="p">,</span> <span class="nx">lenJOld</span><span class="p">;</span>
 
         <span class="nx">H</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">===</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">itemsSettings</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
@@ -1388,10 +1388,6 @@ Have a method in ChoiceTable?</p>
         <td class="code highlight"><div class="highlight"><pre>
                 <span class="nx">ct</span> <span class="o">=</span> <span class="nx">getChoiceTable</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
 
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">ct</span><span class="p">.</span><span class="nx">descriptionCell</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.buildTable: item &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;is missing a description: &#39;</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-                <span class="p">}</span>
                 <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ct</span><span class="p">.</span><span class="nx">descriptionCell</span><span class="p">);</span>
                 <span class="nx">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">lenJ</span> <span class="o">=</span> <span class="nx">ct</span><span class="p">.</span><span class="nx">choicesCells</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
 
@@ -1412,7 +1408,7 @@ Have a method in ChoiceTable?</p>
                 <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">lenJ</span> <span class="o">!==</span> <span class="nx">lenJOld</span><span class="p">)</span> <span class="p">{</span>
                     <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.buildTable: item &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;do not have same number of choices: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">s</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+                                    <span class="nx">ct</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
                 <span class="p">}</span>
 
 </pre></div>
@@ -1476,10 +1472,6 @@ Have a method in ChoiceTable?</p>
         <td class="code highlight"><div class="highlight"><pre>
                 <span class="nx">ct</span> <span class="o">=</span> <span class="nx">getChoiceTable</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
 
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">ct</span><span class="p">.</span><span class="nx">descriptionCell</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.buildTable: item &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;is missing a description: &#39;</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-                <span class="p">}</span>
 
 </pre></div>
         </td>
@@ -1499,7 +1491,7 @@ Have a method in ChoiceTable?</p>
                 <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">lenJ</span> <span class="o">!==</span> <span class="nx">lenJOld</span><span class="p">)</span> <span class="p">{</span>
                     <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.buildTable: item &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;do not have same number of choices: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">s</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+                                    <span class="nx">ct</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
                 <span class="p">}</span>
 
 
@@ -1668,7 +1660,7 @@ Have a method in ChoiceTable?</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">);</span>
             <span class="p">}</span>
 
@@ -2249,8 +2241,12 @@ INPUT_DISABLE, INPUT_ENABLE</p>
         <span class="nx">s</span> <span class="o">=</span> <span class="nx">mixinSettings</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">itemsSettings</span><span class="p">[</span><span class="nx">that</span><span class="p">.</span><span class="nx">order</span><span class="p">[</span><span class="nx">i</span><span class="p">]],</span> <span class="nx">i</span><span class="p">);</span>
         <span class="nx">ct</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ChoiceTable&#39;</span><span class="p">,</span> <span class="nx">s</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">itemsById</span><span class="p">[</span><span class="nx">ct</span><span class="p">.</span><span class="nx">id</span><span class="p">])</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup: an item with the same id &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;already exists: &#39;</span> <span class="o">+</span> <span class="nx">ct</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.buildTable: an item &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;with the same id already exists: &#39;</span> <span class="o">+</span> <span class="nx">ct</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">ct</span><span class="p">.</span><span class="nx">descriptionCell</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.buildTable: item &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;is missing a description: &#39;</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="nx">that</span><span class="p">.</span><span class="nx">itemsById</span><span class="p">[</span><span class="nx">ct</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">ct</span><span class="p">;</span>
         <span class="nx">that</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">ct</span><span class="p">;</span>

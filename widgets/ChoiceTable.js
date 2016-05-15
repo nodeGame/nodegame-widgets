@@ -484,9 +484,12 @@
 
             this.description = '' + options.description;
         }
-        else if ('undefined' !== typeof options.description &&
-                 !(J.isNode(descr) || J.isElement(descr))) {
+        else if(J.isNode(options.description) ||
+                J.isElement(options.description)) {
 
+            this.description = options.description;
+        }
+        else if ('undefined' !== typeof options.description) {
             throw new TypeError('ChoiceTable.init: options.description must ' +
                                 'be string, number, an HTML Element or ' +
                                 'undefined. Found: ' + options.description);
@@ -853,6 +856,7 @@
      * @see Widget.append
      */
     ChoiceTable.prototype.append = function() {
+        var tmp;
         // Id must be unique.
         if (W.getElementById(this.id)) {
             throw new Error('ChoiceTable.append: id is not ' +
@@ -872,7 +876,7 @@
         // Create/set table.
         if (this.table !== false) {
             // Create table, if it was not passed as object before.
-            if ('undefined' === typeof options.table) {
+            if ('undefined' === typeof this.table) {
                 this.table = document.createElement('table');
             }
             // Set table id.
@@ -888,12 +892,12 @@
             this.textarea = document.createElement('textarea');
             this.textarea.id = this.id + '_text';
             if ('string' === typeof this.freeText) {
-                this.textarea.placeholder = options.freeText;
+                this.textarea.placeholder = this.freeText;
             }
             tmp = this.className ? this.className + '-freetext' : 'freetext';
             this.textarea.className = tmp;
             // Append textarea.
-            if this.bodyDiv.appendChild(this.textarea);
+            this.bodyDiv.appendChild(this.textarea);
         }
     };
 

@@ -489,7 +489,7 @@
      */
     ChoiceTableGroup.prototype.buildTable = function() {
         var i, len, tr, H, ct;
-        var j, lenJ, lenJOld, titleOld;
+        var j, lenJ, lenJOld;
 
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
@@ -502,10 +502,6 @@
                 // Get item, append choices for item.
                 ct = getChoiceTable(this, i);
 
-                if (!ct.descriptionCell) {
-                    throw new Error('ChoiceTableGroup.buildTable: item ' +
-                                    'is missing a description: ' + s.id);
-                }
                 tr.appendChild(ct.descriptionCell);
                 j = -1, lenJ = ct.choicesCells.length;
                 // Make sure all items have same number of choices.
@@ -515,7 +511,7 @@
                 else if (lenJ !== lenJOld) {
                     throw new Error('ChoiceTableGroup.buildTable: item ' +
                                     'do not have same number of choices: ' +
-                                    s.id);
+                                    ct.id);
                 }
                 // TODO: might optimize. There are two loops (+1 inside ct).
                 for ( ; ++j < lenJ ; ) {
@@ -535,10 +531,6 @@
                 // Get item, append choices for item.
                 ct = getChoiceTable(this, i);
 
-                if (!ct.descriptionCell) {
-                    throw new Error('ChoiceTableGroup.buildTable: item ' +
-                                    'is missing a description: ' + s.id);
-                }
                 // Make sure all items have same number of choices.
                 lenJ = ct.choicesCells.length;
                 if (i === 0) {
@@ -547,7 +539,7 @@
                 else if (lenJ !== lenJOld) {
                     throw new Error('ChoiceTableGroup.buildTable: item ' +
                                     'do not have same number of choices: ' +
-                                    s.id);
+                                    ct.id);
                 }
 
                 // Add titles.
@@ -606,7 +598,7 @@
 
         // Create/set table, if requested.
         if (this.table !== false) {
-            if ('undefined' === typeof options.table) {
+            if ('undefined' === typeof this.table) {
                 this.table = document.createElement('table');
             }
             // Set table id.
@@ -854,8 +846,12 @@
         s = mixinSettings(that, that.itemsSettings[that.order[i]], i);
         ct = node.widgets.get('ChoiceTable', s);
         if (that.itemsById[ct.id]) {
-            throw new Error('ChoiceTableGroup: an item with the same id ' +
-                            'already exists: ' + ct.id);
+            throw new Error('ChoiceTableGroup.buildTable: an item ' +
+                            'with the same id already exists: ' + ct.id);
+        }
+        if (!ct.descriptionCell) {
+            throw new Error('ChoiceTableGroup.buildTable: item ' +
+                            'is missing a description: ' + s.id);
         }
         that.itemsById[ct.id] = ct;
         that.items[i] = ct;

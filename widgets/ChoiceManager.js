@@ -233,8 +233,7 @@
      * @see ChoiceManager.order
      */
     ChoiceManager.prototype.buildDl = function() {
-        var i, len, dt, dd;
-        var form;
+        var i, len, dl, dt;
 
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
@@ -246,6 +245,7 @@
     };
 
     ChoiceManager.prototype.append = function() {
+        var tmp;
         // Id must be unique.
         if (W.getElementById(this.id)) {
             throw new Error('ChoiceManager.append: id is not ' +
@@ -272,12 +272,12 @@
             this.textarea = document.createElement('textarea');
             this.textarea.id = this.id + '_text';
             if ('string' === typeof this.freeText) {
-                this.textarea.placeholder = options.freeText;
+                this.textarea.placeholder = this.freeText;
             }
             tmp = this.className ? this.className + '-freetext' : 'freetext';
             this.textarea.className = tmp;
             // Append textarea.
-            if this.bodyDiv.appendChild(this.textarea);
+            this.bodyDiv.appendChild(this.textarea);
         }
     };
 
