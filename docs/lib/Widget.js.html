@@ -22,6 +22,36 @@
         <a href="#widget">Widget</a>
       </div>
       <div class="heading h3">
+        <a href="#widget%20constructor">Widget constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.init">Widget.init</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.listeners">Widget.listeners</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.append">Widget.append</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.getvalues">Widget.getValues</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.highlight">Widget.highlight</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.highlight">Widget.highlight</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.ishighlighted">Widget.isHighlighted</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.enabled">Widget.enabled</a>
+      </div>
+      <div class="heading h3">
+        <a href="#widget.disable">Widget.disable</a>
+      </div>
+      <div class="heading h3">
         <a href="#widget.isenabled">Widget.isEnabled</a>
       </div>
       <div class="heading h3">
@@ -60,15 +90,7 @@ MIT Licensed</p>
 
 <p>Prototype methods will be injected in every new widget, if missing.</p>
 
-<p>Properties:</p>
-
-<ul>
-<li>headingDiv,
-<ul><li>bodyDiv,</li>
-<li>footer</li></ul></li>
-</ul>
-
-<p>can be automatically, depending on widget configuration.</p>
+<p>Additional properties can be automatically, depending on configuration.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
@@ -91,28 +113,361 @@ MIT Licensed</p>
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">Widget</span> <span class="o">=</span> <span class="nx">Widget</span><span class="p">;</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget%20constructor">
+  <h3>
+    <a href="#widget%20constructor" name="widget%20constructor" class="pilcrow">&#182;</a>
+    Widget constructor
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Creates a new instance of widget</p>
+
+<p>Should create all widgets properties, but the <code>init</code> method
+initialize them. Some properties are added automatically
+by <code>Widgets.get</code> after the constructor has been called,
+but before <code>init</code>.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.get</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widget.init
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="kd">function</span> <span class="nx">Widget</span><span class="p">()</span> <span class="p">{}</span>
 
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.init">
+  <h3>
+    <a href="#widget.init" name="widget.init" class="pilcrow">&#182;</a>
+    Widget.init
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Inits the widget after constructor and default properties are added</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">object</span>
+      <span>Configuration options</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.get
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.listeners">
+  <h3>
+    <a href="#widget.listeners" name="widget.listeners" class="pilcrow">&#182;</a>
+    Widget.listeners
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Wraps calls event listeners registration</p>
+
+<p>Event listeners registered here are automatically removed
+when widget is destroyed (if still active)</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">EventEmitter.setRecordChanges</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.destroy
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
-    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.append">
+  <h3>
+    <a href="#widget.append" name="widget.append" class="pilcrow">&#182;</a>
+    Widget.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Creates HTML elements and appends them to the <code>panelDiv</code> element</p>
+
+<p>The method is called by <code>Widgets.append</code> which evaluates user-options
+and adds the default container elements of a widget:</p>
+
+<ul>
+<li>panelDiv: the main container
+<ul><li>headingDiv: the title container (optional, added by default)</li>
+<li>footerDiv: the footer container (optional)</li></ul></li>
+</ul>
+
+<p>To ensure correct destroyal of the widget, all HTML elements should
+be children of Widget.panelDiv</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.append</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.destroy</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widget.panelDiv</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widget.footerDiv</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widget.headingDiv
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
-    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
-    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.getvalues">
+  <h3>
+    <a href="#widget.getvalues" name="widget.getvalues" class="pilcrow">&#182;</a>
+    Widget.getValues
+  </h3>
+</div>
 
-    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">highlight</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+  </div>
+  <div class="body"><p>Returns the values currently stored by the widget</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">mixed</span>
+      <span>Settings controlling the content of return value</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">mixed</span>
+      <span>The values of the widget</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.highlight">
+  <h3>
+    <a href="#widget.highlight" name="widget.highlight" class="pilcrow">&#182;</a>
+    Widget.highlight
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Hightlights the user interface of the widget in some way</p>
+
+<p>If widget was not appended, i.e. no <code>panelDiv</code> has been created,
+it should issue a war.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">mixed</span>
+      <span>Settings controlling the type of highlighting</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">highlight</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.highlight">
+  <h3>
+    <a href="#widget.highlight" name="widget.highlight" class="pilcrow">&#182;</a>
+    Widget.highlight
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Hightlights the user interface of the widget in some way</p>
+
+<p>Should mark the state of widget as <code>highlighted</code>.</p>
+
+<p>If widget was not appended, i.e. no <code>panelDiv</code> has been created,
+it should raise an error.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">mixed</span>
+      <span>Settings controlling the type of highlighting</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widget.highlighted
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">unhighlight</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
-    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isHighlighted</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.ishighlighted">
+  <h3>
+    <a href="#widget.ishighlighted" name="widget.ishighlighted" class="pilcrow">&#182;</a>
+    Widget.isHighlighted
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Returns TRUE if widget is currently highlighted</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">boolean</span>
+      <span>TRUE, if widget is currently highlighted</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isHighlighted</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlighted</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.enabled">
+  <h3>
+    <a href="#widget.enabled" name="widget.enabled" class="pilcrow">&#182;</a>
+    Widget.enabled
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Enables the widget</p>
+
+<p>An enabled widget allows the user to interact with it</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.disable">
+  <h3>
+    <a href="#widget.disable" name="widget.disable" class="pilcrow">&#182;</a>
+    Widget.disable
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Disables the widget</p>
+
+<p>A disabled widget is still visible, but user cannot interact with it</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">disable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
 
 
@@ -246,7 +601,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>Remove heading with false-ish argument.</p>
         </td>
@@ -266,7 +621,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>Add heading.</p>
         </td>
@@ -280,7 +635,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Move it to before the body (IE cannot have undefined).</p>
         </td>
@@ -296,7 +651,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Set title.</p>
         </td>
@@ -309,7 +664,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>The given title is an HTML element.</p>
         </td>
@@ -378,7 +733,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Remove footer with false-ish argument.</p>
         </td>
@@ -398,7 +753,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Add footer.</p>
         </td>
@@ -414,7 +769,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Set footer contents.</p>
         </td>
@@ -427,7 +782,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>The given footer is an HTML element.</p>
         </td>
@@ -494,7 +849,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>
