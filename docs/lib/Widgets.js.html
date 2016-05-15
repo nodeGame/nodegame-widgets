@@ -371,7 +371,7 @@ are added.</p>
 <li>className: as specified by the user or as found in the prototype</li>
 <li>id: user-defined id, if specified in options</li>
 <li>wid: random unique widget id</li>
-<li>enabled: boolean flag indicating the widget state, set to TRUE</li>
+<li>disabled: boolean flag indicating the widget state, set to FALSE</li>
 <li>highlighted: boolean flag indicating whether the panelDiv is
 highlighted, set to FALSE</li></ul></li>
 </ul>
@@ -513,12 +513,13 @@ widget.defaults = options;</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">widget</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: options.id must be &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;string, number or undefined. Found: &#39;</span> <span class="o">+</span>
                                     <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -582,7 +583,7 @@ widget.defaults = options;</p>
 <p>Add enabled.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
 </pre></div>
         </td>
@@ -606,9 +607,10 @@ widget.defaults = options;</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
-<p>TODO: Call the INIT method.</p>
+<p>Call init.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">widget</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
 
 
 </pre></div>

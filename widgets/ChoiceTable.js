@@ -47,32 +47,6 @@
         var that;
         that = this;
 
-        if ('number' === typeof options.id) options.id = '' + options.id;
-        if ('string' !== typeof options.id) {
-            throw new TypeError('ChoiceTable constructor: options.id must ' +
-                                'be string or number. Found: ' + options.id);
-        }
-        if (W.getElementById(options.id)) {
-            throw new TypeError('ChoiceTable constructor: options.id is not ' +
-                                'unique: ' + options.id);
-        }
-
-        /**
-         * ### ChoiceTable.id
-         *
-         * The ID of the instance
-         *
-         * Will be used as the table id, and as prefix for all choice TDs
-         */
-        this.id = options.id;
-
-        /**
-         * ### ChoiceTable.className
-         *
-         * The className of the instance
-         */
-        this.className = null;
-
         /**
          * ### ChoiceTable.table
          *
@@ -137,13 +111,6 @@
             // Remove any warning/error from form on click.
             if (that.isHighlighted()) that.unhighlight();
         };
-
-        /**
-         * ### ChoiceTable.disabled
-         *
-         * Flag indicating if the event listener onclick is active
-         */
-        this.disabled = true;
 
         /**
          * ### ChoiceTable.mainText
@@ -358,8 +325,6 @@
          */
         this.separator = ChoiceTable.separator;
 
-        // Init.
-        this.init(options);
     }
 
     // ## ChoiceTable methods
@@ -558,26 +523,22 @@
 
         // After all configuration options are evaluated, add choices.
 
-        // Create/set table, if requested.
-        if (options.table !== false) {
-            if ('object' === typeof options.table) {
-                this.table = options.table;
-            }
-            else if ('undefined' === typeof options.table) {
-                this.table = document.createElement('table');
-            }
-            else {
-                throw new TypeError('ChoiceTable constructor: options.table ' +
-                                    'must be object, false or undefined. ' +
-                                    'Found: ' + options.table);
-            }
-
-            // Set table id.
-            this.table.id = this.id;
-
-            if (this.className) J.addClass(this.table, this.className);
-            else this.table.className = '';
+        // Set table.
+        if ('object' === typeof options.table) {
+            this.table = options.table;
         }
+        else if ('undefined' !== typeof options.table &&
+                 false !== options.table) {
+
+            throw new TypeError('ChoiceTable.init: options.table ' +
+                                'must be object, false or undefined. ' +
+                                'Found: ' + options.table);
+        }
+
+        this.table = options.table;
+
+        this.freeText = 'string' === typeof options.freeText ?
+            options.freeText : !!options.freeText;
 
         // Add the choices.
         if ('undefined' !== typeof options.choices) {
@@ -589,22 +550,6 @@
             this.setCorrectChoice(options.correctChoice);
         }
 
-        // Creates a free-text textarea, possibly with an initial text
-        if (options.freeText) {
-
-            this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
-            tmp = this.className ? this.className + '-freetext' : 'freetext';
-            this.textarea.className = tmp;
-
-            if ('string' === typeof options.freeText) {
-                this.textarea.placeholder = options.freeText;
-                this.freeText = options.freeText;
-            }
-            else {
-                this.freeText = !!options.freeText;
-            }
-        }
     };
 
     /**
@@ -896,16 +841,50 @@
     };
 
     ChoiceTable.prototype.append = function() {
+        // Id must be unique.
+        if (W.getElementById(this.id)) {
+            throw new TypeError('ChoiceTable.append: id is not ' +
+                                'unique: ' + this.id);
+        }
+
+        // Create/set table, if requested.
+        if (this.table !== false) {
+            // Create table, if it was not passed as object before.
+            if ('undefined' === typeof options.table) {
+                this.table = document.createElement('table');
+            }
+            // Set table id.
+            this.table.id = this.id;
+            if (this.className) J.addClass(this.table, this.className);
+            else this.table.className = '';
+
+            // Append Table.
+            this.bodyDiv.appendChild(this.table);
+        }
 
         if (this.mainText) {
             this.spanMainText = document.createElement('span');
             this.spanMainText.className = this.className ?
                 ChoiceTable.className + '-maintext' : 'maintext';
             this.spanMainText.innerHTML = this.mainText;
+
+            // Append.
             this.bodyDiv.appendChild(this.spanMainText);
         }
-        if (this.table) this.bodyDiv.appendChild(this.table);
-        if (this.textarea) this.bodyDiv.appendChild(this.textarea);
+
+        // Creates a free-text textarea, possibly with an initial text
+        if (this.freeText) {
+            this.textarea = document.createElement('textarea');
+            this.textarea.id = this.id + '_text';
+            if ('string' === typeof this.freeText) {
+                this.textarea.placeholder = options.freeText;
+            }
+            tmp = this.className ? this.className + '-freetext' : 'freetext';
+            this.textarea.className = tmp;
+
+            // Append.
+            if this.bodyDiv.appendChild(this.textarea);
+        }
     };
 
     ChoiceTable.prototype.listeners = function() {
