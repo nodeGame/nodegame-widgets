@@ -840,6 +840,21 @@
         this.correctChoice = choice;
     };
 
+    /**
+     * ### ChoiceTable.append
+     *
+     * Implements Widget.append
+     *
+     * Checks that id is unique.
+     *
+     * Appends (all optional):
+     *
+     *   - mainText: a question or statement introducing the choices
+     *   - table: the table containing the choices
+     *   - freeText: a textarea for comments
+     *
+     * @see Widget.append
+     */
     ChoiceTable.prototype.append = function() {
         // Id must be unique.
         if (W.getElementById(this.id)) {
@@ -847,7 +862,18 @@
                                 'unique: ' + this.id);
         }
 
-        // Create/set table, if requested.
+        // MainText.
+        if (this.mainText) {
+            this.spanMainText = document.createElement('span');
+            this.spanMainText.className = this.className ?
+                ChoiceTable.className + '-maintext' : 'maintext';
+            this.spanMainText.innerHTML = this.mainText;
+
+            // Append.
+            this.bodyDiv.appendChild(this.spanMainText);
+        }
+
+        // Create/set table.
         if (this.table !== false) {
             // Create table, if it was not passed as object before.
             if ('undefined' === typeof options.table) {
@@ -862,17 +888,7 @@
             this.bodyDiv.appendChild(this.table);
         }
 
-        if (this.mainText) {
-            this.spanMainText = document.createElement('span');
-            this.spanMainText.className = this.className ?
-                ChoiceTable.className + '-maintext' : 'maintext';
-            this.spanMainText.innerHTML = this.mainText;
-
-            // Append.
-            this.bodyDiv.appendChild(this.spanMainText);
-        }
-
-        // Creates a free-text textarea, possibly with an initial text
+        // Creates a free-text textarea, possibly with an initial text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
             this.textarea.id = this.id + '_text';
@@ -887,6 +903,16 @@
         }
     };
 
+    /**
+     * ### ChoiceTable.listeners
+     *
+     * Implements Widget.listeners
+     *
+     * Adds two listeners two disable/enable the widget on events:
+     * INPUT_DISABLE, INPUT_ENABLE
+     *
+     * @see Widget.listeners
+     */
     ChoiceTable.prototype.listeners = function() {
         var that = this;
         node.on('INPUT_DISABLE', function() {
@@ -1090,18 +1116,7 @@
     };
 
     /**
-     * ### ChoiceTable.isHighlighted
-     *
-     * Returns TRUE if the choice table is highlighted
-     *
-     * @return {boolean} ChoiceTable.highlighted
-     */
-    ChoiceTable.prototype.isHighlighted = function() {
-        return this.highlighted;
-    };
-
-    /**
-     * ### ChoiceTable.getAllValues
+     * ### ChoiceTable.getValues
      *
      * Returns the values for current selection and other paradata
      *
@@ -1117,7 +1132,7 @@
      *
      * @see ChoiceTable.verifyChoice
      */
-    ChoiceTable.prototype.getAllValues = function(opts) {
+    ChoiceTable.prototype.getValues = function(opts) {
         var obj;
         obj = {
             id: this.id,

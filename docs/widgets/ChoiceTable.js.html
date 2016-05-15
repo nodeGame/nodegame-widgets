@@ -136,6 +136,12 @@
         <a href="#choicetable.setcorrectchoice">ChoiceTable.setCorrectChoice</a>
       </div>
       <div class="heading h3">
+        <a href="#choicetable.append">ChoiceTable.append</a>
+      </div>
+      <div class="heading h3">
+        <a href="#choicetable.listeners">ChoiceTable.listeners</a>
+      </div>
+      <div class="heading h3">
         <a href="#choicetable.disable">ChoiceTable.disable</a>
       </div>
       <div class="heading h3">
@@ -160,10 +166,7 @@
         <a href="#choicetable.unhighlight">ChoiceTable.unhighlight</a>
       </div>
       <div class="heading h3">
-        <a href="#choicetable.ishighlighted">ChoiceTable.isHighlighted</a>
-      </div>
-      <div class="heading h3">
-        <a href="#choicetable.getallvalues">ChoiceTable.getAllValues</a>
+        <a href="#choicetable.getvalues">ChoiceTable.getValues</a>
       </div>
       <div class="heading h2">
         <a href="#helper%20methods.">Helper methods.</a>
@@ -2305,6 +2308,43 @@ the <code>id</code> field of the cell</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span> <span class="o">=</span> <span class="nx">choice</span><span class="p">;</span>
     <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.append">
+  <h3>
+    <a href="#choicetable.append" name="choicetable.append" class="pilcrow">&#182;</a>
+    ChoiceTable.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Implements Widget.append</p>
+
+<p>Checks that id is unique.</p>
+
+<p>Appends (all optional):</p>
+
+<ul>
+<li>mainText: a question or statement introducing the choices
+<ul><li>table: the table containing the choices</li>
+<li>freeText: a textarea for comments</li></ul></li>
+</ul>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widget.append
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 </pre></div>
@@ -2313,7 +2353,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-88" id="section-88">&#182;</a>
+  <a class="pilcrow" href="#section-89" id="section-89">&#182;</a>
 </div>
 <p>Id must be unique.</p>
         </td>
@@ -2330,9 +2370,42 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-89" id="section-89">&#182;</a>
+  <a class="pilcrow" href="#section-90" id="section-90">&#182;</a>
 </div>
-<p>Create/set table, if requested.</p>
+<p>MainText.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span> <span class="o">?</span>
+                <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">className</span> <span class="o">+</span> <span class="s1">&#39;-maintext&#39;</span> <span class="o">:</span> <span class="s1">&#39;maintext&#39;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainText</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-91" id="section-91">&#182;</a>
+</div>
+<p>Append.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-92" id="section-92">&#182;</a>
+</div>
+<p>Create/set table.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
@@ -2343,7 +2416,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-90" id="section-90">&#182;</a>
+  <a class="pilcrow" href="#section-93" id="section-93">&#182;</a>
 </div>
 <p>Create table, if it was not passed as object before.</p>
         </td>
@@ -2358,7 +2431,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-91" id="section-91">&#182;</a>
+  <a class="pilcrow" href="#section-94" id="section-94">&#182;</a>
 </div>
 <p>Set table id.</p>
         </td>
@@ -2374,7 +2447,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-92" id="section-92">&#182;</a>
+  <a class="pilcrow" href="#section-95" id="section-95">&#182;</a>
 </div>
 <p>Append Table.</p>
         </td>
@@ -2382,12 +2455,6 @@ the <code>id</code> field of the cell</p>
             <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span> <span class="o">?</span>
-                <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">className</span> <span class="o">+</span> <span class="s1">&#39;-maintext&#39;</span> <span class="o">:</span> <span class="s1">&#39;maintext&#39;</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainText</span><span class="p">;</span>
-
 
 </pre></div>
         </td>
@@ -2395,24 +2462,9 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-93" id="section-93">&#182;</a>
+  <a class="pilcrow" href="#section-96" id="section-96">&#182;</a>
 </div>
-<p>Append.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">);</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-94" id="section-94">&#182;</a>
-</div>
-<p>Creates a free-text textarea, possibly with an initial text</p>
+<p>Creates a free-text textarea, possibly with an initial text.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">freeText</span><span class="p">)</span> <span class="p">{</span>
@@ -2431,7 +2483,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-95" id="section-95">&#182;</a>
+  <a class="pilcrow" href="#section-97" id="section-97">&#182;</a>
 </div>
 <p>Append.</p>
         </td>
@@ -2440,6 +2492,36 @@ the <code>id</code> field of the cell</p>
         <span class="p">}</span>
     <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.listeners">
+  <h3>
+    <a href="#choicetable.listeners" name="choicetable.listeners" class="pilcrow">&#182;</a>
+    ChoiceTable.listeners
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Implements Widget.listeners</p>
+
+<p>Adds two listeners two disable/enable the widget on events:
+INPUT_DISABLE, INPUT_ENABLE</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widget.listeners
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;INPUT_DISABLE&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -2573,7 +2655,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-99" id="section-99">&#182;</a>
+  <a class="pilcrow" href="#section-102" id="section-102">&#182;</a>
 </div>
 <p>If no correct choice is set return null.</p>
         </td>
@@ -2586,7 +2668,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-100" id="section-100">&#182;</a>
+  <a class="pilcrow" href="#section-103" id="section-103">&#182;</a>
 </div>
 <p>Mark attempt by default.</p>
         </td>
@@ -2606,7 +2688,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-101" id="section-101">&#182;</a>
+  <a class="pilcrow" href="#section-104" id="section-104">&#182;</a>
 </div>
 <p>Quick check.</p>
         </td>
@@ -2619,7 +2701,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-102" id="section-102">&#182;</a>
+  <a class="pilcrow" href="#section-105" id="section-105">&#182;</a>
 </div>
 <p>Check every item</p>
         </td>
@@ -2887,42 +2969,10 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="choicetable.ishighlighted">
+<div class="pilwrap" id="choicetable.getvalues">
   <h3>
-    <a href="#choicetable.ishighlighted" name="choicetable.ishighlighted" class="pilcrow">&#182;</a>
-    ChoiceTable.isHighlighted
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Returns TRUE if the choice table is highlighted</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">boolean</span>
-      <span>ChoiceTable.highlighted</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isHighlighted</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlighted</span><span class="p">;</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="choicetable.getallvalues">
-  <h3>
-    <a href="#choicetable.getallvalues" name="choicetable.getallvalues" class="pilcrow">&#182;</a>
-    ChoiceTable.getAllValues
+    <a href="#choicetable.getvalues" name="choicetable.getvalues" class="pilcrow">&#182;</a>
+    ChoiceTable.getValues
   </h3>
 </div>
 
@@ -2959,7 +3009,7 @@ the <code>id</code> field of the cell</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">obj</span><span class="p">;</span>
         <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
