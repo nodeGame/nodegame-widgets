@@ -362,7 +362,6 @@
      */
     ChoiceTable.prototype.init = function(options) {
         var tmp, that;
-        options = options || {};
         that = this;
 
         // Option orientation, default 'H'.
@@ -858,8 +857,8 @@
     ChoiceTable.prototype.append = function() {
         // Id must be unique.
         if (W.getElementById(this.id)) {
-            throw new TypeError('ChoiceTable.append: id is not ' +
-                                'unique: ' + this.id);
+            throw new Error('ChoiceTable.append: id is not ' +
+                            'unique: ' + this.id);
         }
 
         // MainText.
@@ -868,8 +867,7 @@
             this.spanMainText.className = this.className ?
                 ChoiceTable.className + '-maintext' : 'maintext';
             this.spanMainText.innerHTML = this.mainText;
-
-            // Append.
+            // Append mainText.
             this.bodyDiv.appendChild(this.spanMainText);
         }
 
@@ -883,12 +881,11 @@
             this.table.id = this.id;
             if (this.className) J.addClass(this.table, this.className);
             else this.table.className = '';
-
-            // Append Table.
+            // Append table.
             this.bodyDiv.appendChild(this.table);
         }
 
-        // Creates a free-text textarea, possibly with an initial text.
+        // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
             this.textarea.id = this.id + '_text';
@@ -897,8 +894,7 @@
             }
             tmp = this.className ? this.className + '-freetext' : 'freetext';
             this.textarea.className = tmp;
-
-            // Append.
+            // Append textarea.
             if this.bodyDiv.appendChild(this.textarea);
         }
     };

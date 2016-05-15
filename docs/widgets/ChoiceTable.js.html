@@ -1175,7 +1175,6 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">tmp</span><span class="p">,</span> <span class="nx">that</span><span class="p">;</span>
-        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
 
@@ -2359,8 +2358,8 @@ the <code>id</code> field of the cell</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.append: id is not &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;unique: &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.append: id is not &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;unique: &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
         <span class="p">}</span>
 
 
@@ -2381,7 +2380,6 @@ the <code>id</code> field of the cell</p>
                 <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">className</span> <span class="o">+</span> <span class="s1">&#39;-maintext&#39;</span> <span class="o">:</span> <span class="s1">&#39;maintext&#39;</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainText</span><span class="p">;</span>
 
-
 </pre></div>
         </td>
       </tr>
@@ -2390,7 +2388,7 @@ the <code>id</code> field of the cell</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-91" id="section-91">&#182;</a>
 </div>
-<p>Append.</p>
+<p>Append mainText.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spanMainText</span><span class="p">);</span>
@@ -2440,7 +2438,6 @@ the <code>id</code> field of the cell</p>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">className</span><span class="p">)</span> <span class="nx">J</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
             <span class="k">else</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
 
-
 </pre></div>
         </td>
       </tr>
@@ -2449,7 +2446,7 @@ the <code>id</code> field of the cell</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-95" id="section-95">&#182;</a>
 </div>
-<p>Append Table.</p>
+<p>Append table.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
@@ -2464,7 +2461,7 @@ the <code>id</code> field of the cell</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-96" id="section-96">&#182;</a>
 </div>
-<p>Creates a free-text textarea, possibly with an initial text.</p>
+<p>Creates a free-text textarea, possibly with placeholder text.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">freeText</span><span class="p">)</span> <span class="p">{</span>
@@ -2476,7 +2473,6 @@ the <code>id</code> field of the cell</p>
             <span class="nx">tmp</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span> <span class="o">+</span> <span class="s1">&#39;-freetext&#39;</span> <span class="o">:</span> <span class="s1">&#39;freetext&#39;</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
 
-
 </pre></div>
         </td>
       </tr>
@@ -2485,7 +2481,7 @@ the <code>id</code> field of the cell</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-97" id="section-97">&#182;</a>
 </div>
-<p>Append.</p>
+<p>Append textarea.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>

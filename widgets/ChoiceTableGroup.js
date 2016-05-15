@@ -3,7 +3,9 @@
  * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
- * Creates a table that if pressed emits node.done()
+ * Creates a table that groups together several choice tables widgets
+ *
+ * @see ChoiceTable
  *
  * www.nodegame.org
  */
@@ -46,27 +48,6 @@
     function ChoiceTableGroup(options) {
         var that;
         that = this;
-
-        // TODO: move them in the Widgets as a check?
-        if ('number' === typeof options.id) options.id = '' + options.id;
-        if ('string' !== typeof options.id) {
-            throw new TypeError('ChoiceTableGroup constructor: options.id ' +
-                                'must be string or number. Found: ' +
-                                options.id);
-        }
-        if (W.getElementById(options.id)) {
-            throw new TypeError('ChoiceTableGroup constructor: options.id ' +
-                                'is not unique: ' + options.id);
-        }
-
-        /**
-         * ### ChoiceTableGroup.id
-         *
-         * The ID of the instance
-         *
-         * Will be used as the table id, and as prefix for all choice TDs
-         */
-        this.id = options.id;
 
         /**
          * ### ChoiceTableGroup.dl
@@ -138,13 +119,6 @@
         };
 
         /**
-         * ### ChoiceTableGroup.disabled
-         *
-         * Flag indicating if the event listener onclick is active
-         */
-        this.disabled = true;
-
-        /**
          * ### ChoiceTableGroup.mainText
          *
          * The main text introducing the choices
@@ -189,7 +163,7 @@
         this.order = null;
 
         /**
-         * ### ChoiceTable.shuffleChoices
+         * ### ChoiceTableGroup.shuffleItems
          *
          * If TRUE, items are inserted in random order
          *
@@ -266,7 +240,7 @@
         this.selectMultiple = null;
 
         /**
-         * ### ChoiceTable.renderer
+         * ### ChoiceTableGroup.renderer
          *
          * A callback that renders the content of each cell
          *
@@ -297,9 +271,6 @@
          * @see mixinSettings
          */
         this.separator = ChoiceTableGroup.separator;
-
-        // Init.
-        this.init(options);
     }
 
     // ## ChoiceTableGroup methods
@@ -330,7 +301,6 @@
      */
     ChoiceTableGroup.prototype.init = function(options) {
         var tmp, that;
-        options = options || {};
         that = this;
 
         // TODO: many options checking are replicated. Skip them all?
@@ -429,72 +399,48 @@
             this.renderer = options.renderer;
         }
         else if ('undefined' !== typeof options.renderer) {
-            throw new TypeError('ChoiceTable.init: options.renderer must ' +
-                                'be function or undefined. Found: ' +
+            throw new TypeError('ChoiceTableGroup.init: options.renderer ' +
+                                'must be function or undefined. Found: ' +
                                 options.renderer);
         }
 
+        // Set the className, if not use default.
+        if ('undefined' === typeof options.className) {
+            this.className = ChoiceTableGroup.className;
+        }
+        else if (options.className === false ||
+                 'string' === typeof options.className ||
+                 J.isArray(options.className)) {
+
+            this.className = options.className;
+        }
+        else {
+            throw new TypeError('ChoiceTableGroup.init: options.' +
+                                'className must be string, array, ' +
+                                'or undefined. Found: ' + options.className);
+        }
 
         // After all configuration options are evaluated, add items.
 
-        // Create/set table, if requested.
-        if (options.table !== false) {
-            if ('object' === typeof options.table) {
-                this.table = options.table;
-            }
-            else if ('undefined' === typeof options.table) {
-                this.table = document.createElement('table');
-            }
-            else {
-                throw new TypeError('ChoiceTable constructor: options.table ' +
-                                    'must be object, false or undefined. ' +
-                                    'Found: ' + options.table);
-            }
-
-            // Set table id.
-            this.table.id = this.id;
-            // Table className.
-            if ('undefined' !== typeof options.className) {
-                if (options.className === false) {
-                    this.table.className = '';
-                }
-                else if ('string' === typeof options.className ||
-                         J.isArray(options.className)) {
-
-                    J.addClass(this.table, options.className);
-                }
-                else {
-                    throw new TypeError('ChoiceTable.init: options.' +
-                                        'className must be string, array, ' +
-                                        'or undefined. Found: ' +
-                                        options.className);
-                }
-            }
-            else {
-                // Add default 'choicetable' class to table.
-                J.addClass(this.table, ChoiceTableGroup.className);
-            }
+        if ('object' === typeof options.table) {
+            this.table = options.table;
         }
+        else if ('undefined' !== typeof options.table &&
+                 false !== options.table) {
+
+            throw new TypeError('ChoiceTableGroup.init: options.table ' +
+                                'must be object, false or undefined. ' +
+                                'Found: ' + options.table);
+        }
+
+        this.table = options.table;
+
+        this.freeText = 'string' === typeof options.freeText ?
+            options.freeText : !!options.freeText;
 
         // Add the items.
         if ('undefined' !== typeof options.items) {
             this.setItems(options.items);
-        }
-
-        // Creates a free-text textarea, possibly with an initial text
-        if (options.freeText) {
-
-            this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
-            this.textarea.className = ChoiceTableGroup.className + '-freetext';
-
-            if ('string' === typeof options.freeText) {
-                this.textarea.placeholder = options.freeText;
-                this.freeText = options.freeText;
-            }
-            else {
-                this.freeText = !!options.freeText;
-            }
         }
     };
 
@@ -628,20 +574,77 @@
         this.enable();
     };
 
-
-
+    /**
+     * ### ChoiceTableGroup.append
+     *
+     * Implements Widget.append
+     *
+     * Checks that id is unique.
+     *
+     * Appends (all optional):
+     *
+     *   - mainText: a question or statement introducing the choices
+     *   - table: the table containing the choices
+     *   - freeText: a textarea for comments
+     *
+     * @see Widget.append
+     */
     ChoiceTableGroup.prototype.append = function() {
+        // Id must be unique.
+        if (W.getElementById(this.id)) {
+            throw new Error('ChoiceTableGroup.append: id ' +
+                            'is not unique: ' + this.id);
+        }
+
+        // MainText.
         if (this.mainText) {
             this.spanMainText = document.createElement('span');
             this.spanMainText.className =
                 ChoiceTableGroup.className + '-maintext';
             this.spanMainText.innerHTML = this.mainText;
+            // Append.
             this.bodyDiv.appendChild(this.spanMainText);
         }
-        if (this.table) this.bodyDiv.appendChild(this.table);
-        if (this.textarea) this.bodyDiv.appendChild(this.textarea);
+
+        // Create/set table, if requested.
+        if (this.table !== false) {
+            if ('undefined' === typeof options.table) {
+                this.table = document.createElement('table');
+            }
+            // Set table id.
+            this.table.id = this.id;
+            if (this.className) J.addClass(this.table, this.className);
+            else this.table.className = '';
+            // Append table.
+            this.bodyDiv.appendChild(this.table);
+        }
+
+        // Creates a free-text textarea, possibly with placeholder text.
+        if (this.freeText) {
+            this.textarea = document.createElement('textarea');
+            this.textarea.id = this.id + '_text';
+            this.textarea.className = ChoiceTableGroup.className + '-freetext';
+            if ('string' === typeof this.freeText) {
+                this.textarea.placeholder = this.freeText;
+            }
+            // Append textarea.
+            this.bodyDiv.appendChild(this.textarea);
+        }
     };
 
+    /**
+     * ### ChoiceTableGroup.listeners
+     *
+     * Implements Widget.listeners
+     *
+     * Adds two listeners two disable/enable the widget on events:
+     * INPUT_DISABLE, INPUT_ENABLE
+     *
+     * Notice! Nested choice tables listeners are not executed.
+     *
+     * @see Widget.listeners
+     * @see mixinSettings
+     */
     ChoiceTableGroup.prototype.listeners = function() {
         var that = this;
         node.on('INPUT_DISABLE', function() {
@@ -765,18 +768,7 @@
     };
 
     /**
-     * ### ChoiceTableGroup.isHighlighted
-     *
-     * Returns TRUE if the choice table is highlighted
-     *
-     * @return {boolean} ChoiceTableGroup.highlighted
-     */
-    ChoiceTableGroup.prototype.isHighlighted = function() {
-        return this.highlighted;
-    };
-
-    /**
-     * ### ChoiceTableGroup.getAllValues
+     * ### ChoiceTableGroup.getValues
      *
      * Returns the values for current selection and other paradata
      *
@@ -792,7 +784,7 @@
      *
      * @see ChoiceTableGroup.verifyChoice
      */
-    ChoiceTableGroup.prototype.getAllValues = function(opts) {
+    ChoiceTableGroup.prototype.getValues = function(opts) {
         var obj, i, len, tbl;
         obj = {
             id: this.id,
@@ -803,7 +795,7 @@
         i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
             tbl = this.items[i];
-            obj.items[tbl.id] = tbl.getAllValues(opts);
+            obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) obj.missValues = true;
         }
         if (this.textarea) obj.freetext = this.textarea.value;
@@ -855,8 +847,8 @@
      *
      * @return {object} ct The requested choice table
      *
-     * @see ChoiceTable.itemsSettings
-     * @see ChoiceTable.itemsById
+     * @see ChoiceTableGroup.itemsSettings
+     * @see ChoiceTableGroup.itemsById
      * @see mixinSettings
      */
     function getChoiceTable(that, i) {
