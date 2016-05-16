@@ -600,7 +600,7 @@
         if (this.table !== false) {
             if ('undefined' === typeof this.table) {
                 this.table = document.createElement('table');
-                this.buildTable();
+                if (this.items) this.buildTable();
             }
             // Set table id.
             this.table.id = this.id;
@@ -651,8 +651,8 @@
      *
      * Disables clicking on the table and removes CSS 'clicklable' class
      */
-    ChoiceTableGroup.prototype.disable = function() {
-        if (this.disabled) return;
+    ChoiceTableGroup.prototype.disable = function(force) {
+        if (this.disabled === true) return;
         this.disabled = true;
         if (this.table) {
             J.removeClass(this.table, 'clickable');
@@ -667,8 +667,8 @@
      *
      * @return {function} cb The event listener function
      */
-    ChoiceTableGroup.prototype.enable = function() {
-        if (!this.disabled) return;
+    ChoiceTableGroup.prototype.enable = function(force) {
+        if (this.disabled === false) return;
         if (!this.table) {
             throw new Error('ChoiceTableGroup.enable: table not defined.');
         }

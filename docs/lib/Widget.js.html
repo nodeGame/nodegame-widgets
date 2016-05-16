@@ -37,6 +37,9 @@
         <a href="#widget.getvalues">Widget.getValues</a>
       </div>
       <div class="heading h3">
+        <a href="#widget.getvalues">Widget.getValues</a>
+      </div>
+      <div class="heading h3">
         <a href="#widget.highlight">Widget.highlight</a>
       </div>
       <div class="heading h3">
@@ -52,7 +55,7 @@
         <a href="#widget.disable">Widget.disable</a>
       </div>
       <div class="heading h3">
-        <a href="#widget.isenabled">Widget.isEnabled</a>
+        <a href="#widget.isdisabled">Widget.isDisabled</a>
       </div>
       <div class="heading h3">
         <a href="#widget.destroy">Widget.destroy</a>
@@ -322,6 +325,38 @@ be children of Widget.panelDiv</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="widget.getvalues">
+  <h3>
+    <a href="#widget.getvalues" name="widget.getvalues" class="pilcrow">&#182;</a>
+    Widget.getValues
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Set the stored values directly</p>
+
+<p>The method should not set the values, if widget is disabled</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">values</span>
+      <span class="dox_type">mixed</span>
+      <span>The values to store</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">values</span><span class="p">)</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="widget.highlight">
   <h3>
     <a href="#widget.highlight" name="widget.highlight" class="pilcrow">&#182;</a>
@@ -417,7 +452,7 @@ it should raise an error.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isHighlighted</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlighted</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">highlighted</span><span class="p">;</span>
     <span class="p">};</span>
 
 
@@ -475,10 +510,10 @@ it should raise an error.</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="widget.isenabled">
+<div class="pilwrap" id="widget.isdisabled">
   <h3>
-    <a href="#widget.isenabled" name="widget.isenabled" class="pilcrow">&#182;</a>
-    Widget.isEnabled
+    <a href="#widget.isdisabled" name="widget.isdisabled" class="pilcrow">&#182;</a>
+    Widget.isDisabled
   </h3>
 </div>
 
@@ -493,7 +528,7 @@ default cleanup operations.</p>
     <div class="dox_tag_detail">
       <span class="dox_tag_name"></span>
       <span class="dox_type">boolean</span>
-      <span>TRUE if</span>
+      <span>TRUE if widget is disabled</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -513,7 +548,7 @@ default cleanup operations.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isDisabled</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">disabled</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">disabled</span><span class="p">;</span>
     <span class="p">};</span>
 
 
@@ -599,7 +634,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>Remove heading with false-ish argument.</p>
         </td>
@@ -619,7 +654,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Add heading.</p>
         </td>
@@ -633,7 +668,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Move it to before the body (IE cannot have undefined).</p>
         </td>
@@ -649,7 +684,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Set title.</p>
         </td>
@@ -662,7 +697,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>The given title is an HTML element.</p>
         </td>
@@ -731,7 +766,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Remove footer with false-ish argument.</p>
         </td>
@@ -751,7 +786,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Add footer.</p>
         </td>
@@ -767,7 +802,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Set footer contents.</p>
         </td>
@@ -780,7 +815,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>The given footer is an HTML element.</p>
         </td>
@@ -847,7 +882,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>

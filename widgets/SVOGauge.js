@@ -59,7 +59,7 @@
         /**
          * ## SVOGauge.method
          *
-         * The method used to measure mood
+         * The method used to measure svo
          *
          * Available methods: 'Slider'
          *
@@ -71,6 +71,15 @@
          * "Measuring social value orientation"
          */
         this.method = 'Slider';
+
+        /**
+         * ## SVOGauge.gauge
+         *
+         * The object measuring svo
+         *
+         * @see SVOGauge.method
+         */
+        this.gauge = null;
 
         this.addMethod('Slider', SVO_Slider);
     }

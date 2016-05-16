@@ -537,7 +537,7 @@
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
         // Add enabled.
-        widget.disabled = false;
+        widget.disabled = null;
         // Add highlighted.
         widget.highlighted = false;
 
@@ -4802,7 +4802,7 @@
         if (this.table !== false) {
             if ('undefined' === typeof this.table) {
                 this.table = document.createElement('table');
-                this.buildTable();
+                if (this.items) this.buildTable();
             }
             // Set table id.
             this.table.id = this.id;
@@ -4853,8 +4853,8 @@
      *
      * Disables clicking on the table and removes CSS 'clicklable' class
      */
-    ChoiceTableGroup.prototype.disable = function() {
-        if (this.disabled) return;
+    ChoiceTableGroup.prototype.disable = function(force) {
+        if (this.disabled === true) return;
         this.disabled = true;
         if (this.table) {
             J.removeClass(this.table, 'clickable');
@@ -4869,8 +4869,8 @@
      *
      * @return {function} cb The event listener function
      */
-    ChoiceTableGroup.prototype.enable = function() {
-        if (!this.disabled) return;
+    ChoiceTableGroup.prototype.enable = function(force) {
+        if (this.disabled === false) return;
         if (!this.table) {
             throw new Error('ChoiceTableGroup.enable: table not defined.');
         }
@@ -7453,6 +7453,15 @@
          */
         this.method = 'I-PANAS-SF';
 
+        /**
+         * ## SVOGauge.gauge
+         *
+         * The object measuring mood
+         *
+         * @see SVOGauge.method
+         */
+        this.gauge = null;
+
         this.addMethod('I-PANAS-SF', I_PANAS_SF);
     }
 
@@ -8784,7 +8793,7 @@
         /**
          * ## SVOGauge.method
          *
-         * The method used to measure mood
+         * The method used to measure svo
          *
          * Available methods: 'Slider'
          *
@@ -8796,6 +8805,15 @@
          * "Measuring social value orientation"
          */
         this.method = 'Slider';
+
+        /**
+         * ## SVOGauge.gauge
+         *
+         * The object measuring svo
+         *
+         * @see SVOGauge.method
+         */
+        this.gauge = null;
 
         this.addMethod('Slider', SVO_Slider);
     }

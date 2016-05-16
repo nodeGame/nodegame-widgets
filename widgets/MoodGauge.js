@@ -73,6 +73,15 @@
          */
         this.method = 'I-PANAS-SF';
 
+        /**
+         * ## SVOGauge.gauge
+         *
+         * The object measuring mood
+         *
+         * @see SVOGauge.method
+         */
+        this.gauge = null;
+
         this.addMethod('I-PANAS-SF', I_PANAS_SF);
     }
 
