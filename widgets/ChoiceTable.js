@@ -362,6 +362,10 @@
         var tmp, that;
         that = this;
 
+        if (!this.id) {
+            throw new TypeError('ChoiceTable.init: options.id is missing.');
+        }
+
         // Option orientation, default 'H'.
         if ('undefined' === typeof options.orientation) {
             tmp = 'H';
@@ -878,6 +882,7 @@
             // Create table, if it was not passed as object before.
             if ('undefined' === typeof this.table) {
                 this.table = document.createElement('table');
+                this.buildTable();
             }
             // Set table id.
             this.table.id = this.id;
@@ -927,7 +932,7 @@
      * Disables clicking on the table and removes CSS 'clicklable' class
      */
     ChoiceTable.prototype.disable = function() {
-        if (this.disabled) return;
+        if (this.disabled === true) return;
         this.disabled = true;
         if (this.table) {
             J.removeClass(this.table, 'clickable');
@@ -943,7 +948,7 @@
      * @return {function} cb The event listener function
      */
     ChoiceTable.prototype.enable = function() {
-        if (!this.disabled) return;
+        if (this.disabled === false) return;
         if (!this.table) {
             throw new Error('ChoiceTable.enable: table not defined.');
         }

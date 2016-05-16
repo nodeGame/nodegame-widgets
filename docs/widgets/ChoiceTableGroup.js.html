@@ -969,6 +969,11 @@ Have a method in ChoiceTable?</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.init: options.id &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;is missing.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
 
 </pre></div>
         </td>

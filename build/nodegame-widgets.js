@@ -94,6 +94,17 @@
     Widget.prototype.getValues = function(options) {};
 
     /**
+     * ### Widget.getValues
+     *
+     * Set the stored values directly
+     *
+     * The method should not set the values, if widget is disabled
+     *
+     * @param {mixed} values The values to store
+     */
+    Widget.prototype.setValues = function(values) {};
+
+    /**
      * ### Widget.highlight
      *
      * Hightlights the user interface of the widget in some way
@@ -129,7 +140,7 @@
      * @return {boolean} TRUE, if widget is currently highlighted
      */
     Widget.prototype.isHighlighted = function() {
-        return this.highlighted;
+        return !!this.highlighted;
     };
 
     /**
@@ -151,21 +162,21 @@
     Widget.prototype.disable = function() {};
 
     /**
-     * ### Widget.isEnabled
+     * ### Widget.isDisabled
      *
      * Returns TRUE if widget is enabled
      *
      * `Widgets.get` wraps this method in an outer callback performing
      * default cleanup operations.
      *
-     * @return {boolean} TRUE if
+     * @return {boolean} TRUE if widget is disabled
      *
      * @see Widget.enable
      * @see Widget.disable
      * @see Widget.disabled
      */
     Widget.prototype.isDisabled = function() {
-        return this.disabled;
+        return !!this.disabled;
     };
 
     /**
@@ -539,7 +550,7 @@
         // Add enabled.
         widget.disabled = null;
         // Add highlighted.
-        widget.highlighted = false;
+        widget.highlighted = null;
 
         // Call init.
         widget.init(options);
@@ -2619,6 +2630,13 @@
         this.order = null;
 
         /**
+         * ### ChoiceManager.shuffleForms
+         *
+         * TRUE, if forms have been shuffled
+         */
+        this.shuffleForms = null;
+
+        /**
          * ### ChoiceManager.group
          *
          * The name of the group where the list belongs, if any
@@ -2726,10 +2744,6 @@
         if ('undefined' !== typeof options.forms) {
             this.setForms(options.forms);
         }
-        if (W.getElementById(this.id)) {
-            throw new TypeError('ChoiceManager.append: id is ' +
-                                'not unique: ' + this.id);
-        }
     };
 
     /**
@@ -2750,14 +2764,13 @@
             throw new TypeError('ChoiceTableGroup.setForms: ' +
                                 'forms must be array.');
         }
-        if (!forms.length) {
+        len = forms.length;
+        if (!len) {
             throw new Error('ChoiceTableGroup.setForms: ' +
                             'forms is empty array.');
         }
 
-        len = forms.length;
-        this.formsSettings = forms;
-        this.forms = new Array(len);
+        this.forms = forms;
 
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
@@ -2782,7 +2795,7 @@
             dt = document.createElement('dt');
             dt.className = 'question';
             node.widgets.append(this.forms[this.order[i]], dt);
-            dl.appendChild(dt);
+            this.dl.appendChild(dt);
         }
     };
 
@@ -2891,15 +2904,15 @@
         obj = {
             id: this.id,
             order: this.order,
-            items: {}
+            forms: {}
         };
         // Mark attempt by default.
         markAttempt = 'undefined' === typeof markAttempt ? true : markAttempt;
-        i = -1, len = this.items.length;
+        i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
-            form = this.items[i];
-            obj.items[form.id] = form.verifyChoice(markAttempt);
-            if (!obj.items[form.id]) obj.fail = true;
+            form = this.forms[i];
+            obj.forms[form.id] = form.verifyChoice(markAttempt);
+            if (!obj.form[form.id]) obj.fail = true;
         }
         return obj;
     };
@@ -2989,22 +3002,27 @@
      * @see ChoiceManager.verifyChoice
      */
     ChoiceManager.prototype.getValues = function(opts) {
-        var obj, i, len;
+        var obj, i, len, form;
         obj = {
             id: this.id,
-            order: this.order
+            order: this.order,
+            forms: {},
+            missValues: []
         };
         opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
-            obj[this.forms[i].id] = this.forms[i].getValues(opts);
+            form = this.forms[i]
+            obj.forms[form.id] = form.getValues(opts);
+            if (obj.forms[form.id].choice === null) {
+                obj.missValues.push(form.id);
+            }
         }
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
 
     // ## Helper methods.
-
 
 })(node);
 
@@ -3371,6 +3389,10 @@
     ChoiceTable.prototype.init = function(options) {
         var tmp, that;
         that = this;
+
+        if (!this.id) {
+            throw new TypeError('ChoiceTable.init: options.id is missing.');
+        }
 
         // Option orientation, default 'H'.
         if ('undefined' === typeof options.orientation) {
@@ -3888,6 +3910,7 @@
             // Create table, if it was not passed as object before.
             if ('undefined' === typeof this.table) {
                 this.table = document.createElement('table');
+                this.buildTable();
             }
             // Set table id.
             this.table.id = this.id;
@@ -3937,7 +3960,7 @@
      * Disables clicking on the table and removes CSS 'clicklable' class
      */
     ChoiceTable.prototype.disable = function() {
-        if (this.disabled) return;
+        if (this.disabled === true) return;
         this.disabled = true;
         if (this.table) {
             J.removeClass(this.table, 'clickable');
@@ -3953,7 +3976,7 @@
      * @return {function} cb The event listener function
      */
     ChoiceTable.prototype.enable = function() {
-        if (!this.disabled) return;
+        if (this.disabled === false) return;
         if (!this.table) {
             throw new Error('ChoiceTable.enable: table not defined.');
         }
@@ -4505,6 +4528,11 @@
 
         // TODO: many options checking are replicated. Skip them all?
         // Have a method in ChoiceTable?
+
+        if (!this.id) {
+            throw new TypeError('ChoiceTableGroup.init: options.id ' +
+                                'is missing.');
+        }
 
         // Option orientation, default 'H'.
         if ('undefined' === typeof options.orientation) {

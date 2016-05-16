@@ -46,6 +46,9 @@
         <a href="#choicemanager.order">ChoiceManager.order</a>
       </div>
       <div class="heading h3">
+        <a href="#choicemanager.shuffleforms">ChoiceManager.shuffleForms</a>
+      </div>
+      <div class="heading h3">
         <a href="#choicemanager.group">ChoiceManager.group</a>
       </div>
       <div class="heading h3">
@@ -321,6 +324,28 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="choicemanager.shuffleforms">
+  <h3>
+    <a href="#choicemanager.shuffleforms" name="choicemanager.shuffleforms" class="pilcrow">&#182;</a>
+    ChoiceManager.shuffleForms
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>TRUE, if forms have been shuffled</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">shuffleForms</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="choicemanager.group">
   <h3>
     <a href="#choicemanager.group" name="choicemanager.group" class="pilcrow">&#182;</a>
@@ -478,7 +503,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Option shuffleForms, default false.</p>
         </td>
@@ -495,7 +520,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Set the group, if any.</p>
         </td>
@@ -518,7 +543,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Set the groupOrder, if any.</p>
         </td>
@@ -540,7 +565,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Set the mainText, if any.</p>
         </td>
@@ -561,7 +586,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>After all configuration options are evaluated, add forms.</p>
         </td>
@@ -577,17 +602,13 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Add the forms.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">forms</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">setForms</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">forms</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceManager.append: id is &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;not unique: &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">};</span>
 
@@ -642,14 +663,13 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.setForms: &#39;</span> <span class="o">+</span>
                                 <span class="s1">&#39;forms must be array.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">len</span> <span class="o">=</span> <span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">len</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup.setForms: &#39;</span> <span class="o">+</span>
                             <span class="s1">&#39;forms is empty array.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="nx">len</span> <span class="o">=</span> <span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">formsSettings</span> <span class="o">=</span> <span class="nx">forms</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="nx">forms</span><span class="p">;</span>
 
 
 </pre></div>
@@ -658,7 +678,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Save the order in which the choices will be added.</p>
         </td>
@@ -708,7 +728,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
             <span class="nx">dt</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;dt&#39;</span><span class="p">);</span>
             <span class="nx">dt</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;question&#39;</span><span class="p">;</span>
             <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">[</span><span class="nx">i</span><span class="p">]],</span> <span class="nx">dt</span><span class="p">);</span>
-            <span class="nx">dl</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dt</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">dl</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dt</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">};</span>
 
@@ -721,7 +741,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Id must be unique.</p>
         </td>
@@ -738,7 +758,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>MainText.</p>
         </td>
@@ -754,7 +774,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Append mainText.</p>
         </td>
@@ -769,7 +789,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Dl.</p>
         </td>
@@ -783,7 +803,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Append Dl.</p>
         </td>
@@ -797,7 +817,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Creates a free-text textarea, possibly with placeholder text.</p>
         </td>
@@ -817,7 +837,7 @@ or FALSE, to measure absolute time for current choice</li></ul></li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Append textarea.</p>
         </td>
@@ -976,7 +996,7 @@ INPUT_DISABLE, INPUT_ENABLE</p>
         <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
             <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">,</span>
-            <span class="nx">items</span><span class="o">:</span> <span class="p">{}</span>
+            <span class="nx">forms</span><span class="o">:</span> <span class="p">{}</span>
         <span class="p">};</span>
 
 </pre></div>
@@ -985,17 +1005,17 @@ INPUT_DISABLE, INPUT_ENABLE</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>Mark attempt by default.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">markAttempt</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">markAttempt</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="nx">markAttempt</span><span class="p">;</span>
-        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-            <span class="nx">obj</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">verifyChoice</span><span class="p">(</span><span class="nx">markAttempt</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">obj</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">])</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">fail</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">verifyChoice</span><span class="p">(</span><span class="nx">markAttempt</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">obj</span><span class="p">.</span><span class="nx">form</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">])</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">fail</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
     <span class="p">};</span>
@@ -1187,15 +1207,21 @@ INPUT_DISABLE, INPUT_ENABLE</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceManager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">obj</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">obj</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">form</span><span class="p">;</span>
         <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
-            <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span>
+            <span class="nx">order</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">,</span>
+            <span class="nx">forms</span><span class="o">:</span> <span class="p">{},</span>
+            <span class="nx">missValues</span><span class="o">:</span> <span class="p">[]</span>
         <span class="p">};</span>
         <span class="nx">opts</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">||</span> <span class="p">{};</span>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">obj</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
+            <span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+            <span class="nx">obj</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">].</span><span class="nx">choice</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">obj</span><span class="p">.</span><span class="nx">missValues</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+            <span class="p">}</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">freetext</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
@@ -1216,7 +1242,6 @@ INPUT_DISABLE, INPUT_ENABLE</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>

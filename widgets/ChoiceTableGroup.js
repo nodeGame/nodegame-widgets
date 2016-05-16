@@ -304,6 +304,11 @@
         // TODO: many options checking are replicated. Skip them all?
         // Have a method in ChoiceTable?
 
+        if (!this.id) {
+            throw new TypeError('ChoiceTableGroup.init: options.id ' +
+                                'is missing.');
+        }
+
         // Option orientation, default 'H'.
         if ('undefined' === typeof options.orientation) {
             tmp = 'H';
