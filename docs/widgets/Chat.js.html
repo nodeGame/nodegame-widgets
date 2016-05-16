@@ -66,6 +66,9 @@
       <div class="heading h3">
         <a href="#chat.displayname">Chat.displayName</a>
       </div>
+      <div class="heading h3">
+        <a href="#chat.recipient">Chat.recipient</a>
+      </div>
       <div class="heading h2">
         <a href="#chat%20methods">Chat methods</a>
       </div>
@@ -122,7 +125,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.4.1&#39;</span><span class="p">;</span>
+    <span class="nx">Chat</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.1&#39;</span><span class="p">;</span>
     <span class="nx">Chat</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Offers a uni-/bi-directional communication interface &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;between players, or between players and the experimenter.&#39;</span><span class="p">;</span>
 
@@ -200,13 +203,6 @@ be received, but not sent. All messages are sent to the SERVER.</p></li>
   <div class="body"><p><code>Chat</code> is a simple configurable chat</p>
   </div>
   <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options
-which is forwarded to Chat.init.</span>
-    </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
       <span class="dox_type">Chat.init
@@ -216,7 +212,7 @@ which is forwarded to Chat.init.</span>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">Chat</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">Chat</span><span class="p">()</span> <span class="p">{</span>
 
 
 </pre></div>
@@ -427,7 +423,6 @@ which is forwarded to Chat.init.</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">submitText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
-
 </pre></div>
         </td>
       </tr>
@@ -470,7 +465,28 @@ which is forwarded to Chat.init.</span>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">displayName</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="chat.recipient">
+  <h3>
+    <a href="#chat.recipient" name="chat.recipient" class="pilcrow">&#182;</a>
+    Chat.recipient
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Object containing the value of the recipient of the message</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">value</span><span class="o">:</span> <span class="kc">null</span> <span class="p">};</span>
     <span class="p">}</span>
 
 
@@ -527,8 +543,49 @@ The  options object can have the following attributes:
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">tmp</span><span class="p">;</span>
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">||</span> <span class="s1">&#39;MANY_TO_MANY&#39;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>Will be setup later.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="s1">&#39;MANY_TO_MANY&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">switch</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">RECEIVER_ONLY</span><span class="o">:</span>
+                <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_ONE</span><span class="o">:</span>
+                <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;ROOM&#39;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">ONE_TO_ONE</span><span class="o">:</span>
+                <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_MANY</span><span class="o">:</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Chat.init: options.mode is invalid: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Chat.init: options.mode must be string or &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">textareaId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">textareaId</span> <span class="o">||</span> <span class="s1">&#39;chat_textarea&#39;</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">chatId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">chatId</span> <span class="o">||</span> <span class="s1">&#39;chat_chat&#39;</span><span class="p">;</span>
@@ -537,47 +594,74 @@ The  options object can have the following attributes:
         <span class="k">this</span><span class="p">.</span><span class="nx">chatEvent</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">chatEvent</span> <span class="o">||</span> <span class="s1">&#39;CHAT&#39;</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">submitText</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">submitText</span> <span class="o">||</span> <span class="s1">&#39;chat&#39;</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getEventButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chatEvent</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">submitText</span><span class="p">,</span>
-                                       <span class="k">this</span><span class="p">.</span><span class="nx">submitId</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">textareaId</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">chat</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chatId</span><span class="p">);</span>
-
         <span class="k">this</span><span class="p">.</span><span class="nx">displayName</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">displayName</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(</span><span class="nx">from</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">from</span><span class="p">;</span>
         <span class="p">};</span>
-
-        <span class="k">switch</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">RECEIVER_ONLY</span><span class="o">:</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">};</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_ONE</span><span class="o">:</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;ROOM&#39;</span><span class="p">};</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">ONE_TO_ONE</span><span class="o">:</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">};</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">default</span><span class="o">:</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getRecipientSelector</span><span class="p">();</span>
-        <span class="p">}</span>
     <span class="p">};</span>
 
 
     <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">chat</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chatId</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">!==</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">RECEIVER_ONLY</span><span class="p">)</span> <span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>Create buttons to send messages, if allowed.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getEventButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chatEvent</span><span class="p">,</span>
+                                           <span class="k">this</span><span class="p">.</span><span class="nx">submitText</span><span class="p">,</span>
+                                           <span class="k">this</span><span class="p">.</span><span class="nx">submitId</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">textareaId</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
+<p>Append them.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
             <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+<p>Add recipient selector, if requested.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_MANY</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getRecipientSelector</span><span class="p">();</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">};</span>
 
     <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">readTA</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">txt</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">txt</span><span class="p">;</span>
+        <span class="nx">txt</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">txt</span><span class="p">;</span>
     <span class="p">};</span>
@@ -604,9 +688,10 @@ The  options object can have the following attributes:
                 <span class="s1">&#39;%msg&#39;</span><span class="o">:</span> <span class="p">{</span>
                     <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_msg&#39;</span>
                 <span class="p">},</span>
-                <span class="s1">&#39;!txt&#39;</span><span class="o">:</span> <span class="nx">msg</span>
+                <span class="s1">&#39;!txt&#39;</span><span class="o">:</span> <span class="nx">msg</span><span class="p">,</span>
+                <span class="s1">&#39;!to&#39;</span><span class="o">:</span> <span class="nx">to</span>
             <span class="p">};</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">writeTA</span><span class="p">(</span><span class="s1">&#39;%sMe%s: %msg!txt%msg&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">writeTA</span><span class="p">(</span><span class="s1">&#39;%sMe -&gt; !to%s: %msg!txt%msg&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
             <span class="nx">node</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">chatEvent</span><span class="p">,</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">trim</span><span class="p">());</span>
         <span class="p">});</span>
 
