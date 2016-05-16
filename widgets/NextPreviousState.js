@@ -11,29 +11,22 @@
 
     "use strict";
 
+    // TODO: refactor!
+
     // TODO: Introduce rules for update: other vs self
 
     node.widgets.register('NextPreviousState', NextPreviousState);
 
-    // ## Defaults
-
-    NextPreviousState.defaults = {};
-    NextPreviousState.defaults.id = 'nextprevious';
-    NextPreviousState.defaults.fieldset = { legend: 'Rew-Fwd' };
-
     // ## Meta-data
 
-    NextPreviousState.version = '0.3.2';
+    NextPreviousState.className = 'nextprevious';
+    NextPreviousState.title = { legend: 'Rew-Fwd' };
+
+    NextPreviousState.version = '0.5.0';
     NextPreviousState.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
 
-    function NextPreviousState(options) {
-        this.id = options.id;
-    }
-
-    NextPreviousState.prototype.getRoot = function() {
-        return this.root;
-    };
+    function NextPreviousState() {}
 
     NextPreviousState.prototype.append = function(root) {
         var idRew = this.id + '_button';
@@ -41,7 +34,6 @@
 
         var rew = node.window.addButton(root, idRew, '<<');
         var fwd = node.window.addButton(root, idFwd, '>>');
-
 
         var that = this;
 
