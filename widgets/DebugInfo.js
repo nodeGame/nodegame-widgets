@@ -1,6 +1,6 @@
 /**
  * # DebugInfo
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player
@@ -31,13 +31,13 @@
         Table: {}
     };
 
-
     /**
      * ## DebugInfo constructor
      *
      * `DebugInfo` displays information about the state of a player
      */
     function DebugInfo() {
+
         /**
          * ### DebugInfo.table
          *
@@ -45,10 +45,37 @@
          *
          * @See nodegame-window/Table
          */
-        this.table = new Table();
+        this.table = null;
+
+        /**
+         * ### DebugInfo.interval
+         *
+         * The interval checking node properties
+         */
+        this.interval = null;
+
+        /**
+         * ### DebugInfo.intervalTime
+         *
+         * The frequency of update of the interval. Default: 1000
+         */
+        this.intervalTime = 1000;
     }
 
     // ## DebugInfo methods
+
+    /**
+     * ### DebugInfo.init
+     *
+     * Appends widget to `this.bodyDiv` and calls `this.updateAll`
+     *
+     * @see DebugInfo.updateAll
+     */
+    DebugInfo.prototype.init = function(options) {
+        if ('number' === typeof options.intervalTime) {
+            this.intervalTime = options.intervalTime;
+        }
+    };
 
     /**
      * ### DebugInfo.append
@@ -58,15 +85,16 @@
      * @see DebugInfo.updateAll
      */
     DebugInfo.prototype.append = function() {
-        var that, checkPlayerName;
-        that = this;
-        checkPlayerName = setInterval(function() {
-            if (node.player && node.player.id) {
-                clearInterval(checkPlayerName);
-                that.updateAll();
-            }
-        }, 100);
+        var that;
+
+        this.table = new Table();
         this.bodyDiv.appendChild(this.table.table);
+
+        this.updateAll();
+        that = this;
+        this.interval = setInterval(function() {
+            that.updateAll();
+        }, this.intervalTime);
     };
 
     /**
@@ -80,11 +108,15 @@
         var errMsg, connected;
         var tmp, miss;
 
+        if (!this.bodyDiv) {
+            node.err('DebugInfo.updateAll: bodyDiv not found.');
+            return;
+        }
+
         miss = '-';
 
         stageId = miss;
         stageNo = miss;
-        playerId = miss;
 
         stage = node.game.getCurrentGameStage();
         if (stage) {
@@ -103,17 +135,20 @@
                                    W.getStateLevel());
 
 
+        playerId = node.player ? node.player.id : miss;
+
         errMsg = node.errorManager.lastErr || miss;
 
         connected = node.socket.connected ? 'yes' : 'no';
 
         this.table.clear(true);
         this.table.addRow(['Connected: ', connected]);
-        this.table.addRow(['Player Id: ', node.player.id]);
+        this.table.addRow(['Player Id: ', playerId]);
         this.table.addRow(['Stage  No: ', stageNo]);
         this.table.addRow(['Stage  Id: ', stageId]);
         this.table.addRow(['Stage Lvl: ', stageLevel]);
         this.table.addRow(['State Lvl: ', stateLevel]);
+        this.table.addRow(['Players  : ', node.game.pl.size()]);
         this.table.addRow(['Win   Lvl: ', winLevel]);
         this.table.addRow(['Win Loads: ', W.areLoading]);
         this.table.addRow(['Last  Err: ', errMsg]);
@@ -122,31 +157,10 @@
 
     };
 
-    DebugInfo.prototype.listeners = function() {
-        var that, ee;
-
-        that = this;
-        ee = node.events.game;
-
-        ee.on('STEP_CALLBACK_EXECUTED', function() {
-            that.updateAll();
-        });
-
-        ee.on('SOCKET_CONNECT', function() {
-            that.updateAll();
-        });
-
-        ee.on('SOCKET_DISCONNECT', function() {
-            that.updateAll();
-        });
-
-        // TODO Write more listeners. Separate functions. Get event emitter.
-
-    };
-
     DebugInfo.prototype.destroy = function() {
-        // TODO proper cleanup.
-        console.log('DebugInfo destroyed.');
+        clearInterval(this.interval);
+        this.interval = null;
+        node.silly('DebugInfo destroyed.');
     };
 
 })(node);
