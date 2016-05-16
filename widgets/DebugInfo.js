@@ -105,7 +105,7 @@
     DebugInfo.prototype.updateAll = function() {
         var stage, stageNo, stageId, playerId;
         var stageLevel, stateLevel, winLevel;
-        var errMsg, connected;
+        var errMsg, connected, treatment;
         var tmp, miss;
 
         if (!this.bodyDiv) {
@@ -139,9 +139,13 @@
 
         errMsg = node.errorManager.lastErr || miss;
 
+        treatment = node.game.settings && node.game.settings.treatmentName ?
+            node.game.settings.treatmentName : miss;
+
         connected = node.socket.connected ? 'yes' : 'no';
 
         this.table.clear(true);
+        this.table.addRow(['Treatment: ', treatment]);
         this.table.addRow(['Connected: ', connected]);
         this.table.addRow(['Player Id: ', playerId]);
         this.table.addRow(['Stage  No: ', stageNo]);

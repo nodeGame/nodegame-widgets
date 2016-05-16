@@ -336,7 +336,7 @@ MIT Licensed</p>
     <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">stage</span><span class="p">,</span> <span class="nx">stageNo</span><span class="p">,</span> <span class="nx">stageId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">stageLevel</span><span class="p">,</span> <span class="nx">stateLevel</span><span class="p">,</span> <span class="nx">winLevel</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">errMsg</span><span class="p">,</span> <span class="nx">connected</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">errMsg</span><span class="p">,</span> <span class="nx">connected</span><span class="p">,</span> <span class="nx">treatment</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">tmp</span><span class="p">,</span> <span class="nx">miss</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">)</span> <span class="p">{</span>
@@ -370,9 +370,13 @@ MIT Licensed</p>
 
         <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">errorManager</span><span class="p">.</span><span class="nx">lastErr</span> <span class="o">||</span> <span class="nx">miss</span><span class="p">;</span>
 
+        <span class="nx">treatment</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">settings</span> <span class="o">&amp;&amp;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">treatmentName</span> <span class="o">?</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">treatmentName</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
+
         <span class="nx">connected</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">connected</span> <span class="o">?</span> <span class="s1">&#39;yes&#39;</span> <span class="o">:</span> <span class="s1">&#39;no&#39;</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">clear</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Treatment: &#39;</span><span class="p">,</span> <span class="nx">treatment</span><span class="p">]);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Connected: &#39;</span><span class="p">,</span> <span class="nx">connected</span><span class="p">]);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Player Id: &#39;</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">]);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Stage  No: &#39;</span><span class="p">,</span> <span class="nx">stageNo</span><span class="p">]);</span>

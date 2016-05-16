@@ -1,6 +1,6 @@
 /**
  * # DynamicTable
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Extends the GameTable widgets by allowing dynamic reshaping
@@ -41,12 +41,8 @@
         //JSUS.extend(node.window.Table,this);
         Table.call(this, options, data);
         this.options = options;
-        this.id = options.id;
+
         this.name = options.name || 'Dynamic Table';
-        this.fieldset = {
-            legend: this.name,
-            id: this.id + '_fieldset'
-        };
 
         this.root = null;
         this.bindings = {};
