@@ -50,7 +50,7 @@
          * Each function is called with `this` instance as context,
          * and accepts the `options` parameters passed to constructor.
          * Each method must return widget-like gauge object
-         * implementing functions: append, enable, disable, getAllValues
+         * implementing functions: append, enable, disable, getValues
          *
          * or an error will be thrown
          */
@@ -74,8 +74,6 @@
         this.method = 'I-PANAS-SF';
 
         this.addMethod('I-PANAS-SF', I_PANAS_SF);
-
-        this.init(options);
     }
 
     // ## MoodGauge methods.
@@ -139,8 +137,8 @@
         this.methods[name] = cb;
     };
 
-    MoodGauge.prototype.getAllValues = function() {
-        return this.gauge.getAllValues();
+    MoodGauge.prototype.getValues = function() {
+        return this.gauge.getValues();
     };
 
     MoodGauge.prototype.enable = function() {
@@ -167,9 +165,9 @@
             throw new Error('MoodGauge.init: method ' + method +
                             'did not create element gauge.');
         }
-        if ('function' !== typeof gauge.getAllValues) {
+        if ('function' !== typeof gauge.getValues) {
             throw new Error('MoodGauge.init: method ' + method +
-                            ': gauge missing function getAllValues.');
+                            ': gauge missing function getValues.');
         }
         if ('function' !== typeof gauge.enable) {
             throw new Error('MoodGauge.init: method ' + method +

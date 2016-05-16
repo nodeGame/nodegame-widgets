@@ -50,7 +50,7 @@
          * Each function is called with `this` instance as context,
          * and accepts the `options` parameters passed to constructor.
          * Each method must return widget-like gauge object
-         * implementing functions: append, enable, disable, getAllValues
+         * implementing functions: append, enable, disable, getValues
          *
          * or an error will be thrown
          */
@@ -73,8 +73,6 @@
         this.method = 'Slider';
 
         this.addMethod('Slider', SVO_Slider);
-
-        this.init(options);
     }
 
     // ## SVOGauge methods.
@@ -138,8 +136,8 @@
         this.methods[name] = cb;
     };
 
-    SVOGauge.prototype.getAllValues = function() {
-        return this.gauge.getAllValues();
+    SVOGauge.prototype.getValues = function() {
+        return this.gauge.getValues();
     };
 
     SVOGauge.prototype.enable = function() {
@@ -166,9 +164,9 @@
             throw new Error('SVOGauge.init: method ' + method +
                             'did not create element gauge.');
         }
-        if ('function' !== typeof gauge.getAllValues) {
+        if ('function' !== typeof gauge.getValues) {
             throw new Error('SVOGauge.init: method ' + method +
-                            ': gauge missing function getAllValues.');
+                            ': gauge missing function getValues.');
         }
         if ('function' !== typeof gauge.enable) {
             throw new Error('SVOGauge.init: method ' + method +

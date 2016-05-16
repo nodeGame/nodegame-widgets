@@ -164,7 +164,7 @@
          *
          * The rendered title cell
          *
-         * @see ChoiceTable.renderChoicesTitle
+         * @see ChoiceTable.renderDescription
          */
         this.descriptionCell = null;
 
@@ -610,7 +610,7 @@
         for ( ; ++i < len ; ) {
             this.renderChoice(this.choices[this.order[i]], i);
         }
-        if (this.description) this.renderChoicesTitle(this.description);
+        if (this.description) this.renderDescription(this.description);
     };
 
     /**

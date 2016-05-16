@@ -38,35 +38,15 @@
      * ## VisualRound constructor
      *
      * Displays information on the current and total rounds and stages
-     *
-     * @param {object} options Optional. Configuration options.
-     *   The options it can take are:
-     *
-     *   - `stageOffset`:
-     *     Stage displayed is the actual stage minus stageOffset
-     *   - `flexibleMode`:
-     *     Set `true`, if number of rounds and/or stages can change dynamically
-     *   - `curStage`:
-     *     When (re)starting in `flexibleMode`, sets the current stage
-     *   - `curRound`:
-     *     When (re)starting in `flexibleMode`, sets the current round
-     *   - `totStage`:
-     *     When (re)starting in `flexibleMode`, sets the total number of stages
-     *   - `totRound`:
-     *     When (re)starting in `flexibleMode`, sets the total number of
-     *     rounds
-     *   - `oldStageId`:
-     *     When (re)starting in `flexibleMode`, sets the id of the current
-     *     stage
-     *   - `displayModeNames`:
-     *     Array of strings which determines the display style of the widget
-     *
-     * @see VisualRound.setDisplayMode
-     * @see GameStager
-     * @see GamePlot
      */
-    function VisualRound(options) {
-        this.options = options;
+    function VisualRound() {
+
+        /**
+         * ### VisualRound.options
+         *
+         * Current configuration
+         */
+        this.options = null;
 
         /**
          * ### VisualRound.displayMode
@@ -151,7 +131,6 @@
          */
         this.oldStageId = null;
 
-        this.init(this.options);
     }
 
     // ## VisualRound methods
@@ -164,9 +143,31 @@
      * If called on running instance, options are mixed-in into current
      * settings. See `VisualRound` constructor for which options are allowed.
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Optional. Configuration options.
+     *   The options it can take are:
      *
-     * @see VisualRound constructor
+     *   - `stageOffset`:
+     *     Stage displayed is the actual stage minus stageOffset
+     *   - `flexibleMode`:
+     *     Set `true`, if number of rounds and/or stages can change dynamically
+     *   - `curStage`:
+     *     When (re)starting in `flexibleMode`, sets the current stage
+     *   - `curRound`:
+     *     When (re)starting in `flexibleMode`, sets the current round
+     *   - `totStage`:
+     *     When (re)starting in `flexibleMode`, sets the total number of stages
+     *   - `totRound`:
+     *     When (re)starting in `flexibleMode`, sets the total number of
+     *     rounds
+     *   - `oldStageId`:
+     *     When (re)starting in `flexibleMode`, sets the id of the current
+     *     stage
+     *   - `displayModeNames`:
+     *     Array of strings which determines the display style of the widget
+     *
+     * @see VisualRound.setDisplayMode
+     * @see GameStager
+     * @see GamePlot
      */
     VisualRound.prototype.init = function(options) {
         options = options || {};

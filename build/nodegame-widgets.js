@@ -7,13 +7,7 @@
  *
  * Prototype methods will be injected in every new widget, if missing.
  *
- * Properties:
- *
- *  - headingDiv,
- *  - bodyDiv,
- *  - footer
- *
- * can be automatically, depending on widget configuration.
+ * Additional properties can be automatically, depending on configuration.
  *
  * @see Widgets.get
  * @see Widgets.append
@@ -26,28 +20,134 @@
 
     node.Widget = Widget;
 
+    /**
+     * ### Widget constructor
+     *
+     * Creates a new instance of widget
+     *
+     * Should create all widgets properties, but the `init` method
+     * initialize them. Some properties are added automatically
+     * by `Widgets.get` after the constructor has been called,
+     * but before `init`.
+     *
+     * @see Widgets.get
+     * @see Widget.init
+     */
     function Widget() {}
 
-    Widget.prototype.dependencies = {};
+    /**
+     * ### Widget.init
+     *
+     * Inits the widget after constructor and default properties are added
+     *
+     * @param {object} options Configuration options
+     *
+     * @see Widgets.get
+     */
+    Widget.prototype.init = function(options) {};
 
+    /**
+     * ### Widget.listeners
+     *
+     * Wraps calls event listeners registration
+     *
+     * Event listeners registered here are automatically removed
+     * when widget is destroyed (if still active)
+     *
+     * @see EventEmitter.setRecordChanges
+     * @see Widgets.destroy
+     */
     Widget.prototype.listeners = function() {};
 
-    Widget.prototype.getValues = function() {};
-
+    /**
+     * ### Widget.append
+     *
+     * Creates HTML elements and appends them to the `panelDiv` element
+     *
+     * The method is called by `Widgets.append` which evaluates user-options
+     * and adds the default container elements of a widget:
+     *
+     *    - panelDiv: the main container
+     *    - headingDiv: the title container (optional, added by default)
+     *    - footerDiv: the footer container (optional)
+     *
+     * To ensure correct destroyal of the widget, all HTML elements should
+     * be children of Widget.panelDiv
+     *
+     * @see Widgets.append
+     * @see Widgets.destroy
+     * @see Widget.panelDiv
+     * @see Widget.footerDiv
+     * @see Widget.headingDiv
+     */
     Widget.prototype.append = function() {};
 
-    Widget.prototype.init = function() {};
+    /**
+     * ### Widget.getValues
+     *
+     * Returns the values currently stored by the widget
+     *
+     * @param {mixed} options Settings controlling the content of return value
+     *
+     * @return {mixed} The values of the widget
+     */
+    Widget.prototype.getValues = function(options) {};
 
-    Widget.prototype.getAllValues = function() {};
+    /**
+     * ### Widget.highlight
+     *
+     * Hightlights the user interface of the widget in some way
+     *
+     * If widget was not appended, i.e. no `panelDiv` has been created,
+     * it should issue a war.
+     *
+     * @param {mixed} options Settings controlling the type of highlighting
+     */
+    Widget.prototype.highlight = function(options) {};
 
-    Widget.prototype.highlight = function() {};
-
+    /**
+     * ### Widget.highlight
+     *
+     * Hightlights the user interface of the widget in some way
+     *
+     * Should mark the state of widget as `highlighted`.
+     *
+     * If widget was not appended, i.e. no `panelDiv` has been created,
+     * it should raise an error.
+     *
+     * @param {mixed} options Settings controlling the type of highlighting
+     *
+     * @see Widget.highlighted
+     */
     Widget.prototype.unhighlight = function() {};
 
-    Widget.prototype.isHighlighted = function() {};
+    /**
+     * ### Widget.isHighlighted
+     *
+     * Returns TRUE if widget is currently highlighted
+     *
+     * @return {boolean} TRUE, if widget is currently highlighted
+     */
+    Widget.prototype.isHighlighted = function() {
+        return this.highlighted;
+    };
 
+    /**
+     * ### Widget.enabled
+     *
+     * Enables the widget
+     *
+     * An enabled widget allows the user to interact with it
+     */
     Widget.prototype.enable = function() {};
 
+    /**
+     * ### Widget.disable
+     *
+     * Disables the widget
+     *
+     * A disabled widget is still visible, but user cannot interact with it
+     */
     Widget.prototype.disable = function() {};
 
     /**
@@ -62,10 +162,10 @@
      *
      * @see Widget.enable
      * @see Widget.disable
-     * @see Widget.enabled
+     * @see Widget.disabled
      */
-    Widget.prototype.isEnabled = function() {
-        return this.enabled;
+    Widget.prototype.isDisabled = function() {
+        return this.disabled;
     };
 
     /**
@@ -339,7 +439,7 @@
      *   - className: as specified by the user or as found in the prototype
      *   - id: user-defined id, if specified in options
      *   - wid: random unique widget id
-     *   - enabled: boolean flag indicating the widget state, set to TRUE
+     *   - disabled: boolean flag indicating the widget state, set to FALSE
      *   - highlighted: boolean flag indicating whether the panelDiv is
      *        highlighted, set to FALSE
      *
@@ -411,12 +511,13 @@
 
         // Set ID.
         if ('undefined' !== typeof options.id) {
+            if ('number' === typeof options.id) options.id = '' + options.id;
             if ('string' === typeof options.id) {
                 widget.id = options.id;
             }
             else {
                 throw new TypeError('Widgets.get: options.id must be ' +
-                                    'string or undefined. Found: ' +
+                                    'string, number or undefined. Found: ' +
                                     options.id);
             }
         }
@@ -436,11 +537,12 @@
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
         // Add enabled.
-        widget.enabled = true;
+        widget.disabled = false;
         // Add highlighted.
         widget.highlighted = false;
 
-        // TODO: Call the INIT method.
+        // Call init.
+        widget.init(options);
 
         // Call listeners.
         if (options.listeners !== false) {
@@ -2474,33 +2576,10 @@
      * ## ChoiceManager constructor
      *
      * Creates a new instance of ChoiceManager
-     *
-     * @param {object} options Optional. Configuration options.
-     *
-     * @see ChoiceManager.init
      */
-    function ChoiceManager(options) {
+    function ChoiceManager() {
         var that;
         that = this;
-
-        // TODO: move them in the Widgets as a check?
-        if ('string' !== typeof options.id) {
-            throw new TypeError('ChoiceManager constructor: options.id must ' +
-                                'be string. Found: ' + options.id);
-        }
-        if (W.getElementById(options.id)) {
-            throw new TypeError('ChoiceManager constructor: options.id is ' +
-                                'not unique: ' + options.id);
-        }
-
-        /**
-         * ### ChoiceManager.id
-         *
-         * The ID of the instance
-         *
-         * Will be used as the dl id, and as prefix for all choice TDs
-         */
-        this.id = options.id;
 
         /**
          * ### ChoiceManager.dl
@@ -2508,13 +2587,6 @@
          * The clickable list containing all the forms
          */
         this.dl = null;
-
-        /**
-         * ### ChoiceManager.disabled
-         *
-         * Flag indicating if the event listener onclick is active
-         */
-        this.disabled = true;
 
         /**
          * ### ChoiceManager.mainText
@@ -2538,7 +2610,6 @@
          * The array available forms
          */
         this.forms = null;
-
 
         /**
          * ### ChoiceManager.order
@@ -2576,10 +2647,6 @@
          * Textarea for free-text comment
          */
         this.textarea = null;
-
-
-        // Init.
-        this.init(options);
     }
 
     // ## ChoiceManager methods
@@ -2605,11 +2672,10 @@
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Configuration options
      */
     ChoiceManager.prototype.init = function(options) {
         var tmp, that;
-        options = options || {};
         that = this;
 
         // Option shuffleForms, default false.
@@ -2653,25 +2719,16 @@
 
         // After all configuration options are evaluated, add forms.
 
+        this.freeText = 'string' === typeof options.freeText ?
+            options.freeText : !!options.freeText;
+
         // Add the forms.
         if ('undefined' !== typeof options.forms) {
             this.setForms(options.forms);
         }
-
-        // Creates a free-text textarea, possibly with an initial text
-        if (options.freeText) {
-
-            this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
-            this.textarea.className = ChoiceManager.className + '-freetext';
-
-            if ('string' === typeof options.freeText) {
-                this.textarea.placeholder = options.freeText;
-                this.freeText = options.freeText;
-            }
-            else {
-                this.freeText = !!options.freeText;
-            }
+        if (W.getElementById(this.id)) {
+            throw new TypeError('ChoiceManager.append: id is ' +
+                                'not unique: ' + this.id);
         }
     };
 
@@ -2718,8 +2775,7 @@
      * @see ChoiceManager.order
      */
     ChoiceManager.prototype.buildDl = function() {
-        var i, len, dt, dd;
-        var form;
+        var i, len, dl, dt;
 
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
@@ -2731,23 +2787,52 @@
     };
 
     ChoiceManager.prototype.append = function() {
+        var tmp;
+        // Id must be unique.
+        if (W.getElementById(this.id)) {
+            throw new Error('ChoiceManager.append: id is not ' +
+                            'unique: ' + this.id);
+        }
 
+        // MainText.
         if (this.mainText) {
             this.spanMainText = document.createElement('span');
             this.spanMainText.className = ChoiceManager.className + '-maintext';
             this.spanMainText.innerHTML = this.mainText;
+            // Append mainText.
             this.bodyDiv.appendChild(this.spanMainText);
         }
 
-        if (this.dl) {
-            this.dl = document.createElement('dl');
-            this.buildDl();
-            this.bodyDiv.appendChild(this.dl);
-        }
+        // Dl.
+        this.dl = document.createElement('dl');
+        this.buildDl();
+        // Append Dl.
+        this.bodyDiv.appendChild(this.dl);
 
-        if (this.textarea) this.bodyDiv.appendChild(this.textarea);
+        // Creates a free-text textarea, possibly with placeholder text.
+        if (this.freeText) {
+            this.textarea = document.createElement('textarea');
+            this.textarea.id = this.id + '_text';
+            if ('string' === typeof this.freeText) {
+                this.textarea.placeholder = this.freeText;
+            }
+            tmp = this.className ? this.className + '-freetext' : 'freetext';
+            this.textarea.className = tmp;
+            // Append textarea.
+            this.bodyDiv.appendChild(this.textarea);
+        }
     };
 
+    /**
+     * ### ChoiceManager.listeners
+     *
+     * Implements Widget.listeners
+     *
+     * Adds two listeners two disable/enable the widget on events:
+     * INPUT_DISABLE, INPUT_ENABLE
+     *
+     * @see Widget.listeners
+     */
     ChoiceManager.prototype.listeners = function() {
         var that = this;
         node.on('INPUT_DISABLE', function() {
@@ -2761,7 +2846,7 @@
     /**
      * ### ChoiceManager.disable
      *
-     * Disables each form
+     * Disables all forms
      */
     ChoiceManager.prototype.disable = function() {
         var i, len;
@@ -2775,7 +2860,7 @@
     /**
      * ### ChoiceManager.enable
      *
-     * Enables each form
+     * Enables all forms
      */
     ChoiceManager.prototype.enable = function() {
         var i, len;
@@ -2887,18 +2972,7 @@
     };
 
     /**
-     * ### ChoiceManager.isHighlighted
-     *
-     * Returns TRUE if the choice dl is highlighted
-     *
-     * @return {boolean} ChoiceManager.highlighted
-     */
-    ChoiceManager.prototype.isHighlighted = function() {
-        return this.highlighted;
-    };
-
-    /**
-     * ### ChoiceManager.getAllValues
+     * ### ChoiceManager.getValues
      *
      * Returns the values for current selection and other paradata
      *
@@ -2914,7 +2988,7 @@
      *
      * @see ChoiceManager.verifyChoice
      */
-    ChoiceManager.prototype.getAllValues = function(opts) {
+    ChoiceManager.prototype.getValues = function(opts) {
         var obj, i, len;
         obj = {
             id: this.id,
@@ -2923,7 +2997,7 @@
         opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
-            obj[this.forms[i].id] = this.forms[i].getAllValues(opts);
+            obj[this.forms[i].id] = this.forms[i].getValues(opts);
         }
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
@@ -2976,38 +3050,10 @@
      * @param {object} options Optional. Configuration options.
      *   If a `table` option is specified, it sets it as the clickable
      *   table. All other options are passed to the init method.
-     *
-     * @see ChoiceTable.init
      */
     function ChoiceTable(options) {
         var that;
         that = this;
-
-        if ('number' === typeof options.id) options.id = '' + options.id;
-        if ('string' !== typeof options.id) {
-            throw new TypeError('ChoiceTable constructor: options.id must ' +
-                                'be string or number. Found: ' + options.id);
-        }
-        if (W.getElementById(options.id)) {
-            throw new TypeError('ChoiceTable constructor: options.id is not ' +
-                                'unique: ' + options.id);
-        }
-
-        /**
-         * ### ChoiceTable.id
-         *
-         * The ID of the instance
-         *
-         * Will be used as the table id, and as prefix for all choice TDs
-         */
-        this.id = options.id;
-
-        /**
-         * ### ChoiceTable.className
-         *
-         * The className of the instance
-         */
-        this.className = null;
 
         /**
          * ### ChoiceTable.table
@@ -3075,13 +3121,6 @@
         };
 
         /**
-         * ### ChoiceTable.disabled
-         *
-         * Flag indicating if the event listener onclick is active
-         */
-        this.disabled = true;
-
-        /**
          * ### ChoiceTable.mainText
          *
          * The main text introducing the choices
@@ -3135,7 +3174,7 @@
          *
          * The rendered title cell
          *
-         * @see ChoiceTable.renderChoicesTitle
+         * @see ChoiceTable.renderDescription
          */
         this.descriptionCell = null;
 
@@ -3294,8 +3333,6 @@
          */
         this.separator = ChoiceTable.separator;
 
-        // Init.
-        this.init(options);
     }
 
     // ## ChoiceTable methods
@@ -3329,11 +3366,10 @@
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Configuration options
      */
     ChoiceTable.prototype.init = function(options) {
         var tmp, that;
-        options = options || {};
         that = this;
 
         // Option orientation, default 'H'.
@@ -3458,9 +3494,12 @@
 
             this.description = '' + options.description;
         }
-        else if ('undefined' !== typeof options.description &&
-                 !(J.isNode(descr) || J.isElement(descr))) {
+        else if(J.isNode(options.description) ||
+                J.isElement(options.description)) {
 
+            this.description = options.description;
+        }
+        else if ('undefined' !== typeof options.description) {
             throw new TypeError('ChoiceTable.init: options.description must ' +
                                 'be string, number, an HTML Element or ' +
                                 'undefined. Found: ' + options.description);
@@ -3494,26 +3533,22 @@
 
         // After all configuration options are evaluated, add choices.
 
-        // Create/set table, if requested.
-        if (options.table !== false) {
-            if ('object' === typeof options.table) {
-                this.table = options.table;
-            }
-            else if ('undefined' === typeof options.table) {
-                this.table = document.createElement('table');
-            }
-            else {
-                throw new TypeError('ChoiceTable constructor: options.table ' +
-                                    'must be object, false or undefined. ' +
-                                    'Found: ' + options.table);
-            }
-
-            // Set table id.
-            this.table.id = this.id;
-
-            if (this.className) J.addClass(this.table, this.className);
-            else this.table.className = '';
+        // Set table.
+        if ('object' === typeof options.table) {
+            this.table = options.table;
         }
+        else if ('undefined' !== typeof options.table &&
+                 false !== options.table) {
+
+            throw new TypeError('ChoiceTable.init: options.table ' +
+                                'must be object, false or undefined. ' +
+                                'Found: ' + options.table);
+        }
+
+        this.table = options.table;
+
+        this.freeText = 'string' === typeof options.freeText ?
+            options.freeText : !!options.freeText;
 
         // Add the choices.
         if ('undefined' !== typeof options.choices) {
@@ -3525,22 +3560,6 @@
             this.setCorrectChoice(options.correctChoice);
         }
 
-        // Creates a free-text textarea, possibly with an initial text
-        if (options.freeText) {
-
-            this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
-            tmp = this.className ? this.className + '-freetext' : 'freetext';
-            this.textarea.className = tmp;
-
-            if ('string' === typeof options.freeText) {
-                this.textarea.placeholder = options.freeText;
-                this.freeText = options.freeText;
-            }
-            else {
-                this.freeText = !!options.freeText;
-            }
-        }
     };
 
     /**
@@ -3601,7 +3620,7 @@
         for ( ; ++i < len ; ) {
             this.renderChoice(this.choices[this.order[i]], i);
         }
-        if (this.description) this.renderChoicesTitle(this.description);
+        if (this.description) this.renderDescription(this.description);
     };
 
     /**
@@ -3831,19 +3850,77 @@
         this.correctChoice = choice;
     };
 
+    /**
+     * ### ChoiceTable.append
+     *
+     * Implements Widget.append
+     *
+     * Checks that id is unique.
+     *
+     * Appends (all optional):
+     *
+     *   - mainText: a question or statement introducing the choices
+     *   - table: the table containing the choices
+     *   - freeText: a textarea for comments
+     *
+     * @see Widget.append
+     */
     ChoiceTable.prototype.append = function() {
+        var tmp;
+        // Id must be unique.
+        if (W.getElementById(this.id)) {
+            throw new Error('ChoiceTable.append: id is not ' +
+                            'unique: ' + this.id);
+        }
 
+        // MainText.
         if (this.mainText) {
             this.spanMainText = document.createElement('span');
             this.spanMainText.className = this.className ?
                 ChoiceTable.className + '-maintext' : 'maintext';
             this.spanMainText.innerHTML = this.mainText;
+            // Append mainText.
             this.bodyDiv.appendChild(this.spanMainText);
         }
-        if (this.table) this.bodyDiv.appendChild(this.table);
-        if (this.textarea) this.bodyDiv.appendChild(this.textarea);
+
+        // Create/set table.
+        if (this.table !== false) {
+            // Create table, if it was not passed as object before.
+            if ('undefined' === typeof this.table) {
+                this.table = document.createElement('table');
+            }
+            // Set table id.
+            this.table.id = this.id;
+            if (this.className) J.addClass(this.table, this.className);
+            else this.table.className = '';
+            // Append table.
+            this.bodyDiv.appendChild(this.table);
+        }
+
+        // Creates a free-text textarea, possibly with placeholder text.
+        if (this.freeText) {
+            this.textarea = document.createElement('textarea');
+            this.textarea.id = this.id + '_text';
+            if ('string' === typeof this.freeText) {
+                this.textarea.placeholder = this.freeText;
+            }
+            tmp = this.className ? this.className + '-freetext' : 'freetext';
+            this.textarea.className = tmp;
+            // Append textarea.
+            this.bodyDiv.appendChild(this.textarea);
+        }
     };
 
+    /**
+     * ### ChoiceTable.listeners
+     *
+     * Implements Widget.listeners
+     *
+     * Adds two listeners two disable/enable the widget on events:
+     * INPUT_DISABLE, INPUT_ENABLE
+     *
+     * @see Widget.listeners
+     */
     ChoiceTable.prototype.listeners = function() {
         var that = this;
         node.on('INPUT_DISABLE', function() {
@@ -4047,18 +4124,7 @@
     };
 
     /**
-     * ### ChoiceTable.isHighlighted
-     *
-     * Returns TRUE if the choice table is highlighted
-     *
-     * @return {boolean} ChoiceTable.highlighted
-     */
-    ChoiceTable.prototype.isHighlighted = function() {
-        return this.highlighted;
-    };
-
-    /**
-     * ### ChoiceTable.getAllValues
+     * ### ChoiceTable.getValues
      *
      * Returns the values for current selection and other paradata
      *
@@ -4074,7 +4140,7 @@
      *
      * @see ChoiceTable.verifyChoice
      */
-    ChoiceTable.prototype.getAllValues = function(opts) {
+    ChoiceTable.prototype.getValues = function(opts) {
         var obj;
         obj = {
             id: this.id,
@@ -4139,7 +4205,9 @@
  * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
- * Creates a table that if pressed emits node.done()
+ * Creates a table that groups together several choice tables widgets
+ *
+ * @see ChoiceTable
  *
  * www.nodegame.org
  */
@@ -4176,33 +4244,10 @@
      * @param {object} options Optional. Configuration options.
      *   If a `table` option is specified, it sets it as the clickable
      *   table. All other options are passed to the init method.
-     *
-     * @see ChoiceTableGroup.init
      */
     function ChoiceTableGroup(options) {
         var that;
         that = this;
-
-        // TODO: move them in the Widgets as a check?
-        if ('number' === typeof options.id) options.id = '' + options.id;
-        if ('string' !== typeof options.id) {
-            throw new TypeError('ChoiceTableGroup constructor: options.id ' +
-                                'must be string or number. Found: ' +
-                                options.id);
-        }
-        if (W.getElementById(options.id)) {
-            throw new TypeError('ChoiceTableGroup constructor: options.id ' +
-                                'is not unique: ' + options.id);
-        }
-
-        /**
-         * ### ChoiceTableGroup.id
-         *
-         * The ID of the instance
-         *
-         * Will be used as the table id, and as prefix for all choice TDs
-         */
-        this.id = options.id;
 
         /**
          * ### ChoiceTableGroup.dl
@@ -4274,13 +4319,6 @@
         };
 
         /**
-         * ### ChoiceTableGroup.disabled
-         *
-         * Flag indicating if the event listener onclick is active
-         */
-        this.disabled = true;
-
-        /**
          * ### ChoiceTableGroup.mainText
          *
          * The main text introducing the choices
@@ -4325,7 +4363,7 @@
         this.order = null;
 
         /**
-         * ### ChoiceTable.shuffleChoices
+         * ### ChoiceTableGroup.shuffleItems
          *
          * If TRUE, items are inserted in random order
          *
@@ -4402,7 +4440,7 @@
         this.selectMultiple = null;
 
         /**
-         * ### ChoiceTable.renderer
+         * ### ChoiceTableGroup.renderer
          *
          * A callback that renders the content of each cell
          *
@@ -4433,9 +4471,6 @@
          * @see mixinSettings
          */
         this.separator = ChoiceTableGroup.separator;
-
-        // Init.
-        this.init(options);
     }
 
     // ## ChoiceTableGroup methods
@@ -4462,11 +4497,10 @@
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Configuration options
      */
     ChoiceTableGroup.prototype.init = function(options) {
         var tmp, that;
-        options = options || {};
         that = this;
 
         // TODO: many options checking are replicated. Skip them all?
@@ -4565,72 +4599,48 @@
             this.renderer = options.renderer;
         }
         else if ('undefined' !== typeof options.renderer) {
-            throw new TypeError('ChoiceTable.init: options.renderer must ' +
-                                'be function or undefined. Found: ' +
+            throw new TypeError('ChoiceTableGroup.init: options.renderer ' +
+                                'must be function or undefined. Found: ' +
                                 options.renderer);
         }
 
+        // Set the className, if not use default.
+        if ('undefined' === typeof options.className) {
+            this.className = ChoiceTableGroup.className;
+        }
+        else if (options.className === false ||
+                 'string' === typeof options.className ||
+                 J.isArray(options.className)) {
+
+            this.className = options.className;
+        }
+        else {
+            throw new TypeError('ChoiceTableGroup.init: options.' +
+                                'className must be string, array, ' +
+                                'or undefined. Found: ' + options.className);
+        }
 
         // After all configuration options are evaluated, add items.
 
-        // Create/set table, if requested.
-        if (options.table !== false) {
-            if ('object' === typeof options.table) {
-                this.table = options.table;
-            }
-            else if ('undefined' === typeof options.table) {
-                this.table = document.createElement('table');
-            }
-            else {
-                throw new TypeError('ChoiceTable constructor: options.table ' +
-                                    'must be object, false or undefined. ' +
-                                    'Found: ' + options.table);
-            }
-
-            // Set table id.
-            this.table.id = this.id;
-            // Table className.
-            if ('undefined' !== typeof options.className) {
-                if (options.className === false) {
-                    this.table.className = '';
-                }
-                else if ('string' === typeof options.className ||
-                         J.isArray(options.className)) {
-
-                    J.addClass(this.table, options.className);
-                }
-                else {
-                    throw new TypeError('ChoiceTable.init: options.' +
-                                        'className must be string, array, ' +
-                                        'or undefined. Found: ' +
-                                        options.className);
-                }
-            }
-            else {
-                // Add default 'choicetable' class to table.
-                J.addClass(this.table, ChoiceTableGroup.className);
-            }
+        if ('object' === typeof options.table) {
+            this.table = options.table;
         }
+        else if ('undefined' !== typeof options.table &&
+                 false !== options.table) {
+
+            throw new TypeError('ChoiceTableGroup.init: options.table ' +
+                                'must be object, false or undefined. ' +
+                                'Found: ' + options.table);
+        }
+
+        this.table = options.table;
+
+        this.freeText = 'string' === typeof options.freeText ?
+            options.freeText : !!options.freeText;
 
         // Add the items.
         if ('undefined' !== typeof options.items) {
             this.setItems(options.items);
-        }
-
-        // Creates a free-text textarea, possibly with an initial text
-        if (options.freeText) {
-
-            this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
-            this.textarea.className = ChoiceTableGroup.className + '-freetext';
-
-            if ('string' === typeof options.freeText) {
-                this.textarea.placeholder = options.freeText;
-                this.freeText = options.freeText;
-            }
-            else {
-                this.freeText = !!options.freeText;
-            }
         }
     };
 
@@ -4681,7 +4691,7 @@
      */
     ChoiceTableGroup.prototype.buildTable = function() {
         var i, len, tr, H, ct;
-        var j, lenJ, lenJOld, titleOld;
+        var j, lenJ, lenJOld;
 
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
@@ -4694,10 +4704,6 @@
                 // Get item, append choices for item.
                 ct = getChoiceTable(this, i);
 
-                if (!ct.descriptionCell) {
-                    throw new Error('ChoiceTableGroup.buildTable: item ' +
-                                    'is missing a description: ' + s.id);
-                }
                 tr.appendChild(ct.descriptionCell);
                 j = -1, lenJ = ct.choicesCells.length;
                 // Make sure all items have same number of choices.
@@ -4707,7 +4713,7 @@
                 else if (lenJ !== lenJOld) {
                     throw new Error('ChoiceTableGroup.buildTable: item ' +
                                     'do not have same number of choices: ' +
-                                    s.id);
+                                    ct.id);
                 }
                 // TODO: might optimize. There are two loops (+1 inside ct).
                 for ( ; ++j < lenJ ; ) {
@@ -4727,10 +4733,6 @@
                 // Get item, append choices for item.
                 ct = getChoiceTable(this, i);
 
-                if (!ct.descriptionCell) {
-                    throw new Error('ChoiceTableGroup.buildTable: item ' +
-                                    'is missing a description: ' + s.id);
-                }
                 // Make sure all items have same number of choices.
                 lenJ = ct.choicesCells.length;
                 if (i === 0) {
@@ -4739,7 +4741,7 @@
                 else if (lenJ !== lenJOld) {
                     throw new Error('ChoiceTableGroup.buildTable: item ' +
                                     'do not have same number of choices: ' +
-                                    s.id);
+                                    ct.id);
                 }
 
                 // Add titles.
@@ -4764,20 +4766,78 @@
         this.enable();
     };
 
-
-
+    /**
+     * ### ChoiceTableGroup.append
+     *
+     * Implements Widget.append
+     *
+     * Checks that id is unique.
+     *
+     * Appends (all optional):
+     *
+     *   - mainText: a question or statement introducing the choices
+     *   - table: the table containing the choices
+     *   - freeText: a textarea for comments
+     *
+     * @see Widget.append
+     */
     ChoiceTableGroup.prototype.append = function() {
+        // Id must be unique.
+        if (W.getElementById(this.id)) {
+            throw new Error('ChoiceTableGroup.append: id ' +
+                            'is not unique: ' + this.id);
+        }
+
+        // MainText.
         if (this.mainText) {
             this.spanMainText = document.createElement('span');
             this.spanMainText.className =
                 ChoiceTableGroup.className + '-maintext';
             this.spanMainText.innerHTML = this.mainText;
+            // Append.
             this.bodyDiv.appendChild(this.spanMainText);
         }
-        if (this.table) this.bodyDiv.appendChild(this.table);
-        if (this.textarea) this.bodyDiv.appendChild(this.textarea);
+
+        // Create/set table, if requested.
+        if (this.table !== false) {
+            if ('undefined' === typeof this.table) {
+                this.table = document.createElement('table');
+                this.buildTable();
+            }
+            // Set table id.
+            this.table.id = this.id;
+            if (this.className) J.addClass(this.table, this.className);
+            else this.table.className = '';
+            // Append table.
+            this.bodyDiv.appendChild(this.table);
+        }
+
+        // Creates a free-text textarea, possibly with placeholder text.
+        if (this.freeText) {
+            this.textarea = document.createElement('textarea');
+            this.textarea.id = this.id + '_text';
+            this.textarea.className = ChoiceTableGroup.className + '-freetext';
+            if ('string' === typeof this.freeText) {
+                this.textarea.placeholder = this.freeText;
+            }
+            // Append textarea.
+            this.bodyDiv.appendChild(this.textarea);
+        }
     };
 
+    /**
+     * ### ChoiceTableGroup.listeners
+     *
+     * Implements Widget.listeners
+     *
+     * Adds two listeners two disable/enable the widget on events:
+     * INPUT_DISABLE, INPUT_ENABLE
+     *
+     * Notice! Nested choice tables listeners are not executed.
+     *
+     * @see Widget.listeners
+     * @see mixinSettings
+     */
     ChoiceTableGroup.prototype.listeners = function() {
         var that = this;
         node.on('INPUT_DISABLE', function() {
@@ -4901,18 +4961,7 @@
     };
 
     /**
-     * ### ChoiceTableGroup.isHighlighted
-     *
-     * Returns TRUE if the choice table is highlighted
-     *
-     * @return {boolean} ChoiceTableGroup.highlighted
-     */
-    ChoiceTableGroup.prototype.isHighlighted = function() {
-        return this.highlighted;
-    };
-
-    /**
-     * ### ChoiceTableGroup.getAllValues
+     * ### ChoiceTableGroup.getValues
      *
      * Returns the values for current selection and other paradata
      *
@@ -4928,7 +4977,7 @@
      *
      * @see ChoiceTableGroup.verifyChoice
      */
-    ChoiceTableGroup.prototype.getAllValues = function(opts) {
+    ChoiceTableGroup.prototype.getValues = function(opts) {
         var obj, i, len, tbl;
         obj = {
             id: this.id,
@@ -4939,7 +4988,7 @@
         i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
             tbl = this.items[i];
-            obj.items[tbl.id] = tbl.getAllValues(opts);
+            obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) obj.missValues = true;
         }
         if (this.textarea) obj.freetext = this.textarea.value;
@@ -4991,8 +5040,8 @@
      *
      * @return {object} ct The requested choice table
      *
-     * @see ChoiceTable.itemsSettings
-     * @see ChoiceTable.itemsById
+     * @see ChoiceTableGroup.itemsSettings
+     * @see ChoiceTableGroup.itemsById
      * @see mixinSettings
      */
     function getChoiceTable(that, i) {
@@ -5000,8 +5049,12 @@
         s = mixinSettings(that, that.itemsSettings[that.order[i]], i);
         ct = node.widgets.get('ChoiceTable', s);
         if (that.itemsById[ct.id]) {
-            throw new Error('ChoiceTableGroup: an item with the same id ' +
-                            'already exists: ' + ct.id);
+            throw new Error('ChoiceTableGroup.buildTable: an item ' +
+                            'with the same id already exists: ' + ct.id);
+        }
+        if (!ct.descriptionCell) {
+            throw new Error('ChoiceTableGroup.buildTable: item ' +
+                            'is missing a description: ' + s.id);
         }
         that.itemsById[ct.id] = ct;
         that.items[i] = ct;
@@ -7377,7 +7430,7 @@
          * Each function is called with `this` instance as context,
          * and accepts the `options` parameters passed to constructor.
          * Each method must return widget-like gauge object
-         * implementing functions: append, enable, disable, getAllValues
+         * implementing functions: append, enable, disable, getValues
          *
          * or an error will be thrown
          */
@@ -7401,8 +7454,6 @@
         this.method = 'I-PANAS-SF';
 
         this.addMethod('I-PANAS-SF', I_PANAS_SF);
-
-        this.init(options);
     }
 
     // ## MoodGauge methods.
@@ -7466,8 +7517,8 @@
         this.methods[name] = cb;
     };
 
-    MoodGauge.prototype.getAllValues = function() {
-        return this.gauge.getAllValues();
+    MoodGauge.prototype.getValues = function() {
+        return this.gauge.getValues();
     };
 
     MoodGauge.prototype.enable = function() {
@@ -7494,9 +7545,9 @@
             throw new Error('MoodGauge.init: method ' + method +
                             'did not create element gauge.');
         }
-        if ('function' !== typeof gauge.getAllValues) {
+        if ('function' !== typeof gauge.getValues) {
             throw new Error('MoodGauge.init: method ' + method +
-                            ': gauge missing function getAllValues.');
+                            ': gauge missing function getValues.');
         }
         if ('function' !== typeof gauge.enable) {
             throw new Error('MoodGauge.init: method ' + method +
@@ -8724,7 +8775,7 @@
          * Each function is called with `this` instance as context,
          * and accepts the `options` parameters passed to constructor.
          * Each method must return widget-like gauge object
-         * implementing functions: append, enable, disable, getAllValues
+         * implementing functions: append, enable, disable, getValues
          *
          * or an error will be thrown
          */
@@ -8747,8 +8798,6 @@
         this.method = 'Slider';
 
         this.addMethod('Slider', SVO_Slider);
-
-        this.init(options);
     }
 
     // ## SVOGauge methods.
@@ -8812,8 +8861,8 @@
         this.methods[name] = cb;
     };
 
-    SVOGauge.prototype.getAllValues = function() {
-        return this.gauge.getAllValues();
+    SVOGauge.prototype.getValues = function() {
+        return this.gauge.getValues();
     };
 
     SVOGauge.prototype.enable = function() {
@@ -8840,9 +8889,9 @@
             throw new Error('SVOGauge.init: method ' + method +
                             'did not create element gauge.');
         }
-        if ('function' !== typeof gauge.getAllValues) {
+        if ('function' !== typeof gauge.getValues) {
             throw new Error('SVOGauge.init: method ' + method +
-                            ': gauge missing function getAllValues.');
+                            ': gauge missing function getValues.');
         }
         if ('function' !== typeof gauge.enable) {
             throw new Error('SVOGauge.init: method ' + method +
@@ -9219,35 +9268,15 @@
      * ## VisualRound constructor
      *
      * Displays information on the current and total rounds and stages
-     *
-     * @param {object} options Optional. Configuration options.
-     *   The options it can take are:
-     *
-     *   - `stageOffset`:
-     *     Stage displayed is the actual stage minus stageOffset
-     *   - `flexibleMode`:
-     *     Set `true`, if number of rounds and/or stages can change dynamically
-     *   - `curStage`:
-     *     When (re)starting in `flexibleMode`, sets the current stage
-     *   - `curRound`:
-     *     When (re)starting in `flexibleMode`, sets the current round
-     *   - `totStage`:
-     *     When (re)starting in `flexibleMode`, sets the total number of stages
-     *   - `totRound`:
-     *     When (re)starting in `flexibleMode`, sets the total number of
-     *     rounds
-     *   - `oldStageId`:
-     *     When (re)starting in `flexibleMode`, sets the id of the current
-     *     stage
-     *   - `displayModeNames`:
-     *     Array of strings which determines the display style of the widget
-     *
-     * @see VisualRound.setDisplayMode
-     * @see GameStager
-     * @see GamePlot
      */
-    function VisualRound(options) {
-        this.options = options;
+    function VisualRound() {
+
+        /**
+         * ### VisualRound.options
+         *
+         * Current configuration
+         */
+        this.options = null;
 
         /**
          * ### VisualRound.displayMode
@@ -9332,7 +9361,6 @@
          */
         this.oldStageId = null;
 
-        this.init(this.options);
     }
 
     // ## VisualRound methods
@@ -9345,9 +9373,31 @@
      * If called on running instance, options are mixed-in into current
      * settings. See `VisualRound` constructor for which options are allowed.
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} options Optional. Configuration options.
+     *   The options it can take are:
      *
-     * @see VisualRound constructor
+     *   - `stageOffset`:
+     *     Stage displayed is the actual stage minus stageOffset
+     *   - `flexibleMode`:
+     *     Set `true`, if number of rounds and/or stages can change dynamically
+     *   - `curStage`:
+     *     When (re)starting in `flexibleMode`, sets the current stage
+     *   - `curRound`:
+     *     When (re)starting in `flexibleMode`, sets the current round
+     *   - `totStage`:
+     *     When (re)starting in `flexibleMode`, sets the total number of stages
+     *   - `totRound`:
+     *     When (re)starting in `flexibleMode`, sets the total number of
+     *     rounds
+     *   - `oldStageId`:
+     *     When (re)starting in `flexibleMode`, sets the id of the current
+     *     stage
+     *   - `displayModeNames`:
+     *     Array of strings which determines the display style of the widget
+     *
+     * @see VisualRound.setDisplayMode
+     * @see GameStager
+     * @see GamePlot
      */
     VisualRound.prototype.init = function(options) {
         options = options || {};

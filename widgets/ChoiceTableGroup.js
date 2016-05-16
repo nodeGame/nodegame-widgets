@@ -600,6 +600,7 @@
         if (this.table !== false) {
             if ('undefined' === typeof this.table) {
                 this.table = document.createElement('table');
+                this.buildTable();
             }
             // Set table id.
             this.table.id = this.id;

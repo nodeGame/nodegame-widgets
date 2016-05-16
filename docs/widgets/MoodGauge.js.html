@@ -190,7 +190,7 @@ which is forwarded to MoodGauge.init.</span>
 <p>Each function is called with <code>this</code> instance as context,
 and accepts the <code>options</code> parameters passed to constructor.
 Each method must return widget-like gauge object
-implementing functions: append, enable, disable, getAllValues</p>
+implementing functions: append, enable, disable, getValues</p>
 
 <p>or an error will be thrown</p>
   </div>
@@ -232,8 +232,6 @@ the Positive and Negative Affect Schedule (PANAS)"</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="s1">&#39;I-PANAS-SF&#39;</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">addMethod</span><span class="p">(</span><span class="s1">&#39;I-PANAS-SF&#39;</span><span class="p">,</span> <span class="nx">I_PANAS_SF</span><span class="p">);</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
     <span class="p">}</span>
 
 
@@ -390,8 +388,8 @@ the Positive and Negative Affect Schedule (PANAS)"</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">methods</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">cb</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">();</span>
+    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">getValues</span><span class="p">();</span>
     <span class="p">};</span>
 
     <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -460,9 +458,9 @@ the Positive and Negative Affect Schedule (PANAS)"</p>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: method &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span>
                             <span class="s1">&#39;did not create element gauge.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">gauge</span><span class="p">.</span><span class="nx">getAllValues</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">gauge</span><span class="p">.</span><span class="nx">getValues</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: method &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span>
-                            <span class="s1">&#39;: gauge missing function getAllValues.&#39;</span><span class="p">);</span>
+                            <span class="s1">&#39;: gauge missing function getValues.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">gauge</span><span class="p">.</span><span class="nx">enable</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: method &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span>
