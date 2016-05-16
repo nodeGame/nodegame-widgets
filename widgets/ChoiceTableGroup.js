@@ -380,7 +380,7 @@
         }
         else if ('undefined' !== typeof options.mainText) {
             throw new TypeError('ChoiceTableGroup.init: options.mainText ' +
-                                'must be string, undefined. Found: ' +
+                                'must be string or undefined. Found: ' +
                                 options.mainText);
         }
 

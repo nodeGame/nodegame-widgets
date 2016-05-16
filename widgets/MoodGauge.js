@@ -107,7 +107,6 @@
             }
             this.method = options.method;
         }
-
         // Call method.
         gauge = this.methods[this.method].call(this, options);
         // Check properties.
@@ -199,9 +198,14 @@
         var items, emotions, mainText, choices;
         var gauge, i, len;
 
-        mainText = options.mainText ||
-            'Thinking about yourself and how you normally feel, ' +
-            'to what extent do you generally feel: ';
+        if ('undefined' === typeof options.mainText) {
+            mainText = 'Thinking about yourself and how you normally feel, ' +
+                'to what extent do you generally feel: ';
+        }
+        else if ('string' === typeof options.mainText) {
+            mainText = options.mainText;
+        }
+        // Other types ignored.
 
         choices = options.choices ||
             [ 'never', '1', '2', '3', '4', '5', 'always' ];
@@ -241,7 +245,5 @@
 
         return gauge;
     }
-
-
 
 })(node);

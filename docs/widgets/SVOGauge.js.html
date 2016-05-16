@@ -323,7 +323,6 @@ implementing functions: append, enable, disable, getValues</p>
             <span class="k">this</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">;</span>
         <span class="p">}</span>
 
-
 </pre></div>
         </td>
       </tr>
@@ -543,8 +542,25 @@ implementing functions: append, enable, disable, getValues</p>
         <span class="kd">var</span> <span class="nx">gauge</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">descr</span><span class="p">,</span> <span class="nx">renderer</span><span class="p">;</span>
 
-        <span class="nx">mainText</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span> <span class="o">||</span>
-            <span class="s1">&#39;Select your preferred option among those available: &#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">mainText</span> <span class="o">=</span>
+                <span class="s1">&#39;Select your preferred option among those available below:&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">mainText</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">;</span>
+        <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>Other types ignored.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 
         <span class="nx">sliders</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sliders</span> <span class="o">||</span> <span class="p">[</span>
             <span class="p">[</span>

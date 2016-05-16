@@ -106,7 +106,6 @@
             }
             this.method = options.method;
         }
-
         // Call method.
         gauge = this.methods[this.method].call(this, options);
         // Check properties.
@@ -199,8 +198,14 @@
         var gauge, i, len;
         var descr, renderer;
 
-        mainText = options.mainText ||
-            'Select your preferred option among those available: ';
+        if ('undefined' === typeof options.mainText) {
+            mainText =
+                'Select your preferred option among those available below:';
+        }
+        else if ('string' === typeof options.mainText) {
+            mainText = options.mainText;
+        }
+        // Other types ignored.
 
         sliders = options.sliders || [
             [
