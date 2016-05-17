@@ -6710,84 +6710,6 @@
 })(node);
 
 /**
- * # GameSummary
- * Copyright(c) 2015 Stefano Balietti
- * MIT Licensed
- *
- * Shows the configuration options of a game in a box
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    node.widgets.register('GameSummary', GameSummary);
-
-    // ## Meta-data
-
-    GameSummary.version = '0.3.1';
-    GameSummary.description =
-        'Show the general configuration options of the game.';
-
-    GameSummary.title = 'Game Summary';
-    GameSummary.className = 'gamesummary';
-
-
-    /**
-     * ## GameSummary constructor
-     *
-     * `GameSummary` shows the configuration options of the game in a box
-     */
-    function GameSummary() {
-        /**
-         * ### GameSummary.summaryDiv
-         *
-         * The DIV in which to display the information
-         */
-        this.summaryDiv = null;
-    }
-
-    // ## GameSummary methods
-
-    /**
-     * ### GameSummary.append
-     *
-     * Appends the widget to `this.bodyDiv` and calls `this.writeSummary`
-     *
-     * @see GameSummary.writeSummary
-     */
-    GameSummary.prototype.append = function() {
-        this.summaryDiv = node.window.addDiv(this.bodyDiv);
-        this.writeSummary();
-    };
-
-    /**
-     * ### GameSummary.writeSummary
-     *
-     * Writes a summary of the game configuration into `this.summaryDiv`
-     */
-    GameSummary.prototype.writeSummary = function(idState, idSummary) {
-        var gName = document.createTextNode('Name: ' + node.game.metadata.name),
-        gDescr = document.createTextNode(
-                'Descr: ' + node.game.metadata.description),
-        gMinP = document.createTextNode('Min Pl.: ' + node.game.minPlayers),
-        gMaxP = document.createTextNode('Max Pl.: ' + node.game.maxPlayers);
-
-        this.summaryDiv.appendChild(gName);
-        this.summaryDiv.appendChild(document.createElement('br'));
-        this.summaryDiv.appendChild(gDescr);
-        this.summaryDiv.appendChild(document.createElement('br'));
-        this.summaryDiv.appendChild(gMinP);
-        this.summaryDiv.appendChild(document.createElement('br'));
-        this.summaryDiv.appendChild(gMaxP);
-
-        node.window.addDiv(this.bodyDiv, this.summaryDiv, idSummary);
-    };
-
-})(node);
-
-/**
  * # GameTable
  * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
@@ -8077,8 +7999,8 @@
 })(node);
 
 /**
- * # NextPreviousState
- * Copyright(c) 2015 Stefano Balietti
+ * # NextPreviousStep
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Simple widget to step through the stages of the game
@@ -8089,67 +8011,76 @@
 
     "use strict";
 
-    // TODO: Introduce rules for update: other vs self
-
-    node.widgets.register('NextPreviousState', NextPreviousState);
-
-    // ## Defaults
-
-    NextPreviousState.defaults = {};
-    NextPreviousState.defaults.id = 'nextprevious';
-    NextPreviousState.defaults.fieldset = { legend: 'Rew-Fwd' };
+    node.widgets.register('NextPreviousStep', NextPreviousStep);
 
     // ## Meta-data
 
-    NextPreviousState.version = '0.3.2';
-    NextPreviousState.description = 'Adds two buttons to push forward or ' +
+    NextPreviousStep.className = 'nextprevious';
+    NextPreviousStep.title = 'Next/Previous Step';
+
+    NextPreviousStep.version = '1.0.0';
+    NextPreviousStep.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
 
-    function NextPreviousState(options) {
-        this.id = options.id;
-    }
+    function NextPreviousStep() {}
 
-    NextPreviousState.prototype.getRoot = function() {
-        return this.root;
-    };
+    NextPreviousStep.prototype.append = function(root) {
+        var rew, fwd;
 
-    NextPreviousState.prototype.append = function(root) {
-        var idRew = this.id + '_button';
-        var idFwd = this.id + '_button';
-
-        var rew = node.window.addButton(root, idRew, '<<');
-        var fwd = node.window.addButton(root, idFwd, '>>');
-
-
-        var that = this;
-
-        var updateState = function(state) {
-            if (state) {
-                var stateEvent = node.IN + node.action.SAY + '.STATE';
-                var stateMsg = node.msg.createSTATE(stateEvent, state);
-                // Self Update
-                node.emit(stateEvent, stateMsg);
-
-                // Update Others
-                stateEvent = node.OUT + node.action.SAY + '.STATE';
-                node.emit(stateEvent, state, 'ROOM');
-            }
-            else {
-                node.err('No next/previous state. Not sent');
-            }
-        };
+        rew = document.createElement('button');
+        rew.id = this.id + '_rew';
+        rew.innerHTML = '<<';
+        fwd = document.createElement('button');
+        fwd.is = this.id + '_fwd';
+        fwd.innerHTML = '>>';
 
         fwd.onclick = function() {
-            updateState(node.game.next());
+            node.game.step();
+            if (!hasNextStep()) {
+                fwd.disabled = 'disabled';
+            }
         };
 
         rew.onclick = function() {
-            updateState(node.game.previous());
+            var prevStep;
+            prevStep = node.game.getPreviousStep();
+            node.game.gotoStep(prevStep);
+            if (!hasPreviousStep()) {
+                req.disabled = 'disabled';
+            }
         };
 
-        this.root = root;
-        return root;
+        if (node.game.getCurrentGameStage().stage === 0) {
+            rew.disabled = 'disabled';
+        }
+
+
+
+        this.bodyDiv.appendChild(rew);
+        this.bodyDiv.appendChild(fwd);
     };
+
+    function hasNextStep() {
+        var nextStep;
+        nextStep = node.game.getNextStep();
+        if (!nextStep ||
+            nextStep === node.GamePlot.GAMEOVER ||
+            nextStep === node.GamePlot.END_SEQ ||
+            nextStep === node.GamePlot.NO_SEQ) {
+
+            return false;
+        }
+        return true;
+    }
+
+    function hasPreviousStep() {
+        var prevStep;
+        prevStep = node.game.getPreviousStep();
+        if (!prevStep) {
+            return false;
+        }
+        return true;
+    }
 
 })(node);
 
@@ -9117,128 +9048,6 @@
 
         return gauge;
     }
-
-})(node);
-
-/**
- * # ServerInfoDisplay
- * Copyright(c) 2015 Stefano Balietti
- * MIT Licensed
- *
- * Displays information about the server
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    node.widgets.register('ServerInfoDisplay', ServerInfoDisplay);
-
-    // ## Meta-data
-
-    ServerInfoDisplay.version = '0.4.1';
-    ServerInfoDisplay.description = 'Displays information about the server.';
-
-    ServerInfoDisplay.title = 'Server Info';
-    ServerInfoDisplay.className = 'serverinfodisplay';
-
-    /**
-     * ## ServerInfoDisplay constructor
-     *
-     * `ServerInfoDisplay` shows information about the server
-     */
-    function ServerInfoDisplay() {
-        /**
-         * ### ServerInfoDisplay.div
-         *
-         * The DIV wherein to display the information
-         */
-        this.div = document.createElement('div');
-
-        /**
-         * ### ServerInfoDisplay.table
-         *
-         * The table holding the information
-         */
-        this.table = null; //new node.window.Table();
-
-        /**
-         * ### ServerInfoDisplay.button
-         *
-         * The button TODO
-         */
-        this.button = null;
-
-    }
-
-    // ## ServerInfoDisplay methods
-
-    /**
-     * ### ServerInfoDisplay.init
-     *
-     * Initializes the widget
-     */
-    ServerInfoDisplay.prototype.init = function() {
-        var that = this;
-        if (!this.div) {
-            this.div = document.createElement('div');
-        }
-        this.div.innerHTML = 'Waiting for the reply from Server...';
-        if (!this.table) {
-            this.table = new node.window.Table();
-        }
-        this.table.clear(true);
-        this.button = document.createElement('button');
-        this.button.value = 'Refresh';
-        this.button.appendChild(document.createTextNode('Refresh'));
-        this.button.onclick = function(){
-            that.getInfo();
-        };
-        this.bodyDiv.appendChild(this.button);
-        this.getInfo();
-    };
-
-    ServerInfoDisplay.prototype.append = function() {
-        this.bodyDiv.appendChild(this.div);
-    };
-
-    /**
-     * ### ServerInfoDisplay.getInfo
-     *
-     * Updates current info
-     *
-     * @see ServerInfoDisplay.processInfo
-     */
-    ServerInfoDisplay.prototype.getInfo = function() {
-        var that = this;
-        node.get('INFO', function(info) {
-            node.window.removeChildrenFromNode(that.div);
-            that.div.appendChild(that.processInfo(info));
-        });
-    };
-
-    /**
-     * ### ServerInfoDisplay.processInfo
-     *
-     * Processes incoming server info and displays it in `this.table`
-     */
-    ServerInfoDisplay.prototype.processInfo = function(info) {
-        this.table.clear(true);
-        for (var key in info) {
-            if (info.hasOwnProperty(key)){
-                this.table.addRow([key,info[key]]);
-            }
-        }
-        return this.table.parse();
-    };
-
-    ServerInfoDisplay.prototype.listeners = function() {
-        var that = this;
-        node.on('PLAYER_CREATED', function(){
-            that.init();
-        });
-    };
 
 })(node);
 
