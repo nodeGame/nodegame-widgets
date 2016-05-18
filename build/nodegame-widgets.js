@@ -1147,7 +1147,7 @@
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.5.1';
+    ChernoffFaces.version = '0.6.1';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -1202,7 +1202,7 @@
      */
     function ChernoffFaces(options) {
         var that = this;
-        var tblOptions;
+
 
         // ## Public Properties
 
@@ -1210,20 +1210,9 @@
         // Configuration options
         this.options = options;
 
-        // Building table options.
-        tblOptions = {};
-        if ('string' === typeof options.id) tblOptions.id = options.id;
-        else if (options.id !== false) tblOptions.id = 'cf_table';
-        if ('string' === typeof options.className) {
-            tblOptions.id = options.className;
-        }
-        else if (options.className !== false) {
-            tblOptions.className = 'cf_table';
-        }
-
         // ### ChernoffFaces.table
         // The table containing everything
-        this.table = new Table(tblOptions);
+        this.table = null;
 
         // ### ChernoffFaces.sc
         // The slider controls of the interface
@@ -1266,13 +1255,24 @@
         // ### ChernoffFaces.features
         // The object containing all the features to draw Chernoff faces
         this.features = null;
-
-        // Init.
-        this.init(this.options);
     }
 
     ChernoffFaces.prototype.init = function(options) {
         var controlsOptions, f;
+        var tblOptions;
+
+        // Building table options.
+        tblOptions = {};
+        if ('string' === typeof options.id) tblOptions.id = options.id;
+        else if (options.id !== false) tblOptions.id = 'cf_table';
+        if ('string' === typeof options.className) {
+            tblOptions.id = options.className;
+        }
+        else if (options.className !== false) {
+            tblOptions.className = 'cf_table';
+        }
+
+        this.table = new Table(tblOptions);
 
         // Canvas.
         if (!options.canvas) {
@@ -8053,8 +8053,6 @@
         if (node.game.getCurrentGameStage().stage === 0) {
             rew.disabled = 'disabled';
         }
-
-
 
         this.bodyDiv.appendChild(rew);
         this.bodyDiv.appendChild(fwd);

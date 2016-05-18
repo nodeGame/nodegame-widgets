@@ -18,7 +18,7 @@
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.5.1';
+    ChernoffFaces.version = '0.6.1';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -44,57 +44,20 @@
      *
      * Creates a new instance of ChernoffFaces
      *
-     * @param {object} options Configuration options. Accepted options:
-     *
-     * - canvas {object} containing all options for canvas
-     *
-     * - width {number} width of the canvas (read only if canvas is not set)
-     *
-     * - height {number} height of the canvas (read only if canvas is not set)
-     *
-     * - features {FaceVector} vector of face-features. Default: random
-     *
-     * - onChange {string|boolean} The name of the event that will trigger
-     *      redrawing the canvas, or null/false to disable event listener
-     *
-     * - controls {object|false} the controls (usually a set of sliders)
-     *      offering the user the ability to manipulate the canvas. If equal
-     *      to false no controls will be created. Default: SlidersControls.
-     *      Any custom implementation must provide the following methods:
-     *
-     *          - getAllValues: returns the current features vector
-     *          - refresh: redraws the current feature vector
-     *          - init: accepts a configuration object containing a
-     *               features and onChange as specified above.
-     *
-     *
-     * @see ChernoffFaces.init
      * @see Canvas constructor
      */
     function ChernoffFaces(options) {
         var that = this;
-        var tblOptions;
 
         // ## Public Properties
 
         // ### ChernoffFaces.options
         // Configuration options
-        this.options = options;
-
-        // Building table options.
-        tblOptions = {};
-        if ('string' === typeof options.id) tblOptions.id = options.id;
-        else if (options.id !== false) tblOptions.id = 'cf_table';
-        if ('string' === typeof options.className) {
-            tblOptions.id = options.className;
-        }
-        else if (options.className !== false) {
-            tblOptions.className = 'cf_table';
-        }
+        this.options = null;
 
         // ### ChernoffFaces.table
         // The table containing everything
-        this.table = new Table(tblOptions);
+        this.table = null;
 
         // ### ChernoffFaces.sc
         // The slider controls of the interface
@@ -137,13 +100,116 @@
         // ### ChernoffFaces.features
         // The object containing all the features to draw Chernoff faces
         this.features = null;
-
-        // Init.
-        this.init(this.options);
     }
 
+    /**
+     * ### ChernoffFaces.init
+     *
+     * Inits the widget
+     *
+     * Stores the reference to options, most of the operations are done
+     * by the `append` method.
+     *
+     * @param {object} options Configuration options. Accepted options:
+     *
+     * - canvas {object} containing all options for canvas
+     *
+     * - width {number} width of the canvas (read only if canvas is not set)
+     *
+     * - height {number} height of the canvas (read only if canvas is not set)
+     *
+     * - features {FaceVector} vector of face-features. Default: random
+     *
+     * - onChange {string|boolean} The name of the event that will trigger
+     *      redrawing the canvas, or null/false to disable event listener
+     *
+     * - controls {object|false} the controls (usually a set of sliders)
+     *      offering the user the ability to manipulate the canvas. If equal
+     *      to false no controls will be created. Default: SlidersControls.
+     *      Any custom implementation must provide the following methods:
+     *
+     *          - getAllValues: returns the current features vector
+     *          - refresh: redraws the current feature vector
+     *          - init: accepts a configuration object containing a
+     *               features and onChange as specified above.
+     *
+     */
     ChernoffFaces.prototype.init = function(options) {
         var controlsOptions, f;
+
+        this.options = options;
+
+        // Face Painter.
+        this.features = options.features || this.features ||
+            FaceVector.random();
+
+        // Draw features, if facepainter was already created.
+        if (this.fp) this.fp.draw(new FaceVector(this.features));
+
+        // onChange event.
+        if (options.onChange === false || options.onChange === null) {
+            if (this.onChange) {
+                node.off(this.onChange, this.onChangeCb);
+                this.onChange = null;
+            }
+        }
+        else {
+            this.onChange = 'undefined' === typeof options.onChange ?
+                ChernoffFaces.onChange : options.onChange;
+            node.on(this.onChange, this.onChangeCb);
+        }
+    };
+
+    /**
+     * ## ChernoffFaces.getCanvas
+     *
+     * Returns the reference to current wrapper Canvas object
+     *
+     * To get to the HTML Canvas element use `canvas.canvas`.
+     *
+     * @return {Canvas} Canvas object
+     *
+     * @see Canvas
+     */
+    ChernoffFaces.prototype.getCanvas = function() {
+        return this.canvas;
+    };
+
+    /**
+     * ## ChernoffFaces.append
+     *
+     * Appends the widget
+     *
+     * Creates table, canvas, face painter (fp) and controls (sc), according
+     * to current options.
+     *
+     * @see ChernoffFaces.fp
+     * @see ChernoffFaces.sc
+     * @see ChernoffFaces.table
+     * @see Table
+     * @see Canvas
+     * @see SliderControls
+     * @see FacePainter
+     * @see FaceVector
+     */
+    ChernoffFaces.prototype.append = function() {
+        var tblOptions, options;
+
+        options = this.options;
+
+        // Table.
+        tblOptions = {};
+        if (this.id) tblOptions.id = this.id;
+        else if (this.id !== false) tblOptions.id = 'cf_table';
+
+        if ('string' === typeof options.className) {
+            tblOptions.id = options.className;
+        }
+        else if (options.className !== false) {
+            tblOptions.className = 'cf_table';
+        }
+
+        this.table = new Table(tblOptions);
 
         // Canvas.
         if (!options.canvas) {
@@ -158,23 +224,8 @@
         this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
 
         // Face Painter.
-        this.features = options.features || this.features ||
-            FaceVector.random();
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
-
-        // onChange event.
-        if (options.onChange === false || options.onChange === null) {
-            if (this.onChange) {
-                node.off(this.onChange, this.onChangeCb);
-                this.onChange = null;
-            }
-        }
-        else {
-            this.onChange = 'undefined' === typeof options.onChange ?
-                ChernoffFaces.onChange : options.onChange;
-            node.on(this.onChange, this.onChangeCb);
-        }
 
         // Controls.
         if ('undefined' === typeof options.controls || options.controls) {
@@ -198,14 +249,8 @@
         // Table.
         if (this.sc) this.table.addRow([this.sc, this.canvas]);
         else this.table.add(this.canvas);
-        this.table.parse();
-    };
 
-    ChernoffFaces.prototype.getCanvas = function() {
-        return this.canvas;
-    };
-
-    ChernoffFaces.prototype.append = function() {
+        // Create and append table.
         this.table.parse();
         this.bodyDiv.appendChild(this.table.table);
     };
@@ -219,7 +264,7 @@
      * @param {boolean} updateControls Optional. If equal to false,
      *    controls are not updated. Default: true
      *
-     * @see this.sc
+     * @see ChernoffFaces.sc
      */
     ChernoffFaces.prototype.draw = function(features, updateControls) {
         var fv;
@@ -241,8 +286,16 @@
         return this.fp.face;
     };
 
+     /**
+     * ### ChernoffFaces.randomize
+     *
+     * Draws a random image and updates controls accordingly (if found)
+     *
+     * @see ChernoffFaces.sc
+     */
     ChernoffFaces.prototype.randomize = function() {
-        var fv = FaceVector.random();
+        var fv;
+        fv = FaceVector.random();
         this.fp.redraw(fv);
         // If controls are visible, updates them.
         if (this.sc) {
@@ -256,20 +309,68 @@
     };
 
 
-    // # FacePainter
-    // The class that actually draws the faces on the Canvas.
+    /**
+     * # FacePainter
+     *
+     * Draws faces on a Canvas
+     *
+     * @param {HTMLCanvas} canvas The canvas
+     * @param {object} settings Optional. Settings (not used).
+     */
     function FacePainter(canvas, settings) {
 
+        /**
+         * ### FacePainter.canvas
+         *
+         * The wrapper element for the HTML canvas
+         *
+         * @see Canvas
+         */
         this.canvas = new W.Canvas(canvas);
 
+        /**
+         * ### FacePainter.scaleX
+         *
+         * Scales images along the X-axis of this proportion
+         */
         this.scaleX = canvas.width / ChernoffFaces.width;
+
+        /**
+         * ### FacePainter.scaleX
+         *
+         * Scales images along the X-axis of this proportion
+         */
         this.scaleY = canvas.height / ChernoffFaces.heigth;
+
+        /**
+         * ### FacePainter.face
+         *
+         * The last drawn face
+         */
+        this.face = null;
     }
 
-    //Draws a Chernoff face.
+    // ## Methods
+
+    /**
+     * ### FacePainter.draw
+     *
+     * Draws a face into the canvas and stores it as reference
+     *
+     * @param {object} face Multidimensional vector of features
+     * @param {number} x Optional. The x-coordinate to center the image.
+     *   Default: the center of the canvas
+     * @param {number} y Optional. The y-coordinate to center the image.
+     *   Default: the center of the canvas
+     *
+     * @see Canvas
+     * @see Canvas.centerX
+     * @see Canvas.centerY
+     */
     FacePainter.prototype.draw = function(face, x, y) {
         if (!face) return;
         this.face = face;
+
         this.fit2Canvas(face);
         this.canvas.scale(face.scaleX, face.scaleY);
 
@@ -289,7 +390,6 @@
         this.drawNose(face, x, y);
 
         this.drawMouth(face, x, y);
-
     };
 
     FacePainter.prototype.redraw = function(face, x, y) {
