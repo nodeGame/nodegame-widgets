@@ -24,6 +24,21 @@
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+      <div class="heading h2">
+        <a href="#nextpreviousstep%20constructor">NextPreviousStep constructor</a>
+      </div>
+      <div class="heading h3">
+        <a href="#nextpreviousstep.rew">NextPreviousStep.rew</a>
+      </div>
+      <div class="heading h3">
+        <a href="#nextpreviousstep.fwd">NextPreviousStep.fwd</a>
+      </div>
+      <div class="heading h3">
+        <a href="#nextpreviousstep.checkbox">NextPreviousStep.checkbox</a>
+      </div>
+      <div class="heading h3">
+        <a href="#nextpreviousstep.append">NextPreviousStep.append</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -79,40 +94,181 @@ MIT Licensed</p>
     <span class="nx">NextPreviousStep</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Adds two buttons to push forward or &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;rewind the state of the game by one step.&#39;</span><span class="p">;</span>
 
-    <span class="kd">function</span> <span class="nx">NextPreviousStep</span><span class="p">()</span> <span class="p">{}</span>
 
-    <span class="nx">NextPreviousStep</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">rew</span><span class="p">,</span> <span class="nx">fwd</span><span class="p">;</span>
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="nextpreviousstep%20constructor">
+  <h2>
+    <a href="#nextpreviousstep%20constructor" name="nextpreviousstep%20constructor" class="pilcrow">&#182;</a>
+    NextPreviousStep constructor
+  </h2>
+</div>
 
-        <span class="nx">rew</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
-        <span class="nx">rew</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_rew&#39;</span><span class="p">;</span>
-        <span class="nx">rew</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;&lt;&#39;</span><span class="p">;</span>
-        <span class="nx">fwd</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
-        <span class="nx">fwd</span><span class="p">.</span><span class="nx">is</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_fwd&#39;</span><span class="p">;</span>
-        <span class="nx">fwd</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&gt;&gt;&#39;</span><span class="p">;</span>
+  </div>
+  <div class="body">
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">NextPreviousStep</span><span class="p">()</span> <span class="p">{</span>
 
-        <span class="nx">fwd</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">step</span><span class="p">();</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="nextpreviousstep.rew">
+  <h3>
+    <a href="#nextpreviousstep.rew" name="nextpreviousstep.rew" class="pilcrow">&#182;</a>
+    NextPreviousStep.rew
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The button to go one step back</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rew</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="nextpreviousstep.fwd">
+  <h3>
+    <a href="#nextpreviousstep.fwd" name="nextpreviousstep.fwd" class="pilcrow">&#182;</a>
+    NextPreviousStep.fwd
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The button to go one step forward</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fwd</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="nextpreviousstep.checkbox">
+  <h3>
+    <a href="#nextpreviousstep.checkbox" name="nextpreviousstep.checkbox" class="pilcrow">&#182;</a>
+    NextPreviousStep.checkbox
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The checkbox to call <code>node.done</code> on forward</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">checkbox</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="nextpreviousstep.append">
+  <h3>
+    <a href="#nextpreviousstep.append" name="nextpreviousstep.append" class="pilcrow">&#182;</a>
+    NextPreviousStep.append
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Appends the widget</p>
+
+<p>Creates two buttons and a checkbox</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">NextPreviousStep</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">,</span> <span class="nx">spanDone</span><span class="p">;</span>
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      
+        <span class="k">this</span><span class="p">.</span><span class="nx">rew</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rew</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;&lt;&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">fwd</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fwd</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&gt;&gt;&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">checkbox</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">checkbox</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;checkbox&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">fwd</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">checkbox</span><span class="p">.</span><span class="nx">checked</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+            <span class="k">else</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">step</span><span class="p">();</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">hasNextStep</span><span class="p">())</span> <span class="p">{</span>
-                <span class="nx">fwd</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span><span class="p">;</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">fwd</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">};</span>
 
-        <span class="nx">rew</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rew</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">prevStep</span><span class="p">;</span>
             <span class="nx">prevStep</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getPreviousStep</span><span class="p">();</span>
             <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">gotoStep</span><span class="p">(</span><span class="nx">prevStep</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">hasPreviousStep</span><span class="p">())</span> <span class="p">{</span>
-                <span class="nx">req</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span><span class="p">;</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">rew</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">};</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentGameStage</span><span class="p">().</span><span class="nx">stage</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">rew</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">hasPreviousStep</span><span class="p">())</span> <span class="k">this</span><span class="p">.</span><span class="nx">rew</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">hasNextStep</span><span class="p">())</span> <span class="k">this</span><span class="p">.</span><span class="nx">fwd</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="s1">&#39;disabled&#39;</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">rew</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">fwd</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>Buttons.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rew</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fwd</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Checkbox.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">spanDone</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
+        <span class="nx">spanDone</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;node.done&#39;</span><span class="p">));</span>
+        <span class="nx">spanDone</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">checkbox</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">spanDone</span><span class="p">);</span>
     <span class="p">};</span>
 
     <span class="kd">function</span> <span class="nx">hasNextStep</span><span class="p">()</span> <span class="p">{</span>

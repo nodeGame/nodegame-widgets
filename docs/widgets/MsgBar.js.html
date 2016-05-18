@@ -44,7 +44,7 @@
 </div>
 
 
-<p>Copyright(c) 2015 Stefano Balietti
+<p>Copyright(c) 2016 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Creates a tool for sending messages to other connected clients</p>
@@ -78,31 +78,35 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.6&#39;</span><span class="p">;</span>
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.7.0&#39;</span><span class="p">;</span>
     <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Send a nodeGame message to players&#39;</span><span class="p">;</span>
 
     <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Send MSG&#39;</span><span class="p">;</span>
     <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;msgbar&#39;</span><span class="p">;</span>
 
-    <span class="kd">function</span> <span class="nx">MsgBar</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
-
+    <span class="kd">function</span> <span class="nx">MsgBar</span><span class="p">()</span> <span class="p">{</span>      
         <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>     
+        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">advButton</span><span class="p">,</span> <span class="nx">sendButton</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">field</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">table</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
 
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
 
 
 </pre></div>
@@ -175,17 +179,6 @@ is hidden by default.</p>
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-    <span class="p">};</span>
-
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">advButton</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">sendButton</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
-
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-
 
 </pre></div>
         </td>
@@ -217,11 +210,9 @@ is hidden by default.</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">sendButton</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
         <span class="nx">sendButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-            <span class="p">}</span>
+            <span class="kd">var</span> <span class="nx">msg</span><span class="p">;</span>
+            <span class="nx">msg</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>            
         <span class="p">};</span>
 
 
@@ -242,9 +233,9 @@ is hidden by default.</p>
             <span class="nx">that</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span> <span class="o">?</span> <span class="s1">&#39;none&#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
         <span class="p">};</span>
-    <span class="p">};</span>
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
     <span class="p">};</span>
 
     <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
