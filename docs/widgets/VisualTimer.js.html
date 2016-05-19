@@ -45,6 +45,12 @@
       <div class="heading h3">
         <a href="#visualtimer.isinitialized">VisualTimer.isInitialized</a>
       </div>
+      <div class="heading h3">
+        <a href="#visualtimer.options">VisualTimer.options</a>
+      </div>
+      <div class="heading h3">
+        <a href="#visualtimer.internaltimer">VisualTimer.internalTimer</a>
+      </div>
       <div class="heading h2">
         <a href="#visualtimer%20methods">VisualTimer methods</a>
       </div>
@@ -86,9 +92,6 @@
       </div>
       <div class="heading h3">
         <a href="#visualtimer.dotimeup">VisualTimer.doTimeUp</a>
-      </div>
-      <div class="heading h3">
-        <a href="#visualtimer.processoptions">VisualTimer.processOptions</a>
       </div>
       <div class="heading h1">
         <a href="#timerbox">TimerBox</a>
@@ -155,7 +158,7 @@
 </div>
 
 
-<p>Copyright(c) 2015 Stefano Balietti
+<p>Copyright(c) 2016 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Display a timer for the game. Timer can trigger events.
@@ -189,7 +192,7 @@ Only for countdown smaller than 1h.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.0&#39;</span><span class="p">;</span>
+    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.6.0&#39;</span><span class="p">;</span>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display a timer for the game. Timer can &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;trigger events. Only for countdown smaller than 1h.&#39;</span><span class="p">;</span>
 
@@ -261,8 +264,7 @@ The options it can take are:
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">VisualTimer</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+    <span class="kd">function</span> <span class="nx">VisualTimer</span><span class="p">()</span> <span class="p">{</span>
 
 
 </pre></div>
@@ -405,7 +407,66 @@ The options it can take are:
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">isInitialized</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualtimer.options">
+  <h3>
+    <a href="#visualtimer.options" name="visualtimer.options" class="pilcrow">&#182;</a>
+    VisualTimer.options
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Currently stored options</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="visualtimer.internaltimer">
+  <h3>
+    <a href="#visualtimer.internaltimer" name="visualtimer.internaltimer" class="pilcrow">&#182;</a>
+    VisualTimer.internalTimer
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>TRUE, if the timer is created internally</p>
+
+<p>Internal timers are destroyed when widget is destroyed or cleared</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualTimer.gameTimer</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualTimer.destroy</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">VisualTimer.clear
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">internalTimer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
 
 
@@ -494,7 +555,7 @@ The options it can take are:
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>Only push this hook once.</p>
         </td>
@@ -502,13 +563,8 @@ The options it can take are:
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isInitialized</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
                 <span class="nx">hook</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">,</span>
-                <span class="nx">ctx</span><span class="o">:</span> <span class="k">this</span><span class="p">,</span>
-                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;VisualTimer.updateDisplay&#39;</span>
+                <span class="nx">ctx</span><span class="o">:</span> <span class="k">this</span>
             <span class="p">});</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">createTimer</span><span class="p">();</span>
         <span class="p">}</span>
 
 
@@ -518,15 +574,65 @@ The options it can take are:
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>If gameTimer is not already set, check options, then
+try to use node.game.timer, if defined, otherwise crete a new timer.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;GameTimer.init: options.gameTimer cannot &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;be set if a gameTimer is already existing: &#39;</span> <span class="o">+</span>
+                                <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;VisualTimer.init: options.&#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;gameTimer must be object or &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>  <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">timer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">timer</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isInitialized</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">internalTimer</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;VisualTimer.updateDisplay&#39;</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">createTimer</span><span class="p">();</span>
+            <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>TODO: make it consistent with processOptions.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">);</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>Init the gameTimer, regardless of the source (internal vs external).</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
 
         <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">;</span>
@@ -539,7 +645,7 @@ The options it can take are:
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>TODO</p>
         </td>
@@ -625,7 +731,7 @@ The options it can take are:
 </div>
 
   </div>
-  <div class="body"><p>Reverts state of <code>VisualTimer</code> to right after a constructor call</p>
+  <div class="body"><p>Reverts state of <code>VisualTimer</code> to right after creation</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -658,7 +764,10 @@ The options it can take are:
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
         <span class="nx">oldOptions</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">;</span>
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">destroyTimer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">internalTimer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">destroyTimer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">internalTimer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">activeBox</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -1119,118 +1228,13 @@ hidden. All other options are forwarded directly to
         <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">timeup</span><span class="p">);</span>
     <span class="p">};</span>
 
-    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;PLAYING&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">timer</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">step</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">startOnPlaying</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">step</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentGameStage</span><span class="p">();</span>
-                <span class="nx">timer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">step</span><span class="p">,</span> <span class="s1">&#39;timer&#39;</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">timer</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">options</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">processOptions</span><span class="p">(</span><span class="nx">timer</span><span class="p">);</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">startTiming</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">});</span>
-
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;REALLY_DONE&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">stopOnDone</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">that</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">isStopped</span><span class="p">())</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
-</div>
-<p>that.startWaiting();</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-       <span class="p">});</span>
-    <span class="p">};</span>
-
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">destroyTimer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">internalTimer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">destroyTimer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">internalTimer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainBox</span><span class="p">.</span><span class="nx">boxDiv</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">waitBox</span><span class="p">.</span><span class="nx">boxDiv</span><span class="p">);</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="visualtimer.processoptions">
-  <h3>
-    <a href="#visualtimer.processoptions" name="visualtimer.processoptions" class="pilcrow">&#182;</a>
-    VisualTimer.processOptions
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Clones and cleans user options</p>
-
-<p>Adds the default 'timeup' function as <code>node.done</code>.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Configuration options</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">object</span>
-      <span>Clean, valid configuration object</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processOptions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">inOptions</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">typeofOptions</span><span class="p">;</span>
-        <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
-        <span class="nx">typeofOptions</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">inOptions</span><span class="p">;</span>
-        <span class="k">switch</span> <span class="p">(</span><span class="nx">typeofOptions</span><span class="p">)</span> <span class="p">{</span>
-
-        <span class="k">case</span> <span class="s1">&#39;number&#39;</span><span class="o">:</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="nx">inOptions</span><span class="p">;</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="s1">&#39;object&#39;</span><span class="o">:</span>
-            <span class="nx">options</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">inOptions</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="s1">&#39;function&#39;</span><span class="o">:</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="nx">inOptions</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">);</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="s1">&#39;string&#39;</span><span class="o">:</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">inOptions</span><span class="p">);</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;VisualTimer processOptions: milliseconds cannot &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;be 0 or undefined.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeup</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">timeup</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
-            <span class="p">};</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">options</span><span class="p">;</span>
     <span class="p">};</span>
 
 

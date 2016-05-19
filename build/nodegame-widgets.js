@@ -9131,7 +9131,7 @@
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
-    VisualRound.title = 'Round and Stage info';
+    VisualRound.title = 'Round info';
     VisualRound.className = 'visualround';
 
     // ## Dependencies
@@ -10355,7 +10355,7 @@
 
 /**
  * # VisualTimer
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Display a timer for the game. Timer can trigger events.
@@ -10373,7 +10373,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.5.0';
+    VisualTimer.version = '0.6.0';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
@@ -10402,8 +10402,7 @@
      * @see TimerBox
      * @see GameTimer
      */
-    function VisualTimer(options) {
-        this.options = options || {};
+    function VisualTimer() {
 
         /**
          * ### VisualTimer.gameTimer
@@ -10451,7 +10450,25 @@
          */
         this.isInitialized = false;
 
-        this.init(this.options);
+        /**
+         * ### VisualTimer.options
+         *
+         * Currently stored options
+         */
+        this.options = {};
+
+        /**
+         * ### VisualTimer.internalTimer
+         *
+         * TRUE, if the timer is created internally
+         *
+         * Internal timers are destroyed when widget is destroyed or cleared
+         *
+         * @see VisualTimer.gameTimer
+         * @see VisualTimer.destroy
+         * @see VisualTimer.clear
+         */
+        this.internalTimer = null;
     }
 
     // ## VisualTimer methods
@@ -10494,20 +10511,43 @@
         if (!this.isInitialized) {
             options.hooks.push({
                 hook: this.updateDisplay,
-                ctx: this,
-                name: 'VisualTimer.updateDisplay'
+                ctx: this
             });
         }
 
-        if (!this.gameTimer) {
-            this.gameTimer = node.timer.createTimer();
+        // If gameTimer is not already set, check options, then
+        // try to use node.game.timer, if defined, otherwise crete a new timer.
+        if ('undefined' !== typeof options.gameTimer) {
+
+            if (this.gameTimer) {
+                throw new Error('GameTimer.init: options.gameTimer cannot ' +
+                                'be set if a gameTimer is already existing: ' +
+                                this.name);
+            }
+            if ('object' !== typeof options.gameTimer) {
+                throw new TypeError('VisualTimer.init: options.' +
+                                    'gameTimer must be object or ' +
+                                    'undefined. Found: ' + options.gameTimer);
+            }
+            this.gameTimer = options.gameTimer;
+        }
+        else  if (node.game.timer) {
+            this.gameTimer = node.game.timer;
+        }
+        else {
+            if (!this.isInitialized) {
+                this.internalTimer = true;
+                options.name = 'VisualTimer.updateDisplay';
+                this.gameTimer = node.timer.createTimer();
+            }
+
+            // TODO: make it consistent with processOptions.
+            if ('function' === typeof options.milliseconds) {
+                options.milliseconds = options.milliseconds.call(node.game);
+            }
         }
 
-        // TODO: make it consistent with processOptions.
-        if ('function' === typeof options.milliseconds) {
-            options.milliseconds = options.milliseconds.call(node.game);
-        }
-
+        // Init the gameTimer, regardless of the source (internal vs external).
         this.gameTimer.init(options);
 
         t = this.gameTimer;
@@ -10583,7 +10623,7 @@
     /**
      * ### VisualTimer.clear
      *
-     * Reverts state of `VisualTimer` to right after a constructor call
+     * Reverts state of `VisualTimer` to right after creation
      *
      * @param {object} options Configuration object
      *
@@ -10597,7 +10637,10 @@
         options = options || {};
         oldOptions = this.options;
 
-        node.timer.destroyTimer(this.gameTimer);
+        if (this.internalTimer) {
+            node.timer.destroyTimer(this.gameTimer);
+            this.internalTimer = null;
+        }
 
         this.gameTimer = null;
         this.activeBox = null;
@@ -10806,82 +10849,13 @@
         this.gameTimer.fire(this.gameTimer.timeup);
     };
 
-    VisualTimer.prototype.listeners = function() {
-        var that = this;
-
-        node.on('PLAYING', function() {
-            var timer, options, step;
-            if (that.options.startOnPlaying) {
-                step = node.game.getCurrentGameStage();
-                timer = node.game.plot.getProperty(step, 'timer');
-                if (timer) {
-                    options = that.processOptions(timer);
-                    that.startTiming(options);
-                }
-            }
-        });
-
-        node.on('REALLY_DONE', function() {
-            if (that.options.stopOnDone) {
-                if (!that.gameTimer.isStopped()) {
-                    // that.startWaiting();
-                    that.stop();
-                }
-            }
-       });
-    };
-
     VisualTimer.prototype.destroy = function() {
-        node.timer.destroyTimer(this.gameTimer);
+        if (this.internalTimer) {
+            node.timer.destroyTimer(this.gameTimer);
+            this.internalTimer = null;
+        }
         this.bodyDiv.removeChild(this.mainBox.boxDiv);
         this.bodyDiv.removeChild(this.waitBox.boxDiv);
-    };
-
-    /**
-     * ### VisualTimer.processOptions
-     *
-     * Clones and cleans user options
-     *
-     * Adds the default 'timeup' function as `node.done`.
-     *
-     * @param {object} options Configuration options
-     *
-     * @return {object} Clean, valid configuration object
-     */
-    VisualTimer.prototype.processOptions = function(inOptions) {
-        var options, typeofOptions;
-        options = {};
-        typeofOptions = typeof inOptions;
-        switch (typeofOptions) {
-
-        case 'number':
-            options.milliseconds = inOptions;
-            break;
-        case 'object':
-            options = J.clone(inOptions);
-            if ('function' === typeof options.milliseconds) {
-                options.milliseconds = options.milliseconds.call(node.game);
-            }
-            break;
-        case 'function':
-            options.milliseconds = inOptions.call(node.game);
-            break;
-        case 'string':
-            options.milliseconds = Number(inOptions);
-            break;
-        }
-
-        if (!options.milliseconds) {
-            throw new Error('VisualTimer processOptions: milliseconds cannot ' +
-                            'be 0 or undefined.');
-        }
-
-        if ('undefined' === typeof options.timeup) {
-            options.timeup = function() {
-                node.done();
-            };
-        }
-        return options;
     };
 
    /**
