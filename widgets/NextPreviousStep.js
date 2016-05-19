@@ -22,40 +22,82 @@
     NextPreviousStep.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
 
-    function NextPreviousStep() {}
+    /**
+     * ## NextPreviousStep constructor
+     */
+    function NextPreviousStep() {
 
-    NextPreviousStep.prototype.append = function(root) {
-        var rew, fwd;
+        /**
+         * ### NextPreviousStep.rew
+         *
+         * The button to go one step back
+         */
+        this.rew = null;
 
-        rew = document.createElement('button');
-        rew.id = this.id + '_rew';
-        rew.innerHTML = '<<';
-        fwd = document.createElement('button');
-        fwd.is = this.id + '_fwd';
-        fwd.innerHTML = '>>';
+        /**
+         * ### NextPreviousStep.fwd
+         *
+         * The button to go one step forward
+         */
+        this.fwd = null;
 
-        fwd.onclick = function() {
-            node.game.step();
+        /**
+         * ### NextPreviousStep.checkbox
+         *
+         * The checkbox to call `node.done` on forward
+         */
+        this.checkbox = null;
+    }
+
+    /**
+     * ### NextPreviousStep.append
+     *
+     * Appends the widget
+     *
+     * Creates two buttons and a checkbox
+     */
+    NextPreviousStep.prototype.append = function() {
+        var that, spanDone;
+        that = this;
+
+        this.rew = document.createElement('button');
+        this.rew.innerHTML = '<<';
+
+        this.fwd = document.createElement('button');
+        this.fwd.innerHTML = '>>';
+
+        this.checkbox = document.createElement('input');
+        this.checkbox.type = 'checkbox';
+
+        this.fwd.onclick = function() {
+            if (that.checkbox.checked) node.done();
+            else node.game.step();
             if (!hasNextStep()) {
-                fwd.disabled = 'disabled';
+                that.fwd.disabled = 'disabled';
             }
         };
 
-        rew.onclick = function() {
+        this.rew.onclick = function() {
             var prevStep;
             prevStep = node.game.getPreviousStep();
             node.game.gotoStep(prevStep);
             if (!hasPreviousStep()) {
-                req.disabled = 'disabled';
+                that.rew.disabled = 'disabled';
             }
         };
 
-        if (node.game.getCurrentGameStage().stage === 0) {
-            rew.disabled = 'disabled';
-        }
+        if (!hasPreviousStep()) this.rew.disabled = 'disabled';
+        if (!hasNextStep()) this.fwd.disabled = 'disabled';
 
-        this.bodyDiv.appendChild(rew);
-        this.bodyDiv.appendChild(fwd);
+        // Buttons.
+        this.bodyDiv.appendChild(this.rew);
+        this.bodyDiv.appendChild(this.fwd);
+
+        // Checkbox.
+        spanDone = document.createElement('span');
+        spanDone.appendChild(document.createTextNode('node.done'));
+        spanDone.appendChild(this.checkbox);
+        this.bodyDiv.appendChild(spanDone);
     };
 
     function hasNextStep() {

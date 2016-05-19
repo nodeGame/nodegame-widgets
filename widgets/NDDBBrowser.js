@@ -24,7 +24,7 @@
 
     // ## Meta-data
 
-    NDDBBrowser.version = '0.1.2';
+    NDDBBrowser.version = '0.2.0';
     NDDBBrowser.description =
         'Provides a very simple interface to control a NDDB istance.';
 
@@ -40,17 +40,23 @@
         this.options = options;
         this.nddb = null;
 
-        this.commandsDiv = document.createElement('div');
-        this.id = options.id;
-        if ('undefined' !== typeof this.id) {
-            this.commandsDiv.id = this.id;
-        }
+        this.commandsDiv = null;
+
 
         this.info = null;
-        this.init(this.options);
     }
 
     NDDBBrowser.prototype.init = function(options) {
+        this.tm = new TriggerManager();
+        this.tm.init(options.triggers);
+        this.nddb = options.nddb || new NDDB({
+            update: { pointer: true }
+        });
+    };
+
+    NDDBBrowser.prototype.append = function() {
+        this.commandsDiv = document.createElement('div');
+        if (this.id) this.commandsDiv.id = this.id;
 
         function addButtons() {
             var id = this.id;
@@ -70,19 +76,10 @@
             return span;
         }
 
-
         addButtons.call(this);
         this.info = addInfoBar.call(this);
 
-        this.tm = new TriggerManager();
-        this.tm.init(options.triggers);
-        this.nddb = options.nddb || new NDDB({auto_update_pointer: true});
-    };
-
-    NDDBBrowser.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.commandsDiv);
-        return root;
+        this.bodyDiv.appendChild(this.commandsDiv);
     };
 
     NDDBBrowser.prototype.getRoot = function(root) {
@@ -147,9 +144,10 @@
     };
 
     NDDBBrowser.prototype.writeInfo = function(text) {
+        var that;
+        that = this;
         if (this.infoTimeout) clearTimeout(this.infoTimeout);
         this.info.innerHTML = text;
-        var that = this;
         this.infoTimeout = setTimeout(function(){
             that.info.innerHTML = '';
         }, 2000);

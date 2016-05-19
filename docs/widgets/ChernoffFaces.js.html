@@ -360,7 +360,6 @@ Can be set manually via options.controls.
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">onChangeCb</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">updateControls</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">updateControls</span><span class="p">;</span>
 
 </pre></div>
         </td>
@@ -461,7 +460,6 @@ by the <code>append</code> method.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">controlsOptions</span><span class="p">,</span> <span class="nx">f</span><span class="p">;</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
 
@@ -617,6 +615,7 @@ to current options.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">controlsOptions</span><span class="p">,</span> <span class="nx">f</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">tblOptions</span><span class="p">,</span> <span class="nx">options</span><span class="p">;</span>
 
         <span class="nx">options</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">;</span>

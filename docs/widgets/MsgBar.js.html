@@ -84,7 +84,7 @@ MIT Licensed</p>
     <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Send MSG&#39;</span><span class="p">;</span>
     <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;msgbar&#39;</span><span class="p">;</span>
 
-    <span class="kd">function</span> <span class="nx">MsgBar</span><span class="p">()</span> <span class="p">{</span>      
+    <span class="kd">function</span> <span class="nx">MsgBar</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -93,7 +93,7 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>     
+    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
     <span class="p">};</span>
 
@@ -212,7 +212,7 @@ is hidden by default.</p>
         <span class="nx">sendButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">msg</span><span class="p">;</span>
             <span class="nx">msg</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>            
+            <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
         <span class="p">};</span>
 
 

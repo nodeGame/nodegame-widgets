@@ -81,7 +81,6 @@
         // ### ChernoffFaces.onChangeCb
         // Updates the canvas when the onChange event is emitted
         this.onChangeCb = function(f, updateControls) {
-            var updateControls;
             // Draw what passed as parameter,
             // or what is the current value of sliders,
             // or a random face.
@@ -135,7 +134,6 @@
      *
      */
     ChernoffFaces.prototype.init = function(options) {
-        var controlsOptions, f;
 
         this.options = options;
 
@@ -193,6 +191,7 @@
      * @see FaceVector
      */
     ChernoffFaces.prototype.append = function() {
+        var controlsOptions, f;
         var tblOptions, options;
 
         options = this.options;

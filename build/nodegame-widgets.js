@@ -1173,42 +1173,16 @@
      *
      * Creates a new instance of ChernoffFaces
      *
-     * @param {object} options Configuration options. Accepted options:
-     *
-     * - canvas {object} containing all options for canvas
-     *
-     * - width {number} width of the canvas (read only if canvas is not set)
-     *
-     * - height {number} height of the canvas (read only if canvas is not set)
-     *
-     * - features {FaceVector} vector of face-features. Default: random
-     *
-     * - onChange {string|boolean} The name of the event that will trigger
-     *      redrawing the canvas, or null/false to disable event listener
-     *
-     * - controls {object|false} the controls (usually a set of sliders)
-     *      offering the user the ability to manipulate the canvas. If equal
-     *      to false no controls will be created. Default: SlidersControls.
-     *      Any custom implementation must provide the following methods:
-     *
-     *          - getAllValues: returns the current features vector
-     *          - refresh: redraws the current feature vector
-     *          - init: accepts a configuration object containing a
-     *               features and onChange as specified above.
-     *
-     *
-     * @see ChernoffFaces.init
      * @see Canvas constructor
      */
     function ChernoffFaces(options) {
         var that = this;
 
-
         // ## Public Properties
 
         // ### ChernoffFaces.options
         // Configuration options
-        this.options = options;
+        this.options = null;
 
         // ### ChernoffFaces.table
         // The table containing everything
@@ -1236,7 +1210,6 @@
         // ### ChernoffFaces.onChangeCb
         // Updates the canvas when the onChange event is emitted
         this.onChangeCb = function(f, updateControls) {
-            var updateControls;
             // Draw what passed as parameter,
             // or what is the current value of sliders,
             // or a random face.
@@ -1257,14 +1230,106 @@
         this.features = null;
     }
 
+    /**
+     * ### ChernoffFaces.init
+     *
+     * Inits the widget
+     *
+     * Stores the reference to options, most of the operations are done
+     * by the `append` method.
+     *
+     * @param {object} options Configuration options. Accepted options:
+     *
+     * - canvas {object} containing all options for canvas
+     *
+     * - width {number} width of the canvas (read only if canvas is not set)
+     *
+     * - height {number} height of the canvas (read only if canvas is not set)
+     *
+     * - features {FaceVector} vector of face-features. Default: random
+     *
+     * - onChange {string|boolean} The name of the event that will trigger
+     *      redrawing the canvas, or null/false to disable event listener
+     *
+     * - controls {object|false} the controls (usually a set of sliders)
+     *      offering the user the ability to manipulate the canvas. If equal
+     *      to false no controls will be created. Default: SlidersControls.
+     *      Any custom implementation must provide the following methods:
+     *
+     *          - getAllValues: returns the current features vector
+     *          - refresh: redraws the current feature vector
+     *          - init: accepts a configuration object containing a
+     *               features and onChange as specified above.
+     *
+     */
     ChernoffFaces.prototype.init = function(options) {
-        var controlsOptions, f;
-        var tblOptions;
 
-        // Building table options.
+        this.options = options;
+
+        // Face Painter.
+        this.features = options.features || this.features ||
+            FaceVector.random();
+
+        // Draw features, if facepainter was already created.
+        if (this.fp) this.fp.draw(new FaceVector(this.features));
+
+        // onChange event.
+        if (options.onChange === false || options.onChange === null) {
+            if (this.onChange) {
+                node.off(this.onChange, this.onChangeCb);
+                this.onChange = null;
+            }
+        }
+        else {
+            this.onChange = 'undefined' === typeof options.onChange ?
+                ChernoffFaces.onChange : options.onChange;
+            node.on(this.onChange, this.onChangeCb);
+        }
+    };
+
+    /**
+     * ## ChernoffFaces.getCanvas
+     *
+     * Returns the reference to current wrapper Canvas object
+     *
+     * To get to the HTML Canvas element use `canvas.canvas`.
+     *
+     * @return {Canvas} Canvas object
+     *
+     * @see Canvas
+     */
+    ChernoffFaces.prototype.getCanvas = function() {
+        return this.canvas;
+    };
+
+    /**
+     * ## ChernoffFaces.append
+     *
+     * Appends the widget
+     *
+     * Creates table, canvas, face painter (fp) and controls (sc), according
+     * to current options.
+     *
+     * @see ChernoffFaces.fp
+     * @see ChernoffFaces.sc
+     * @see ChernoffFaces.table
+     * @see Table
+     * @see Canvas
+     * @see SliderControls
+     * @see FacePainter
+     * @see FaceVector
+     */
+    ChernoffFaces.prototype.append = function() {
+        var controlsOptions, f;
+        var tblOptions, options;
+
+        options = this.options;
+
+        // Table.
         tblOptions = {};
-        if ('string' === typeof options.id) tblOptions.id = options.id;
-        else if (options.id !== false) tblOptions.id = 'cf_table';
+        if (this.id) tblOptions.id = this.id;
+        else if (this.id !== false) tblOptions.id = 'cf_table';
+
         if ('string' === typeof options.className) {
             tblOptions.id = options.className;
         }
@@ -1287,23 +1352,8 @@
         this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
 
         // Face Painter.
-        this.features = options.features || this.features ||
-            FaceVector.random();
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
-
-        // onChange event.
-        if (options.onChange === false || options.onChange === null) {
-            if (this.onChange) {
-                node.off(this.onChange, this.onChangeCb);
-                this.onChange = null;
-            }
-        }
-        else {
-            this.onChange = 'undefined' === typeof options.onChange ?
-                ChernoffFaces.onChange : options.onChange;
-            node.on(this.onChange, this.onChangeCb);
-        }
 
         // Controls.
         if ('undefined' === typeof options.controls || options.controls) {
@@ -1327,14 +1377,8 @@
         // Table.
         if (this.sc) this.table.addRow([this.sc, this.canvas]);
         else this.table.add(this.canvas);
-        this.table.parse();
-    };
 
-    ChernoffFaces.prototype.getCanvas = function() {
-        return this.canvas;
-    };
-
-    ChernoffFaces.prototype.append = function() {
+        // Create and append table.
         this.table.parse();
         this.bodyDiv.appendChild(this.table.table);
     };
@@ -1348,7 +1392,7 @@
      * @param {boolean} updateControls Optional. If equal to false,
      *    controls are not updated. Default: true
      *
-     * @see this.sc
+     * @see ChernoffFaces.sc
      */
     ChernoffFaces.prototype.draw = function(features, updateControls) {
         var fv;
@@ -1370,8 +1414,16 @@
         return this.fp.face;
     };
 
+     /**
+     * ### ChernoffFaces.randomize
+     *
+     * Draws a random image and updates controls accordingly (if found)
+     *
+     * @see ChernoffFaces.sc
+     */
     ChernoffFaces.prototype.randomize = function() {
-        var fv = FaceVector.random();
+        var fv;
+        fv = FaceVector.random();
         this.fp.redraw(fv);
         // If controls are visible, updates them.
         if (this.sc) {
@@ -1385,20 +1437,68 @@
     };
 
 
-    // # FacePainter
-    // The class that actually draws the faces on the Canvas.
+    /**
+     * # FacePainter
+     *
+     * Draws faces on a Canvas
+     *
+     * @param {HTMLCanvas} canvas The canvas
+     * @param {object} settings Optional. Settings (not used).
+     */
     function FacePainter(canvas, settings) {
 
+        /**
+         * ### FacePainter.canvas
+         *
+         * The wrapper element for the HTML canvas
+         *
+         * @see Canvas
+         */
         this.canvas = new W.Canvas(canvas);
 
+        /**
+         * ### FacePainter.scaleX
+         *
+         * Scales images along the X-axis of this proportion
+         */
         this.scaleX = canvas.width / ChernoffFaces.width;
+
+        /**
+         * ### FacePainter.scaleX
+         *
+         * Scales images along the X-axis of this proportion
+         */
         this.scaleY = canvas.height / ChernoffFaces.heigth;
+
+        /**
+         * ### FacePainter.face
+         *
+         * The last drawn face
+         */
+        this.face = null;
     }
 
-    //Draws a Chernoff face.
+    // ## Methods
+
+    /**
+     * ### FacePainter.draw
+     *
+     * Draws a face into the canvas and stores it as reference
+     *
+     * @param {object} face Multidimensional vector of features
+     * @param {number} x Optional. The x-coordinate to center the image.
+     *   Default: the center of the canvas
+     * @param {number} y Optional. The y-coordinate to center the image.
+     *   Default: the center of the canvas
+     *
+     * @see Canvas
+     * @see Canvas.centerX
+     * @see Canvas.centerY
+     */
     FacePainter.prototype.draw = function(face, x, y) {
         if (!face) return;
         this.face = face;
+
         this.fit2Canvas(face);
         this.canvas.scale(face.scaleX, face.scaleY);
 
@@ -1418,7 +1518,6 @@
         this.drawNose(face, x, y);
 
         this.drawMouth(face, x, y);
-
     };
 
     FacePainter.prototype.redraw = function(face, x, y) {
@@ -5761,80 +5860,6 @@
 })(node);
 
 /**
- * # DataBar
- * Copyright(c) 2015 Stefano Balietti
- * MIT Licensed
- *
- * Creates a form to send DATA packages to other clients / SERVER
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    node.widgets.register('DataBar', DataBar);
-
-    // ## Meta-data
-
-    DataBar.version = '0.4.1';
-    DataBar.description =
-        'Adds a input field to send DATA messages to the players';
-
-    DataBar.title = 'DataBar';
-    DataBar.className = 'databar';
-
-
-    /**
-     * ## DataBar constructor
-     *
-     * Instantiates a new DataBar object
-     */
-    function DataBar() {
-        this.bar = null;
-        this.recipient = null;
-    }
-
-    // ## DataBar methods
-
-     /**
-     * ## DataBar.append
-     *
-     * Appends widget to `this.bodyDiv`
-     */
-    DataBar.prototype.append = function() {
-
-        var sendButton, textInput, dataInput;
-        var that = this;
-
-        sendButton = W.addButton(this.bodyDiv);
-        textInput = W.addTextInput(this.bodyDiv, 'data-bar-text');
-        W.addLabel(this.bodyDiv, textInput, undefined, 'Text');
-        W.writeln('Data');
-        dataInput = W.addTextInput(this.bodyDiv, 'data-bar-data');
-
-        this.recipient = W.addRecipientSelector(this.bodyDiv);
-
-        sendButton.onclick = function() {
-            var to, data, text;
-
-            to = that.recipient.value;
-            text = textInput.value;
-            data = dataInput.value;
-
-            node.log('Parsed Data: ' + JSON.stringify(data));
-
-            node.say(text, to, data);
-        };
-
-        node.on('UPDATED_PLIST', function() {
-            node.window.populateRecipientSelector(that.recipient, node.game.pl);
-        });
-    };
-
-})(node);
-
-/**
  * # DebugInfo
  * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
@@ -7621,7 +7646,7 @@
 
 /**
  * # MsgBar
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -7639,31 +7664,35 @@
 
     // ## Meta-data
 
-    MsgBar.version = '0.6';
+    MsgBar.version = '0.7.0';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
     MsgBar.className = 'msgbar';
 
-    function MsgBar(options) {
-        this.id = options.id || MsgBar.className;
-
+    function MsgBar() {
         this.recipient = null;
         this.actionSel = null;
         this.targetSel = null;
 
-        this.table = new Table();
-        this.tableAdvanced = new Table();
-
-        this.init();
+        this.table = null;
+        this.tableAdvanced = null;
     }
 
     MsgBar.prototype.init = function() {
-        var that;
+        this.id = this.id || MsgBar.className;
+    };
+
+    MsgBar.prototype.append = function() {
+        var advButton, sendButton;
         var fields, i, field;
         var table;
+        var that;
 
         that = this;
+
+        this.table = new Table();
+        this.tableAdvanced = new Table();
 
         // Create fields.
         fields = ['to', 'action', 'target', 'text', 'data', 'from', 'priority',
@@ -7714,17 +7743,6 @@
             }
         }
 
-        this.table.parse();
-        this.tableAdvanced.parse();
-    };
-
-    MsgBar.prototype.append = function() {
-        var advButton;
-        var sendButton;
-        var that;
-
-        that = this;
-
         // Show table of basic fields.
         this.bodyDiv.appendChild(this.table.table);
 
@@ -7734,11 +7752,9 @@
         // Show 'Send' button.
         sendButton = W.addButton(this.bodyDiv);
         sendButton.onclick = function() {
-            var msg = that.parse();
-
-            if (msg) {
-                node.socket.send(msg);
-            }
+            var msg;
+            msg = that.parse();
+            if (msg) node.socket.send(msg);
         };
 
         // Show a button that expands the table of advanced fields.
@@ -7748,9 +7764,9 @@
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
         };
-    };
 
-    MsgBar.prototype.listeners = function() {
+        this.table.parse();
+        this.tableAdvanced.parse();
     };
 
     MsgBar.prototype.parse = function() {
@@ -7865,7 +7881,7 @@
 
     // ## Meta-data
 
-    NDDBBrowser.version = '0.1.2';
+    NDDBBrowser.version = '0.2.0';
     NDDBBrowser.description =
         'Provides a very simple interface to control a NDDB istance.';
 
@@ -7881,17 +7897,23 @@
         this.options = options;
         this.nddb = null;
 
-        this.commandsDiv = document.createElement('div');
-        this.id = options.id;
-        if ('undefined' !== typeof this.id) {
-            this.commandsDiv.id = this.id;
-        }
+        this.commandsDiv = null;
+
 
         this.info = null;
-        this.init(this.options);
     }
 
     NDDBBrowser.prototype.init = function(options) {
+        this.tm = new TriggerManager();
+        this.tm.init(options.triggers);
+        this.nddb = options.nddb || new NDDB({
+            update: { pointer: true }
+        });
+    };
+
+    NDDBBrowser.prototype.append = function() {
+        this.commandsDiv = document.createElement('div');
+        if (this.id) this.commandsDiv.id = this.id;
 
         function addButtons() {
             var id = this.id;
@@ -7911,19 +7933,10 @@
             return span;
         }
 
-
         addButtons.call(this);
         this.info = addInfoBar.call(this);
 
-        this.tm = new TriggerManager();
-        this.tm.init(options.triggers);
-        this.nddb = options.nddb || new NDDB({auto_update_pointer: true});
-    };
-
-    NDDBBrowser.prototype.append = function(root) {
-        this.root = root;
-        root.appendChild(this.commandsDiv);
-        return root;
+        this.bodyDiv.appendChild(this.commandsDiv);
     };
 
     NDDBBrowser.prototype.getRoot = function(root) {
@@ -7988,9 +8001,10 @@
     };
 
     NDDBBrowser.prototype.writeInfo = function(text) {
+        var that;
+        that = this;
         if (this.infoTimeout) clearTimeout(this.infoTimeout);
         this.info.innerHTML = text;
-        var that = this;
         this.infoTimeout = setTimeout(function(){
             that.info.innerHTML = '';
         }, 2000);
@@ -8022,40 +8036,82 @@
     NextPreviousStep.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
 
-    function NextPreviousStep() {}
+    /**
+     * ## NextPreviousStep constructor
+     */
+    function NextPreviousStep() {
 
-    NextPreviousStep.prototype.append = function(root) {
-        var rew, fwd;
+        /**
+         * ### NextPreviousStep.rew
+         *
+         * The button to go one step back
+         */
+        this.rew = null;
 
-        rew = document.createElement('button');
-        rew.id = this.id + '_rew';
-        rew.innerHTML = '<<';
-        fwd = document.createElement('button');
-        fwd.is = this.id + '_fwd';
-        fwd.innerHTML = '>>';
+        /**
+         * ### NextPreviousStep.fwd
+         *
+         * The button to go one step forward
+         */
+        this.fwd = null;
 
-        fwd.onclick = function() {
-            node.game.step();
+        /**
+         * ### NextPreviousStep.checkbox
+         *
+         * The checkbox to call `node.done` on forward
+         */
+        this.checkbox = null;
+    }
+
+    /**
+     * ### NextPreviousStep.append
+     *
+     * Appends the widget
+     *
+     * Creates two buttons and a checkbox
+     */
+    NextPreviousStep.prototype.append = function() {
+        var that, spanDone;
+        that = this;
+
+        this.rew = document.createElement('button');
+        this.rew.innerHTML = '<<';
+
+        this.fwd = document.createElement('button');
+        this.fwd.innerHTML = '>>';
+
+        this.checkbox = document.createElement('input');
+        this.checkbox.type = 'checkbox';
+
+        this.fwd.onclick = function() {
+            if (that.checkbox.checked) node.done();
+            else node.game.step();
             if (!hasNextStep()) {
-                fwd.disabled = 'disabled';
+                that.fwd.disabled = 'disabled';
             }
         };
 
-        rew.onclick = function() {
+        this.rew.onclick = function() {
             var prevStep;
             prevStep = node.game.getPreviousStep();
             node.game.gotoStep(prevStep);
             if (!hasPreviousStep()) {
-                req.disabled = 'disabled';
+                that.rew.disabled = 'disabled';
             }
         };
 
-        if (node.game.getCurrentGameStage().stage === 0) {
-            rew.disabled = 'disabled';
-        }
+        if (!hasPreviousStep()) this.rew.disabled = 'disabled';
+        if (!hasNextStep()) this.fwd.disabled = 'disabled';
 
-        this.bodyDiv.appendChild(rew);
-        this.bodyDiv.appendChild(fwd);
+        // Buttons.
+        this.bodyDiv.appendChild(this.rew);
+        this.bodyDiv.appendChild(this.fwd);
+
+        // Checkbox.
+        spanDone = document.createElement('span');
+        spanDone.appendChild(document.createTextNode('node.done'));
+        spanDone.appendChild(this.checkbox);
+        this.bodyDiv.appendChild(spanDone);
     };
 
     function hasNextStep() {
@@ -9046,86 +9102,6 @@
 
         return gauge;
     }
-
-})(node);
-
-/**
- * # StateBar
- * Copyright(c) 2015 Stefano Balietti
- * MIT Licensed
- *
- * Provides a simple interface to change the game stages
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    node.widgets.register('StateBar', StateBar);
-
-    // ## Meta-data
-
-    StateBar.version = '0.4.0';
-    StateBar.description =
-        'Provides a simple interface to change the stage of a game.';
-
-    StateBar.title = 'Change GameStage';
-    StateBar.className = 'statebar';
-
-
-    /**
-     * ## StateBar constructor
-     *
-     * `StateBar` provides a simple interface to change game stages
-     */
-    function StateBar() {
-        //this.recipient = null;
-    }
-
-    /**
-     * ### StateBar.append
-     *
-     * Appends widget to `this.bodyDiv`
-     */
-    StateBar.prototype.append = function() {
-        var prefix;
-        var idButton, idStageField, idRecipientField;
-        var sendButton, stageField, recipientField;
-
-        prefix = StateBar.className + '_';
-
-        idButton = prefix + 'sendButton';
-        idStageField = prefix + 'stageField';
-        idRecipientField = prefix + 'recipient';
-
-        this.bodyDiv.appendChild(document.createTextNode('Stage:'));
-        stageField = W.getTextInput(idStageField);
-        this.bodyDiv.appendChild(stageField);
-
-        this.bodyDiv.appendChild(document.createTextNode(' To:'));
-        recipientField = W.getTextInput(idRecipientField);
-        this.bodyDiv.appendChild(recipientField);
-
-        sendButton = node.window.addButton(this.bodyDiv, idButton);
-
-        sendButton.onclick = function() {
-            var to;
-            var stage;
-
-            // Should be within the range of valid values
-            // but we should add a check
-            to = recipientField.value;
-
-            try {
-                stage = new node.GameStage(stageField.value);
-                node.remoteCommand('goto_step', to, stage);
-            }
-            catch (e) {
-                node.err('Invalid stage, not sent: ' + e);
-            }
-        };
-    };
 
 })(node);
 

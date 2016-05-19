@@ -101,7 +101,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">NDDBBrowser</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.2&#39;</span><span class="p">;</span>
+    <span class="nx">NDDBBrowser</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.0&#39;</span><span class="p">;</span>
     <span class="nx">NDDBBrowser</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
         <span class="s1">&#39;Provides a very simple interface to control a NDDB istance.&#39;</span><span class="p">;</span>
 
@@ -131,17 +131,23 @@ MIT Licensed</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">nddb</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">commandsDiv</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">commandsDiv</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">commandsDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
 
         <span class="k">this</span><span class="p">.</span><span class="nx">info</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="nx">NDDBBrowser</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tm</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TriggerManager</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tm</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">triggers</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">nddb</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">nddb</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">NDDB</span><span class="p">({</span>
+            <span class="nx">update</span><span class="o">:</span> <span class="p">{</span> <span class="nx">pointer</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="nx">NDDBBrowser</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">commandsDiv</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">commandsDiv</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
 
         <span class="kd">function</span> <span class="nx">addButtons</span><span class="p">()</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
@@ -161,19 +167,10 @@ MIT Licensed</p>
             <span class="k">return</span> <span class="nx">span</span><span class="p">;</span>
         <span class="p">}</span>
 
-
         <span class="nx">addButtons</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">info</span> <span class="o">=</span> <span class="nx">addInfoBar</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">tm</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TriggerManager</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tm</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">triggers</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">nddb</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">nddb</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">NDDB</span><span class="p">({</span><span class="nx">auto_update_pointer</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
-    <span class="p">};</span>
-
-    <span class="nx">NDDBBrowser</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">;</span>
-        <span class="nx">root</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">commandsDiv</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">root</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">commandsDiv</span><span class="p">);</span>
     <span class="p">};</span>
 
     <span class="nx">NDDBBrowser</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getRoot</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
@@ -238,9 +235,10 @@ MIT Licensed</p>
     <span class="p">};</span>
 
     <span class="nx">NDDBBrowser</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">writeInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">infoTimeout</span><span class="p">)</span> <span class="nx">clearTimeout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">infoTimeout</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">text</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">infoTimeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
         <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
