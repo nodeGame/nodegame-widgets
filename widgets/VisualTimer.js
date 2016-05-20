@@ -18,7 +18,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.6.0';
+    VisualTimer.version = '0.7.0';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
@@ -144,7 +144,7 @@
         J.mixout(options, this.options);
 
         if (options.hooks) {
-            if (!options.hooks instanceof Array) {
+            if (!J.isArray(options.hooks)) {
                 options.hooks = [options.hooks];
             }
         }
@@ -185,11 +185,21 @@
                 options.name = 'VisualTimer.updateDisplay';
                 this.gameTimer = node.timer.createTimer();
             }
+        }
 
-            // TODO: make it consistent with processOptions.
-            if ('function' === typeof options.milliseconds) {
-                options.milliseconds = options.milliseconds.call(node.game);
-            }
+        // Parse milliseconds option.
+        if ('undefined' === typeof options.milliseconds) {
+            options.milliseconds = node.timer.parseInput('milliseconds',
+                                                         options.milliseconds);
+        }
+
+        // Parse update option.
+        if ('undefined' !== typeof options.update) {
+            options.update = node.timer.parseInput('update',
+                                                   options.update);
+        }
+        else {
+            options.update = 1000;
         }
 
         // Init the gameTimer, regardless of the source (internal vs external).
@@ -215,9 +225,6 @@
 
         this.options = options;
 
-        if ('undefined' === typeof this.options.update) {
-            this.options.update = 1000;
-        }
         if ('undefined' === typeof this.options.stopOnDone) {
             this.options.stopOnDone = true;
         }
