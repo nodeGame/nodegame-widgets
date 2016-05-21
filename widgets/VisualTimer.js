@@ -137,12 +137,12 @@
     VisualTimer.prototype.init = function(options) {
         var t;
         options = options || {};
+
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
                                 'object or undefined');
         }
         J.mixout(options, this.options);
-
         if (options.hooks) {
             if (!J.isArray(options.hooks)) {
                 options.hooks = [options.hooks];
@@ -176,9 +176,6 @@
             }
             this.gameTimer = options.gameTimer;
         }
-        else  if (node.game.timer) {
-            this.gameTimer = node.game.timer;
-        }
         else {
             if (!this.isInitialized) {
                 this.internalTimer = true;
@@ -188,7 +185,7 @@
         }
 
         // Parse milliseconds option.
-        if ('undefined' === typeof options.milliseconds) {
+        if ('undefined' !== typeof options.milliseconds) {
             options.milliseconds = node.timer.parseInput('milliseconds',
                                                          options.milliseconds);
         }
@@ -201,27 +198,28 @@
         else {
             options.update = 1000;
         }
-
         // Init the gameTimer, regardless of the source (internal vs external).
         this.gameTimer.init(options);
 
         t = this.gameTimer;
-        node.session.register('visualtimer', {
-            set: function(p) {
-                // TODO
-            },
-            get: function() {
-                return {
-                    startPaused: t.startPaused,
-                        status: t.status,
-                    timeLeft: t.timeLeft,
-                    timePassed: t.timePassed,
-                    update: t.update,
-                    updateRemaining: t.updateRemaining,
-                    updateStart: t. updateStart
-                };
-            }
-        });
+
+// TODO: not using session for now.
+//         node.session.register('visualtimer', {
+//             set: function(p) {
+//                 // TODO
+//             },
+//             get: function() {
+//                 return {
+//                     startPaused: t.startPaused,
+//                         status: t.status,
+//                     timeLeft: t.timeLeft,
+//                     timePassed: t.timePassed,
+//                     update: t.update,
+//                     updateRemaining: t.updateRemaining,
+//                     updateStart: t. updateStart
+//                 };
+//             }
+//         });
 
         this.options = options;
 
@@ -499,6 +497,32 @@
         this.stop();
         this.gameTimer.timeLeft = 0;
         this.gameTimer.fire(this.gameTimer.timeup);
+    };
+
+    VisualTimer.prototype.listeners = function() {
+        var that = this;
+
+        node.on('PLAYING', function() {
+            var options;
+            if (that.options.startOnPlaying) {
+                options = that.gameTimer.getStepOptions();
+                if (options) {
+                    // TODO: improve.
+                    options.update = that.update;
+                    options.timeup = undefined;
+                    that.startTiming(options);
+                }
+            }
+        });
+
+        node.on('REALLY_DONE', function() {
+            if (that.options.stopOnDone) {
+                if (!that.gameTimer.isStopped()) {
+                    // that.startWaiting();
+                    that.stop();
+                }
+            }
+       });
     };
 
     VisualTimer.prototype.destroy = function() {

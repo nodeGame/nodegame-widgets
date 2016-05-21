@@ -10373,7 +10373,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.6.0';
+    VisualTimer.version = '0.7.0';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
@@ -10492,14 +10492,14 @@
     VisualTimer.prototype.init = function(options) {
         var t;
         options = options || {};
+
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
                                 'object or undefined');
         }
         J.mixout(options, this.options);
-
         if (options.hooks) {
-            if (!options.hooks instanceof Array) {
+            if (!J.isArray(options.hooks)) {
                 options.hooks = [options.hooks];
             }
         }
@@ -10531,48 +10531,53 @@
             }
             this.gameTimer = options.gameTimer;
         }
-        else  if (node.game.timer) {
-            this.gameTimer = node.game.timer;
-        }
         else {
             if (!this.isInitialized) {
                 this.internalTimer = true;
                 options.name = 'VisualTimer.updateDisplay';
                 this.gameTimer = node.timer.createTimer();
             }
-
-            // TODO: make it consistent with processOptions.
-            if ('function' === typeof options.milliseconds) {
-                options.milliseconds = options.milliseconds.call(node.game);
-            }
         }
 
+        // Parse milliseconds option.
+        if ('undefined' !== typeof options.milliseconds) {
+            options.milliseconds = node.timer.parseInput('milliseconds',
+                                                         options.milliseconds);
+        }
+
+        // Parse update option.
+        if ('undefined' !== typeof options.update) {
+            options.update = node.timer.parseInput('update',
+                                                   options.update);
+        }
+        else {
+            options.update = 1000;
+        }
         // Init the gameTimer, regardless of the source (internal vs external).
         this.gameTimer.init(options);
 
         t = this.gameTimer;
-        node.session.register('visualtimer', {
-            set: function(p) {
-                // TODO
-            },
-            get: function() {
-                return {
-                    startPaused: t.startPaused,
-                        status: t.status,
-                    timeLeft: t.timeLeft,
-                    timePassed: t.timePassed,
-                    update: t.update,
-                    updateRemaining: t.updateRemaining,
-                    updateStart: t. updateStart
-                };
-            }
-        });
+
+// TODO: not using session for now.
+//         node.session.register('visualtimer', {
+//             set: function(p) {
+//                 // TODO
+//             },
+//             get: function() {
+//                 return {
+//                     startPaused: t.startPaused,
+//                         status: t.status,
+//                     timeLeft: t.timeLeft,
+//                     timePassed: t.timePassed,
+//                     update: t.update,
+//                     updateRemaining: t.updateRemaining,
+//                     updateStart: t. updateStart
+//                 };
+//             }
+//         });
 
         this.options = options;
 
-        if ('undefined' === typeof this.options.update) {
-            this.options.update = 1000;
-        }
         if ('undefined' === typeof this.options.stopOnDone) {
             this.options.stopOnDone = true;
         }
@@ -10847,6 +10852,32 @@
         this.stop();
         this.gameTimer.timeLeft = 0;
         this.gameTimer.fire(this.gameTimer.timeup);
+    };
+
+    VisualTimer.prototype.listeners = function() {
+        var that = this;
+
+        node.on('PLAYING', function() {
+            var options;
+            if (that.options.startOnPlaying) {
+                options = that.gameTimer.getStepOptions();
+                if (options) {
+                    // TODO: improve.
+                    options.update = that.update;
+                    options.timeup = undefined;
+                    that.startTiming(options);
+                }
+            }
+        });
+
+        node.on('REALLY_DONE', function() {
+            if (that.options.stopOnDone) {
+                if (!that.gameTimer.isStopped()) {
+                    // that.startWaiting();
+                    that.stop();
+                }
+            }
+       });
     };
 
     VisualTimer.prototype.destroy = function() {
