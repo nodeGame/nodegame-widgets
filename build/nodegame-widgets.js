@@ -180,6 +180,59 @@
     };
 
     /**
+     * ### Widget.hide
+     *
+     * Hides the widget, if it was previously appended to DOM
+     *
+     * Sets the 'display' property of `panelDiv` to 'none'
+     *
+     * @see Widget.show
+     */
+    Widget.prototype.hide = function() {
+        if (!this.panelDiv) return;
+        this.panelDiv.style.display = 'none';
+    };
+
+    /**
+     * ### Widget.show
+     *
+     * Show the widget, if it was previously appended and hidden
+     *
+     * Sets the 'display' property of `panelDiv` to ''
+     *
+     * @param {string} display Optional. The value of the display
+     *    property. Default: ''
+     *
+     * @see Widget.hide
+     */
+    Widget.prototype.show = function(display) {
+        if (this.panelDiv && this.panelDiv.style.display === 'none') {
+            this.panelDiv.style.display = display || '';
+        }
+    };
+
+
+    /**
+     * ### Widget.toggle
+     *
+     * Toggles the display of the widget, if it was previously appended
+     *
+     * @param {string} display Optional. The value of the display
+     *    property in case the widget is currently hidden. Default: ''
+     *
+     * @see Widget.hide
+     */
+    Widget.prototype.toggle = function(display) {
+        if (!this.panelDiv) return;
+        if (this.panelDiv.style.display === 'none') {
+            this.panelDiv.style.display = display || '';
+        }
+        else {
+            this.panelDiv.style.display = 'none';
+        }
+    };
+
+    /**
      * ### Widget.destroy
      *
      * Performs cleanup operations
@@ -10373,7 +10426,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.7.0';
+    VisualTimer.version = '0.8.0';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
