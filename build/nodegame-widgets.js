@@ -10497,7 +10497,8 @@
             throw new TypeError('VisualTimer.init: options must be ' +
                                 'object or undefined');
         }
-        J.mixout(options, this.options);
+
+        // Important! Hooks must be added before calling mixout.
         if (options.hooks) {
             if (!J.isArray(options.hooks)) {
                 options.hooks = [options.hooks];
@@ -10506,7 +10507,6 @@
         else {
             options.hooks = [];
         }
-
         // Only push this hook once.
         if (!this.isInitialized) {
             options.hooks.push({
@@ -10514,6 +10514,7 @@
                 ctx: this
             });
         }
+        J.mixout(options, this.options);
 
         // If gameTimer is not already set, check options, then
         // try to use node.game.timer, if defined, otherwise crete a new timer.
@@ -10843,15 +10844,10 @@
      *
      * Stops the timer and calls the timeup
      *
-     * It will call timeup even if the game is paused.
-     *
-     * @see VisualTimer.stop
-     * @see GameTimer.fire
+     * @see GameTimer.doTimeup
      */
     VisualTimer.prototype.doTimeUp = function() {
-        this.stop();
-        this.gameTimer.timeLeft = 0;
-        this.gameTimer.fire(this.gameTimer.timeup);
+        this.gameTimer.doTimeUp();
     };
 
     VisualTimer.prototype.listeners = function() {

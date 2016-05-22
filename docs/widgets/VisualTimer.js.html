@@ -192,7 +192,7 @@ Only for countdown smaller than 1h.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.7.0&#39;</span><span class="p">;</span>
+    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.8.0&#39;</span><span class="p">;</span>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display a timer for the game. Timer can &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;trigger events. Only for countdown smaller than 1h.&#39;</span><span class="p">;</span>
 
@@ -538,15 +538,6 @@ The options it can take are:
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;VisualTimer.init: options must be &#39;</span> <span class="o">+</span>
                                 <span class="s1">&#39;object or undefined&#39;</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span><span class="p">))</span> <span class="p">{</span>
-                <span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span> <span class="o">=</span> <span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span><span class="p">];</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span> <span class="o">=</span> <span class="p">[];</span>
-        <span class="p">}</span>
 
 
 </pre></div>
@@ -557,6 +548,26 @@ The options it can take are:
 <div class="pilwrap">
   <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
+<p>Important! Hooks must be added before calling mixout.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span> <span class="o">=</span> <span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">hooks</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
 <p>Only push this hook once.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -566,6 +577,7 @@ The options it can take are:
                 <span class="nx">ctx</span><span class="o">:</span> <span class="k">this</span>
             <span class="p">});</span>
         <span class="p">}</span>
+        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
 
 
 </pre></div>
@@ -574,7 +586,7 @@ The options it can take are:
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>If gameTimer is not already set, check options, then
 try to use node.game.timer, if defined, otherwise crete a new timer.</p>
@@ -609,7 +621,7 @@ try to use node.game.timer, if defined, otherwise crete a new timer.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Parse milliseconds option.</p>
         </td>
@@ -626,7 +638,7 @@ try to use node.game.timer, if defined, otherwise crete a new timer.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Parse update option.</p>
         </td>
@@ -645,7 +657,7 @@ try to use node.game.timer, if defined, otherwise crete a new timer.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Init the gameTimer, regardless of the source (internal vs external).</p>
         </td>
@@ -661,7 +673,7 @@ try to use node.game.timer, if defined, otherwise crete a new timer.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>TODO: not using session for now.
         node.session.register('visualtimer', {
@@ -1221,17 +1233,11 @@ hidden. All other options are forwarded directly to
 
   </div>
   <div class="body"><p>Stops the timer and calls the timeup</p>
-
-<p>It will call timeup even if the game is paused.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">VisualTimer.stop</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">GameTimer.fire
+      <span class="dox_type">GameTimer.doTimeup
 </span>
     </div>
   </div>
@@ -1239,9 +1245,7 @@ hidden. All other options are forwarded directly to
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">doTimeUp</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">timeLeft</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">timeup</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">doTimeUp</span><span class="p">();</span>
     <span class="p">};</span>
 
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -1259,7 +1263,7 @@ hidden. All other options are forwarded directly to
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>TODO: improve.</p>
         </td>
@@ -1281,7 +1285,7 @@ hidden. All other options are forwarded directly to
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>that.startWaiting();</p>
         </td>
