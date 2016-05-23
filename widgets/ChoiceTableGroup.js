@@ -775,13 +775,15 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
+     *   - highlight:   If TRUE, if current value is not the correct
+     *      value, widget will be highlighted. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
      * @see ChoiceTableGroup.verifyChoice
      */
     ChoiceTableGroup.prototype.getValues = function(opts) {
-        var obj, i, len, tbl;
+        var obj, i, len, tbl, toHighlight;
         obj = {
             id: this.id,
             order: this.order,
@@ -793,7 +795,11 @@
             tbl = this.items[i];
             obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) obj.missValues = true;
+            if (!obj.items[tbl.id].isCorrect && opts.highlight) {
+                toHighLight = true;
+            }
         }
+        if (toHighlight) this.highlight();
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };

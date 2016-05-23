@@ -1130,8 +1130,8 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
-     *   - highlight:   If TRUE, forms that do not have a correct value
-     *      will be highlighted. Default: FALSE.
+     *   - highlight:   If TRUE, if current value is not the correct
+     *      value, widget will be highlighted. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
