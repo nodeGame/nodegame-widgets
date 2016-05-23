@@ -1130,6 +1130,8 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
+     *   - highlight:   If TRUE, forms that do not have a correct value
+     *      will be highlighted. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -1156,6 +1158,7 @@
         if (null !== this.correctChoice) {
             obj.isCorrect = this.verifyChoice(opts.markAttempt);
             obj.attemps = this.attemps;
+            if (!obj.isCorrect && opts.highlight) this.highlight();
         }
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;

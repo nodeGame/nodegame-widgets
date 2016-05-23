@@ -1189,6 +1189,8 @@ INPUT_DISABLE, INPUT_ENABLE</p>
 <ul>
 <li>markAttempt: If TRUE, getting the value counts as an attempt
  to find the correct answer. Default: TRUE.</li>
+<li>highlight:   If TRUE, forms that do not have a correct value
+ will be highlighted. Default: FALSE.</li>
 </ul></span>
     </div>
     <div class="dox_tag_title">Returns</div>
@@ -1214,6 +1216,7 @@ INPUT_DISABLE, INPUT_ENABLE</p>
             <span class="nx">forms</span><span class="o">:</span> <span class="p">{},</span>
             <span class="nx">missValues</span><span class="o">:</span> <span class="p">[]</span>
         <span class="p">};</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">markAttempt</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">isCorrect</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="nx">opts</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">||</span> <span class="p">{};</span>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
@@ -1221,6 +1224,9 @@ INPUT_DISABLE, INPUT_ENABLE</p>
             <span class="nx">obj</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">].</span><span class="nx">choice</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">obj</span><span class="p">.</span><span class="nx">missValues</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">markAttempt</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">obj</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="nx">form</span><span class="p">.</span><span class="nx">id</span><span class="p">].</span><span class="nx">isCorrect</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">obj</span><span class="p">.</span><span class="nx">isCorrect</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">freetext</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>

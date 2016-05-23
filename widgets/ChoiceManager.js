@@ -443,6 +443,8 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
+     *   - highlight:   If TRUE, forms that do not have a correct value
+     *      will be highlighted. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -456,6 +458,7 @@
             forms: {},
             missValues: []
         };
+        if (opts.markAttempt) obj.isCorrect = true;
         opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
@@ -463,6 +466,9 @@
             obj.forms[form.id] = form.getValues(opts);
             if (obj.forms[form.id].choice === null) {
                 obj.missValues.push(form.id);
+            }
+            if (opts.markAttempt && !obj.forms[form.id].isCorrect) {
+                obj.isCorrect = false;
             }
         }
         if (this.textarea) obj.freetext = this.textarea.value;

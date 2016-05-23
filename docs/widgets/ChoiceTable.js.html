@@ -2992,6 +2992,8 @@ INPUT_DISABLE, INPUT_ENABLE</p>
 <ul>
 <li>markAttempt: If TRUE, getting the value counts as an attempt
  to find the correct answer. Default: TRUE.</li>
+<li>highlight:   If TRUE, forms that do not have a correct value
+ will be highlighted. Default: FALSE.</li>
 </ul></span>
     </div>
     <div class="dox_tag_title">Returns</div>
@@ -3030,6 +3032,7 @@ INPUT_DISABLE, INPUT_ENABLE</p>
         <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">obj</span><span class="p">.</span><span class="nx">isCorrect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyChoice</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">markAttempt</span><span class="p">);</span>
             <span class="nx">obj</span><span class="p">.</span><span class="nx">attemps</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">attemps</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">obj</span><span class="p">.</span><span class="nx">isCorrect</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">highlight</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlight</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">)</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">freetext</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
