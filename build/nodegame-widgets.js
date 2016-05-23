@@ -211,7 +211,6 @@
         }
     };
 
-
     /**
      * ### Widget.toggle
      *
@@ -3175,6 +3174,8 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
+     *   - highlight:   If TRUE, forms that do not have a correct value
+     *      will be highlighted. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -3188,6 +3189,7 @@
             forms: {},
             missValues: []
         };
+        if (opts.markAttempt) obj.isCorrect = true;
         opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
@@ -3195,6 +3197,9 @@
             obj.forms[form.id] = form.getValues(opts);
             if (obj.forms[form.id].choice === null) {
                 obj.missValues.push(form.id);
+            }
+            if (opts.markAttempt && !obj.forms[form.id].isCorrect) {
+                obj.isCorrect = false;
             }
         }
         if (this.textarea) obj.freetext = this.textarea.value;
@@ -4337,6 +4342,8 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
+     *   - highlight:   If TRUE, if current value is not the correct
+     *      value, widget will be highlighted. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -4363,6 +4370,7 @@
         if (null !== this.correctChoice) {
             obj.isCorrect = this.verifyChoice(opts.markAttempt);
             obj.attemps = this.attemps;
+            if (!obj.isCorrect && opts.highlight) this.highlight();
         }
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
@@ -5179,13 +5187,15 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
+     *   - highlight:   If TRUE, if current value is not the correct
+     *      value, widget will be highlighted. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
      * @see ChoiceTableGroup.verifyChoice
      */
     ChoiceTableGroup.prototype.getValues = function(opts) {
-        var obj, i, len, tbl;
+        var obj, i, len, tbl, toHighlight;
         obj = {
             id: this.id,
             order: this.order,
@@ -5197,7 +5207,11 @@
             tbl = this.items[i];
             obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) obj.missValues = true;
+            if (!obj.items[tbl.id].isCorrect && opts.highlight) {
+                toHighLight = true;
+            }
         }
+        if (toHighlight) this.highlight();
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
@@ -10551,24 +10565,6 @@
                                 'object or undefined');
         }
 
-        // Important! Hooks must be added before calling mixout.
-        if (options.hooks) {
-            if (!J.isArray(options.hooks)) {
-                options.hooks = [options.hooks];
-            }
-        }
-        else {
-            options.hooks = [];
-        }
-        // Only push this hook once.
-        if (!this.isInitialized) {
-            options.hooks.push({
-                hook: this.updateDisplay,
-                ctx: this
-            });
-        }
-        J.mixout(options, this.options);
-
         // If gameTimer is not already set, check options, then
         // try to use node.game.timer, if defined, otherwise crete a new timer.
         if ('undefined' !== typeof options.gameTimer) {
@@ -10592,6 +10588,31 @@
                 this.gameTimer = node.timer.createTimer();
             }
         }
+
+        if (options.hooks) {
+            if (!this.internalTimer) {
+                throw new Error('VisualTimer.init: cannot add hooks on ' +
+                                'external gameTimer.');
+            }
+            if (!J.isArray(options.hooks)) {
+                options.hooks = [options.hooks];
+            }
+        }
+        else {
+            options.hooks = [];
+        }
+
+        // Only push this hook once.
+        if (!this.isInitialized) {
+            options.hooks.push({
+                name: 'VisualTimer_' + this.wid,
+                hook: this.updateDisplay,
+                ctx: this
+            });
+        }
+
+        // Important! Must be called after processing hooks and gameTimer.
+        J.mixout(options, this.options);
 
         // Parse milliseconds option.
         if ('undefined' !== typeof options.milliseconds) {
@@ -10699,6 +10720,9 @@
         if (this.internalTimer) {
             node.timer.destroyTimer(this.gameTimer);
             this.internalTimer = null;
+        }
+        else {
+            this.gameTimer.removeHook(this.updateHookName);
         }
 
         this.gameTimer = null;
@@ -10906,6 +10930,10 @@
     VisualTimer.prototype.listeners = function() {
         var that = this;
 
+        if (!this.internalTimer) {
+            return;
+        }
+
         node.on('PLAYING', function() {
             var options;
             if (that.options.startOnPlaying) {
@@ -10933,6 +10961,9 @@
         if (this.internalTimer) {
             node.timer.destroyTimer(this.gameTimer);
             this.internalTimer = null;
+        }
+        else {
+            this.gameTimer.removeHook('VisualTimer_' + this.wid);
         }
         this.bodyDiv.removeChild(this.mainBox.boxDiv);
         this.bodyDiv.removeChild(this.waitBox.boxDiv);
