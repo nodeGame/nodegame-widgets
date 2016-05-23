@@ -143,24 +143,6 @@
                                 'object or undefined');
         }
 
-        // Important! Hooks must be added before calling mixout.
-        if (options.hooks) {
-            if (!J.isArray(options.hooks)) {
-                options.hooks = [options.hooks];
-            }
-        }
-        else {
-            options.hooks = [];
-        }
-        // Only push this hook once.
-        if (!this.isInitialized) {
-            options.hooks.push({
-                hook: this.updateDisplay,
-                ctx: this
-            });
-        }
-        J.mixout(options, this.options);
-
         // If gameTimer is not already set, check options, then
         // try to use node.game.timer, if defined, otherwise crete a new timer.
         if ('undefined' !== typeof options.gameTimer) {
@@ -184,6 +166,31 @@
                 this.gameTimer = node.timer.createTimer();
             }
         }
+
+        if (options.hooks) {
+            if (!this.internalTimer) {
+                throw new Error('VisualTimer.init: cannot add hooks on ' +
+                                'external gameTimer.');
+            }
+            if (!J.isArray(options.hooks)) {
+                options.hooks = [options.hooks];
+            }
+        }
+        else {
+            options.hooks = [];
+        }
+
+        // Only push this hook once.
+        if (!this.isInitialized) {
+            options.hooks.push({
+                name: 'VisualTimer_' + this.wid,
+                hook: this.updateDisplay,
+                ctx: this
+            });
+        }
+
+        // Important! Must be called after processing hooks and gameTimer.
+        J.mixout(options, this.options);
 
         // Parse milliseconds option.
         if ('undefined' !== typeof options.milliseconds) {
@@ -291,6 +298,9 @@
         if (this.internalTimer) {
             node.timer.destroyTimer(this.gameTimer);
             this.internalTimer = null;
+        }
+        else {
+            this.gameTimer.removeHook(this.updateHookName);
         }
 
         this.gameTimer = null;
@@ -498,6 +508,10 @@
     VisualTimer.prototype.listeners = function() {
         var that = this;
 
+        if (!this.internalTimer) {
+            return;
+        }
+
         node.on('PLAYING', function() {
             var options;
             if (that.options.startOnPlaying) {
@@ -525,6 +539,9 @@
         if (this.internalTimer) {
             node.timer.destroyTimer(this.gameTimer);
             this.internalTimer = null;
+        }
+        else {
+            this.gameTimer.removeHook('VisualTimer_' + this.wid);
         }
         this.bodyDiv.removeChild(this.mainBox.boxDiv);
         this.bodyDiv.removeChild(this.waitBox.boxDiv);
