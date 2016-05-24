@@ -240,7 +240,8 @@
             id: 'ipnassf',
             items: items,
             mainText: mainText,
-            title: false
+            title: false,
+            requiredChoice: true
         });
 
         return gauge;

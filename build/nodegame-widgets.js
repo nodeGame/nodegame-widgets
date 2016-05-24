@@ -3420,6 +3420,13 @@
         this.correctChoice = null;
 
         /**
+         * ### ChoiceTable.requiredChoice
+         *
+         * The number of required choices. Default 0
+         */
+        this.requiredChoice = null;
+
+        /**
          * ### ChoiceTable.attempts
          *
          * List of currentChoices at the moment of verifying correct answers
@@ -3613,6 +3620,19 @@
         else tmp = !!options.selectMultiple;
         this.selectMultiple = tmp;
 
+        // Option requiredChoice, if any.
+        if ('number' === typeof options.requiredChoice) {
+            this.requiredChoice = options.requiredChoice;
+        }
+        else if ('boolean' === typeof options.requiredChoice) {
+            this.requiredChoice = options.requiredChoice ? 1 : 0;
+        }
+        else if ('undefined' !== typeof options.requiredChoice) {
+            throw new TypeError('ChoiceTable.init: options.requiredChoice ' +
+                                'be number or boolean or undefined. Found: ' +
+                                options.requiredChoice);
+        }
+
         // Set the group, if any.
         if ('string' === typeof options.group ||
             'number' === typeof options.group) {
@@ -3764,6 +3784,10 @@
 
         // Add the correct choices.
         if ('undefined' !== typeof options.correctChoice) {
+            if (this.requiredChoice) {
+                throw new Error('ChoiceTable.init: cannot specify both ' +
+                                'options requiredChoice and correctChoice.');
+            }
             this.setCorrectChoice(options.correctChoice);
         }
 
@@ -4175,6 +4199,12 @@
      *
      * Compares the current choice/s with the correct one/s
      *
+     * Depending on current settings, there are two modes of verifying
+     * choices:
+     *
+     *    - requiredChoice: there must be at least N choices selected
+     *    - correcChoice:   the choices are compared against correct ones.
+     *
      * @param {boolean} markAttempt Optional. If TRUE, the value of
      *   current choice is added to the attempts array. Default
      *
@@ -4187,6 +4217,13 @@
      */
     ChoiceTable.prototype.verifyChoice = function(markAttempt) {
         var i, len, j, lenJ, c, clone, found;
+
+        // Check the number of choices.
+        if (this.requiredChoice !== null) {
+            if (!this.selectMultiple) return this.currentChoice !== null;
+            else return this.currentChoice.length >= this.requiredChoice;
+        }
+
         // If no correct choice is set return null.
         if (!this.correctChoice) return null;
         // Mark attempt by default.
@@ -4368,7 +4405,7 @@
         if (this.groupOrder === 0 || this.groupOrder) {
             obj.groupOrder = this.groupOrder;
         }
-        if (null !== this.correctChoice) {
+        if (null !== this.correctChoice || null !== this.requiredChoice) {
             obj.isCorrect = this.verifyChoice(opts.markAttempt);
             obj.attemps = this.attemps;
             if (!obj.isCorrect && opts.highlight) this.highlight();
@@ -4583,6 +4620,13 @@
         this.shuffleItems = null;
 
         /**
+         * ### ChoiceTableGroup.requiredChoice
+         *
+         * The number of required choices.
+         */
+        this.requiredChoice = null;
+
+        /**
          * ### ChoiceTableGroup.orientation
          *
          * Orientation of display of items: vertical ('V') or horizontal ('H')
@@ -4751,6 +4795,19 @@
         else tmp = !!options.shuffleItems;
         this.shuffleItems = tmp;
 
+        // Option requiredChoice, if any.
+        if ('number' === typeof options.requiredChoice) {
+            this.requiredChoice = options.requiredChoice;
+        }
+        else if ('boolean' === typeof options.requiredChoice) {
+            this.requiredChoice = options.requiredChoice ? 1 : 0;
+        }
+        else if ('undefined' !== typeof options.requiredChoice) {
+            throw new TypeError('ChoiceTableGroup.init: ' +
+                                'options.requiredChoice ' +
+                                'be number or boolean or undefined. Found: ' +
+                                options.requiredChoice);
+        }
 
         // Set the group, if any.
         if ('string' === typeof options.group ||
@@ -5207,8 +5264,11 @@
         for ( ; ++i < len ; ) {
             tbl = this.items[i];
             obj.items[tbl.id] = tbl.getValues(opts);
-            if (obj.items[tbl.id].choice === null) obj.missValues = true;
-            if (!obj.items[tbl.id].isCorrect && opts.highlight) {
+            if (obj.items[tbl.id].choice === null) {
+                obj.missValues = true;
+                if (tbl.requiredChoice) toHighlight = true;
+            }
+            if (!obj.items[tbl.id].isCorrect === false && opts.highlight) {
                 toHighlight = true;
             }
         }
@@ -5240,6 +5300,10 @@
         s.separator = that.separator;
 
         if (!s.renderer && that.renderer) s.renderer = that.renderer;
+
+        if ('undefined' === typeof s.requiredChoice && that.requiredChoice) {
+            s.requiredChoice = that.requiredChoice;
+        }
 
         if ('undefined' === typeof s.selectMultiple &&
             null !== that.selectMultiple) {
@@ -7704,7 +7768,8 @@
             id: 'ipnassf',
             items: items,
             mainText: mainText,
-            title: false
+            title: false,
+            requiredChoice: true
         });
 
         return gauge;
@@ -9165,7 +9230,8 @@
             items: items,
             mainText: mainText,
             title: false,
-            renderer: renderer
+            renderer: renderer,
+            requiredChoice: true
         });
 
         return gauge;

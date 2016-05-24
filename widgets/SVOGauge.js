@@ -307,7 +307,8 @@
             items: items,
             mainText: mainText,
             title: false,
-            renderer: renderer
+            renderer: renderer,
+            requiredChoice: true
         });
 
         return gauge;

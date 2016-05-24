@@ -170,6 +170,13 @@
         this.shuffleItems = null;
 
         /**
+         * ### ChoiceTableGroup.requiredChoice
+         *
+         * The number of required choices.
+         */
+        this.requiredChoice = null;
+
+        /**
          * ### ChoiceTableGroup.orientation
          *
          * Orientation of display of items: vertical ('V') or horizontal ('H')
@@ -338,6 +345,19 @@
         else tmp = !!options.shuffleItems;
         this.shuffleItems = tmp;
 
+        // Option requiredChoice, if any.
+        if ('number' === typeof options.requiredChoice) {
+            this.requiredChoice = options.requiredChoice;
+        }
+        else if ('boolean' === typeof options.requiredChoice) {
+            this.requiredChoice = options.requiredChoice ? 1 : 0;
+        }
+        else if ('undefined' !== typeof options.requiredChoice) {
+            throw new TypeError('ChoiceTableGroup.init: ' +
+                                'options.requiredChoice ' +
+                                'be number or boolean or undefined. Found: ' +
+                                options.requiredChoice);
+        }
 
         // Set the group, if any.
         if ('string' === typeof options.group ||
@@ -794,8 +814,11 @@
         for ( ; ++i < len ; ) {
             tbl = this.items[i];
             obj.items[tbl.id] = tbl.getValues(opts);
-            if (obj.items[tbl.id].choice === null) obj.missValues = true;
-            if (!obj.items[tbl.id].isCorrect && opts.highlight) {
+            if (obj.items[tbl.id].choice === null) {
+                obj.missValues = true;
+                if (tbl.requiredChoice) toHighlight = true;
+            }
+            if (!obj.items[tbl.id].isCorrect === false && opts.highlight) {
                 toHighlight = true;
             }
         }
@@ -827,6 +850,10 @@
         s.separator = that.separator;
 
         if (!s.renderer && that.renderer) s.renderer = that.renderer;
+
+        if ('undefined' === typeof s.requiredChoice && that.requiredChoice) {
+            s.requiredChoice = that.requiredChoice;
+        }
 
         if ('undefined' === typeof s.selectMultiple &&
             null !== that.selectMultiple) {
