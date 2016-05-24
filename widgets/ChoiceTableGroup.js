@@ -796,7 +796,7 @@
             obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) obj.missValues = true;
             if (!obj.items[tbl.id].isCorrect && opts.highlight) {
-                toHighLight = true;
+                toHighlight = true;
             }
         }
         if (toHighlight) this.highlight();

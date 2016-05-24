@@ -144,8 +144,8 @@
         this.methods[name] = cb;
     };
 
-    SVOGauge.prototype.getValues = function() {
-        return this.gauge.getValues();
+    SVOGauge.prototype.getValues = function(opts) {
+        return this.gauge.getValues(opts);
     };
 
     SVOGauge.prototype.enable = function() {

@@ -418,8 +418,8 @@ implementing functions: append, enable, disable, getValues</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">methods</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">cb</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="nx">SVOGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">getValues</span><span class="p">();</span>
+    <span class="nx">SVOGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
     <span class="p">};</span>
 
     <span class="nx">SVOGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>

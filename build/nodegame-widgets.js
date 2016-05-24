@@ -5209,7 +5209,7 @@
             obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) obj.missValues = true;
             if (!obj.items[tbl.id].isCorrect && opts.highlight) {
-                toHighLight = true;
+                toHighlight = true;
             }
         }
         if (toHighlight) this.highlight();
@@ -7609,8 +7609,8 @@
         this.methods[name] = cb;
     };
 
-    MoodGauge.prototype.getValues = function() {
-        return this.gauge.getValues();
+    MoodGauge.prototype.getValues = function(opts) {
+        return this.gauge.getValues(opts);
     };
 
     MoodGauge.prototype.enable = function() {
@@ -9002,8 +9002,8 @@
         this.methods[name] = cb;
     };
 
-    SVOGauge.prototype.getValues = function() {
-        return this.gauge.getValues();
+    SVOGauge.prototype.getValues = function(opts) {
+        return this.gauge.getValues(opts);
     };
 
     SVOGauge.prototype.enable = function() {

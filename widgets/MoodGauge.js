@@ -145,8 +145,8 @@
         this.methods[name] = cb;
     };
 
-    MoodGauge.prototype.getValues = function() {
-        return this.gauge.getValues();
+    MoodGauge.prototype.getValues = function(opts) {
+        return this.gauge.getValues(opts);
     };
 
     MoodGauge.prototype.enable = function() {
