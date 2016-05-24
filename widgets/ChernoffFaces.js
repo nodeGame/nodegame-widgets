@@ -174,23 +174,14 @@
     };
 
     /**
-     * ## ChernoffFaces.append
+     * ## ChernoffFaces.buildHTML
      *
-     * Appends the widget
+     * Builds HTML objects, but does not append them
      *
-     * Creates table, canvas, face painter (fp) and controls (sc), according
-     * to current options.
-     *
-     * @see ChernoffFaces.fp
-     * @see ChernoffFaces.sc
-     * @see ChernoffFaces.table
-     * @see Table
-     * @see Canvas
-     * @see SliderControls
-     * @see FacePainter
-     * @see FaceVector
+     * Creates the table, canvas, draw the current image, and
+     * eventually adds the controls.
      */
-    ChernoffFaces.prototype.append = function() {
+    ChernoffFaces.prototype.buildHTML = function() {
         var controlsOptions, f;
         var tblOptions, options;
 
@@ -199,10 +190,9 @@
         // Table.
         tblOptions = {};
         if (this.id) tblOptions.id = this.id;
-        else if (this.id !== false) tblOptions.id = 'cf_table';
 
         if ('string' === typeof options.className) {
-            tblOptions.id = options.className;
+            tblOptions.className = options.className;
         }
         else if (options.className !== false) {
             tblOptions.className = 'cf_table';
@@ -251,6 +241,28 @@
 
         // Create and append table.
         this.table.parse();
+    };
+
+    /**
+     * ## ChernoffFaces.append
+     *
+     * Appends the widget
+     *
+     * Creates table, canvas, face painter (fp) and controls (sc), according
+     * to current options.
+     *
+     * @see ChernoffFaces.buildHTML
+     * @see ChernoffFaces.fp
+     * @see ChernoffFaces.sc
+     * @see ChernoffFaces.table
+     * @see Table
+     * @see Canvas
+     * @see SliderControls
+     * @see FacePainter
+     * @see FaceVector
+     */
+    ChernoffFaces.prototype.append = function() {
+        if (!this.table) this.buildHTML();
         this.bodyDiv.appendChild(this.table.table);
     };
 
