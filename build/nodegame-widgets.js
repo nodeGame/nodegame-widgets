@@ -1361,10 +1361,14 @@
      *
      * Creates the table, canvas, draw the current image, and
      * eventually adds the controls.
+     *
+     * If the table was already built, it returns immediately.
      */
     ChernoffFaces.prototype.buildHTML = function() {
         var controlsOptions, f;
         var tblOptions, options;
+
+        if (this.table) return;
 
         options = this.options;
 
@@ -1382,20 +1386,7 @@
         this.table = new Table(tblOptions);
 
         // Canvas.
-        if (!options.canvas) {
-            options.canvas = {};
-            if ('undefined' !== typeof options.height) {
-                options.canvas.height = options.height;
-            }
-            if ('undefined' !== typeof options.width) {
-                options.canvas.width = options.width;
-            }
-        }
-        this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
-
-        // Face Painter.
-        this.fp = new FacePainter(this.canvas);
-        this.fp.draw(new FaceVector(this.features));
+        if (!this.canvas) this.buildCanvas();
 
         // Controls.
         if ('undefined' === typeof options.controls || options.controls) {
@@ -1422,6 +1413,39 @@
 
         // Create and append table.
         this.table.parse();
+    };
+
+    /**
+     * ## ChernoffFaces.buildCanvas
+     *
+     * Builds the canvas object and face painter
+     *
+     * All the necessary to draw faces
+     *
+     * If the canvas was already built, it simply returns it.
+     *
+     * @return {canvas}
+     */
+    ChernoffFaces.prototype.buildCanvas = function() {
+        var options;
+        if (!this.canvas) {
+            options = this.options;
+
+            if (!options.canvas) {
+                options.canvas = {};
+                if ('undefined' !== typeof options.height) {
+                    options.canvas.height = options.height;
+                }
+                if ('undefined' !== typeof options.width) {
+                    options.canvas.width = options.width;
+                }
+            }
+            this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
+
+            // Face Painter.
+            this.fp = new FacePainter(this.canvas);
+            this.fp.draw(new FaceVector(this.features));
+        }
     };
 
     /**
