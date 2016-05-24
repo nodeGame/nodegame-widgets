@@ -85,7 +85,7 @@
             // or what is the current value of sliders,
             // or a random face.
             if (!f && that.sc) {
-                f = that.sc.getAllValues();
+                f = that.sc.getValues();
                 if ('undefined' === typeof updateControls) {
                     updateControls = false;
                 }
@@ -127,7 +127,7 @@
      *      to false no controls will be created. Default: SlidersControls.
      *      Any custom implementation must provide the following methods:
      *
-     *          - getAllValues: returns the current features vector
+     *          - getValues: returns the current features vector
      *          - refresh: redraws the current feature vector
      *          - init: accepts a configuration object containing a
      *               features and onChange as specified above.
@@ -281,7 +281,7 @@
         }
     };
 
-    ChernoffFaces.prototype.getAllValues = function() {
+    ChernoffFaces.prototype.getValues = function() {
         return this.fp.face;
     };
 
