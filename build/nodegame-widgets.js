@@ -3189,6 +3189,7 @@
             forms: {},
             missValues: []
         };
+        opts = opts || {};
         if (opts.markAttempt) obj.isCorrect = true;
         opts = opts || {};
         i = -1, len = this.forms.length;
@@ -5303,7 +5304,7 @@
 
     // ## Meta-data
 
-    Controls.version = '0.3.1';
+    Controls.version = '0.5.0';
     Controls.description = 'Wraps a collection of user-inputs controls.';
 
     Controls.title = 'Controls';
@@ -5518,7 +5519,7 @@
         return true;
     };
 
-    Controls.prototype.getAllValues = function() {
+    Controls.prototype.getValues = function() {
         var out, el, key;
         out = {};
         for (key in this.features) {
@@ -5704,7 +5705,7 @@
     };
 
     // Override getAllValues for Radio Controls
-    RadioControls.prototype.getAllValues = function() {
+    RadioControls.prototype.getValues = function() {
 
         for (var key in this.features) {
             if (this.features.hasOwnProperty(key)) {

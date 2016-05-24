@@ -124,7 +124,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.1&#39;</span><span class="p">;</span>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.0&#39;</span><span class="p">;</span>
     <span class="nx">Controls</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Wraps a collection of user-inputs controls.&#39;</span><span class="p">;</span>
 
     <span class="nx">Controls</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Controls&#39;</span><span class="p">;</span>
@@ -600,7 +600,7 @@ TODO: remove/add elements</p>
         <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">Controls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">out</span><span class="p">,</span> <span class="nx">el</span><span class="p">,</span> <span class="nx">key</span><span class="p">;</span>
         <span class="nx">out</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
@@ -976,7 +976,7 @@ TODO: is this a javascript bug?</p>
 <p>Override getAllValues for Radio Controls</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getAllValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">RadioControls</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">features</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>

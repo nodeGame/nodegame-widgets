@@ -458,6 +458,7 @@
             forms: {},
             missValues: []
         };
+        opts = opts || {};
         if (opts.markAttempt) obj.isCorrect = true;
         opts = opts || {};
         i = -1, len = this.forms.length;
