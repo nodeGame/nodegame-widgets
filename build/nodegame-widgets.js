@@ -10687,8 +10687,9 @@
         else {
             if (!this.isInitialized) {
                 this.internalTimer = true;
-                options.name = 'VisualTimer.updateDisplay';
-                this.gameTimer = node.timer.createTimer();
+                this.gameTimer = node.timer.createTimer({
+                    name: options.name || 'VisualTimer'
+                });
             }
         }
 

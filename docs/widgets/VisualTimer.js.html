@@ -569,8 +569,9 @@ try to use node.game.timer, if defined, otherwise crete a new timer.</p>
         <span class="k">else</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isInitialized</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">internalTimer</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-                <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;VisualTimer.updateDisplay&#39;</span><span class="p">;</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">createTimer</span><span class="p">();</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">createTimer</span><span class="p">({</span>
+                    <span class="nx">name</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="s1">&#39;VisualTimer&#39;</span>
+                <span class="p">});</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
