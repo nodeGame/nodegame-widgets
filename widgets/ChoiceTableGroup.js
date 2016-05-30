@@ -514,7 +514,7 @@
      */
     ChoiceTableGroup.prototype.buildTable = function() {
         var i, len, tr, H, ct;
-        var j, lenJ, lenJOld;
+        var j, lenJ, lenJOld, hasRight;
 
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
@@ -527,7 +527,7 @@
                 // Get item, append choices for item.
                 ct = getChoiceTable(this, i);
 
-                tr.appendChild(ct.descriptionCell);
+                tr.appendChild(ct.leftCell);
                 j = -1, lenJ = ct.choicesCells.length;
                 // Make sure all items have same number of choices.
                 if (i === 0) {
@@ -542,6 +542,7 @@
                 for ( ; ++j < lenJ ; ) {
                     tr.appendChild(ct.choicesCells[j]);
                 }
+                if (ct.rightCell) tr.appendChild(ct.rightCell);
             }
         }
         else {
@@ -567,9 +568,22 @@
                                     ct.id);
                 }
 
+                if ('undefined' === typeof hasRight) {
+                    hasRight = !!ct.rightCell;
+                }
+                else if ((!ct.rightCell && hasRight) ||
+                         (ct.rightCell && !hasRight)) {
+
+                    throw new Error('ChoiceTableGroup.buildTable: either all ' +
+                                    'items or no item must have the right ' +
+                                    'cell: ' + ct.id);
+
+                }
                 // Add titles.
-                tr.appendChild(ct.descriptionCell);
+                tr.appendChild(ct.leftCell);
             }
+
+            if (hasRight) lenJ++;
 
             j = -1;
             for ( ; ++j < lenJ ; ) {
@@ -580,9 +594,15 @@
                 i = -1;
                 // TODO: might optimize. There are two loops (+1 inside ct).
                 for ( ; ++i < len ; ) {
-                    tr.appendChild(this.items[i].choicesCells[j]);
+                    if (hasRight && j === (lenJ-1)) {
+                        tr.appendChild(this.items[i].rightCell);
+                    }
+                    else {
+                        tr.appendChild(this.items[i].choicesCells[j]);
+                    }
                 }
             }
+
         }
 
         // Enable onclick listener.
@@ -888,9 +908,9 @@
             throw new Error('ChoiceTableGroup.buildTable: an item ' +
                             'with the same id already exists: ' + ct.id);
         }
-        if (!ct.descriptionCell) {
+        if (!ct.leftCell) {
             throw new Error('ChoiceTableGroup.buildTable: item ' +
-                            'is missing a description: ' + s.id);
+                            'is missing a left cell: ' + s.id);
         }
         that.itemsById[ct.id] = ct;
         that.items[i] = ct;

@@ -148,25 +148,46 @@
         this.choicesCells = null;
 
         /**
-         * ### ChoiceTable.description
+         * ### ChoiceTable.left
          *
-         * A title included in the first cell of the row/column
+         * A non-clickable first cell of the row/column
          *
          * It will be placed to the left of the choices if orientation
          * is horizontal, or above the choices if orientation is vertical
          *
          * @see ChoiceTable.orientation
          */
-        this.description = null;
+        this.left = null;
 
         /**
-         * ### ChoiceTable.descriptionCell
+         * ### ChoiceTable.leftCell
          *
-         * The rendered title cell
+         * The rendered left cell
          *
-         * @see ChoiceTable.renderDescription
+         * @see ChoiceTable.renderSpecial
          */
-        this.descriptionCell = null;
+        this.leftCell = null;
+
+        /**
+         * ### ChoiceTable.right
+         *
+         * A non-clickable last cell of the row/column
+         *
+         * It will be placed to the right of the choices if orientation
+         * is horizontal, or below the choices if orientation is vertical
+         *
+         * @see ChoiceTable.orientation
+         */
+        this.right = null;
+
+        /**
+         * ### ChoiceTable.rightCell
+         *
+         * The rendered right cell
+         *
+         * @see ChoiceTable.renderSpecial
+         */
+        this.rightCell = null;
 
         /**
          * ### ChoiceTable.timeCurrentChoice
@@ -496,28 +517,38 @@
                             options.separator);
         }
 
-        // Copy short-form for description (only if not defined).
-        if ('undefined' !== typeof options.descr &&
-            'undefined' === typeof options.description) {
+        if ('string' === typeof options.left ||
+            'number' === typeof options.left) {
 
-            options.description = options.descr;
+            this.left = '' + options.left;
         }
+        else if(J.isNode(options.left) ||
+                J.isElement(options.left)) {
 
-        if ('string' === typeof options.description ||
-            'number' === typeof options.description) {
-
-            this.description = '' + options.description;
+            this.left = options.left;
         }
-        else if(J.isNode(options.description) ||
-                J.isElement(options.description)) {
-
-            this.description = options.description;
-        }
-        else if ('undefined' !== typeof options.description) {
-            throw new TypeError('ChoiceTable.init: options.description must ' +
+        else if ('undefined' !== typeof options.left) {
+            throw new TypeError('ChoiceTable.init: options.left must ' +
                                 'be string, number, an HTML Element or ' +
-                                'undefined. Found: ' + options.description);
+                                'undefined. Found: ' + options.left);
         }
+
+        if ('string' === typeof options.right ||
+            'number' === typeof options.right) {
+
+            this.right = '' + options.right;
+        }
+        else if(J.isNode(options.right) ||
+                J.isElement(options.right)) {
+
+            this.right = options.right;
+        }
+        else if ('undefined' !== typeof options.right) {
+            throw new TypeError('ChoiceTable.init: options.right must ' +
+                                'be string, number, an HTML Element or ' +
+                                'undefined. Found: ' + options.right);
+        }
+
 
         // Set the className, if not use default.
         if ('undefined' === typeof options.className) {
@@ -624,11 +655,13 @@
      *
      * Render every choice and stores cell in `choicesCells` array
      *
+     * Left and right cells are also rendered, if specified.
+     *
      * Follows a shuffled order, if set
      *
      * @see ChoiceTable.order
      * @see ChoiceTable.renderChoice
-     * @see ChoiceTable.descriptionCell
+     * @see ChoiceTable.renderSpecial
      */
     ChoiceTable.prototype.buildChoices = function() {
         var i, len;
@@ -638,7 +671,8 @@
         for ( ; ++i < len ; ) {
             this.renderChoice(this.choices[this.order[i]], i);
         }
-        if (this.description) this.renderDescription(this.description);
+        if (this.left) this.renderSpecial('left', this.left);
+        if (this.right) this.renderSpecial('right', this.right);
     };
 
     /**
@@ -665,7 +699,7 @@
             tr = document.createElement('tr');
             this.table.appendChild(tr);
             // Add horizontal choices title.
-            if (this.descriptionCell) tr.appendChild(this.descriptionCell);
+            if (this.leftCell) tr.appendChild(this.leftCell);
         }
         // Main loop.
         for ( ; ++i < len ; ) {
@@ -673,14 +707,21 @@
                 tr = document.createElement('tr');
                 this.table.appendChild(tr);
                 // Add vertical choices title.
-                if (i === 0 && this.descriptionCell) {
-                    tr.appendChild(this.descriptionCell);
+                if (i === 0 && this.leftCell) {
+                    tr.appendChild(this.leftCell);
                     tr = document.createElement('tr');
                     this.table.appendChild(tr);
                 }
             }
             // Clickable cell.
             tr.appendChild(this.choicesCells[i]);
+        }
+        if (this.rightCell) {
+            if (!H) {
+                tr = document.createElement('tr');
+                this.table.appendChild(tr);
+            }
+            tr.appendChild(this.rightCell);
         }
         // Enable onclick listener.
         this.enable();
@@ -709,9 +750,9 @@
         if (H) {
             tr = document.createElement('tr');
             this.table.appendChild(tr);
-            // Add horizontal choices description.
-            if (this.description) {
-                td = this.renderDescription(this.description);
+            // Add horizontal choices left.
+            if (this.left) {
+                td = this.renderSpecial('left', this.left);
                 tr.appendChild(td);
             }
         }
@@ -720,9 +761,9 @@
             if (!H) {
                 tr = document.createElement('tr');
                 this.table.appendChild(tr);
-                // Add vertical choices description.
-                if (i === 0 && this.description) {
-                    td = this.renderDescription(this.description);
+                // Add vertical choices left.
+                if (i === 0 && this.left) {
+                    td = this.renderSpecial('left', this.left);
                     tr.appendChild(td);
                     tr = document.createElement('tr');
                     this.table.appendChild(tr);
@@ -732,34 +773,51 @@
             td = this.renderChoice(this.choices[this.order[i]], i);
             tr.appendChild(td);
         }
+        if (this.right) {
+            if (!H) {
+                tr = document.createElement('tr');
+                this.table.appendChild(tr);
+            }
+            td = this.renderSpecial('right', this.right);
+            tr.appendChild(td);
+        }
 
         // Enable onclick listener.
         this.enable();
     };
 
     /**
-     * ### ChoiceTable.renderDescription
+     * ### ChoiceTable.renderSpecial
      *
-     * Transforms a choice element into a cell of the table
+     * Renders a non-choice element into a cell of the table (e.g. left/right)
      *
-     * @param {mixed} descr The description. It must be string or number,
+     * @param {mixed} special The special element. It must be string or number,
      *   or array where the first element is the 'value' (incorporated in the
-     *   `id` field) and the second the text to display as choice. If a
-     *   If renderer function is defined there are no restriction on the
-     *   format of choice
+     *   `id` field) and the second the text to display as choice.
      *
      * @return {HTMLElement} td The newly created cell of the table
      *
-     * @see ChoiceTable.description
+     * @see ChoiceTable.left
+     * @see ChoiceTable.right
      */
-    ChoiceTable.prototype.renderDescription = function(descr) {
-        var td;
+    ChoiceTable.prototype.renderSpecial = function(type, special) {
+        var td, className;
         td = document.createElement('td');
-        if ('string' === typeof descr) td.innerHTML = descr;
+        if ('string' === typeof special) td.innerHTML = special;
         // HTML element (checked before).
-        else td.appendChild(descr);
-        td.className = this.className ? this.className + '-descr' : 'descr';
-        this.descriptionCell = td;
+        else td.appendChild(special);
+        if (type === 'left') {
+            className = this.className ? this.className + '-left' : 'left';
+            this.leftCell = td;
+        }
+        else if (type === 'right') {
+            className = this.className ? this.className + '-right' : 'right';
+            this.rightCell = td;
+        }
+        else {
+            throw new Error('ChoiceTable.renderSpecial: unknown type: ' + type);
+        }
+        td.className = className;
         return td;
     };
 

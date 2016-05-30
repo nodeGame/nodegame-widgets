@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.1.1';
+    MoodGauge.version = '0.2.0';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
@@ -195,7 +195,7 @@
 
     // ### I_PANAS_SF
     function I_PANAS_SF(options) {
-        var items, emotions, mainText, choices;
+        var items, emotions, mainText, choices, left, right;
         var gauge, i, len;
 
         if ('undefined' === typeof options.mainText) {
@@ -208,7 +208,7 @@
         // Other types ignored.
 
         choices = options.choices ||
-            [ 'never', '1', '2', '3', '4', '5', 'always' ];
+            [ '1', '2', '3', '4', '5' ];
 
         emotions = options.emotions || [
             'Upset',
@@ -223,6 +223,10 @@
             'Active'
         ];
 
+        left = options.left || 'never';
+
+        right = options.right || 'always';
+
         len = emotions.length;
 
         items = new Array(len);
@@ -231,7 +235,8 @@
         for ( ; ++i < len ; ) {
             items[i] = {
                 id: emotions[i],
-                descr: emotions[i],
+                left: '<span class="emotion">' + emotions[i] + ':</span> never',
+                right: right,
                 choices: choices
             };
         }

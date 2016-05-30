@@ -108,7 +108,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.1&#39;</span><span class="p">;</span>
+    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.0&#39;</span><span class="p">;</span>
     <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays an interface to measure mood &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;and emotions.&#39;</span><span class="p">;</span>
 
@@ -539,7 +539,7 @@ the Positive and Negative Affect Schedule (PANAS)"</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="kd">function</span> <span class="nx">I_PANAS_SF</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">items</span><span class="p">,</span> <span class="nx">emotions</span><span class="p">,</span> <span class="nx">mainText</span><span class="p">,</span> <span class="nx">choices</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">items</span><span class="p">,</span> <span class="nx">emotions</span><span class="p">,</span> <span class="nx">mainText</span><span class="p">,</span> <span class="nx">choices</span><span class="p">,</span> <span class="nx">left</span><span class="p">,</span> <span class="nx">right</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">gauge</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
@@ -563,7 +563,7 @@ the Positive and Negative Affect Schedule (PANAS)"</p>
         <td class="code highlight"><div class="highlight"><pre>
 
         <span class="nx">choices</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">choices</span> <span class="o">||</span>
-            <span class="p">[</span> <span class="s1">&#39;never&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;always&#39;</span> <span class="p">];</span>
+            <span class="p">[</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span> <span class="p">];</span>
 
         <span class="nx">emotions</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">emotions</span> <span class="o">||</span> <span class="p">[</span>
             <span class="s1">&#39;Upset&#39;</span><span class="p">,</span>
@@ -578,6 +578,10 @@ the Positive and Negative Affect Schedule (PANAS)"</p>
             <span class="s1">&#39;Active&#39;</span>
         <span class="p">];</span>
 
+        <span class="nx">left</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">left</span> <span class="o">||</span> <span class="s1">&#39;never&#39;</span><span class="p">;</span>
+
+        <span class="nx">right</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">right</span> <span class="o">||</span> <span class="s1">&#39;always&#39;</span><span class="p">;</span>
+
         <span class="nx">len</span> <span class="o">=</span> <span class="nx">emotions</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
 
         <span class="nx">items</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">);</span>
@@ -586,7 +590,8 @@ the Positive and Negative Affect Schedule (PANAS)"</p>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="nx">id</span><span class="o">:</span> <span class="nx">emotions</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span>
-                <span class="nx">descr</span><span class="o">:</span> <span class="nx">emotions</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span>
+                <span class="nx">left</span><span class="o">:</span> <span class="s1">&#39;&lt;span class=&quot;emotion&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">emotions</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:&lt;/span&gt; never&#39;</span><span class="p">,</span>
+                <span class="nx">right</span><span class="o">:</span> <span class="nx">right</span><span class="p">,</span>
                 <span class="nx">choices</span><span class="o">:</span> <span class="nx">choices</span>
             <span class="p">};</span>
         <span class="p">}</span>

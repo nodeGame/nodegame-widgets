@@ -196,7 +196,7 @@
     function SVO_Slider(options) {
         var items, sliders, mainText;
         var gauge, i, len;
-        var descr, renderer;
+        var left, renderer;
 
         if ('undefined' === typeof options.mainText) {
             mainText =
@@ -283,11 +283,11 @@
             td.innerHTML = choice[0] + '<hr/>' + choice[1];
         };
 
-        if (options.description) {
-            descr = options.description;
+        if (options.left) {
+            left = options.left;
         }
         else {
-            descr = 'You:<hr/>Other:';
+            left = 'You:<hr/>Other:';
         }
 
         len = sliders.length;
@@ -297,7 +297,7 @@
         for ( ; ++i < len ; ) {
             items[i] = {
                 id: (i+1),
-                descr: descr,
+                left: left,
                 choices: sliders[i]
             };
         }
