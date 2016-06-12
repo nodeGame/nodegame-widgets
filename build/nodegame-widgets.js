@@ -8009,7 +8009,7 @@
                     '<strong>not selected</strong> to start the game.' +
                     'Thank you for your participation.' +
                     '</span><br><br>';
-                if (false === data.isDispatchable
+                if (false === data.shouldDispatchMoreGames
                     || that.disconnectIfNotSelected) {
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
                 }
@@ -8081,8 +8081,8 @@
     };
 
     WaitingRoom.prototype.alertPlayer = function() {
-        JSUS.playSound('sounds/doorbell.ogg');
-        JSUS.blinkTitle(document.title, 'GAME STARTS!', {stopOnFocus: true});
+        JSUS.playSound('/sounds/doorbell.ogg');
+        JSUS.blinkTitle('GAME STARTS!', {stopOnFocus: true});
     };
 
     WaitingRoom.prototype.destroy = function() {

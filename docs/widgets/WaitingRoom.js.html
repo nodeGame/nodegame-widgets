@@ -1035,7 +1035,7 @@ is disconnected.</p>
                     <span class="s1">&#39;&lt;strong&gt;not selected&lt;/strong&gt; to start the game.&#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;Thank you for your participation.&#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">data</span><span class="p">.</span><span class="nx">isDispatchable</span>
+                <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">data</span><span class="p">.</span><span class="nx">shouldDispatchMoreGames</span>
                     <span class="o">||</span> <span class="nx">that</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">that</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="nx">reportExitCode</span><span class="p">);</span>
                 <span class="p">}</span>

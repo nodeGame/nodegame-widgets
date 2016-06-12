@@ -444,7 +444,7 @@
                     '<strong>not selected</strong> to start the game.' +
                     'Thank you for your participation.' +
                     '</span><br><br>';
-                if (false === data.isDispatchable
+                if (false === data.shouldDispatchMoreGames
                     || that.disconnectIfNotSelected) {
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
                 }
