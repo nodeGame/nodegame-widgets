@@ -517,7 +517,7 @@
 
     WaitingRoom.prototype.alertPlayer = function() {
         JSUS.playSound('/sounds/doorbell.ogg');
-        JSUS.blinkTitle(document.title, 'GAME STARTS!', {stopOnFocus: true});
+        JSUS.blinkTitle('GAME STARTS!', {stopOnFocus: true});
     };
 
     WaitingRoom.prototype.destroy = function() {
