@@ -444,8 +444,8 @@
                     '<strong>not selected</strong> to start the game.' +
                     'Thank you for your participation.' +
                     '</span><br><br>';
-                if (false === data.shouldDispatchMoreGames
-                    || that.disconnectIfNotSelected) {
+                if (false === data.shouldDispatchMoreGames ||
+                    that.disconnectIfNotSelected) {
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
                 }
             }
@@ -498,7 +498,7 @@
 
     WaitingRoom.prototype.setStartDate = function(startDate) {
         this.startDate = new Date(startDate).toString();
-        this.startDateDiv.innerHTML = "Game starts at: <br>" + this.startDate;
+        this.startDateDiv.innerHTML = 'Game starts at: <br>' + this.startDate;
         this.startDateDiv.style.display = '';
     };
 
