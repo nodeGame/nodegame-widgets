@@ -43,6 +43,9 @@
         <a href="#widgets.append">Widgets.append</a>
       </div>
       <div class="heading h3">
+        <a href="#widgets.destroy">Widgets.destroy</a>
+      </div>
+      <div class="heading h3">
         <a href="#widgets.destroyall">Widgets.destroyAll</a>
       </div>
       <div class="heading h3">
@@ -969,6 +972,79 @@ attachListeners(w);</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="widgets.destroy">
+  <h3>
+    <a href="#widgets.destroy" name="widgets.destroy" class="pilcrow">&#182;</a>
+    Widgets.destroy
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Destroys the widget with the specified id</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">id</span>
+      <span class="dox_type">string</span>
+      <span>The id of the widget to destroy</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">boolean</span>
+      <span>TRUE, if the widget was found and destroyed.</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.get</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.destroyAll
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">id</span> <span class="o">||</span> <span class="o">!</span><span class="nx">id</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.destroy: id must be a non-empty &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;string. Found: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+</div>
+<p>Nested widgets can be destroyed by previous calls to destroy,
+and each call to destroy modify the array of instances.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">id</span> <span class="o">===</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">destroy</span><span class="p">();</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;node.widgets.destroy: widget could not be destroyed: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="widgets.destroyall">
   <h3>
     <a href="#widgets.destroyall" name="widgets.destroyall" class="pilcrow">&#182;</a>
@@ -984,7 +1060,11 @@ attachListeners(w);</p>
   <div class="details">
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.get
+      <span class="dox_type">Widgets.get</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.destroy
 </span>
     </div>
   </div>
@@ -1001,7 +1081,7 @@ attachListeners(w);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
 </div>
 <p>Nested widgets can be destroyed by previous calls to destroy,
 and each call to destroy modify the array of instances.</p>
@@ -1117,7 +1197,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
 </div>
 <p>TODO: Check every parameter</p>
         </td>
@@ -1132,7 +1212,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code><span class="kd">function</span> <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
@@ -1172,7 +1252,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
 </div>
 <p>Expose Widgets to the global object.</p>
         </td>
@@ -1187,7 +1267,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>

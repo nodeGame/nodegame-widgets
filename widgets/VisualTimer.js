@@ -509,9 +509,8 @@
     VisualTimer.prototype.listeners = function() {
         var that = this;
 
-        if (!this.internalTimer) {
-            return;
-        }
+        // Add listeners only on internal timer.
+        if (!this.internalTimer) return;
 
         node.on('PLAYING', function() {
             var options;
