@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## current
+
+- `Widgets.destroy()`
+
 ## 0.7.1
 
 - Improved ChernoffFaces.
