@@ -755,6 +755,37 @@
     };
 
     /**
+     * ### Widgets.destroy
+     *
+     * Destroys the widget with the specified id
+     *
+     * @param {string} id The id of the widget to destroy
+     *
+     * @return {boolean} TRUE, if the widget was found and destroyed.
+     *
+     * @see Widgets.get
+     * @see Widgets.destroyAll
+     */
+    Widgets.prototype.destroy = function(id) {
+        var i, len;
+        if ('string' !== typeof id || !id.trim().length) {
+            throw new TypeError('Widgets.destroy: id must be a non-empty ' +
+                                'string. Found: ' + id);
+        }
+        i = -1, len = this.instances.length;
+        // Nested widgets can be destroyed by previous calls to destroy,
+        // and each call to destroy modify the array of instances.
+        for ( ; ++i < len ; ) {
+            if (this.instances[i].id === id) {
+                this.instances[i].destroy();
+                return true;
+            }
+        }
+        node.warn('node.widgets.destroy: widget could not be destroyed: ' + id);
+        return false;
+    };
+
+    /**
      * ### Widgets.destroyAll
      *
      * Removes all widgets that have been created through Widgets.get
@@ -762,6 +793,7 @@
      * Exceptions thrown in the widgets' destroy methods are caught.
      *
      * @see Widgets.get
+     * @see Widgets.destroy
      */
     Widgets.prototype.destroyAll = function() {
         var i, len;
@@ -11117,9 +11149,8 @@
     VisualTimer.prototype.listeners = function() {
         var that = this;
 
-        if (!this.internalTimer) {
-            return;
-        }
+        // Add listeners only on internal timer.
+        if (!this.internalTimer) return;
 
         node.on('PLAYING', function() {
             var options;
@@ -11373,32 +11404,46 @@
     function WaitingRoom(options) {
 
         /**
-         * ### WaitingRoom.callbacks
+         * ### WaitingRoom.connected
          *
-         * Array of all test callbacks
+         * Number of players connected
          */
         this.connected = 0;
 
         /**
-         * ### WaitingRoom.stillChecking
+         * ### WaitingRoom.poolSize
          *
-         * Number of tests still pending
+         * Number of players connected before groups are made
          */
         this.poolSize = 0;
 
         /**
-         * ### WaitingRoom.withTimeout
+         * ### WaitingRoom.nGames
+         *
+         * Total number of games to be dispatched
+         */
+        this.nGames = 0;
+
+        /**
+         * ### WaitingRoom.groupSize
          *
          * The size of the group
          */
         this.groupSize = 0;
 
         /**
-         * ### WaitingRoom.maxWaitTime
+         * ### WaitingRoom.waitTime
          *
          * The time in milliseconds for the timeout to expire
          */
-        this.maxWaitTime = null;
+        this.waitTime = null;
+
+        /**
+         * ### WaitingRoom.startDate
+         *
+         * The exact date and time when the game starts
+         */
+        this.startDate = null;
 
         /**
          * ### WaitingRoom.timeoutId
@@ -11422,6 +11467,13 @@
          * Span displaying the number of connected players
          */
         this.playerCount = null;
+
+        /**
+         * ### WaitingRoom.startDateDiv
+         *
+         * Div containing the start date
+         */
+        this.startDateDiv = null;
 
         /**
          * ### WaitingRoom.timerDiv
@@ -11449,19 +11501,27 @@
         this.dots = null;
 
         /**
-         * ### WaitingRoom.ontTimeout
+         * ### WaitingRoom.onTimeout
          *
          * Callback to be executed if the timer expires
          */
-        this.ontTimeout = null;
+        this.onTimeout = null;
+
 
         /**
-         * ### WaitingRoom.onTimeout
+         * ### WaitingRoom.disconnectMessage
          *
-         * TRUE if the timer expired
+         * String to be put into `this.bodyDiv.innerHTML` when player
+         * is disconnected.
          */
-        this.alreadyTimeUp = null;
+        this.disconnectMessage = null;
 
+        /**
+         * ### WaitingRoom.disconnectIfNotSelected
+         *
+         * Flag that indicates whether to disconnect an not selected player
+         */
+        this.disconnectIfNotSelected = null;
     }
 
     // ## WaitingRoom methods
@@ -11474,9 +11534,9 @@
      * Available options:
      *
      *   - onComplete: function executed with either failure or success
-     *   - onTimeout: function executed when at least one test fails
+     *   - onTimeout: function executed when timer runs out
      *   - onSuccess: function executed when all tests succeed
-     *   - maxWaitTime: max waiting time to execute all tests (in milliseconds)
+     *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *
      * @param {object} conf Configuration object.
      */
@@ -11484,24 +11544,26 @@
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object.');
         }
-        if ('undefined' !== typeof conf.onTimeout) {
-            if (null !== conf.onTimeout &&
-                'function' !== typeof conf.onTimeout) {
-
+        if (conf.onTimeout) {
+            if ('function' !== typeof conf.onTimeout) {
                 throw new TypeError('WaitingRoom.init: conf.onTimeout must ' +
                                     'be function, null or undefined.');
             }
             this.onTimeout = conf.onTimeout;
         }
-        if (conf.maxWaitTime) {
-            if (null !== conf.maxWaitTime &&
-                'number' !== typeof conf.maxWaitTime) {
+        if (conf.waitTime) {
+            if (null !== conf.waitTime &&
+                'number' !== typeof conf.waitTime) {
 
                 throw new TypeError('WaitingRoom.init: conf.onMaxExecTime ' +
                                     'must be number, null or undefined.');
             }
-            this.maxWaitTime = conf.maxWaitTime;
+            this.waitTime = conf.waitTime;
             this.startTimer();
+        }
+        // TODO: check conditions?
+        if (conf.startDate) {
+            this.setStartDate(conf.startDate);
         }
 
         if (conf.poolSize) {
@@ -11519,6 +11581,13 @@
             }
             this.groupSize = conf.groupSize;
         }
+        if (conf.nGames) {
+            if (conf.nGames && 'number' !== typeof conf.nGames) {
+                throw new TypeError('WaitingRoom.init: conf.nGames ' +
+                                    'must be number or undefined.');
+            }
+            this.nGames = conf.nGames;
+        }
 
         if (conf.connected) {
             if (conf.connected && 'number' !== typeof conf.connected) {
@@ -11527,6 +11596,32 @@
             }
             this.connected = conf.connected;
         }
+
+        if (conf.disconnectMessage) {
+            if ('string' !== typeof conf.disconnectMessage) {
+                throw new TypeError('WaitingRoom.init: ' +
+                        'conf.disconnectMessage must be string or undefined.');
+            }
+            this.disconnectMessage = conf.disconnectMessage;
+        }
+        else {
+            this.disconnectMessage = '<span style="color: red">You have been ' +
+                '<strong>disconnected</strong>. Please try again later.' +
+                '</span><br><br>';
+        }
+
+        if (conf.disconnectIfNotSelected) {
+            if ('boolean' !== typeof conf.disconnectIfNotSelected) {
+                throw new TypeError('WaitingRoom.init: ' +
+                    'conf.disconnectIfNotSelected must be boolean or ' +
+                    'undefined.');
+            }
+            this.disconnectIfNotSelected = conf.disconnectIfNotSelected;
+        }
+        else {
+            this.disconnectIfNotSelected = false;
+        }
+
     };
 
     /**
@@ -11536,8 +11631,9 @@
      *
      */
     WaitingRoom.prototype.startTimer = function() {
+        var that = this;
         if (this.timer) return;
-        if (!this.maxWaitTime) return;
+        if (!this.waitTime) return;
         if (!this.timerDiv) {
             this.timerDiv = document.createElement('div');
             this.timerDiv.id = 'timer-div';
@@ -11546,8 +11642,13 @@
             'Maximum Waiting Time: '
         ));
         this.timer = node.widgets.append('VisualTimer', this.timerDiv, {
-            milliseconds: this.maxWaitTime,
-            timeup: this.onTimeup,
+            milliseconds: this.waitTime,
+            timeup: function() {
+                that.bodyDiv.innerHTML =
+                    'Waiting for too long. Please look for a HIT called ' +
+                    '<strong>ETH Descil Trouble Ticket</strong> and file' +
+                    ' a new trouble ticket reporting your experience.';
+            },
             update: 1000
         });
         // Style up: delete title and border;
@@ -11575,7 +11676,7 @@
     };
 
     /**
-     * ### WaitingRoom.updateDisplay
+     * ### WaitingRoom.updateState
      *
      * Displays the state of the waiting room on screen
      *
@@ -11602,7 +11703,25 @@
      * @see WaitingRoom.updateState
      */
     WaitingRoom.prototype.updateDisplay = function() {
-        this.playerCount.innerHTML = this.connected + ' / ' + this.poolSize;
+        var numberOfGameSlots, numberOfGames;
+        if (this.connected > this.poolSize) {
+            numberOfGames = Math.floor(this.connected / this.groupSize);
+            numberOfGames = numberOfGames > this.nGames ?
+                this.nGames : numberOfGames;
+            numberOfGameSlots = numberOfGames * this.groupSize;
+
+            this.playerCount.innerHTML = '<span style="color:red">' +
+                this.connected + '</span>' + ' / ' + this.poolSize;
+            this.playerCountTooHigh.style.display = '';
+            this.playerCountTooHigh.innerHTML = 'There are more players in ' +
+                'this waiting room than there are playslots in the game. ' +
+                'Only ' + numberOfGameSlots + ' players will be selected to ' +
+                'play the game.';
+        }
+        else {
+            this.playerCount.innerHTML = this.connected + ' / ' + this.poolSize;
+            this.playerCountTooHigh.style.display = 'none';
+        }
     };
 
     WaitingRoom.prototype.append = function() {
@@ -11616,12 +11735,23 @@
         this.playerCount.id = 'player-count';
         this.playerCountDiv.appendChild(this.playerCount);
 
+        this.playerCountTooHigh = document.createElement('div');
+        this.playerCountTooHigh.style.display = 'none';
+        this.playerCountDiv.appendChild(this.playerCountTooHigh);
+
         this.dots = W.getLoadingDots();
         this.playerCountDiv.appendChild(this.dots.span);
 
         this.bodyDiv.appendChild(this.playerCountDiv);
 
-        if (this.maxWaitTime) {
+        this.startDateDiv = document.createElement('div');
+        this.bodyDiv.appendChild(this.startDateDiv);
+        this.startDateDiv.style.display= 'none';
+
+        if (this.startDate) {
+            this.setStartDate(this.startDate);
+        }
+        if (this.waitTime) {
             this.startTimer();
         }
 
@@ -11650,8 +11780,52 @@
             that.updateDisplay();
         });
 
+        node.on.data('DISPATCH', function(msg) {
+            var data, reportExitCode;
+            msg = msg || {};
+            data = msg.data || {};
+
+            reportExitCode = '<br>You have been disconnected. ' +
+                ('undefined' !== typeof data.exit ?
+                'Please report this exit code: ' + data.exit : '') +
+                '<br></h3>';
+
+            if (data.action === 'AllPlayersConnected') {
+                that.alertPlayer();
+            }
+
+            else if (data.action === 'NotEnoughPlayers') {
+                that.bodyDiv.innerHTML =
+                    '<h3 align="center" style="color: red">' +
+                    'Thank you for your patience.<br>' +
+                    'Unfortunately, there are not enough participants in ' +
+                    'your group to start the experiment.<br>';
+
+                that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+            }
+
+            else if (data.action === 'NotSelected') {
+                that.bodyDiv.innerHTML = '<h3 align="center">' +
+                    '<span style="color: red"> You were ' +
+                    '<strong>not selected</strong> to start the game.' +
+                    'Thank you for your participation.' +
+                    '</span><br><br>';
+                if (false === data.shouldDispatchMoreGames ||
+                    that.disconnectIfNotSelected) {
+                    that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                }
+            }
+
+            else if (data.action === 'Disconnect') {
+                that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+            }
+        });
+
         node.on.data('TIME', function(msg) {
-            timeIsUp.call(that, msg.data);
+            msg = msg || {};
+            console.log('TIME IS UP!');
+            that.stopTimer();
+            if (this.onTimeout) this.onTimeout(msg.data);
         });
 
 
@@ -11667,49 +11841,54 @@
         });
 
         node.on('SOCKET_DISCONNECT', function() {
-            if (that.alreadyTimeUp) return;
 
             // Terminate countdown.
-            if (that.timer) {
-                that.timer.stop();
-                that.timer.destroy();
-            }
+            that.stopTimer();
 
             // Write about disconnection in page.
-            that.bodyDiv.innerHTML = '<span style="color: red">You have been ' +
-                '<strong>disconnected</strong>. Please try again later.' +
-                '</span><br><br>';
+            that.bodyDiv.innerHTML = that.disconnectMessage;
 
 //             // Enough to not display it in case of page refresh.
 //             setTimeout(function() {
 //                 alert('Disconnection from server detected!');
 //             }, 200);
         });
+
+        node.on.data('ROOM_CLOSED', function() {
+            that.disconnect('<span style="color: red"> The waiting ' +
+                'room is <strong>CLOSED</strong>. You have been disconnected.' +
+                ' Please try again later.' +
+                '</span><br><br>');
+        });
+    };
+
+    WaitingRoom.prototype.setStartDate = function(startDate) {
+        this.startDate = new Date(startDate).toString();
+        this.startDateDiv.innerHTML = 'Game starts at: <br>' + this.startDate;
+        this.startDateDiv.style.display = '';
+    };
+
+    WaitingRoom.prototype.stopTimer = function() {
+        if (this.timer) {
+            console.log('STOPPING TIMER');
+            this.timer.stop();
+            this.timer.destroy();
+        }
+    };
+
+    WaitingRoom.prototype.disconnect = function(msg) {
+        if (msg) this.disconnectMessage = msg;
+        node.socket.disconnect();
+    };
+
+    WaitingRoom.prototype.alertPlayer = function() {
+        JSUS.playSound('/sounds/doorbell.ogg');
+        JSUS.blinkTitle('GAME STARTS!', {stopOnFocus: true});
     };
 
     WaitingRoom.prototype.destroy = function() {
         node.deregisterSetup('waitroom');
     };
-
-    // ## Helper methods
-
-    function timeIsUp(data) {
-        console.log('TIME IS UP!');
-
-        if (this.alreadyTimeUp) return;
-        this.alreadyTimeUp = true;
-        if (this.timer) this.timer.stop();
-
-        data = data || {};
-
-        // All players have connected. Game starts.
-        if (data.over === 'AllPlayersConnected') return;
-
-        node.socket.disconnect();
-
-
-        if (this.onTimeout) this.onTimeout(data);
-    }
 
 })(node);
 
