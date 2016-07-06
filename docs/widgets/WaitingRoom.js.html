@@ -113,7 +113,7 @@
 </div>
 
 
-<p>Copyright(c) 2015 Stefano Balietti
+<p>Copyright(c) 2016 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Display the number of connected / required players to start a game</p>
@@ -1026,6 +1026,8 @@ is disconnected.</p>
                     <span class="s1">&#39;Unfortunately, there are not enough participants in &#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;your group to start the experiment.&lt;br&gt;&#39;</span><span class="p">;</span>
 
+                <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+
                 <span class="nx">that</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="nx">reportExitCode</span><span class="p">);</span>
             <span class="p">}</span>
 
@@ -1050,7 +1052,6 @@ is disconnected.</p>
             <span class="nx">msg</span> <span class="o">=</span> <span class="nx">msg</span> <span class="o">||</span> <span class="p">{};</span>
             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;TIME IS UP!&#39;</span><span class="p">);</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">stopTimer</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
         <span class="p">});</span>
 
 
