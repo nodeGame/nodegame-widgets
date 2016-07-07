@@ -573,7 +573,7 @@
             // Configure all requirements.
             that.init(conf);
             // Start a checking immediately if requested.
-            if (conf.doChecking) that.checkRequirements();
+            if (conf.doChecking !== false) that.checkRequirements();
 
             return conf;
         });
@@ -583,7 +583,7 @@
         node.deregisterSetup('requirements');
     };
 
-    // ## Helper methods
+    // ## Helper methods.
 
     function resultCb(that, name, i) {
         var req, update, res;
