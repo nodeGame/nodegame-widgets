@@ -139,6 +139,9 @@ MIT Licensed</p>
   </div>
   <div class="body"><p>Checks a list of requirements and displays the results</p>
 
+<p>TODO: see if we need to reset the state between two
+consecutive calls to checkRequirements (results array).</p>
+
 <p>www.nodegame.org</p>
   </div>
 </div>
@@ -167,7 +170,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.6.0&#39;</span><span class="p">;</span>
+    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.7.0&#39;</span><span class="p">;</span>
     <span class="nx">Requirements</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Checks a set of requirements and display the &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;results&#39;</span><span class="p">;</span>
 
@@ -907,10 +910,10 @@ corresponding option is set.</p>
                 <span class="nx">resultCb</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
                 <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">extractErrorMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-
-                <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;An exception occurred in requirement n.&#39;</span> <span class="o">+</span>
+                <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;An error occurred in requirement n.&#39;</span> <span class="o">+</span>
                             <span class="nx">cbName</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nx">errMsg</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>

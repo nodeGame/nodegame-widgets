@@ -8429,6 +8429,9 @@
  *
  * Checks a list of requirements and displays the results
  *
+ * TODO: see if we need to reset the state between two
+ * consecutive calls to checkRequirements (results array).
+ *
  * www.nodegame.org
  */
 (function(node) {
@@ -8441,7 +8444,7 @@
 
     // ## Meta-data
 
-    Requirements.version = '0.6.0';
+    Requirements.version = '0.7.0';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
@@ -8760,10 +8763,10 @@
                 resultCb(this, cbName, i);
             }
             catch(e) {
+                this.hasFailed = true;
                 errMsg = extractErrorMsg(e);
                 this.updateStillChecking(-1);
-
-                errors.push('An exception occurred in requirement n.' +
+                errors.push('An error occurred in requirement n.' +
                             cbName + ': ' + errMsg);
             }
         }
@@ -8997,7 +9000,7 @@
             // Configure all requirements.
             that.init(conf);
             // Start a checking immediately if requested.
-            if (conf.doChecking) that.checkRequirements();
+            if (conf.doChecking !== false) that.checkRequirements();
 
             return conf;
         });
@@ -9007,7 +9010,7 @@
         node.deregisterSetup('requirements');
     };
 
-    // ## Helper methods
+    // ## Helper methods.
 
     function resultCb(that, name, i) {
         var req, update, res;
@@ -11884,7 +11887,7 @@
 
     WaitingRoom.prototype.alertPlayer = function() {
         JSUS.playSound('/sounds/doorbell.ogg');
-        JSUS.blinkTitle('GAME STARTS!', {stopOnFocus: true});
+        JSUS.blinkTitle(['3', '2', '1', 'GAME STARTS!'], { stopOnFocus: true });
     };
 
     WaitingRoom.prototype.destroy = function() {
