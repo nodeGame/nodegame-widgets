@@ -11886,8 +11886,12 @@
     };
 
     WaitingRoom.prototype.alertPlayer = function() {
+        var opts;
         JSUS.playSound('/sounds/doorbell.ogg');
-        JSUS.blinkTitle(['3', '2', '1', 'GAME STARTS!'], { stopOnFocus: true });
+        if (document.hasFocus && document.hasFocus()) opts = { repeatFor: 1 };
+        else opts = { stopOnFocus: true, stopOnClick: window };
+        debugger
+        JSUS.blinkTitle(['3', '2', '1', 'GAME STARTS!'], opts);
     };
 
     WaitingRoom.prototype.destroy = function() {
