@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    WaitingRoom.version = '0.1.0';
+    WaitingRoom.version = '1.0.0';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';

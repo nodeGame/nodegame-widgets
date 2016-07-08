@@ -838,7 +838,7 @@
                 obj.missValues = true;
                 if (tbl.requiredChoice) toHighlight = true;
             }
-            if (!obj.items[tbl.id].isCorrect === false && opts.highlight) {
+            if (obj.items[tbl.id].isCorrect === false && opts.highlight) {
                 toHighlight = true;
             }
         }
