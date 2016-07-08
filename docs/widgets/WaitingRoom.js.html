@@ -1167,11 +1167,56 @@ if (timeCheck) clearInterval(timeCheck);</p>
     <span class="p">};</span>
 
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">alertPlayer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">opts</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">clearBlink</span><span class="p">,</span> <span class="nx">onFrame</span><span class="p">;</span>
+
         <span class="nx">JSUS</span><span class="p">.</span><span class="nx">playSound</span><span class="p">(</span><span class="s1">&#39;/sounds/doorbell.ogg&#39;</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">hasFocus</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="p">.</span><span class="nx">hasFocus</span><span class="p">())</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">repeatFor</span><span class="o">:</span> <span class="mi">1</span> <span class="p">};</span>
-        <span class="k">else</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">stopOnFocus</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">stopOnClick</span><span class="o">:</span> <span class="nb">window</span> <span class="p">};</span>
-        <span class="nx">JSUS</span><span class="p">.</span><span class="nx">blinkTitle</span><span class="p">([</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;GAME STARTS!&#39;</span><span class="p">],</span> <span class="nx">opts</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+</div>
+<p>If document.hasFocus() returns TRUE, then just one repeat is enough.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">hasFocus</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="p">.</span><span class="nx">hasFocus</span><span class="p">())</span> <span class="p">{</span>
+            <span class="nx">JSUS</span><span class="p">.</span><span class="nx">blinkTitle</span><span class="p">(</span><span class="s1">&#39;GAME STARTS!&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">repeatFor</span><span class="o">:</span> <span class="mi">1</span> <span class="p">});</span>
+        <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+</div>
+<p>Otherwise we repeat blinking until an event that shows that the
+user is active on the page happens, e.g. focus and click. However,
+the iframe is not created yet, and even later. if the user clicks it
+it won't be detected in the main window, so we need to handle it.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">clearBlink</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">blinkTitle</span><span class="p">(</span><span class="s1">&#39;GAME STARTS!&#39;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="nx">stopOnFocus</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="nx">stopOnClick</span><span class="o">:</span> <span class="nb">window</span>
+            <span class="p">});</span>
+            <span class="nx">onFrame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">frame</span><span class="p">;</span>
+                <span class="nx">clearBlink</span><span class="p">();</span>
+                <span class="nx">frame</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrame</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">frame</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">frame</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;mouseover&#39;</span><span class="p">,</span> <span class="nx">onFrame</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">};</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">ng</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;FRAME_GENERATED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">frame</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">frame</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mouseover&#39;</span><span class="p">,</span> <span class="nx">onFrame</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
     <span class="p">};</span>
 
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
