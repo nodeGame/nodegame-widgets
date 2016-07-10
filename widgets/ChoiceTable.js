@@ -1252,7 +1252,7 @@
         }
         if (null !== this.correctChoice || null !== this.requiredChoice) {
             obj.isCorrect = this.verifyChoice(opts.markAttempt);
-            obj.attemps = this.attemps;
+            obj.attempts = this.attempts;
             if (!obj.isCorrect && opts.highlight) this.highlight();
         }
         if (this.textarea) obj.freetext = this.textarea.value;

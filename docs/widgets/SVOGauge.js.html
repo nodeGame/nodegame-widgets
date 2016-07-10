@@ -636,6 +636,7 @@ implementing functions: append, enable, disable, getValues</p>
 
         <span class="nx">renderer</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(</span><span class="nx">td</span><span class="p">,</span> <span class="nx">choice</span><span class="p">,</span> <span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">td</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&lt;hr/&gt;&#39;</span> <span class="o">+</span> <span class="nx">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
         <span class="p">};</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span> <span class="p">{</span>
