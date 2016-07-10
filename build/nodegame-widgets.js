@@ -4594,6 +4594,9 @@
             nClicks: this.numberOfClicks
         };
         opts = opts || {};
+        if (opts.processChoice) {
+            obj.choice = opts.processChoice.call(this, obj.choice);
+        }
         if (this.shuffleChoices) {
             obj.order = this.order;
         }
@@ -4605,7 +4608,7 @@
         }
         if (null !== this.correctChoice || null !== this.requiredChoice) {
             obj.isCorrect = this.verifyChoice(opts.markAttempt);
-            obj.attemps = this.attemps;
+            obj.attempts = this.attempts;
             if (!obj.isCorrect && opts.highlight) this.highlight();
         }
         if (this.textarea) obj.freetext = this.textarea.value;
@@ -9294,6 +9297,13 @@
     };
 
     SVOGauge.prototype.getValues = function(opts) {
+        opts = opts || {};
+        // Transform choice in numerical values.
+        if ('undefined' === typeof opts.processChoice) {
+            opts.processChoice = function(choice) {
+                return this.choices[choice];
+            };
+        }
         return this.gauge.getValues(opts);
     };
 
@@ -9430,6 +9440,7 @@
 
         renderer = options.renderer || function(td, choice, idx) {
             td.innerHTML = choice[0] + '<hr/>' + choice[1];
+            // return (choice[0] + '_' + choice[1]);
         };
 
         if (options.left) {
