@@ -419,6 +419,24 @@ implementing functions: append, enable, disable, getValues</p>
     <span class="p">};</span>
 
     <span class="nx">SVOGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">opts</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">||</span> <span class="p">{};</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>Transform choice in numerical values.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">processChoice</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">opts</span><span class="p">.</span><span class="nx">processChoice</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">choice</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">choices</span><span class="p">[</span><span class="nx">choice</span><span class="p">];</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
     <span class="p">};</span>
 
@@ -556,7 +574,7 @@ implementing functions: append, enable, disable, getValues</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Other types ignored.</p>
         </td>
@@ -636,7 +654,6 @@ implementing functions: append, enable, disable, getValues</p>
 
         <span class="nx">renderer</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">renderer</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(</span><span class="nx">td</span><span class="p">,</span> <span class="nx">choice</span><span class="p">,</span> <span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">td</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&lt;hr/&gt;&#39;</span> <span class="o">+</span> <span class="nx">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-            <span class="k">return</span> <span class="p">(</span><span class="nx">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
         <span class="p">};</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span> <span class="p">{</span>

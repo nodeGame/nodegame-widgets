@@ -1241,6 +1241,9 @@
             nClicks: this.numberOfClicks
         };
         opts = opts || {};
+        if (opts.processChoice) {
+            obj.choice = opts.processChoice.call(this, obj.choice);
+        }
         if (this.shuffleChoices) {
             obj.order = this.order;
         }

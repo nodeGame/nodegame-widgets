@@ -145,6 +145,13 @@
     };
 
     SVOGauge.prototype.getValues = function(opts) {
+        opts = opts || {};
+        // Transform choice in numerical values.
+        if ('undefined' === typeof opts.processChoice) {
+            opts.processChoice = function(choice) {
+                return this.choices[choice];
+            };
+        }
         return this.gauge.getValues(opts);
     };
 
@@ -281,7 +288,6 @@
 
         renderer = options.renderer || function(td, choice, idx) {
             td.innerHTML = choice[0] + '<hr/>' + choice[1];
-            return (choice[0] + '_' + choice[1]);
         };
 
         if (options.left) {
