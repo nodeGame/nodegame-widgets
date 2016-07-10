@@ -103,6 +103,18 @@
             that.draw(f, updateControls);
         };
 
+        /**
+         * ### ChoiceTable.timeFrom
+         *
+         * Name of the event to measure time from for each change
+         *
+         * Default event is a new step is loaded (user can interact with
+         * the screen). Set it to FALSE, to have absolute time.
+         *
+         * @see node.timer.getTimeSince
+         */
+        this.timeFrom = 'step';
+
         // ### ChernoffFaces.features
         // The object containing all the features to draw Chernoff faces
         this.features = null;
@@ -317,10 +329,24 @@
      * @see ChernoffFaces.features
      */
     ChernoffFaces.prototype.draw = function(features, updateControls) {
+        var time;
         if ('object' !== typeof features) {
             throw new TypeError('ChernoffFaces.draw: features must be object.');
         }
-        if (this.options.trackChanges) this.changes.push(features);
+        if (this.options.trackChanges) {
+            // Relative time.
+            if ('string' === typeof this.timeFrom) {
+                time = node.timer.getTimeSince(this.timeFrom);
+            }
+            // Absolute time.
+            else {
+                time = Date.now ? Date.now() : new Date().getTime();
+            }
+            this.changes.push({
+                time: time,
+                change: features
+            });
+        };
 
         // Create a new FaceVector, if features is not one, mixing-in
         // new features and old ones.
@@ -647,12 +673,9 @@
 
 
     /**
+     * FaceVector.defaults
      *
-     * A description of a Chernoff Face.
-     *
-     * This class packages the 11-dimensional vector of numbers from 0 through
-     * 1 that completely describe a Chernoff face.
-     *
+     * Numerical description of all the components of a standard Chernoff Face
      */
     FaceVector.defaults = {
         // Head
@@ -863,29 +886,6 @@
 
     // Constructs a random face vector.
     FaceVector.random = function() {
-//         var out, key;
-//         out = {};
-//         for (key in FaceVector.defaults) {
-//             if (FaceVector.defaults.hasOwnProperty(key)) {
-//                 if (key === 'color') {
-//                     out.color = 'red';
-//                 }
-//                 else if (key === 'lineWidth') {
-//                     out.lineWidth = 1;
-//                 }
-//                 else if (key === 'scaleX') {
-//                     out.scaleX = 1;
-//                 }
-//                 else if (key === 'scaleY') {
-//                     out.scaleY = 1;
-//                 }
-//                 else {
-//                     out[key] = FaceVector.defaults[key].min +
-//                         Math.random() * FaceVector.defaults[key].max;
-//                 }
-//             }
-//         }
-//         return new FaceVector(out);
         console.log('*** FaceVector.random is deprecated. ' +
                     'Use new FaceVector() instead.');
         return new FaceVector();

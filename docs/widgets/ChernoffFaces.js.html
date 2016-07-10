@@ -58,6 +58,9 @@
         <a href="#chernofffaces.onchangecb">ChernoffFaces.onChangeCb</a>
       </div>
       <div class="heading h3">
+        <a href="#choicetable.timefrom">ChoiceTable.timeFrom</a>
+      </div>
+      <div class="heading h3">
         <a href="#chernofffaces.features">ChernoffFaces.features</a>
       </div>
       <div class="heading h3">
@@ -411,6 +414,38 @@ Can be set manually via options.controls.
         </td>
       </tr>
       <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.timefrom">
+  <h3>
+    <a href="#choicetable.timefrom" name="choicetable.timefrom" class="pilcrow">&#182;</a>
+    ChoiceTable.timeFrom
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Name of the event to measure time from for each change</p>
+
+<p>Default event is a new step is loaded (user can interact with
+the screen). Set it to FALSE, to have absolute time.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">node.timer.getTimeSince
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span> <span class="o">=</span> <span class="s1">&#39;step&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
         <td class="docs">
 <div class="pilwrap" id="chernofffaces.features">
   <h3>
@@ -490,7 +525,7 @@ by the <code>append</code> method.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Face Painter.</p>
         </td>
@@ -509,7 +544,7 @@ by the <code>append</code> method.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Draw features, if facepainter was already created.</p>
         </td>
@@ -523,7 +558,7 @@ by the <code>append</code> method.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>onChange event.</p>
         </td>
@@ -620,7 +655,7 @@ eventually adds the controls.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Table.</p>
         </td>
@@ -644,7 +679,7 @@ eventually adds the controls.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Canvas.</p>
         </td>
@@ -658,7 +693,7 @@ eventually adds the controls.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Controls.</p>
         </td>
@@ -671,7 +706,7 @@ eventually adds the controls.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Sc options.</p>
         </td>
@@ -690,7 +725,7 @@ eventually adds the controls.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Create them.</p>
         </td>
@@ -710,7 +745,7 @@ eventually adds the controls.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Table.</p>
         </td>
@@ -725,7 +760,7 @@ eventually adds the controls.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Create and append table.</p>
         </td>
@@ -789,7 +824,7 @@ eventually adds the controls.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Face Painter.</p>
         </td>
@@ -913,10 +948,46 @@ to current options.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChernoffFaces</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">draw</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">features</span><span class="p">,</span> <span class="nx">updateControls</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">time</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">features</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;ChernoffFaces.draw: features must be object.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">trackChanges</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">changes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">features</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">trackChanges</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+</div>
+<p>Relative time.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">time</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">getTimeSince</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeFrom</span><span class="p">);</span>
+            <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+</div>
+<p>Absolute time.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">time</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span> <span class="o">?</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">changes</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+                <span class="nx">time</span><span class="o">:</span> <span class="nx">time</span><span class="p">,</span>
+                <span class="nx">change</span><span class="o">:</span> <span class="nx">features</span>
+            <span class="p">});</span>
+        <span class="p">};</span>
 
 
 </pre></div>
@@ -925,7 +996,7 @@ to current options.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Create a new FaceVector, if features is not one, mixing-in
 new features and old ones.</p>
@@ -943,7 +1014,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Without merging wrong values are passed as attributes.</p>
         </td>
@@ -1005,7 +1076,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>If controls are visible, updates them.</p>
         </td>
@@ -1235,7 +1306,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 <p>console.log('Face Scale ' + face.scaleY + ' ' + face.scaleX );</p>
         </td>
@@ -1273,7 +1344,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
 </div>
 <p>TODO: Improve. It eats a bit of the margins</p>
         </td>
@@ -1324,7 +1395,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>console.log(face);</p>
         </td>
@@ -1346,7 +1417,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
 </div>
 <p>console.log(face);</p>
         </td>
@@ -1442,7 +1513,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
 </div>
 <p>this.canvas.ctx.closePath();</p>
         </td>
@@ -1468,7 +1539,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
+  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
 </div>
 <p>Upper Lip</p>
         </td>
@@ -1484,7 +1555,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
+  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
 </div>
 <p>Lower Lip</p>
         </td>
@@ -1503,7 +1574,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
+  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
 </div>
 <p>TODO Scaling ?</p>
         </td>
@@ -1517,7 +1588,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
+  <a class="pilcrow" href="#section-54" id="section-54">&#182;</a>
 </div>
 <p>var pos = y - face.head_radius * face.scaleY +
          face.head_radius * face.scaleY * 2 * offset;</p>
@@ -1531,7 +1602,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
+  <a class="pilcrow" href="#section-55" id="section-55">&#182;</a>
 </div>
 <p>console.log('POS: ' + pos);</p>
         </td>
@@ -1554,15 +1625,12 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
+  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
 </div>
 <div class="dox">
-  <div class="summary">
+  <div class="summary"><p>FaceVector.defaults</p>
   </div>
-  <div class="body"><p>A description of a Chernoff Face.</p>
-
-<p>This class packages the 11-dimensional vector of numbers from 0 through
-1 that completely describe a Chernoff face.</p>
+  <div class="body"><p>Numerical description of all the components of a standard Chernoff Face</p>
   </div>
 </div>
         </td>
@@ -1575,7 +1643,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-54" id="section-54">&#182;</a>
+  <a class="pilcrow" href="#section-57" id="section-57">&#182;</a>
 </div>
 <p>Head</p>
         </td>
@@ -1588,7 +1656,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-55" id="section-55">&#182;</a>
+  <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
 </div>
 <p>id can be specified otherwise is taken head_radius</p>
         </td>
@@ -1620,7 +1688,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
+  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
 </div>
 <p>Eye</p>
         </td>
@@ -1667,7 +1735,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-57" id="section-57">&#182;</a>
+  <a class="pilcrow" href="#section-60" id="section-60">&#182;</a>
 </div>
 <p>Pupil</p>
         </td>
@@ -1700,7 +1768,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
+  <a class="pilcrow" href="#section-61" id="section-61">&#182;</a>
 </div>
 <p>Eyebrow</p>
         </td>
@@ -1740,7 +1808,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
+  <a class="pilcrow" href="#section-62" id="section-62">&#182;</a>
 </div>
 <p>Nose</p>
         </td>
@@ -1773,7 +1841,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-60" id="section-60">&#182;</a>
+  <a class="pilcrow" href="#section-63" id="section-63">&#182;</a>
 </div>
 <p>Mouth</p>
         </td>
@@ -1848,7 +1916,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-61" id="section-61">&#182;</a>
+  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
 </div>
 <p>Compute range for each feature.</p>
         </td>
@@ -1869,50 +1937,12 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-62" id="section-62">&#182;</a>
+  <a class="pilcrow" href="#section-65" id="section-65">&#182;</a>
 </div>
 <p>Constructs a random face vector.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">random</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-63" id="section-63">&#182;</a>
-</div>
-
-<div class="highlight"><pre><code>    <span class="kd">var</span> <span class="nx">out</span><span class="p">,</span> <span class="nx">key</span><span class="p">;</span>
-    <span class="nx">out</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;color&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">out</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;lineWidth&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">out</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;scaleX&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">out</span><span class="p">.</span><span class="nx">scaleX</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;scaleY&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">out</span><span class="p">.</span><span class="nx">scaleY</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">out</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">min</span> <span class="o">+</span>
-                    <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nx">FaceVector</span><span class="p">.</span><span class="nx">defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">max</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">FaceVector</span><span class="p">(</span><span class="nx">out</span><span class="p">);</span>
-</code></pre></div>
-
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** FaceVector.random is deprecated. &#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;Use new FaceVector() instead.&#39;</span><span class="p">);</span>
         <span class="k">return</span> <span class="k">new</span> <span class="nx">FaceVector</span><span class="p">();</span>
@@ -1927,7 +1957,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
+  <a class="pilcrow" href="#section-66" id="section-66">&#182;</a>
 </div>
 <p>Make random vector.</p>
         </td>
@@ -1961,7 +1991,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-65" id="section-65">&#182;</a>
+  <a class="pilcrow" href="#section-67" id="section-67">&#182;</a>
 </div>
 <p>Mixin values.</p>
         </td>
@@ -1983,7 +2013,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-66" id="section-66">&#182;</a>
+  <a class="pilcrow" href="#section-68" id="section-68">&#182;</a>
 </div>
 <p>Merge on key.</p>
         </td>
@@ -2013,7 +2043,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-67" id="section-67">&#182;</a>
+  <a class="pilcrow" href="#section-69" id="section-69">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code><span class="c1">//Constructs a random face vector.</span>
@@ -2042,7 +2072,7 @@ new features and old ones.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-68" id="section-68">&#182;</a>
+  <a class="pilcrow" href="#section-70" id="section-70">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code><span class="c1">//Computes the Euclidean distance between two FaceVectors.</span>
