@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 2.1.0
+- Fixed timer destroying in Waiting Room.
+
 ## 2.0.0
 
 - `Widgets.destroy()`
