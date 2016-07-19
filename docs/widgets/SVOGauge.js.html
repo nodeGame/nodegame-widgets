@@ -434,10 +434,14 @@ implementing functions: append, enable, disable, getValues</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">processChoice</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">opts</span><span class="p">.</span><span class="nx">processChoice</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">choice</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">choices</span><span class="p">[</span><span class="nx">choice</span><span class="p">];</span>
+                <span class="k">return</span> <span class="nx">choice</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">choices</span><span class="p">[</span><span class="nx">choice</span><span class="p">];</span>
             <span class="p">};</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">SVOGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">setValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
     <span class="p">};</span>
 
     <span class="nx">SVOGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>

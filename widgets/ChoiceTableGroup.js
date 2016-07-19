@@ -494,11 +494,11 @@
         this.itemsSettings = items;
         this.items = new Array(len);
 
-        // Save the order in which the choices will be added.
+        // Save the order in which the items will be added.
         this.order = J.seq(0, len-1);
         if (this.shuffleItems) this.order = J.shuffle(this.order);
 
-        // Build the table and choices at once (faster).
+        // Build the table and items at once (faster).
         if (this.table) this.buildTable();
     };
 
@@ -845,6 +845,34 @@
         if (toHighlight) this.highlight();
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
+    };
+
+   /**
+     * ### ChoiceTableGroup.setValues
+     *
+     * Sets values in the choice table group as specified by the options
+     *
+     * @param {object} options Optional. Options specifying how to set
+     *   the values. If no parameter is specified, random values will
+     *   be set.
+     *
+     * @see ChoiceTable.setValues
+     *
+     * @experimental
+     */
+    ChoiceTableGroup.prototype.setValues = function(opts) {
+        var i, len;
+        if (!this.items || !this.items.length) {
+            throw new Error('ChoiceTableGroup.setValues: no items found.');
+        }
+        opts = opts || {};
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            this.items[i].setValues(opts);
+        }
+
+        // Make a random comment.
+        if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
     };
 
     // ## Helper methods.

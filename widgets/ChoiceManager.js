@@ -476,6 +476,30 @@
         return obj;
     };
 
+    /**
+     * ### ChoiceManager.setValues
+     *
+     * Sets values for forms in manager as specified by the options
+     *
+     * @param {object} options Optional. Options specifying how to set
+     *   the values. If no parameter is specified, random values will
+     *   be set.
+     */
+    ChoiceManager.prototype.setValues = function(opts) {
+        var i, len;
+        if (!this.forms || !this.forms.length) {
+            throw new Error('ChoiceManager.setValues: no forms found.');
+        }
+        opts = opts || {};
+        i = -1, len = this.forms.length;
+        for ( ; ++i < len ; ) {
+            this.forms[i].setValues(opts);
+        }
+
+        // Make a random comment.
+        if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
+    };
+
     // ## Helper methods.
 
 })(node);

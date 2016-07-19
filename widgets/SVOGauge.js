@@ -149,10 +149,14 @@
         // Transform choice in numerical values.
         if ('undefined' === typeof opts.processChoice) {
             opts.processChoice = function(choice) {
-                return this.choices[choice];
+                return choice === null ? null : this.choices[choice];
             };
         }
         return this.gauge.getValues(opts);
+    };
+
+    SVOGauge.prototype.setValues = function(opts) {
+        return this.gauge.setValues(opts);
     };
 
     SVOGauge.prototype.enable = function() {

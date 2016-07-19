@@ -149,6 +149,10 @@
         return this.gauge.getValues(opts);
     };
 
+    MoodGauge.prototype.setValues = function(opts) {
+        return this.gauge.setValues(opts);
+    };
+
     MoodGauge.prototype.enable = function() {
         return this.gauge.enable();
     };

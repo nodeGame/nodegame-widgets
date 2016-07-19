@@ -1262,6 +1262,78 @@
         return obj;
     };
 
+    /**
+     * ### ChoiceTable.setValues
+     *
+     * Sets values in the choice table as specified by the options
+     *
+     * @param {object} options Optional. Options specifying how to set
+     *   the values. If no parameter is specified, random values will
+     *   be set.
+     *
+     * @experimental
+     */
+    ChoiceTable.prototype.setValues = function(options) {
+        var choice;
+        var i, len, j, lenJ;
+
+        if (!this.choices || !this.choices.length) {
+            throw new Error('ChoiceTable.setValues: no choices found.');
+        }
+        options = options || {};
+
+        // TODO: allow it to set it visually or just in the background.
+        // Use options.visual.
+
+        // TODO: allow it to set random or fixed values, or correct values
+
+        if (!this.choicesCells || !this.choicesCells.length) {
+            throw new Error('Choicetable.setValues: table was not ' +
+                            'built yet.');
+        }
+
+        if (options.correct) {
+            if (!this.correctChoice || !this.correctChoice.length) {
+                throw new Error('Choicetable.setValues: "correct" is set, ' +
+                               'but not correct choice is found.');
+            }
+            i = -1, len = this.correctChoice.length;
+
+            // TODO: is not working.
+            for ( ; ++i < len ; ) {
+                if (this.shuffleChoices) {
+                    j = -1, lenJ = this.order.length;
+                    for ( ; ++j < lenJ ; ) {
+                        choice = parseInt(this.correctChoice[i], 10);
+                        if (this.order[j] === choice) {
+                            choice = this.order[j];
+                            break;
+                        }
+                    }
+                }
+                else {
+                    choice = this.correctChoice[i];
+                }
+
+                this.choicesCells[choice].click();
+            }
+            return;
+        }
+
+        // How many random choices?
+        if (!this.selectMultiple) len = 1;
+        else len = J.randomInt(0, this.choicesCells.length);
+
+        i = -1;
+        for ( ; ++i < len ; ) {
+            choice = J.randomInt(0, this.choicesCells.length)-1;
+            this.choicesCells[choice].click();
+        }
+
+        // Make a random comment.
+        if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
+    };
+
     // ## Helper methods.
 
     /**
