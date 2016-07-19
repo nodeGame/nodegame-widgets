@@ -9440,7 +9440,6 @@
 
         renderer = options.renderer || function(td, choice, idx) {
             td.innerHTML = choice[0] + '<hr/>' + choice[1];
-            // return (choice[0] + '_' + choice[1]);
         };
 
         if (options.left) {
@@ -11958,7 +11957,7 @@
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
             console.log('STOPPING TIMER');
-            this.timer.stop();
+            // this.timer.stop();
             this.timer.destroy();
         }
     };
