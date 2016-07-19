@@ -11914,7 +11914,6 @@
             that.stopTimer();
         });
 
-
         // Start waiting time timer.
         node.on.data('WAITTIME', function(msg) {
 
@@ -11957,7 +11956,6 @@
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
             console.log('STOPPING TIMER');
-            // this.timer.stop();
             this.timer.destroy();
         }
     };
