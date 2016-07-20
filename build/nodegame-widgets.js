@@ -4425,7 +4425,7 @@
      * choices:
      *
      *    - requiredChoice: there must be at least N choices selected
-     *    - correcChoice:   the choices are compared against correct ones.
+     *    - correctChoice:  the choices are compared against correct ones.
      *
      * @param {boolean} markAttempt Optional. If TRUE, the value of
      *   current choice is added to the attempts array. Default
@@ -4455,11 +4455,12 @@
             return this.currentChoice === this.correctChoice;
         }
         else {
+            // Value this.correctChoice can be string or array.
             len = this.correctChoice.length;
             lenJ = this.currentChoice.length;
             // Quick check.
             if (len !== lenJ) return false;
-            // Check every item
+            // Check every item.
             i = -1;
             clone = this.currentChoice.slice(0);
             for ( ; ++i < len ; ) {
@@ -4670,26 +4671,23 @@
         }
 
         if (options.correct) {
+            // Value this.correctChoice can be string or array.
             if (!this.correctChoice || !this.correctChoice.length) {
                 throw new Error('Choicetable.setValues: "correct" is set, ' +
                                'but not correct choice is found.');
             }
             i = -1, len = this.correctChoice.length;
 
-            // TODO: is not working.
             for ( ; ++i < len ; ) {
+                choice = parseInt(this.correctChoice[i], 10);
                 if (this.shuffleChoices) {
                     j = -1, lenJ = this.order.length;
                     for ( ; ++j < lenJ ; ) {
-                        choice = parseInt(this.correctChoice[i], 10);
                         if (this.order[j] === choice) {
-                            choice = this.order[j];
+                            choice = j;
                             break;
                         }
                     }
-                }
-                else {
-                    choice = this.correctChoice[i];
                 }
 
                 this.choicesCells[choice].click();

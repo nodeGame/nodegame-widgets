@@ -2773,7 +2773,7 @@ choices:</p>
 
 <ul>
 <li>requiredChoice: there must be at least N choices selected
-<ul><li>correcChoice:   the choices are compared against correct ones.</li></ul></li>
+<ul><li>correctChoice:  the choices are compared against correct ones.</li></ul></li>
 </ul>
   </div>
   <div class="details">
@@ -2857,6 +2857,18 @@ choices:</p>
             <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-108" id="section-108">&#182;</a>
+</div>
+<p>Value this.correctChoice can be string or array.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
             <span class="nx">lenJ</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentChoice</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
 
@@ -2866,7 +2878,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-108" id="section-108">&#182;</a>
+  <a class="pilcrow" href="#section-109" id="section-109">&#182;</a>
 </div>
 <p>Quick check.</p>
         </td>
@@ -2879,9 +2891,9 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-109" id="section-109">&#182;</a>
+  <a class="pilcrow" href="#section-110" id="section-110">&#182;</a>
 </div>
-<p>Check every item</p>
+<p>Check every item.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
@@ -3275,7 +3287,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-117" id="section-117">&#182;</a>
+  <a class="pilcrow" href="#section-118" id="section-118">&#182;</a>
 </div>
 <p>TODO: allow it to set it visually or just in the background.
 Use options.visual.</p>
@@ -3289,7 +3301,7 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-118" id="section-118">&#182;</a>
+  <a class="pilcrow" href="#section-119" id="section-119">&#182;</a>
 </div>
 <p>TODO: allow it to set random or fixed values, or correct values</p>
         </td>
@@ -3301,12 +3313,6 @@ Use options.visual.</p>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">correct</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Choicetable.setValues: &quot;correct&quot; is set, &#39;</span> <span class="o">+</span>
-                               <span class="s1">&#39;but not correct choice is found.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-
 
 </pre></div>
         </td>
@@ -3314,24 +3320,27 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-119" id="section-119">&#182;</a>
+  <a class="pilcrow" href="#section-120" id="section-120">&#182;</a>
 </div>
-<p>TODO: is not working.</p>
+<p>Value this.correctChoice can be string or array.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Choicetable.setValues: &quot;correct&quot; is set, &#39;</span> <span class="o">+</span>
+                               <span class="s1">&#39;but not correct choice is found.&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
             <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="nx">choice</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="mi">10</span><span class="p">);</span>
                 <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">shuffleChoices</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">lenJ</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
                     <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">lenJ</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">choice</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="mi">10</span><span class="p">);</span>
                         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="nx">choice</span><span class="p">)</span> <span class="p">{</span>
-                            <span class="nx">choice</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+                            <span class="nx">choice</span> <span class="o">=</span> <span class="nx">j</span><span class="p">;</span>
                             <span class="k">break</span><span class="p">;</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">choice</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
                 <span class="p">}</span>
 
                 <span class="k">this</span><span class="p">.</span><span class="nx">choicesCells</span><span class="p">[</span><span class="nx">choice</span><span class="p">].</span><span class="nx">click</span><span class="p">();</span>
@@ -3346,7 +3355,7 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-120" id="section-120">&#182;</a>
+  <a class="pilcrow" href="#section-121" id="section-121">&#182;</a>
 </div>
 <p>How many random choices?</p>
         </td>
@@ -3367,7 +3376,7 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-121" id="section-121">&#182;</a>
+  <a class="pilcrow" href="#section-122" id="section-122">&#182;</a>
 </div>
 <p>Make a random comment.</p>
         </td>
