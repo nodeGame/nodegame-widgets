@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 2.2.0
+- Implementing .setValues in ChoiceTable ChoiceTableGroup, ChoiceManager, SVOGauge and MoodGauge.
+
 ## 2.1.0
 - Fixed timer destroying in Waiting Room.
 
