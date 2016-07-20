@@ -1062,6 +1062,7 @@
      */
     ChoiceTable.prototype.verifyChoice = function(markAttempt) {
         var i, len, j, lenJ, c, clone, found;
+        var correctChoice;
 
         // Check the number of choices.
         if (this.requiredChoice !== null) {
@@ -1078,8 +1079,11 @@
             return this.currentChoice === this.correctChoice;
         }
         else {
-            // Value this.correctChoice can be string or array.
-            len = this.correctChoice.length;
+            // Make it an array (can be a string).
+            correctChoice = J.isArray(this.correctChoice) ?
+                this.correctChoice : [this.correctChoice];
+
+            len = correctChoice.length;
             lenJ = this.currentChoice.length;
             // Quick check.
             if (len !== lenJ) return false;
@@ -1088,7 +1092,7 @@
             clone = this.currentChoice.slice(0);
             for ( ; ++i < len ; ) {
                 found = false;
-                c = this.correctChoices[i];
+                c = correctChoices[i];
                 j = -1;
                 for ( ; ++j < lenJ ; ) {
                     if (clone[j] === c) {
@@ -1275,7 +1279,7 @@
      * @experimental
      */
     ChoiceTable.prototype.setValues = function(options) {
-        var choice;
+        var choice, correctChoice;
         var i, len, j, lenJ;
 
         if (!this.choices || !this.choices.length) {
@@ -1297,12 +1301,15 @@
             // Value this.correctChoice can be string or array.
             if (!this.correctChoice || !this.correctChoice.length) {
                 throw new Error('Choicetable.setValues: "correct" is set, ' +
-                               'but not correct choice is found.');
+                               'but no correct choice is found.');
             }
-            i = -1, len = this.correctChoice.length;
+            // Make it an array (can be a string).
+            correctChoice = J.isArray(this.correctChoice) ?
+                this.correctChoice : [this.correctChoice];
 
+            i = -1, len = correctChoice.length;
             for ( ; ++i < len ; ) {
-                choice = parseInt(this.correctChoice[i], 10);
+                choice = parseInt(correctChoice[i], 10);
                 if (this.shuffleChoices) {
                     j = -1, lenJ = this.order.length;
                     for ( ; ++j < lenJ ; ) {
