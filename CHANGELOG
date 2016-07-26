@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 2.3.0
+- Fixed bug in WaitingRoom.destroy(). The loading dots are properly stopped now.
+
 ## 2.2.0
 - Implementing .setValues in ChoiceTable ChoiceTableGroup, ChoiceManager, SVOGauge and MoodGauge.
 

@@ -546,6 +546,7 @@
     };
 
     WaitingRoom.prototype.destroy = function() {
+        if (this.dots) this.dots.stop();
         node.deregisterSetup('waitroom');
     };
 
