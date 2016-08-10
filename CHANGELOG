@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 2.4.0 (current)
+- Avoiding duplicated testing in Requirements.
+
 ## 2.3.0
 - Fixed bug in WaitingRoom.destroy(). The loading dots are properly stopped now.
 
