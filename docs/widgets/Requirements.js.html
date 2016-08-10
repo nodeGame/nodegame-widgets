@@ -64,6 +64,9 @@
         <a href="#requirements.results">Requirements.results</a>
       </div>
       <div class="heading h3">
+        <a href="#requirements.completed">Requirements.completed</a>
+      </div>
+      <div class="heading h3">
         <a href="#requirements.sayresult">Requirements.sayResult</a>
       </div>
       <div class="heading h3">
@@ -477,6 +480,28 @@ consecutive calls to checkRequirements (results array).</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="requirements.completed">
+  <h3>
+    <a href="#requirements.completed" name="requirements.completed" class="pilcrow">&#182;</a>
+    Requirements.completed
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Maps all tests that have been completed already to avoid duplication</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">completed</span> <span class="o">=</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="requirements.sayresult">
   <h3>
     <a href="#requirements.sayresult" name="requirements.sayresult" class="pilcrow">&#182;</a>
@@ -652,7 +677,7 @@ consecutive calls to checkRequirements (results array).</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Might be the full exception object.</p>
         </td>
@@ -895,7 +920,7 @@ corresponding option is set.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Get Test Name.</p>
         </td>
@@ -1276,7 +1301,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>No errors.</p>
         </td>
@@ -1289,7 +1314,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>All tests passed.</p>
         </td>
@@ -1307,7 +1332,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>Add the errors.</p>
         </td>
@@ -1327,7 +1352,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>Parse deletes previously existing nodes in the list.</p>
         </td>
@@ -1372,7 +1397,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
 <p>Configure all requirements.</p>
         </td>
@@ -1385,7 +1410,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>Start a checking immediately if requested.</p>
         </td>
@@ -1420,10 +1445,13 @@ in the results array.</p>
         <span class="kd">var</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">update</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
 
         <span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">,</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">completed</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: test &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;already completed: &#39;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
             <span class="p">}</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">completed</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">success</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">errors</span><span class="p">))</span> <span class="p">{</span>
@@ -1463,7 +1491,7 @@ in the results array.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
 </div>
 <p>Synchronous checking.</p>
         </td>

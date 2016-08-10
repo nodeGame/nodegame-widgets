@@ -121,6 +121,13 @@
         this.results = [];
 
         /**
+         * ### Requirements.completed
+         *
+         * Maps all tests that have been completed already to avoid duplication
+         */
+        this.completed = {};
+
+        /**
          * ### Requirements.sayResult
          *
          * If true, the final result of the tests will be sent to the server
@@ -592,10 +599,13 @@
         var req, update, res;
 
         update = function(success, errors, data) {
-            that.updateStillChecking(-1);
-            if (!success) {
-                that.hasFailed = true;
+            if (that.completed[name]) {
+                throw new Error('Requirements.checkRequirements: test ' +
+                                'already completed: ' + name);
             }
+            that.completed[name] = true;
+            that.updateStillChecking(-1);
+            if (!success) that.hasFailed = true;
 
             if (errors) {
                 if (!J.isArray(errors)) {
