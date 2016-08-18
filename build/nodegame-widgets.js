@@ -1463,8 +1463,23 @@
         }
 
         // Table.
-        if (this.sc) this.table.addRow([this.sc, this.canvas]);
-        else this.table.add(this.canvas);
+        if (this.sc) {
+            this.table.addRow(
+                [{
+                    content: this.sc,
+                    id: this.id + '_td_controls'
+                },{
+                    content: this.canvas,
+                    id: this.id + '_td_cf'
+                }]
+            );
+        }
+        else {
+            this.table.add({
+                content: this.canvas,
+                id: this.id + '_td_cf'
+            });
+        }
 
         // Create and append table.
         this.table.parse();
@@ -9238,6 +9253,8 @@
             that.completed[name] = true;
             that.updateStillChecking(-1);
             if (!success) that.hasFailed = true;
+
+            if ('string' === typeof errors) errors = [ errors ];
 
             if (errors) {
                 if (!J.isArray(errors)) {

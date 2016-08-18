@@ -607,6 +607,8 @@
             that.updateStillChecking(-1);
             if (!success) that.hasFailed = true;
 
+            if ('string' === typeof errors) errors = [ errors ];
+
             if (errors) {
                 if (!J.isArray(errors)) {
                     throw new Error('Requirements.checkRequirements: ' +

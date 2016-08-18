@@ -1453,6 +1453,8 @@ in the results array.</p>
             <span class="nx">that</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">success</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">errors</span><span class="p">)</span> <span class="nx">errors</span> <span class="o">=</span> <span class="p">[</span> <span class="nx">errors</span> <span class="p">];</span>
+
             <span class="k">if</span> <span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">errors</span><span class="p">))</span> <span class="p">{</span>
                     <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: &#39;</span> <span class="o">+</span>

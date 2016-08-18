@@ -750,8 +750,23 @@ eventually adds the controls.</p>
 <p>Table.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">]);</span>
-        <span class="k">else</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">(</span>
+                <span class="p">[{</span>
+                    <span class="nx">content</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">sc</span><span class="p">,</span>
+                    <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_td_controls&#39;</span>
+                <span class="p">},{</span>
+                    <span class="nx">content</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">,</span>
+                    <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_td_cf&#39;</span>
+                <span class="p">}]</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">({</span>
+                <span class="nx">content</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">,</span>
+                <span class="nx">id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_td_cf&#39;</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
 
 
 </pre></div>
