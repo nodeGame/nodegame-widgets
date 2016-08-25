@@ -61,6 +61,9 @@
         <a href="#waitingroom.startdatediv">WaitingRoom.startDateDiv</a>
       </div>
       <div class="heading h3">
+        <a href="#waitingroom.msgdiv">WaitingRoom.msgDiv</a>
+      </div>
+      <div class="heading h3">
         <a href="#waitingroom.timerdiv">WaitingRoom.timerDiv</a>
       </div>
       <div class="heading h3">
@@ -144,7 +147,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">;</span>
+    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;1.1.0&#39;</span><span class="p">;</span>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a waiting room for clients.&#39;</span><span class="p">;</span>
 
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Waiting Room&#39;</span><span class="p">;</span>
@@ -435,6 +438,28 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="waitingroom.msgdiv">
+  <h3>
+    <a href="#waitingroom.msgdiv" name="waitingroom.msgdiv" class="pilcrow">&#182;</a>
+    WaitingRoom.msgDiv
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Div containing optional messages to display</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">msgDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="waitingroom.timerdiv">
   <h3>
     <a href="#waitingroom.timerdiv" name="waitingroom.timerdiv" class="pilcrow">&#182;</a>
@@ -658,7 +683,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>TODO: check conditions?</p>
         </td>
@@ -773,7 +798,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Style up: delete title and border;</p>
         </td>
@@ -787,7 +812,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Append to bodyDiv.</p>
         </td>
@@ -951,6 +976,9 @@ is disconnected.</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">startDateDiv</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">startDateDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span><span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
 
+        <span class="k">this</span><span class="p">.</span><span class="nx">msgDiv</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">msgDiv</span><span class="p">);</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">startDate</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">setStartDate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">startDate</span><span class="p">);</span>
         <span class="p">}</span>
@@ -977,7 +1005,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Configure all requirements.</p>
         </td>
@@ -994,7 +1022,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>NodeGame Listeners.</p>
         </td>
@@ -1006,7 +1034,7 @@ is disconnected.</p>
         <span class="p">});</span>
 
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;DISPATCH&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">reportExitCode</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">notSelected</span><span class="p">,</span> <span class="nx">reportExitCode</span><span class="p">;</span>
             <span class="nx">msg</span> <span class="o">=</span> <span class="nx">msg</span> <span class="o">||</span> <span class="p">{};</span>
             <span class="nx">data</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span> <span class="o">||</span> <span class="p">{};</span>
 
@@ -1020,6 +1048,7 @@ is disconnected.</p>
             <span class="p">}</span>
 
             <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">action</span> <span class="o">===</span> <span class="s1">&#39;NotEnoughPlayers&#39;</span><span class="p">)</span> <span class="p">{</span>
+
                 <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span>
                     <span class="s1">&#39;&lt;h3 align=&quot;center&quot; style=&quot;color: red&quot;&gt;&#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;Thank you for your patience.&lt;br&gt;&#39;</span> <span class="o">+</span>
@@ -1032,14 +1061,25 @@ is disconnected.</p>
             <span class="p">}</span>
 
             <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">action</span> <span class="o">===</span> <span class="s1">&#39;NotSelected&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3 align=&quot;center&quot;&gt;&#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt; You were &#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;&lt;strong&gt;not selected&lt;/strong&gt; to start the game.&#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;Thank you for your participation.&#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
+
+                <span class="nx">notSelected</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3 align=&quot;center&quot;&gt;&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt;Unfortunately, you were &#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;&lt;strong&gt;not selected&lt;/strong&gt; to join the game this time&#39;</span><span class="p">;</span>
+
                 <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">data</span><span class="p">.</span><span class="nx">shouldDispatchMoreGames</span> <span class="o">||</span>
                     <span class="nx">that</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">)</span> <span class="p">{</span>
+
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">notSelected</span> <span class="o">+</span> <span class="s1">&#39;. Thank you &#39;</span> <span class="o">+</span>
+                        <span class="s1">&#39;for your participation.&lt;/span&gt;&lt;/h3&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
+
                     <span class="nx">that</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="nx">reportExitCode</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">msgDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">notSelected</span> <span class="o">+</span> <span class="s1">&#39;, but you &#39;</span> <span class="o">+</span>
+                        <span class="s1">&#39;may join the next one.&lt;/span&gt; &#39;</span> <span class="o">+</span>
+                        <span class="s1">&#39;&lt;a class=&quot;hand&quot; onclick=&#39;</span> <span class="o">+</span>
+                        <span class="s1">&#39;javascript:this.parentElement.innerHTML=&quot;&quot;&gt;&#39;</span> <span class="o">+</span>
+                        <span class="s1">&#39;Ok, I got it.&lt;/a&gt;&lt;/h3&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
                 <span class="p">}</span>
             <span class="p">}</span>
 
@@ -1061,7 +1101,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Start waiting time timer.</p>
         </td>
@@ -1075,7 +1115,7 @@ is disconnected.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>Avoid running multiple timers.
 if (timeCheck) clearInterval(timeCheck);</p>
@@ -1096,7 +1136,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Terminate countdown.</p>
         </td>
@@ -1110,7 +1150,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Write about disconnection in page.</p>
         </td>
@@ -1124,7 +1164,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code>        <span class="c1">// Enough to not display it in case of page refresh.</span>
@@ -1162,6 +1202,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">disconnect</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">;</span>
         <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">stopTimer</span><span class="p">();</span>
     <span class="p">};</span>
 
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">alertPlayer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -1175,7 +1216,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>If document.hasFocus() returns TRUE, then just one repeat is enough.</p>
         </td>
@@ -1190,7 +1231,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>Otherwise we repeat blinking until an event that shows that the
 user is active on the page happens, e.g. focus and click. However,

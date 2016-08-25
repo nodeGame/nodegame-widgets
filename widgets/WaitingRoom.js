@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    WaitingRoom.version = '1.0.0';
+    WaitingRoom.version = '1.1.0';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -108,6 +108,13 @@
          * Div containing the start date
          */
         this.startDateDiv = null;
+
+        /**
+         * ### WaitingRoom.msgDiv
+         *
+         * Div containing optional messages to display
+         */
+        this.msgDiv = null;
 
         /**
          * ### WaitingRoom.timerDiv
@@ -382,6 +389,9 @@
         this.bodyDiv.appendChild(this.startDateDiv);
         this.startDateDiv.style.display= 'none';
 
+        this.msgDiv = document.createElement('div');
+        this.bodyDiv.appendChild(this.msgDiv);
+
         if (this.startDate) {
             this.setStartDate(this.startDate);
         }
@@ -415,7 +425,7 @@
         });
 
         node.on.data('DISPATCH', function(msg) {
-            var data, reportExitCode;
+            var data, notSelected, reportExitCode;
             msg = msg || {};
             data = msg.data || {};
 
@@ -429,6 +439,7 @@
             }
 
             else if (data.action === 'NotEnoughPlayers') {
+
                 that.bodyDiv.innerHTML =
                     '<h3 align="center" style="color: red">' +
                     'Thank you for your patience.<br>' +
@@ -441,14 +452,25 @@
             }
 
             else if (data.action === 'NotSelected') {
-                that.bodyDiv.innerHTML = '<h3 align="center">' +
-                    '<span style="color: red"> You were ' +
-                    '<strong>not selected</strong> to start the game.' +
-                    'Thank you for your participation.' +
-                    '</span><br><br>';
+
+                notSelected = '<h3 align="center">' +
+                    '<span style="color: red">Unfortunately, you were ' +
+                    '<strong>not selected</strong> to join the game this time';
+
                 if (false === data.shouldDispatchMoreGames ||
                     that.disconnectIfNotSelected) {
+
+                    that.bodyDiv.innerHTML = notSelected + '. Thank you ' +
+                        'for your participation.</span></h3><br><br>';
+
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                }
+                else {
+                    that.msgDiv.innerHTML = notSelected + ', but you ' +
+                        'may join the next one.</span> ' +
+                        '<a class="hand" onclick=' +
+                        'javascript:this.parentElement.innerHTML="">' +
+                        'Ok, I got it.</a></h3><br><br>';
                 }
             }
 
@@ -512,6 +534,7 @@
     WaitingRoom.prototype.disconnect = function(msg) {
         if (msg) this.disconnectMessage = msg;
         node.socket.disconnect();
+        this.stopTimer();
     };
 
     WaitingRoom.prototype.alertPlayer = function() {
