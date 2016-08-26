@@ -11630,7 +11630,7 @@
 
     // ## Meta-data
 
-    WaitingRoom.version = '1.0.0';
+    WaitingRoom.version = '1.1.0';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -12082,7 +12082,7 @@
                 }
                 else {
                     that.msgDiv.innerHTML = notSelected + ', but you ' +
-                        'may join the next game.</span> ' +
+                        'may join the next one.</span> ' +
                         '<a class="hand" onclick=' +
                         'javascript:this.parentElement.innerHTML="">' +
                         'Ok, I got it.</a></h3><br><br>';
