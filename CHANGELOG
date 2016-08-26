@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 2.3.2
+- WaitingRoom correctly displays if a player can still join a game.
+
 ## 2.3.1
 - Avoiding duplicated testing in Requirements.
 
