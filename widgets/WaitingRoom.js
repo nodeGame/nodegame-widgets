@@ -431,7 +431,7 @@
 
             reportExitCode = '<br>You have been disconnected. ' +
                 ('undefined' !== typeof data.exit ?
-                'Please report this exit code: ' + data.exit : '') +
+                 ('Please report this exit code: ' + data.exit) : '') +
                 '<br></h3>';
 
             if (data.action === 'AllPlayersConnected') {
