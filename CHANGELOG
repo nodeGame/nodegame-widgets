@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 3.0.0
+- 02/10/2016 NodeGame Version Upgrade.
+
 ## 2.3.2
 - WaitingRoom correctly displays if a player can still join a game.
 
