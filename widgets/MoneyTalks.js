@@ -3,7 +3,7 @@
  * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
- * Displays a box for formatting currency
+ * Displays a box for formatting earnings ("money") in currency
  *
  * www.nodegame.org
  */
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    MoneyTalks.version = '0.1.1';
+    MoneyTalks.version = '0.2.0';
     MoneyTalks.description = 'Displays the earnings of a player.';
 
     MoneyTalks.title = 'Earnings';
@@ -30,7 +30,7 @@
     /**
      * ## MoneyTalks constructor
      *
-     * `MoneyTalks` displays the earnings of the player so far
+     * `MoneyTalks` displays the earnings ("money") of the player so far
      *
      * @param {object} options Optional. Configuration options
      * which is forwarded to MoneyTalks.init.
@@ -124,21 +124,24 @@
     /**
      * ### MoneyTalks.update
      *
-     * Updates the contents of this.money and this.spanMoney according to amount
+     * Updates the display and the count of available "money"
      *
-     * @param {string|number} amount The amount to add. If string it will be
-     *   parsed.
+     * @param {string|number} amount Amount to add to current value of money
+     * @param {boolean} clear Optional. If TRUE, money will be set to 0
+     *    before adding the new amount
+     *
+     * @see MoneyTalks.money
+     * @see MonetyTalks.spanMoney
      */
-    MoneyTalks.prototype.update = function(amount) {
-        if ('number' !== typeof amount) {
-            // Try to parse strings.
-            amount = parseFloat(amount, 10);
-            if (isNaN(amount) || !isFinite(amount)) {
-                node.err('MoneyTalks.update: invalid amount received: amount');
-                return;
-            }
+    MoneyTalks.prototype.update = function(amount, clear) {
+        var parsedAmount;
+        parsedAmount = J.isNumber(amount);
+        if (parsedAmount === false) {
+            node.err('MoneyTalks.update: invalid amount: ' + amount);
+            return;
         }
-        this.money += amount;
+        if (clear) this.money = 0;
+        this.money += parsedAmount;
         this.spanMoney.innerHTML = this.money.toFixed(this.precision);
     };
 })(node);

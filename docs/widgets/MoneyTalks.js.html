@@ -74,7 +74,7 @@
 <p>Copyright(c) 2016 Stefano Balietti
 MIT Licensed</p>
   </div>
-  <div class="body"><p>Displays a box for formatting currency</p>
+  <div class="body"><p>Displays a box for formatting earnings ("money") in currency</p>
 
 <p>www.nodegame.org</p>
   </div>
@@ -102,7 +102,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.1&#39;</span><span class="p">;</span>
+    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.0&#39;</span><span class="p">;</span>
     <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays the earnings of a player.&#39;</span><span class="p">;</span>
 
     <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Earnings&#39;</span><span class="p">;</span>
@@ -143,7 +143,7 @@ MIT Licensed</p>
 </div>
 
   </div>
-  <div class="body"><p><code>MoneyTalks</code> displays the earnings of the player so far</p>
+  <div class="body"><p><code>MoneyTalks</code> displays the earnings ("money") of the player so far</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -371,7 +371,7 @@ The  options object can have the following attributes:
 </div>
 
   </div>
-  <div class="body"><p>Updates the contents of this.money and this.spanMoney according to amount</p>
+  <div class="body"><p>Updates the display and the count of available "money"</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -379,34 +379,36 @@ The  options object can have the following attributes:
       <span class="dox_tag_name">amount</span>
       <span class="dox_type">string</span>
       <span class="dox_type">number</span>
-      <span>The amount to add. If string it will be
-  parsed.</span>
+      <span>Amount to add to current value of money</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">clear</span>
+      <span class="dox_type">boolean</span>
+      <span>Optional. If TRUE, money will be set to 0
+   before adding the new amount</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">MoneyTalks.money</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">MonetyTalks.spanMoney
+</span>
     </div>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
-</div>
-<p>Try to parse strings.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">amount</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="nb">isFinite</span><span class="p">(</span><span class="nx">amount</span><span class="p">))</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;MoneyTalks.update: invalid amount received: amount&#39;</span><span class="p">);</span>
-                <span class="k">return</span><span class="p">;</span>
-            <span class="p">}</span>
+    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="nx">clear</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">parsedAmount</span><span class="p">;</span>
+        <span class="nx">parsedAmount</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">amount</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">parsedAmount</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;MoneyTalks.update: invalid amount: &#39;</span> <span class="o">+</span> <span class="nx">amount</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="nx">amount</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">clear</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="nx">parsedAmount</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">spanMoney</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">precision</span><span class="p">);</span>
     <span class="p">};</span>
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
