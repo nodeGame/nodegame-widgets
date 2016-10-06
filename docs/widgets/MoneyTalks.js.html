@@ -402,7 +402,7 @@ The  options object can have the following attributes:
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="nx">clear</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">parsedAmount</span><span class="p">;</span>
-        <span class="nx">parsedAmount</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">amount</span><span class="p">);</span>
+        <span class="nx">parsedAmount</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">amount</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">parsedAmount</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;MoneyTalks.update: invalid amount: &#39;</span> <span class="o">+</span> <span class="nx">amount</span><span class="p">);</span>
             <span class="k">return</span><span class="p">;</span>
