@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 3.0.2
+- VisualRound correctly interprets gameover stage.
+
 ## 3.0.1
 - Minor update in MoneyTalk.
 
