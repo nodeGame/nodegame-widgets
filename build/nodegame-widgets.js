@@ -1287,8 +1287,10 @@
         // The HTMLElement canvas where the faces are created
         this.canvas = null;
 
-        // ### ChernoffFaces.effort
-        // Records all the changes (if options.trackChanges is TRUE).
+        // ### ChernoffFaces.changes
+        // History all the changes (if options.trackChanges is TRUE).
+        // Each time the `draw` method is called, the input parameters
+        // and a time measurement will be added here.
         this.changes = [];
 
         // ### ChernoffFaces.onChange
@@ -10023,7 +10025,7 @@
      * @see VisualRound.updateDisplay
      */
     VisualRound.prototype.updateInformation = function() {
-        var stage;
+        var stage, len;
 
         // TODO CHECK: was:
         // stage = this.gamePlot.getStage(node.player.stage);
@@ -10061,7 +10063,11 @@
             this.curRound = stage.round;
             this.totRound = this.stager.sequence[this.curStage -1].num || 1;
             this.curStage -= this.stageOffset;
-            this.totStage = this.stager.sequence.length - this.totStageOffset;
+            len = this.stager.sequence.length;
+            this.totStage = len - this.totStageOffset;
+            if (this.stager.sequence[(len-1)].type === 'gameover') {
+                this.totStage--;
+            }
         }
         // Update display.
         this.updateDisplay();

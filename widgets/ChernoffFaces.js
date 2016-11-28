@@ -74,8 +74,10 @@
         // The HTMLElement canvas where the faces are created
         this.canvas = null;
 
-        // ### ChernoffFaces.effort
-        // Records all the changes (if options.trackChanges is TRUE).
+        // ### ChernoffFaces.changes
+        // History all the changes (if options.trackChanges is TRUE).
+        // Each time the `draw` method is called, the input parameters
+        // and a time measurement will be added here.
         this.changes = [];
 
         // ### ChernoffFaces.onChange

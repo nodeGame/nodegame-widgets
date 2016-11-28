@@ -49,7 +49,7 @@
         <a href="#chernofffaces.canvas">ChernoffFaces.canvas</a>
       </div>
       <div class="heading h3">
-        <a href="#chernofffaces.effort">ChernoffFaces.effort</a>
+        <a href="#chernofffaces.changes">ChernoffFaces.changes</a>
       </div>
       <div class="heading h3">
         <a href="#chernofffaces.onchange">ChernoffFaces.onChange</a>
@@ -341,15 +341,17 @@ Can be set manually via options.controls.
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="chernofffaces.effort">
+<div class="pilwrap" id="chernofffaces.changes">
   <h3>
-    <a href="#chernofffaces.effort" name="chernofffaces.effort" class="pilcrow">&#182;</a>
-    ChernoffFaces.effort
+    <a href="#chernofffaces.changes" name="chernofffaces.changes" class="pilcrow">&#182;</a>
+    ChernoffFaces.changes
   </h3>
 </div>
 
 
-<p>Records all the changes (if options.trackChanges is TRUE).</p>
+<p>History all the changes (if options.trackChanges is TRUE).
+Each time the <code>draw</code> method is called, the input parameters
+and a time measurement will be added here.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">changes</span> <span class="o">=</span> <span class="p">[];</span>
