@@ -18,7 +18,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.8.0';
+    VisualTimer.version = '0.8.1';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
@@ -521,6 +521,9 @@
                     options.update = that.update;
                     options.timeup = undefined;
                     that.startTiming(options);
+                }
+                else {
+                    that.setToZero();
                 }
             }
         });

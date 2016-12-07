@@ -192,7 +192,7 @@ Only for countdown smaller than 1h.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.8.0&#39;</span><span class="p">;</span>
+    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.8.1&#39;</span><span class="p">;</span>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display a timer for the game. Timer can &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;trigger events. Only for countdown smaller than 1h.&#39;</span><span class="p">;</span>
 
@@ -1296,6 +1296,9 @@ hidden. All other options are forwarded directly to
                     <span class="nx">options</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">update</span><span class="p">;</span>
                     <span class="nx">options</span><span class="p">.</span><span class="nx">timeup</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
                     <span class="nx">that</span><span class="p">.</span><span class="nx">startTiming</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">setToZero</span><span class="p">();</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">});</span>

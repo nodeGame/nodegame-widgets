@@ -9646,7 +9646,7 @@
 
 /**
  * # VisualRound
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -9666,7 +9666,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.6.0';
+    VisualRound.version = '0.7.0';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -10027,8 +10027,6 @@
     VisualRound.prototype.updateInformation = function() {
         var stage, len;
 
-        // TODO CHECK: was:
-        // stage = this.gamePlot.getStage(node.player.stage);
         stage = node.player.stage;
 
         // Game not started.
@@ -10039,17 +10037,14 @@
         }
         // Flexible mode.
         else if (this.options.flexibleMode) {
-            // Was:
-            // if (stage) {
-                if (stage.id === this.oldStageId) {
-                    this.curRound += 1;
-                }
-                else if (stage.id) {
-                    this.curRound = 1;
-                    this.curStage += 1;
-                }
-                this.oldStageId = stage.id;
-            // }
+            if (stage.id === this.oldStageId) {
+                this.curRound += 1;
+            }
+            else if (stage.id) {
+                this.curRound = 1;
+                this.curStage += 1;
+            }
+            this.oldStageId = stage.id;
         }
         // Normal mode.
         else {
@@ -10916,7 +10911,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.8.0';
+    VisualTimer.version = '0.8.1';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
@@ -11419,6 +11414,9 @@
                     options.update = that.update;
                     options.timeup = undefined;
                     that.startTiming(options);
+                }
+                else {
+                    that.setToZero();
                 }
             }
         });

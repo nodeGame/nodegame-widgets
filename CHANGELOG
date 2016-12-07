@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## current
+- VisualTimer auto-set itself to 0:00 striken, if there are no timer settings in step.
+
 ## 3.0.2
 - VisualRound correctly interprets gameover stage.
 
