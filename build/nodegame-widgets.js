@@ -11416,7 +11416,9 @@
                     that.startTiming(options);
                 }
                 else {
-                    that.setToZero();
+                    // Set to zero if it was not started already.
+                    if (!that.gameTimer.isRunning()) that.setToZero();
+                    // that.setToZero();
                 }
             }
         });

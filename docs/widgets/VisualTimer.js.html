@@ -1298,7 +1298,19 @@ hidden. All other options are forwarded directly to
                     <span class="nx">that</span><span class="p">.</span><span class="nx">startTiming</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
                 <span class="p">}</span>
                 <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">setToZero</span><span class="p">();</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+</div>
+<p>Set to zero if it was not started already.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">that</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">isRunning</span><span class="p">())</span> <span class="nx">that</span><span class="p">.</span><span class="nx">setToZero</span><span class="p">();</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">});</span>
@@ -1313,7 +1325,7 @@ hidden. All other options are forwarded directly to
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>that.startWaiting();</p>
         </td>
