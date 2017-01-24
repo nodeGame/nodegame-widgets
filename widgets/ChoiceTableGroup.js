@@ -514,19 +514,23 @@
      */
     ChoiceTableGroup.prototype.buildTable = function() {
         var i, len, tr, H, ct;
-        var j, lenJ, lenJOld, hasRight;
+        var j, lenJ, lenJOld, hasRight, sep;
+        sep = this.separator;
 
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
         if (H) {
             for ( ; ++i < len ; ) {
+                // Get item.
+                ct = getChoiceTable(this, i);
+
                 // Add new TR.
                 tr = document.createElement('tr');
                 this.table.appendChild(tr);
+                // Set id.
+                tr.id = 'tr' + sep + ct.id;
 
-                // Get item, append choices for item.
-                ct = getChoiceTable(this, i);
-
+                // Append choices for item.
                 tr.appendChild(ct.leftCell);
                 j = -1, lenJ = ct.choicesCells.length;
                 // Make sure all items have same number of choices.
@@ -549,7 +553,9 @@
 
             // Add new TR.
             tr = document.createElement('tr');
-            this.table.appendChild(tr);
+            this.table.appendChild(tr);;
+            // Set id.
+            tr.id = this.id + sep + 'tr' + sep + 'leftCells';
 
             // Build all items first.
             for ( ; ++i < len ; ) {
@@ -590,6 +596,7 @@
                 // Add new TR.
                 tr = document.createElement('tr');
                 this.table.appendChild(tr);
+                tr.id = this.id + sep + 'tr' + sep + 'row' + (j+1);
 
                 i = -1;
                 // TODO: might optimize. There are two loops (+1 inside ct).
@@ -823,13 +830,16 @@
      * @see ChoiceTableGroup.verifyChoice
      */
     ChoiceTableGroup.prototype.getValues = function(opts) {
-        var obj, i, len, tbl, toHighlight;
+        var obj, i, len, tbl, toHighlight, toReset;
         obj = {
             id: this.id,
             order: this.order,
             items: {}
         };
         opts = opts || {};
+        // Make sure reset is done only at the end.
+        toReset = opts.reset;
+        opts.reset = false;
         i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
             tbl = this.items[i];
@@ -842,12 +852,14 @@
                 toHighlight = true;
             }
         }
+
         if (toHighlight) this.highlight();
+        else if (toReset) this.reset(toReset);
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
 
-   /**
+    /**
      * ### ChoiceTableGroup.setValues
      *
      * Sets values in the choice table group as specified by the options
@@ -873,6 +885,39 @@
 
         // Make a random comment.
         if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
+    };
+
+    /**
+     * ### ChoiceTableGroup.reset
+     *
+     * Resets all the ChoiceTable items and textarea
+     *
+     * @param {object} options Optional. Options specifying how to set
+     *   to reset each item
+     *
+     * @see ChoiceTable.reset
+     */
+    ChoiceTableGroup.prototype.reset = function(opts) {
+        var order, i, len;
+        opts = opts || {};
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            this.items[i].reset(opts);
+        }
+        // Delete textarea, if found.
+        if (this.textarea) this.textarea.value = '';
+        if (opts.shuffleItems) {
+            order = J.shuffle(this.order);
+            if (this.orientation === 'H') {
+                J.shuffleElements(this.table, order);
+            }
+            else {
+                // TODO: Must not shuffle leftCells!
+                throw new Error('TODO!!');
+            }
+            this.order = order;
+        }
+        if (this.isHighlighted()) this.unhighlight();
     };
 
     // ## Helper methods.

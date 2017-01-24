@@ -40,6 +40,9 @@
         <a href="#widget.getvalues">Widget.getValues</a>
       </div>
       <div class="heading h3">
+        <a href="#widget.reset">Widget.reset</a>
+      </div>
+      <div class="heading h3">
         <a href="#widget.highlight">Widget.highlight</a>
       </div>
       <div class="heading h3">
@@ -358,6 +361,31 @@ be children of Widget.panelDiv</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">values</span><span class="p">)</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widget.reset">
+  <h3>
+    <a href="#widget.reset" name="widget.reset" class="pilcrow">&#182;</a>
+    Widget.reset
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Resets the widget</p>
+
+<p>Deletes current selection, any highlighting, and other data
+that the widget might have collected to far.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reset</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{};</span>
 
 
 </pre></div>
@@ -763,7 +791,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Remove heading with false-ish argument.</p>
         </td>
@@ -783,7 +811,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Add heading.</p>
         </td>
@@ -797,7 +825,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Move it to before the body (IE cannot have undefined).</p>
         </td>
@@ -813,7 +841,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Set title.</p>
         </td>
@@ -826,7 +854,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>The given title is an HTML element.</p>
         </td>
@@ -895,7 +923,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Remove footer with false-ish argument.</p>
         </td>
@@ -915,7 +943,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Add footer.</p>
         </td>
@@ -931,7 +959,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Set footer contents.</p>
         </td>
@@ -944,7 +972,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>The given footer is an HTML element.</p>
         </td>
@@ -1011,7 +1039,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>
