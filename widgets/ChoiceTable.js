@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.0.0';
+    ChoiceTable.version = '1.1.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 

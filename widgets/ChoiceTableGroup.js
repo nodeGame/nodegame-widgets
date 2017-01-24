@@ -19,7 +19,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.0.0';
+    ChoiceTableGroup.version = '1.1.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
