@@ -186,6 +186,9 @@
       <div class="heading h3">
         <a href="#choicetable.reset">ChoiceTable.reset</a>
       </div>
+      <div class="heading h3">
+        <a href="#choicetable.shuffle">ChoiceTable.shuffle</a>
+      </div>
       <div class="heading h2">
         <a href="#helper%20methods.">Helper methods.</a>
       </div>
@@ -345,7 +348,10 @@ MIT Licensed</p>
 </div>
 
   </div>
-  <div class="body"><p>Reference to TR element of the table</p>
+  <div class="body"><p>Reference to TR elements of the table</p>
+
+<p>Note: if the orientation is vertical there will be multiple TR
+otherwise just one.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">See</div>
@@ -357,7 +363,7 @@ MIT Licensed</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tr</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">trs</span> <span class="o">=</span> <span class="p">[];</span>
 
 
 </pre></div>
@@ -1949,7 +1955,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">H</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">===</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+            <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;main&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -1978,7 +1984,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+                <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -1993,7 +1999,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
         <td class="code highlight"><div class="highlight"><pre>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">leftCell</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">leftCell</span><span class="p">);</span>
-                    <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+                    <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">}</span>
 
@@ -2011,7 +2017,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
             <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">choicesCells</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rightCell</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">H</span><span class="p">)</span> <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">H</span><span class="p">)</span> <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">);</span>
             <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rightCell</span><span class="p">);</span>
         <span class="p">}</span>
 
@@ -2101,7 +2107,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">H</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">===</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+            <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;main&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -2133,7 +2139,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+                <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -2149,7 +2155,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">td</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderSpecial</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
                     <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">td</span><span class="p">);</span>
-                    <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+                    <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">}</span>
 
@@ -2168,7 +2174,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
             <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">td</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">H</span><span class="p">)</span> <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">H</span><span class="p">)</span> <span class="nx">tr</span> <span class="o">=</span> <span class="nx">createTR</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">);</span>
             <span class="nx">td</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderSpecial</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">right</span><span class="p">);</span>
             <span class="nx">tr</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">td</span><span class="p">);</span>
         <span class="p">}</span>
@@ -3476,18 +3482,8 @@ Use options.visual.</p>
       <span>Optional. Available options:
    - shuffleChoices: If TRUE, choices are shuffled. Default: FALSE</span>
     </div>
-    <div class="dox_tag_title">experimental
+  </div>
 </div>
-
-
-<div class="highlight"><pre><code><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;dox_tag_detail&quot;</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="err">/div&gt;</span>
-</code></pre></div>
-
-
-
-<p></div>
-</div></p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reset</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
@@ -3520,30 +3516,64 @@ Use options.visual.</p>
     <span class="p">};</span>
 
 
-    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">shuffle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">order</span><span class="p">,</span> <span class="nx">tmpId</span><span class="p">,</span> <span class="nx">tmpHTML</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
-        <span class="nx">order</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">);</span>
-        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">order</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-
-        <span class="p">}</span>
-
-        <span class="nx">J</span><span class="p">.</span><span class="nx">shuffleElements</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">,</span> <span class="nx">order</span><span class="p">);</span>
-
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-126" id="section-126">&#182;</a>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="choicetable.shuffle">
+  <h3>
+    <a href="#choicetable.shuffle" name="choicetable.shuffle" class="pilcrow">&#182;</a>
+    ChoiceTable.shuffle
+  </h3>
 </div>
-<p>if (this.left) tr.insertBefore(this.leftCell, tr.firstElementChild);
-if (this.right) this.tr.appendChild(this.rightCell);</p>
+
+  </div>
+  <div class="body"><p>Shuffles the order of the choices</p>
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">shuffle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">order</span><span class="p">,</span> <span class="nx">H</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">cell</span><span class="p">,</span> <span class="nx">choice</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">choicesValues</span><span class="p">,</span> <span class="nx">choicesCells</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">parentTR</span><span class="p">;</span>
+
+        <span class="nx">H</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">===</span> <span class="s1">&#39;H&#39;</span><span class="p">;</span>
+        <span class="nx">order</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">);</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">order</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="nx">choicesValues</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="nx">choicesCells</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">choice</span> <span class="o">=</span> <span class="nx">order</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+            <span class="nx">cell</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">choicesCells</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">choicesValues</span><span class="p">[</span><span class="nx">choice</span><span class="p">]];</span>
+            <span class="nx">choicesCells</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">cell</span><span class="p">;</span>
+            <span class="nx">choicesValues</span><span class="p">[</span><span class="nx">choice</span><span class="p">]</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">trs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">cell</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">parentTR</span> <span class="o">=</span> <span class="nx">cell</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">||</span> <span class="nx">cell</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">parentTR</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rightCell</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">H</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">trs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rightCell</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">parentTR</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rightCell</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">||</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">rightCell</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">parentTR</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
         <span class="k">this</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">order</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">choicesCells</span> <span class="o">=</span> <span class="nx">choicesCells</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">choicesValues</span> <span class="o">=</span> <span class="nx">choicesValues</span><span class="p">;</span>
     <span class="p">};</span>
 
 
@@ -3664,12 +3694,24 @@ value of the array separately.</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">createTR</span><span class="p">(</span><span class="nx">that</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">createTR</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">trid</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">tr</span><span class="p">;</span>
         <span class="nx">tr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">);</span>
         <span class="nx">tr</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;tr&#39;</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">separator</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
         <span class="nx">that</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
-        <span class="nx">that</span><span class="p">.</span><span class="nx">tr</span> <span class="o">=</span> <span class="nx">tr</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-130" id="section-130">&#182;</a>
+</div>
+<p>Store reference.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">that</span><span class="p">.</span><span class="nx">trs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
         <span class="k">return</span> <span class="nx">tr</span><span class="p">;</span>
     <span class="p">}</span>
 

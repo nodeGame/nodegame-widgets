@@ -55,11 +55,14 @@
         /**
          * ### ChoiceTable.tr
          *
-         * Reference to TR element of the table
+         * Reference to TR elements of the table
+         *
+         * Note: if the orientation is vertical there will be multiple TR
+         * otherwise just one.
          *
          * @see createTR
          */
-        this.tr = null;
+        this.trs = [];
 
         /**
          * ## ChoiceTable.listener
@@ -705,25 +708,25 @@
         i = -1, H = this.orientation === 'H';
 
         if (H) {
-            tr = createTR(this);
+            tr = createTR(this, 'main');
             // Add horizontal choices title.
             if (this.leftCell) tr.appendChild(this.leftCell);
         }
         // Main loop.
         for ( ; ++i < len ; ) {
             if (!H) {
-                tr = createTR(this);
+                tr = createTR(this, 'left');
                 // Add vertical choices title.
                 if (i === 0 && this.leftCell) {
                     tr.appendChild(this.leftCell);
-                    createTR(this);
+                    tr = createTR(this, i);
                 }
             }
             // Clickable cell.
             tr.appendChild(this.choicesCells[i]);
         }
         if (this.rightCell) {
-            if (!H) tr = createTR(this);
+            if (!H) tr = createTR(this, 'right');
             tr.appendChild(this.rightCell);
         }
         // Enable onclick listener.
@@ -751,7 +754,7 @@
         i = -1, H = this.orientation === 'H';
 
         if (H) {
-            tr = createTR(this);
+            tr = createTR(this, 'main');
             // Add horizontal choices left.
             if (this.left) {
                 td = this.renderSpecial('left', this.left);
@@ -761,12 +764,12 @@
         // Main loop.
         for ( ; ++i < len ; ) {
             if (!H) {
-                tr = createTR(this);
+                tr = createTR(this, 'left');
                 // Add vertical choices left.
                 if (i === 0 && this.left) {
                     td = this.renderSpecial('left', this.left);
                     tr.appendChild(td);
-                    tr = createTR(this);
+                    tr = createTR(this, i);
                 }
             }
             // Clickable cell.
@@ -774,7 +777,7 @@
             tr.appendChild(td);
         }
         if (this.right) {
-            if (!H) tr = createTR(this);
+            if (!H) tr = createTR(this, 'right');
             td = this.renderSpecial('right', this.right);
             tr.appendChild(td);
         }
@@ -1354,8 +1357,6 @@
      *
      * @param {object} options Optional. Available options:
      *    - shuffleChoices: If TRUE, choices are shuffled. Default: FALSE
-     *
-     * @experimental
      */
     ChoiceTable.prototype.reset = function(options) {
         var i, len;
@@ -1386,20 +1387,50 @@
         if (options.shuffleChoices) this.shuffle();
     };
 
-
+    /**
+     * ### ChoiceTable.shuffle
+     *
+     * Shuffles the order of the choices
+     */
     ChoiceTable.prototype.shuffle = function() {
-        var order, tmpId, tmpHTML;
-        var i, len;
+        var order, H;
+        var i, len, cell, choice;
+        var choicesValues, choicesCells;
+        var parentTR;
+
+        H = this.orientation === 'H';
         order = J.shuffle(this.order);
         i = -1, len = order.length;
-        for ( ; ++i < len ; ) {
+        choicesValues = {};
+        choicesCells = new Array(len);
 
+        for ( ; ++i < len ; ) {
+            choice = order[i];
+            cell = this.choicesCells[this.choicesValues[choice]];
+            choicesCells[i] = cell;
+            choicesValues[choice] = i;
+            if (H) {
+                this.trs[0].appendChild(cell);
+            }
+            else {
+                parentTR = cell.parentElement || cell.parentNode;
+                this.table.appendChild(parentTR);
+            }
+        }
+        if (this.rightCell) {
+            if (H) {
+                this.trs[0].appendChild(this.rightCell);
+            }
+            else {
+                parentTR = this.rightCell.parentElement ||
+                    this.rightCell.parentNode;
+                this.table.appendChild(parentTR);
+            }
         }
 
-        J.shuffleElements(this.tr, order);
-        // if (this.left) tr.insertBefore(this.leftCell, tr.firstElementChild);
-        // if (this.right) this.tr.appendChild(this.rightCell);
         this.order = order;
+        this.choicesCells = choicesCells;
+        this.choicesValues = choicesValues;
     };
 
     // ## Helper methods.
@@ -1448,12 +1479,13 @@
      *
      * @see ChoiceTable.tr
      */
-    function createTR(that) {
+    function createTR(that, trid) {
         var tr;
         tr = document.createElement('tr');
         tr.id = 'tr' + that.separator + that.id;
         that.table.appendChild(tr);
-        that.tr = tr;
+        // Store reference.
+        that.trs.push(tr);
         return tr;
     }
 
