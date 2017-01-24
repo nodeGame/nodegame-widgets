@@ -936,8 +936,10 @@
      * Assigns the new order of items to `this.order`.
      *
      * @param {object} options Optional. Not used for now.
-
-     // TODO: items and choices?
+     *
+     * TODO: shuffle choices in each item. (Note: can't use
+     * item.shuffle, because the cells are taken out, so
+     * there is no table and no tr in there)
      *
      * JSUS.shuffleElements
      */
