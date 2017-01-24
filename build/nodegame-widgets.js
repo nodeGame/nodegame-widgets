@@ -3461,6 +3461,15 @@
         this.table = null;
 
         /**
+         * ### ChoiceTable.tr
+         *
+         * Reference to TR element of the table
+         *
+         * @see createTR
+         */
+        this.tr = null;
+
+        /**
          * ## ChoiceTable.listener
          *
          * The listener function
@@ -3760,16 +3769,6 @@
          * @see ChoiceTable.renderChoice
          */
         this.separator = ChoiceTable.separator;
-
-        /**
-         * ### ChoiceTable.trId
-         *
-         * If TRUE, an ID is added to the TR
-         *
-         * @see createTR
-         */
-        this.trId = false;
-
     }
 
     // ## ChoiceTable methods
@@ -4027,9 +4026,6 @@
             }
             this.setCorrectChoice(options.correctChoice);
         }
-
-        // If TR needs an id.
-        if ('undefined' !== typeof options.trId) this.trId = !!options.trId;
     };
 
     /**
@@ -4794,14 +4790,24 @@
 
         if (this.textArea) this.textArea.value = '';
         if (this.isHighlighted()) this.unhighlight();
+      
+        if (options.shuffleChoices) this.shuffle();
+    };
 
-        // TODO: shuffle choices in TR.
-        // TODO: make it a method.
-        // if (options.shuffleChoices) {
-            // order = J.shuffle(this.order);
-            // J.shuffleElements(this.table, order);
-            // this.order = order;
-        // }
+
+    ChoiceTable.prototype.shuffle = function() {
+        var order, tmpId, tmpHTML;
+        var i, len;
+        order = J.shuffle(this.order);
+        i = -1, len = order.length;
+        for ( ; ++i < len ; ) {
+            
+        }
+
+        J.shuffleElements(this.tr, order);
+        // if (this.left) tr.insertBefore(this.leftCell, tr.firstElementChild);
+        // if (this.right) this.tr.appendChild(this.rightCell);        
+        this.order = order;
     };
 
     // ## Helper methods.
@@ -4841,18 +4847,21 @@
      *
      * Creates and append a new TR element
      *
-     * If required by current configuration, the `id` attribute is
-     * added to the TR in the form of: 'tr' + separator + widget_id
+     * Adds the the `id` attribute formatted as: 
+     *   'tr' + separator + widget_id
      *
      * @param {ChoiceTable} that This instance
      *
      * @return {HTMLElement} Thew newly created TR element
+     *
+     * @see ChoiceTable.tr
      */
     function createTR(that) {
         var tr;
         tr = document.createElement('tr');
-        if (that.trId) tr.id = 'tr' + that.separator + that.id;
+        tr.id = 'tr' + that.separator + that.id;
         that.table.appendChild(tr);
+        that.tr = tr;
         return tr;
     }
 
@@ -4913,6 +4922,17 @@
          * The clickable table containing all the cells
          */
         this.table = null;
+
+        /**
+         * ### ChoiceTableGroup.trs
+         *
+         * Collection of all trs created
+         *
+         * Useful when shuffling items/choices
+         *
+         * @see ChoiceTableGroup.shuffle
+         */
+        this.trs = [];
 
         /**
          * ## ChoiceTableGroup.listener
@@ -5138,15 +5158,15 @@
         this.separator = ChoiceTableGroup.separator;
 
         /**
-         * ### ChoiceTableGroup.trs
+         * ### ChoiceTableGroup.shuffleChoices
          *
-         * Collection of all trs created
+         * If TRUE, choices in items are shuffled
          *
-         * Useful when shuffling items/choices
+         * This option is passed to each individual item.
          *
-         * @see ChoiceTableGroup.shuffle
+         * @see mixinSettings
          */
-        this.trs = [];
+        this.shuffleChoices = null;
     }
 
     // ## ChoiceTableGroup methods
@@ -5287,6 +5307,10 @@
                                 options.timeFrom);
         }
 
+        // Option shuffleChoices, default false.
+        if ('undefined' !== typeof options.shuffleChoices) {
+            this.shuffleChoices = !!options.shuffleChoices;
+        }
 
         // Set the renderer, if any.
         if ('function' === typeof options.renderer) {
@@ -5781,6 +5805,8 @@
      * Assigns the new order of items to `this.order`.
      *
      * @param {object} options Optional. Not used for now.
+
+     // TODO: items and choices?
      *
      * JSUS.shuffleElements
      */
@@ -5794,7 +5820,7 @@
         else {
             i = -1, len = this.trs.length;
             for ( ; ++i < len ; ) {
-                J.shuffleElements(this.trs[i], order);            
+                J.shuffleElements(this.trs[i], order);
             }
         }
         this.order = order;
@@ -5832,6 +5858,10 @@
             null !== that.selectMultiple) {
 
             s.selectMultiple = that.selectMultiple;
+        }
+
+        if ('undefined' === typeof s.shuffleChoices && that.shuffleChoices) {
+            s.shuffleChoices = that.shuffleChoices;
         }
 
         return s;
@@ -5886,7 +5916,7 @@
         var tr, sep;
         tr = document.createElement('tr');
         that.table.appendChild(tr);
-        // Set id.        
+        // Set id.
         sep = that.separator;
         tr.id = that.id + sep + 'tr' + sep + trid;
         // Store reference.

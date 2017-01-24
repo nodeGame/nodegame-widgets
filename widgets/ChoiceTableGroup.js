@@ -55,6 +55,17 @@
         this.table = null;
 
         /**
+         * ### ChoiceTableGroup.trs
+         *
+         * Collection of all trs created
+         *
+         * Useful when shuffling items/choices
+         *
+         * @see ChoiceTableGroup.shuffle
+         */
+        this.trs = [];
+
+        /**
          * ## ChoiceTableGroup.listener
          *
          * The listener function
@@ -278,15 +289,15 @@
         this.separator = ChoiceTableGroup.separator;
 
         /**
-         * ### ChoiceTableGroup.trs
+         * ### ChoiceTableGroup.shuffleChoices
          *
-         * Collection of all trs created
+         * If TRUE, choices in items are shuffled
          *
-         * Useful when shuffling items/choices
+         * This option is passed to each individual item.
          *
-         * @see ChoiceTableGroup.shuffle
+         * @see mixinSettings
          */
-        this.trs = [];
+        this.shuffleChoices = null;
     }
 
     // ## ChoiceTableGroup methods
@@ -427,6 +438,10 @@
                                 options.timeFrom);
         }
 
+        // Option shuffleChoices, default false.
+        if ('undefined' !== typeof options.shuffleChoices) {
+            this.shuffleChoices = !!options.shuffleChoices;
+        }
 
         // Set the renderer, if any.
         if ('function' === typeof options.renderer) {
@@ -921,6 +936,8 @@
      * Assigns the new order of items to `this.order`.
      *
      * @param {object} options Optional. Not used for now.
+
+     // TODO: items and choices?
      *
      * JSUS.shuffleElements
      */
@@ -972,6 +989,10 @@
             null !== that.selectMultiple) {
 
             s.selectMultiple = that.selectMultiple;
+        }
+
+        if ('undefined' === typeof s.shuffleChoices && that.shuffleChoices) {
+            s.shuffleChoices = that.shuffleChoices;
         }
 
         return s;

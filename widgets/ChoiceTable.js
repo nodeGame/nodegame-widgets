@@ -53,6 +53,15 @@
         this.table = null;
 
         /**
+         * ### ChoiceTable.tr
+         *
+         * Reference to TR element of the table
+         *
+         * @see createTR
+         */
+        this.tr = null;
+
+        /**
          * ## ChoiceTable.listener
          *
          * The listener function
@@ -352,16 +361,6 @@
          * @see ChoiceTable.renderChoice
          */
         this.separator = ChoiceTable.separator;
-
-        /**
-         * ### ChoiceTable.trId
-         *
-         * If TRUE, an ID is added to the TR
-         *
-         * @see createTR
-         */
-        this.trId = false;
-
     }
 
     // ## ChoiceTable methods
@@ -619,9 +618,6 @@
             }
             this.setCorrectChoice(options.correctChoice);
         }
-
-        // If TR needs an id.
-        if ('undefined' !== typeof options.trId) this.trId = !!options.trId;
     };
 
     /**
@@ -1387,13 +1383,23 @@
         if (this.textArea) this.textArea.value = '';
         if (this.isHighlighted()) this.unhighlight();
 
-        // TODO: shuffle choices in TR.
-        // TODO: make it a method.
-        // if (options.shuffleChoices) {
-            // order = J.shuffle(this.order);
-            // J.shuffleElements(this.table, order);
-            // this.order = order;
-        // }
+        if (options.shuffleChoices) this.shuffle();
+    };
+
+
+    ChoiceTable.prototype.shuffle = function() {
+        var order, tmpId, tmpHTML;
+        var i, len;
+        order = J.shuffle(this.order);
+        i = -1, len = order.length;
+        for ( ; ++i < len ; ) {
+
+        }
+
+        J.shuffleElements(this.tr, order);
+        // if (this.left) tr.insertBefore(this.leftCell, tr.firstElementChild);
+        // if (this.right) this.tr.appendChild(this.rightCell);
+        this.order = order;
     };
 
     // ## Helper methods.
@@ -1433,18 +1439,21 @@
      *
      * Creates and append a new TR element
      *
-     * If required by current configuration, the `id` attribute is
-     * added to the TR in the form of: 'tr' + separator + widget_id
+     * Adds the the `id` attribute formatted as:
+     *   'tr' + separator + widget_id
      *
      * @param {ChoiceTable} that This instance
      *
      * @return {HTMLElement} Thew newly created TR element
+     *
+     * @see ChoiceTable.tr
      */
     function createTR(that) {
         var tr;
         tr = document.createElement('tr');
-        if (that.trId) tr.id = 'tr' + that.separator + that.id;
+        tr.id = 'tr' + that.separator + that.id;
         that.table.appendChild(tr);
+        that.tr = tr;
         return tr;
     }
 

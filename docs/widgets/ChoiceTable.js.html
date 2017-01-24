@@ -33,6 +33,9 @@
       <div class="heading h3">
         <a href="#choicetable.table">ChoiceTable.table</a>
       </div>
+      <div class="heading h3">
+        <a href="#choicetable.tr">ChoiceTable.tr</a>
+      </div>
       <div class="heading h2">
         <a href="#choicetable.listener">ChoiceTable.listener</a>
       </div>
@@ -116,9 +119,6 @@
       </div>
       <div class="heading h3">
         <a href="#choicetable.separator">ChoiceTable.separator</a>
-      </div>
-      <div class="heading h3">
-        <a href="#choicetable.trid">ChoiceTable.trId</a>
       </div>
       <div class="heading h2">
         <a href="#choicetable%20methods">ChoiceTable methods</a>
@@ -337,6 +337,35 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="choicetable.tr">
+  <h3>
+    <a href="#choicetable.tr" name="choicetable.tr" class="pilcrow">&#182;</a>
+    ChoiceTable.tr
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Reference to TR element of the table</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">createTR
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tr</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="choicetable.listener">
   <h2>
     <a href="#choicetable.listener" name="choicetable.listener" class="pilcrow">&#182;</a>
@@ -371,7 +400,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>Relative time.</p>
         </td>
@@ -386,7 +415,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>Absolute time.</p>
         </td>
@@ -406,7 +435,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>Not a clickable choice.</p>
         </td>
@@ -420,7 +449,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
 <p>Id of elements are in the form of name_value or name_item_value.</p>
         </td>
@@ -434,7 +463,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>Separator not found, not a clickable cell.</p>
         </td>
@@ -451,7 +480,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>One more click.</p>
         </td>
@@ -465,7 +494,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>If only 1 selection allowed, remove selection from oldSelected.</p>
         </td>
@@ -491,7 +520,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>Remove any warning/error from form on click.</p>
         </td>
@@ -1206,36 +1235,6 @@ the order in the choices array is used as value).</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">separator</span> <span class="o">=</span> <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">separator</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="choicetable.trid">
-  <h3>
-    <a href="#choicetable.trid" name="choicetable.trid" class="pilcrow">&#182;</a>
-    ChoiceTable.trId
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>If TRUE, an ID is added to the TR</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">createTR
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">trId</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-
     <span class="p">}</span>
 
 
@@ -1717,20 +1716,6 @@ as specified by user.</p>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">setCorrectChoice</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">correctChoice</span><span class="p">);</span>
         <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-62" id="section-62">&#182;</a>
-</div>
-<p>If TR needs an id.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">trId</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">trId</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">options</span><span class="p">.</span><span class="nx">trId</span><span class="p">;</span>
     <span class="p">};</span>
 
 
@@ -1804,7 +1789,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
+  <a class="pilcrow" href="#section-63" id="section-63">&#182;</a>
 </div>
 <p>Save the order in which the choices will be added.</p>
         </td>
@@ -1819,7 +1804,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-65" id="section-65">&#182;</a>
+  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
 </div>
 <p>Build the table and choices at once (faster).</p>
         </td>
@@ -1832,7 +1817,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-66" id="section-66">&#182;</a>
+  <a class="pilcrow" href="#section-65" id="section-65">&#182;</a>
 </div>
 <p>Or just build choices.</p>
         </td>
@@ -1890,7 +1875,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-68" id="section-68">&#182;</a>
+  <a class="pilcrow" href="#section-67" id="section-67">&#182;</a>
 </div>
 <p>Pre-allocate the choicesCells array.</p>
         </td>
@@ -1956,7 +1941,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-70" id="section-70">&#182;</a>
+  <a class="pilcrow" href="#section-69" id="section-69">&#182;</a>
 </div>
 <p>Start adding tr/s and tds based on the orientation.</p>
         </td>
@@ -1972,7 +1957,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-71" id="section-71">&#182;</a>
+  <a class="pilcrow" href="#section-70" id="section-70">&#182;</a>
 </div>
 <p>Add horizontal choices title.</p>
         </td>
@@ -1986,7 +1971,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-72" id="section-72">&#182;</a>
+  <a class="pilcrow" href="#section-71" id="section-71">&#182;</a>
 </div>
 <p>Main loop.</p>
         </td>
@@ -2001,7 +1986,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-73" id="section-73">&#182;</a>
+  <a class="pilcrow" href="#section-72" id="section-72">&#182;</a>
 </div>
 <p>Add vertical choices title.</p>
         </td>
@@ -2018,7 +2003,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-74" id="section-74">&#182;</a>
+  <a class="pilcrow" href="#section-73" id="section-73">&#182;</a>
 </div>
 <p>Clickable cell.</p>
         </td>
@@ -2036,7 +2021,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-75" id="section-75">&#182;</a>
+  <a class="pilcrow" href="#section-74" id="section-74">&#182;</a>
 </div>
 <p>Enable onclick listener.</p>
         </td>
@@ -2094,7 +2079,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-77" id="section-77">&#182;</a>
+  <a class="pilcrow" href="#section-76" id="section-76">&#182;</a>
 </div>
 <p>Pre-allocate the choicesCells array.</p>
         </td>
@@ -2108,7 +2093,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-78" id="section-78">&#182;</a>
+  <a class="pilcrow" href="#section-77" id="section-77">&#182;</a>
 </div>
 <p>Start adding tr/s and tds based on the orientation.</p>
         </td>
@@ -2124,7 +2109,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-79" id="section-79">&#182;</a>
+  <a class="pilcrow" href="#section-78" id="section-78">&#182;</a>
 </div>
 <p>Add horizontal choices left.</p>
         </td>
@@ -2141,7 +2126,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-80" id="section-80">&#182;</a>
+  <a class="pilcrow" href="#section-79" id="section-79">&#182;</a>
 </div>
 <p>Main loop.</p>
         </td>
@@ -2156,7 +2141,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-81" id="section-81">&#182;</a>
+  <a class="pilcrow" href="#section-80" id="section-80">&#182;</a>
 </div>
 <p>Add vertical choices left.</p>
         </td>
@@ -2174,7 +2159,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-82" id="section-82">&#182;</a>
+  <a class="pilcrow" href="#section-81" id="section-81">&#182;</a>
 </div>
 <p>Clickable cell.</p>
         </td>
@@ -2195,7 +2180,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-83" id="section-83">&#182;</a>
+  <a class="pilcrow" href="#section-82" id="section-82">&#182;</a>
 </div>
 <p>Enable onclick listener.</p>
         </td>
@@ -2264,7 +2249,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-85" id="section-85">&#182;</a>
+  <a class="pilcrow" href="#section-84" id="section-84">&#182;</a>
 </div>
 <p>HTML element (checked before).</p>
         </td>
@@ -2355,7 +2340,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-87" id="section-87">&#182;</a>
+  <a class="pilcrow" href="#section-86" id="section-86">&#182;</a>
 </div>
 <p>Use custom renderer.</p>
         </td>
@@ -2371,7 +2356,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-88" id="section-88">&#182;</a>
+  <a class="pilcrow" href="#section-87" id="section-87">&#182;</a>
 </div>
 <p>Or use standard format.</p>
         </td>
@@ -2404,7 +2389,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-89" id="section-89">&#182;</a>
+  <a class="pilcrow" href="#section-88" id="section-88">&#182;</a>
 </div>
 <p>Map a value to the index.</p>
         </td>
@@ -2421,7 +2406,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-90" id="section-90">&#182;</a>
+  <a class="pilcrow" href="#section-89" id="section-89">&#182;</a>
 </div>
 <p>Add the id if not added already by the renderer function.</p>
         </td>
@@ -2437,7 +2422,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-91" id="section-91">&#182;</a>
+  <a class="pilcrow" href="#section-90" id="section-90">&#182;</a>
 </div>
 <p>All fine, updates global variables.</p>
         </td>
@@ -2559,7 +2544,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-94" id="section-94">&#182;</a>
+  <a class="pilcrow" href="#section-93" id="section-93">&#182;</a>
 </div>
 <p>Id must be unique.</p>
         </td>
@@ -2576,7 +2561,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-95" id="section-95">&#182;</a>
+  <a class="pilcrow" href="#section-94" id="section-94">&#182;</a>
 </div>
 <p>MainText.</p>
         </td>
@@ -2593,7 +2578,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-96" id="section-96">&#182;</a>
+  <a class="pilcrow" href="#section-95" id="section-95">&#182;</a>
 </div>
 <p>Append mainText.</p>
         </td>
@@ -2608,7 +2593,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-97" id="section-97">&#182;</a>
+  <a class="pilcrow" href="#section-96" id="section-96">&#182;</a>
 </div>
 <p>Create/set table.</p>
         </td>
@@ -2621,7 +2606,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-98" id="section-98">&#182;</a>
+  <a class="pilcrow" href="#section-97" id="section-97">&#182;</a>
 </div>
 <p>Create table, if it was not passed as object before.</p>
         </td>
@@ -2637,7 +2622,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-99" id="section-99">&#182;</a>
+  <a class="pilcrow" href="#section-98" id="section-98">&#182;</a>
 </div>
 <p>Set table id.</p>
         </td>
@@ -2652,7 +2637,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-100" id="section-100">&#182;</a>
+  <a class="pilcrow" href="#section-99" id="section-99">&#182;</a>
 </div>
 <p>Append table.</p>
         </td>
@@ -2667,7 +2652,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-101" id="section-101">&#182;</a>
+  <a class="pilcrow" href="#section-100" id="section-100">&#182;</a>
 </div>
 <p>Creates a free-text textarea, possibly with placeholder text.</p>
         </td>
@@ -2687,7 +2672,7 @@ the <code>id</code> field of the cell</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-102" id="section-102">&#182;</a>
+  <a class="pilcrow" href="#section-101" id="section-101">&#182;</a>
 </div>
 <p>Append textarea.</p>
         </td>
@@ -2869,7 +2854,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-107" id="section-107">&#182;</a>
+  <a class="pilcrow" href="#section-106" id="section-106">&#182;</a>
 </div>
 <p>Check the number of choices.</p>
         </td>
@@ -2886,7 +2871,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-108" id="section-108">&#182;</a>
+  <a class="pilcrow" href="#section-107" id="section-107">&#182;</a>
 </div>
 <p>If no correct choice is set return null.</p>
         </td>
@@ -2899,7 +2884,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-109" id="section-109">&#182;</a>
+  <a class="pilcrow" href="#section-108" id="section-108">&#182;</a>
 </div>
 <p>Mark attempt by default.</p>
         </td>
@@ -2917,7 +2902,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-110" id="section-110">&#182;</a>
+  <a class="pilcrow" href="#section-109" id="section-109">&#182;</a>
 </div>
 <p>Make it an array (can be a string).</p>
         </td>
@@ -2934,7 +2919,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-111" id="section-111">&#182;</a>
+  <a class="pilcrow" href="#section-110" id="section-110">&#182;</a>
 </div>
 <p>Quick check.</p>
         </td>
@@ -2947,7 +2932,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-112" id="section-112">&#182;</a>
+  <a class="pilcrow" href="#section-111" id="section-111">&#182;</a>
 </div>
 <p>Check every item.</p>
         </td>
@@ -3355,7 +3340,7 @@ choices:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-120" id="section-120">&#182;</a>
+  <a class="pilcrow" href="#section-119" id="section-119">&#182;</a>
 </div>
 <p>TODO: allow it to set it visually or just in the background.
 Use options.visual.</p>
@@ -3369,7 +3354,7 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-121" id="section-121">&#182;</a>
+  <a class="pilcrow" href="#section-120" id="section-120">&#182;</a>
 </div>
 <p>TODO: allow it to set random or fixed values, or correct values</p>
         </td>
@@ -3388,7 +3373,7 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-122" id="section-122">&#182;</a>
+  <a class="pilcrow" href="#section-121" id="section-121">&#182;</a>
 </div>
 <p>Value this.correctChoice can be string or array.</p>
         </td>
@@ -3404,7 +3389,7 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-123" id="section-123">&#182;</a>
+  <a class="pilcrow" href="#section-122" id="section-122">&#182;</a>
 </div>
 <p>Make it an array (can be a string).</p>
         </td>
@@ -3437,7 +3422,7 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-124" id="section-124">&#182;</a>
+  <a class="pilcrow" href="#section-123" id="section-123">&#182;</a>
 </div>
 <p>How many random choices?</p>
         </td>
@@ -3458,7 +3443,7 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-125" id="section-125">&#182;</a>
+  <a class="pilcrow" href="#section-124" id="section-124">&#182;</a>
 </div>
 <p>Make a random comment.</p>
         </td>
@@ -3531,6 +3516,20 @@ Use options.visual.</p>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textArea</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">textArea</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isHighlighted</span><span class="p">())</span> <span class="k">this</span><span class="p">.</span><span class="nx">unhighlight</span><span class="p">();</span>
 
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">shuffleChoices</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+    <span class="nx">ChoiceTable</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">shuffle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">order</span><span class="p">,</span> <span class="nx">tmpId</span><span class="p">,</span> <span class="nx">tmpHTML</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+        <span class="nx">order</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">order</span><span class="p">);</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">order</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="nx">J</span><span class="p">.</span><span class="nx">shuffleElements</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tr</span><span class="p">,</span> <span class="nx">order</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -3538,17 +3537,13 @@ Use options.visual.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-127" id="section-127">&#182;</a>
+  <a class="pilcrow" href="#section-126" id="section-126">&#182;</a>
 </div>
-<p>TODO: shuffle choices in TR.
-TODO: make it a method.
-if (options.shuffleChoices) {
-order = J.shuffle(this.order);
-J.shuffleElements(this.table, order);
-this.order = order;
-}</p>
+<p>if (this.left) tr.insertBefore(this.leftCell, tr.firstElementChild);
+if (this.right) this.tr.appendChild(this.rightCell);</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">order</span><span class="p">;</span>
     <span class="p">};</span>
 
 
@@ -3644,8 +3639,8 @@ value of the array separately.</p>
   </div>
   <div class="body"><p>Creates and append a new TR element</p>
 
-<p>If required by current configuration, the <code>id</code> attribute is
-added to the TR in the form of: 'tr' + separator + widget_id</p>
+<p>Adds the the <code>id</code> attribute formatted as:
+  'tr' + separator + widget_id</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -3660,6 +3655,11 @@ added to the TR in the form of: 'tr' + separator + widget_id</p>
       <span class="dox_type">HTMLElement</span>
       <span>Thew newly created TR element</span>
     </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">ChoiceTable.tr
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -3667,8 +3667,9 @@ added to the TR in the form of: 'tr' + separator + widget_id</p>
     <span class="kd">function</span> <span class="nx">createTR</span><span class="p">(</span><span class="nx">that</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">tr</span><span class="p">;</span>
         <span class="nx">tr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">trId</span><span class="p">)</span> <span class="nx">tr</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;tr&#39;</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">separator</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="nx">tr</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;tr&#39;</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">separator</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
         <span class="nx">that</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">tr</span><span class="p">);</span>
+        <span class="nx">that</span><span class="p">.</span><span class="nx">tr</span> <span class="o">=</span> <span class="nx">tr</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">tr</span><span class="p">;</span>
     <span class="p">}</span>
 
