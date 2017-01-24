@@ -792,6 +792,7 @@
      *
      * Renders a non-choice element into a cell of the table (e.g. left/right)
      *
+     * @param {string} type The type of special element ('left' or 'right')
      * @param {mixed} special The special element. It must be string or number,
      *   or array where the first element is the 'value' (incorporated in the
      *   `id` field) and the second the text to display as choice.
@@ -819,6 +820,7 @@
             throw new Error('ChoiceTable.renderSpecial: unknown type: ' + type);
         }
         td.className = className;
+        td.id = this.id + this.separator + 'special-cell-' + type
         return td;
     };
 

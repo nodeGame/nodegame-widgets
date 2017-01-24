@@ -2223,6 +2223,11 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
   <div class="details">
     <div class="dox_tag_title">Params</div>
     <div class="dox_tag_detail">
+      <span class="dox_tag_name">type</span>
+      <span class="dox_type">string</span>
+      <span>The type of special element ('left' or 'right')</span>
+    </div>
+    <div class="dox_tag_detail">
       <span class="dox_tag_name">special</span>
       <span class="dox_type">mixed</span>
       <span>The special element. It must be string or number,
@@ -2277,6 +2282,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
             <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ChoiceTable.renderSpecial: unknown type: &#39;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="nx">td</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">className</span><span class="p">;</span>
+        <span class="nx">td</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">separator</span> <span class="o">+</span> <span class="s1">&#39;special-cell-&#39;</span> <span class="o">+</span> <span class="nx">type</span>
         <span class="k">return</span> <span class="nx">td</span><span class="p">;</span>
     <span class="p">};</span>
 

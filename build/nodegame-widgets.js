@@ -4135,7 +4135,7 @@
             tr.appendChild(this.choicesCells[i]);
         }
         if (this.rightCell) {
-            if (!H) tr = createTR(this);            
+            if (!H) tr = createTR(this);
             tr.appendChild(this.rightCell);
         }
         // Enable onclick listener.
@@ -4186,7 +4186,7 @@
             tr.appendChild(td);
         }
         if (this.right) {
-            if (!H) tr = createTR(this);            
+            if (!H) tr = createTR(this);
             td = this.renderSpecial('right', this.right);
             tr.appendChild(td);
         }
@@ -4200,6 +4200,7 @@
      *
      * Renders a non-choice element into a cell of the table (e.g. left/right)
      *
+     * @param {string} type The type of special element ('left' or 'right')
      * @param {mixed} special The special element. It must be string or number,
      *   or array where the first element is the 'value' (incorporated in the
      *   `id` field) and the second the text to display as choice.
@@ -4227,6 +4228,7 @@
             throw new Error('ChoiceTable.renderSpecial: unknown type: ' + type);
         }
         td.className = className;
+        td.id = this.id + this.separator + 'special-cell-' + type
         return td;
     };
 
@@ -4858,7 +4860,7 @@
 
 /**
  * # ChoiceTableGroup
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several choice tables widgets
@@ -5134,6 +5136,17 @@
          * @see mixinSettings
          */
         this.separator = ChoiceTableGroup.separator;
+
+        /**
+         * ### ChoiceTableGroup.trs
+         *
+         * Collection of all trs created
+         *
+         * Useful when shuffling items/choices
+         *
+         * @see ChoiceTableGroup.shuffle
+         */
+        this.trs = [];
     }
 
     // ## ChoiceTableGroup methods
@@ -5372,8 +5385,7 @@
      */
     ChoiceTableGroup.prototype.buildTable = function() {
         var i, len, tr, H, ct;
-        var j, lenJ, lenJOld, hasRight, sep;
-        sep = this.separator;
+        var j, lenJ, lenJOld, hasRight;
 
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
@@ -5383,10 +5395,7 @@
                 ct = getChoiceTable(this, i);
 
                 // Add new TR.
-                tr = document.createElement('tr');
-                this.table.appendChild(tr);
-                // Set id.
-                tr.id = 'tr' + sep + ct.id;
+                tr = createTR(this, ct.id);
 
                 // Append choices for item.
                 tr.appendChild(ct.leftCell);
@@ -5410,10 +5419,7 @@
         else {
 
             // Add new TR.
-            tr = document.createElement('tr');
-            this.table.appendChild(tr);;
-            // Set id.
-            tr.id = this.id + sep + 'tr' + sep + 'leftCells';
+            tr = createTR(this, 'header');
 
             // Build all items first.
             for ( ; ++i < len ; ) {
@@ -5452,9 +5458,7 @@
             j = -1;
             for ( ; ++j < lenJ ; ) {
                 // Add new TR.
-                tr = document.createElement('tr');
-                this.table.appendChild(tr);
-                tr.id = this.id + sep + 'tr' + sep + 'row' + (j+1);
+                tr = createTR(this, 'row' + (j+1));
 
                 i = -1;
                 // TODO: might optimize. There are two loops (+1 inside ct).
@@ -5754,9 +5758,10 @@
      *   to reset each item
      *
      * @see ChoiceTable.reset
+     * @see ChoiceTableGroup.shuffle
      */
     ChoiceTableGroup.prototype.reset = function(opts) {
-        var order, i, len;
+        var i, len;
         opts = opts || {};
         i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
@@ -5764,19 +5769,36 @@
         }
         // Delete textarea, if found.
         if (this.textarea) this.textarea.value = '';
-        if (opts.shuffleItems) {
-            order = J.shuffle(this.order);
-            if (this.orientation === 'H') {
-                J.shuffleElements(this.table, order);
-            }
-            else {
-                // TODO: Must not shuffle leftCells!
-                throw new Error('TODO!!');
-            }
-            this.order = order;
-        }
+        if (opts.shuffleItems) this.shuffle();
         if (this.isHighlighted()) this.unhighlight();
-    }; 
+    };
+
+    /**
+     * ### ChoiceTableGroup.shuffle
+     *
+     * Shuffles the order of the displayed items
+     *
+     * Assigns the new order of items to `this.order`.
+     *
+     * @param {object} options Optional. Not used for now.
+     *
+     * JSUS.shuffleElements
+     */
+    ChoiceTableGroup.prototype.shuffle = function(opts) {
+        var order, i, len, j, lenJ;
+        if (!this.items || !this.items.length) return;
+        order = J.shuffle(this.order);
+        if (this.orientation === 'H') {
+            J.shuffleElements(this.table, order);
+        }
+        else {
+            i = -1, len = this.trs.length;
+            for ( ; ++i < len ; ) {
+                J.shuffleElements(this.trs[i], order);            
+            }
+        }
+        this.order = order;
+    };
 
     // ## Helper methods.
 
@@ -5846,6 +5868,30 @@
         that.itemsById[ct.id] = ct;
         that.items[i] = ct;
         return ct;
+    }
+
+    /**
+     * ### createTR
+     *
+     * Creates and append a new TR element
+     *
+     * If required by current configuration, the `id` attribute is
+     * added to the TR in the form of: 'tr' + separator + widget_id
+     *
+     * @param {ChoiceTable} that This instance
+     *
+     * @return {HTMLElement} Thew newly created TR element
+     */
+    function createTR(that, trid) {
+        var tr, sep;
+        tr = document.createElement('tr');
+        that.table.appendChild(tr);
+        // Set id.        
+        sep = that.separator;
+        tr.id = that.id + sep + 'tr' + sep + trid;
+        // Store reference.
+        that.trs.push(tr);
+        return tr;
     }
 
 })(node);
