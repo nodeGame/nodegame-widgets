@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 3.5.2
+- Actually implements changes in ChoiceTable and ChoiceTableGroup described in 3.5.1.
+
 ## 3.5.1
 - Better error messages in Widgets.js.
 - `#ChoiceTable.shuffle()` and `#ChoiceTableGroup.shuffle()`.
