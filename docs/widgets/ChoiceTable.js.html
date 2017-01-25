@@ -1138,7 +1138,7 @@ the order in the choices array is used as value).</p>
   </div>
   <div class="body"><p>If truthy, a textarea for free-text comment will be added</p>
 
-<p>If 'string', the text will be added inside the the textarea</p>
+<p>If 'string', the text will be added inside the textarea</p>
   </div>
 </div>
         </td>
@@ -1229,9 +1229,11 @@ the order in the choices array is used as value).</p>
 <p>Available options are:</p>
 
 <ul>
+<li>left: the content of the left (or top) cell
+<ul><li>right: the content of the right (or bottom) cell</li>
 <li>className: the className of the table (string, array), or false
-  to have none.
-<ul><li>orientation: orientation of the table: vertical (v) or horizontal (h)</li>
+to have none.</li>
+<li>orientation: orientation of the table: vertical (v) or horizontal (h)</li>
 <li>group: the name of the group (number or string), if any</li>
 <li>groupOrder: the order of the table in the group, if any</li>
 <li>onclick: a custom onclick listener function. Context is
@@ -1247,7 +1249,7 @@ to the table</li>
 <li>renderer: a function that will render the choices. See
 ChoiceTable.renderer for info about the format</li>
 <li>freeText: if TRUE, a textarea will be added under the table,
-if 'string', the text will be added inside the the textarea</li>
+if 'string', the text will be added inside the textarea</li>
 <li>timeFrom: The timestamp as recorded by <code>node.timer.setTimestamp</code>
 or FALSE, to measure absolute time for current choice</li></ul></li>
 </ul>
@@ -2177,6 +2179,11 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
   <div class="details">
     <div class="dox_tag_title">Params</div>
     <div class="dox_tag_detail">
+      <span class="dox_tag_name">type</span>
+      <span class="dox_type">string</span>
+      <span>The type of special cell ('left' or 'right').</span>
+    </div>
+    <div class="dox_tag_detail">
       <span class="dox_tag_name">special</span>
       <span class="dox_type">mixed</span>
       <span>The special element. It must be string or number,
@@ -2261,7 +2268,7 @@ as TD cells. Otherwise, the choices will be built but not appended.</p>
       <span>The choice element. It must be string or number,
   or array where the first element is the 'value' (incorporated in the
   <code>id</code> field) and the second the text to display as choice. If a
-  If renderer function is defined there are no restriction on the
+  renderer function is defined there are no restriction on the
   format of choice</span>
     </div>
     <div class="dox_tag_detail">

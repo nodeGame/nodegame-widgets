@@ -3729,7 +3729,7 @@
          *
          * If truthy, a textarea for free-text comment will be added
          *
-         * If 'string', the text will be added inside the the textarea
+         * If 'string', the text will be added inside the textarea
          */
         this.freeText = null;
 
@@ -3760,6 +3760,8 @@
      *
      * Available options are:
      *
+     *   - left: the content of the left (or top) cell
+     *   - right: the content of the right (or bottom) cell
      *   - className: the className of the table (string, array), or false
      *       to have none.
      *   - orientation: orientation of the table: vertical (v) or horizontal (h)
@@ -3778,7 +3780,7 @@
      *   - renderer: a function that will render the choices. See
      *       ChoiceTable.renderer for info about the format
      *   - freeText: if TRUE, a textarea will be added under the table,
-     *       if 'string', the text will be added inside the the textarea
+     *       if 'string', the text will be added inside the textarea
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
      *
@@ -4189,10 +4191,11 @@
      *
      * Renders a non-choice element into a cell of the table (e.g. left/right)
      *
+     * @param {string} type The type of special cell ('left' or 'right').
      * @param {mixed} special The special element. It must be string or number,
      *   or array where the first element is the 'value' (incorporated in the
      *   `id` field) and the second the text to display as choice.
-     *
+
      * @return {HTMLElement} td The newly created cell of the table
      *
      * @see ChoiceTable.left
@@ -4229,7 +4232,7 @@
      * @param {mixed} choice The choice element. It must be string or number,
      *   or array where the first element is the 'value' (incorporated in the
      *   `id` field) and the second the text to display as choice. If a
-     *   If renderer function is defined there are no restriction on the
+     *   renderer function is defined there are no restriction on the
      *   format of choice
      * @param {number} idx The position of the choice within the choice array
      *
