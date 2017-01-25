@@ -1,6 +1,6 @@
 /**
  * # ChoiceTableGroup
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several choice tables widgets
@@ -19,7 +19,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.0.0';
+    ChoiceTableGroup.version = '1.1.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -53,6 +53,17 @@
          * The clickable table containing all the cells
          */
         this.table = null;
+
+        /**
+         * ### ChoiceTableGroup.trs
+         *
+         * Collection of all trs created
+         *
+         * Useful when shuffling items/choices
+         *
+         * @see ChoiceTableGroup.shuffle
+         */
+        this.trs = [];
 
         /**
          * ## ChoiceTableGroup.listener
@@ -276,6 +287,17 @@
          * @see mixinSettings
          */
         this.separator = ChoiceTableGroup.separator;
+
+        /**
+         * ### ChoiceTableGroup.shuffleChoices
+         *
+         * If TRUE, choices in items are shuffled
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         */
+        this.shuffleChoices = null;
     }
 
     // ## ChoiceTableGroup methods
@@ -416,6 +438,10 @@
                                 options.timeFrom);
         }
 
+        // Option shuffleChoices, default false.
+        if ('undefined' !== typeof options.shuffleChoices) {
+            this.shuffleChoices = !!options.shuffleChoices;
+        }
 
         // Set the renderer, if any.
         if ('function' === typeof options.renderer) {
@@ -520,13 +546,13 @@
         i = -1, len = this.itemsSettings.length;
         if (H) {
             for ( ; ++i < len ; ) {
-                // Add new TR.
-                tr = document.createElement('tr');
-                this.table.appendChild(tr);
-
-                // Get item, append choices for item.
+                // Get item.
                 ct = getChoiceTable(this, i);
 
+                // Add new TR.
+                tr = createTR(this, ct.id);
+
+                // Append choices for item.
                 tr.appendChild(ct.leftCell);
                 j = -1, lenJ = ct.choicesCells.length;
                 // Make sure all items have same number of choices.
@@ -548,8 +574,7 @@
         else {
 
             // Add new TR.
-            tr = document.createElement('tr');
-            this.table.appendChild(tr);
+            tr = createTR(this, 'header');
 
             // Build all items first.
             for ( ; ++i < len ; ) {
@@ -588,8 +613,7 @@
             j = -1;
             for ( ; ++j < lenJ ; ) {
                 // Add new TR.
-                tr = document.createElement('tr');
-                this.table.appendChild(tr);
+                tr = createTR(this, 'row' + (j+1));
 
                 i = -1;
                 // TODO: might optimize. There are two loops (+1 inside ct).
@@ -823,13 +847,16 @@
      * @see ChoiceTableGroup.verifyChoice
      */
     ChoiceTableGroup.prototype.getValues = function(opts) {
-        var obj, i, len, tbl, toHighlight;
+        var obj, i, len, tbl, toHighlight, toReset;
         obj = {
             id: this.id,
             order: this.order,
             items: {}
         };
         opts = opts || {};
+        // Make sure reset is done only at the end.
+        toReset = opts.reset;
+        opts.reset = false;
         i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
             tbl = this.items[i];
@@ -842,12 +869,14 @@
                 toHighlight = true;
             }
         }
+
         if (toHighlight) this.highlight();
+        else if (toReset) this.reset(toReset);
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
 
-   /**
+    /**
      * ### ChoiceTableGroup.setValues
      *
      * Sets values in the choice table group as specified by the options
@@ -873,6 +902,61 @@
 
         // Make a random comment.
         if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
+    };
+
+    /**
+     * ### ChoiceTableGroup.reset
+     *
+     * Resets all the ChoiceTable items and textarea
+     *
+     * @param {object} options Optional. Options specifying how to set
+     *   to reset each item
+     *
+     * @see ChoiceTable.reset
+     * @see ChoiceTableGroup.shuffle
+     */
+    ChoiceTableGroup.prototype.reset = function(opts) {
+        var i, len;
+        opts = opts || {};
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            this.items[i].reset(opts);
+        }
+        // Delete textarea, if found.
+        if (this.textarea) this.textarea.value = '';
+        if (opts.shuffleItems) this.shuffle();
+        if (this.isHighlighted()) this.unhighlight();
+    };
+
+    /**
+     * ### ChoiceTableGroup.shuffle
+     *
+     * Shuffles the order of the displayed items
+     *
+     * Assigns the new order of items to `this.order`.
+     *
+     * @param {object} options Optional. Not used for now.
+     *
+     * TODO: shuffle choices in each item. (Note: can't use
+     * item.shuffle, because the cells are taken out, so
+     * there is no table and no tr in there)
+     *
+     * JSUS.shuffleElements
+     */
+    ChoiceTableGroup.prototype.shuffle = function(opts) {
+        var order, i, len, j, lenJ;
+        if (!this.items || !this.items.length) return;
+        order = J.shuffle(this.order);
+        if (this.orientation === 'H') {
+            J.shuffleElements(this.table, order);
+        }
+        else {
+            i = -1, len = this.trs.length;
+            for ( ; ++i < len ; ) {
+                J.shuffleElements(this.trs[i], order);
+            }
+        }
+        this.order = order;
     };
 
     // ## Helper methods.
@@ -909,6 +993,10 @@
             s.selectMultiple = that.selectMultiple;
         }
 
+        if ('undefined' === typeof s.shuffleChoices && that.shuffleChoices) {
+            s.shuffleChoices = that.shuffleChoices;
+        }
+
         return s;
     }
 
@@ -943,6 +1031,30 @@
         that.itemsById[ct.id] = ct;
         that.items[i] = ct;
         return ct;
+    }
+
+    /**
+     * ### createTR
+     *
+     * Creates and append a new TR element
+     *
+     * If required by current configuration, the `id` attribute is
+     * added to the TR in the form of: 'tr' + separator + widget_id
+     *
+     * @param {ChoiceTable} that This instance
+     *
+     * @return {HTMLElement} Thew newly created TR element
+     */
+    function createTR(that, trid) {
+        var tr, sep;
+        tr = document.createElement('tr');
+        that.table.appendChild(tr);
+        // Set id.
+        sep = that.separator;
+        tr.id = that.id + sep + 'tr' + sep + trid;
+        // Store reference.
+        that.trs.push(tr);
+        return tr;
     }
 
 })(node);

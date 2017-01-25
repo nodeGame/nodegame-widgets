@@ -1,6 +1,6 @@
 /**
  * # ChoiceTable
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.0.0';
+    ChoiceTable.version = '1.1.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -53,6 +53,18 @@
         this.table = null;
 
         /**
+         * ### ChoiceTable.tr
+         *
+         * Reference to TR elements of the table
+         *
+         * Note: if the orientation is vertical there will be multiple TR
+         * otherwise just one.
+         *
+         * @see createTR
+         */
+        this.trs = [];
+
+        /**
          * ## ChoiceTable.listener
          *
          * The listener function
@@ -77,7 +89,7 @@
             td = e.target || e.srcElement;
 
             // Not a clickable choice.
-            if (!td.id || td.id === '') return;
+            if ('undefined' === typeof that.choicesIds[td.id]) return;
 
             // Id of elements are in the form of name_value or name_item_value.
             value = td.id.split(that.separator);
@@ -134,11 +146,20 @@
         this.choices = null;
 
         /**
-         * ### ChoiceTable.values
+         * ### ChoiceTable.choicesValues
          *
          * Map of choices' values to indexes in the choices array
          */
         this.choicesValues = {};
+
+        /**
+         * ### ChoiceTable.choicesIds
+         *
+         * Map of choices' cells ids to choices
+         *
+         * Used to determine what are the clickable choices.
+         */
+        this.choicesIds = {};
 
         /**
          * ### ChoiceTable.choicesCells
@@ -348,9 +369,10 @@
          * Symbol used to separate tokens in the id attribute of every cell
          *
          * Default ChoiceTable.separator
+         *
+         * @see ChoiceTable.renderChoice
          */
         this.separator = ChoiceTable.separator;
-
     }
 
     // ## ChoiceTable methods
@@ -610,7 +632,6 @@
             }
             this.setCorrectChoice(options.correctChoice);
         }
-
     };
 
     /**
@@ -698,31 +719,25 @@
         i = -1, H = this.orientation === 'H';
 
         if (H) {
-            tr = document.createElement('tr');
-            this.table.appendChild(tr);
+            tr = createTR(this, 'main');
             // Add horizontal choices title.
             if (this.leftCell) tr.appendChild(this.leftCell);
         }
         // Main loop.
         for ( ; ++i < len ; ) {
             if (!H) {
-                tr = document.createElement('tr');
-                this.table.appendChild(tr);
+                tr = createTR(this, 'left');
                 // Add vertical choices title.
                 if (i === 0 && this.leftCell) {
                     tr.appendChild(this.leftCell);
-                    tr = document.createElement('tr');
-                    this.table.appendChild(tr);
+                    tr = createTR(this, i);
                 }
             }
             // Clickable cell.
             tr.appendChild(this.choicesCells[i]);
         }
         if (this.rightCell) {
-            if (!H) {
-                tr = document.createElement('tr');
-                this.table.appendChild(tr);
-            }
+            if (!H) tr = createTR(this, 'right');
             tr.appendChild(this.rightCell);
         }
         // Enable onclick listener.
@@ -750,8 +765,7 @@
         i = -1, H = this.orientation === 'H';
 
         if (H) {
-            tr = document.createElement('tr');
-            this.table.appendChild(tr);
+            tr = createTR(this, 'main');
             // Add horizontal choices left.
             if (this.left) {
                 td = this.renderSpecial('left', this.left);
@@ -761,14 +775,12 @@
         // Main loop.
         for ( ; ++i < len ; ) {
             if (!H) {
-                tr = document.createElement('tr');
-                this.table.appendChild(tr);
+                tr = createTR(this, 'left');
                 // Add vertical choices left.
                 if (i === 0 && this.left) {
                     td = this.renderSpecial('left', this.left);
                     tr.appendChild(td);
-                    tr = document.createElement('tr');
-                    this.table.appendChild(tr);
+                    tr = createTR(this, i);
                 }
             }
             // Clickable cell.
@@ -776,10 +788,7 @@
             tr.appendChild(td);
         }
         if (this.right) {
-            if (!H) {
-                tr = document.createElement('tr');
-                this.table.appendChild(tr);
-            }
+            if (!H) tr = createTR(this, 'right');
             td = this.renderSpecial('right', this.right);
             tr.appendChild(td);
         }
@@ -797,7 +806,7 @@
      * @param {mixed} special The special element. It must be string or number,
      *   or array where the first element is the 'value' (incorporated in the
      *   `id` field) and the second the text to display as choice.
-
+     *
      * @return {HTMLElement} td The newly created cell of the table
      *
      * @see ChoiceTable.left
@@ -821,6 +830,7 @@
             throw new Error('ChoiceTable.renderSpecial: unknown type: ' + type);
         }
         td.className = className;
+        td.id = this.id + this.separator + 'special-cell-' + type
         return td;
     };
 
@@ -889,6 +899,7 @@
         // All fine, updates global variables.
         this.choicesValues[value] = idx;
         this.choicesCells[idx] = td;
+        this.choicesIds[td.id] = td;
 
         return td;
     };
@@ -1232,23 +1243,28 @@
      *   Available optionts:
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
-     *      to find the correct answer. Default: TRUE.
+     *       to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, if current value is not the correct
-     *      value, widget will be highlighted. Default: FALSE.
+     *       value, widget will be highlighted. Default: FALSE.
+     *   - reset:       If TRUTHY and a correct choice is selected (or not
+     *       specified), then it resets the state of the widgets before
+     *       returning it. Default: FALSE
      *
      * @return {object} Object containing the choice and paradata
      *
      * @see ChoiceTable.verifyChoice
+     * @see ChoiceTable.reset
      */
     ChoiceTable.prototype.getValues = function(opts) {
-        var obj;
+        var obj, resetOpts;
+        opts = opts || {};
         obj = {
             id: this.id,
-            choice: J.clone(this.currentChoice),
+            choice: opts.reset ?
+                this.currentChoice: J.clone(this.currentChoice),
             time: this.timeCurrentChoice,
             nClicks: this.numberOfClicks
         };
-        opts = opts || {};
         if (opts.processChoice) {
             obj.choice = opts.processChoice.call(this, obj.choice);
         }
@@ -1267,6 +1283,10 @@
             if (!obj.isCorrect && opts.highlight) this.highlight();
         }
         if (this.textarea) obj.freetext = this.textarea.value;
+        if (obj.isCorrect !== false && opts.reset) {
+            resetOpts = 'object' !== typeof opts.reset ? {} : opts.reset;
+            this.reset(resetOpts);
+        }
         return obj;
     };
 
@@ -1342,6 +1362,89 @@
         if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
     };
 
+    /**
+     * ### ChoiceTable.reset
+     *
+     * Resets current selection and collected paradata
+     *
+     * @param {object} options Optional. Available options:
+     *    - shuffleChoices: If TRUE, choices are shuffled. Default: FALSE
+     */
+    ChoiceTable.prototype.reset = function(options) {
+        var i, len;
+
+        options = options || {};
+
+        this.attempts = [];
+        this.numberOfClicks = 0;
+        this.currentChoice = null;
+        this.timeCurrentChoice = null;
+
+        if (this.selected) {
+            if (!this.selectMultiple) {
+                J.removeClass(this.selected, 'selected');
+            }
+            else {
+                i = -1, len = this.selected.length;
+                for ( ; ++i < len ; ) {
+                    J.removeClass(this.selected[i], 'selected');
+                }
+            }
+            this.selected = null;
+        }
+
+        if (this.textArea) this.textArea.value = '';
+        if (this.isHighlighted()) this.unhighlight();
+
+        if (options.shuffleChoices) this.shuffle();
+    };
+
+    /**
+     * ### ChoiceTable.shuffle
+     *
+     * Shuffles the order of the choices
+     */
+    ChoiceTable.prototype.shuffle = function() {
+        var order, H;
+        var i, len, cell, choice;
+        var choicesValues, choicesCells;
+        var parentTR;
+
+        H = this.orientation === 'H';
+        order = J.shuffle(this.order);
+        i = -1, len = order.length;
+        choicesValues = {};
+        choicesCells = new Array(len);
+
+        for ( ; ++i < len ; ) {
+            choice = order[i];
+            cell = this.choicesCells[this.choicesValues[choice]];
+            choicesCells[i] = cell;
+            choicesValues[choice] = i;
+            if (H) {
+                this.trs[0].appendChild(cell);
+            }
+            else {
+                parentTR = cell.parentElement || cell.parentNode;
+                this.table.appendChild(parentTR);
+            }
+        }
+        if (this.rightCell) {
+            if (H) {
+                this.trs[0].appendChild(this.rightCell);
+            }
+            else {
+                parentTR = this.rightCell.parentElement ||
+                    this.rightCell.parentNode;
+                this.table.appendChild(parentTR);
+            }
+        }
+
+        this.order = order;
+        this.choicesCells = choicesCells;
+        this.choicesValues = choicesValues;
+    };
+
     // ## Helper methods.
 
     /**
@@ -1372,6 +1475,30 @@
                                 'not found: ' + choice);
         }
         return choice;
+    }
+
+    /**
+     * ### createTR
+     *
+     * Creates and append a new TR element
+     *
+     * Adds the the `id` attribute formatted as:
+     *   'tr' + separator + widget_id
+     *
+     * @param {ChoiceTable} that This instance
+     *
+     * @return {HTMLElement} Thew newly created TR element
+     *
+     * @see ChoiceTable.tr
+     */
+    function createTR(that, trid) {
+        var tr;
+        tr = document.createElement('tr');
+        tr.id = 'tr' + that.separator + that.id;
+        that.table.appendChild(tr);
+        // Store reference.
+        that.trs.push(tr);
+        return tr;
     }
 
 })(node);
