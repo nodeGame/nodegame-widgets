@@ -5551,7 +5551,7 @@
                     if (hasRight && j === (lenJ-1)) {
                         tr.appendChild(this.items[i].rightCell);
                     }
-                    else {                        
+                    else {
                         cell = this.items[i].choicesCells[j];
                         tr.appendChild(cell);
                         this.choicesById[cell.id] = cell;
