@@ -3497,7 +3497,7 @@
             td = e.target || e.srcElement;
 
             // Not a clickable choice.
-            if (!td.id || td.id === '') return;
+            if ('undefined' === typeof that.choicesIds[td.id]) return;
 
             // Id of elements are in the form of name_value or name_item_value.
             value = td.id.split(that.separator);
@@ -3554,11 +3554,20 @@
         this.choices = null;
 
         /**
-         * ### ChoiceTable.values
+         * ### ChoiceTable.choicesValues
          *
          * Map of choices' values to indexes in the choices array
          */
         this.choicesValues = {};
+
+        /**
+         * ### ChoiceTable.choicesIds
+         *
+         * Map of choices' cells ids to choices
+         *
+         * Used to determine what are the clickable choices.
+         */
+        this.choicesIds = {};
 
         /**
          * ### ChoiceTable.choicesCells
@@ -4298,6 +4307,7 @@
         // All fine, updates global variables.
         this.choicesValues[value] = idx;
         this.choicesCells[idx] = td;
+        this.choicesIds[td.id] = td;
 
         return td;
     };
@@ -4995,6 +5005,9 @@
             // Not a clickable choice.
             if (!td.id || td.id === '') return;
 
+            // Not a clickable choice.
+            if (!that.choicesById[td.id]) return;
+
             // Id of elements are in the form of name_value or name_item_value.
             value = td.id.split(that.separator);
 
@@ -5005,6 +5018,9 @@
             value = value[1];
 
             item = that.itemsById[name];
+
+            // Not a clickable cell.
+            if (!item) return;
 
             item.timeCurrentChoice = time;
 
@@ -5059,6 +5075,15 @@
          * Map of items ids to items
          */
         this.itemsById = {};
+
+        /**
+         * ### ChoiceTableGroup.choicesById
+         *
+         * Map of items choices ids to corresponding cell
+         *
+         * Useful to detect clickable cells.
+         */
+        this.choicesById = {};
 
         /**
          * ### ChoiceTableGroup.itemsSettings
@@ -5443,7 +5468,7 @@
      */
     ChoiceTableGroup.prototype.buildTable = function() {
         var i, len, tr, H, ct;
-        var j, lenJ, lenJOld, hasRight;
+        var j, lenJ, lenJOld, hasRight, cell;
 
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
@@ -5469,7 +5494,9 @@
                 }
                 // TODO: might optimize. There are two loops (+1 inside ct).
                 for ( ; ++j < lenJ ; ) {
-                    tr.appendChild(ct.choicesCells[j]);
+                    cell = ct.choicesCells[j];
+                    tr.appendChild(cell);
+                    this.choicesById[cell.id] = cell;
                 }
                 if (ct.rightCell) tr.appendChild(ct.rightCell);
             }
@@ -5507,7 +5534,7 @@
                                     'cell: ' + ct.id);
 
                 }
-                // Add titles.
+                // Add left.
                 tr.appendChild(ct.leftCell);
             }
 
@@ -5524,8 +5551,10 @@
                     if (hasRight && j === (lenJ-1)) {
                         tr.appendChild(this.items[i].rightCell);
                     }
-                    else {
-                        tr.appendChild(this.items[i].choicesCells[j]);
+                    else {                        
+                        cell = this.items[i].choicesCells[j];
+                        tr.appendChild(cell);
+                        this.choicesById[cell.id] = cell;
                     }
                 }
             }
