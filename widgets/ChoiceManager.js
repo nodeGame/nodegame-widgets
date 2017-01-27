@@ -127,8 +127,6 @@
      *       to have none.
      *   - group: the name of the group (number or string), if any
      *   - groupOrder: the order of the list in the group, if any
-     *   - onclick: a custom onclick listener function. Context is
-     *       `this` instance
      *   - mainText: a text to be displayed above the list
      *   - shuffleForms: if TRUE, forms are shuffled before being added
      *       to the list
