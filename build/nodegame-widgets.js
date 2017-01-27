@@ -3425,7 +3425,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.1.0';
+    ChoiceTable.version = '1.2.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -4933,7 +4933,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.1.0';
+    ChoiceTableGroup.version = '1.2.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -5719,6 +5719,26 @@
     };
 
     /**
+     * ### ChoiceTable.setCurrentChoice
+     *
+     * Marks a choice as current
+     *
+     * If `ChoiceTable.selectMultiple` is set multiple choices can be current.
+     *
+     * @param {number|string} The choice to mark as current
+     *
+     * @see ChoiceTable.currentChoice
+     * @see ChoiceTable.selectMultiple
+     */
+    ChoiceTableGroup.prototype.setCurrentChoice = function(choice) {
+        var i, len;
+        i = -1, len = this.items[i].length;
+        for ( ; ++i < len ; ) {
+            this.items[i].setCurrentChoice(choice);
+        }
+    };
+
+    /**
      * ### ChoiceTableGroup.unsetCurrentChoice
      *
      * Deletes the value for currentChoice
@@ -5735,7 +5755,7 @@
         var i, len;
         i = -1, len = this.items[i].length;
         for ( ; ++i < len ; ) {
-            this.items[i].unsetCurrentChoice();
+            this.items[i].unsetCurrentChoice(choice);
         }
     };
 
