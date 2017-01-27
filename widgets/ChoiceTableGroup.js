@@ -807,9 +807,9 @@
     /**
      * ### ChoiceTable.setCurrentChoice
      *
-     * Marks a choice as current
+     * Marks a choice as current in each item
      *
-     * If `ChoiceTable.selectMultiple` is set multiple choices can be current.
+     * If the item allows it, multiple choices can be set as current.
      *
      * @param {number|string} The choice to mark as current
      *
@@ -827,7 +827,7 @@
     /**
      * ### ChoiceTableGroup.unsetCurrentChoice
      *
-     * Deletes the value for currentChoice
+     * Deletes the value for currentChoice from every item
      *
      * If `ChoiceTableGroup.selectMultiple` is set the
      *
