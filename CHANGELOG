@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 3.5.3
+- Minor changes to ChoiceTableGroup, ChoiceTable and ChoiceManager.
+
 ## 3.5.2
 - Actually implements changes in ChoiceTable and ChoiceTableGroup described in 3.5.1.
 
