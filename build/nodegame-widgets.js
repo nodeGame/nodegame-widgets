@@ -3029,15 +3029,11 @@
      *       to have none.
      *   - group: the name of the group (number or string), if any
      *   - groupOrder: the order of the list in the group, if any
-     *   - onclick: a custom onclick listener function. Context is
-     *       `this` instance
      *   - mainText: a text to be displayed above the list
      *   - shuffleForms: if TRUE, forms are shuffled before being added
      *       to the list
      *   - freeText: if TRUE, a textarea will be added under the list,
      *       if 'string', the text will be added inside the the textarea
-     *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
-     *       or FALSE, to measure absolute time for current choice
      *
      * @param {object} options Configuration options
      */
@@ -3267,36 +3263,37 @@
     };
 
     /**
+     * ### ChoiceManager.setCurrentChoice
+     *
+     * Marks a choice as current in each form
+     *
+     * If the item allows it, multiple choices can be set as current.
+     *
+     * @param {number|string} The choice to mark as current
+     */
+    ChoiceManager.prototype.setCurrentChoice = function(choice) {
+        var i, len;
+        i = -1, len = this.forms[i].length;
+        for ( ; ++i < len ; ) {
+            this.forms[i].setCurrentChoice(choice);
+        }
+    };
+
+    /**
      * ### ChoiceManager.unsetCurrentChoice
      *
-     * Deletes the value for currentChoice
+     * Deletes the value for currentChoice in each form
      *
      * If `ChoiceManager.selectMultiple` is set the
      *
-     * @param {number|string} Optional. The choice to delete from currentChoice
+     * @param {number|string} Optional. The choice to delete
      *   when multiple selections are allowed
-     *
-     * @see ChoiceManager.currentChoice
-     * @see ChoiceManager.selectMultiple
      */
     ChoiceManager.prototype.unsetCurrentChoice = function(choice) {
         var i, len;
-        if (!this.selectMultiple || 'undefined' === typeof choice) {
-            this.currentChoice = null;
-        }
-        else {
-            if ('string' !== typeof choice && 'number' !== typeof choice) {
-                throw new TypeError('ChoiceManager.unsetCurrentChoice: ' +
-                                    'choice must be string, number ' +
-                                    'or undefined.');
-            }
-            i = -1, len = this.currentChoice.length;
-            for ( ; ++i < len ; ) {
-                if (this.currentChoice[i] === choice) {
-                    this.currentChoice.splice(i,1);
-                    break;
-                }
-            }
+        i = -1, len = this.forms[i].length;
+        for ( ; ++i < len ; ) {
+            this.forms[i].unsetCurrentChoice(choice);
         }
     };
 
@@ -5721,9 +5718,9 @@
     /**
      * ### ChoiceTable.setCurrentChoice
      *
-     * Marks a choice as current
+     * Marks a choice as current in each item
      *
-     * If `ChoiceTable.selectMultiple` is set multiple choices can be current.
+     * If the item allows it, multiple choices can be set as current.
      *
      * @param {number|string} The choice to mark as current
      *
@@ -5741,7 +5738,7 @@
     /**
      * ### ChoiceTableGroup.unsetCurrentChoice
      *
-     * Deletes the value for currentChoice
+     * Deletes the value for currentChoice from every item
      *
      * If `ChoiceTableGroup.selectMultiple` is set the
      *
