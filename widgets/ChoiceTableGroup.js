@@ -164,6 +164,13 @@
         this.itemsById = {};
 
         /**
+         * ### ChoiceTableGroup.choices
+         *
+         * Array of default choices (if passed as global parameter)
+         */
+        this.choices = null;
+
+        /**
          * ### ChoiceTableGroup.choicesById
          *
          * Map of items choices ids to corresponding cell
@@ -466,6 +473,11 @@
             throw new TypeError('ChoiceTableGroup.init: options.renderer ' +
                                 'must be function or undefined. Found: ' +
                                 options.renderer);
+        }
+
+        // Set default choices, if any.
+        if ('undefined' !== typeof options.choices) {
+            this.choices = options.choices;
         }
 
         // Set the className, if not use default.
@@ -860,10 +872,14 @@
      *      to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, if current value is not the correct
      *      value, widget will be highlighted. Default: FALSE.
+     *   - reset:    If TRUTHY and no item raises an error,
+     *       then it resets the state of all items before
+     *       returning it. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
      * @see ChoiceTableGroup.verifyChoice
+     * @see ChoiceTableGroup.reset
      */
     ChoiceTableGroup.prototype.getValues = function(opts) {
         var obj, i, len, tbl, toHighlight, toReset;
@@ -986,19 +1002,30 @@
      * Mix-ins global settings with local settings for specific choice tables
      *
      * @param {ChoiceTableGroup} that This instance
-     * @param {object} s The local settings for choice table
+     * @param {object|string} s The current settings for the item
+     *   (choice table), or just its id, to mixin all settings.
      * @param {number} i The ordinal position of the table in the group
      *
      * @return {object} s The mixed-in settings
      */
     function mixinSettings(that, s, i) {
+        if ('string' === typeof s) {
+            s = { id: s };
+        }
+        else if ('object' !== typeof s) {
+            throw new TypeError('ChoiceTableGroup.buildTable: item must be ' +
+                                'string or object. Found: ' + s);
+        }
         s.group = that.id;
         s.groupOrder = i+1;
         s.orientation = that.orientation;
         s.title = false;
         s.listeners = false;
-        s.timeFrom = that.timeFrom;
         s.separator = that.separator;
+
+        if ('undefined' === typeof s.choices && that.choices) {
+            s.choices = that.choices;
+        }
 
         if (!s.renderer && that.renderer) s.renderer = that.renderer;
 
@@ -1015,6 +1042,10 @@
         if ('undefined' === typeof s.shuffleChoices && that.shuffleChoices) {
             s.shuffleChoices = that.shuffleChoices;
         }
+
+        if ('undefined' === typeof s.timeFrom) s.timeFrom = that.timeFrom;
+
+        if ('undefined' === typeof s.left) s.left = s.id;
 
         return s;
     }

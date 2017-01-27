@@ -2855,7 +2855,7 @@ choices:</p>
       <span class="dox_tag_name">markAttempt</span>
       <span class="dox_type">boolean</span>
       <span>Optional. If TRUE, the value of
-  current choice is added to the attempts array. Default</span>
+  current choice is added to the attempts array. Default: TRUE</span>
     </div>
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
@@ -3051,9 +3051,10 @@ choices:</p>
 </div>
 
   </div>
-  <div class="body"><p>Deletes the value for currentChoice</p>
+  <div class="body"><p>Deletes the value of currentChoice</p>
 
-<p>If <code>ChoiceTable.selectMultiple</code> is set the</p>
+<p>If <code>ChoiceTable.selectMultiple</code> is activated, then it is
+possible to select the choice to unset.</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -3061,8 +3062,8 @@ choices:</p>
       <span class="dox_tag_name">Optional.</span>
       <span class="dox_type">number</span>
       <span class="dox_type">string</span>
-      <span>The choice to delete from currentChoice
-  when multiple selections are allowed</span>
+      <span>The choice to delete from
+  currentChoice when multiple selections are allowed</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -3263,7 +3264,7 @@ choices:</p>
   value, widget will be highlighted. Default: FALSE.</li>
 <li>reset:       If TRUTHY and a correct choice is selected (or not
   specified), then it resets the state of the widgets before
-  returning it. Default: FALSE</li>
+  returning it. Default: FALSE.</li>
 </ul></span>
     </div>
     <div class="dox_tag_title">Returns</div>

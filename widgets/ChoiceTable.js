@@ -1065,7 +1065,7 @@
      *    - correctChoice:  the choices are compared against correct ones.
      *
      * @param {boolean} markAttempt Optional. If TRUE, the value of
-     *   current choice is added to the attempts array. Default
+     *   current choice is added to the attempts array. Default: TRUE
      *
      * @return {boolean|null} TRUE if current choice is correct,
      *   FALSE if it is not correct, or NULL if no correct choice
@@ -1140,12 +1140,13 @@
     /**
      * ### ChoiceTable.unsetCurrentChoice
      *
-     * Deletes the value for currentChoice
+     * Deletes the value of currentChoice
      *
-     * If `ChoiceTable.selectMultiple` is set the
+     * If `ChoiceTable.selectMultiple` is activated, then it is
+     * possible to select the choice to unset.
      *
-     * @param {number|string} Optional. The choice to delete from currentChoice
-     *   when multiple selections are allowed
+     * @param {number|string} Optional. The choice to delete from
+     *   currentChoice when multiple selections are allowed
      *
      * @see ChoiceTable.currentChoice
      * @see ChoiceTable.selectMultiple
@@ -1248,7 +1249,7 @@
      *       value, widget will be highlighted. Default: FALSE.
      *   - reset:       If TRUTHY and a correct choice is selected (or not
      *       specified), then it resets the state of the widgets before
-     *       returning it. Default: FALSE
+     *       returning it. Default: FALSE.
      *
      * @return {object} Object containing the choice and paradata
      *
