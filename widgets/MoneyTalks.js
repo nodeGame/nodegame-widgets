@@ -1,6 +1,6 @@
 /**
  * # MoneyTalks
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Displays a box for formatting earnings ("money") in currency
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    MoneyTalks.version = '0.2.0';
+    MoneyTalks.version = '0.3.0';
     MoneyTalks.description = 'Displays the earnings of a player.';
 
     MoneyTalks.title = 'Earnings';
@@ -116,8 +116,8 @@
 
     MoneyTalks.prototype.listeners = function() {
         var that = this;
-        node.on('MONEYTALKS', function(amount) {
-            that.update(amount);
+        node.on('MONEYTALKS', function(amount, clear) {
+            that.update(amount, clear);
         });
     };
 
@@ -144,4 +144,16 @@
         this.money += parsedAmount;
         this.spanMoney.innerHTML = this.money.toFixed(this.precision);
     };
+
+    /**
+     * ### MoneyTalks.getValues
+     *
+     * Returns the current value of "money"
+     *
+     * @see MoneyTalks.money
+     */
+    MoneyTalks.prototype.getValues = function() {
+        return this.money;
+    };
+
 })(node);

@@ -54,6 +54,9 @@
       <div class="heading h3">
         <a href="#moneytalks.update">MoneyTalks.update</a>
       </div>
+      <div class="heading h3">
+        <a href="#moneytalks.getvalues">MoneyTalks.getValues</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -71,7 +74,7 @@
 </div>
 
 
-<p>Copyright(c) 2016 Stefano Balietti
+<p>Copyright(c) 2017 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Displays a box for formatting earnings ("money") in currency</p>
@@ -102,7 +105,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.0&#39;</span><span class="p">;</span>
+    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.0&#39;</span><span class="p">;</span>
     <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays the earnings of a player.&#39;</span><span class="p">;</span>
 
     <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Earnings&#39;</span><span class="p">;</span>
@@ -351,8 +354,8 @@ The  options object can have the following attributes:
 
     <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;MONEYTALKS&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">amount</span><span class="p">);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;MONEYTALKS&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="nx">clear</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="nx">clear</span><span class="p">);</span>
         <span class="p">});</span>
     <span class="p">};</span>
 
@@ -411,6 +414,38 @@ The  options object can have the following attributes:
         <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="nx">parsedAmount</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">spanMoney</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">precision</span><span class="p">);</span>
     <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="moneytalks.getvalues">
+  <h3>
+    <a href="#moneytalks.getvalues" name="moneytalks.getvalues" class="pilcrow">&#182;</a>
+    MoneyTalks.getValues
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Returns the current value of "money"</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">MoneyTalks.money
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span><span class="p">;</span>
+    <span class="p">};</span>
+
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
 </pre></div>
         </td>
