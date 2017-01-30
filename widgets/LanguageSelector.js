@@ -254,6 +254,7 @@
         this.usingButtons = this.options.usingButtons || true;
 
         // Register listener.
+        // TODO: should it be moved into the listeners method?
         node.on.lang(this.onLangCallback);
 
         // Display initialization.

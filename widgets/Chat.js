@@ -177,7 +177,7 @@
             options.mode = 'MANY_TO_MANY';
         }
         else if ('string' === typeof options.mode) {
-            switch(this.mode) {
+            switch(options.mode) {
             case Chat.modes.RECEIVER_ONLY:
                 tmp = 'SERVER';
                 break;
@@ -226,6 +226,7 @@
             this.submit = W.getEventButton(this.chatEvent,
                                            this.submitText,
                                            this.submitId);
+            this.submit.className = 'btn btn-sm btn-secondary';
             this.textarea = W.getElement('textarea', this.textareaId);
             // Append them.
             W.writeln('', this.bodyDiv);
