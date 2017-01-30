@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 3.5.4
+- Minor fix on Chat, ChoiceManager, MoneyTalks.
+
 ## 3.5.3
 - Minor changes to ChoiceTableGroup, ChoiceTable and ChoiceManager.
 
