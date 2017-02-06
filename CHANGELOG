@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## 3.5.5
+- Bug Fix: `ChoiceTable.setValues()` does not unsets the value if new selected value is the same as previous.
+- Bug Fix: `ChoiceTableGroup.unsetCurrentChoice()`.
+
 ## 3.5.4
 - Minor fix on Chat, ChoiceManager, MoneyTalks.
 
