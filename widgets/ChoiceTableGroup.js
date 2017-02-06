@@ -839,7 +839,7 @@
      */
     ChoiceTableGroup.prototype.unsetCurrentChoice = function(choice) {
         var i, len;
-        i = -1, len = this.items[i].length;
+        i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
             this.items[i].unsetCurrentChoice(choice);
         }

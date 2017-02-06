@@ -4588,7 +4588,10 @@
      */
     ChoiceTable.prototype.isChoiceCurrent = function(choice) {
         var i, len;
-        if ('string' !== typeof choice && 'number' !== typeof choice) {
+        if ('number' === typeof choice) {
+            choice = '' + choice;
+        }
+        else if ('string' !== typeof choice) {
             throw new TypeError('ChoiceTable.isChoiceCurrent: choice ' +
                                 'must be string or number.');
         }
@@ -4709,7 +4712,7 @@
      * @experimental
      */
     ChoiceTable.prototype.setValues = function(options) {
-        var choice, correctChoice;
+        var choice, correctChoice, cell;
         var i, len, j, lenJ;
 
         if (!this.choices || !this.choices.length) {
@@ -4762,7 +4765,10 @@
         i = -1;
         for ( ; ++i < len ; ) {
             choice = J.randomInt(0, this.choicesCells.length)-1;
-            this.choicesCells[choice].click();
+            // Do not click it again if it is already selected.
+            if (!this.isChoiceCurrent(choice)) {
+                this.choicesCells[choice].click();
+            }
         }
 
         // Make a random comment.
@@ -5751,7 +5757,7 @@
      */
     ChoiceTableGroup.prototype.unsetCurrentChoice = function(choice) {
         var i, len;
-        i = -1, len = this.items[i].length;
+        i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
             this.items[i].unsetCurrentChoice(choice);
         }
