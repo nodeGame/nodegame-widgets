@@ -18,7 +18,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.8.1';
+    VisualTimer.version = '0.9.0';
     VisualTimer.description = 'Display a timer for the game. Timer can ' +
         'trigger events. Only for countdown smaller than 1h.';
 
@@ -135,13 +135,17 @@
      * @see GameTimer
      */
     VisualTimer.prototype.init = function(options) {
-        var t;
-        options = options || {};
+        var t, gameTimerOptions;
 
+        options = options || {};
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
                                 'object or undefined');
         }
+
+        // Important! Do not modify directly options, because it might
+        // modify a step-property. Will manual clone later.
+        gameTimerOptions = {};
 
         // If gameTimer is not already set, check options, then
         // try to use node.game.timer, if defined, otherwise crete a new timer.
@@ -174,41 +178,46 @@
                                 'external gameTimer.');
             }
             if (!J.isArray(options.hooks)) {
-                options.hooks = [options.hooks];
+                gameTimerOptions.hooks = [ options.hooks ];
             }
         }
         else {
-            options.hooks = [];
+            gameTimerOptions.hooks = [];
         }
 
         // Only push this hook once.
         if (!this.isInitialized) {
-            options.hooks.push({
+            gameTimerOptions.hooks.push({
                 name: 'VisualTimer_' + this.wid,
                 hook: this.updateDisplay,
                 ctx: this
             });
         }
 
-        // Important! Must be called after processing hooks and gameTimer.
-        J.mixout(options, this.options);
+        // Important! Manual clone must be done after hooks and gameTimer.
 
         // Parse milliseconds option.
         if ('undefined' !== typeof options.milliseconds) {
-            options.milliseconds = node.timer.parseInput('milliseconds',
-                                                         options.milliseconds);
+            gameTimerOptions.milliseconds =
+                node.timer.parseInput('milliseconds', options.milliseconds);
         }
 
         // Parse update option.
         if ('undefined' !== typeof options.update) {
-            options.update = node.timer.parseInput('update',
-                                                   options.update);
+            gameTimerOptions.update =
+                node.timer.parseInput('update', options.update);
         }
         else {
-            options.update = 1000;
+            gameTimerOptions.update = 1000;
         }
+
+        // Parse timeup option.
+        if ('undefined' !== typeof options.timeup) {
+            gameTimerOptions.timeup = options.timeup;
+        }
+
         // Init the gameTimer, regardless of the source (internal vs external).
-        this.gameTimer.init(options);
+        this.gameTimer.init(gameTimerOptions);
 
         t = this.gameTimer;
 
@@ -230,7 +239,7 @@
 //             }
 //         });
 
-        this.options = options;
+        this.options = gameTimerOptions;
 
         if ('undefined' === typeof this.options.stopOnDone) {
             this.options.stopOnDone = true;
@@ -517,9 +526,12 @@
             if (that.options.startOnPlaying) {
                 options = that.gameTimer.getStepOptions();
                 if (options) {
-                    // TODO: improve.
+                    // Visual update is here (1000 usually).
                     options.update = that.update;
-                    // options.timeup = undefined;
+                    // Make sure timeup is not used (game.timer does it).
+                    options.timeup = undefined;
+                    // Options other than `update`, `timeup`,
+                    // `milliseconds`, `hooks`, `gameTimer` are ignored.
                     that.startTiming(options);
                 }
                 else {
