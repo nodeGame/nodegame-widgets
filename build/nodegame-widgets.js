@@ -11756,7 +11756,7 @@
                 if (options) {
                     // TODO: improve.
                     options.update = that.update;
-                    options.timeup = undefined;
+                    // options.timeup = undefined;
                     that.startTiming(options);
                 }
                 else {
