@@ -158,11 +158,12 @@
 </div>
 
 
-<p>Copyright(c) 2016 Stefano Balietti
+<p>Copyright(c) 2017 Stefano Balietti
 MIT Licensed</p>
   </div>
-  <div class="body"><p>Display a timer for the game. Timer can trigger events.
-Only for countdown smaller than 1h.</p>
+  <div class="body"><p>Display a configurable timer for the game</p>
+
+<p>Timer can trigger events, only for countdown smaller than 1h.</p>
 
 <p>www.nodegame.org</p>
   </div>
@@ -193,8 +194,8 @@ Only for countdown smaller than 1h.</p>
         <td class="code highlight"><div class="highlight"><pre>
 
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.9.0&#39;</span><span class="p">;</span>
-    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display a timer for the game. Timer can &#39;</span> <span class="o">+</span>
-        <span class="s1">&#39;trigger events. Only for countdown smaller than 1h.&#39;</span><span class="p">;</span>
+    <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display a configurable timer for the game. &#39;</span> <span class="o">+</span>
+        <span class="s1">&#39;Can trigger events. Only for countdown smaller than 1h.&#39;</span><span class="p">;</span>
 
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Time left&#39;</span><span class="p">;</span>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;visualtimer&#39;</span><span class="p">;</span>
@@ -1089,16 +1090,15 @@ options are forwarded directly to <code>VisualTimer.restart</code>.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">VisualTimer</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">startWaiting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">milliseconds</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gameTimer</span><span class="p">.</span><span class="nx">timeLeft</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">waitBoxOptions</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
         <span class="nx">options</span><span class="p">.</span><span class="nx">mainBoxOptions</span><span class="p">.</span><span class="nx">classNameBody</span> <span class="o">=</span> <span class="s1">&#39;strike&#39;</span><span class="p">;</span>
@@ -1383,7 +1383,9 @@ hidden. All other options are forwarded directly to
 <div class="pilwrap">
   <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
-<p>that.startWaiting();</p>
+<p>This was createing problems, so we just stop it.
+It could be an option, though.
+that.startWaiting();</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
                     <span class="nx">that</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>

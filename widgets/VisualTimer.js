@@ -1,10 +1,11 @@
 /**
  * # VisualTimer
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
- * Display a timer for the game. Timer can trigger events.
- * Only for countdown smaller than 1h.
+ * Display a configurable timer for the game
+ *
+ * Timer can trigger events, only for countdown smaller than 1h.
  *
  * www.nodegame.org
  */
@@ -19,8 +20,8 @@
     // ## Meta-data
 
     VisualTimer.version = '0.9.0';
-    VisualTimer.description = 'Display a timer for the game. Timer can ' +
-        'trigger events. Only for countdown smaller than 1h.';
+    VisualTimer.description = 'Display a configurable timer for the game. ' +
+        'Can trigger events. Only for countdown smaller than 1h.';
 
     VisualTimer.title = 'Time left';
     VisualTimer.className = 'visualtimer';
@@ -418,16 +419,15 @@
       * @see VisualTimer.restart
       */
     VisualTimer.prototype.startWaiting = function(options) {
-        if ('undefined' === typeof options) {
-            options = {};
-        }
-        if (typeof options.milliseconds === 'undefined') {
+        if ('undefined' === typeof options) options = {};
+
+        if ('undefined' === typeof options.milliseconds) {
             options.milliseconds = this.gameTimer.timeLeft;
         }
-        if (typeof options.mainBoxOptions === 'undefined') {
+        if ('undefined' === typeof options.mainBoxOptions) {
             options.mainBoxOptions = {};
         }
-        if (typeof options.waitBoxOptions === 'undefined') {
+        if ('undefined' === typeof options.waitBoxOptions) {
             options.waitBoxOptions = {};
         }
         options.mainBoxOptions.classNameBody = 'strike';
@@ -544,6 +544,8 @@
         node.on('REALLY_DONE', function() {
             if (that.options.stopOnDone) {
                 if (!that.gameTimer.isStopped()) {
+                    // This was createing problems, so we just stop it.
+                    // It could be an option, though.
                     // that.startWaiting();
                     that.stop();
                 }
