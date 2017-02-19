@@ -544,7 +544,7 @@
         node.on('REALLY_DONE', function() {
             if (that.options.stopOnDone) {
                 if (!that.gameTimer.isStopped()) {
-                    // This was createing problems, so we just stop it.
+                    // This was creating problems, so we just stop it.
                     // It could be an option, though.
                     // that.startWaiting();
                     that.stop();
