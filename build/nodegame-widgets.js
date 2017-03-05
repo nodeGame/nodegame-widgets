@@ -701,8 +701,8 @@
      * @param {string|object} w The name of the widget to load or a loaded
      *   widget object
      * @param {object} root Optional. The HTML element under which the widget
-     *   will be appended. Default: `GameWindow.getFrameRoot()` or
-     *   `document.body`
+     *   will be appended. Default: the `document.body` element of the main
+     *   frame (if one is defined), or `document.body` elment of the page
      * @param {options} options Optional. Configuration options to be passed
      *   to the widget
      *
@@ -726,7 +726,14 @@
         }
 
         // Init default values.
-        root = root || W.getFrameRoot() || document.body;
+
+        // If no root is defined, use the body element of the main frame,
+        // if none is found, use the document.body.
+        if (!root) {
+            root = W.getFrameDocument();
+            if (root) root = root.body;
+            if (!root) root = document.body;
+        }
         options = options || {};
 
         // Check if it is a object (new widget).
@@ -11657,7 +11664,7 @@
       */
     VisualTimer.prototype.startWaiting = function(options) {
         if ('undefined' === typeof options) options = {};
-        
+
         if ('undefined' === typeof options.milliseconds) {
             options.milliseconds = this.gameTimer.timeLeft;
         }
@@ -11781,7 +11788,7 @@
         node.on('REALLY_DONE', function() {
             if (that.options.stopOnDone) {
                 if (!that.gameTimer.isStopped()) {
-                    // This was createing problems, so we just stop it.
+                    // This was creating problems, so we just stop it.
                     // It could be an option, though.
                     // that.startWaiting();
                     that.stop();
