@@ -67,9 +67,10 @@
      * The method is called by `Widgets.append` which evaluates user-options
      * and adds the default container elements of a widget:
      *
-     *    - panelDiv: the main container
-     *    - headingDiv: the title container (optional, added by default)
-     *    - footerDiv: the footer container (optional)
+     *    - panelDiv:   the outer container
+     *    - headingDiv: the title container
+     *    - bodyDiv:    the main container
+     *    - footerDiv:  the footer container
      *
      * To ensure correct destroyal of the widget, all HTML elements should
      * be children of Widget.panelDiv
@@ -11657,7 +11658,7 @@
       */
     VisualTimer.prototype.startWaiting = function(options) {
         if ('undefined' === typeof options) options = {};
-        
+
         if ('undefined' === typeof options.milliseconds) {
             options.milliseconds = this.gameTimer.timeLeft;
         }
@@ -11781,7 +11782,7 @@
         node.on('REALLY_DONE', function() {
             if (that.options.stopOnDone) {
                 if (!that.gameTimer.isStopped()) {
-                    // This was createing problems, so we just stop it.
+                    // This was creating problems, so we just stop it.
                     // It could be an option, though.
                     // that.startWaiting();
                     that.stop();
