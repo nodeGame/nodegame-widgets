@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## 3.5.6
+- VisualTimer makes sure that options are manually cloned to avoid overriding step properties.
+- Widgets.append by default appends to the iframe's body, and not the iframe's root.
+
 ## 3.5.5
 - Bug Fix: `ChoiceTable.setValues()` does not unsets the value if new selected value is the same as previous.
 - Bug Fix: `ChoiceTableGroup.unsetCurrentChoice()`.
