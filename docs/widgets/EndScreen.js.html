@@ -37,7 +37,7 @@
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>  <span class="c1">// self-executing function for encapsulation</span>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 
 </pre></div>
@@ -65,7 +65,7 @@
 <p>Add Meta-data</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.0.1&#39;</span><span class="p">;</span>
+    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">;</span>
     <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Game end screen. With end game message, &#39;</span> <span class="o">+</span>
     <span class="s1">&#39;email form, and exit code.&#39;</span><span class="p">;</span>
 
@@ -142,10 +142,10 @@ The options object is always existing even if no</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">endScreen</span><span class="p">);</span>
-
         <span class="kd">var</span> <span class="nx">errStr</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">button</span><span class="p">,</span> <span class="nx">input</span><span class="p">,</span> <span class="nx">form</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">endScreen</span><span class="p">);</span>
 
         <span class="nx">button</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;submit-email&#39;</span><span class="p">);</span>
         <span class="nx">form</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;email-form&#39;</span><span class="p">);</span>
@@ -153,9 +153,11 @@ The options object is always existing even if no</p>
         <span class="nx">errStr</span> <span class="o">=</span> <span class="s1">&#39;Check your email and click here again&#39;</span><span class="p">;</span>
 
         <span class="nx">form</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;submit&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">indexAt</span><span class="p">,</span> <span class="nx">indexDot</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">counter</span><span class="p">;</span>
+
             <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
 
-            <span class="kd">var</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">indexAt</span><span class="p">,</span> <span class="nx">indexDot</span><span class="p">;</span>
             <span class="nx">email</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">email</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">indexAt</span> <span class="o">=</span> <span class="nx">email</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">);</span>
@@ -194,7 +196,8 @@ The options object is always existing even if no</p>
         <span class="kd">var</span> <span class="nx">showEmailForm</span><span class="p">;</span> <span class="c1">// boolean: email form or not</span>
         <span class="kd">var</span> <span class="nx">exitCode</span><span class="p">;</span> <span class="c1">// exit code</span>
 
-        <span class="kd">var</span> <span class="nx">topHTML</span><span class="p">,</span> <span class="nx">messageHTML</span><span class="p">,</span> <span class="nx">totalWinHTML</span><span class="p">,</span> <span class="nx">exitCodeHTML</span><span class="p">,</span> <span class="nx">emailHTML</span><span class="p">,</span> <span class="nx">endHTML</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">topHTML</span><span class="p">,</span> <span class="nx">messageHTML</span><span class="p">,</span> <span class="nx">totalWinHTML</span><span class="p">,</span> <span class="nx">exitCodeHTML</span><span class="p">,</span>
+        <span class="kd">var</span> <span class="nx">emailHTML</span><span class="p">,</span> <span class="nx">endHTML</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">endScreenHTML</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">endScreen</span><span class="p">;</span>
 
@@ -206,7 +209,8 @@ The options object is always existing even if no</p>
         <span class="s1">&#39;submit the HIT.&#39;</span><span class="p">;</span>
         <span class="nx">showEmailForm</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">;</span>
 
-        <span class="nx">messageHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;h1&gt;&#39;</span> <span class="o">+</span> <span class="nx">headerMessage</span> <span class="o">+</span><span class="s1">&#39;&lt;/h1&gt;&#39;</span> <span class="o">+</span> <span class="s1">&#39;&lt;p&gt;&#39;</span> <span class="o">+</span> <span class="nx">message</span> <span class="o">+</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">messageHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;h1&gt;&#39;</span> <span class="o">+</span> <span class="nx">headerMessage</span> <span class="o">+</span><span class="s1">&#39;&lt;/h1&gt;&#39;</span> <span class="o">+</span>
+            <span class="s1">&#39;&lt;p&gt;&#39;</span> <span class="o">+</span> <span class="nx">message</span> <span class="o">+</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
         <span class="nx">endScreenHTML</span> <span class="o">=</span> <span class="nx">messageHTML</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">totalWin</span><span class="p">)</span> <span class="p">{</span>
@@ -223,8 +227,7 @@ The options object is always existing even if no</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">totalWinHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;p&gt;Your total win: &#39;</span> <span class="o">+</span>
-                           <span class="s1">&#39;&lt;input id=&quot;total&quot; class=&quot;form-control&quot; disabled&gt;&lt;/input&gt;&#39;</span> <span class="o">+</span>
-                           <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+                <span class="s1">&#39;&lt;input id=&quot;total&quot; class=&quot;form-control&quot; disabled&gt;&lt;/input&gt;&lt;/p&gt;&#39;</span><span class="p">;</span>
             <span class="nx">endScreenHTML</span> <span class="o">+=</span> <span class="nx">totalWinHTML</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">exitCode</span><span class="p">)</span> <span class="p">{</span>
@@ -241,19 +244,22 @@ The options object is always existing even if no</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">exitCodeHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;p&gt;Your exit code: &#39;</span> <span class="o">+</span>
-                           <span class="s1">&#39;&lt;input id=&quot;exit-code&quot; class=&quot;form-control&quot; disabled&gt;&lt;/input&gt;&#39;</span> <span class="o">+</span>
-                           <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+                <span class="s1">&#39;&lt;input id=&quot;exit-code&quot; class=&quot;form-control&quot; disabled&gt;&lt;/input&gt;&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
             <span class="nx">endScreenHTML</span> <span class="o">+=</span> <span class="nx">exitCodeHTML</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">showEmailForm</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">emailHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;form id=&quot;email-form&quot;&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;label for=&quot;email&quot;&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;p&gt;Would you like to be contacted again for future experiments?&lt;/p&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;p&gt;If so, leave your email here and press submit:&lt;/p&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;/label&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;input id=&quot;email&quot; type=&quot;text&quot; placeholder=&quot;Email&quot; class=&quot;form-control&quot;/&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;input class=&quot;btn btn-info&quot; id=&quot;submit-email&quot; type=&quot;submit&quot;&gt;&lt;/input&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="p">;</span>
+                <span class="s1">&#39;&lt;label for=&quot;email&quot;&gt;&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;p&gt;Would you like to be contacted again for &#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;future experiments?&lt;/p&gt;&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;p&gt;If so, leave your email here and press submit:&lt;/p&gt;&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;/label&gt;&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;input id=&quot;email&quot; type=&quot;text&quot; placeholder=&quot;Email&quot; &#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;class=&quot;form-control&quot;/&gt;&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;input class=&quot;btn btn-info&quot; id=&quot;submit-email&quot; &#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;type=&quot;submit&quot;&gt;&lt;/input&gt;&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="p">;</span>
             <span class="nx">endScreenHTML</span> <span class="o">+=</span> <span class="nx">emailHTML</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -274,8 +280,6 @@ The options object is always existing even if no</p>
         <span class="nx">endScreen</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">endScreenHTML</span><span class="p">;</span>
 
         <span class="k">return</span> <span class="nx">endScreen</span><span class="p">;</span>
-
-        <span class="cm">/* &lt;button class=&quot;btn btn-info&quot; id=&quot;submit-email&quot; type=&quot;submit&quot;&gt;Submit&lt;/button&gt; */</span>
     <span class="p">}</span>
 
 
@@ -308,8 +312,6 @@ when the widget is destroyed.</p>
             <span class="kd">var</span> <span class="nx">totalWin</span><span class="p">;</span>
             <span class="kd">var</span> <span class="nx">exitCode</span><span class="p">;</span>
             <span class="kd">var</span> <span class="nx">data</span><span class="p">;</span>
-
-            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
 
             <span class="nx">data</span> <span class="o">=</span> <span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
             <span class="nx">totalWin</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">total</span><span class="p">;</span>

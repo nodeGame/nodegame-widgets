@@ -1,10 +1,10 @@
-(function() {  // self-executing function for encapsulation
+(function() {
 
     // Register the widget in the widgets collection.
     node.widgets.register('EndScreen', EndScreen);
 
     // Add Meta-data
-    EndScreen.version = '0.0.1';
+    EndScreen.version = '0.1.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
     'email form, and exit code.';
 
@@ -27,10 +27,10 @@
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
-        this.bodyDiv.appendChild(this.endScreen);
-
         var errStr;
         var button, input, form;
+
+        this.bodyDiv.appendChild(this.endScreen);
 
         button = W.getElementById('submit-email');
         form = W.getElementById('email-form');
@@ -38,9 +38,11 @@
         errStr = 'Check your email and click here again';
 
         form.addEventListener("submit", function(event) {
+            var email, indexAt, indexDot;
+            var counter;
+
             event.preventDefault();
 
-            var email, indexAt, indexDot;
             email = input.value;
             if (email.trim().length > 5) {
                 indexAt = email.indexOf('@');
@@ -79,7 +81,8 @@
         var showEmailForm; // boolean: email form or not
         var exitCode; // exit code
 
-        var topHTML, messageHTML, totalWinHTML, exitCodeHTML, emailHTML, endHTML;
+        var topHTML, messageHTML, totalWinHTML, exitCodeHTML,
+        var emailHTML, endHTML;
         var endScreenHTML;
         var endScreen;
 
@@ -91,32 +94,35 @@
         'submit the HIT.';
         showEmailForm = this.options.showEmailForm;
 
-        messageHTML = '<h1>' + headerMessage +'</h1>' + '<p>' + message + '</p>';
+        messageHTML = '<h1>' + headerMessage +'</h1>' +
+            '<p>' + message + '</p>';
         endScreenHTML = messageHTML;
 
         if (totalWin) {
             // totalWinHTML = '<p>Your total win: ' + totalWin + '</p>';
             totalWinHTML = '<p>Your total win: ' +
-                           '<input id="total" class="form-control" disabled></input>' +
-                           '</p>';
+                '<input id="total" class="form-control" disabled></input></p>';
             endScreenHTML += totalWinHTML;
         }
         if (exitCode) {
             // exitCodeHTML = '<p>Your Exit code: ' + exitCode + '</p>';
             exitCodeHTML = '<p>Your exit code: ' +
-                           '<input id="exit-code" class="form-control" disabled></input>' +
-                           '</p>';
+                '<input id="exit-code" class="form-control" disabled></input>' +
+                '</p>';
             endScreenHTML += exitCodeHTML;
         }
         if (showEmailForm) {
             emailHTML = '<form id="email-form">' +
-            '<label for="email">' +
-            '<p>Would you like to be contacted again for future experiments?</p>' +
-            '<p>If so, leave your email here and press submit:</p>' +
-            '</label>' +
-            '<input id="email" type="text" placeholder="Email" class="form-control"/>' +
-            '<input class="btn btn-info" id="submit-email" type="submit"></input>' +
-            '</form>';
+                '<label for="email">' +
+                '<p>Would you like to be contacted again for ' +
+                'future experiments?</p>' +
+                '<p>If so, leave your email here and press submit:</p>' +
+                '</label>' +
+                '<input id="email" type="text" placeholder="Email" ' +
+                'class="form-control"/>' +
+                '<input class="btn btn-info" id="submit-email" ' +
+                'type="submit"></input>' +
+                '</form>';
             endScreenHTML += emailHTML;
         }
 
@@ -126,8 +132,6 @@
         endScreen.innerHTML = endScreenHTML;
 
         return endScreen;
-
-        /* <button class="btn btn-info" id="submit-email" type="submit">Submit</button> */
     }
 
     // Implements the Widget.listeners method.
@@ -138,8 +142,6 @@
             var totalWin;
             var exitCode;
             var data;
-
-            console.log(message);
 
             data = message.data;
             totalWin = data.total;
