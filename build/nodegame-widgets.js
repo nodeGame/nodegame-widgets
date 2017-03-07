@@ -7379,13 +7379,6 @@
                     }
                 }
                 emailButton.value = emailErrorString;
-
-                if (counter) {
-                    b.innerHTML += '(' + counter + ')';
-                }
-                else {
-                    counter++;
-                }
             }, true);
         }
 

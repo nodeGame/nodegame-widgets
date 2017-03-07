@@ -75,13 +75,6 @@
                     }
                 }
                 emailButton.value = emailErrorString;
-
-                if (counter) {
-                    b.innerHTML += '(' + counter + ')';
-                }
-                else {
-                    counter++;
-                }
             }, true);
         }
 
@@ -211,8 +204,6 @@
             var data;
 
             var totalHTML, exitCodeHTML;
-
-            console.log(message);
 
             data = message.data;
             totalWin = data.total;
