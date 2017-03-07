@@ -809,8 +809,8 @@ conditions are not met.</p>
       <span class="dox_tag_name">root</span>
       <span class="dox_type">object</span>
       <span>Optional. The HTML element under which the widget
-  will be appended. Default: <code>GameWindow.getFrameRoot()</code> or
-  <code>document.body</code></span>
+  will be appended. Default: the <code>document.body</code> element of the main
+  frame (if one is defined), or <code>document.body</code> elment of the page</span>
     </div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">options</span>
@@ -861,8 +861,6 @@ conditions are not met.</p>
 <p>Init default values.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span> <span class="o">||</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrameRoot</span><span class="p">()</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
-        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
 
 
 </pre></div>
@@ -872,6 +870,26 @@ conditions are not met.</p>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+</div>
+<p>If no root is defined, use the body element of the main frame,
+if none is found, use the document.body.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">root</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrameDocument</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span><span class="p">)</span> <span class="nx">root</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>Check if it is a object (new widget).
 If it is a string is the name of an existing widget.
@@ -893,7 +911,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Optionally add title.</p>
         </td>
@@ -907,7 +925,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Add body.</p>
         </td>
@@ -923,7 +941,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>Optionally add footer.</p>
         </td>
@@ -937,7 +955,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>Optionally set context.</p>
         </td>
@@ -951,7 +969,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>User listeners.
 attachListeners(w);</p>
@@ -1026,7 +1044,7 @@ attachListeners(w);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>Nested widgets can be destroyed by previous calls to destroy,
 and each call to destroy modify the array of instances.</p>
@@ -1085,7 +1103,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
 </div>
 <p>Nested widgets can be destroyed by previous calls to destroy,
 and each call to destroy modify the array of instances.</p>
@@ -1201,7 +1219,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 <p>TODO: Check every parameter</p>
         </td>
@@ -1216,7 +1234,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code><span class="kd">function</span> <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
@@ -1256,7 +1274,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>Expose Widgets to the global object.</p>
         </td>
@@ -1271,7 +1289,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>
