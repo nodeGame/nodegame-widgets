@@ -4,7 +4,7 @@
     node.widgets.register('EndScreen', EndScreen);
 
     // Add Meta-data
-    EndScreen.version = '0.0.1';
+    EndScreen.version = '0.1.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
     'email form, and exit code.';
 
