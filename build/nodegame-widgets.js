@@ -7308,7 +7308,7 @@
     node.widgets.register('EndScreen', EndScreen);
 
     // Add Meta-data
-    EndScreen.version = '0.0.0';
+    EndScreen.version = '0.0.1';
     EndScreen.description = 'Game end screen. With end game message, ' +
     'email form, and exit code.';
 
@@ -7326,112 +7326,183 @@
     //
     function EndScreen(options) {
         this.options = options;
-        this.endScreen = this.createHTML(true, true);
+        this.init(true, true);
     }
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
         this.bodyDiv.appendChild(this.endScreen);
 
-        var errStr;
-        var button, input, form;
+        var that;
+        var emailErrorString;
+        var emailButton, emailInput, emailForm;
+        var feedbackButton, feedbackForm, feedbackInput;
+        var charCounter;
 
-        button = W.getElementById('submit-email');
-        form = W.getElementById('email-form');
-        input = W.getElementById('email');
-        errStr = 'Check your email and click here again';
+        that = this;
 
-        form.addEventListener("submit", function(event) {
-            event.preventDefault();
+        emailButton = W.getElementById('endscreen-submit-email');
+        emailForm = W.getElementById('endscreen-email-form');
+        emailInput = W.getElementById('endscreen-email');
+        emailErrorString = 'Not a valid email address, ' +
+                           'please correct it and submit again.';
 
-            var email, indexAt, indexDot;
-            email = input.value;
-            if (email.trim().length > 5) {
-                indexAt = email.indexOf('@');
-                if (indexAt !== -1 &&
-                    indexAt !== 0 &&
-                    indexAt !== (email.length-1)) {
+        feedbackForm = W.getElementById('endscreen-feedback-form');
+        feedbackInput = W.getElementById('endscreen-feedback');
+        feedbackButton = W.getElementById('endscreen-submit-feedback');
 
-                    indexDot = email.lastIndexOf('.');
-                    if (indexDot !== -1 &&
-                        indexDot !== (email.length-1) &&
-                        indexDot > (indexAt+1)) {
+        charCounter = W.getElementById('endscreen-char-count');
 
-                        button.disabled = true;
-                        input.disabled = true;
-                        node.say('email', 'SERVER', email);
-                        button.onclick = null;
-                        button.innerHTML = 'Sent!';
-                        return;
+        if (this.showEmailForm) {
+            emailForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                var email, indexAt, indexDot;
+                email = emailInput.value;
+                if (email.trim().length > 5) {
+                    indexAt = email.indexOf('@');
+                    if (indexAt !== -1 &&
+                        indexAt !== 0 &&
+                        indexAt !== (email.length-1)) {
+
+                        indexDot = email.lastIndexOf('.');
+                        if (indexDot !== -1 &&
+                            indexDot !== (email.length-1) &&
+                            indexDot > (indexAt+1)) {
+
+                            node.say('email', 'SERVER', email);
+
+                            emailButton.disabled = true;
+                            emailInput.disabled = true;
+                            emailButton.value = 'Sent!';
+                        }
                     }
                 }
-            }
-            button.innerHTML = errStr;
-            if (counter) {
-                b.innerHTML += '(' + counter + ')';
-            }
-            else {
-                counter++;
-            }
-        }, true);
+                emailButton.value = emailErrorString;
+
+                if (counter) {
+                    b.innerHTML += '(' + counter + ')';
+                }
+                else {
+                    counter++;
+                }
+            }, true);
+        }
+
+        if (this.showFeedbackForm) {
+            feedbackForm.addEventListener('submit', function(event) {
+                var feedback;
+
+                event.preventDefault();
+                feedback = feedbackInput.value.trim();
+
+                if (feedback.length < that.maxFeedbackLength) {
+                    node.say('feedback', 'SERVER', feedback);
+
+                    feedbackButton.disabled = true;
+                    feedbackButton.value = 'Sent!';
+                }
+                else {
+                    feedbackButton.value = 'Please shorten your response ' +
+                                           'and submit again.';
+                }
+            });
+
+            feedbackForm.addEventListener('input', function(event) {
+                var charLeft;
+
+                charLeft = that.maxFeedbackLength - feedbackInput.value.length;
+                charCounter.innerHTML = Math.abs(charLeft);
+
+                if (charLeft < 0) {
+                    charCounter.innerHTML += ' characters over.';
+                }
+                else {
+                    charCounter.innerHTML += ' characters remaining.';
+                }
+            });
+        }
     };
 
-    EndScreen.prototype.createHTML = function(totalWin, exitCode) {
-        var headerMessage; // the header to be displayed
-        var message; // the message to be displayed
-        var totalWin; // total win
-        var showEmailForm; // boolean: email form or not
+    EndScreen.prototype.init = function() {
         var exitCode; // exit code
-
-        var topHTML, messageHTML, totalWinHTML, exitCodeHTML, emailHTML, endHTML;
-        var endScreenHTML;
+        var topHTML, messageHTML, totalWinHTML, exitCodeHTML, emailHTML,
+            endHTML, endScreenHTML;
         var endScreen;
 
-        headerMessage = this.options.headerMessage ||
+        this.headerMessage = this.options.headerMessage ||
         'Thank You for Participating!';
-        message = this.options.message ||
-        'You have now completed this task and your data have been saved. ' +
+        this.message = this.options.message ||
+        'You have now completed this task and your data has been saved. ' +
         'Please go back to the Amazon Mechanical Turk web site and ' +
         'submit the HIT.';
-        showEmailForm = this.options.showEmailForm;
+        this.showEmailForm = 'showEmailForm' in this.options ?
+                            this.options.showEmailForm : true;
+        this.showFeedbackForm = 'showFeedbackForm' in this.options ?
+                            this.options.showFeedbackForm : true;
+        this.showTotalWin = 'showTotalWin' in this.options ?
+                            this.options.showTotalWin : true;
+        this.showExitCode = 'showExitCode' in this.options ?
+                            this.options.showExitCode : true;
+        this.maxFeedbackLength = this.options.maxFeedbackLength || 800;
 
-        messageHTML = '<h1>' + headerMessage +'</h1>' + '<p>' + message + '</p>';
+        messageHTML = '<h1>' + this.headerMessage +'</h1>' + '<p>' +
+                      this.message + '</p>';
         endScreenHTML = messageHTML;
 
-        if (totalWin) {
+        if (this.showTotalWin) {
             // totalWinHTML = '<p>Your total win: ' + totalWin + '</p>';
             totalWinHTML = '<p>Your total win: ' +
-                           '<input id="total" class="form-control" disabled></input>' +
+                           '<input id="endscreen-total" ' +
+                           'class="form-control" ' +
+                           'disabled></input>' +
                            '</p>';
             endScreenHTML += totalWinHTML;
         }
-        if (exitCode) {
+        if (this.showExitCode) {
             // exitCodeHTML = '<p>Your Exit code: ' + exitCode + '</p>';
             exitCodeHTML = '<p>Your exit code: ' +
-                           '<input id="exit-code" class="form-control" disabled></input>' +
+                           '<input id="endscreen-exit-code" ' +
+                           'class="form-control" disabled></input>' +
                            '</p>';
             endScreenHTML += exitCodeHTML;
         }
-        if (showEmailForm) {
-            emailHTML = '<form id="email-form">' +
-            '<label for="email">' +
-            '<p>Would you like to be contacted again for future experiments?</p>' +
-            '<p>If so, leave your email here and press submit:</p>' +
+        if (this.showEmailForm) {
+            emailHTML = '<form id="endscreen-email-form">' +
+            '<label for="endscreen-email">' +
+            'Would you like to be contacted again ' +
+            'for future experiments? ' +
+            'If so, leave your email here and press submit:' +
             '</label>' +
-            '<input id="email" type="text" placeholder="Email" class="form-control"/>' +
-            '<input class="btn btn-info" id="submit-email" type="submit"></input>' +
+            '<input id="endscreen-email" type="text" placeholder="Email" ' +
+            'class="form-control"/>' +
+            '<input class="btn btn-lg btn-primary" ' +
+            'id="endscreen-submit-email" ' +
+            'type="submit" value="Submit email"></input>' +
             '</form>';
             endScreenHTML += emailHTML;
         }
+        if (this.showFeedbackForm) {
+            feedbackFormHTML = '<form id="endscreen-feedback-form">' +
+            '<label for="endscreen-feedback">' +
+            'Any feedback about the experiment? Let us know here:' +
+            '</label>' +
+            '<textarea id="endscreen-feedback" type="text" rows="3"' +
+            'class="form-control"></textarea>' +
+            '<span id="endscreen-char-count" class="badge">' +
+            this.maxFeedbackLength +
+            ' characters left</span>' +
+            '<input class="btn btn-lg btn-primary" ' +
+            'id="endscreen-submit-feedback" ' +
+            'type="submit" value="Submit feedback"></input>' +
+            '</form>';
+            endScreenHTML += feedbackFormHTML;
+        }
 
-        endScreen = document.createElement('div');
-        endScreen.class = this.className;
-        // endScreen.id = ''
-        endScreen.innerHTML = endScreenHTML;
-
-        return endScreen;
-
-        /* <button class="btn btn-info" id="submit-email" type="submit">Submit</button> */
+        this.endScreen = document.createElement('div');
+        this.endScreen.class = this.className;
+        this.endScreen.id = 'endscreen';
+        this.endScreen.innerHTML = endScreenHTML;
     }
 
     // Implements the Widget.listeners method.
@@ -7443,14 +7514,24 @@
             var exitCode;
             var data;
 
+            var totalHTML, exitCodeHTML;
+
             console.log(message);
 
             data = message.data;
             totalWin = data.total;
             exitCode = data.exit;
 
-            W.getElementById('total').value = totalWin;
-            W.getElementById('exit-code').value = exitCode;
+            totalHTML = W.getElementById('endscreen-total');
+            exitCodeHTML = W.getElementById('endscreen-exit-code');
+
+            if (totalHTML) {
+                totalHTML.value = totalWin;
+            }
+
+            if (exitCodeHTML) {
+                exitCodeHTML.value = exitCode;
+            }
         });
     };
 })(node);
