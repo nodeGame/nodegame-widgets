@@ -30,6 +30,9 @@
       <div class="heading h3">
         <a href="#widgets.instances">Widgets.instances</a>
       </div>
+      <div class="heading h3">
+        <a href="#widgets.lastappended">Widgets.lastAppended</a>
+      </div>
       <div class="heading h2">
         <a href="#widgets%20methods">Widgets methods</a>
       </div>
@@ -157,7 +160,11 @@ MIT Licensed</p>
   <div class="details">
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.append
+      <span class="dox_type">Widgets.append</span>
+    </div>
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.lastAppended
 </span>
     </div>
   </div>
@@ -165,6 +172,36 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">instances</span> <span class="o">=</span> <span class="p">[];</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="widgets.lastappended">
+  <h3>
+    <a href="#widgets.lastappended" name="widgets.lastappended" class="pilcrow">&#182;</a>
+    Widgets.lastAppended
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Reference to lastAppended widget</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Widgets.append
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">lastAppended</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
 
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">node</span><span class="p">.</span><span class="nx">registerSetup</span><span class="p">(</span><span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
@@ -178,7 +215,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>Add new widgets.</p>
         </td>
@@ -198,7 +235,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>Destroy all existing widgets.</p>
         </td>
@@ -214,7 +251,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>Append existing widgets.</p>
         </td>
@@ -229,7 +266,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>Determine root.</p>
         </td>
@@ -334,7 +371,7 @@ are added.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>Add default properties to widget prototype.</p>
         </td>
@@ -471,7 +508,7 @@ following operations:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>Add default properties to the user options.</p>
         </td>
@@ -487,7 +524,7 @@ following operations:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>Create widget.</p>
         </td>
@@ -501,7 +538,7 @@ following operations:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>TODO: check do we need this?
 Re-inject defaults.
@@ -516,7 +553,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Set ID.</p>
         </td>
@@ -540,7 +577,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Set prototype values or options values.</p>
         </td>
@@ -561,7 +598,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Fixed properties.</p>
         </td>
@@ -574,7 +611,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Add random unique widget id.</p>
         </td>
@@ -587,7 +624,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Add enabled.</p>
         </td>
@@ -600,7 +637,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Add highlighted.</p>
         </td>
@@ -614,7 +651,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Call init.</p>
         </td>
@@ -628,7 +665,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Call listeners.</p>
         </td>
@@ -641,7 +678,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Start recording changes.</p>
         </td>
@@ -657,7 +694,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Get registered listeners, clear changes, and stop recording.</p>
         </td>
@@ -675,7 +712,7 @@ widget.defaults = options;</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>If any listener was added or removed, the original situation will
 be restored when the widget is destroyed.
@@ -693,7 +730,7 @@ The widget is also automatically removed from parent.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Call original function.</p>
         </td>
@@ -706,7 +743,7 @@ The widget is also automatically removed from parent.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Remove the widget's div from its parent.</p>
         </td>
@@ -744,7 +781,7 @@ The widget is also automatically removed from parent.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Remove widget from current instances, if found.</p>
         </td>
@@ -765,7 +802,7 @@ The widget is also automatically removed from parent.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Store widget instance (e.g. used for destruction).</p>
         </td>
@@ -859,7 +896,7 @@ conditions are not met.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Init default values.</p>
         </td>
@@ -872,7 +909,7 @@ conditions are not met.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>If no root is defined, use the body element of the main frame,
 if none is found, use the document.body.</p>
@@ -892,7 +929,7 @@ if none is found, use the document.body.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Check if it is a object (new widget).
 If it is a string is the name of an existing widget.
@@ -914,7 +951,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Optionally add title.</p>
         </td>
@@ -928,7 +965,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>Add body.</p>
         </td>
@@ -944,7 +981,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>Optionally add footer.</p>
         </td>
@@ -958,7 +995,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>Optionally set context.</p>
         </td>
@@ -972,7 +1009,7 @@ In this case a dependencies check is done.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
 <p>User listeners.
 attachListeners(w);</p>
@@ -980,6 +1017,20 @@ attachListeners(w);</p>
         <td class="code highlight"><div class="highlight"><pre>
 
         <span class="nx">w</span><span class="p">.</span><span class="nx">append</span><span class="p">();</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+</div>
+<p>Store reference of last appended widget.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">lastAppended</span> <span class="o">=</span> <span class="nx">w</span><span class="p">;</span>
 
         <span class="k">return</span> <span class="nx">w</span><span class="p">;</span>
     <span class="p">};</span>
@@ -1109,7 +1160,7 @@ attachListeners(w);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
 </div>
 <p>Nested widgets can be destroyed by previous calls to destroy,
 and each call to destroy modify the array of instances.</p>
@@ -1168,7 +1219,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 <p>Nested widgets can be destroyed by previous calls to destroy,
 and each call to destroy modify the array of instances.</p>
@@ -1284,7 +1335,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
 </div>
 <p>TODO: Check every parameter</p>
         </td>
@@ -1299,7 +1350,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
+  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code><span class="kd">function</span> <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
@@ -1339,7 +1390,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
+  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
 </div>
 <p>Expose Widgets to the global object.</p>
         </td>
@@ -1354,7 +1405,7 @@ and each call to destroy modify the array of instances.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
+  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>

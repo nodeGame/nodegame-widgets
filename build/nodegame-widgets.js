@@ -413,8 +413,19 @@
          * Container of appended widget instances
          *
          * @see Widgets.append
+         * @see Widgets.lastAppended
          */
         this.instances = [];
+
+        /**
+         * ### Widgets.lastAppended
+         *
+         * Reference to lastAppended widget
+         *
+         * @see Widgets.append
+         */
+        this.lastAppended = null;
+
 
         that = this;
         node.registerSetup('widgets', function(conf) {
@@ -766,6 +777,9 @@
         // attachListeners(w);
 
         w.append();
+
+        // Store reference of last appended widget.
+        this.lastAppended = w;
 
         return w;
     };
