@@ -380,7 +380,7 @@
 
 /**
  * # Widgets
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Helper class to interact with nodeGame widgets
@@ -774,6 +774,30 @@
         console.log('***Widgets.add is deprecated. Use ' +
                     'Widgets.append instead.***');
         return this.append(w, root, options);
+    };
+
+    /**
+     * ### Widgets.isWidget
+     *
+     * Returns TRUE if the object is a widget-like 
+     *
+     * @param {object} w The object to test
+     * @param {boolean} strict If TRUE, it checks if object is an
+     *   instance of the Widget class. If FALSE, it just have to
+     *   implement some of its methods (append and getValues).
+     *
+     * @return {boolean} TRUE, if the widget was found and destroyed.
+     *
+     * @see Widgets.get
+     * @see Widgets.destroyAll
+     *
+     * @api experimental
+     */
+    Widgets.prototype.isWidget = function(w, strict) {
+        if (strict) return w instanceof node.Widget;
+        return ('object' === typeof w &&
+                'function' === typeof w.append && 
+                'function' === typeof w.getValues)
     };
 
     /**
@@ -2911,7 +2935,7 @@
 
 /**
  * # ChoiceManager
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g. ChoiceTable).
@@ -3105,6 +3129,12 @@
      *
      * Sets the available forms
      *
+     * Each form element must be a widget or a "widget-like" element,
+     * implementing at least the `append` and `getValues` methods.
+     *
+     * Notice! If one of the elements of the form array is invalid,
+     * an error is raised when the form is appended.
+     *
      * @param {array} forms The array of forms
      *
      * @see ChoiceManager.order
@@ -3113,18 +3143,29 @@
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
-        var len;
-        if (!J.isArray(forms)) {
-            throw new TypeError('ChoiceTableGroup.setForms: ' +
-                                'forms must be array.');
+        var len, parsedForms;
+        if ('function' === typeof forms) {
+            parsedForms = forms.call(node.game);
+            if (!J.isArray(parsedForms)) {
+                throw new TypeError('ChoiceManager.setForms: forms is a ' +
+                                    'callback, but did not returned an ' +
+                                    'array. Found: ' + parsedForms);
+            }
         }
-        len = forms.length;
-        if (!len) {
-            throw new Error('ChoiceTableGroup.setForms: ' +
-                            'forms is empty array.');
+        else if (J.isArray(forms)) {
+            parsedForms = forms;
+        }
+        else {
+            throw new TypeError('ChoiceManager.setForms: forms must be array ' +
+                                'or function. Found: ' + forms);
         }
 
-        this.forms = forms;
+        len = parsedForms.length;
+        if (!len) {
+            throw new Error('ChoiceManager.setForms: forms is an empty array.');
+        }
+
+        this.forms = parsedForms;
 
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
@@ -3143,12 +3184,24 @@
      */
     ChoiceManager.prototype.buildDl = function() {
         var i, len, dl, dt;
+        var form;
 
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
             dt = document.createElement('dt');
             dt.className = 'question';
-            node.widgets.append(this.forms[this.order[i]], dt);
+            form = this.forms[this.order[i]];
+            if (!node.widgets.isWidget(form)) {
+                if ('string' === typeof form.name) {
+                    form = node.widgets.get(form.name, form);
+                }
+                if (!node.widgets.isWidget(form)) {
+                    throw new Error('ChoiceManager.buildDl: one of the forms ' +
+                                    'is not a widget-like element: ' +
+                                    this.forms[this.order[i]]);
+                }
+            }
+            node.widgets.append(form, dt);
             this.dl.appendChild(dt);
         }
     };
@@ -7316,7 +7369,7 @@
     node.widgets.register('EndScreen', EndScreen);
 
     // Add Meta-data
-    EndScreen.version = '0.0.1';
+    EndScreen.version = '0.1.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
     'email form, and exit code.';
 
@@ -7516,8 +7569,6 @@
             var data;
 
             var totalHTML, exitCodeHTML;
-
-            console.log(message);
 
             data = message.data;
             totalWin = data.total;
