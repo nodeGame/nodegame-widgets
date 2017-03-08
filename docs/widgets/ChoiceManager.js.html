@@ -712,7 +712,7 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
 <p>Manual clone forms.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">forms</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">);</span>
+        <span class="nx">forms</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">);</span>
         <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="nx">form</span> <span class="o">=</span> <span class="nx">parsedForms</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
@@ -725,8 +725,8 @@ if 'string', the text will be added inside the the textarea</li></ul></li>
                                     <span class="s1">&#39;is not a widget-like element: &#39;</span> <span class="o">+</span>
                                     <span class="nx">parsedForms</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
                 <span class="p">}</span>
-                <span class="nx">forms</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">form</span><span class="p">;</span>
             <span class="p">}</span>
+            <span class="nx">forms</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">form</span><span class="p">;</span>
         <span class="p">}</span>
 
 </pre></div>

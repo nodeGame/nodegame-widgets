@@ -240,7 +240,7 @@
         }
 
         // Manual clone forms.
-        forms = Array(len);
+        forms = new Array(len);
         i = -1;
         for ( ; ++i < len ; ) {
             form = parsedForms[i];
@@ -253,8 +253,8 @@
                                     'is not a widget-like element: ' +
                                     parsedForms[i]);
                 }
-                forms[i] = form;
             }
+            forms[i] = form;
         }
         // Assigned verified forms.
         this.forms = forms;
