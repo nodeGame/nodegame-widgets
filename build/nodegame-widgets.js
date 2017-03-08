@@ -3147,6 +3147,7 @@
      *   returning an array of forms
      *
      * @see ChoiceManager.order
+     * @see ChoiceManager.isWidget
      * @see ChoiceManager.shuffleForms
      * @see ChoiceManager.buildForms
      * @see ChoiceManager.buildTableAndForms
