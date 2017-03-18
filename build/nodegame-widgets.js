@@ -7316,7 +7316,7 @@
     node.widgets.register('EndScreen', EndScreen);
 
     // Add Meta-data
-    EndScreen.version = '0.0.1';
+    EndScreen.version = '0.1.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
     'email form, and exit code.';
 
@@ -7517,11 +7517,19 @@
 
             var totalHTML, exitCodeHTML;
 
-            console.log(message);
-
             data = message.data;
             totalWin = data.total;
             exitCode = data.exit;
+
+            if (!JSUS.isNumber(totalWin, 0)) {
+                totalWin = 'Error: invalid total win';
+                // node.error('Invalid total win.');
+            }
+
+            if (!(typeof exitCode === 'string')) {
+                exitCode = 'Error: invalid exit code';
+                // node.error('Invalid exit code.');
+            }
 
             totalHTML = W.getElementById('endscreen-total');
             exitCodeHTML = W.getElementById('endscreen-exit-code');

@@ -209,6 +209,16 @@
             totalWin = data.total;
             exitCode = data.exit;
 
+            if (!JSUS.isNumber(totalWin, 0)) {
+                totalWin = 'Error: invalid total win';
+                // node.error('Invalid total win.');
+            }
+
+            if (!(typeof exitCode === 'string')) {
+                exitCode = 'Error: invalid exit code';
+                // node.error('Invalid exit code.');
+            }
+
             totalHTML = W.getElementById('endscreen-total');
             exitCodeHTML = W.getElementById('endscreen-exit-code');
 
