@@ -210,13 +210,13 @@
             exitCode = data.exit;
 
             if (!JSUS.isNumber(totalWin, 0)) {
-                totalWin = 'Error: invalid total win';
-                // node.error('Invalid total win.');
+                node.err('EndScreen error, invalid exit code: ' + totalWin);
+                totalWin = 'Error: invalid total win.';
             }
 
             if (!(typeof exitCode === 'string')) {
-                exitCode = 'Error: invalid exit code';
-                // node.error('Invalid exit code.');
+                node.err('EndScreen error, invalid exit code: ' + exitCode);
+                exitCode = 'Error: invalid exit code.';
             }
 
             totalHTML = W.getElementById('endscreen-total');
