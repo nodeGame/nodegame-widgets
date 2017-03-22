@@ -1,5 +1,10 @@
 # nodegame-widgets change log
 
+## 3.5.7
+- Last appended widget is available under `node.widgets.lastAppended`.
+- `#Widgets.isWidget()` returns TRUE if object is widget-like (see inline comment).
+- Experimental EndScreen (in progress).
+
 ## 3.5.6
 - VisualTimer makes sure that options are manually cloned to avoid overriding step properties.
 - Widgets.append by default appends to the iframe's body, and not the iframe's root.

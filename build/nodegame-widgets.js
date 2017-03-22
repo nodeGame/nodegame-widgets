@@ -380,7 +380,7 @@
 
 /**
  * # Widgets
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Helper class to interact with nodeGame widgets
@@ -413,8 +413,19 @@
          * Container of appended widget instances
          *
          * @see Widgets.append
+         * @see Widgets.lastAppended
          */
         this.instances = [];
+
+        /**
+         * ### Widgets.lastAppended
+         *
+         * Reference to lastAppended widget
+         *
+         * @see Widgets.append
+         */
+        this.lastAppended = null;
+
 
         that = this;
         node.registerSetup('widgets', function(conf) {
@@ -714,7 +725,7 @@
      */
     Widgets.prototype.append = function(w, root, options) {
         if ('string' !== typeof w && 'object' !== typeof w) {
-            throw new TypeError('Widgets.append: w must be string or object.' +
+            throw new TypeError('Widgets.append: w must be string or object. ' +
                                'Found: ' + w);
         }
         if (root && !J.isElement(root)) {
@@ -767,6 +778,9 @@
 
         w.append();
 
+        // Store reference of last appended widget.
+        this.lastAppended = w;
+
         return w;
     };
 
@@ -774,6 +788,30 @@
         console.log('***Widgets.add is deprecated. Use ' +
                     'Widgets.append instead.***');
         return this.append(w, root, options);
+    };
+
+    /**
+     * ### Widgets.isWidget
+     *
+     * Returns TRUE if the object is a widget-like
+     *
+     * @param {object} w The object to test
+     * @param {boolean} strict If TRUE, it checks if object is an
+     *   instance of the Widget class. If FALSE, it just have to
+     *   implement some of its methods (append and getValues).
+     *
+     * @return {boolean} TRUE, if the widget was found and destroyed.
+     *
+     * @see Widgets.get
+     * @see Widgets.destroyAll
+     *
+     * @api experimental
+     */
+    Widgets.prototype.isWidget = function(w, strict) {
+        if (strict) return w instanceof node.Widget;
+        return ('object' === typeof w &&
+                'function' === typeof w.append &&
+                'function' === typeof w.getValues)
     };
 
     /**
@@ -2911,7 +2949,7 @@
 
 /**
  * # ChoiceManager
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g. ChoiceTable).
@@ -3105,25 +3143,70 @@
      *
      * Sets the available forms
      *
-     * @param {array} forms The array of forms
+     * Each form element can be:
+     *
+     *   - an instantiated widget
+     *   - a "widget-like" element (`append` and `getValues` methods must exist)
+     *   - an object with the `name` of the widget and optional settings, e.g.:
+     *
+     *  ```
+     *     {
+     *        name: 'ChoiceTable',
+     *        mainText: 'Did you commit the crime?',
+     *        choices: [ 'Yes', 'No' ],
+     *     }
+     *  ```
+     *
+     * @param {array|function} forms The array of forms or a function
+     *   returning an array of forms
      *
      * @see ChoiceManager.order
+     * @see ChoiceManager.isWidget
      * @see ChoiceManager.shuffleForms
      * @see ChoiceManager.buildForms
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
-        var len;
-        if (!J.isArray(forms)) {
-            throw new TypeError('ChoiceTableGroup.setForms: ' +
-                                'forms must be array.');
+        var form, i, len, parsedForms;
+        if ('function' === typeof forms) {
+            parsedForms = forms.call(node.game);
+            if (!J.isArray(parsedForms)) {
+                throw new TypeError('ChoiceManager.setForms: forms is a ' +
+                                    'callback, but did not returned an ' +
+                                    'array. Found: ' + parsedForms);
+            }
         }
-        len = forms.length;
-        if (!len) {
-            throw new Error('ChoiceTableGroup.setForms: ' +
-                            'forms is empty array.');
+        else if (J.isArray(forms)) {
+            parsedForms = forms;
+        }
+        else {
+            throw new TypeError('ChoiceManager.setForms: forms must be array ' +
+                                'or function. Found: ' + forms);
         }
 
+        len = parsedForms.length;
+        if (!len) {
+            throw new Error('ChoiceManager.setForms: forms is an empty array.');
+        }
+
+        // Manual clone forms.
+        forms = new Array(len);
+        i = -1;
+        for ( ; ++i < len ; ) {
+            form = parsedForms[i];
+            if (!node.widgets.isWidget(form)) {
+                if ('string' === typeof form.name) {
+                    form = node.widgets.get(form.name, form);
+                }
+                if (!node.widgets.isWidget(form)) {
+                    throw new Error('ChoiceManager.buildDl: one of the forms ' +
+                                    'is not a widget-like element: ' +
+                                    parsedForms[i]);
+                }
+            }
+            forms[i] = form;
+        }
+        // Assigned verified forms.
         this.forms = forms;
 
         // Save the order in which the choices will be added.
@@ -3143,12 +3226,14 @@
      */
     ChoiceManager.prototype.buildDl = function() {
         var i, len, dl, dt;
+        var form;
 
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
             dt = document.createElement('dt');
             dt.className = 'question';
-            node.widgets.append(this.forms[this.order[i]], dt);
+            form = this.forms[this.order[i]];
+            node.widgets.append(form, dt);
             this.dl.appendChild(dt);
         }
     };
