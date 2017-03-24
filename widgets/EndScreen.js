@@ -22,7 +22,7 @@
     //
     function EndScreen(options) {
         this.options = options;
-        this.init(true, true);
+        this.init();
     }
 
     // Implements the Widget.append method.
@@ -209,7 +209,7 @@
             totalWin = data.total;
             exitCode = data.exit;
 
-            if (!JSUS.isNumber(totalWin, 0)) {
+            if (JSUS.isNumber(totalWin, 0) === false) {
                 node.err('EndScreen error, invalid exit code: ' + totalWin);
                 totalWin = 'Error: invalid total win.';
             }

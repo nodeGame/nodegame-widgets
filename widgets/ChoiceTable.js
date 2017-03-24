@@ -65,12 +65,9 @@
         this.trs = [];
 
         /**
-         * ## ChoiceTable.listener
+         * ### ChoiceTable.listener
          *
          * The listener function
-         *
-         * @see GameChoice.enable
-         * @see GameChoice.disable
          */
         this.listener = function(e) {
             var name, value, td, oldSelected;
