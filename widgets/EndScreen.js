@@ -21,13 +21,153 @@
     // The options object is always existing even if no
     //
     function EndScreen(options) {
-        this.options = options;
+        /**
+         * ### EndScreen.headerMessage
+         *
+         * The header message displayed at the top of the screen
+         *
+         * Default: 'Thank you for participating!'
+         */
+        if ('undefined' === typeof options.headerMessage) {
+            this.headerMessage = 'Thank you for participating!';
+        }
+        else if ('string' === typeof options.headerMessage) {
+            this.headerMessage = options.headerMessage;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: ' +
+                                'options.headerMessage ' +
+                                'must be string or undefined. ' +
+                                'Found: ' + options.headerMessage);
+        }
+
+        /**
+         * ### EndScreen.message
+         *
+         * The informational message displayed in the body of the screen
+         *
+         * Default: 'You have now completed this task and your data
+         *           has been saved. Please go back to the Amazon Mechanical
+         *           Turk web site and submit the HIT.'
+         */
+        if ('undefined' === typeof options.message) {
+            this.message =  'You have now completed this task ' +
+                            'and your data has been saved. ' +
+                            'Please go back to the Amazon Mechanical Turk ' +
+                            'web site and ' +
+                            'submit the HIT.';
+        }
+        else if ('string' === typeof options.message) {
+            this.message = options.message;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: options.message ' +
+                                'must be string or undefined. ' +
+                                'Found: ' + options.message);
+        }
+
+        /**
+         * ### EndScreen.showEmailForm
+         *
+         * If true, the email form is shown
+         *
+         * Default: true
+         */
+        if ('undefined' === typeof options.showEmailForm) {
+            this.showEmailForm = true;
+        }
+        else if ('boolean' === typeof options.showEmailForm) {
+            this.showEmailForm = options.showEmailForm;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: ' +
+                                'options.showEmailForm ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showEmailForm);
+        }
+
+        /**
+         * ### EndScreen.showFeedbackForm
+         *
+         * If true, the feedback form is shown
+         *
+         * Default: true
+         */
+        if ('undefined' === typeof options.showFeedbackForm) {
+            this.showFeedbackForm = true;
+        }
+        else if ('boolean' === typeof options.showFeedbackForm) {
+            this.showFeedbackForm = options.showFeedbackForm;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: ' +
+                                'options.showFeedbackForm ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showFeedbackForm);
+        }
+
+        /**
+         * ### EndScreen.showTotalWin
+         *
+         * If true, the total win is shown
+         *
+         * Default: true
+         */
+        if ('undefined' === typeof options.showTotalWin) {
+            this.showTotalWin = true;
+        }
+        else if ('boolean' === typeof options.showTotalWin) {
+            this.showTotalWin = options.showTotalWin;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: ' +
+                                'options.showTotalWin ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showTotalWin);
+        }
+
+        /**
+         * ### EndScreen.showExitCode
+         *
+         * If true, the exit code is shown
+         *
+         * Default: true
+         */
+        if ('undefined' === typeof options.showExitCode) {
+            this.showExitCode = true;
+        }
+        else if ('boolean' === typeof options.showExitCode) {
+            this.showExitCode = options.showExitCode;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: ' +
+                                'options.showExitCode ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showExitCode);
+        }
+
+        /**
+         * ### EndScreen.feedback
+         *
+         * Feedback widget element
+         *
+         * Default: null (added on append)
+         */
+        this.feedback = null;
+
         this.init();
     }
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
-        this.bodyDiv.appendChild(this.endScreen);
+        this.endScreenHTML = this.makeEndScreen(this.headerMessage,
+                                                this.message,
+                                                this.showEmailForm,
+                                                this.showFeedbackForm,
+                                                this.showTotalWin,
+                                                this.showExitCode);
+        this.bodyDiv.appendChild(this.endScreenHTML);
+        node.widgets.append(this.endScreenHTML, this.feedback);
 
         var that;
         var emailErrorString;
@@ -113,51 +253,51 @@
         }
     };
 
-    EndScreen.prototype.init = function() {
-        var exitCode; // exit code
-        var topHTML, messageHTML, totalWinHTML, exitCodeHTML, emailHTML,
-            endHTML, endScreenHTML;
-        var endScreen;
+    // makes the end screen
+    EndScreen.prototype.makeEndScreen = function(headerMessage, message,
+                                                 showEmailForm,
+                                                 showFeedbackForm,
+                                                 showTotalWin,
+                                                 showExitCode) {
+        var endScreenElement;
+        var headerElement;
+        var messageElement;
+        var totalWinElement;
+        var exitCodeElement;
+        var emailElement;
 
-        this.headerMessage = this.options.headerMessage ||
-        'Thank You for Participating!';
-        this.message = this.options.message ||
-        'You have now completed this task and your data has been saved. ' +
-        'Please go back to the Amazon Mechanical Turk web site and ' +
-        'submit the HIT.';
-        this.showEmailForm = 'showEmailForm' in this.options ?
-                            this.options.showEmailForm : true;
-        this.showFeedbackForm = 'showFeedbackForm' in this.options ?
-                            this.options.showFeedbackForm : true;
-        this.showTotalWin = 'showTotalWin' in this.options ?
-                            this.options.showTotalWin : true;
-        this.showExitCode = 'showExitCode' in this.options ?
-                            this.options.showExitCode : true;
-        this.maxFeedbackLength = this.options.maxFeedbackLength || 800;
+        endScreenElement = document.createElement('div');
+        endScreenElement.id = 'endscreen';
 
-        messageHTML = '<h1>' + this.headerMessage +'</h1>' + '<p>' +
-                      this.message + '</p>';
-        endScreenHTML = messageHTML;
+        headerElement = document.createElement('h1');
+        headerElement.innerHTML = headerMessage;
+        endScreenElement.appendChild(headerElement);
 
-        if (this.showTotalWin) {
-            // totalWinHTML = '<p>Your total win: ' + totalWin + '</p>';
-            totalWinHTML = '<p>Your total win: ' +
-                           '<input id="endscreen-total" ' +
-                           'class="form-control" ' +
-                           'disabled></input>' +
-                           '</p>';
-            endScreenHTML += totalWinHTML;
+        messageElement = document.createElement('p');
+        messageElement.innerHTML = message;
+        endScreenElement.appendChild(messageElement);
+
+        if (showTotalWin) {
+            totalWinElement = document.createElement('div');
+            totalWinElement.innerHTML = '<p>Your total win: ' +
+                                        '<input id="endscreen-total" ' +
+                                        'class="form-control" ' +
+                                        'disabled></input></p>';
+            endScreenElement.appendChild(totalWinElement);
         }
-        if (this.showExitCode) {
-            // exitCodeHTML = '<p>Your Exit code: ' + exitCode + '</p>';
-            exitCodeHTML = '<p>Your exit code: ' +
-                           '<input id="endscreen-exit-code" ' +
-                           'class="form-control" disabled></input>' +
-                           '</p>';
-            endScreenHTML += exitCodeHTML;
+
+        if (showExitCode) {
+            exitCodeElement = document.createElement('div');
+            exitCodeElement.innerHTML = '<p>Your exit code: ' +
+                                        '<input id="endscreen-exit-code" ' +
+                                        'class="form-control" disabled>' +
+                                        '</input></p>';
+            endScreenElement.appendChild(exitCodeElement);
         }
-        if (this.showEmailForm) {
-            emailHTML = '<form id="endscreen-email-form">' +
+
+        if (showEmailForm) {
+            emailElement = document.createElement('div');
+            emailElement.innerHTML = '<form id="endscreen-email-form">' +
             '<label for="endscreen-email">' +
             'Would you like to be contacted again ' +
             'for future experiments? ' +
@@ -169,23 +309,11 @@
             'id="endscreen-submit-email" ' +
             'type="submit" value="Submit email"></input>' +
             '</form>';
-            endScreenHTML += emailHTML;
+            endScreenElement.appendChild(emailElement);
         }
+
         if (this.showFeedbackForm) {
-            feedbackFormHTML = '<form id="endscreen-feedback-form">' +
-            '<label for="endscreen-feedback">' +
-            'Any feedback about the experiment? Let us know here:' +
-            '</label>' +
-            '<textarea id="endscreen-feedback" type="text" rows="3"' +
-            'class="form-control"></textarea>' +
-            '<span id="endscreen-char-count" class="badge">' +
-            this.maxFeedbackLength +
-            ' characters left</span>' +
-            '<input class="btn btn-lg btn-primary" ' +
-            'id="endscreen-submit-feedback" ' +
-            'type="submit" value="Submit feedback"></input>' +
-            '</form>';
-            endScreenHTML += feedbackFormHTML;
+            this.feedback =
         }
 
         this.endScreen = document.createElement('div');

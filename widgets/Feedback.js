@@ -44,7 +44,6 @@
          *
          * Default: 'Any feedback about the experiment? Let us know here: '
          */
-
         if ('undefined' === typeof options.label) {
             this.label = 'Any feedback about the experiment? Let us know here:';
         }
@@ -79,7 +78,7 @@
         /**
          * ### Feedback.minFeedbackLength
          *
-         * The minimun character length for feedback to be submitted
+         * The minimum character length for feedback to be submitted
          *
          * If minFeedbackLength = 0, then there is no minimum length checked.
          * Default: 0
@@ -183,6 +182,7 @@
 
     Feedback.prototype.listeners = function() {};
 
+    // check the feedback length
     function checkFeedbackLength(feedbackTextarea, charCounter,
                                  submit, minLength, maxLength) {
         var length;
