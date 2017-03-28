@@ -192,7 +192,7 @@
         this.endScreen.class = this.className;
         this.endScreen.id = 'endscreen';
         this.endScreen.innerHTML = endScreenHTML;
-    }
+    };
 
     // Implements the Widget.listeners method.
     EndScreen.prototype.listeners = function() {
@@ -214,7 +214,7 @@
                 totalWin = 'Error: invalid total win.';
             }
 
-            if (!(typeof exitCode === 'string')) {
+            if ((typeof exitCode !== 'string')) {
                 node.err('EndScreen error, invalid exit code: ' + exitCode);
                 exitCode = 'Error: invalid exit code.';
             }

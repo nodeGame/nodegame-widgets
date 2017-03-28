@@ -3081,8 +3081,12 @@
      *       to the list
      *   - freeText: if TRUE, a textarea will be added under the list,
      *       if 'string', the text will be added inside the the textarea
+     *   - forms: the forms to displayed, formatted as explained in
+     *       `ChoiceManager.setForms`
      *
      * @param {object} options Configuration options
+     *
+     * @see ChoiceManager.setForms
      */
     ChoiceManager.prototype.init = function(options) {
         var tmp, that;
@@ -7586,7 +7590,7 @@
         this.endScreen.class = this.className;
         this.endScreen.id = 'endscreen';
         this.endScreen.innerHTML = endScreenHTML;
-    }
+    };
 
     // Implements the Widget.listeners method.
     EndScreen.prototype.listeners = function() {
@@ -7608,7 +7612,7 @@
                 totalWin = 'Error: invalid total win.';
             }
 
-            if (!(typeof exitCode === 'string')) {
+            if ((typeof exitCode !== 'string')) {
                 node.err('EndScreen error, invalid exit code: ' + exitCode);
                 exitCode = 'Error: invalid exit code.';
             }
@@ -7783,7 +7787,9 @@
             node.say('feedback', 'SERVER', feedback);
 
             submit.disabled = true;
-            submit.innerHTML = 'Sent!';
+            feedbackTextarea.disabled = true;
+
+            submit.setAttribute('value', 'Sent!');
         });
 
         feedbackForm.addEventListener('input', function(event) {

@@ -154,7 +154,9 @@
             node.say('feedback', 'SERVER', feedback);
 
             submit.disabled = true;
-            submit.innerHTML = 'Sent!';
+            feedbackTextarea.disabled = true;
+
+            submit.setAttribute('value', 'Sent!');
         });
 
         feedbackForm.addEventListener('input', function(event) {
