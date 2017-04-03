@@ -252,7 +252,8 @@
             emailButtonElement = document.createElement('input');
             emailButtonElement.setAttribute('type', 'submit');
             emailButtonElement.setAttribute('value', 'Submit email');
-            emailButtonElement.className = 'endscreen-email-submit';
+            emailButtonElement.className = 'btn btn-lg btn-primary ' +
+                                           'endscreen-email-submit';
 
             emailFormElement.appendChild(emailLabelElement);
             emailFormElement.appendChild(emailInputElement);
