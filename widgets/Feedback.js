@@ -114,10 +114,10 @@
         var charCounter;
 
         feedbackHTML = document.createElement('div');
-        feedbackHTML.id = 'feedback';
+        feedbackHTML.className = 'feedback';
 
         feedbackForm = document.createElement('form');
-        feedbackForm.id = 'feedback-form';
+        feedbackForm.className = 'feedback-form';
         feedbackHTML.appendChild(feedbackForm);
 
         feedbackLabel = document.createElement('label');
@@ -126,8 +126,7 @@
         feedbackForm.appendChild(feedbackLabel);
 
         feedbackTextarea = document.createElement('textarea');
-        feedbackTextarea.id = 'feedback-textarea';
-        feedbackTextarea.className = 'form-control';
+        feedbackTextarea.className = 'feedback-textarea form-control';
         feedbackTextarea.setAttribute('type', 'text');
         feedbackTextarea.setAttribute('rows', '3');
         feedbackForm.appendChild(feedbackTextarea);
@@ -139,8 +138,7 @@
         feedbackForm.appendChild(submit);
 
         charCounter = document.createElement('span');
-        charCounter.id = 'feedback-char-count';
-        charCounter.className = 'badge';
+        charCounter.className = 'feedback-char-count badge';
         charCounter.innerHTML = maxLength;
         feedbackForm.appendChild(charCounter);
 

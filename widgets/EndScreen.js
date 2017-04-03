@@ -151,50 +151,120 @@
          *
          * Feedback widget element
          *
-         * Default: null (added on append)
+         * Default: new Feedback(options)
+         * null initially, element added on append()
          */
-        this.feedback = null;
+        this.feedback = node.widgets.get('Feedback', options);
+
+        /**
+         * ### EndScreen.endScreenElement
+         *
+         * Endscreen HTML element
+         *
+         * Default: an HTML element,
+         * null initially, element added on append()
+         */
+        this.endScreenHTML = null;
 
         this.init();
     }
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
-        this.endScreenHTML = this.makeEndScreen(this.headerMessage,
-                                                this.message,
-                                                this.showEmailForm,
-                                                this.showFeedbackForm,
-                                                this.showTotalWin,
-                                                this.showExitCode);
-        this.bodyDiv.appendChild(this.endScreenHTML);
-        node.widgets.append(this.endScreenHTML, this.feedback);
+        this.endScreenHTML = this.makeEndScreen();
+        this.bodyDiv.append(this.endScreenHTML);
+    };
 
-        var that;
+    // makes the end screen
+    EndScreen.prototype.makeEndScreen = function() {
+        var endScreenElement;
+        var headerElement, messageElement;
+        var totalWinElement, totalWinParaElement, totalWinInputElement;
+        var exitCodeElement, exitCodeParaElement, exitCodeInputElement;
+        var emailElement, emailFormElement, emailLabelElement,
+            emailInputElement, emailButtonElement;
         var emailErrorString;
-        var emailButton, emailInput, emailForm;
-        var feedbackButton, feedbackForm, feedbackInput;
-        var charCounter;
 
-        that = this;
+        endScreenElement = document.createElement('div');
+        endScreenElement.className = 'endscreen';
 
-        emailButton = W.getElementById('endscreen-submit-email');
-        emailForm = W.getElementById('endscreen-email-form');
-        emailInput = W.getElementById('endscreen-email');
-        emailErrorString = 'Not a valid email address, ' +
-                           'please correct it and submit again.';
+        headerElement = document.createElement('h1');
+        headerElement.innerHTML = this.headerMessage;
+        endScreenElement.appendChild(headerElement);
 
-        feedbackForm = W.getElementById('endscreen-feedback-form');
-        feedbackInput = W.getElementById('endscreen-feedback');
-        feedbackButton = W.getElementById('endscreen-submit-feedback');
+        messageElement = document.createElement('p');
+        messageElement.innerHTML = this.message;
+        endScreenElement.appendChild(messageElement);
 
-        charCounter = W.getElementById('endscreen-char-count');
+        if (this.showTotalWin) {
+            totalWinElement = document.createElement('div');
+
+            totalWinParaElement = document.createElement('p');
+            totalWinParaElement.innerHTML = 'Your total win: ';
+
+            totalWinInputElement = document.createElement('input');
+            totalWinInputElement.className = 'endscreen-total form-control';
+            totalWinInputElement.setAttribute('disabled', 'true');
+
+            totalWinParaElement.appendChild(totalWinInputElement);
+            totalWinElement.appendChild(totalWinParaElement);
+
+            endScreenElement.appendChild(totalWinElement);
+            this.totalWinInputElement = totalWinInputElement;
+        }
+
+        if (this.showExitCode) {
+            exitCodeElement = document.createElement('div');
+
+            exitCodeParaElement = document.createElement('p');
+            exitCodeParaElement.innerHTML = 'Your exit code: ';
+
+            exitCodeInputElement = document.createElement('input');
+            exitCodeInputElement.className = 'endscreen-exit-code ' +
+                                             'form-control';
+            exitCodeInputElement.setAttribute('disabled', 'true');
+
+            exitCodeParaElement.appendChild(exitCodeInputElement);
+            exitCodeElement.appendChild(exitCodeParaElement);
+
+            endScreenElement.appendChild(exitCodeElement);
+            this.exitCodeInputElement = exitCodeInputElement;
+        }
 
         if (this.showEmailForm) {
-            emailForm.addEventListener('submit', function(event) {
-                event.preventDefault();
+            emailElement = document.createElement('div');
+            emailFormElement = document.createElement('form');
+            emailFormElement.className = 'endscreen-email-form';
 
+            emailLabelElement = document.createElement('label');
+            emailLabelElement.innerHTML = 'Would you like to be contacted ' +
+                                          'again for future experiments? ' +
+                                          'If so, leave your email here ' +
+                                          'and press submit: ';
+
+            emailInputElement = document.createElement('input');
+            emailInputElement.setAttribute('type', 'text');
+            emailInputElement.setAttribute('placeholder', 'Email');
+            emailInputElement.className = 'endscreen-email-input form-control';
+
+            emailButtonElement = document.createElement('input');
+            emailButtonElement.setAttribute('type', 'submit');
+            emailButtonElement.setAttribute('value', 'Submit email');
+            emailButtonElement.className = 'endscreen-email-submit';
+
+            emailFormElement.appendChild(emailLabelElement);
+            emailFormElement.appendChild(emailInputElement);
+            emailFormElement.appendChild(emailButtonElement);
+
+            emailErrorString = 'Not a valid email address, ' +
+                               'please correct it and submit again.';
+
+            emailFormElement.addEventListener('submit', function(event) {
                 var email, indexAt, indexDot;
-                email = emailInput.value;
+
+                event.preventDefault();
+                email = emailInputElement.value;
+
                 if (email.trim().length > 5) {
                     indexAt = email.indexOf('@');
                     if (indexAt !== -1 &&
@@ -208,122 +278,33 @@
 
                             node.say('email', 'SERVER', email);
 
-                            emailButton.disabled = true;
-                            emailInput.disabled = true;
-                            emailButton.value = 'Sent!';
+                            emailButtonElement.disabled = true;
+                            emailInputElement.disabled = true;
+                            emailButtonElement.value = 'Sent!';
                         }
                     }
                 }
-                emailButton.value = emailErrorString;
+
+                emailButtonElement.value = emailErrorString;
             }, true);
-        }
 
-        if (this.showFeedbackForm) {
-            feedbackForm.addEventListener('submit', function(event) {
-                var feedback;
-
-                event.preventDefault();
-                feedback = feedbackInput.value.trim();
-
-                if (feedback.length < that.maxFeedbackLength) {
-                    node.say('feedback', 'SERVER', feedback);
-
-                    feedbackButton.disabled = true;
-                    feedbackButton.value = 'Sent!';
-                }
-                else {
-                    feedbackButton.value = 'Please shorten your response ' +
-                                           'and submit again.';
-                }
-            });
-
-            feedbackForm.addEventListener('input', function(event) {
-                var charLeft;
-
-                charLeft = that.maxFeedbackLength - feedbackInput.value.length;
-                charCounter.innerHTML = Math.abs(charLeft);
-
-                if (charLeft < 0) {
-                    charCounter.innerHTML += ' characters over.';
-                }
-                else {
-                    charCounter.innerHTML += ' characters remaining.';
-                }
-            });
-        }
-    };
-
-    // makes the end screen
-    EndScreen.prototype.makeEndScreen = function(headerMessage, message,
-                                                 showEmailForm,
-                                                 showFeedbackForm,
-                                                 showTotalWin,
-                                                 showExitCode) {
-        var endScreenElement;
-        var headerElement;
-        var messageElement;
-        var totalWinElement;
-        var exitCodeElement;
-        var emailElement;
-
-        endScreenElement = document.createElement('div');
-        endScreenElement.id = 'endscreen';
-
-        headerElement = document.createElement('h1');
-        headerElement.innerHTML = headerMessage;
-        endScreenElement.appendChild(headerElement);
-
-        messageElement = document.createElement('p');
-        messageElement.innerHTML = message;
-        endScreenElement.appendChild(messageElement);
-
-        if (showTotalWin) {
-            totalWinElement = document.createElement('div');
-            totalWinElement.innerHTML = '<p>Your total win: ' +
-                                        '<input id="endscreen-total" ' +
-                                        'class="form-control" ' +
-                                        'disabled></input></p>';
-            endScreenElement.appendChild(totalWinElement);
-        }
-
-        if (showExitCode) {
-            exitCodeElement = document.createElement('div');
-            exitCodeElement.innerHTML = '<p>Your exit code: ' +
-                                        '<input id="endscreen-exit-code" ' +
-                                        'class="form-control" disabled>' +
-                                        '</input></p>';
-            endScreenElement.appendChild(exitCodeElement);
-        }
-
-        if (showEmailForm) {
-            emailElement = document.createElement('div');
-            emailElement.innerHTML = '<form id="endscreen-email-form">' +
-            '<label for="endscreen-email">' +
-            'Would you like to be contacted again ' +
-            'for future experiments? ' +
-            'If so, leave your email here and press submit:' +
-            '</label>' +
-            '<input id="endscreen-email" type="text" placeholder="Email" ' +
-            'class="form-control"/>' +
-            '<input class="btn btn-lg btn-primary" ' +
-            'id="endscreen-submit-email" ' +
-            'type="submit" value="Submit email"></input>' +
-            '</form>';
             endScreenElement.appendChild(emailElement);
         }
 
         if (this.showFeedbackForm) {
-            this.feedback =
+            node.widgets.append(endScreenElement, this.feedback);
         }
 
-        this.endScreen = document.createElement('div');
-        this.endScreen.class = this.className;
-        this.endScreen.id = 'endscreen';
-        this.endScreen.innerHTML = endScreenHTML;
+        return endScreenElement;
+
     };
 
     // Implements the Widget.listeners method.
     EndScreen.prototype.listeners = function() {
+        var that;
+
+        that = this;
+
         // Listeners added here are automatically removed
         // when the widget is destroyed.
         node.on.data('WIN', function(message) {
@@ -347,14 +328,14 @@
                 exitCode = 'Error: invalid exit code.';
             }
 
-            totalHTML = W.getElementById('endscreen-total');
-            exitCodeHTML = W.getElementById('endscreen-exit-code');
+            totalHTML = that.totalWinInputElement;
+            exitCodeHTML = that.exitCodeInputElement;
 
-            if (totalHTML) {
+            if (totalHTML && that.showTotalWin) {
                 totalHTML.value = totalWin;
             }
 
-            if (exitCodeHTML) {
+            if (exitCodeHTML && that.showExitCode) {
                 exitCodeHTML.value = exitCode;
             }
         });
