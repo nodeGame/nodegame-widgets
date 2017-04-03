@@ -151,8 +151,7 @@
          *
          * Feedback widget element
          *
-         * Default: new Feedback(options)
-         * null initially, element added on append()
+         * Default: new Feedback(option)
          */
         this.feedback = node.widgets.get('Feedback', options);
 
@@ -184,6 +183,9 @@
         var emailElement, emailFormElement, emailLabelElement,
             emailInputElement, emailButtonElement;
         var emailErrorString;
+
+        emailErrorString = 'Not a valid email address, ' +
+                           'please correct it and submit again.';
 
         endScreenElement = document.createElement('div');
         endScreenElement.className = 'endscreen';
@@ -256,8 +258,8 @@
             emailFormElement.appendChild(emailInputElement);
             emailFormElement.appendChild(emailButtonElement);
 
-            emailErrorString = 'Not a valid email address, ' +
-                               'please correct it and submit again.';
+            emailElement.appendChild(emailFormElement);
+            endScreenElement.appendChild(emailElement);
 
             emailFormElement.addEventListener('submit', function(event) {
                 var email, indexAt, indexDot;
@@ -287,16 +289,13 @@
 
                 emailButtonElement.value = emailErrorString;
             }, true);
-
-            endScreenElement.appendChild(emailElement);
         }
 
         if (this.showFeedbackForm) {
-            node.widgets.append(endScreenElement, this.feedback);
+            node.widgets.append(this.feedback, endScreenElement);
         }
 
         return endScreenElement;
-
     };
 
     // Implements the Widget.listeners method.
