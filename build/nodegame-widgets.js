@@ -1,6 +1,6 @@
 /**
  * # Widget
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Prototype of a widget class
@@ -299,9 +299,9 @@
                 this.headingDiv.innerHTML = title;
             }
             else {
-                throw new TypeError(J.funcName(this) + '.setTitle: ' +
-                                    'title must be string, HTML element or ' +
-                                    'falsy. Found: ' + title);
+                throw new TypeError(J.funcName(this.constructor) + 
+                                    '.setTitle: title must be string, ' +
+                                    'HTML element or falsy. Found: ' + title);
             }
         }
     };
@@ -347,9 +347,9 @@
                 this.footerDiv.innerHTML = footer;
             }
             else {
-                throw new TypeError(J.funcName(this) + '.setFooter: ' +
-                                    'footer must be string, HTML element or ' +
-                                    'falsy. Found: ' + title);
+                throw new TypeError(J.funcName(this.constructor) +
+                                    '.setFooter: footer must be string, ' +
+                                    'HTML element or falsy. Found: ' + title);
             }
         }
     };
@@ -365,13 +365,58 @@
      */
     Widget.prototype.setContext = function(context) {
         if ('string' !== typeof context) {
-            throw new TypeError(J.funcName(this) + '.setContext: ' +
-                                'footer must be string. Found: ' + context);
+            throw new TypeError(J.funcName(this.constructor) + '.setContext: ' +
+                                'context must be string. Found: ' + context);
 
         }
         W.removeClass(this.panelDiv, 'panel-[a-z]*');
         W.addClass(this.panelDiv, 'panel-' + context);
     };
+
+     /**
+      * ### Widget.addFrame
+      *
+      * Adds a border and margins around the bodyDiv element
+      *
+      * @param {string} context The type of bootstrap context.
+      *   Default: 'default'
+      *
+      * @see Widget.panelDiv
+      * @see Widget.bodyDiv
+      */
+     Widget.prototype.addFrame = function(context) {
+         if ('undefined' === typeof context) {
+             context = 'default';
+         }
+         else if ('string' !== typeof context || context.trim() === '') {
+             throw new TypeError(J.funcName(this.constructor) +
+                                 '.addFrame: context must be a non-empty ' +
+                                 'string or undefined. Found: ' + context);             
+         }
+         if (this.panelDiv) {
+             if (this.panelDiv.className.indexOf('panel-') === -1) {
+                 W.addClass(this.panelDiv, 'panel-' + context);
+             }
+         }
+         if (this.bodyDiv) {
+             if (this.bodyDiv.className.indexOf('panel-body') === -1) {
+                 W.addClass(this.bodyDiv, 'panel-body');
+             }
+         }
+     };
+
+     /**
+      * ### Widget.removeFrame
+      *
+      * Removes the border and the margins around the bodyDiv element
+      *
+      * @see Widget.panelDiv
+      * @see Widget.bodyDiv
+      */
+     Widget.prototype.removeFrame = function() {
+         if (this.panelDiv) W.removeClass(this.panelDiv, 'panel-[a-z]*');
+         if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
+     };
 
 })(
     // Widgets works only in the browser environment.
