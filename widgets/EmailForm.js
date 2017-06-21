@@ -1,5 +1,5 @@
 /**
- * # Feedback
+ * # EmailForm
  * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
@@ -13,32 +13,30 @@
 
     var J = node.JSUS;
 
-    node.widgets.register('Feedback', Feedback);
+    node.widgets.register('EmailForm', EmailForm);
 
     // ## Meta-data
 
-    Feedback.version = '0.4.0';
-    Feedback.description = 'Displays a simple feedback form.';
+    EmailForm.version = '0.1.0';
+    EmailForm.description = 'Displays a simple email form.';
 
-    Feedback.title = 'Feedback';
-    Feedback.className = 'feedback';
+    EmailForm.title = 'Email';
+    EmailForm.className = 'emailform';
 
     // ## Dependencies
 
-    Feedback.dependencies = {
-        JSUS: {}
-    };
+    EmailForm.dependencies = { JSUS: {} };
 
     /**
-     * ## Feedback constructor
+     * ## EmailForm constructor
      *
-     * `Feedback` sends a feedback message to the server
+     * `EmailForm` sends a feedback message to the server
      *
      * @param {object} options configuration option
      */
-    function Feedback(options) {
+    function EmailForm(options) {
         /**
-         * ### Feedback.label
+         * ### EmailForm.label
          *
          * The label for the feedback element
          *
@@ -51,61 +49,61 @@
             this.label = options.label;
         }
         else {
-            throw new TypeError('Feedback constructor: options.label ' +
+            throw new TypeError('EmailForm constructor: options.label ' +
                                 'must be string or undefined. ' +
                                 'Found: ' + options.label);
         }
 
         /**
-         * ### Feedback.maxFeedbackLength
+         * ### EmailForm.maxEmailFormLength
          *
          * The maximum character length for feedback to be submitted
          *
          * Default: 800
          */
         if ('undefined' === typeof options.maxLength) {
-            this.maxFeedbackLength = 800;
+            this.maxEmailFormLength = 800;
         }
         else if (JSUS.isNumber(options.maxLength, 0) !== false) {
-            this.maxFeedbackLength = options.maxLength;
+            this.maxEmailFormLength = options.maxLength;
         }
         else {
-            throw new TypeError('Feedback constructor: options.maxLength ' +
+            throw new TypeError('EmailForm constructor: options.maxLength ' +
                                 'must be a number >= 0 or undefined. ' +
                                 'Found: ' + options.maxLength);
         }
 
         /**
-         * ### Feedback.minFeedbackLength
+         * ### EmailForm.minEmailFormLength
          *
          * The minimum character length for feedback to be submitted
          *
-         * If minFeedbackLength = 0, then there is no minimum length checked.
+         * If minEmailFormLength = 0, then there is no minimum length checked.
          * Default: 0
          */
         if ('undefined' === typeof options.minLength) {
-            this.minFeedbackLength = 0;
+            this.minEmailFormLength = 0;
         }
         else if (JSUS.isNumber(options.minLength, 0) !== false) {
-            this.minFeedbackLength = options.minLength;
+            this.minEmailFormLength = options.minLength;
         }
         else {
-            throw new TypeError('Feedback constructor: options.minLength ' +
+            throw new TypeError('EmailForm constructor: options.minLength ' +
                                 'must be a number >= 0 or undefined. ' +
                                 'Found: ' + options.minLength);
         }
 
         /**
-         * ### Feedback.feedbackHTML
+         * ### EmailForm.feedbackHTML
          *
          * The HTML element containing the form elements
          */
         this.feedbackHTML = null;
     }
 
-    // ## Feedback methods
+    // ## EmailForm methods
 
-    Feedback.prototype.createForm = function(showCount, minLength,
+    EmailForm.prototype.createForm = function(showCount, minLength,
                                              maxLength, labelText) {
 
         var feedbackHTML;
@@ -159,33 +157,33 @@
         });
 
         feedbackForm.addEventListener('input', function(event) {
-            checkFeedbackLength(feedbackTextarea, charCounter, submit,
+            checkEmailFormLength(feedbackTextarea, charCounter, submit,
                                 minLength, maxLength);
         });
 
-        checkFeedbackLength(feedbackTextarea, charCounter, submit,
+        checkEmailFormLength(feedbackTextarea, charCounter, submit,
                             minLength, maxLength);
 
         return feedbackHTML;
     };
 
     /**
-     * ### Feedback.append
+     * ### EmailForm.append
      *
      * Appends widget to this.bodyDiv
      */
-    Feedback.prototype.append = function() {
+    EmailForm.prototype.append = function() {
         this.feedbackHTML = this.createForm(this.showCharCount,
-                                            this.minFeedbackLength,
-                                            this.maxFeedbackLength,
+                                            this.minEmailFormLength,
+                                            this.maxEmailFormLength,
                                             this.label);
         this.bodyDiv.appendChild(this.feedbackHTML);
     };
 
-    Feedback.prototype.listeners = function() {};
+    EmailForm.prototype.listeners = function() {};
 
     // check the feedback length
-    function checkFeedbackLength(feedbackTextarea, charCounter,
+    function checkEmailFormLength(feedbackTextarea, charCounter,
                                  submit, minLength, maxLength) {
         var length;
 
