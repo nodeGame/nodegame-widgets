@@ -299,7 +299,7 @@
                 this.headingDiv.innerHTML = title;
             }
             else {
-                throw new TypeError(J.funcName(this.constructor) + 
+                throw new TypeError(J.funcName(this.constructor) +
                                     '.setTitle: title must be string, ' +
                                     'HTML element or falsy. Found: ' + title);
             }
@@ -391,7 +391,7 @@
          else if ('string' !== typeof context || context.trim() === '') {
              throw new TypeError(J.funcName(this.constructor) +
                                  '.addFrame: context must be a non-empty ' +
-                                 'string or undefined. Found: ' + context);             
+                                 'string or undefined. Found: ' + context);
          }
          if (this.panelDiv) {
              if (this.panelDiv.className.indexOf('panel-') === -1) {
@@ -609,11 +609,14 @@
             throw new TypeError('Widgets.get: widgetName must be string.' +
                                'Found: ' + widgetName);
         }
-        if (options && 'object' !== typeof options) {
+        if (!options) {
+            options = {};
+        }
+        else if ('object' !== typeof options) {
             throw new TypeError('Widgets.get: options must be object or ' +
                                 'undefined. Found: ' + options);
         }
-        options = options || {};
+        
         that = this;
 
         WidgetPrototype = J.getNestedValue(widgetName, this.widgets);
@@ -769,6 +772,8 @@
      * @see Widgets.get
      */
     Widgets.prototype.append = function(w, root, options) {
+        var tmp;
+
         if ('string' !== typeof w && 'object' !== typeof w) {
             throw new TypeError('Widgets.append: w must be string or object. ' +
                                'Found: ' + w);
@@ -798,18 +803,20 @@
         // In this case a dependencies check is done.
         if ('string' === typeof w) w = this.get(w, options);
 
-        w.panelDiv = appendDiv(root, {
-            attributes: {
-                className: ['ng_widget', 'panel', 'panel-default', w.className]
-            }
-        });
+        // Add panelDiv (with or without frame around).
+        tmp = options.frame === false ?
+            [ 'ng_widget', 'panel', w.className ] :
+            [ 'ng_widget', 'panel', 'panel-default', w.className ];
+
+        w.panelDiv = appendDiv(root, { attributes: { className: tmp } });
 
         // Optionally add title.
-        if (w.title) w.setTitle(w.title);
+        if (options.title !== false && w.title) w.setTitle(w.title);
 
-        // Add body.
+        // Add body (with or without margins around).
+        tmp = options.frame !== false ? { className: 'panel-body' } : undefined;
         w.bodyDiv = appendDiv(w.panelDiv, {
-            attributes: {className: 'panel-body'}
+            attributes: tmp
         });
 
         // Optionally add footer.
@@ -7639,7 +7646,9 @@
          *
          * Default: new Feedback(option)
          */
-        this.feedback = node.widgets.get('Feedback', options);
+        if (this.showFeedbackForm) {
+            this.feedback = node.widgets.get('Feedback');
+        }
 
         /**
          * ### EndScreen.endScreenElement
@@ -7779,7 +7788,10 @@
         }
 
         if (this.showFeedbackForm) {
-            node.widgets.append(this.feedback, endScreenElement);
+            node.widgets.append(this.feedback, endScreenElement, {
+                title: false,
+                frame: false
+            });
         }
 
         return endScreenElement;

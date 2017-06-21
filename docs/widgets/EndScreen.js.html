@@ -466,7 +466,9 @@ MIT Licensed</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">feedback</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">feedback</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
 
 
 </pre></div>
@@ -643,7 +645,10 @@ null initially, element added on append()</p>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">feedback</span><span class="p">,</span> <span class="nx">endScreenElement</span><span class="p">);</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">feedback</span><span class="p">,</span> <span class="nx">endScreenElement</span><span class="p">,</span> <span class="p">{</span>
+                <span class="nx">title</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">frame</span><span class="o">:</span> <span class="kc">false</span>
+            <span class="p">});</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="nx">endScreenElement</span><span class="p">;</span>

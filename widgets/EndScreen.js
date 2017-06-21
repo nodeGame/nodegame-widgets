@@ -196,7 +196,9 @@
          *
          * Default: new Feedback(option)
          */
-        this.feedback = node.widgets.get('Feedback', options);
+        if (this.showFeedbackForm) {
+            this.feedback = node.widgets.get('Feedback');
+        }
 
         /**
          * ### EndScreen.endScreenElement
@@ -336,7 +338,10 @@
         }
 
         if (this.showFeedbackForm) {
-            node.widgets.append(this.feedback, endScreenElement);
+            node.widgets.append(this.feedback, endScreenElement, {
+                title: false,
+                frame: false
+            });
         }
 
         return endScreenElement;
