@@ -1032,7 +1032,6 @@ default cleanup operations.</p>
         <span class="nx">W</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="s1">&#39;panel-&#39;</span> <span class="o">+</span> <span class="nx">context</span><span class="p">);</span>
     <span class="p">};</span>
 
-<span class="p">})(</span>
 
 </pre></div>
         </td>
@@ -1041,6 +1040,41 @@ default cleanup operations.</p>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+</div>
+
+<div class="highlight"><pre><code><span class="cm">/**</span>
+<span class="cm"> * ### Widget.removeFrame</span>
+<span class="cm"> *</span>
+<span class="cm"> * Removes</span>
+<span class="cm"> *</span>
+<span class="cm"> * Context are defined in Bootstrap framework.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param {string} context The type of the context</span>
+<span class="cm"> */</span>
+<span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setContext</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">funcName</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.setContext: &#39;</span> <span class="o">+</span>
+                            <span class="s1">&#39;footer must be string. Found: &#39;</span> <span class="o">+</span> <span class="nx">context</span><span class="p">);</span>
+
+    <span class="p">}</span>
+    <span class="nx">W</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="s1">&#39;panel-[a-z]*&#39;</span><span class="p">);</span>
+    <span class="nx">W</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="s1">&#39;panel-&#39;</span> <span class="o">+</span> <span class="nx">context</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div>
+
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="p">})(</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>
