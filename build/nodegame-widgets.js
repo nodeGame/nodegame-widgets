@@ -7421,7 +7421,7 @@
     EndScreen.title = 'End Screen';
     EndScreen.className = 'end-screen';
 
-    // ## Dependencies 
+    // ## Dependencies
 
     // Checked when the widget is created.
     EndScreen.dependencies = { JSUS: {} };
@@ -7760,7 +7760,7 @@
 
 /**
  * # Feedback
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -7777,7 +7777,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '0.3';
+    Feedback.version = '0.4';
     Feedback.description = 'Displays a simple feedback form.';
 
     Feedback.title = 'Feedback';
@@ -7865,7 +7865,9 @@
 
     // ## Feedback methods
 
-    Feedback.prototype.createForm = function(showCount, minLength, maxLength, labelText) {
+    Feedback.prototype.createForm = function(showCount, minLength,
+                                             maxLength, labelText) {
+
         var feedbackHTML;
         var feedbackForm;
         var feedbackLabel;
@@ -7917,10 +7919,12 @@
         });
 
         feedbackForm.addEventListener('input', function(event) {
-            checkFeedbackLength(feedbackTextarea, charCounter, submit, minLength, maxLength);
+            checkFeedbackLength(feedbackTextarea, charCounter, submit,
+                                minLength, maxLength);
         });
 
-        checkFeedbackLength(feedbackTextarea, charCounter, submit, minLength, maxLength);
+        checkFeedbackLength(feedbackTextarea, charCounter, submit,
+                            minLength, maxLength);
 
         return feedbackHTML;
     };
@@ -7962,7 +7966,8 @@
         else {
           submit.disabled = false;
 
-          charCounter.innerHTML = (maxLength - length) + ' characters remaining.';
+          charCounter.innerHTML = (maxLength - length) +
+                ' characters remaining.';
           charCounter.style.backgroundColor = '#dff0d8';
         }
     }
