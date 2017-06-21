@@ -245,7 +245,7 @@
             totalWinElement = document.createElement('div');
 
             totalWinParaElement = document.createElement('p');
-            totalWinParaElement.innerHTML = 'Your total win: ';
+            totalWinParaElement.innerHTML = '<strong>Your total win:</strong>';
 
             totalWinInputElement = document.createElement('input');
             totalWinInputElement.className = 'endscreen-total form-control';
@@ -262,7 +262,7 @@
             exitCodeElement = document.createElement('div');
 
             exitCodeParaElement = document.createElement('p');
-            exitCodeParaElement.innerHTML = 'Your exit code: ';
+            exitCodeParaElement.innerHTML = '<strong>Your exit code:</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
@@ -351,17 +351,14 @@
         // Listeners added here are automatically removed
         // when the widget is destroyed.
         node.on.data('WIN', function(message) {
-            var totalWin;
-            var exitCode;
             var data;
-            var totalWin, exitCode;
+            var preWin, totalWin, exitCode;
             var totalHTML, exitCodeHTML;
-            var i, len;
 
             data = message.data;
             exitCode = data.exit;
 
-            totalWin = JSUS.isNumber(data.total, 0);
+            totalWin = J.isNumber(data.total, 0);
             if (totalWin === false) {
                 node.err('EndScreen error, invalid total win: ' + data.total);
                 totalWin = 'Error: invalid total win.';
@@ -372,7 +369,15 @@
                              data.partials);
                 }
                 else {
-                    totalWin = data.partials.join(' + ') + ' = ' + totalWin;
+                    preWin = data.partials.join(' + ');
+
+                    if ('undefined' !== typeof data.totalRaw) {
+                        preWin += ' = ' + data.totalRaw;
+                        if ('undefined' !== typeof data.exchangeRate) {
+                            preWin += '*' + data.exchangeRate;
+                        }
+                        totalWin = preWin + ' = ' + totalWin;
+                    }
                 }
             }
 

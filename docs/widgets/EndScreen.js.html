@@ -552,7 +552,7 @@ null initially, element added on append()</p>
             <span class="nx">totalWinElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
 
             <span class="nx">totalWinParaElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
-            <span class="nx">totalWinParaElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Your total win: &#39;</span><span class="p">;</span>
+            <span class="nx">totalWinParaElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;strong&gt;Your total win:&lt;/strong&gt;&#39;</span><span class="p">;</span>
 
             <span class="nx">totalWinInputElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
             <span class="nx">totalWinInputElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;endscreen-total form-control&#39;</span><span class="p">;</span>
@@ -569,7 +569,7 @@ null initially, element added on append()</p>
             <span class="nx">exitCodeElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
 
             <span class="nx">exitCodeParaElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
-            <span class="nx">exitCodeParaElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Your exit code: &#39;</span><span class="p">;</span>
+            <span class="nx">exitCodeParaElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;strong&gt;Your exit code:&lt;/strong&gt;&#39;</span><span class="p">;</span>
 
             <span class="nx">exitCodeInputElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
             <span class="nx">exitCodeInputElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;endscreen-exit-code &#39;</span> <span class="o">+</span>
@@ -680,17 +680,14 @@ when the widget is destroyed.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;WIN&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">totalWin</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">exitCode</span><span class="p">;</span>
             <span class="kd">var</span> <span class="nx">data</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">totalWin</span><span class="p">,</span> <span class="nx">exitCode</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">preWin</span><span class="p">,</span> <span class="nx">totalWin</span><span class="p">,</span> <span class="nx">exitCode</span><span class="p">;</span>
             <span class="kd">var</span> <span class="nx">totalHTML</span><span class="p">,</span> <span class="nx">exitCodeHTML</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
 
             <span class="nx">data</span> <span class="o">=</span> <span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
             <span class="nx">exitCode</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">exit</span><span class="p">;</span>
 
-            <span class="nx">totalWin</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">total</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="nx">totalWin</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">total</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">totalWin</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;EndScreen error, invalid total win: &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">total</span><span class="p">);</span>
                 <span class="nx">totalWin</span> <span class="o">=</span> <span class="s1">&#39;Error: invalid total win.&#39;</span><span class="p">;</span>
@@ -701,7 +698,15 @@ when the widget is destroyed.</p>
                              <span class="nx">data</span><span class="p">.</span><span class="nx">partials</span><span class="p">);</span>
                 <span class="p">}</span>
                 <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">totalWin</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">partials</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; + &#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="nx">totalWin</span><span class="p">;</span>
+                    <span class="nx">preWin</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">partials</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; + &#39;</span><span class="p">);</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">data</span><span class="p">.</span><span class="nx">totalRaw</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">preWin</span> <span class="o">+=</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">totalRaw</span><span class="p">;</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">data</span><span class="p">.</span><span class="nx">exchangeRate</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">preWin</span> <span class="o">+=</span> <span class="s1">&#39;*&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">exchangeRate</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="nx">totalWin</span> <span class="o">=</span> <span class="nx">preWin</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="nx">totalWin</span><span class="p">;</span>
+                    <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
 
