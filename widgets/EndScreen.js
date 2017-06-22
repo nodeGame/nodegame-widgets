@@ -29,7 +29,11 @@
     // ## Dependencies
 
     // Checked when the widget is created.
-    EndScreen.dependencies = { JSUS: {} };
+    EndScreen.dependencies = {
+        JSUS: {},
+        Feedback: {},
+        EmailForm: {}
+    };
 
     /**
      * ## EndScreen constructor
@@ -190,11 +194,22 @@
         }
 
         /**
+         * ### EndScreen.emailForm
+         *
+         * EmailForm widget element
+         *
+         * @see EmailForm
+         */
+        if (this.showEmailForm) {
+            this.emailForm = node.widgets.get('EmailForm');
+        }
+
+        /**
          * ### EndScreen.feedback
          *
          * Feedback widget element
          *
-         * Default: new Feedback(option)
+         * @see Feedback
          */
         if (this.showFeedbackForm) {
             this.feedback = node.widgets.get('Feedback');
@@ -225,12 +240,6 @@
         var headerElement, messageElement;
         var totalWinElement, totalWinParaElement, totalWinInputElement;
         var exitCodeElement, exitCodeParaElement, exitCodeInputElement;
-        var emailElement, emailFormElement, emailLabelElement;
-        var emailInputElement, emailButtonElement;
-        var emailErrorString;
-
-        emailErrorString = 'Not a valid email address, ' +
-                           'please correct it and submit again.';
 
         endScreenElement = document.createElement('div');
         endScreenElement.className = 'endscreen';
@@ -279,62 +288,13 @@
         }
 
         if (this.showEmailForm) {
-            emailElement = document.createElement('div');
-            emailFormElement = document.createElement('form');
-            emailFormElement.className = 'endscreen-email-form';
-
-            emailLabelElement = document.createElement('label');
-            emailLabelElement.innerHTML = 'Would you like to be contacted ' +
-                                          'again for future experiments? ' +
-                                          'If so, leave your email here ' +
-                                          'and press submit: ';
-
-            emailInputElement = document.createElement('input');
-            emailInputElement.setAttribute('type', 'text');
-            emailInputElement.setAttribute('placeholder', 'Email');
-            emailInputElement.className = 'endscreen-email-input form-control';
-
-            emailButtonElement = document.createElement('input');
-            emailButtonElement.setAttribute('type', 'submit');
-            emailButtonElement.setAttribute('value', 'Submit email');
-            emailButtonElement.className = 'btn btn-lg btn-primary ' +
-                                           'endscreen-email-submit';
-
-            emailFormElement.appendChild(emailLabelElement);
-            emailFormElement.appendChild(emailInputElement);
-            emailFormElement.appendChild(emailButtonElement);
-
-            emailElement.appendChild(emailFormElement);
-            endScreenElement.appendChild(emailElement);
-
-            emailFormElement.addEventListener('submit', function(event) {
-                var email, indexAt, indexDot;
-
-                event.preventDefault();
-                email = emailInputElement.value;
-
-                if (email.trim().length > 5) {
-                    indexAt = email.indexOf('@');
-                    if (indexAt !== -1 &&
-                        indexAt !== 0 &&
-                        indexAt !== (email.length-1)) {
-
-                        indexDot = email.lastIndexOf('.');
-                        if (indexDot !== -1 &&
-                            indexDot !== (email.length-1) &&
-                            indexDot > (indexAt+1)) {
-
-                            node.say('email', 'SERVER', email);
-
-                            emailButtonElement.disabled = true;
-                            emailInputElement.disabled = true;
-                            emailButtonElement.value = 'Sent!';
-                        }
-                    }
-                }
-
-                emailButtonElement.value = emailErrorString;
-            }, true);
+            node.widgets.append(this.emailForm, endScreenElement, {
+                title: false,
+                frame: false,
+                label: 'Would you like to be contacted again for future ' +
+                    'experiments? If so, leave your email here and ' +
+                    'press submit: '
+            });
         }
 
         if (this.showFeedbackForm) {

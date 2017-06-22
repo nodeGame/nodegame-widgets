@@ -52,6 +52,9 @@
         <a href="#endscreen.totalwincurrency">EndScreen.totalWinCurrency</a>
       </div>
       <div class="heading h3">
+        <a href="#endscreen.emailform">EndScreen.emailForm</a>
+      </div>
+      <div class="heading h3">
         <a href="#endscreen.feedback">EndScreen.feedback</a>
       </div>
       <div class="heading h3">
@@ -155,7 +158,11 @@ MIT Licensed</p>
 <p>Checked when the widget is created.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span> <span class="p">};</span>
+    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">Feedback</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">EmailForm</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">};</span>
 
 
 </pre></div>
@@ -451,6 +458,37 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="endscreen.emailform">
+  <h3>
+    <a href="#endscreen.emailform" name="endscreen.emailform" class="pilcrow">&#182;</a>
+    EndScreen.emailForm
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>EmailForm widget element</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">EmailForm
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">emailForm</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;EmailForm&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="endscreen.feedback">
   <h3>
     <a href="#endscreen.feedback" name="endscreen.feedback" class="pilcrow">&#182;</a>
@@ -460,8 +498,13 @@ MIT Licensed</p>
 
   </div>
   <div class="body"><p>Feedback widget element</p>
-
-<p>Default: new Feedback(option)</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Feedback
+</span>
+    </div>
   </div>
 </div>
         </td>
@@ -505,7 +548,7 @@ null initially, element added on append()</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Implements the Widget.append method.</p>
         </td>
@@ -522,7 +565,7 @@ null initially, element added on append()</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>makes the end screen</p>
         </td>
@@ -532,12 +575,6 @@ null initially, element added on append()</p>
         <span class="kd">var</span> <span class="nx">headerElement</span><span class="p">,</span> <span class="nx">messageElement</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">totalWinElement</span><span class="p">,</span> <span class="nx">totalWinParaElement</span><span class="p">,</span> <span class="nx">totalWinInputElement</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">exitCodeElement</span><span class="p">,</span> <span class="nx">exitCodeParaElement</span><span class="p">,</span> <span class="nx">exitCodeInputElement</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">emailElement</span><span class="p">,</span> <span class="nx">emailFormElement</span><span class="p">,</span> <span class="nx">emailLabelElement</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">emailInputElement</span><span class="p">,</span> <span class="nx">emailButtonElement</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">emailErrorString</span><span class="p">;</span>
-
-        <span class="nx">emailErrorString</span> <span class="o">=</span> <span class="s1">&#39;Not a valid email address, &#39;</span> <span class="o">+</span>
-                           <span class="s1">&#39;please correct it and submit again.&#39;</span><span class="p">;</span>
 
         <span class="nx">endScreenElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
         <span class="nx">endScreenElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;endscreen&#39;</span><span class="p">;</span>
@@ -586,7 +623,7 @@ null initially, element added on append()</p>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">feedback</span><span class="p">,</span> <span class="nx">endScreenElement</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">emailForm</span><span class="p">,</span> <span class="nx">endScreenElement</span><span class="p">,</span> <span class="p">{</span>
                 <span class="nx">title</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
                 <span class="nx">frame</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
                 <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Would you like to be contacted again for future &#39;</span> <span class="o">+</span>
@@ -612,7 +649,7 @@ null initially, element added on append()</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Implements the Widget.listeners method.</p>
         </td>
@@ -629,7 +666,7 @@ null initially, element added on append()</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Listeners added here are automatically removed
 when the widget is destroyed.</p>
