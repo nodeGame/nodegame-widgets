@@ -74,11 +74,11 @@
         }
 
         /**
-         * ### EmailForm.
+         * ### EmailForm.onsubmit
          *
-         * The error message in case of invalid email format
+         * Options passed to `getValues` when the submit button is pressed
          *
-         * Notice! It is displayed only if the submit button is displayed.
+         * @see Feedback.getValues
          */
         if (!options.onsubmit) {
             this.onsubmit = { emailOnly: true };

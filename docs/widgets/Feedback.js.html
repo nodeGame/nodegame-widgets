@@ -34,13 +34,40 @@
         <a href="#feedback.label">Feedback.label</a>
       </div>
       <div class="heading h3">
-        <a href="#feedback.maxfeedbacklength">Feedback.maxFeedbackLength</a>
+        <a href="#feedback.maxlength">Feedback.maxLength</a>
       </div>
       <div class="heading h3">
-        <a href="#feedback.minfeedbacklength">Feedback.minFeedbackLength</a>
+        <a href="#feedback.minlength">Feedback.minLength</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.maxattemptlength">Feedback.maxAttemptLength</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.showcharcount">Feedback.showCharCount</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.onsubmit">Feedback.onsubmit</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback._feedback">Feedback._feedback</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.attempts">Feedback.attempts</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.timebegin">Feedback.timeBegin</a>
       </div>
       <div class="heading h3">
         <a href="#feedback.feedbackhtml">Feedback.feedbackHTML</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.textareaelement">Feedback.textareaElement</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.charcounter">Feedback.charCounter</a>
+      </div>
+      <div class="heading h3">
+        <a href="#feedback.submitbutton">Feedback.submitButton</a>
       </div>
       <div class="heading h2">
         <a href="#feedback%20methods">Feedback methods</a>
@@ -74,9 +101,6 @@
       </div>
       <div class="heading h2">
         <a href="#helper%20functions.">Helper functions.</a>
-      </div>
-      <div class="heading h3">
-        <a href="#checkfeedbacklength">checkFeedbackLength</a>
       </div>
       <div class="heading h3">
         <a href="#getfeedback">getFeedback</a>
@@ -179,7 +203,15 @@ MIT Licensed</p>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">options</span>
       <span class="dox_type">object</span>
-      <span>configuration option</span>
+      <span>Optional. Configuration option.
+  Available options:
+
+<ul>
+<li>showCount: If TRUE, the character count is displayed</li>
+<li>minLength: The minimum number of characters in textarea</li>
+<li>maxLength: The max number of characters in textarea</li>
+<li>label: The text to display above the textarea</li>
+</ul></span>
     </div>
   </div>
 </div>
@@ -228,10 +260,10 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="feedback.maxfeedbacklength">
+<div class="pilwrap" id="feedback.maxlength">
   <h3>
-    <a href="#feedback.maxfeedbacklength" name="feedback.maxfeedbacklength" class="pilcrow">&#182;</a>
-    Feedback.maxFeedbackLength
+    <a href="#feedback.maxlength" name="feedback.maxlength" class="pilcrow">&#182;</a>
+    Feedback.maxLength
   </h3>
 </div>
 
@@ -244,10 +276,10 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">maxFeedbackLength</span> <span class="o">=</span> <span class="mi">800</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span> <span class="o">=</span> <span class="mi">800</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">maxFeedbackLength</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Feedback constructor: options.maxLength &#39;</span> <span class="o">+</span>
@@ -262,33 +294,219 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="feedback.minfeedbacklength">
+<div class="pilwrap" id="feedback.minlength">
   <h3>
-    <a href="#feedback.minfeedbacklength" name="feedback.minfeedbacklength" class="pilcrow">&#182;</a>
-    Feedback.minFeedbackLength
+    <a href="#feedback.minlength" name="feedback.minlength" class="pilcrow">&#182;</a>
+    Feedback.minLength
   </h3>
 </div>
 
   </div>
   <div class="body"><p>The minimum character length for feedback to be submitted</p>
 
-<p>If minFeedbackLength = 0, then there is no minimum length checked.
+<p>If minLength = 0, then there is no minimum length checked.
 Default: 0</p>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">minFeedbackLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">minLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">minFeedbackLength</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">minLength</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Feedback constructor: options.minLength &#39;</span> <span class="o">+</span>
                                 <span class="s1">&#39;must be a number &gt;= 0 or undefined. &#39;</span> <span class="o">+</span>
                                 <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="p">);</span>
         <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.maxattemptlength">
+  <h3>
+    <a href="#feedback.maxattemptlength" name="feedback.maxattemptlength" class="pilcrow">&#182;</a>
+    Feedback.maxAttemptLength
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The maximum character length for an attempt to submit feedback</p>
+
+<p>Attempts are stored in the attempts array. This allows to store
+longer texts than accepts feedbacks</p>
+
+<p>Default: Max(2000, maxLength)</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">maxAttemptLength</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">maxAttemptLength</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">,</span>
+                                                     <span class="nx">options</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Feedback constructor: options.maxLength &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;must be a number &gt;= 0 or undefined. &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.showcharcount">
+  <h3>
+    <a href="#feedback.showcharcount" name="feedback.showcharcount" class="pilcrow">&#182;</a>
+    Feedback.showCharCount
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>If TRUE, the character count is shown</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Feedback.charCounter
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showCount</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">showCharCount</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">showCharCount</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">options</span><span class="p">.</span><span class="nx">showCount</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.onsubmit">
+  <h3>
+    <a href="#feedback.onsubmit" name="feedback.onsubmit" class="pilcrow">&#182;</a>
+    Feedback.onsubmit
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Options passed to <code>getValues</code> when the submit button is pressed</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Feedback.getValues
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onsubmit</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">feedbackOnly</span><span class="o">:</span> <span class="kc">true</span> <span class="p">};</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onsubmit</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Feedback constructor: options.onsubmit &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;must be string or object. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback._feedback">
+  <h3>
+    <a href="#feedback._feedback" name="feedback._feedback" class="pilcrow">&#182;</a>
+    Feedback._feedback
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Internal storage of the value of the feedback</p>
+
+<p>This value is used when the form has not been created yet</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">Feedback.createForm
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_feedback</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">feedback</span> <span class="o">||</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.attempts">
+  <h3>
+    <a href="#feedback.attempts" name="feedback.attempts" class="pilcrow">&#182;</a>
+    Feedback.attempts
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Invalid feedbacks tried</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span> <span class="o">=</span> <span class="p">[];</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.timebegin">
+  <h3>
+    <a href="#feedback.timebegin" name="feedback.timebegin" class="pilcrow">&#182;</a>
+    Feedback.timeBegin
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Time when feedback was inserted (first character, last attempt)</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timeBegin</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
 </pre></div>
@@ -311,6 +529,73 @@ Default: 0</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.textareaelement">
+  <h3>
+    <a href="#feedback.textareaelement" name="feedback.textareaelement" class="pilcrow">&#182;</a>
+    Feedback.textareaElement
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The HTML textarea element containing the feedback</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">textareaElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.charcounter">
+  <h3>
+    <a href="#feedback.charcounter" name="feedback.charcounter" class="pilcrow">&#182;</a>
+    Feedback.charCounter
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The HTML span element containing the characters count</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">charCounter</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="feedback.submitbutton">
+  <h3>
+    <a href="#feedback.submitbutton" name="feedback.submitbutton" class="pilcrow">&#182;</a>
+    Feedback.submitButton
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The HTML submit button</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
     <span class="p">}</span>
 
 
@@ -344,43 +629,22 @@ Default: 0</p>
 </div>
 
   </div>
-  <div class="body"><p>Builds the HTML forms </p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">showCount</span>
-      <span class="dox_type">boolean</span>
-      <span>If TRUE, the character count is displayed</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">minLength</span>
-      <span class="dox_type">number</span>
-      <span>The minimum number of characters in textarea</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">maxLength</span>
-      <span class="dox_type">number</span>
-      <span>The max number of characters in textarea</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">labelText</span>
-      <span class="dox_type">string</span>
-      <span>The text to display above the textarea</span>
-    </div>
+  <div class="body"><p>Builds the HTML forms</p>
   </div>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createForm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">showCount</span><span class="p">,</span> <span class="nx">minLength</span><span class="p">,</span>
-                                             <span class="nx">maxLength</span><span class="p">,</span> <span class="nx">labelText</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createForm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">feedbackHTML</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">feedbackForm</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">feedbackLabel</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">feedbackTextarea</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">submit</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">charCounter</span><span class="p">;</span>
+
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
         <span class="nx">feedbackHTML</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
         <span class="nx">feedbackHTML</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;feedback&#39;</span><span class="p">;</span>
@@ -391,7 +655,7 @@ Default: 0</p>
 
         <span class="nx">feedbackLabel</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">);</span>
         <span class="nx">feedbackLabel</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;for&#39;</span><span class="p">,</span> <span class="s1">&#39;feedback-input&#39;</span><span class="p">);</span>
-        <span class="nx">feedbackLabel</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">labelText</span><span class="p">;</span>
+        <span class="nx">feedbackLabel</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">label</span><span class="p">;</span>
         <span class="nx">feedbackForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">feedbackLabel</span><span class="p">);</span>
 
         <span class="nx">feedbackTextarea</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">);</span>
@@ -406,10 +670,12 @@ Default: 0</p>
         <span class="nx">submit</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;Submit feedback&#39;</span><span class="p">);</span>
         <span class="nx">feedbackForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">submit</span><span class="p">);</span>
 
-        <span class="nx">charCounter</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
-        <span class="nx">charCounter</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;feedback-char-count badge&#39;</span><span class="p">;</span>
-        <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">maxLength</span><span class="p">;</span>
-        <span class="nx">feedbackForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">charCounter</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showCharCount</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">charCounter</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
+            <span class="nx">charCounter</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;feedback-char-count badge&#39;</span><span class="p">;</span>
+            <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">;</span>
+            <span class="nx">feedbackForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">charCounter</span><span class="p">);</span>
+        <span class="p">}</span>
 
 
 </pre></div>
@@ -418,28 +684,15 @@ Default: 0</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Add listeners.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">J</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">feedbackForm</span><span class="p">,</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">feedback</span><span class="p">;</span>
-
             <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
-
-            <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">feedbackTextarea</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">();</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="s1">&#39;feedback&#39;</span><span class="p">,</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">,</span> <span class="nx">feedback</span><span class="p">);</span>
-
-            <span class="nx">submit</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="nx">feedbackTextarea</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-
+            <span class="nx">that</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">);</span>
             <span class="nx">submit</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;Sent!&#39;</span><span class="p">);</span>
-        <span class="p">});</span>
-
-        <span class="nx">J</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">feedbackForm</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">checkFeedbackLength</span><span class="p">(</span><span class="nx">feedbackTextarea</span><span class="p">,</span> <span class="nx">charCounter</span><span class="p">,</span> <span class="nx">submit</span><span class="p">,</span>
-                                <span class="nx">minLength</span><span class="p">,</span> <span class="nx">maxLength</span><span class="p">);</span>
         <span class="p">});</span>
 
 
@@ -449,13 +702,71 @@ Default: 0</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+
+<div class="highlight"><pre><code>    <span class="nx">J</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">feedbackForm</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">checkLength</span><span class="p">(</span><span class="nx">feedbackTextarea</span><span class="p">,</span> <span class="nx">charCounter</span><span class="p">,</span> <span class="nx">submit</span><span class="p">,</span>
+                            <span class="nx">minLength</span><span class="p">,</span> <span class="nx">maxLength</span><span class="p">);</span>
+    <span class="p">});</span>
+</code></pre></div>
+
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+        <span class="nx">J</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">feedbackForm</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">verifyFeedback</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+        <span class="p">});</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Check it once at the beginning.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">checkFeedbackLength</span><span class="p">(</span><span class="nx">feedbackTextarea</span><span class="p">,</span> <span class="nx">charCounter</span><span class="p">,</span> <span class="nx">submit</span><span class="p">,</span>
-                            <span class="nx">minLength</span><span class="p">,</span> <span class="nx">maxLength</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">verifyFeedback</span><span class="p">();</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+
+<div class="highlight"><pre><code>   <span class="nx">checkLength</span><span class="p">(</span><span class="nx">feedbackTextarea</span><span class="p">,</span> <span class="nx">charCounter</span><span class="p">,</span> <span class="nx">submit</span><span class="p">,</span>
+                       <span class="nx">minLength</span><span class="p">,</span> <span class="nx">maxLength</span><span class="p">);</span>
+</code></pre></div>
+
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>Store references.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span> <span class="o">=</span> <span class="nx">submit</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span> <span class="o">=</span> <span class="nx">feedbackHTML</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">textareaElement</span> <span class="o">=</span> <span class="nx">feedbackTextarea</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">charCounter</span> <span class="o">=</span> <span class="nx">charCounter</span> <span class="o">||</span> <span class="kc">null</span><span class="p">;</span>
 
         <span class="k">return</span> <span class="nx">feedbackHTML</span><span class="p">;</span>
     <span class="p">};</span>
@@ -482,8 +793,9 @@ Default: 0</p>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">markAttempt</span>
       <span class="dox_type">boolean</span>
-      <span>Optional. If TRUE, the current email
-   is added to the attempts array. Default: TRUE</span>
+      <span>Optional. If TRUE, the current feedback
+   is added to the attempts array (if too long, may be truncateed).
+   Default: TRUE</span>
     </div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name">updateUI</span>
@@ -495,7 +807,7 @@ Default: 0</p>
     <div class="dox_tag_detail">
       <span class="dox_tag_name"></span>
       <span class="dox_type">boolean</span>
-      <span>TRUE, if the email is valid</span>
+      <span>TRUE, if the feedback is valid</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -503,7 +815,7 @@ Default: 0</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">getEmail
+      <span class="dox_type">getFeedback
 </span>
     </div>
   </div>
@@ -511,24 +823,80 @@ Default: 0</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">verifyFeedback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">markAttempt</span><span class="p">,</span> <span class="nx">updateUI</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
-        <span class="nx">email</span> <span class="o">=</span> <span class="nx">getEmail</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-        <span class="nx">res</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">isEmail</span><span class="p">(</span><span class="nx">email</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">res</span> <span class="o">&amp;&amp;</span> <span class="nx">updateUI</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Sent!&#39;</span><span class="p">;</span>
-            <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">feedback</span><span class="p">,</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">updateCount</span><span class="p">,</span> <span class="nx">updateColor</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">submitButton</span><span class="p">,</span> <span class="nx">charCounter</span><span class="p">;</span>
+
+        <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">getFeedback</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="nx">length</span> <span class="o">=</span> <span class="nx">feedback</span> <span class="o">?</span> <span class="nx">feedback</span><span class="p">.</span><span class="nx">length</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="nx">submitButton</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span><span class="p">;</span>
+        <span class="nx">charCounter</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">charCounter</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">minLength</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="nx">updateCount</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">minLength</span> <span class="o">-</span> <span class="nx">length</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; characters needed.&#39;</span><span class="p">;</span>
+            <span class="nx">updateColor</span> <span class="o">=</span> <span class="s1">&#39;#f2dede&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="nx">updateCount</span> <span class="o">=</span> <span class="p">(</span><span class="nx">length</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; characters over.&#39;</span><span class="p">;</span>
+            <span class="nx">updateColor</span> <span class="o">=</span> <span class="s1">&#39;#f2dede&#39;</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">updateUI</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">errString</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">markAttempt</span> <span class="o">||</span> <span class="nx">markAttempt</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">email</span><span class="p">);</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">updateCount</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span> <span class="o">-</span> <span class="nx">length</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; characters remaining.&#39;</span><span class="p">;</span>
+            <span class="nx">updateColor</span> <span class="o">=</span> <span class="s1">&#39;#dff0d8&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">updateUI</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">submitButton</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">res</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">charCounter</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">charCounter</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">updateColor</span><span class="p">;</span>
+                <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">updateCount</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">res</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">markAttempt</span> <span class="o">||</span> <span class="nx">markAttempt</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">feedback</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">feedback</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">feedback</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+
+<div class="highlight"><pre><code>    <span class="nx">res</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="c1">// TODO: check if valid.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">res</span> <span class="o">&amp;&amp;</span> <span class="nx">updateUI</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Sent!&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">updateUI</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">errString</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">markAttempt</span> <span class="o">||</span> <span class="nx">markAttempt</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">feedback</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">feedback</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">feedback</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
         <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
     <span class="p">};</span>
 
@@ -553,10 +921,7 @@ Default: 0</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showCharCount</span><span class="p">,</span>
-                                            <span class="k">this</span><span class="p">.</span><span class="nx">minFeedbackLength</span><span class="p">,</span>
-                                            <span class="k">this</span><span class="p">.</span><span class="nx">maxFeedbackLength</span><span class="p">,</span>
-                                            <span class="k">this</span><span class="p">.</span><span class="nx">label</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span><span class="p">);</span>
     <span class="p">};</span>
 
@@ -584,7 +949,7 @@ Default: 0</p>
         <span class="kd">var</span> <span class="nx">feedback</span><span class="p">;</span>
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">feedback</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">randomString</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxFeedbackLength</span><span class="p">),</span>
+            <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">randomString</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">),</span>
                                       <span class="s1">&#39;aA_1&#39;</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
@@ -594,7 +959,7 @@ Default: 0</p>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">_feedback</span> <span class="o">=</span> <span class="nx">feedback</span><span class="p">;</span>
         <span class="k">else</span> <span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">feedback</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeInputBegin</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeInputEnd</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timeInputBegin</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
     <span class="p">};</span>
 
 
@@ -652,7 +1017,7 @@ Default: 0</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">Feedback.verifyInput</span>
+      <span class="dox_type">Feedback.verifyFeedback</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -665,12 +1030,13 @@ Default: 0</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">feedback</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
+
         <span class="nx">opts</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">||</span> <span class="p">{};</span>
 
         <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">getFeedback</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">verify</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyInput</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">markAttempt</span><span class="p">,</span>
-                                                          <span class="nx">opts</span><span class="p">.</span><span class="nx">updateUI</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">verify</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyFeedback</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">markAttempt</span><span class="p">,</span>
+                                                             <span class="nx">opts</span><span class="p">.</span><span class="nx">updateUI</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">res</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">updateUI</span> <span class="o">||</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">highlight</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlight</span><span class="p">();</span>
 
@@ -681,7 +1047,7 @@ Default: 0</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Only value.</p>
         </td>
@@ -689,7 +1055,6 @@ Default: 0</p>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">opts</span><span class="p">.</span><span class="nx">feedbackOnly</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">feedback</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="nx">timeBegin</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeInputBegin</span><span class="p">,</span>
-                <span class="nx">timeEnd</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeInputEnd</span><span class="p">,</span>
                 <span class="nx">feedback</span><span class="o">:</span> <span class="nx">feedback</span><span class="p">,</span>
                 <span class="nx">attempts</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span><span class="p">,</span>
                 <span class="nx">valid</span><span class="o">:</span> <span class="nx">res</span>
@@ -703,7 +1068,7 @@ Default: 0</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Send the message.</p>
         </td>
@@ -732,7 +1097,7 @@ Default: 0</p>
 </div>
 
   </div>
-  <div class="body"><p>Sends a DATA message with label 'feedback' with current feedback and paradata</p>
+  <div class="body"><p>Sends a DATA message with label 'feedback' with feedback and paradata</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -871,7 +1236,6 @@ Default: 0</p>
     <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reset</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">timeInputBegin</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeInputEnd</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">_feedback</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
@@ -899,75 +1263,102 @@ Default: 0</p>
         </td>
       </tr>
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="checkfeedbacklength">
-  <h3>
-    <a href="#checkfeedbacklength" name="checkfeedbacklength" class="pilcrow">&#182;</a>
-    checkFeedbackLength
-  </h3>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 
-  </div>
-  <div class="body"><p>Checks the feedback length</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">feedbackTextarea</span>
-      <span class="dox_type">HTMLElement</span>
-      <span>The textarea with feedback</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">charCounter</span>
-      <span class="dox_type">HTMLElement</span>
-      <span>The span counting the characthers</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">submit</span>
-      <span class="dox_type">HTMLElement</span>
-      <span>The submit button</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">minLength</span>
-      <span class="dox_type">number</span>
-      <span>The minimum length of feedback</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">maxLength</span>
-      <span class="dox_type">number</span>
-      <span>The max length of feedback</span>
-    </div>
-  </div>
-</div>
+<div class="highlight"><pre><code><span class="cm">/**</span>
+<span class="cm"> * ### checkLength</span>
+<span class="cm"> *</span>
+<span class="cm"> * Checks the feedback length</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param {HTMLElement} feedbackTextarea The textarea with feedback</span>
+<span class="cm"> * @param {HTMLElement} charCounter The span counting the characthers</span>
+<span class="cm"> * @param {HTMLElement} submit The submit button</span>
+<span class="cm"> * @param {number} minLength The minimum length of feedback</span>
+<span class="cm"> * @param {number} maxLength The max length of feedback</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">checkLength</span><span class="p">(</span><span class="nx">feedbackTextarea</span><span class="p">,</span> <span class="nx">charCounter</span><span class="p">,</span>
+                             <span class="nx">submit</span><span class="p">,</span> <span class="nx">minLength</span><span class="p">,</span> <span class="nx">maxLength</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
+
+    <span class="nx">length</span> <span class="o">=</span> <span class="nx">feedbackTextarea</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">length</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="nx">minLength</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nx">submit</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="p">(</span><span class="nx">minLength</span> <span class="o">-</span> <span class="nx">length</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s1">&#39; characters needed.&#39;</span><span class="p">;</span>
+        <span class="nx">charCounter</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="s1">&#39;#f2dede&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">maxLength</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nx">submit</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="p">(</span><span class="nx">length</span> <span class="o">-</span> <span class="nx">maxLength</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s1">&#39; characters over.&#39;</span><span class="p">;</span>
+        <span class="nx">charCounter</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="s1">&#39;#f2dede&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">res</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">submit</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="p">(</span><span class="nx">maxLength</span> <span class="o">-</span> <span class="nx">length</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s1">&#39; characters remaining.&#39;</span><span class="p">;</span>
+        <span class="nx">charCounter</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="s1">&#39;#dff0d8&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">checkFeedbackLength</span><span class="p">(</span><span class="nx">feedbackTextarea</span><span class="p">,</span> <span class="nx">charCounter</span><span class="p">,</span>
-                                 <span class="nx">submit</span><span class="p">,</span> <span class="nx">minLength</span><span class="p">,</span> <span class="nx">maxLength</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">length</span><span class="p">;</span>
 
-        <span class="nx">length</span> <span class="o">=</span> <span class="nx">feedbackTextarea</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">length</span><span class="p">;</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="nx">minLength</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">submit</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isValidFeedback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">markAttempt</span><span class="p">,</span> <span class="nx">updateUI</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">feedback</span><span class="p">,</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">updateCount</span><span class="p">,</span> <span class="nx">updateColor</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">submitButton</span><span class="p">,</span> <span class="nx">charCounter</span><span class="p">;</span>
 
-          <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="p">(</span><span class="nx">minLength</span> <span class="o">-</span> <span class="nx">length</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; characters needed.&#39;</span><span class="p">;</span>
-          <span class="nx">charCounter</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="s1">&#39;#f2dede&#39;</span><span class="p">;</span>
+        <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">getFeedback</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="nx">length</span> <span class="o">=</span> <span class="nx">feedback</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+        <span class="nx">submitButton</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">submitButton</span><span class="p">;</span>
+        <span class="nx">charCounter</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">charCounter</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">minLength</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="nx">updateCount</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">minLength</span> <span class="o">-</span> <span class="nx">length</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; characters needed.&#39;</span><span class="p">;</span>
+            <span class="nx">updateColor</span> <span class="o">=</span> <span class="s1">&#39;#a32020&#39;&#39;; // #f2dede&#39;</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">maxLength</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">submit</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-
-          <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="p">(</span><span class="nx">length</span> <span class="o">-</span> <span class="nx">maxLength</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; characters over.&#39;</span><span class="p">;</span>
-          <span class="nx">charCounter</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="s1">&#39;#f2dede&#39;</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="nx">updateCount</span> <span class="o">=</span> <span class="p">(</span><span class="nx">length</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; characters over.&#39;</span><span class="p">;</span>
+            <span class="nx">updateColor</span> <span class="o">=</span> <span class="s1">&#39;#a32020&#39;&#39;; // #f2dede&#39;</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-          <span class="nx">submit</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-
-          <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="p">(</span><span class="nx">maxLength</span> <span class="o">-</span> <span class="nx">length</span><span class="p">)</span> <span class="o">+</span>
-                <span class="s1">&#39; characters remaining.&#39;</span><span class="p">;</span>
-          <span class="nx">charCounter</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="s1">&#39;#dff0d8&#39;</span><span class="p">;</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">updateCount</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">maxLength</span> <span class="o">-</span> <span class="nx">length</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; characters remaining.&#39;</span><span class="p">;</span>
+            <span class="nx">updateColor</span> <span class="o">=</span> <span class="s1">&#39;#78b360&#39;</span><span class="p">;</span> <span class="c1">// &#39;#dff0d8&#39;;</span>
         <span class="p">}</span>
-    <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">updateUI</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">submitButton</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="o">!</span><span class="nx">res</span><span class="p">;</span>
+            <span class="nx">charCounter</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">updateColor</span><span class="p">;</span>
+            <span class="nx">charCounter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">updateCount</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">markAttempt</span> <span class="o">||</span> <span class="nx">markAttempt</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">feedback</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">feedback</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxAttemptLength</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">feedback</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+    <span class="p">};</span>
 
 
 </pre></div>
@@ -1000,8 +1391,10 @@ Default: 0</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">getEmail</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span><span class="p">.</span><span class="nx">value</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_feedback</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="nx">getFeedback</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">out</span><span class="p">;</span>
+        <span class="nx">out</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">feedbackHTML</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">textareaElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_feedback</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">out</span> <span class="o">?</span> <span class="nx">out</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">:</span> <span class="nx">out</span><span class="p">;</span>
     <span class="p">}</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
