@@ -81,7 +81,7 @@
          * @see Feedback.getValues
          */
         if (!options.onsubmit) {
-            this.onsubmit = { emailOnly: true };
+            this.onsubmit = { emailOnly: true, say: true, updateUI: true };
         }
         else if ('object' === typeof options.onsubmit) {
             this.onsubmit = options.onsubmit;

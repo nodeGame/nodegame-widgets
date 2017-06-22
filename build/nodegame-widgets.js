@@ -7531,7 +7531,7 @@
          * @see Feedback.getValues
          */
         if (!options.onsubmit) {
-            this.onsubmit = { emailOnly: true };
+            this.onsubmit = { emailOnly: true, say: true, updateUI: true };
         }
         else if ('object' === typeof options.onsubmit) {
             this.onsubmit = options.onsubmit;
@@ -8299,7 +8299,7 @@
         if ('undefined' === typeof options.maxLength) {
             this.maxLength = 800;
         }
-        else if (JSUS.isNumber(options.maxLength, 0) !== false) {
+        else if (J.isNumber(options.maxLength, 0) !== false) {
             this.maxLength = options.maxLength;
         }
         else {
@@ -8319,7 +8319,7 @@
         if ('undefined' === typeof options.minLength) {
             this.minLength = 0;
         }
-        else if (JSUS.isNumber(options.minLength, 0) !== false) {
+        else if (J.isNumber(options.minLength, 0) !== false) {
             this.minLength = options.minLength;
         }
         else {
@@ -8341,7 +8341,7 @@
         if ('undefined' === typeof options.maxAttemptLength) {
             this.maxAttemptLength = 2000;
         }
-        else if (JSUS.isNumber(options.maxAttemptLength, 0) !== false) {
+        else if (J.isNumber(options.maxAttemptLength, 0) !== false) {
             this.maxAttemptLength = Math.max(this.maxLength,
                                                      options.maxAttemptLength);
         }
@@ -8373,7 +8373,7 @@
          * @see Feedback.getValues
          */
         if (!options.onsubmit) {
-            this.onsubmit = { feedbackOnly: true };
+            this.onsubmit = { feedbackOnly: true, say: true, updateUI: true };
         }
         else if ('object' === typeof options.onsubmit) {
             this.onsubmit = options.onsubmit;
@@ -8481,7 +8481,7 @@
         submit.setAttribute('type', 'submit');
         submit.setAttribute('value', 'Submit feedback');
         feedbackForm.appendChild(submit);
-        
+
         if (this.showCharCount) {
             charCounter = document.createElement('span');
             charCounter.className = 'feedback-char-count badge';
@@ -8493,13 +8493,7 @@
         J.addEvent(feedbackForm, 'submit', function(event) {
             event.preventDefault();
             that.getValues(that.onsubmit);
-            submit.setAttribute('value', 'Sent!');
         });
-
-//         J.addEvent(feedbackForm, 'input', function(event) {
-//             checkLength(feedbackTextarea, charCounter, submit,
-//                                 minLength, maxLength);
-//         });
 
         J.addEvent(feedbackForm, 'input', function(event) {
             that.verifyFeedback(false, true);
@@ -8507,9 +8501,6 @@
 
         // Check it once at the beginning.
         this.verifyFeedback();
-
-//        checkLength(feedbackTextarea, charCounter, submit,
-//                            minLength, maxLength);
 
         // Store references.
         this.submitButton = submit;
@@ -8546,24 +8537,25 @@
         submitButton = this.submitButton;
         charCounter = this.charCounter;
 
+
         if (length < this.minLength) {
             res = false;
             updateCount = (this.minLength - length) + ' characters needed.';
-            updateColor = '#f2dede';
+            updateColor = '#a32020'; // #f2dede';
         }
         else if (length > this.maxLength) {
             res = false;
             updateCount = (length - this.maxLength) + ' characters over.';
-            updateColor = '#f2dede';
+            updateColor = '#a32020'; // #f2dede';
         }
         else {
             res = true;
             updateCount = (this.maxLength - length) + ' characters remaining.';
-            updateColor = '#dff0d8';            
+            updateColor = '#78b360'; // '#dff0d8';
         }
 
         if (updateUI) {
-            submitButton.disabled = !!res;
+            submitButton.disabled = !res;
             if (charCounter) {
                 charCounter.style.backgroundColor = updateColor;
                 charCounter.innerHTML = updateCount;
@@ -8685,6 +8677,11 @@
         // Send the message.
         if ((opts.say && res) || opts.sayAnyway) {
             this.sendValues({ values: feedback });
+            if (opts.updateUI) {
+                this.submitButton.setAttribute('value', 'Sent!');
+                this.submitButton.disabled = true;
+                this.textareaElement.disabled = true;
+            }
         }
 
         if (opts.reset) this.reset();
@@ -8695,7 +8692,7 @@
     /**
      * ### Feedback.sendValues
      *
-     * Sends a DATA message with label 'feedback' with current feedback and paradata
+     * Sends a DATA message with label 'feedback' with feedback and paradata
      *
      * @param {object} opts Optional. Options to pass to the `getValues`
      *    method. Additional options:
@@ -8774,13 +8771,13 @@
 //      * @param {HTMLElement} submit The submit button
 //      * @param {number} minLength The minimum length of feedback
 //      * @param {number} maxLength The max length of feedback
-//      */ 
+//      */
 //     function checkLength(feedbackTextarea, charCounter,
 //                                  submit, minLength, maxLength) {
 //         var length, res;
-// 
+//
 //         length = feedbackTextarea.value.trim().length;
-// 
+//
 //         if (length < minLength) {
 //             res = false;
 //             submit.disabled = true;
@@ -8802,54 +8799,9 @@
 //                 ' characters remaining.';
 //             charCounter.style.backgroundColor = '#dff0d8';
 //         }
-//         
+//
 //         return true;
 //     }
-
-
-    Feedback.prototype.isValidFeedback = function(markAttempt, updateUI) {
-        var feedback, length, updateCount, updateColor, res;
-        var submitButton, charCounter;
-
-        feedback = getFeedback.call(this);
-        length = feedback.length;
-
-        submitButton = this.submitButton;
-        charCounter = this.charCounter;
-
-        if (length < this.minLength) {
-            res = false;
-            updateCount = (this.minLength - length) + ' characters needed.';
-            updateColor = '#f2dede';
-        }
-        else if (length > this.maxLength) {
-            res = false;
-            updateCount = (length - this.maxLength) + ' characters over.';
-            updateColor = '#f2dede';
-        }
-        else {
-            res = true;
-            updateCount = (this.maxLength - length) + ' characters remaining.';
-            updateColor = '#dff0d8';            
-        }
-
-        if (updateUI) {
-            submitButton.disabled = !!res;
-            charCounter.style.backgroundColor = updateColor;
-            charCounter.innerHTML = updateCount;
-        }
-
-        if (!res) {
-            if ('undefined' === typeof markAttempt || markAttempt) {
-                if (feedback.length > this.maxAttemptLength) {
-                    feedback = feedback.substr(0, this.maxAttemptLength);
-                }
-                this.attempts.push(feedback);
-            }
-        }
-
-        return res;
-    };
 
     /**
      * ### getFeedback
