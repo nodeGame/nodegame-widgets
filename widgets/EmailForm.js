@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    EmailForm.version = '0.2.0';
+    EmailForm.version = '0.9.0';
     EmailForm.description = 'Displays a simple email form.';
 
     EmailForm.title = 'Email';
