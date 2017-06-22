@@ -8051,7 +8051,11 @@
          * @see EmailForm
          */
         if (this.showEmailForm) {
-            this.emailForm = node.widgets.get('EmailForm');
+            this.emailForm = node.widgets.get('EmailForm', {
+                label: 'Would you like to be contacted again for future ' +
+                    'experiments? If so, leave your email here and ' +
+                    'press submit: '
+            });
         }
 
         /**
@@ -8140,10 +8144,7 @@
         if (this.showEmailForm) {
             node.widgets.append(this.emailForm, endScreenElement, {
                 title: false,
-                frame: false,
-                label: 'Would you like to be contacted again for future ' +
-                    'experiments? If so, leave your email here and ' +
-                    'press submit: '
+                frame: false
             });
         }
 
