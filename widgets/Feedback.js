@@ -273,14 +273,14 @@
             that.verifyFeedback(false, true);
         });
 
-        // Check it once at the beginning.
-        this.verifyFeedback();
-
         // Store references.
         this.submitButton = submit;
         this.feedbackHTML = feedbackHTML;
         this.textareaElement = feedbackTextarea;
         this.charCounter = charCounter || null;
+
+        // Check it once at the beginning to initialize counter.
+        this.verifyFeedback(false, true);
 
         return feedbackHTML;
     };
@@ -337,7 +337,7 @@
         }
 
         if (!res && ('undefined' === typeof markAttempt || markAttempt)) {
-            if (feedback.length > this.maxAttemptLength) {
+            if (length > this.maxAttemptLength) {
                 feedback = feedback.substr(0, this.maxAttemptLength);
             }
             this.attempts.push(feedback);

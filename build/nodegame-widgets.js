@@ -7696,7 +7696,7 @@
     EmailForm.prototype.setValues = function(options) {
         var email;
         options = options || {};
-        if (!options.email) email = J.randomEmail()
+        if (!options.email) email = J.randomEmail();
         else email = options.email;
 
         if (!this.inputElement) this._email = email;
@@ -8058,12 +8058,12 @@
          * @see EmailForm
          */
         if (this.showEmailForm) {
-            this.emailForm = node.widgets.get('EmailForm', {
+            this.emailForm = node.widgets.get('EmailForm', J.mixin({
                 label: 'Would you like to be contacted again for future ' +
                     'experiments? If so, leave your email here and ' +
                     'press submit: ',
                 onsubmit: { say: true, emailOnly: true, updateUI: true }
-            });
+            }, options.email));
         }
 
         /**
@@ -8074,7 +8074,7 @@
          * @see Feedback
          */
         if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback');
+            this.feedback = node.widgets.get('Feedback', options.feedback);
         }
 
         /**
@@ -8499,14 +8499,14 @@
             that.verifyFeedback(false, true);
         });
 
-        // Check it once at the beginning.
-        this.verifyFeedback();
-
         // Store references.
         this.submitButton = submit;
         this.feedbackHTML = feedbackHTML;
         this.textareaElement = feedbackTextarea;
         this.charCounter = charCounter || null;
+
+        // Check it once at the beginning to initialize counter.
+        this.verifyFeedback(false, true);
 
         return feedbackHTML;
     };
@@ -8563,7 +8563,7 @@
         }
 
         if (!res && ('undefined' === typeof markAttempt || markAttempt)) {
-            if (feedback.length > this.maxAttemptLength) {
+            if (length > this.maxAttemptLength) {
                 feedback = feedback.substr(0, this.maxAttemptLength);
             }
             this.attempts.push(feedback);

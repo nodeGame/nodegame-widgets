@@ -246,7 +246,7 @@
     EmailForm.prototype.setValues = function(options) {
         var email;
         options = options || {};
-        if (!options.email) email = J.randomEmail()
+        if (!options.email) email = J.randomEmail();
         else email = options.email;
 
         if (!this.inputElement) this._email = email;

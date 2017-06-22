@@ -201,12 +201,12 @@
          * @see EmailForm
          */
         if (this.showEmailForm) {
-            this.emailForm = node.widgets.get('EmailForm', {
+            this.emailForm = node.widgets.get('EmailForm', J.mixin({
                 label: 'Would you like to be contacted again for future ' +
                     'experiments? If so, leave your email here and ' +
                     'press submit: ',
                 onsubmit: { say: true, emailOnly: true, updateUI: true }
-            });
+            }, options.email));
         }
 
         /**
@@ -217,7 +217,7 @@
          * @see Feedback
          */
         if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback');
+            this.feedback = node.widgets.get('Feedback', options.feedback);
         }
 
         /**

@@ -479,12 +479,12 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">emailForm</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;EmailForm&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">emailForm</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;EmailForm&#39;</span><span class="p">,</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mixin</span><span class="p">({</span>
                 <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Would you like to be contacted again for future &#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;experiments? If so, leave your email here and &#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;press submit: &#39;</span><span class="p">,</span>
                 <span class="nx">onsubmit</span><span class="o">:</span> <span class="p">{</span> <span class="nx">say</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">emailOnly</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">updateUI</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span>
-            <span class="p">});</span>
+            <span class="p">},</span> <span class="nx">options</span><span class="p">.</span><span class="nx">email</span><span class="p">));</span>
         <span class="p">}</span>
 
 
@@ -515,7 +515,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">feedback</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">feedback</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">feedback</span><span class="p">);</span>
         <span class="p">}</span>
 
 
