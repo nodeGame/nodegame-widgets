@@ -18,7 +18,7 @@
     // ## Meta-data
 
     EmailForm.version = '0.9.0';
-    EmailForm.description = 'Displays a simple email form.';
+    EmailForm.description = 'Displays a configurable email form.';
 
     EmailForm.title = 'Email';
     EmailForm.className = 'emailform';
@@ -113,7 +113,7 @@
         /**
          * ### EmailForm.timeInput
          *
-         * Time when the email was inserted (first character)
+         * Time when the email was inserted (first character, last attempt)
          */
         this.timeInput = null;
 
@@ -170,7 +170,6 @@
 
         // Add listeners on input form.
         J.addEvent(formElement, 'submit', function(event) {
-            var res;
             event.preventDefault();
             that.getValues(that.onsubmit);
         }, true);
@@ -253,13 +252,13 @@
         if (!this.inputElement) this._email = email;
         else this.inputElement.value = email;
 
-        this.timeInput = Date.now ? Date.now() : new Date().getTime();
+        this.timeInput = J.now();
     };
 
     /**
      * ### EmailForm.getValues
      *
-     * Returns the email input form
+     * Returns the email and paradata
      *
      * @param {object} opts Optional. Configures the return value.
      *   Available optionts:
@@ -294,8 +293,6 @@
         if (opts.verify !== false) res = this.verifyInput(opts.markAttempt,
                                                           opts.updateUI);
 
-        if (res === false && opts.updateUI || opts.highlight) this.highlight();
-
         // Only value.
         if (!opts.emailOnly) {
             email = {
@@ -304,6 +301,11 @@
                 attempts: this.attempts,
                 valid: res
             };
+        }
+
+        if (res === false) {
+            if (opts.updateUI || opts.highlight) this.highlight();
+            this.timeInput = null;
         }
 
         // Send the message.

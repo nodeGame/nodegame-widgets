@@ -141,7 +141,7 @@ MIT Licensed</p>
         <td class="code highlight"><div class="highlight"><pre>
 
     <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.9.0&#39;</span><span class="p">;</span>
-    <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a simple email form.&#39;</span><span class="p">;</span>
+    <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a configurable email form.&#39;</span><span class="p">;</span>
 
     <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Email&#39;</span><span class="p">;</span>
     <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;emailform&#39;</span><span class="p">;</span>
@@ -363,7 +363,7 @@ MIT Licensed</p>
 </div>
 
   </div>
-  <div class="body"><p>Time when the email was inserted (first character)</p>
+  <div class="body"><p>Time when the email was inserted (first character, last attempt)</p>
   </div>
 </div>
         </td>
@@ -493,7 +493,6 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">J</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">formElement</span><span class="p">,</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">res</span><span class="p">;</span>
             <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
             <span class="nx">that</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">);</span>
         <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
@@ -663,7 +662,7 @@ MIT Licensed</p>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">_email</span> <span class="o">=</span> <span class="nx">email</span><span class="p">;</span>
         <span class="k">else</span> <span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">email</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeInput</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span> <span class="o">?</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">timeInput</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
     <span class="p">};</span>
 
 
@@ -681,7 +680,7 @@ MIT Licensed</p>
 </div>
 
   </div>
-  <div class="body"><p>Returns the email input form</p>
+  <div class="body"><p>Returns the email and paradata</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -741,8 +740,6 @@ MIT Licensed</p>
         <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">verify</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyInput</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">markAttempt</span><span class="p">,</span>
                                                           <span class="nx">opts</span><span class="p">.</span><span class="nx">updateUI</span><span class="p">);</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">res</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">updateUI</span> <span class="o">||</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">highlight</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlight</span><span class="p">();</span>
-
 
 </pre></div>
         </td>
@@ -762,6 +759,11 @@ MIT Licensed</p>
                 <span class="nx">attempts</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span><span class="p">,</span>
                 <span class="nx">valid</span><span class="o">:</span> <span class="nx">res</span>
             <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">res</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">updateUI</span> <span class="o">||</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">highlight</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlight</span><span class="p">();</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">timeInput</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="p">}</span>
 
 
