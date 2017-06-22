@@ -179,7 +179,7 @@ integrate current values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;1.1.0&#39;</span><span class="p">;</span>
+    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;1.1.1&#39;</span><span class="p">;</span>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a waiting room for clients.&#39;</span><span class="p">;</span>
 
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Waiting Room&#39;</span><span class="p">;</span>
@@ -221,7 +221,7 @@ integrate current values</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    
+
 
 </pre></div>
         </td>
@@ -243,7 +243,7 @@ integrate current values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">sounds</span> <span class="o">=</span> <span class="p">{</span>
-        
+
 
 </pre></div>
         </td>
@@ -341,7 +341,7 @@ integrate current values</p>
             <span class="s1">&#39;Thank you for your patience.&lt;br&gt;&#39;</span> <span class="o">+</span>
             <span class="s1">&#39;Unfortunately, there are not enough participants in &#39;</span> <span class="o">+</span>
             <span class="s1">&#39;your group to start the experiment.&lt;br&gt;&#39;</span><span class="p">,</span>
-        
+
 
 </pre></div>
         </td>
@@ -764,7 +764,7 @@ integrate current values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        
+
 
 </pre></div>
         </td>
@@ -786,7 +786,7 @@ integrate current values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        
+
 
 </pre></div>
         </td>
@@ -808,7 +808,7 @@ integrate current values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">roomClosedText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        
+
 
 </pre></div>
         </td>
@@ -983,7 +983,7 @@ integrate current values</p>
             <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">texts</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">texts</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">)</span> <span class="p">{</span>
@@ -1001,7 +1001,7 @@ integrate current values</p>
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span> <span class="o">&amp;&amp;</span>
                 <span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">)</span> <span class="p">{</span>
-                
+
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;conf.dispatchSound must be boolean, &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span>
@@ -1023,10 +1023,10 @@ integrate current values</p>
 <p>Texts.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        
+
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">notEnoughPlayersText</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">notEnoughPlayersText</span><span class="p">)</span> <span class="p">{</span>
-                
+
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;conf.notEnoughPlayersText must be &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span>
@@ -1037,7 +1037,7 @@ integrate current values</p>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">)</span> <span class="p">{</span>
-                
+
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;conf.disconnectText must be string &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;or undefined. Found: &#39;</span> <span class="o">+</span>
@@ -1045,10 +1045,10 @@ integrate current values</p>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">;</span>
         <span class="p">}</span>
-        
+
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">waitedTooLongText</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">waitedTooLongText</span><span class="p">)</span> <span class="p">{</span>
-                
+
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;conf.waitedTooLongText must be string &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;or undefined. Found: &#39;</span> <span class="o">+</span>
@@ -1056,10 +1056,10 @@ integrate current values</p>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">waitedTooLongText</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">waitedTooLongText</span><span class="p">;</span>
         <span class="p">}</span>
-        
+
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">roomClosedText</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">roomClosedText</span><span class="p">)</span> <span class="p">{</span>
-                
+
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;conf.roomClosedText must be string &#39;</span> <span class="o">+</span>
                                     <span class="s1">&#39;or undefined. Found: &#39;</span> <span class="o">+</span>
@@ -1385,7 +1385,7 @@ integrate current values</p>
             <span class="p">}</span>
 
             <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">action</span> <span class="o">===</span> <span class="s1">&#39;NotSelected&#39;</span><span class="p">)</span> <span class="p">{</span>
-                
+
 
 </pre></div>
         </td>
@@ -1554,7 +1554,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">)</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">playSound</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">);</span>
-        
+
 
 </pre></div>
         </td>

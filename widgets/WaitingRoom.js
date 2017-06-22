@@ -17,7 +17,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-    WaitingRoom.version = '1.1.0';
+    WaitingRoom.version = '1.1.1';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -31,13 +31,13 @@
     };
 
     // ## Prototype Properties.
-    
+
     /** ### WaitingRoom.sounds
      *
      * Default sounds to play on particular events
      */
     WaitingRoom.sounds = {
-        
+
         // #### dispatch
         dispatch: '/sounds/doorbell.ogg'
     };
@@ -63,7 +63,7 @@
             'Thank you for your patience.<br>' +
             'Unfortunately, there are not enough participants in ' +
             'your group to start the experiment.<br>',
-        
+
         // #### roomClosed
         roomClosed: '<span style="color: red"> The ' +
             'waiting room is <strong>CLOSED</strong>. You have been ' +
@@ -196,21 +196,21 @@
          * Flag that indicates whether to disconnect an not selected player
          */
         this.disconnectIfNotSelected = null;
-        
+
         /**
          * ### WaitingRoom.disconnectText
          *
          * Content of `this.bodyDiv.innerHTML` when player is disconnected
          */
         this.disconnectText = null;
-        
+
         /**
          * ### WaitingRoom.roomClosedText
          *
          * Content of `this.bodyDiv.innerHTML` when player room is closed
          */
         this.roomClosedText = null;
-        
+
         /**
          * ### WaitingRoom.dispatchSound
          *
@@ -314,7 +314,7 @@
             this.disconnectText = conf.disconnectText;
         }
         else {
-            this.disconnectText = WaitingRoom.texts.disconnectText;
+            this.disconnectText = WaitingRoom.texts.disconnect;
         }
 
         if (conf.disconnectIfNotSelected) {
@@ -332,7 +332,7 @@
         if (conf.dispatchSound) {
             if ('boolean' !== typeof conf.dispatchSound &&
                 'string' !== typeof conf.dispatchSound) {
-                
+
                 throw new TypeError('WaitingRoom.init: ' +
                                     'conf.dispatchSound must be boolean, ' +
                                     'string or undefined. Found: ' +
@@ -343,10 +343,10 @@
         }
 
         // Texts.
-        
+
         if (conf.notEnoughPlayersText) {
             if ('string' !== typeof conf.notEnoughPlayersText) {
-                
+
                 throw new TypeError('WaitingRoom.init: ' +
                                     'conf.notEnoughPlayersText must be ' +
                                     'string or undefined. Found: ' +
@@ -357,7 +357,7 @@
 
         if (conf.disconnectText) {
             if ('string' !== typeof conf.disconnectText) {
-                
+
                 throw new TypeError('WaitingRoom.init: ' +
                                     'conf.disconnectText must be string ' +
                                     'or undefined. Found: ' +
@@ -365,10 +365,10 @@
             }
             this.disconnectText = conf.disconnectText;
         }
-        
+
         if (conf.waitedTooLongText) {
             if ('string' !== typeof conf.waitedTooLongText) {
-                
+
                 throw new TypeError('WaitingRoom.init: ' +
                                     'conf.waitedTooLongText must be string ' +
                                     'or undefined. Found: ' +
@@ -376,10 +376,10 @@
             }
             this.waitedTooLongText = conf.waitedTooLongText;
         }
-        
+
         if (conf.roomClosedText) {
             if ('string' !== typeof conf.roomClosedText) {
-                
+
                 throw new TypeError('WaitingRoom.init: ' +
                                     'conf.roomClosedText must be string ' +
                                     'or undefined. Found: ' +
@@ -569,7 +569,7 @@
             }
 
             else if (data.action === 'NotSelected') {
-                
+
                 // TODO: make all strings parameteric.
                 notSelected = '<h3 align="center">' +
                     '<span style="color: red">Unfortunately, you were ' +
@@ -657,7 +657,7 @@
 
         // Play sound, if requested.
         if (this.dispatchSound) JSUS.playSound(this.dispatchSound);
-        
+
         // If document.hasFocus() returns TRUE, then just one repeat is enough.
         if (document.hasFocus && document.hasFocus()) {
             JSUS.blinkTitle('GAME STARTS!', { repeatFor: 1 });
