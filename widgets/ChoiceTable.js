@@ -1206,7 +1206,7 @@
      * Highlights the choice table
      *
      * @param {string} The style for the table's border.
-     *   Default '1px solid red'
+     *   Default '3px solid red'
      *
      * @see ChoiceTable.highlighted
      */
