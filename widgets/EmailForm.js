@@ -74,6 +74,25 @@
         }
 
         /**
+         * ### EmailForm.
+         *
+         * The error message in case of invalid email format
+         *
+         * Notice! It is displayed only if the submit button is displayed.
+         */
+        if (!options.onsubmit) {
+            this.onsubmit = { emailOnly: true };
+        }
+        else if ('object' === typeof options.onsubmit) {
+            this.onsubmit = options.onsubmit;
+        }
+        else {
+            throw new TypeError('EmailForm constructor: options.onsubmit ' +
+                                'must be string or object. Found: ' +
+                                options.onsubmit);
+        }
+
+        /**
          * ### EmailForm._email
          *
          * Internal storage of the value of the email
@@ -113,7 +132,7 @@
         this.inputElement = null;
 
         /**
-         * ### EmailForm.emailButtonElement
+         * ### EmailForm.buttonElement
          *
          * The email's HTML submit button
          */
@@ -129,7 +148,7 @@
         that = this;
 
         formElement = document.createElement('form');
-        formElement.className = 'endscreen-email-form';
+        formElement.className = 'emailform-form';
 
         labelElement = document.createElement('label');
         labelElement.innerHTML = this.label;
@@ -143,17 +162,23 @@
         buttonElement.setAttribute('type', 'submit');
         buttonElement.setAttribute('value', 'Submit email');
         buttonElement.className = 'btn btn-lg btn-primary ' +
-            'endscreen-email-submit';
+            'emailform-submit';
 
         formElement.appendChild(labelElement);
         formElement.appendChild(inputElement);
         formElement.appendChild(buttonElement);
 
-
-        formElement.addEventListener('submit', function(event) {
+        // Add listeners on input form.
+        J.addEvent(formElement, 'submit', function(event) {
+            var res;
             event.preventDefault();
-            that.getValues({ emailOnly: true });
+            that.getValues(that.onsubmit);
         }, true);
+        J.addEvent(formElement, 'input', function(event) {
+            if (!that.timeInput) that.timeInput = J.now();
+            if (that.isHighlighted()) that.unhighlight();
+        }, true);
+
 
         // Store references.
         this.formElement = formElement;
@@ -168,34 +193,38 @@
     };
 
     /**
-     * ### EmailForm.verifyEmail
+     * ### EmailForm.verifyInput
      *
      * Verify current email, updates interface, and optionally marks attempt
      *
      * @param {boolean} markAttempt Optional. If TRUE, the current email
-     *   is added to the attempts array. Default: TRUE
+     *    is added to the attempts array. Default: TRUE
+     * @param {boolean} updateUI Optional. If TRUE, the interface is updated.
+     *    Default: FALSE
      *
-     * @return {boolean} TRUE if the email is valid
+     * @return {boolean} TRUE, if the email is valid
      *
      * @see EmailForm.getValues
      * @see getEmail
      */
-    EmailForm.prototype.verifyEmail = function(markAttempt) {
+    EmailForm.prototype.verifyInput = function(markAttempt, updateUI) {
         var email, res;
         email = getEmail.call(this);
-        res = this.isValidEmail(email);
-        if (res) {
+        res = J.isEmail(email);
+        if (res && updateUI) {
             if (this.inputElement) this.inputElement.disabled = true;
             if (this.buttonElement) {
                 this.buttonElement.disabled = true;
                 this.buttonElement.value = 'Sent!';
             }
+        }
+        else {
+            if (updateUI && this.buttonElement) {
+                this.buttonElement.value = this.errString;
+            }
             if ('undefined' === typeof markAttempt || markAttempt) {
                 this.attempts.push(email);
             }
-        }
-        else {
-            if (this.buttonElement) this.buttonElement.value = this.errString;
         }
         return res;
     };
@@ -218,14 +247,8 @@
     EmailForm.prototype.setValues = function(options) {
         var email;
         options = options || {};
-        if (!options.email) {
-            email = J.randomString(J.randomInt(5,15), '!Aa0') + '@' +
-                J.randomString(J.randomInt(3,10))  + '.' +
-                J.randomString(J.randomInt(2,3));
-        }
-        else {
-            email = options.email;
-        }
+        if (!options.email) email = J.randomEmail()
+        else email = options.email;
 
         if (!this.inputElement) this._email = email;
         else this.inputElement.value = email;
@@ -247,13 +270,19 @@
      *       the email value before returning (default: FALSE),
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *       (default: TRUE),
-     *   - highlight:   If TRUE, if email is not the valid, widget
-     *       will be highlighted. Default: FALSE.
+     *   - updateUI:    If TRUE, the UI (form, input, button) is updated.
+     *                  Default: FALSE.
+     *   - highlight:   If TRUE, if email is not the valid, widget is
+     *                  is highlighted. Default: (updateUI || FALSE).
+     *   - say:         If TRUE, and the email is valid, then it sends
+     *                  a data msg. Default: FALSE.
+     *   - sayAnyway:   If TRUE, it sends a data msg regardless of the
+     *                  validity of the email. Default: FALSE.
      *
      * @return {string|object} The email, and optional paradata
      *
      * @see EmailForm.sendValues
-     * @see EmailForm.verifyEmail
+     * @see EmailForm.verifyInput
      * @see getEmail
      */
     EmailForm.prototype.getValues = function(opts) {
@@ -261,14 +290,14 @@
         opts = opts || {};
 
         email = getEmail.call(this);
-        // Email, with or without email form; or FALSE if invalid.
-        if (opts.verify !== false) res = this.verifyEmail(opts.markAttempt);
+
+        if (opts.verify !== false) res = this.verifyInput(opts.markAttempt,
+                                                          opts.updateUI);
+
+        if (res === false && opts.updateUI || opts.highlight) this.highlight();
 
         // Only value.
         if (!opts.emailOnly) {
-
-            if (res === false && opts.highlight) this.hightlight();
-
             email = {
                 time: this.timeInput,
                 email: email,
@@ -277,12 +306,15 @@
             };
         }
 
-        if (opts.say) this.sendValues({ values: email });
+        // Send the message.
+        if ((opts.say && res) || opts.sayAnyway) {
+            this.sendValues({ values: email });
+        }
+
         if (opts.reset) this.reset();
 
         return email;
     };
-
 
     /**
      * ### EmailForm.sendValues
@@ -309,33 +341,6 @@
     };
 
     /**
-     * ### EmailForm.isValidEmail
-     *
-     * Returns TRUE if the email is valid
-     *
-     * TODO: improve validation. Move into JSUS?
-     *
-     * @param {string} email
-     *
-     * @return {boolean} res TRUE, if the email is valid
-     */
-    EmailForm.prototype.isValidEmail = function(email) {
-        var idx;
-        if ('string' !== typeof email) return false;
-        if (email.trim().length > 5) return false;
-
-        idx = email.indexOf('@');
-        if (idx === -1 || idx === 0 || idx === (email.length-1)) return false;
-
-        idx = email.lastIndexOf('.');
-        if (idx === -1 || idx === (email.length-1) || idx > (idx+1)) {
-            return false;
-        }
-
-        return true;
-    };
-
-    /**
      * ### EmailForm.highlight
      *
      * Highlights the email form
@@ -345,12 +350,12 @@
      * @see EmailForm.highlighted
      */
     EmailForm.prototype.highlight = function(border) {
-        if (!this.formElement) return;
+        if (!this.inputElement) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('EmailForm.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        this.formElement.style.border = border || '3px solid red';
+        this.inputElement.style.border = border || '3px solid red';
         this.highlighted = true;
     };
 
@@ -362,8 +367,8 @@
      * @see EmailForm.highlighted
      */
     EmailForm.prototype.unhighlight = function() {
-        if (!this.formElement) return;
-        this.formElement.style.border = '';
+        if (!this.inputElement) return;
+        this.inputElement.style.border = '';
         this.highlighted = false;
     };
 

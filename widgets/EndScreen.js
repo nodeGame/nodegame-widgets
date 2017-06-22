@@ -204,7 +204,8 @@
             this.emailForm = node.widgets.get('EmailForm', {
                 label: 'Would you like to be contacted again for future ' +
                     'experiments? If so, leave your email here and ' +
-                    'press submit: '
+                    'press submit: ',
+                onsubmit: { say: true, emailOnly: true, updateUI: true }
             });
         }
 

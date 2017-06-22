@@ -37,6 +37,9 @@
         <a href="#emailform.errstring">EmailForm.errString</a>
       </div>
       <div class="heading h3">
+        <a href="#emailform.">EmailForm.</a>
+      </div>
+      <div class="heading h3">
         <a href="#emailform._email">EmailForm._email</a>
       </div>
       <div class="heading h3">
@@ -52,13 +55,13 @@
         <a href="#emailform.inputelement">EmailForm.inputElement</a>
       </div>
       <div class="heading h3">
-        <a href="#emailform.emailbuttonelement">EmailForm.emailButtonElement</a>
+        <a href="#emailform.buttonelement">EmailForm.buttonElement</a>
       </div>
       <div class="heading h2">
         <a href="#emailform%20methods">EmailForm methods</a>
       </div>
       <div class="heading h3">
-        <a href="#emailform.verifyemail">EmailForm.verifyEmail</a>
+        <a href="#emailform.verifyinput">EmailForm.verifyInput</a>
       </div>
       <div class="heading h3">
         <a href="#emailform.append">EmailForm.append</a>
@@ -71,9 +74,6 @@
       </div>
       <div class="heading h3">
         <a href="#emailform.sendvalues">EmailForm.sendValues</a>
-      </div>
-      <div class="heading h3">
-        <a href="#emailform.isvalidemail">EmailForm.isValidEmail</a>
       </div>
       <div class="heading h3">
         <a href="#emailform.highlight">EmailForm.highlight</a>
@@ -268,6 +268,40 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="emailform.">
+  <h3>
+    <a href="#emailform." name="emailform." class="pilcrow">&#182;</a>
+    EmailForm.
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>The error message in case of invalid email format</p>
+
+<p>Notice! It is displayed only if the submit button is displayed.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onsubmit</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">emailOnly</span><span class="o">:</span> <span class="kc">true</span> <span class="p">};</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">onsubmit</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EmailForm constructor: options.onsubmit &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;must be string or object. Found: &#39;</span> <span class="o">+</span>
+                                <span class="nx">options</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="emailform._email">
   <h3>
     <a href="#emailform._email" name="emailform._email" class="pilcrow">&#182;</a>
@@ -387,10 +421,10 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="emailform.emailbuttonelement">
+<div class="pilwrap" id="emailform.buttonelement">
   <h3>
-    <a href="#emailform.emailbuttonelement" name="emailform.emailbuttonelement" class="pilcrow">&#182;</a>
-    EmailForm.emailButtonElement
+    <a href="#emailform.buttonelement" name="emailform.buttonelement" class="pilcrow">&#182;</a>
+    EmailForm.buttonElement
   </h3>
 </div>
 
@@ -426,7 +460,7 @@ MIT Licensed</p>
         <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
         <span class="nx">formElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">);</span>
-        <span class="nx">formElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;endscreen-email-form&#39;</span><span class="p">;</span>
+        <span class="nx">formElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;emailform-form&#39;</span><span class="p">;</span>
 
         <span class="nx">labelElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">);</span>
         <span class="nx">labelElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">label</span><span class="p">;</span>
@@ -440,17 +474,11 @@ MIT Licensed</p>
         <span class="nx">buttonElement</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;submit&#39;</span><span class="p">);</span>
         <span class="nx">buttonElement</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;Submit email&#39;</span><span class="p">);</span>
         <span class="nx">buttonElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;btn btn-lg btn-primary &#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;endscreen-email-submit&#39;</span><span class="p">;</span>
+            <span class="s1">&#39;emailform-submit&#39;</span><span class="p">;</span>
 
         <span class="nx">formElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">labelElement</span><span class="p">);</span>
         <span class="nx">formElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">inputElement</span><span class="p">);</span>
         <span class="nx">formElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">buttonElement</span><span class="p">);</span>
-
-
-        <span class="nx">formElement</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">getValues</span><span class="p">({</span> <span class="nx">emailOnly</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
-        <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
 
 
 </pre></div>
@@ -459,7 +487,30 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>Add listeners on input form.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">J</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">formElement</span><span class="p">,</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">res</span><span class="p">;</span>
+            <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">onsubmit</span><span class="p">);</span>
+        <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
+        <span class="nx">J</span><span class="p">.</span><span class="nx">addEvent</span><span class="p">(</span><span class="nx">formElement</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">that</span><span class="p">.</span><span class="nx">timeInput</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">timeInput</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">isHighlighted</span><span class="p">())</span> <span class="nx">that</span><span class="p">.</span><span class="nx">unhighlight</span><span class="p">();</span>
+        <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>Store references.</p>
         </td>
@@ -475,7 +526,7 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>If a value was previously set, insert it in the form.</p>
         </td>
@@ -493,10 +544,10 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="emailform.verifyemail">
+<div class="pilwrap" id="emailform.verifyinput">
   <h3>
-    <a href="#emailform.verifyemail" name="emailform.verifyemail" class="pilcrow">&#182;</a>
-    EmailForm.verifyEmail
+    <a href="#emailform.verifyinput" name="emailform.verifyinput" class="pilcrow">&#182;</a>
+    EmailForm.verifyInput
   </h3>
 </div>
 
@@ -509,13 +560,19 @@ MIT Licensed</p>
       <span class="dox_tag_name">markAttempt</span>
       <span class="dox_type">boolean</span>
       <span>Optional. If TRUE, the current email
-  is added to the attempts array. Default: TRUE</span>
+   is added to the attempts array. Default: TRUE</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">updateUI</span>
+      <span class="dox_type">boolean</span>
+      <span>Optional. If TRUE, the interface is updated.
+   Default: FALSE</span>
     </div>
     <div class="dox_tag_title">Returns</div>
     <div class="dox_tag_detail">
       <span class="dox_tag_name"></span>
       <span class="dox_type">boolean</span>
-      <span>TRUE if the email is valid</span>
+      <span>TRUE, if the email is valid</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -530,22 +587,24 @@ MIT Licensed</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">verifyEmail</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">markAttempt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">verifyInput</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">markAttempt</span><span class="p">,</span> <span class="nx">updateUI</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
         <span class="nx">email</span> <span class="o">=</span> <span class="nx">getEmail</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-        <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">isValidEmail</span><span class="p">(</span><span class="nx">email</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">isEmail</span><span class="p">(</span><span class="nx">email</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">res</span> <span class="o">&amp;&amp;</span> <span class="nx">updateUI</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Sent!&#39;</span><span class="p">;</span>
             <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">updateUI</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">errString</span><span class="p">;</span>
+            <span class="p">}</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">markAttempt</span> <span class="o">||</span> <span class="nx">markAttempt</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">attempts</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">email</span><span class="p">);</span>
             <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">buttonElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">errString</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
     <span class="p">};</span>
@@ -598,14 +657,8 @@ MIT Licensed</p>
     <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">email</span><span class="p">;</span>
         <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">email</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">email</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">randomString</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="s1">&#39;!Aa0&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;@&#39;</span> <span class="o">+</span>
-                <span class="nx">J</span><span class="p">.</span><span class="nx">randomString</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>  <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span>
-                <span class="nx">J</span><span class="p">.</span><span class="nx">randomString</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">));</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">email</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">email</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">email</span><span class="p">)</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">randomEmail</span><span class="p">()</span>
+        <span class="k">else</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">email</span><span class="p">;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">_email</span> <span class="o">=</span> <span class="nx">email</span><span class="p">;</span>
         <span class="k">else</span> <span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">email</span><span class="p">;</span>
@@ -645,8 +698,14 @@ MIT Licensed</p>
   the email value before returning (default: FALSE),</li>
 <li>markAttempt: If TRUE, getting the value counts as an attempt
   (default: TRUE),</li>
-<li>highlight:   If TRUE, if email is not the valid, widget
-  will be highlighted. Default: FALSE.</li>
+<li>updateUI:    If TRUE, the UI (form, input, button) is updated.
+             Default: FALSE.</li>
+<li>highlight:   If TRUE, if email is not the valid, widget is
+             is highlighted. Default: (updateUI || FALSE).</li>
+<li>say:         If TRUE, and the email is valid, then it sends
+             a data msg. Default: FALSE.</li>
+<li>sayAnyway:   If TRUE, it sends a data msg regardless of the
+             validity of the email. Default: FALSE.</li>
 </ul></span>
     </div>
     <div class="dox_tag_title">Returns</div>
@@ -662,7 +721,7 @@ MIT Licensed</p>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
-      <span class="dox_type">EmailForm.verifyEmail</span>
+      <span class="dox_type">EmailForm.verifyInput</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -679,18 +738,10 @@ MIT Licensed</p>
 
         <span class="nx">email</span> <span class="o">=</span> <span class="nx">getEmail</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
-</div>
-<p>Email, with or without email form; or FALSE if invalid.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">verify</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyEmail</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">markAttempt</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">verify</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">verifyInput</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">markAttempt</span><span class="p">,</span>
+                                                          <span class="nx">opts</span><span class="p">.</span><span class="nx">updateUI</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">res</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">updateUI</span> <span class="o">||</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">highlight</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlight</span><span class="p">();</span>
 
 
 </pre></div>
@@ -699,15 +750,12 @@ MIT Licensed</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Only value.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">opts</span><span class="p">.</span><span class="nx">emailOnly</span><span class="p">)</span> <span class="p">{</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nx">res</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">highlight</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">hightlight</span><span class="p">();</span>
-
             <span class="nx">email</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="nx">time</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeInput</span><span class="p">,</span>
                 <span class="nx">email</span><span class="o">:</span> <span class="nx">email</span><span class="p">,</span>
@@ -716,12 +764,26 @@ MIT Licensed</p>
             <span class="p">};</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">say</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">sendValues</span><span class="p">({</span> <span class="nx">values</span><span class="o">:</span> <span class="nx">email</span> <span class="p">});</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+<p>Send the message.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">((</span><span class="nx">opts</span><span class="p">.</span><span class="nx">say</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">)</span> <span class="o">||</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">sayAnyway</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">sendValues</span><span class="p">({</span> <span class="nx">values</span><span class="o">:</span> <span class="nx">email</span> <span class="p">});</span>
+        <span class="p">}</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">reset</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">reset</span><span class="p">();</span>
 
         <span class="k">return</span> <span class="nx">email</span><span class="p">;</span>
     <span class="p">};</span>
-
 
 
 </pre></div>
@@ -785,58 +847,6 @@ MIT Licensed</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="emailform.isvalidemail">
-  <h3>
-    <a href="#emailform.isvalidemail" name="emailform.isvalidemail" class="pilcrow">&#182;</a>
-    EmailForm.isValidEmail
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Returns TRUE if the email is valid</p>
-
-<p>TODO: improve validation. Move into JSUS?</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">email
-</span>
-      <span class="dox_type">string</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">boolean</span>
-      <span>res TRUE, if the email is valid</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isValidEmail</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">idx</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">email</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">email</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-
-        <span class="nx">idx</span> <span class="o">=</span> <span class="nx">email</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">idx</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">idx</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">idx</span> <span class="o">===</span> <span class="p">(</span><span class="nx">email</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-
-        <span class="nx">idx</span> <span class="o">=</span> <span class="nx">email</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">idx</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">idx</span> <span class="o">===</span> <span class="p">(</span><span class="nx">email</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">||</span> <span class="nx">idx</span> <span class="o">&gt;</span> <span class="p">(</span><span class="nx">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
 <div class="pilwrap" id="emailform.highlight">
   <h3>
     <a href="#emailform.highlight" name="emailform.highlight" class="pilcrow">&#182;</a>
@@ -864,12 +874,12 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">highlight</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">border</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">formElement</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">border</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">border</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EmailForm.highlight: border must be &#39;</span> <span class="o">+</span>
                                 <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">border</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">formElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="nx">border</span> <span class="o">||</span> <span class="s1">&#39;3px solid red&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="nx">border</span> <span class="o">||</span> <span class="s1">&#39;3px solid red&#39;</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">highlighted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">};</span>
 
@@ -901,8 +911,8 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">EmailForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">unhighlight</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">formElement</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">formElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">inputElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">border</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">highlighted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">};</span>
 
