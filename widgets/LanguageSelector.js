@@ -139,13 +139,13 @@
         this.setUriPrefix = true;
 
         /**
-         * ## LanguageSelector.notifyUpdate
+         * ## LanguageSelector.notifyServer
          *
          * If TRUE, a message is sent to the server when the language is set
          *
          * Default: TRUE.
          */
-        this.notifyUpdate = true;
+        this.notifyServer = true;
 
         /**
          * ### LanguageSelector.onLangCallback
@@ -256,8 +256,6 @@
          * @see LanguageSelector.onLangCallback
          */
         this.onLangCallbackExtension = null;
-
-        this.init(this.options);
     }
 
     // ## LanguageSelector methods
@@ -279,8 +277,8 @@
             this.usingButtons = !!this.options.usingButtons;
         }
 
-        if ('undefined' !== typeof this.options.notifyUpdate) {
-            this.notifyUpdate = !!this.options.notifyUpdate;
+        if ('undefined' !== typeof this.options.notifyServer) {
+            this.notifyServer = !!this.options.notifyServer;
         }
 
         if ('undefined' !== typeof this.options.setUriPrefix) {
@@ -343,7 +341,7 @@
 
         // Update node.player.
         node.setLanguage(this.availableLanguages[this.currentLanguage],
-                         this.setUriPrefix, this.notifyUpdate);
+                         this.setUriPrefix, this.notifyServer);
     };
 
     /**
@@ -374,15 +372,8 @@
      * @see LanguageSelector.updateAvalaibleLanguages
      */
     LanguageSelector.prototype.loadLanguages = function(options) {
-        if(!this.languagesLoaded) {
-            this.updateAvalaibleLanguages(options);
-        }
-        else {
-            if (options && options.callback) {
-                options.callback();
-            }
-
-        }
+        if (!this.languagesLoaded) this.updateAvalaibleLanguages(options);
+        else if (options && options.callback) options.callback();
     };
 
 })(node);
