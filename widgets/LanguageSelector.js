@@ -126,6 +126,26 @@
         this.usingButtons = null;
 
         /**
+         * ## LanguageSelector.setUriPrefix
+         *
+         * If TRUE, the Window URI prefix is updated when the language is set
+         *
+         * Default: TRUE.
+         *
+         * @see GameWindow.setUriPrefix
+         */
+        this.setUriPrefix = true;
+
+        /**
+         * ## LanguageSelector.notifyUpdate
+         *
+         * If TRUE, a message is sent to the server when the language is set
+         *
+         * Default: TRUE.
+         */
+        this.notifyUpdate = true;
+
+        /**
          * ### LanguageSelector.onLangCallback
          *
          * Function to be called when languages have been loaded
@@ -251,10 +271,21 @@
         J.mixout(options, this.options);
         this.options = options;
 
-        this.usingButtons = this.options.usingButtons || true;
+        if ('undefined' !== typeof this.options.usingButtons) {
+            this.usingButtons = !!this.options.usingButtons;
+        }
+
+        if ('undefined' !== typeof this.options.notifyUpdate) {
+            this.notifyUpdate = !!this.options.notifyUpdate;
+        }
+
+        if ('undefined' !== typeof this.options.setUriPrefix) {
+            this.setUriPrefix = !!this.options.setUriPrefix;
+        }
 
         // Register listener.
         // TODO: should it be moved into the listeners method?
+        // TODO: calling init twice will add it twice.
         node.on.lang(this.onLangCallback);
 
         // Display initialization.
@@ -308,7 +339,8 @@
         }
 
         // Update node.player.
-        node.setLanguage(this.availableLanguages[this.currentLanguage]);
+        node.setLanguage(this.availableLanguages[this.currentLanguage],
+                         this.setUriPrefix, this.notifyUpdate);
     };
 
     /**

@@ -57,6 +57,12 @@
       <div class="heading h2">
         <a href="#languageselector.usingbuttons">LanguageSelector.usingButtons</a>
       </div>
+      <div class="heading h2">
+        <a href="#languageselector.seturiprefix">LanguageSelector.setUriPrefix</a>
+      </div>
+      <div class="heading h2">
+        <a href="#languageselector.notifyupdate">LanguageSelector.notifyUpdate</a>
+      </div>
       <div class="heading h3">
         <a href="#languageselector.onlangcallback">LanguageSelector.onLangCallback</a>
       </div>
@@ -428,6 +434,61 @@ path to the context files for this language.</li>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="languageselector.seturiprefix">
+  <h2>
+    <a href="#languageselector.seturiprefix" name="languageselector.seturiprefix" class="pilcrow">&#182;</a>
+    LanguageSelector.setUriPrefix
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>If TRUE, the Window URI prefix is updated when the language is set</p>
+
+<p>Default: TRUE.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">See</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">GameWindow.setUriPrefix
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">setUriPrefix</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.notifyupdate">
+  <h2>
+    <a href="#languageselector.notifyupdate" name="languageselector.notifyupdate" class="pilcrow">&#182;</a>
+    LanguageSelector.notifyUpdate
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>If TRUE, a message is sent to the server when the language is set</p>
+
+<p>Default: TRUE.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">notifyUpdate</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="languageselector.onlangcallback">
   <h3>
     <a href="#languageselector.onlangcallback" name="languageselector.onlangcallback" class="pilcrow">&#182;</a>
@@ -470,7 +531,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>Clear display.</p>
         </td>
@@ -486,7 +547,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Initialize widget.</p>
         </td>
@@ -501,7 +562,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Creates labeled buttons.</p>
         </td>
@@ -568,7 +629,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Initialize to English.</p>
         </td>
@@ -582,7 +643,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Extension point.</p>
         </td>
@@ -684,7 +745,17 @@ end.</p>
         <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">usingButtons</span> <span class="o">||</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span> <span class="o">=</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyUpdate</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">notifyUpdate</span> <span class="o">=</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyUpdate</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">setUriPrefix</span> <span class="o">=</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">;</span>
+        <span class="p">}</span>
 
 
 </pre></div>
@@ -693,10 +764,11 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Register listener.
-TODO: should it be moved into the listeners method?</p>
+TODO: should it be moved into the listeners method?
+TODO: calling init twice will add it twice.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">lang</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onLangCallback</span><span class="p">);</span>
@@ -708,7 +780,7 @@ TODO: should it be moved into the listeners method?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Display initialization.</p>
         </td>
@@ -768,7 +840,7 @@ TODO: should it be moved into the listeners method?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>Uncheck current language button and change className of label.</p>
         </td>
@@ -790,7 +862,7 @@ TODO: should it be moved into the listeners method?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Set current language index.</p>
         </td>
@@ -806,7 +878,7 @@ TODO: should it be moved into the listeners method?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Check language button and change className of label.</p>
         </td>
@@ -826,12 +898,13 @@ TODO: should it be moved into the listeners method?</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Update node.player.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">]);</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">],</span>
+                         <span class="k">this</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">notifyUpdate</span><span class="p">);</span>
     <span class="p">};</span>
 
 
