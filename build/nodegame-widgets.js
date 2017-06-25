@@ -9147,14 +9147,14 @@
 
 /**
  * # LanguageSelector
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Manages and displays information about languages available and selected
  *
  * www.nodegame.org
  */
- (function(node) {
+(function(node) {
 
     "use strict";
 
@@ -9163,8 +9163,8 @@
     node.widgets.register('LanguageSelector', LanguageSelector);
 
     // ## Meta-data
-
-    LanguageSelector.version = '0.3.1';
+    
+    LanguageSelector.version = '0.5.0';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
@@ -9269,8 +9269,10 @@
          * ## LanguageSelector.usingButtons
          *
          * Flag indicating if the interface should have buttons
+         *
+         * Default: TRUE.
          */
-        this.usingButtons = null;
+        this.usingButtons = true;
 
         /**
          * ## LanguageSelector.setUriPrefix
@@ -9322,18 +9324,20 @@
                 // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
-                        that.optionsLabel[language] = W.getElement('label',
-                            language + 'Label', {
-                                'for': language + 'RadioButton'
-                            });
+                        that.optionsLabel[language] = 
+                            W.getElement('label',
+                                         language + 'Label', {
+                                             'for': language + 'RadioButton'
+                                         });
 
-                        that.optionsDisplay[language] = W.getElement('input',
-                            language + 'RadioButton', {
-                                type: 'radio',
-                                name: 'languageButton',
-                                value: msg.data[language].name
-                            }
-                        );
+                        that.optionsDisplay[language] =
+                            W.getElement('input',
+                                         language + 'RadioButton', {
+                                             type: 'radio',
+                                             name: 'languageButton',
+                                             value: msg.data[language].name
+                                         }
+                                        );
 
                         that.optionsDisplay[language].onclick =
                             makeSetLanguageOnClick(language);
@@ -9347,14 +9351,14 @@
                         that.optionsLabel[language].className =
                             'unselectedButtonLabel';
                         that.displayForm.appendChild(
-                                that.optionsLabel[language]);
+                            that.optionsLabel[language]);
                     }
                 }
             }
             else {
 
-                that.displaySelection = node.window.getElement('select',
-                    'selectLanguage');
+                that.displaySelection = W.getElement('select',
+                                                     'selectLanguage');
                 for (language in msg.data) {
                     that.optionsLabel[language] =
                         document.createTextNode(msg.data[language].nativeName);
@@ -9475,7 +9479,6 @@
         this.currentLanguage = langName;
 
         if (this.usingButtons) {
-
             // Check language button and change className of label.
             this.optionsDisplay[this.currentLanguage].checked = 'checked';
             this.optionsLabel[this.currentLanguage].className =
