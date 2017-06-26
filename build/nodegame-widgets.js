@@ -2337,7 +2337,7 @@
 
 /**
  * # ChernoffFacesSimple
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -2397,8 +2397,6 @@
 
         this.features = null;
         this.controls = null;
-
-        this.init(this.options);
     }
 
     ChernoffFaces.prototype.init = function(options) {
@@ -6195,7 +6193,7 @@
 
 /**
  * # Controls
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -6269,8 +6267,6 @@
          * Flag to indicate whether the list has changed
          */
         this.hasChanged = false;
-
-        this.init(options);
     }
 
     Controls.prototype.add = function(root, id, attributes) {
@@ -7091,7 +7087,7 @@
 
 /**
  * # DoneButton
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed emits node.done()
@@ -7161,8 +7157,6 @@
             res = node.done();
             if (res) that.disable();
         };
-
-        this.init(options);
     }
 
     // ## DoneButton methods
@@ -7857,7 +7851,7 @@
 
 /**
  * # EndScreen
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -8086,8 +8080,6 @@
          * null initially, element added on append()
          */
         this.endScreenHTML = null;
-
-        this.init();
     }
 
     // Implements the Widget.append method.
@@ -8990,6 +8982,8 @@
  *
  * Creates a table that renders in each cell data captured by fired events
  *
+ * TODO: needs refactoring
+ *
  * www.nodegame.org
  */
 (function(node) {
@@ -9020,7 +9014,7 @@
         JSUS: {}
     };
 
-    function GameTable (options) {
+    function GameTable(options) {
         this.options = options;
         this.id = options.id;
         this.name = options.name || GameTable.name;
@@ -9028,8 +9022,6 @@
         this.root = null;
         this.gtbl = null;
         this.plist = null;
-
-        this.init(this.options);
     }
 
     GameTable.prototype.init = function(options) {
@@ -9152,6 +9144,8 @@
  *
  * Manages and displays information about languages available and selected
  *
+ * @TODO: bubble event in case of buttons (now there are many listeners).
+ *
  * www.nodegame.org
  */
 (function(node) {
@@ -9164,7 +9158,7 @@
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.5.0';
+    LanguageSelector.version = '0.6.0';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
@@ -9275,9 +9269,25 @@
         this.usingButtons = true;
 
         /**
+         * ## LanguageSelector.updatePlayer
+         *
+         * Specifies when updating the player
+         *
+         * Available options:
+         *
+         *   - false: alias for 'never',
+         *   - 'never': never notifies,
+         *   - 'onselect': each time a selection is made,
+         *   - 'ondone': when current step is done.
+         *
+         * Default: 'ondone'
+         */
+        this.updatePlayer = 'ondone';
+
+        /**
          * ## LanguageSelector.setUriPrefix
          *
-         * If TRUE, the Window URI prefix is updated when the language is set
+         * If TRUE, the Window URI prefix is updated when the player is updated
          *
          * Default: TRUE.
          *
@@ -9288,7 +9298,7 @@
         /**
          * ## LanguageSelector.notifyServer
          *
-         * If TRUE, a message is sent to the server when the language is set
+         * If TRUE, a message is sent to the server when the player is updated
          *
          * Default: TRUE.
          */
@@ -9372,15 +9382,17 @@
                 }
                 that.displayForm.appendChild(that.displaySelection);
                 that.displayForm.onchange = function() {
-                    that.setLanguage(that.displaySelection.value);
+                    that.setLanguage(that.displaySelection.value,
+                                     that.updatePlayer === 'onselect');
                 };
             }
 
             that.loadingDiv.style.display = 'none';
             that.languagesLoaded = true;
 
-            // Initialize to English.
-            that.setLanguage('en');
+            // Initialize with current value inside player object,
+            // or default to English. Does not update the player object yet.
+            that.setLanguage(node.player.lang.shortName || 'en', false);
 
             // Extension point.
             if (that.onLangCallbackExtension) {
@@ -9388,9 +9400,9 @@
                 that.onLangCallbackExtension = null;
             }
 
-            function makeSetLanguageOnClick(langName) {
+            function makeSetLanguageOnClick(langStr) {
                 return function() {
-                    that.setLanguage(langName);
+                    that.setLanguage(langStr, that.updatePlayer === 'onselect');
                 };
             }
         };
@@ -9425,7 +9437,28 @@
         }
 
         if ('undefined' !== typeof this.options.notifyServer) {
-            this.notifyServer = !!this.options.notifyServer;
+            if (false === this.options.notifyServer) {
+                this.options.notifyServer = 'never';
+            }
+            else if ('string' === typeof this.options.notifyServer) {
+                if ('never' === this.options.notifyServer ||
+                    'onselect' === this.options.notifyServer ||
+                    'ondone' === this.options.notifyServer) {
+                    
+                    this.notifyServer = this.options.notifyServer;
+                }
+                else {
+                    throw new Error('LanguageSelector.init: invalid value ' +
+                                    'for notifyServer: "' +
+                                    this.options.notifyServer + '". Valid ' +
+                                    'values: "never","onselect", "ondone".');
+                }
+            }
+            else {
+                throw new Error('LanguageSelector.init: options.notifyServer ' +
+                                'must be ' +
+                                this.options.notifyServer);
+            }
         }
 
         if ('undefined' !== typeof this.options.setUriPrefix) {
@@ -9452,13 +9485,16 @@
     /**
      * ### LanguageSelector.setLanguage
      *
-     * Sets language and updates view
+     * Sets language within the widget and globally and updates the display
      *
      * @param {string} langName shortName of language to be set
+     * @param {boolean} updatePlayer If FALSE, the language is set only
+     *   inside the widget, and no changes are made to the player object.
+     *   Default: TRUE
      *
      * @see NodeGameClient.setLanguage
      */
-    LanguageSelector.prototype.setLanguage = function(langName) {
+    LanguageSelector.prototype.setLanguage = function(langName, updatePlayer) {
 
         if (this.usingButtons) {
 
@@ -9487,8 +9523,10 @@
         }
 
         // Update node.player.
-        node.setLanguage(this.availableLanguages[this.currentLanguage],
-                         this.setUriPrefix, this.notifyServer);
+        if (updatePlayer !== false) {
+            node.setLanguage(this.availableLanguages[this.currentLanguage],
+                             this.setUriPrefix, this.notifyServer);
+        }
     };
 
     /**
@@ -9521,6 +9559,22 @@
     LanguageSelector.prototype.loadLanguages = function(options) {
         if (!this.languagesLoaded) this.updateAvalaibleLanguages(options);
         else if (options && options.callback) options.callback();
+    };
+
+    /**
+     * ### LanguageSelector.listeners
+     *
+     * Implements Widget.listeners
+     */
+    LanguageSelector.prototype.listeners = function() {
+        var that;
+        that = this;
+        node.events.step.on('REALLY_DONE', function() {
+            if (that.updatePlayer === 'ondone') {
+                node.setLanguage(that.availableLanguages[that.currentLanguage],
+                                 that.setUriPrefix, that.notifyServer);
+            }
+        });
     };
 
 })(node);
@@ -9599,8 +9653,6 @@
          * Precision of floating point number to display
          */
         this.precision = 2;
-
-        this.init(options);
     }
 
     // ## MoneyTalks methods
@@ -10441,7 +10493,7 @@
 
 /**
  * # Requirements
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Checks a list of requirements and displays the results
@@ -12823,7 +12875,7 @@
         options = options || {};
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined');
+                                'object or undefined. Found: ' + options);
         }
 
         // Important! Do not modify directly options, because it might
@@ -13426,7 +13478,7 @@
 
 /**
  * # WaitingRoom
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display the number of connected / required players to start a game
