@@ -58,6 +58,9 @@
         <a href="#languageselector.usingbuttons">LanguageSelector.usingButtons</a>
       </div>
       <div class="heading h2">
+        <a href="#languageselector.updateplayer">LanguageSelector.updatePlayer</a>
+      </div>
+      <div class="heading h2">
         <a href="#languageselector.seturiprefix">LanguageSelector.setUriPrefix</a>
       </div>
       <div class="heading h2">
@@ -84,6 +87,9 @@
       <div class="heading h3">
         <a href="#languageselector.loadlanguages">LanguageSelector.loadLanguages</a>
       </div>
+      <div class="heading h3">
+        <a href="#languageselector.listeners">LanguageSelector.listeners</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -101,12 +107,18 @@
 </div>
 
 
-<p>Copyright(c) 2017 Stefano Balietti <a href="m&#97;&#105;&#x6C;&#x74;&#111;:&#x73;t&#101;&#64;n&#x6F;d&#x65;&#x67;&#x61;m&#101;&#46;&#111;&#114;&#x67;">&#x73;t&#101;&#64;n&#x6F;d&#x65;&#x67;&#x61;m&#101;&#46;&#111;&#114;&#x67;</a>
+<p>Copyright(c) 2017 Stefano Balietti <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6F;:&#115;&#x74;&#101;&#64;&#110;o&#100;&#x65;&#103;a&#109;&#101;&#46;&#x6F;rg">&#115;&#x74;&#101;&#64;&#110;o&#100;&#x65;&#103;a&#109;&#101;&#46;&#x6F;rg</a>
 MIT Licensed</p>
   </div>
   <div class="body"><p>Manages and displays information about languages available and selected</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">TODO:</div>
+    <div class="dox_tag_detail">
+      <span>bubble event in case of buttons (now there are many listeners).
 
-<p>www.nodegame.org</p>
+www.nodegame.org</span>
+    </div>
   </div>
 </div>
         </td>
@@ -134,7 +146,7 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.0&#39;</span><span class="p">;</span>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.6.0&#39;</span><span class="p">;</span>
     <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display information about the current &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;language and allows to change language.&#39;</span><span class="p">;</span>
     <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Language&#39;</span><span class="p">;</span>
@@ -436,6 +448,39 @@ path to the context files for this language.</li>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
+<div class="pilwrap" id="languageselector.updateplayer">
+  <h2>
+    <a href="#languageselector.updateplayer" name="languageselector.updateplayer" class="pilcrow">&#182;</a>
+    LanguageSelector.updatePlayer
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p>Specifies when updating the player</p>
+
+<p>Available options:</p>
+
+<ul>
+<li>false: alias for 'never',
+<ul><li>'never': never notifies,</li>
+<li>'onselect': each time a selection is made,</li>
+<li>'ondone': when current step is done.</li></ul></li>
+</ul>
+
+<p>Default: 'ondone'</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">updatePlayer</span> <span class="o">=</span> <span class="s1">&#39;ondone&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
 <div class="pilwrap" id="languageselector.seturiprefix">
   <h2>
     <a href="#languageselector.seturiprefix" name="languageselector.seturiprefix" class="pilcrow">&#182;</a>
@@ -444,7 +489,7 @@ path to the context files for this language.</li>
 </div>
 
   </div>
-  <div class="body"><p>If TRUE, the Window URI prefix is updated when the language is set</p>
+  <div class="body"><p>If TRUE, the Window URI prefix is updated when the player is updated</p>
 
 <p>Default: TRUE.</p>
   </div>
@@ -475,7 +520,7 @@ path to the context files for this language.</li>
 </div>
 
   </div>
-  <div class="body"><p>If TRUE, a message is sent to the server when the language is set</p>
+  <div class="body"><p>If TRUE, a message is sent to the server when the player is updated</p>
 
 <p>Default: TRUE.</p>
   </div>
@@ -533,7 +578,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>Clear display.</p>
         </td>
@@ -549,7 +594,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>Initialize widget.</p>
         </td>
@@ -564,7 +609,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Creates labeled buttons.</p>
         </td>
@@ -619,7 +664,8 @@ end.</p>
                 <span class="p">}</span>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">);</span>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span>
+                                     <span class="nx">that</span><span class="p">.</span><span class="nx">updatePlayer</span> <span class="o">===</span> <span class="s1">&#39;onselect&#39;</span><span class="p">);</span>
                 <span class="p">};</span>
             <span class="p">}</span>
 
@@ -633,12 +679,13 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
-<p>Initialize to English.</p>
+<p>Initialize with current value inside player object,
+or default to English. Does not update the player object yet.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">);</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">shortName</span> <span class="o">||</span> <span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
 
 
 </pre></div>
@@ -647,7 +694,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Extension point.</p>
         </td>
@@ -657,9 +704,9 @@ end.</p>
                 <span class="nx">that</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="kd">function</span> <span class="nx">makeSetLanguageOnClick</span><span class="p">(</span><span class="nx">langName</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">function</span> <span class="nx">makeSetLanguageOnClick</span><span class="p">(</span><span class="nx">langStr</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">langName</span><span class="p">);</span>
+                    <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">langStr</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">updatePlayer</span> <span class="o">===</span> <span class="s1">&#39;onselect&#39;</span><span class="p">);</span>
                 <span class="p">};</span>
             <span class="p">}</span>
         <span class="p">};</span>
@@ -752,7 +799,28 @@ end.</p>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">=</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">=</span> <span class="s1">&#39;never&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;never&#39;</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">||</span>
+                    <span class="s1">&#39;onselect&#39;</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">||</span>
+                    <span class="s1">&#39;ondone&#39;</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">)</span> <span class="p">{</span>
+
+                    <span class="k">this</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;LanguageSelector.init: invalid value &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;for notifyServer: &quot;&#39;</span> <span class="o">+</span>
+                                    <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">+</span> <span class="s1">&#39;&quot;. Valid &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;values: &quot;never&quot;,&quot;onselect&quot;, &quot;ondone&quot;.&#39;</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;LanguageSelector.init: options.notifyServer &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;must be &#39;</span> <span class="o">+</span>
+                                <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">);</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">)</span> <span class="p">{</span>
@@ -766,7 +834,7 @@ end.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Register listener.
 TODO: should it be moved into the listeners method?
@@ -782,7 +850,7 @@ TODO: calling init twice will add it twice.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Display initialization.</p>
         </td>
@@ -813,7 +881,7 @@ TODO: calling init twice will add it twice.</p>
 </div>
 
   </div>
-  <div class="body"><p>Sets language and updates view</p>
+  <div class="body"><p>Sets language within the widget and globally and updates the display</p>
   </div>
   <div class="details">
     <div class="dox_tag_title">Params</div>
@@ -821,6 +889,13 @@ TODO: calling init twice will add it twice.</p>
       <span class="dox_tag_name">langName</span>
       <span class="dox_type">string</span>
       <span>shortName of language to be set</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">updatePlayer</span>
+      <span class="dox_type">boolean</span>
+      <span>If FALSE, the language is set only
+  inside the widget, and no changes are made to the player object.
+  Default: TRUE</span>
     </div>
     <div class="dox_tag_title">See</div>
     <div class="dox_tag_detail">
@@ -831,7 +906,7 @@ TODO: calling init twice will add it twice.</p>
 </div>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setLanguage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">langName</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setLanguage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">langName</span><span class="p">,</span> <span class="nx">updatePlayer</span><span class="p">)</span> <span class="p">{</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
 
@@ -842,7 +917,7 @@ TODO: calling init twice will add it twice.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>Uncheck current language button and change className of label.</p>
         </td>
@@ -864,7 +939,7 @@ TODO: calling init twice will add it twice.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>Set current language index.</p>
         </td>
@@ -879,7 +954,7 @@ TODO: calling init twice will add it twice.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Check language button and change className of label.</p>
         </td>
@@ -899,13 +974,15 @@ TODO: calling init twice will add it twice.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Update node.player.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">],</span>
-                         <span class="k">this</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">updatePlayer</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">node</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">],</span>
+                             <span class="k">this</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">);</span>
+        <span class="p">}</span>
     <span class="p">};</span>
 
 
@@ -983,6 +1060,37 @@ TODO: calling init twice will add it twice.</p>
     <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">loadLanguages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">languagesLoaded</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">updateAvalaibleLanguages</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="languageselector.listeners">
+  <h3>
+    <a href="#languageselector.listeners" name="languageselector.listeners" class="pilcrow">&#182;</a>
+    LanguageSelector.listeners
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>Implements Widget.listeners</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">step</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;REALLY_DONE&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">updatePlayer</span> <span class="o">===</span> <span class="s1">&#39;ondone&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">node</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="nx">that</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">],</span>
+                                 <span class="nx">that</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
     <span class="p">};</span>
 
 <span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
