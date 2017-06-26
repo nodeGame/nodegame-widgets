@@ -9444,7 +9444,7 @@
                 if ('never' === this.options.notifyServer ||
                     'onselect' === this.options.notifyServer ||
                     'ondone' === this.options.notifyServer) {
-                    
+
                     this.notifyServer = this.options.notifyServer;
                 }
                 else {
