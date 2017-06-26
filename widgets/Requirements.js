@@ -1,6 +1,6 @@
 /**
  * # Requirements
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Checks a list of requirements and displays the results

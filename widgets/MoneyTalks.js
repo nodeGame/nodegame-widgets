@@ -72,8 +72,6 @@
          * Precision of floating point number to display
          */
         this.precision = 2;
-
-        this.init(options);
     }
 
     // ## MoneyTalks methods

@@ -1,6 +1,6 @@
 /**
  * # EndScreen
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -229,8 +229,6 @@
          * null initially, element added on append()
          */
         this.endScreenHTML = null;
-
-        this.init();
     }
 
     // Implements the Widget.append method.

@@ -5,6 +5,8 @@
  *
  * Creates a table that renders in each cell data captured by fired events
  *
+ * TODO: needs refactoring
+ *
  * www.nodegame.org
  */
 (function(node) {
@@ -35,7 +37,7 @@
         JSUS: {}
     };
 
-    function GameTable (options) {
+    function GameTable(options) {
         this.options = options;
         this.id = options.id;
         this.name = options.name || GameTable.name;
@@ -43,8 +45,6 @@
         this.root = null;
         this.gtbl = null;
         this.plist = null;
-
-        this.init(this.options);
     }
 
     GameTable.prototype.init = function(options) {

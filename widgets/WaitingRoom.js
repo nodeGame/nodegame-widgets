@@ -1,6 +1,6 @@
 /**
  * # WaitingRoom
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display the number of connected / required players to start a game
