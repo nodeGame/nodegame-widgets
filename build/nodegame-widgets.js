@@ -12316,7 +12316,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-    WaitingRoom.version = '1.1.0';
+    WaitingRoom.version = '1.2.0';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -12330,13 +12330,13 @@
     };
 
     // ## Prototype Properties.
-    
+
     /** ### WaitingRoom.sounds
      *
      * Default sounds to play on particular events
      */
     WaitingRoom.sounds = {
-        
+
         // #### dispatch
         dispatch: '/sounds/doorbell.ogg'
     };
@@ -12362,11 +12362,41 @@
             'Thank you for your patience.<br>' +
             'Unfortunately, there are not enough participants in ' +
             'your group to start the experiment.<br>',
-        
+
         // #### roomClosed
         roomClosed: '<span style="color: red"> The ' +
             'waiting room is <strong>CLOSED</strong>. You have been ' +
-            'disconnected. Please try again later.</span><br><br>'
+            'disconnected. Please try again later.</span><br><br>',
+
+        // #### tooManyPlayers
+        tooManyPlayers: function(widget, numberOfGameSlots) {
+            return 'There are more players in this waiting room ' +
+                'than there are playslots in the game. Only ' +
+                 numberOfGameSlots + ' players will be selected ' +
+                'to play the game.';
+        },
+
+        // #### notSelectedClosed
+        notSelectedClosed: '<h3 align="center">' +
+            '<span style="color: red">Unfortunately, you were ' +
+            '<strong>not selected</strong> to join the game this time. ' +
+            'Thank you for your participation.</span></h3><br><br>',
+
+        // #### notSelectedOpen
+        notSelectedOpen: '<h3 align="center">' +
+            '<span style="color: red">Unfortunately, you were ' +
+            '<strong>not selected</strong> to join the game this time, ' +
+            'but you may join the next one.</span><a class="hand" ' +
+            'onclick=javascript:this.parentElement.innerHTML="">' +
+            'Ok, I got it.</a></h3><br><br>' +
+            'Thank you for your participation.</span></h3><br><br>',
+
+        exitCode: function(widget, data) {
+            return '<br>You have been disconnected. ' +
+                ('undefined' !== typeof data.exit ?
+                 ('Please report this exit code: ' + data.exit) : '') +
+                '<br></h3>';
+        }
     };
 
     /**
@@ -12495,21 +12525,17 @@
          * Flag that indicates whether to disconnect an not selected player
          */
         this.disconnectIfNotSelected = null;
-        
+
         /**
-         * ### WaitingRoom.disconnectText
+         * ### WaitingRoom.texts
          *
-         * Content of `this.bodyDiv.innerHTML` when player is disconnected
-         */
-        this.disconnectText = null;
-        
-        /**
-         * ### WaitingRoom.roomClosedText
+         * Contains all the texts displayed to the players
          *
-         * Content of `this.bodyDiv.innerHTML` when player room is closed
+         * @see WaitingRoom.setText
+         * @see WaitingRoom.getText
          */
-        this.roomClosedText = null;
-        
+        this.texts = {};
+
         /**
          * ### WaitingRoom.dispatchSound
          *
@@ -12603,19 +12629,6 @@
             this.connected = conf.connected;
         }
 
-        if (conf.disconnectText) {
-            if ('string' !== typeof conf.disconnectText) {
-                throw new TypeError('WaitingRoom.init: conf.' +
-                                    'disconnectText must be string or ' +
-                                    'undefined. Found: ' +
-                                    conf.disconnectText);
-            }
-            this.disconnectText = conf.disconnectText;
-        }
-        else {
-            this.disconnectText = WaitingRoom.texts.disconnectText;
-        }
-
         if (conf.disconnectIfNotSelected) {
             if ('boolean' !== typeof conf.disconnectIfNotSelected) {
                 throw new TypeError('WaitingRoom.init: ' +
@@ -12628,10 +12641,12 @@
             this.disconnectIfNotSelected = false;
         }
 
+        // Sounds.
+        
         if (conf.dispatchSound) {
             if ('boolean' !== typeof conf.dispatchSound &&
                 'string' !== typeof conf.dispatchSound) {
-                
+
                 throw new TypeError('WaitingRoom.init: ' +
                                     'conf.dispatchSound must be boolean, ' +
                                     'string or undefined. Found: ' +
@@ -12642,50 +12657,16 @@
         }
 
         // Texts.
-        
-        if (conf.notEnoughPlayersText) {
-            if ('string' !== typeof conf.notEnoughPlayersText) {
-                
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.notEnoughPlayersText must be ' +
-                                    'string or undefined. Found: ' +
-                                    conf.notEnoughPlayersText);
-            }
-            this.notEnoughPlayersText = conf.notEnoughPlayersText;
-        }
 
-        if (conf.disconnectText) {
-            if ('string' !== typeof conf.disconnectText) {
-                
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.disconnectText must be string ' +
-                                    'or undefined. Found: ' +
-                                    conf.disconnectText);
-            }
-            this.disconnectText = conf.disconnectText;
-        }
-        
-        if (conf.waitedTooLongText) {
-            if ('string' !== typeof conf.waitedTooLongText) {
-                
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.waitedTooLongText must be string ' +
-                                    'or undefined. Found: ' +
-                                    conf.waitedTooLongText);
-            }
-            this.waitedTooLongText = conf.waitedTooLongText;
-        }
-        
-        if (conf.roomClosedText) {
-            if ('string' !== typeof conf.roomClosedText) {
-                
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.roomClosedText must be string ' +
-                                    'or undefined. Found: ' +
-                                    conf.roomClosedText);
-            }
-            this.roomClosedText = conf.roomClosedText;
-        }
+        this.setText('disconnect', conf.disconnectText);
+        this.setText('waitedTooLong', conf.waitedTooLongText);
+        this.setText('notEnoughPlayers', conf.notEnoughPlayersText);
+        this.setText('roomClosed', conf.roomClosedText);
+        this.setText('tooManyPlayers', conf.tooManyPlayersText);
+        this.setText('notSelectedClosed', conf.notSelectedClosedText);
+        this.setText('notSelectedOpen', conf.notSelectedOpenText);
+        this.setText('exitCode', conf.exitCodeText);
+
     };
 
     /**
@@ -12707,7 +12688,7 @@
         this.timer = node.widgets.append('VisualTimer', this.timerDiv, {
             milliseconds: this.waitTime,
             timeup: function() {
-                that.bodyDiv.innerHTML = that.waitedTooLongText;
+                that.bodyDiv.innerHTML = that.getText('waitedTooLong');
             },
             update: 1000
         });
@@ -12773,11 +12754,10 @@
             this.playerCount.innerHTML = '<span style="color:red">' +
                 this.connected + '</span>' + ' / ' + this.poolSize;
             this.playerCountTooHigh.style.display = '';
-            // TODO: make it parametric like other strings.
-            this.playerCountTooHigh.innerHTML = 'There are more players in ' +
-                'this waiting room than there are playslots in the game. ' +
-                'Only ' + numberOfGameSlots + ' players will be selected to ' +
-                'play the game.';
+debugger
+            // Update text.
+            this.playerCountTooHigh.innerHTML =
+                this.getText('tooManyPlayers', numberOfGameSlots);
         }
         else {
             this.playerCount.innerHTML = this.connected + ' / ' + this.poolSize;
@@ -12845,54 +12825,40 @@
         });
 
         node.on.data('DISPATCH', function(msg) {
-            var data, notSelected, reportExitCode;
+            var data, reportExitCode;
             msg = msg || {};
             data = msg.data || {};
 
-            reportExitCode = '<br>You have been disconnected. ' +
-                ('undefined' !== typeof data.exit ?
-                 ('Please report this exit code: ' + data.exit) : '') +
-                '<br></h3>';
-
+            // Alert player he/she is about to play.
             if (data.action === 'AllPlayersConnected') {
                 that.alertPlayer();
             }
+            // Not selected/no game/etc.
+            else {
+                reportExitCode = that.getText('exitCode', msg.data);
 
-            else if (data.action === 'NotEnoughPlayers') {
-
-                that.bodyDiv.innerHTML = that.notEnoughPlayersText;
-
-                if (that.onTimeout) that.onTimeout(msg.data);
-
-                that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
-            }
-
-            else if (data.action === 'NotSelected') {
-                
-                // TODO: make all strings parameteric.
-                notSelected = '<h3 align="center">' +
-                    '<span style="color: red">Unfortunately, you were ' +
-                    '<strong>not selected</strong> to join the game this time';
-
-                if (false === data.shouldDispatchMoreGames ||
-                    that.disconnectIfNotSelected) {
-
-                    that.bodyDiv.innerHTML = notSelected + '. Thank you ' +
-                        'for your participation.</span></h3><br><br>';
-
+                if (data.action === 'NotEnoughPlayers') {                    
+                    that.bodyDiv.innerHTML = that.getText('notEnoughPlayers');
+                    if (that.onTimeout) that.onTimeout(msg.data);
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
                 }
-                else {
-                    that.msgDiv.innerHTML = notSelected + ', but you ' +
-                        'may join the next one.</span> ' +
-                        '<a class="hand" onclick=' +
-                        'javascript:this.parentElement.innerHTML="">' +
-                        'Ok, I got it.</a></h3><br><br>';
-                }
-            }
+                else if (data.action === 'NotSelected') {
 
-            else if (data.action === 'Disconnect') {
-                that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                    if (false === data.shouldDispatchMoreGames ||
+                        that.disconnectIfNotSelected) {
+                        
+                        that.bodyDiv.innerHTML =
+                            that.getText('notSelectedClosed');
+
+                        that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                    }
+                    else {
+                        that.msgDiv.innerHTML = that.getText('notSelectedOpen');
+                    }
+                }
+                else if (data.action === 'Disconnect') {
+                    that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                }
             }
         });
 
@@ -12919,7 +12885,7 @@
             that.stopTimer();
 
             // Write about disconnection in page.
-            that.bodyDiv.innerHTML = that.disconnectText;
+            that.bodyDiv.innerHTML = that.getText('disconnect');
 
 //             // Enough to not display it in case of page refresh.
 //             setTimeout(function() {
@@ -12928,7 +12894,7 @@
         });
 
         node.on.data('ROOM_CLOSED', function() {
-            that.disconnect(that.roomClosedText);
+            that.disconnect(that.getText('roomClosed'));
         });
     };
 
@@ -12945,8 +12911,18 @@
         }
     };
 
+    /**
+     * ### WaitingRoom.disconnect
+     *
+     * Disconnects the playr, stops the timer, and displays a msg
+     *
+     * @param {string|function} msg. Optional. A disconnect message. If set,
+     *    replaces the current value for future calls.
+     *
+     * @see WaitingRoom.setText
+     */
     WaitingRoom.prototype.disconnect = function(msg) {
-        if (msg) this.disconnectText = msg;
+        if (msg) this.setText('disconnect', msg);
         node.socket.disconnect();
         this.stopTimer();
     };
@@ -12956,7 +12932,7 @@
 
         // Play sound, if requested.
         if (this.dispatchSound) JSUS.playSound(this.dispatchSound);
-        
+
         // If document.hasFocus() returns TRUE, then just one repeat is enough.
         if (document.hasFocus && document.hasFocus()) {
             JSUS.blinkTitle('GAME STARTS!', { repeatFor: 1 });
@@ -12988,6 +12964,70 @@
         if (this.dots) this.dots.stop();
         node.deregisterSetup('waitroom');
     };
+
+    /**
+     * ### WaitingRoom.getText
+     *
+     * Returns the requested text
+     *
+     * @param {string} name The name of the text variable.
+     * @param {mixed} param Optional. Additional to pass to the callback, if any
+     *
+     * @return {string} The requested text
+     *
+     * @see WaitingRoom.setText
+     */
+    WaitingRoom.prototype.getText = function(name, param) {
+        var txt;
+        txt = this.texts[name];
+        if ('string' === typeof txt) return txt;
+        if ('function' === typeof txt) {
+            txt = txt(this, param);
+            if ('string' !== typeof txt) {
+                throw new TypeError('WaitingRoom.getText: cb "' + name +
+                                    'did not return a string. Found: ' + txt);
+            }
+            return txt;
+        }
+        throw new Error('WaitingRoom.getText: unknown text requested: ' + name);
+    };
+
+    /**
+     * ### WaitingRoom.setText
+     *
+     * Checks and assigns the value of a text to display to user
+     *
+     * Throws an error if value is invalid
+     *
+     * @param {string} name The name of the property to check
+     * @param {mixed} value Optional. The value for the text. If undefined
+     *    the default value from WaitingRoom.texts is used
+     * @param {boolean} noDefault Optional. If true, no default value is
+     *    assigned in case value is undefined. Default: false
+     *
+     * @return {string|function} The validated property's value
+     *
+     * @see WaitingRoom.init
+     * @see WaitingRoom.texts
+     * @see WaitingRoom.getText
+     */
+    WaitingRoom.prototype.setText = function(name, value, noDefault) {
+        if ('undefined' === typeof value) {
+            if (!noDefault) this.texts[name] = WaitingRoom.texts[name];
+        }
+        else if ('string' === typeof value || 'function' === typeof value) {
+            this.texts[name] = value;
+        }
+        else {
+            throw new TypeError('WaitingRoom.setText: text "' + name +
+                                '" must be string, function or undefined. ' +
+                                'Found: ' + value);
+        }
+        return this.texts[name];
+    };
+
+    // ## Helper functions.
+
 
 })(node);
 
