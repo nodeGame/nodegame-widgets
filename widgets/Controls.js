@@ -1,6 +1,6 @@
 /**
  * # Controls
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -74,8 +74,6 @@
          * Flag to indicate whether the list has changed
          */
         this.hasChanged = false;
-
-        this.init(options);
     }
 
     Controls.prototype.add = function(root, id, attributes) {

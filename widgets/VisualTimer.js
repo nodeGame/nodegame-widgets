@@ -141,7 +141,7 @@
         options = options || {};
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined');
+                                'object or undefined. Found: ' + options);
         }
 
         // Important! Do not modify directly options, because it might

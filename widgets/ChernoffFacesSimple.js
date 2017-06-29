@@ -1,6 +1,6 @@
 /**
  * # ChernoffFacesSimple
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -60,8 +60,6 @@
 
         this.features = null;
         this.controls = null;
-
-        this.init(this.options);
     }
 
     ChernoffFaces.prototype.init = function(options) {
