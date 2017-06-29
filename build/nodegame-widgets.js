@@ -13495,11 +13495,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-<<<<<<< HEAD
     WaitingRoom.version = '1.2.0';
-=======
-    WaitingRoom.version = '1.1.1';
->>>>>>> e7ed549a77f9c79fc4d4373e6cf13a361638cd70
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -13712,25 +13708,12 @@
         /**
          * ### WaitingRoom.texts
          *
-<<<<<<< HEAD
          * Contains all the texts displayed to the players
-=======
-         * Content of `this.bodyDiv.innerHTML` when player is disconnected
-         */
-        this.disconnectText = null;
-
-        /**
-         * ### WaitingRoom.roomClosedText
->>>>>>> e7ed549a77f9c79fc4d4373e6cf13a361638cd70
          *
          * @see WaitingRoom.setText
          * @see WaitingRoom.getText
          */
-<<<<<<< HEAD
         this.texts = {};
-=======
-        this.roomClosedText = null;
->>>>>>> e7ed549a77f9c79fc4d4373e6cf13a361638cd70
 
         /**
          * ### WaitingRoom.dispatchSound
@@ -13825,22 +13808,6 @@
             this.connected = conf.connected;
         }
 
-<<<<<<< HEAD
-=======
-        if (conf.disconnectText) {
-            if ('string' !== typeof conf.disconnectText) {
-                throw new TypeError('WaitingRoom.init: conf.' +
-                                    'disconnectText must be string or ' +
-                                    'undefined. Found: ' +
-                                    conf.disconnectText);
-            }
-            this.disconnectText = conf.disconnectText;
-        }
-        else {
-            this.disconnectText = WaitingRoom.texts.disconnect;
-        }
-
->>>>>>> e7ed549a77f9c79fc4d4373e6cf13a361638cd70
         if (conf.disconnectIfNotSelected) {
             if ('boolean' !== typeof conf.disconnectIfNotSelected) {
                 throw new TypeError('WaitingRoom.init: ' +
@@ -13869,63 +13836,7 @@
         }
 
         // Texts.
-<<<<<<< HEAD
-
-        this.setText('disconnect', conf.disconnectText);
-        this.setText('waitedTooLong', conf.waitedTooLongText);
-        this.setText('notEnoughPlayers', conf.notEnoughPlayersText);
-        this.setText('roomClosed', conf.roomClosedText);
-        this.setText('tooManyPlayers', conf.tooManyPlayersText);
-        this.setText('notSelectedClosed', conf.notSelectedClosedText);
-        this.setText('notSelectedOpen', conf.notSelectedOpenText);
-        this.setText('exitCode', conf.exitCodeText);
-
-=======
-
-        if (conf.notEnoughPlayersText) {
-            if ('string' !== typeof conf.notEnoughPlayersText) {
-
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.notEnoughPlayersText must be ' +
-                                    'string or undefined. Found: ' +
-                                    conf.notEnoughPlayersText);
-            }
-            this.notEnoughPlayersText = conf.notEnoughPlayersText;
-        }
-
-        if (conf.disconnectText) {
-            if ('string' !== typeof conf.disconnectText) {
-
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.disconnectText must be string ' +
-                                    'or undefined. Found: ' +
-                                    conf.disconnectText);
-            }
-            this.disconnectText = conf.disconnectText;
-        }
-
-        if (conf.waitedTooLongText) {
-            if ('string' !== typeof conf.waitedTooLongText) {
-
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.waitedTooLongText must be string ' +
-                                    'or undefined. Found: ' +
-                                    conf.waitedTooLongText);
-            }
-            this.waitedTooLongText = conf.waitedTooLongText;
-        }
-
-        if (conf.roomClosedText) {
-            if ('string' !== typeof conf.roomClosedText) {
-
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.roomClosedText must be string ' +
-                                    'or undefined. Found: ' +
-                                    conf.roomClosedText);
-            }
-            this.roomClosedText = conf.roomClosedText;
-        }
->>>>>>> e7ed549a77f9c79fc4d4373e6cf13a361638cd70
+        this.setTexts(conf.texts);
     };
 
     /**
@@ -14013,7 +13924,9 @@
             this.playerCount.innerHTML = '<span style="color:red">' +
                 this.connected + '</span>' + ' / ' + this.poolSize;
             this.playerCountTooHigh.style.display = '';
-debugger
+
+            // TODO: check here (was a debugger).
+            
             // Update text.
             this.playerCountTooHigh.innerHTML =
                 this.getText('tooManyPlayers', numberOfGameSlots);
@@ -14096,33 +14009,12 @@ debugger
             else {
                 reportExitCode = that.getText('exitCode', msg.data);
 
-<<<<<<< HEAD
                 if (data.action === 'NotEnoughPlayers') {                    
                     that.bodyDiv.innerHTML = that.getText('notEnoughPlayers');
                     if (that.onTimeout) that.onTimeout(msg.data);
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
                 }
                 else if (data.action === 'NotSelected') {
-=======
-            else if (data.action === 'NotEnoughPlayers') {
-
-                that.bodyDiv.innerHTML = that.notEnoughPlayersText;
-
-                if (that.onTimeout) that.onTimeout(msg.data);
-
-                that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
-            }
-
-            else if (data.action === 'NotSelected') {
-
-                // TODO: make all strings parameteric.
-                notSelected = '<h3 align="center">' +
-                    '<span style="color: red">Unfortunately, you were ' +
-                    '<strong>not selected</strong> to join the game this time';
-
-                if (false === data.shouldDispatchMoreGames ||
-                    that.disconnectIfNotSelected) {
->>>>>>> e7ed549a77f9c79fc4d4373e6cf13a361638cd70
 
                     if (false === data.shouldDispatchMoreGames ||
                         that.disconnectIfNotSelected) {
@@ -14246,33 +14138,6 @@ debugger
     };
 
     /**
-     * ### WaitingRoom.getText
-     *
-     * Returns the requested text
-     *
-     * @param {string} name The name of the text variable.
-     * @param {mixed} param Optional. Additional to pass to the callback, if any
-     *
-     * @return {string} The requested text
-     *
-     * @see WaitingRoom.setText
-     */
-    WaitingRoom.prototype.getText = function(name, param) {
-        var txt;
-        txt = this.texts[name];
-        if ('string' === typeof txt) return txt;
-        if ('function' === typeof txt) {
-            txt = txt(this, param);
-            if ('string' !== typeof txt) {
-                throw new TypeError('WaitingRoom.getText: cb "' + name +
-                                    'did not return a string. Found: ' + txt);
-            }
-            return txt;
-        }
-        throw new Error('WaitingRoom.getText: unknown text requested: ' + name);
-    };
-
-    /**
      * ### WaitingRoom.setText
      *
      * Checks and assigns the value of a text to display to user
@@ -14285,30 +14150,131 @@ debugger
      * @param {boolean} noDefault Optional. If true, no default value is
      *    assigned in case value is undefined. Default: false
      *
-     * @return {string|function} The validated property's value
-     *
      * @see WaitingRoom.init
      * @see WaitingRoom.texts
      * @see WaitingRoom.getText
      */
     WaitingRoom.prototype.setText = function(name, value, noDefault) {
-        if ('undefined' === typeof value) {
-            if (!noDefault) this.texts[name] = WaitingRoom.texts[name];
-        }
-        else if ('string' === typeof value || 'function' === typeof value) {
-            this.texts[name] = value;
-        }
-        else {
-            throw new TypeError('WaitingRoom.setText: text "' + name +
-                                '" must be string, function or undefined. ' +
-                                'Found: ' + value);
-        }
-        return this.texts[name];
+        strSetter(this, name, value, noDefault, 'texts', 'setSetext');
+    };
+
+    /**
+     * ### WaitingRoom.setTexts
+     *
+     * Assigns all texts
+     *
+     * @param {object} texts Optional. Object containing texts
+     *
+     * @see WaitingRoom.texts
+     * @see WaitingRoom.setText
+     * @see WaitingRoom.getTexts
+     */
+    WaitingRoom.prototype.setTexts = function(texts, noDefault) {
+        strSetterMulti(this, texts, noDefault, 'texts', 'setText', 'setTexts');
+    };
+    
+    /**
+     * ### WaitingRoom.getText
+     *
+     * Returns the requested text
+     *
+     * @param {string} name The name of the text variable.
+     * @param {mixed} param Optional. Additional to pass to the callback, if any
+     *
+     * @return {string} The requested text
+     *
+     * @see WaitingRoom.setText
+     */
+    WaitingRoom.prototype.getText = function(name, param) {
+        return strGetter(this, name, param, 'texts', 'getTexts');       
+    };
+    
+    /**
+     * ### WaitingRoom.getTexts
+     *
+     * Returns an object with all current texts
+     *
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the texts functions (if any)
+     *
+     * @return {object} out All current texts
+     *
+     * @see WaitingRoom.texts
+     * @see WaitingRoom.setTexts
+     * @see WaitingRoom.getText
+     */
+    WaitingRoom.prototype.getTexts = function(param) {       
+        return strGetterMulti(this, param, 'texts', 'getText', 'getTexts');
     };
 
     // ## Helper functions.
 
+    // TODO: document.
+    
+    function strGetter(that, name, param, collection, method) {
+        var res;
+        res = that[collection][name];
+        if ('string' === typeof res) return res;
+        if ('function' === typeof res) {
+            res = res(that, param);
+            if ('string' !== typeof res) {
+                throw new TypeError('WaitingRoom.' + method + ': cb "' + name +
+                                    'did not return a string. Found: ' + res);
+            }
+            return res;
+        }
+        throw new Error('WaitingRoom.' + method + ': unknown item requested: ' +
+                        name);
+    }
+    
+    function strGetterMulti(that, param, collection, getMethod, method) {
+        var t, out;
+        out = {};
+        for (t in that[collection]) {
+            if (that[collection].hasOwnProperty(t)) {
+                out[t] = that[getMethod](t, param);
+            }
+        }
+        return out;
+    }
 
+    function strSetterMulti(that, obj, noDefault,
+                            collection, setMethod, method) {
+
+        var i, out;
+        out = out || {};
+        if ('object' !== typeof obj && 'undefined' !== typeof obj) {
+            throw new TypeError('WaitingRoom.' + method + ': ' +  collection +
+                                ' must be object or undefined. Found: ' + obj);
+        }
+        for (i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                that[setMethod](i);
+            }
+        }
+    }
+    
+    
+    function strSetter(that, name, value, noDefault, collection, method) {
+        if ('undefined' === typeof that[collection][name]) {
+            throw new TypeError('WaitingRoom.' + method + ': unrecognized ' +
+                                'name: ' + name);
+        }
+        if ('undefined' === typeof value) {
+            if (!noDefault) {
+                that[collection][name] = WaitingRoom[collection][name];
+            }
+        }
+        else if ('string' === typeof value || 'function' === typeof value) {
+            that[collection][name] = value;
+        }
+        else {
+            throw new TypeError('WaitingRoom.' + method + ': value for item "' +
+                                name + '" must be string, function or ' +
+                                'undefined. Found: ' + value);
+        }
+    }
+    
 })(node);
 
 /**
