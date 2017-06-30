@@ -788,11 +788,11 @@
     };
     
     /**
-     * ### WaitingRoom.getTexts
+     * ### WaitingRoom.getAllTexts
      *
      * Returns an object with all current texts
      *
-     * @param {object} param Optional. Object containing parameters to pass
+     * @param {object|array} param Optional. Object containing parameters to pass
      *   to the texts functions (if any)
      *
      * @return {object} out All current texts
@@ -801,14 +801,16 @@
      * @see WaitingRoom.setText
      * @see WaitingRoom.setTexts
      * @see WaitingRoom.getText
-     */
-    WaitingRoom.prototype.getTexts = function(param) {       
-        return strGetterMulti(this, param, 'texts', 'getText', 'getTexts');
+     */   
+    WaitingRoom.prototype.getTexts = function(paramOrKeys, param) {
+        if (J.isArray(paramOrKeys)) {
+            // TODO: continue here.
+        }
+        return strGetterMulti(this, 'texts', 'getText',
+                              'getTexts', undefined, param);
     };
 
     // ## Helper functions.
-
-    // TODO: document.
 
     /**
      * ### strGetter
@@ -852,16 +854,9 @@
     }
     
     /**
-     * ### strGetter
+     * ### strGetterMulti
      *
-     * Returns multiple values value a property from a collection inside an instance
-     *
-     * The name of the property must exist in the corresponding static
-     * collection with the same name inside the constructor of the instance,
-     * or an error will be thrown.
-     *
-     * If the string is not found in the live instance, the default value
-     * from the collection inside the contructor is returned instead
+     * Same as strGetter, but returns multiple values at once
      *
      * @param {object} that The main instance
      * @param {string} collection The name of the collection inside the instance
@@ -869,10 +864,14 @@
      *   create the error string)
      * @param {mixed} param Optional. If the value of the requested property
      *    is a function, this parameter is passed to it to get a return value.
+     * @param {mixed} param Optional. If the value of the requested property
+     *    is a function, this parameter is passed to it to get a return value.
      *
      * @return {string} res The requested value.
+     *
+     * @see strGetter
      */
-    function strGetterMulti(that, collection, getMethod, method, param) {
+    function strGetterMulti(that, collection, getMethod, method, obj, param) {
         var t, out;
         out = {};
         for (t in that[collection]) {
