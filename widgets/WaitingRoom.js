@@ -270,8 +270,6 @@
      * @param {object} conf Configuration object.
      */
     WaitingRoom.prototype.init = function(conf) {
-
-        console.log('INIT', conf);
         
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
@@ -553,7 +551,7 @@
 
         node.on.data('TIME', function(msg) {
             msg = msg || {};
-            console.log('TIME IS UP!');
+            node.log('waiting room: TIME IS UP!');
             that.stopTimer();
         });
 
@@ -595,7 +593,7 @@
 
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
-            console.log('STOPPING TIMER');
+            node.log('waiting room: STOPPING TIMER');
             this.timer.destroy();
         }
     };
@@ -979,7 +977,7 @@
      * @see strSetter
      */
     function strSetter(that, name, value, collection, method) {
-        console.log(arguments);
+
         if ('undefined' === typeof that.constructor[collection][name]) {
             throw new TypeError(method + ': name not found: ' + name);
         }
