@@ -551,7 +551,7 @@
 
         node.on.data('TIME', function(msg) {
             msg = msg || {};
-            node.log('waiting room: TIME IS UP!');
+            node.info('waiting room: TIME IS UP!');
             that.stopTimer();
         });
 
@@ -593,7 +593,7 @@
 
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
-            node.log('waiting room: STOPPING TIMER');
+            node.info('waiting room: STOPPING TIMER');
             this.timer.destroy();
         }
     };
