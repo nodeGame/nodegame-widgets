@@ -1,6 +1,6 @@
 /**
  * # EmailForm
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays a form to input email
@@ -10,8 +10,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('EmailForm', EmailForm);
 
