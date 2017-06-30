@@ -99,7 +99,7 @@
                 '<br></h3>';
         }
     };
-
+    
     /**
      * ## WaitingRoom constructor
      *
@@ -234,18 +234,22 @@
          *
          * @see WaitingRoom.setText
          * @see WaitingRoom.getText
+         * @see WaitingRoom.setTexts
+         * @see WaitingRoom.getTexts
          */
         this.texts = {};
 
         /**
-         * ### WaitingRoom.dispatchSound
+         * ### WaitingRoom.sounds
          *
-         * Flag that indicates that a sound should be played before dispatching
+         * List of custom sounds to play to the players
          *
-         * @see WaitingRoom.sounds.dispatch
-         * @see WaitingRoom.alertPlayer
+         * @see WaitingRoom.setSound
+         * @see WaitingRoom.getSound
+         * @see WaitingRoom.setSounds
+         * @see WaitingRoom.getSounds
          */
-        this.dispatchSound = null;
+        this.sounds = {};
     }
 
     // ## WaitingRoom methods
@@ -343,20 +347,9 @@
         }
 
         // Sounds.
+
+        this.setSounds(conf.texts);
         
-        if (conf.dispatchSound) {
-            if ('boolean' !== typeof conf.dispatchSound &&
-                'string' !== typeof conf.dispatchSound) {
-
-                throw new TypeError('WaitingRoom.init: ' +
-                                    'conf.dispatchSound must be boolean, ' +
-                                    'string or undefined. Found: ' +
-                                    conf.dispatchSound);
-            }
-            this.dispatchSound = (true === conf.dispatchSound) ?
-                WaitingRoom.sounds.dispatch : conf.dispatchSound;
-        }
-
         // Texts.
         this.setTexts(conf.texts);
     };
@@ -660,6 +653,84 @@
     };
 
     /**
+     * ### WaitingRoom.setSound
+     *
+     * Checks and assigns the value of a sound to play to user
+     *
+     * Throws an error if value is invalid
+     *
+     * @param {string} name The name of the sound to check
+     * @param {mixed} path Optional. The path to the audio file. If undefined
+     *    the default value from WaitingRoom.sounds is used
+     * @param {boolean} noDefault Optional. If true, no default value is
+     *    assigned in case value is undefined. Default: false
+     *
+     * @see WaitingRoom.sounds
+     * @see WaitingRoom.getSound
+     * @see WaitingRoom.setSounds
+     * @see WaitingRoom.getSounds
+     */
+    WaitingRoom.prototype.setSound = function(name, value, noDefault) {
+        strSetter(this, name, value, noDefault, 'texts', 'setSound');
+    };
+
+    /**
+     * ### WaitingRoom.setSounds
+     *
+     * Assigns multiple sounds at the same time
+     *
+     * @param {object} sounds Optional. Object containing sound paths
+     *
+     * @see WaitingRoom.sounds
+     * @see WaitingRoom.setSound
+     * @see WaitingRoom.getSound
+     * @see WaitingRoom.getSounds
+     */
+    WaitingRoom.prototype.setSounds = function(sounds, noDefault) {
+        strSetterMulti(this, sounds, noDefault, 'sounds', 'setSound',
+                       'setSounds');
+    };
+    
+    /**
+     * ### WaitingRoom.getSound
+     *
+     * Returns the requested sound path
+     *
+     * @param {string} name The name of the sound variable.
+     * @param {mixed} param Optional. Additional info to pass to the
+     *   callback, if any
+     *
+     * @return {string} The requested sound
+     *
+     * @see WaitingRoom.sounds
+     * @see WaitingRoom.setSound
+     * @see WaitingRoom.getSound
+     * @see WaitingRoom.getSounds
+     */
+    WaitingRoom.prototype.getSound = function(name, param) {
+        return strGetter(this, name, param, 'sounds', 'getSounds');       
+    };
+    
+    /**
+     * ### WaitingRoom.getSounds
+     *
+     * Returns an object with all current sounds
+     *
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} out All current sounds
+     *
+     * @see WaitingRoom.sounds
+     * @see WaitingRoom.setSound
+     * @see WaitingRoom.getSound
+     * @see WaitingRoom.setSounds
+     */
+    WaitingRoom.prototype.getSounds = function(param) {       
+        return strGetterMulti(this, param, 'sounds', 'getSound', 'getSounds');
+    };
+    
+    /**
      * ### WaitingRoom.setText
      *
      * Checks and assigns the value of a text to display to user
@@ -672,12 +743,13 @@
      * @param {boolean} noDefault Optional. If true, no default value is
      *    assigned in case value is undefined. Default: false
      *
-     * @see WaitingRoom.init
      * @see WaitingRoom.texts
      * @see WaitingRoom.getText
+     * @see WaitingRoom.setTexts
+     * @see WaitingRoom.getTexts
      */
     WaitingRoom.prototype.setText = function(name, value, noDefault) {
-        strSetter(this, name, value, noDefault, 'texts', 'setSetext');
+        strSetter(this, name, value, noDefault, 'texts', 'setText');
     };
 
     /**
@@ -689,6 +761,7 @@
      *
      * @see WaitingRoom.texts
      * @see WaitingRoom.setText
+     * @see WaitingRoom.getText
      * @see WaitingRoom.getTexts
      */
     WaitingRoom.prototype.setTexts = function(texts, noDefault) {
@@ -705,7 +778,10 @@
      *
      * @return {string} The requested text
      *
+     * @see WaitingRoom.texts
      * @see WaitingRoom.setText
+     * @see WaitingRoom.setTexts
+     * @see WaitingRoom.getTexts
      */
     WaitingRoom.prototype.getText = function(name, param) {
         return strGetter(this, name, param, 'texts', 'getTexts');       
@@ -722,6 +798,7 @@
      * @return {object} out All current texts
      *
      * @see WaitingRoom.texts
+     * @see WaitingRoom.setText
      * @see WaitingRoom.setTexts
      * @see WaitingRoom.getText
      */
@@ -729,29 +806,73 @@
         return strGetterMulti(this, param, 'texts', 'getText', 'getTexts');
     };
 
-    // TODO: do sounds.
-    
     // ## Helper functions.
 
     // TODO: document.
-    
-    function strGetter(that, name, param, collection, method) {
+
+    /**
+     * ### strGetter
+     *
+     * Returns the value a property from a collection in instance/constructor
+     *
+     * If the string is not found in the live instance, the default value
+     * from the same collection inside the contructor is returned instead.
+     *
+     * If the property is not found in the corresponding static
+     * collection in the constructor of the instance, an error is thrown.
+     *
+     * @param {object} that The main instance
+     * @param {string} name The name of the property inside the collection
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} method The name of the invoking method (for error string)
+     * @param {mixed} param Optional. If the value of the requested property
+     *   is a function, this parameter is passed to it to get a return value.
+     *
+     * @return {string} res The value of requested property as found
+     *   in the instance, or its default value as found in the constructor
+     */
+    function strGetter(that, name, collection, method, param) {
         var res;
+        if (!that.constructor[collection].hasOwnProperty(name)) {
+            throw new Error('WaitingRoom.' + method +
+                            ': unknown item: ' + name);
+        }
         res = that[collection][name];
-        if ('string' === typeof res) return res;
         if ('function' === typeof res) {
             res = res(that, param);
             if ('string' !== typeof res) {
                 throw new TypeError('WaitingRoom.' + method + ': cb "' + name +
                                     'did not return a string. Found: ' + res);
             }
-            return res;
         }
-        throw new Error('WaitingRoom.' + method + ': unknown item requested: ' +
-                        name);
+        else if ('undefined' === typeof res) {
+            res = that.constructor[collection][name];
+        }
+        return res;
     }
     
-    function strGetterMulti(that, param, collection, getMethod, method) {
+    /**
+     * ### strGetter
+     *
+     * Returns multiple values value a property from a collection inside an instance
+     *
+     * The name of the property must exist in the corresponding static
+     * collection with the same name inside the constructor of the instance,
+     * or an error will be thrown.
+     *
+     * If the string is not found in the live instance, the default value
+     * from the collection inside the contructor is returned instead
+     *
+     * @param {object} that The main instance
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} collection The name of the invoking method (to
+     *   create the error string)
+     * @param {mixed} param Optional. If the value of the requested property
+     *    is a function, this parameter is passed to it to get a return value.
+     *
+     * @return {string} res The requested value.
+     */
+    function strGetterMulti(that, collection, getMethod, method, param) {
         var t, out;
         out = {};
         for (t in that[collection]) {
@@ -773,7 +894,7 @@
         }
         for (i in obj) {
             if (obj.hasOwnProperty(i)) {
-                that[setMethod](i);
+                that[setMethod](i, obj[i], noDefault);
             }
         }
     }
