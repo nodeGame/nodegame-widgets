@@ -99,7 +99,7 @@
                 '<br></h3>';
         }
     };
-    
+
     /**
      * ## WaitingRoom constructor
      *
@@ -270,6 +270,9 @@
      * @param {object} conf Configuration object.
      */
     WaitingRoom.prototype.init = function(conf) {
+
+        console.log('INIT', conf);
+        
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
                                 'Found: ' + conf);
@@ -347,9 +350,8 @@
         }
 
         // Sounds.
+        this.setSounds(conf.sounds);
 
-        this.setSounds(conf.texts);
-        
         // Texts.
         this.setTexts(conf.texts);
     };
@@ -441,7 +443,7 @@
             this.playerCountTooHigh.style.display = '';
 
             // TODO: check here (was a debugger).
-            
+
             // Update text.
             this.playerCountTooHigh.innerHTML =
                 this.getText('tooManyPlayers', numberOfGameSlots);
@@ -524,7 +526,7 @@
             else {
                 reportExitCode = that.getText('exitCode', msg.data);
 
-                if (data.action === 'NotEnoughPlayers') {                    
+                if (data.action === 'NotEnoughPlayers') {
                     that.bodyDiv.innerHTML = that.getText('notEnoughPlayers');
                     if (that.onTimeout) that.onTimeout(msg.data);
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
@@ -533,7 +535,7 @@
 
                     if (false === data.shouldDispatchMoreGames ||
                         that.disconnectIfNotSelected) {
-                        
+
                         that.bodyDiv.innerHTML =
                             that.getText('notSelectedClosed');
 
@@ -616,20 +618,23 @@
 
     WaitingRoom.prototype.alertPlayer = function() {
         var clearBlink, onFrame;
-
+        var sound;
+        
+        sound = this.getSound('dispatch');
+        
         // Play sound, if requested.
-        if (this.dispatchSound) JSUS.playSound(this.dispatchSound);
+        if (sound) J.playSound(sound);
 
         // If document.hasFocus() returns TRUE, then just one repeat is enough.
         if (document.hasFocus && document.hasFocus()) {
-            JSUS.blinkTitle('GAME STARTS!', { repeatFor: 1 });
+            J.blinkTitle('GAME STARTS!', { repeatFor: 1 });
         }
         // Otherwise we repeat blinking until an event that shows that the
         // user is active on the page happens, e.g. focus and click. However,
         // the iframe is not created yet, and even later. if the user clicks it
         // it won't be detected in the main window, so we need to handle it.
         else {
-            clearBlink = JSUS.blinkTitle('GAME STARTS!', {
+            clearBlink = J.blinkTitle('GAME STARTS!', {
                 stopOnFocus: true,
                 stopOnClick: window
             });
@@ -662,16 +667,14 @@
      * @param {string} name The name of the sound to check
      * @param {mixed} path Optional. The path to the audio file. If undefined
      *    the default value from WaitingRoom.sounds is used
-     * @param {boolean} noDefault Optional. If true, no default value is
-     *    assigned in case value is undefined. Default: false
      *
      * @see WaitingRoom.sounds
      * @see WaitingRoom.getSound
      * @see WaitingRoom.setSounds
      * @see WaitingRoom.getSounds
      */
-    WaitingRoom.prototype.setSound = function(name, value, noDefault) {
-        strSetter(this, name, value, noDefault, 'texts', 'setSound');
+    WaitingRoom.prototype.setSound = function(name, value) {
+        strSetter(this, name, value, 'sounds', 'WaitingRoom.setSound');
     };
 
     /**
@@ -686,11 +689,11 @@
      * @see WaitingRoom.getSound
      * @see WaitingRoom.getSounds
      */
-    WaitingRoom.prototype.setSounds = function(sounds, noDefault) {
-        strSetterMulti(this, sounds, noDefault, 'sounds', 'setSound',
-                       'setSounds');
+    WaitingRoom.prototype.setSounds = function(sounds) {
+        strSetterMulti(this, sounds, 'sounds', 'setSound',
+                       'WaitingRoom.setSounds');
     };
-    
+
     /**
      * ### WaitingRoom.getSound
      *
@@ -708,11 +711,34 @@
      * @see WaitingRoom.getSounds
      */
     WaitingRoom.prototype.getSound = function(name, param) {
-        return strGetter(this, name, param, 'sounds', 'getSounds');       
+        return strGetter(this, name, 'sounds', 'WaitingRoom.getSound', param);
     };
-    
+
     /**
      * ### WaitingRoom.getSounds
+     *
+     * Returns an object with selected sounds (paths)
+     *
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of  to select the properties to return.
+     *   Default: all properties in the collection object.
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} out Selected sounds (paths)
+     *
+     * @see WaitingRoom.sounds
+     * @see WaitingRoom.setSound
+     * @see WaitingRoom.getSound
+     * @see WaitingRoom.setSounds
+     */
+    WaitingRoom.prototype.getSounds = function(keys, param) {
+        return strGetterMulti(this, 'sounds', 'getSound',
+                              'WaitingRoom.getSounds', keys, param);
+    };
+
+    /**
+     * ### WaitingRoom.getAllSounds
      *
      * Returns an object with all current sounds
      *
@@ -721,15 +747,13 @@
      *
      * @return {object} out All current sounds
      *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.setSound
      * @see WaitingRoom.getSound
-     * @see WaitingRoom.setSounds
      */
-    WaitingRoom.prototype.getSounds = function(param) {       
-        return strGetterMulti(this, param, 'sounds', 'getSound', 'getSounds');
+    WaitingRoom.prototype.getAllSounds = function(param) {
+        return strGetterMulti(this, 'sounds', 'getSound',
+                              'WaitingRoom.getAllSounds', undefined, param);
     };
-    
+
     /**
      * ### WaitingRoom.setText
      *
@@ -740,16 +764,14 @@
      * @param {string} name The name of the property to check
      * @param {mixed} value Optional. The value for the text. If undefined
      *    the default value from WaitingRoom.texts is used
-     * @param {boolean} noDefault Optional. If true, no default value is
-     *    assigned in case value is undefined. Default: false
      *
      * @see WaitingRoom.texts
      * @see WaitingRoom.getText
      * @see WaitingRoom.setTexts
      * @see WaitingRoom.getTexts
      */
-    WaitingRoom.prototype.setText = function(name, value, noDefault) {
-        strSetter(this, name, value, noDefault, 'texts', 'setText');
+    WaitingRoom.prototype.setText = function(name, value) {
+        strSetter(this, name, value, 'texts', 'WaitingRoom.setText');
     };
 
     /**
@@ -764,10 +786,10 @@
      * @see WaitingRoom.getText
      * @see WaitingRoom.getTexts
      */
-    WaitingRoom.prototype.setTexts = function(texts, noDefault) {
-        strSetterMulti(this, texts, noDefault, 'texts', 'setText', 'setTexts');
+    WaitingRoom.prototype.setTexts = function(texts) {
+        strSetterMulti(this, texts, 'texts', 'setText', 'WaitingRoom.setTexts');
     };
-    
+
     /**
      * ### WaitingRoom.getText
      *
@@ -784,16 +806,41 @@
      * @see WaitingRoom.getTexts
      */
     WaitingRoom.prototype.getText = function(name, param) {
-        return strGetter(this, name, param, 'texts', 'getTexts');       
+        return strGetter(this, name, 'texts',
+                         'WaitingRoom.getText', undefined, param);
     };
-    
+
+    /**
+     * ### WaitingRoom.getTexts
+     *
+     * Returns an object with selected texts
+     *
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of  to select the properties to return.
+     *   Default: all properties in the collection object.
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} out Selected texts
+     *
+     * @see WaitingRoom.texts
+     * @see WaitingRoom.setText
+     * @see WaitingRoom.getText
+     * @see WaitingRoom.setTexts
+     * @see WaitingRoom.getAllTexts
+     */
+    WaitingRoom.prototype.getTexts = function(keys, param) {
+        return strGetterMulti(this, 'texts', 'getText',
+                              'WaitingRoom.getTexts', keys, param);
+    };
+
     /**
      * ### WaitingRoom.getAllTexts
      *
      * Returns an object with all current texts
      *
-     * @param {object|array} param Optional. Object containing parameters to pass
-     *   to the texts functions (if any)
+     * @param {object|array} param Optional. Object containing parameters
+     *   to pass to the texts functions (if any)
      *
      * @return {object} out All current texts
      *
@@ -801,16 +848,13 @@
      * @see WaitingRoom.setText
      * @see WaitingRoom.setTexts
      * @see WaitingRoom.getText
-     */   
-    WaitingRoom.prototype.getTexts = function(paramOrKeys, param) {
-        if (J.isArray(paramOrKeys)) {
-            // TODO: continue here.
-        }
+     */
+    WaitingRoom.prototype.getAllTexts = function(param) {
         return strGetterMulti(this, 'texts', 'getText',
-                              'getTexts', undefined, param);
+                              'WaitingRoom.getAllTexts', undefined, param);
     };
 
-    // ## Helper functions.
+    // ## Helper methods.
 
     /**
      * ### strGetter
@@ -836,14 +880,13 @@
     function strGetter(that, name, collection, method, param) {
         var res;
         if (!that.constructor[collection].hasOwnProperty(name)) {
-            throw new Error('WaitingRoom.' + method +
-                            ': unknown item: ' + name);
+            throw new Error(method + ': name not found: ' + name);
         }
         res = that[collection][name];
         if ('function' === typeof res) {
             res = res(that, param);
             if ('string' !== typeof res) {
-                throw new TypeError('WaitingRoom.' + method + ': cb "' + name +
+                throw new TypeError(method + ': cb "' + name +
                                     'did not return a string. Found: ' + res);
             }
         }
@@ -852,7 +895,7 @@
         }
         return res;
     }
-    
+
     /**
      * ### strGetterMulti
      *
@@ -860,63 +903,97 @@
      *
      * @param {object} that The main instance
      * @param {string} collection The name of the collection inside the instance
-     * @param {string} collection The name of the invoking method (to
-     *   create the error string)
+     * @param {string} getMethod The name of the method to get each value
+     * @param {string} method The name of the invoking method (for error string)
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of this object are to select the properties
+     *   to return. Default: all properties in the collection object.
      * @param {mixed} param Optional. If the value of the requested property
-     *    is a function, this parameter is passed to it to get a return value.
-     * @param {mixed} param Optional. If the value of the requested property
-     *    is a function, this parameter is passed to it to get a return value.
+     *    is a function, this parameter is passed to it, when invoked to get
+     *    a return value. Default: undefined
      *
      * @return {string} res The requested value.
      *
      * @see strGetter
      */
-    function strGetterMulti(that, collection, getMethod, method, obj, param) {
-        var t, out;
+    function strGetterMulti(that, collection, getMethod, method, keys, param) {
+        var out, k, len;
+        if (!keys) keys = that.constructor[collection];
+
         out = {};
-        for (t in that[collection]) {
-            if (that[collection].hasOwnProperty(t)) {
-                out[t] = that[getMethod](t, param);
+        if (J.isArray(keys)) {
+            k = -1, len = keys.length;
+            for ( ; ++k < len; ) {
+                out[keys[k]] = that[getMethod](keys[k], param);
+            }
+        }
+        else {
+            for (k in keys) {
+                if (keys.hasOwnProperty(k)) {
+                    out[k] = that[getMethod](k, param);
+                }
             }
         }
         return out;
     }
 
-    function strSetterMulti(that, obj, noDefault,
-                            collection, setMethod, method) {
-
+    /**
+     * ### strSetterMulti
+     *
+     * Same as strSetter, but sets multiple values at once
+     *
+     * @param {object} that The main instance
+     * @param {object} obj List of properties to set and their values
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} setMethod The name of the method to set each value
+     * @param {string} method The name of the invoking method (for error string)
+     *
+     * @see strSetter
+     */
+    function strSetterMulti(that, obj, collection, setMethod, method) {
         var i, out;
         out = out || {};
         if ('object' !== typeof obj && 'undefined' !== typeof obj) {
-            throw new TypeError('WaitingRoom.' + method + ': ' +  collection +
+            throw new TypeError(method + ': ' +  collection +
                                 ' must be object or undefined. Found: ' + obj);
         }
         for (i in obj) {
             if (obj.hasOwnProperty(i)) {
-                that[setMethod](i, obj[i], noDefault);
+                that[setMethod](i, obj[i]);
             }
         }
     }
-    
-    
-    function strSetter(that, name, value, noDefault, collection, method) {
-        if ('undefined' === typeof that[collection][name]) {
-            throw new TypeError('WaitingRoom.' + method + ': unrecognized ' +
-                                'name: ' + name);
+
+
+    /**
+     * ### strSetter
+     *
+     * Sets the value of a property in a collection if string, function or false
+     *
+     * @param {object} that The main instance
+     * @param {string} name The name of the property to set
+     * @param {string|function|false} value The value for the property
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} method The name of the invoking method (for error string)
+     *
+     * @see strSetter
+     */
+    function strSetter(that, name, value, collection, method) {
+        console.log(arguments);
+        if ('undefined' === typeof that.constructor[collection][name]) {
+            throw new TypeError(method + ': name not found: ' + name);
         }
-        if ('undefined' === typeof value) {
-            if (!noDefault) {
-                that[collection][name] = WaitingRoom[collection][name];
-            }
-        }
-        else if ('string' === typeof value || 'function' === typeof value) {
+        if ('string' === typeof value ||
+            'function' === typeof value ||
+            false === value) {
+           
             that[collection][name] = value;
         }
         else {
-            throw new TypeError('WaitingRoom.' + method + ': value for item "' +
-                                name + '" must be string, function or ' +
-                                'undefined. Found: ' + value);
+            throw new TypeError(method + ': value for item "' + name +
+                                '" must be string, function or false. ' +
+                                'Found: ' + value);
         }
     }
-    
+
 })(node);
