@@ -3,10 +3,7 @@
  * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
- * Display the number of connected / required players to start a game
- *
- * TODO: accepts functions for `texts` variables, so that they can
- * integrate current values
+ * Displays the number of connected/required players to start a game
  *
  * www.nodegame.org
  */
@@ -70,10 +67,10 @@
             'disconnected. Please try again later.</span><br><br>',
 
         // #### tooManyPlayers
-        tooManyPlayers: function(widget, numberOfGameSlots) {
+        tooManyPlayers: function(widget, data) {
             return 'There are more players in this waiting room ' +
                 'than there are playslots in the game. Only ' +
-                 numberOfGameSlots + ' players will be selected ' +
+                data.nGames + ' players will be selected ' +
                 'to play the game.';
         },
 
@@ -92,6 +89,7 @@
             'Ok, I got it.</a></h3><br><br>' +
             'Thank you for your participation.</span></h3><br><br>',
 
+        // #### exitCode
         exitCode: function(widget, data) {
             return '<br>You have been disconnected. ' +
                 ('undefined' !== typeof data.exit ?
@@ -440,11 +438,9 @@
                 this.connected + '</span>' + ' / ' + this.poolSize;
             this.playerCountTooHigh.style.display = '';
 
-            // TODO: check here (was a debugger).
-
             // Update text.
             this.playerCountTooHigh.innerHTML =
-                this.getText('tooManyPlayers', numberOfGameSlots);
+                this.getText('tooManyPlayers', { nGames: numberOfGameSlots });
         }
         else {
             this.playerCount.innerHTML = this.connected + ' / ' + this.poolSize;
