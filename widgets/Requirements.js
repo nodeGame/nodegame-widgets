@@ -226,12 +226,14 @@
      */
     Requirements.prototype.init = function(conf) {
         if ('object' !== typeof conf) {
-            throw new TypeError('Requirements.init: conf must be object.');
+            throw new TypeError('Requirements.init: conf must be object. ' +
+                                'Found: ' + conf);
         }
         if (conf.requirements) {
             if (!J.isArray(conf.requirements)) {
                 throw new TypeError('Requirements.init: conf.requirements ' +
-                                    'must be array or undefined.');
+                                    'must be array or undefined. Found: ' +
+                                    conf.requirements);
             }
             this.requirements = conf.requirements;
         }
@@ -240,7 +242,8 @@
                 'function' !== typeof conf.onComplete) {
 
                 throw new TypeError('Requirements.init: conf.onComplete must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onComplete);
             }
             this.onComplete = conf.onComplete;
         }
@@ -249,7 +252,8 @@
                 'function' !== typeof conf.onSuccess) {
 
                 throw new TypeError('Requirements.init: conf.onSuccess must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onSuccess);
             }
             this.onSuccess = conf.onSuccess;
         }
@@ -258,7 +262,8 @@
                 'function' !== typeof conf.onFailure) {
 
                 throw new TypeError('Requirements.init: conf.onFailure must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onFailure);
             }
             this.onFailure = conf.onFailure;
         }
@@ -267,7 +272,8 @@
                 'number' !== typeof conf.maxExecTime) {
 
                 throw new TypeError('Requirements.init: conf.onMaxExecTime ' +
-                                    'must be number, null or undefined.');
+                                    'must be number, null or undefined. ' +
+                                    'Found: ' + conf.maxExecTime);
             }
             this.withTimeout = !!conf.maxExecTime;
             this.timeoutTime = conf.maxExecTime;
@@ -299,7 +305,8 @@
                 'object' !== typeof arguments[i] ) {
 
                 throw new TypeError('Requirements.addRequirements: ' +
-                                    'requirements must be function or object.');
+                                    'requirements must be function or ' +
+                                    'object. Found: ' + arguments[i]);
             }
             this.requirements.push(arguments[i]);
         }
@@ -327,7 +334,7 @@
         var errors, cbName, errMsg;
         if (!this.requirements.length) {
             throw new Error('Requirements.checkRequirements: no requirements ' +
-                            'to check found.');
+                            'to check.');
         }
 
         this.updateStillChecking(this.requirements.length, true);
@@ -525,7 +532,7 @@
 
         if (!J.isArray(results)) {
             throw new TypeError('Requirements.displayResults: results must ' +
-                                'be array.');
+                                'be array. Found: ' + results);
         }
 
         // No errors.
@@ -612,7 +619,8 @@
             if (errors) {
                 if (!J.isArray(errors)) {
                     throw new Error('Requirements.checkRequirements: ' +
-                                    'errors must be array or undefined.');
+                                    'errors must be array or undefined. ' +
+                                    'Found: ' + errors);
                 }
                 that.displayResults(errors);
             }
