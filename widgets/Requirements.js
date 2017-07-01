@@ -168,6 +168,13 @@
          * Callback to be executed at the end of all tests
          */
         this.onFailure = null;
+        
+        /**
+         * ### Requirements.callbacksExecuted
+         *
+         * TRUE, the callbacks have been executed
+         */
+        this.callbacksExecuted = false;
 
         /**
          * ### Requirements.list
@@ -361,17 +368,13 @@
             }
         }
 
-        if (this.withTimeout) {
-            this.addTimeout();
-        }
+        if (this.withTimeout) this.addTimeout();        
 
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
 
-        if (this.isCheckingFinished()) {
-            this.checkingFinished();
-        }
+        if (this.isCheckingFinished()) this.checkingFinished();        
 
         return errors;
     };
@@ -456,13 +459,16 @@
     };
 
     /**
-     * ### Requirements.CheckingFinished
+     * ### Requirements.checkingFinished
      *
-     * Cleans up timer and dots, and executes final requirements accordingly
+     * Clears up timer and dots, and executes final callbacks accordingly
      *
      * First, executes the `onComplete` callback in any case. Then if no
      * errors have been raised executes the `onSuccess` callback, otherwise
      * the `onFailure` callback.
+     *
+     * @param {boolean} force If TRUE, the function is executed again,
+     *   regardless of whether it was already executed. Default: FALSE
      *
      * @see this.onComplete
      * @see this.onSuccess
@@ -470,12 +476,16 @@
      * @see this.stillCheckings
      * @see this.requirements
      */
-    Requirements.prototype.checkingFinished = function() {
+    Requirements.prototype.checkingFinished = function(force) {
         var results;
 
-        if (this.timeoutId) {
-            clearTimeout(this.timeoutId);
-        }
+        // Sometimes, if all requirements are almost synchronous, it
+        // can happen that this function is called twice (from resultCb
+        // and at the end of all requirements checkings.
+        if (this.callbacksExecuted && !force) return;        
+        this.callbacksExecuted = true;
+        
+        if (this.timeoutId) clearTimeout(this.timeoutId);        
 
         this.dots.stop();
 
@@ -491,10 +501,8 @@
             node.say(this.sayResultsLabel, 'SERVER', results);
         }
 
-        if (this.onComplete) {
-            this.onComplete();
-        }
-
+        if (this.onComplete) this.onComplete();
+        
         if (this.hasFailed) {
             if (this.onFailure) this.onFailure();
         }
@@ -632,9 +640,7 @@
                 data: data
             });
 
-            if (that.isCheckingFinished()) {
-                that.checkingFinished();
-            }
+            if (that.isCheckingFinished()) that.checkingFinished();            
         };
 
         req = that.requirements[i];
