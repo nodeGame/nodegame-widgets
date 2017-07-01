@@ -1,6 +1,6 @@
 /**
  * # Widget
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Prototype of a widget class
@@ -15,8 +15,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.Widget = Widget;
 
@@ -282,8 +280,8 @@
         else {
             if (!this.headingDiv) {
                 // Add heading.
-                this.headingDiv = W.addDiv(this.panelDiv, undefined,
-                        {className: 'panel-heading'});
+                this.headingDiv = W.add('div', this.panelDiv,
+                                        { className: 'panel-heading' });
                 // Move it to before the body (IE cannot have undefined).
                 tmp = (this.bodyDiv && this.bodyDiv.childNodes[0]) || null;
                 this.panelDiv.insertBefore(this.headingDiv, tmp);
@@ -333,8 +331,8 @@
         else {
             if (!this.footerDiv) {
                 // Add footer.
-                this.footerDiv = W.addDiv(this.panelDiv, undefined,
-                        {className: 'panel-footer'});
+                this.footerDiv = W.add('div', this.panelDiv,
+                                       { className: 'panel-footer' });
             }
 
             // Set footer contents.
@@ -808,17 +806,24 @@
             [ 'ng_widget', 'panel', w.className ] :
             [ 'ng_widget', 'panel', 'panel-default', w.className ];
 
-        w.panelDiv = appendDiv(root, { attributes: { className: tmp } });
+        // w.panelDiv = document.createElement('div');
+        // root.appendChild(w.panelDiv);
+        // w.panelDiv.className = tmp;
+        
+        w.panelDiv = W.append('div', root, { className: tmp });
 
         // Optionally add title.
         if (options.title !== false && w.title) w.setTitle(w.title);
 
         // Add body (with or without margins around).
-        tmp = options.frame !== false ? { className: 'panel-body' } : undefined;
-        w.bodyDiv = appendDiv(w.panelDiv, {
-            attributes: tmp
-        });
 
+        // w.bodyDiv = document.createElement('div');
+        // w.panelDiv.appendChild(w.bodyDiv);
+        // if (options.frame !== false) w.bodyDiv.className = 'panel-body';
+        
+        tmp = options.frame !== false ? { className: 'panel-body' } : undefined;
+        w.bodyDiv = W.append('div', w.panelDiv, tmp);
+        
         // Optionally add footer.
         if (w.footer) w.setFooter(w.footer);
 
@@ -968,11 +973,13 @@
 
     // ## Helper functions
 
-    function appendDiv(root, options) {
-        // TODO: Check every parameter
-        return W.addDiv(root, undefined, options.attributes);
-    }
-
+//    function appendDiv(root, options) {
+//        var div;
+//        div = document.createElement('div');
+//        // TODO: Check every parameter
+//        return W.addDiv(root, undefined, options.attributes);
+//    }
+//
 //     function createListenerFunction(w, e, l) {
 //         if (!w || !e || !l) return;
 //         w.panelDiv[e] = function() { l.call(w); };
@@ -10659,6 +10666,13 @@
          * Callback to be executed at the end of all tests
          */
         this.onFailure = null;
+        
+        /**
+         * ### Requirements.callbacksExecuted
+         *
+         * TRUE, the callbacks have been executed
+         */
+        this.callbacksExecuted = false;
 
         /**
          * ### Requirements.list
@@ -10717,12 +10731,14 @@
      */
     Requirements.prototype.init = function(conf) {
         if ('object' !== typeof conf) {
-            throw new TypeError('Requirements.init: conf must be object.');
+            throw new TypeError('Requirements.init: conf must be object. ' +
+                                'Found: ' + conf);
         }
         if (conf.requirements) {
             if (!J.isArray(conf.requirements)) {
                 throw new TypeError('Requirements.init: conf.requirements ' +
-                                    'must be array or undefined.');
+                                    'must be array or undefined. Found: ' +
+                                    conf.requirements);
             }
             this.requirements = conf.requirements;
         }
@@ -10731,7 +10747,8 @@
                 'function' !== typeof conf.onComplete) {
 
                 throw new TypeError('Requirements.init: conf.onComplete must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onComplete);
             }
             this.onComplete = conf.onComplete;
         }
@@ -10740,7 +10757,8 @@
                 'function' !== typeof conf.onSuccess) {
 
                 throw new TypeError('Requirements.init: conf.onSuccess must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onSuccess);
             }
             this.onSuccess = conf.onSuccess;
         }
@@ -10749,7 +10767,8 @@
                 'function' !== typeof conf.onFailure) {
 
                 throw new TypeError('Requirements.init: conf.onFailure must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onFailure);
             }
             this.onFailure = conf.onFailure;
         }
@@ -10758,7 +10777,8 @@
                 'number' !== typeof conf.maxExecTime) {
 
                 throw new TypeError('Requirements.init: conf.onMaxExecTime ' +
-                                    'must be number, null or undefined.');
+                                    'must be number, null or undefined. ' +
+                                    'Found: ' + conf.maxExecTime);
             }
             this.withTimeout = !!conf.maxExecTime;
             this.timeoutTime = conf.maxExecTime;
@@ -10790,7 +10810,8 @@
                 'object' !== typeof arguments[i] ) {
 
                 throw new TypeError('Requirements.addRequirements: ' +
-                                    'requirements must be function or object.');
+                                    'requirements must be function or ' +
+                                    'object. Found: ' + arguments[i]);
             }
             this.requirements.push(arguments[i]);
         }
@@ -10818,7 +10839,7 @@
         var errors, cbName, errMsg;
         if (!this.requirements.length) {
             throw new Error('Requirements.checkRequirements: no requirements ' +
-                            'to check found.');
+                            'to check.');
         }
 
         this.updateStillChecking(this.requirements.length, true);
@@ -10845,17 +10866,13 @@
             }
         }
 
-        if (this.withTimeout) {
-            this.addTimeout();
-        }
+        if (this.withTimeout) this.addTimeout();        
 
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
 
-        if (this.isCheckingFinished()) {
-            this.checkingFinished();
-        }
+        if (this.isCheckingFinished()) this.checkingFinished();        
 
         return errors;
     };
@@ -10940,13 +10957,16 @@
     };
 
     /**
-     * ### Requirements.CheckingFinished
+     * ### Requirements.checkingFinished
      *
-     * Cleans up timer and dots, and executes final requirements accordingly
+     * Clears up timer and dots, and executes final callbacks accordingly
      *
      * First, executes the `onComplete` callback in any case. Then if no
      * errors have been raised executes the `onSuccess` callback, otherwise
      * the `onFailure` callback.
+     *
+     * @param {boolean} force If TRUE, the function is executed again,
+     *   regardless of whether it was already executed. Default: FALSE
      *
      * @see this.onComplete
      * @see this.onSuccess
@@ -10954,12 +10974,16 @@
      * @see this.stillCheckings
      * @see this.requirements
      */
-    Requirements.prototype.checkingFinished = function() {
+    Requirements.prototype.checkingFinished = function(force) {
         var results;
 
-        if (this.timeoutId) {
-            clearTimeout(this.timeoutId);
-        }
+        // Sometimes, if all requirements are almost synchronous, it
+        // can happen that this function is called twice (from resultCb
+        // and at the end of all requirements checkings.
+        if (this.callbacksExecuted && !force) return;        
+        this.callbacksExecuted = true;
+        
+        if (this.timeoutId) clearTimeout(this.timeoutId);        
 
         this.dots.stop();
 
@@ -10975,10 +10999,8 @@
             node.say(this.sayResultsLabel, 'SERVER', results);
         }
 
-        if (this.onComplete) {
-            this.onComplete();
-        }
-
+        if (this.onComplete) this.onComplete();
+        
         if (this.hasFailed) {
             if (this.onFailure) this.onFailure();
         }
@@ -11016,7 +11038,7 @@
 
         if (!J.isArray(results)) {
             throw new TypeError('Requirements.displayResults: results must ' +
-                                'be array.');
+                                'be array. Found: ' + results);
         }
 
         // No errors.
@@ -11103,7 +11125,8 @@
             if (errors) {
                 if (!J.isArray(errors)) {
                     throw new Error('Requirements.checkRequirements: ' +
-                                    'errors must be array or undefined.');
+                                    'errors must be array or undefined. ' +
+                                    'Found: ' + errors);
                 }
                 that.displayResults(errors);
             }
@@ -11115,9 +11138,7 @@
                 data: data
             });
 
-            if (that.isCheckingFinished()) {
-                that.checkingFinished();
-            }
+            if (that.isCheckingFinished()) that.checkingFinished();            
         };
 
         req = that.requirements[i];
@@ -12732,7 +12753,7 @@
 
 /**
  * # VisualTimer
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -13350,12 +13371,11 @@
          */
         this.timeLeft = null;
 
-        this.boxDiv = node.window.getDiv();
-        this.titleDiv = node.window.addDiv(this.boxDiv);
-        this.bodyDiv = node.window.addDiv(this.boxDiv);
+        this.boxDiv =   W.get('div');
+        this.titleDiv = W.add('div', this.boxDiv);
+        this.bodyDiv =  W.add('div', this.boxDiv);
 
         this.init(options);
-
     }
 
     TimerBox.prototype.init = function(options) {
@@ -14434,7 +14454,6 @@
         }
     }
 
-
     /**
      * ### strSetter
      *
@@ -14449,7 +14468,6 @@
      * @see strSetter
      */
     function strSetter(that, name, value, collection, method) {
-
         if ('undefined' === typeof that.constructor[collection][name]) {
             throw new TypeError(method + ': name not found: ' + name);
         }

@@ -958,7 +958,6 @@
         }
     }
 
-
     /**
      * ### strSetter
      *
@@ -973,7 +972,6 @@
      * @see strSetter
      */
     function strSetter(that, name, value, collection, method) {
-
         if ('undefined' === typeof that.constructor[collection][name]) {
             throw new TypeError(method + ': name not found: ' + name);
         }
