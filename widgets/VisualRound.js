@@ -1,6 +1,6 @@
 /**
  * # VisualRound
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -20,7 +20,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.7.0';
+    VisualRound.version = '0.7.1';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -483,7 +483,7 @@
      * @see EmptyDisplayMode.updateDisplay
      */
     EmptyDisplayMode.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
+        this.displayDiv = W.get('div');
         this.displayDiv.className = 'rounddiv';
 
         this.updateDisplay();
@@ -597,29 +597,29 @@
      * @see CountUpStages.updateDisplay
      */
     CountUpStages.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
+        this.displayDiv = W.get('div');
         this.displayDiv.className = 'stagediv';
 
-        this.titleDiv = node.window.addElement('div', this.displayDiv);
+        this.titleDiv = W.add('div', this.displayDiv);
         this.titleDiv.className = 'title';
         this.titleDiv.innerHTML = 'Stage:';
 
         if (this.options.toTotal) {
-            this.curStageNumber = node.window.addElement('span',
+            this.curStageNumber = W.add('span',
                 this.displayDiv);
             this.curStageNumber.className = 'number';
         }
         else {
-            this.curStageNumber = node.window.addDiv(this.displayDiv);
+            this.curStageNumber = W.add('div', this.displayDiv);
             this.curStageNumber.className = 'number';
         }
 
         if (this.options.toTotal) {
-            this.textDiv = node.window.addElement('span', this.displayDiv);
+            this.textDiv = W.add('span', this.displayDiv);
             this.textDiv.className = 'text';
             this.textDiv.innerHTML = ' of ';
 
-            this.totStageNumber = node.window.addElement('span',
+            this.totStageNumber = W.add('span',
                 this.displayDiv);
             this.totStageNumber.className = 'number';
         }
@@ -719,14 +719,14 @@
      * @see CountDownStages.updateDisplay
      */
     CountDownStages.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
+        this.displayDiv = W.get('div');
         this.displayDiv.className = 'stagediv';
 
-        this.titleDiv = node.window.addDiv(this.displayDiv);
+        this.titleDiv = W.add('div', this.displayDiv);
         this.titleDiv.className = 'title';
         this.titleDiv.innerHTML = 'Stages left: ';
 
-        this.stagesLeft = node.window.addDiv(this.displayDiv);
+        this.stagesLeft = W.add('div', this.displayDiv);
         this.stagesLeft.className = 'number';
 
         this.updateDisplay();
@@ -846,29 +846,28 @@
      * @see CountUpRounds.updateDisplay
      */
     CountUpRounds.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
+        this.displayDiv = W.get('div');
         this.displayDiv.className = 'rounddiv';
 
-        this.titleDiv = node.window.addElement('div', this.displayDiv);
+        this.titleDiv = W.add('div', this.displayDiv);
         this.titleDiv.className = 'title';
         this.titleDiv.innerHTML = 'Round:';
 
         if (this.options.toTotal) {
-            this.curRoundNumber = node.window.addElement('span',
-                this.displayDiv);
+            this.curRoundNumber = W.add('span', this.displayDiv);
             this.curRoundNumber.className = 'number';
         }
         else {
-            this.curRoundNumber = node.window.addDiv(this.displayDiv);
+            this.curRoundNumber = W.add('div', this.displayDiv);
             this.curRoundNumber.className = 'number';
         }
 
         if (this.options.toTotal) {
-            this.textDiv = node.window.addElement('span', this.displayDiv);
+            this.textDiv = W.add('span', this.displayDiv);
             this.textDiv.className = 'text';
             this.textDiv.innerHTML = ' of ';
 
-            this.totRoundNumber = node.window.addElement('span',
+            this.totRoundNumber = W.add('span',
                 this.displayDiv);
             this.totRoundNumber.className = 'number';
         }
@@ -969,14 +968,14 @@
      * @see CountDownRounds.updateDisplay
      */
     CountDownRounds.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
+        this.displayDiv = W.get('div');
         this.displayDiv.className = 'rounddiv';
 
-        this.titleDiv = node.window.addDiv(this.displayDiv);
+        this.titleDiv = W.add('div', this.displayDiv);
         this.titleDiv.className = 'title';
         this.titleDiv.innerHTML = 'Round left: ';
 
-        this.roundsLeft = node.window.addDiv(this.displayDiv);
+        this.roundsLeft = W.add('div', this.displayDiv);
         this.roundsLeft.className = 'number';
 
         this.updateDisplay();
@@ -1080,7 +1079,7 @@
      */
      CompoundDisplayMode.prototype.init = function(options) {
         var index;
-        this.displayDiv = node.window.getDiv();
+        this.displayDiv = W.get('div');
 
         for (index in this.displayModes) {
             if (this.displayModes.hasOwnProperty(index)) {

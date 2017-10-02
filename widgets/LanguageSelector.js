@@ -19,7 +19,7 @@
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.6.0';
+    LanguageSelector.version = '0.6.1';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
@@ -218,7 +218,7 @@
                         that.optionsLabel[language].appendChild(
                             document.createTextNode(
                                 msg.data[language].nativeName));
-                        node.window.addElement('br', that.displayForm);
+                        node.window.add('br', that.displayForm);
                         that.optionsLabel[language].className =
                             'unselectedButtonLabel';
                         that.displayForm.appendChild(

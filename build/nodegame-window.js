@@ -19,15 +19,14 @@
 
     "use strict";
 
-    var J, DOM;
+    var DOM;
 
     var constants, windowLevels, screenLevels;
     var CB_EXECUTED, WIN_LOADING, lockedUpdate;
 
-    J = node.JSUS;
     if (!J) throw new Error('GameWindow: JSUS not found. Aborting.');
-    DOM = J.get('DOM');
-    if (!DOM) throw new Error('GameWindow: JSUS=>DOM not found. Aborting.');
+    DOM = J.require('DOM');
+    if (!DOM) throw new Error('GameWindow: J.require("DOM") failed.');
 
     constants = node.constants;
     windowLevels = constants.windowLevels;
@@ -1029,7 +1028,7 @@
                             'unique in DOM: ' + headerName);
         }
 
-        header = this.addElement('div', root, headerName);
+        header = this.add('div', root, headerName);
 
         // If generateHeader is called after generateFrame, and the default
         // header position is not bottom, we need to move the header in front.
