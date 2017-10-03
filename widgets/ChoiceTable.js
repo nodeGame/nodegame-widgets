@@ -11,8 +11,6 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('ChoiceTable', ChoiceTable);
 
     // ## Meta-data
@@ -827,7 +825,7 @@
             throw new Error('ChoiceTable.renderSpecial: unknown type: ' + type);
         }
         td.className = className;
-        td.id = this.id + this.separator + 'special-cell-' + type
+        td.id = this.id + this.separator + 'special-cell-' + type;
         return td;
     };
 

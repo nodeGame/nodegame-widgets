@@ -13,8 +13,6 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('LanguageSelector', LanguageSelector);
 
     // ## Meta-data
@@ -195,20 +193,17 @@
                 // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
-                        that.optionsLabel[language] =
-                            W.getElement('label',
-                                         language + 'Label', {
-                                             'for': language + 'RadioButton'
-                                         });
+                        that.optionsLabel[language] = W.get('label', {
+                            id: language + 'Label',
+                            'for': language + 'RadioButton'
+                        });
 
-                        that.optionsDisplay[language] =
-                            W.getElement('input',
-                                         language + 'RadioButton', {
-                                             type: 'radio',
-                                             name: 'languageButton',
-                                             value: msg.data[language].name
-                                         }
-                                        );
+                        that.optionsDisplay[language] = W.get('input', {
+                            id: language + 'RadioButton', 
+                            type: 'radio',
+                            name: 'languageButton',
+                            value: msg.data[language].name
+                        });
 
                         that.optionsDisplay[language].onclick =
                             makeSetLanguageOnClick(language);
@@ -218,7 +213,7 @@
                         that.optionsLabel[language].appendChild(
                             document.createTextNode(
                                 msg.data[language].nativeName));
-                        node.window.add('br', that.displayForm);
+                        W.add('br', that.displayForm);
                         that.optionsLabel[language].className =
                             'unselectedButtonLabel';
                         that.displayForm.appendChild(
@@ -228,13 +223,14 @@
             }
             else {
 
-                that.displaySelection = W.getElement('select',
-                                                     'selectLanguage');
+                that.displaySelection = W.get('select', 'selectLanguage');
                 for (language in msg.data) {
                     that.optionsLabel[language] =
                         document.createTextNode(msg.data[language].nativeName);
-                    that.optionsDisplay[language] = node.window.getElement(
-                        'option', language + 'Option', { value: language });
+                    that.optionsDisplay[language] = W.get('option', {
+                        id: language + 'Option',
+                        value: language
+                    });
                     that.optionsDisplay[language].appendChild(
                         that.optionsLabel[language]);
                     that.displaySelection.appendChild(
@@ -332,8 +328,8 @@
         node.on.lang(this.onLangCallback);
 
         // Display initialization.
-        this.displayForm = node.window.getElement('form', 'radioButtonForm');
-        this.loadingDiv = node.window.addDiv(this.displayForm);
+        this.displayForm = W.get('form', 'radioButtonForm');
+        this.loadingDiv = W.add('div', this.displayForm);
         this.loadingDiv.innerHTML = 'Loading language information...';
 
         this.loadLanguages();

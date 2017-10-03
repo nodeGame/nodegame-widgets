@@ -1,6 +1,6 @@
 /**
  * # GameTable
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that renders in each cell data captured by fired events
@@ -18,20 +18,11 @@
 
     node.widgets.register('GameTable', GameTable);
 
-    // ## Defaults
+    // ## Meta-data.
+    GameTable.className = 'gametable';
+    GameTable.version = '0.3.1';
 
-    GameTable.defaults = {};
-    GameTable.defaults.id = 'gametable';
-    GameTable.defaults.fieldset = {
-        legend: 'Game Table',
-        id: 'gametable_fieldset'
-    };
-
-    // ## Meta-data
-
-    GameTable.version = '0.3';
-
-    // ## Dependencies
+    // ## Dependencies,
 
     GameTable.dependencies = {
         JSUS: {}
@@ -39,7 +30,6 @@
 
     function GameTable(options) {
         this.options = options;
-        this.id = options.id;
         this.name = options.name || GameTable.name;
 
         this.root = null;
@@ -51,7 +41,7 @@
 
         if (!this.plist) this.plist = new PlayerList();
 
-        this.gtbl = new node.window.Table({
+        this.gtbl = new W.Table({
             auto_update: true,
             id: options.id || this.id,
             render: options.render
@@ -90,7 +80,7 @@
         node.on.plist(function(msg) {
             if (!msg.data.length) return;
 
-            //var diff = JSUS.arrayDiff(msg.data,that.plist.db);
+            //var diff = J.arrayDiff(msg.data,that.plist.db);
             var plist = new PlayerList({}, msg.data);
             var diff = plist.diff(that.plist);
             if (diff) {
@@ -122,8 +112,8 @@
     GameTable.prototype.addLeft = function(state, player) {
         if (!state) return;
         state = new GameStage(state);
-        if (!JSUS.in_array({content:state.toString(), type: 'left'},
-                    this.gtbl.left)) {
+        if (!J.inArray({content:state.toString(), type: 'left'},
+                       this.gtbl.left)) {
 
             this.gtbl.add2Left(state.toString());
         }

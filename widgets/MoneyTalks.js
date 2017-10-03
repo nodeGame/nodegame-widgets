@@ -133,7 +133,7 @@
      */
     MoneyTalks.prototype.update = function(amount, clear) {
         var parsedAmount;
-        parsedAmount = JSUS.isNumber(amount);
+        parsedAmount = J.isNumber(amount);
         if (parsedAmount === false) {
             node.err('MoneyTalks.update: invalid amount: ' + amount);
             return;

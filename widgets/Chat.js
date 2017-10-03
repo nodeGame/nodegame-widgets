@@ -1,6 +1,6 @@
 /**
  * # Chat
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -11,13 +11,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('Chat', Chat);
 
     // ## Meta-data
 
-    Chat.version = '0.5.1';
+    Chat.version = '0.5.2';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the experimenter.';
 
@@ -217,7 +215,7 @@
 
     Chat.prototype.append = function() {
 
-        this.chat = W.getElement('div', this.chatId);
+        this.chat = W.get('div', this.chatId);
         this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
@@ -227,7 +225,7 @@
                                            this.submitText,
                                            this.submitId);
             this.submit.className = 'btn btn-sm btn-secondary';
-            this.textarea = W.getElement('textarea', this.textareaId);
+            this.textarea = W.get('textarea', this.textareaId);
             // Append them.
             W.writeln('', this.bodyDiv);
             this.bodyDiv.appendChild(this.textarea);

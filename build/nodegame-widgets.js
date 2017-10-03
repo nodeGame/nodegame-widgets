@@ -1016,7 +1016,7 @@
 
 /**
  * # Chat
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -1027,13 +1027,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('Chat', Chat);
 
     // ## Meta-data
 
-    Chat.version = '0.5.1';
+    Chat.version = '0.5.2';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the experimenter.';
 
@@ -1233,7 +1231,7 @@
 
     Chat.prototype.append = function() {
 
-        this.chat = W.getElement('div', this.chatId);
+        this.chat = W.get('div', this.chatId);
         this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
@@ -1243,7 +1241,7 @@
                                            this.submitText,
                                            this.submitId);
             this.submit.className = 'btn btn-sm btn-secondary';
-            this.textarea = W.getElement('textarea', this.textareaId);
+            this.textarea = W.get('textarea', this.textareaId);
             // Append them.
             W.writeln('', this.bodyDiv);
             this.bodyDiv.appendChild(this.textarea);
@@ -1333,7 +1331,7 @@
 
 /**
  * # ChernoffFaces
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -1344,14 +1342,13 @@
 
     "use strict";
 
-    var J = node.JSUS;
-    var Table = node.window.Table;
+    var Table = W.Table;
 
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.6.1';
+    ChernoffFaces.version = '0.6.2';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -1696,7 +1693,7 @@
                 time: time,
                 change: features
             });
-        };
+        }
 
         // Create a new FaceVector, if features is not one, mixing-in
         // new features and old ones.
@@ -2355,7 +2352,7 @@
 
     "use strict";
 
-    var Table = node.window.Table;
+    var Table = W.Table;
 
     node.widgets.register('ChernoffFacesSimple', ChernoffFaces);
 
@@ -2369,7 +2366,7 @@
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.3';
+    ChernoffFaces.version = '0.4';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -2425,14 +2422,14 @@
                 options.height : ChernoffFaces.defaults.canvas.heigth
         };
 
-        this.canvas = node.window.getCanvas(idCanvas, this.dims);
+        this.canvas = W.getCanvas(idCanvas, this.dims);
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
         var sc_options = {
             id: 'cf_controls',
             features:
-                JSUS.mergeOnKey(FaceVector.defaults, this.features, 'value'),
+                J.mergeOnKey(FaceVector.defaults, this.features, 'value'),
             change: this.change,
             fieldset: {id: this.id + '_controls_fieldest',
                        legend: this.controls.legend || 'Controls'
@@ -2488,7 +2485,7 @@
         this.fp.redraw(fv);
         // Without merging wrong values are passed as attributes
         this.sc.init({
-            features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')
+            features: J.mergeOnKey(FaceVector.defaults, features, 'value')
         });
         this.sc.refresh();
     };
@@ -2503,7 +2500,7 @@
         this.fp.redraw(fv);
 
         var sc_options = {
-            features: JSUS.mergeOnKey(FaceVector.defaults, fv, 'value'),
+            features: J.mergeOnKey(FaceVector.defaults, fv, 'value'),
             change: this.change
         };
         this.sc.init(sc_options);
@@ -2515,7 +2512,7 @@
     // FacePainter
     // The class that actually draws the faces on the Canvas
     function FacePainter(canvas, settings) {
-        this.canvas = new node.window.Canvas(canvas);
+        this.canvas = new W.Canvas(canvas);
         this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
         this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
     }
@@ -2529,8 +2526,8 @@
 
         //console.log('Face Scale ' + face.scaleY + ' ' + face.scaleX );
 
-        var x = x || this.canvas.centerX;
-        var y = y || this.canvas.centerY;
+        x = x || this.canvas.centerX;
+        y = y || this.canvas.centerY;
 
         this.drawHead(face, x, y);
 
@@ -2721,7 +2718,7 @@
 
     //TODO Scaling ?
     FacePainter.computeFaceOffset = function(face, offset, y) {
-        var y = y || 0;
+        y = y || 0;
         //var pos = y - face.head_radius * face.scaleY +
         //          face.head_radius * face.scaleY * 2 * offset;
         var pos = y - face.head_radius + face.head_radius * 2 * offset;
@@ -2730,7 +2727,7 @@
     };
 
     FacePainter.computeEyebrowOffset = function(face, y) {
-        var y = y || 0;
+        y = y || 0;
         var eyemindistance = 2;
         return FacePainter.computeFaceOffset(face, face.eye_height, y) -
             eyemindistance - face.eyebrow_eyedistance;
@@ -2916,7 +2913,7 @@
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!JSUS.in_array(key,
+                if (!J.inArray(key,
                             ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
 
                     out[key] = FaceVector.defaults[key].min +
@@ -3016,8 +3013,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('ChoiceManager', ChoiceManager);
 
@@ -3517,7 +3512,7 @@
         opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
-            form = this.forms[i]
+            form = this.forms[i];
             obj.forms[form.id] = form.getValues(opts);
             if (obj.forms[form.id].choice === null) {
                 obj.missValues.push(form.id);
@@ -3570,8 +3565,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('ChoiceTable', ChoiceTable);
 
@@ -4387,7 +4380,7 @@
             throw new Error('ChoiceTable.renderSpecial: unknown type: ' + type);
         }
         td.className = className;
-        td.id = this.id + this.separator + 'special-cell-' + type
+        td.id = this.id + this.separator + 'special-cell-' + type;
         return td;
     };
 
@@ -5081,8 +5074,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('ChoiceTableGroup', ChoiceTableGroup);
 
@@ -6217,7 +6208,7 @@
 
     // ## Meta-data
 
-    Controls.version = '0.5.0';
+    Controls.version = '0.5.1';
     Controls.description = 'Wraps a collection of user-inputs controls.';
 
     Controls.title = 'Controls';
@@ -6232,7 +6223,7 @@
      * which is stored and forwarded to Controls.init.
      *
      *  The  options object can have the following attributes:
-     *   - Any option that can be passed to `node.window.List` constructor.
+     *   - Any option that can be passed to `W.List` constructor.
      *   - `change`: Event to fire when contents change.
      *   - `features`: Collection of collection attributes for individual
      *                 controls.
@@ -6277,13 +6268,13 @@
     }
 
     Controls.prototype.add = function(root, id, attributes) {
-        // TODO: node.window.addTextInput
-        //return node.window.addTextInput(root, id, attributes);
+        // TODO: replace W.addTextInput 
+        //return W.addTextInput(root, id, attributes);
     };
 
     Controls.prototype.getItem = function(id, attributes) {
-        // TODO: node.window.addTextInput
-        //return node.window.getTextInput(id, attributes);
+        // TODO: replace W.addTextInput
+        //return W.getTextInput(id, attributes);
     };
 
     // ## Controls methods
@@ -6296,7 +6287,7 @@
      * @param {object} options Optional. Configuration options.
      *
      * The  options object can have the following attributes:
-     *   - Any option that can be passed to `node.window.List` constructor.
+     *   - Any option that can be passed to `W.List` constructor.
      *   - `change`: Event to fire when contents change.
      *   - `features`: Collection of collection attributes for individual
      *                 controls.
@@ -6316,12 +6307,10 @@
         this.list = new W.List(options);
         this.listRoot = this.list.getRoot();
 
-        if (!options.features) {
-            return;
+        if (options.features) {
+            this.features = options.features;
+            this.populate();
         }
-
-        this.features = options.features;
-        this.populate();
     };
 
     /**
@@ -6344,8 +6333,11 @@
                 idButton = this.options.submit.id;
                 this.option.submit = this.option.submit.name;
             }
-            this.submit = node.window.addButton(this.bodyDiv, idButton,
-                    this.options.submit, this.options.attributes);
+            this.submit = W.add('button', this.bodyDiv,
+                                J.merge(this.options.attributes, {
+                                    id: idButton,
+                                    innerHTML: this.options.submit
+                                }));
 
             this.submit.onclick = function() {
                 if (that.options.change) {
@@ -6392,8 +6384,11 @@
                     };
                 }
 
-                if (attributes.label) {
-                    W.addLabel(container, elem, null, attributes.label);
+                if (attributes.label) {                    
+                    W.add('label', container, {
+                        'for': elem.id,
+                        innerHTML: attributes.label
+                    });
                 }
 
                 // Element added to the list.
@@ -6415,7 +6410,7 @@
         var key, el;
         for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
-                el = node.window.getElementById(key);
+                el = W.getElementById(key);
                 if (el) {
                     // node.log('KEY: ' + key, 'DEBUG');
                     // node.log('VALUE: ' + el.value, 'DEBUG');
@@ -6435,7 +6430,7 @@
         out = {};
         for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
-                el = node.window.getElementById(key);
+                el = W.getElementById(key);
                 if (el) out[key] = Number(el.value);
             }
         }
@@ -6443,7 +6438,7 @@
     };
 
     Controls.prototype.highlight = function(code) {
-        return node.window.highlight(this.listRoot, code);
+        return W.highlight(this.listRoot, code);
     };
 
     // ## Sub-classes
@@ -6456,7 +6451,7 @@
     SliderControls.prototype.__proto__ = Controls.prototype;
     SliderControls.prototype.constructor = SliderControls;
 
-    SliderControls.version = '0.2.1';
+    SliderControls.version = '0.2.2';
     SliderControls.description = 'Collection of Sliders.';
 
     SliderControls.title = 'Slider Controls';
@@ -6474,11 +6469,16 @@
     }
 
     SliderControls.prototype.add = function(root, id, attributes) {
-        return node.window.addSlider(root, id, attributes);
+        attributes = attributes || {};
+        attributes.id = id;
+        attributes.type = 'range';
+        return W.add('input', root, attributes);
     };
 
     SliderControls.prototype.getItem = function(id, attributes) {
-        return node.window.getSlider(id, attributes);
+        attributes = attributes || {};
+        attributes.id = id;
+        return W.get('input', attributes);
     };
 
     /**
@@ -6545,7 +6545,7 @@
     function RadioControls(options) {
         Controls.call(this,options);
         this.groupName = ('undefined' !== typeof options.name) ? options.name :
-            node.window.generateUniqueId();
+            W.generateUniqueId();
         this.radioElem = null;
     }
 
@@ -6593,37 +6593,33 @@
         if ('undefined' === typeof attributes.name) {
             attributes.name = this.groupName;
         }
-
-        elem = node.window.addRadioButton(root, id, attributes);
+        attributes.id = id;
+        attributes.type = 'radio';
+        elem = W.add('input', root, attributes);
         // Adding the text for the radio button
         elem.appendChild(document.createTextNode(attributes.label));
         return elem;
     };
 
     RadioControls.prototype.getItem = function(id, attributes) {
-        //console.log('ADDDING radio');
-        //console.log(attributes);
+        attributes = attributes || {};
         // add the group name if not specified
         // TODO: is this a javascript bug?
         if ('undefined' === typeof attributes.name) {
-            //                  console.log(this);
-            //                  console.log(this.name);
-            //                  console.log('MODMOD ' + this.name);
             attributes.name = this.groupName;
         }
-        //console.log(attributes);
-        return node.window.getRadioButton(id, attributes);
+        attributes.id = id;
+        attributes.type = 'radio';
+        return W.get('input', attributes);
     };
 
     // Override getAllValues for Radio Controls
     RadioControls.prototype.getValues = function() {
-
-        for (var key in this.features) {
+        var key, el;
+        for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
-                var el = node.window.getElementById(key);
-                if (el.checked) {
-                    return el.value;
-                }
+                el = W.getElementById(key);
+                if (el.checked) return el.value;                
             }
         }
         return false;
@@ -6734,7 +6730,7 @@
         var o, x, y;
         D3.call(this, options);
 
-        this.options = o = JSUS.merge(D3ts.defaults, options);
+        this.options = o = J.merge(D3ts.defaults, options);
         this.n = o.n;
         this.data = [0];
 
@@ -6840,7 +6836,7 @@
 
 /**
  * # DebugInfo
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player
@@ -6851,15 +6847,13 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
-    var Table = node.window.Table;
+    var Table = W.Table;
 
     node.widgets.register('DebugInfo', DebugInfo);
 
     // ## Meta-data
 
-    DebugInfo.version = '0.6.0';
+    DebugInfo.version = '0.6.1';
     DebugInfo.description = 'Display basic info a client\'s status.';
 
     DebugInfo.title = 'Debug Info';
@@ -7105,8 +7099,6 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('DoneButton', DoneButton);
 
     // ## Meta-data
@@ -7301,7 +7293,7 @@
 
 /**
  * # DynamicTable
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Extends the GameTable widgets by allowing dynamic reshaping
@@ -7316,21 +7308,18 @@
 
     "use strict";
 
-    var GameStage = node.GameStage,
-    Table = node.window.Table,
-    HTMLRenderer = node.window.HTMLRenderer,
-    J = node.JSUS;
-
+    var GameStage = node.GameStage;
+    var Table = W.Table;
+    var HTMLRenderer = W.HTMLRenderer;
 
     node.widgets.register('DynamicTable', DynamicTable);
-
 
     DynamicTable.prototype = new Table();
     DynamicTable.prototype.constructor = Table;
 
 
     DynamicTable.id = 'dynamictable';
-    DynamicTable.version = '0.3.1';
+    DynamicTable.version = '0.3.2';
 
     DynamicTable.dependencies = {
         Table: {},
@@ -7339,7 +7328,6 @@
     };
 
     function DynamicTable (options, data) {
-        //JSUS.extend(node.window.Table,this);
         Table.call(this, options, data);
         this.options = options;
 
@@ -7867,9 +7855,6 @@
 
     "use strict";
 
-    var J;
-    J = JSUS;
-
     // Register the widget in the widgets collection.
     node.widgets.register('EndScreen', EndScreen);
 
@@ -8233,8 +8218,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('Feedback', Feedback);
 
@@ -8818,171 +8801,8 @@
 })(node);
 
 /**
- * # GameBoard
- * Copyright(c) 2015 Stefano Balietti
- * MIT Licensed
- *
- * Displays a table of currently connected players
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    node.widgets.register('GameBoard', GameBoard);
-
-    // ## Meta-data
-
-    GameBoard.version = '0.4.1';
-    GameBoard.description = 'Offer a visual representation of the state of ' +
-                            'all players in the game.';
-
-    GameBoard.title = 'Game Board';
-    GameBoard.className = 'gameboard';
-
-    /**
-     * ## GameBoard constructor
-     *
-     * `GameBoard` shows the currently connected players
-     */
-    function GameBoard(options) {
-        /**
-         * ### GameBoard.board
-         *
-         * The DIV wherein to display the players
-         */
-        this.board = null;
-
-        /**
-         * ### GameBoard.status
-         *
-         * The DIV wherein to display the status of the game board
-         */
-        this.status = null;
-    }
-
-    // ## GameBoard methods
-
-    /**
-     * ### GameBoard.append
-     *
-     * Appends widget to `this.bodyDiv` and updates the board
-     *
-     * @see GameBoard.updateBoard
-     */
-    GameBoard.prototype.append = function() {
-        this.status = node.window.addDiv(this.bodyDiv, 'gboard_status');
-        this.board = node.window.addDiv(this.bodyDiv, 'gboard');
-
-        this.updateBoard(node.game.pl);
-    };
-
-    GameBoard.prototype.listeners = function() {
-        var that = this;
-        node.on('UPDATED_PLIST', function() {
-            that.updateBoard(node.game.pl);
-        });
-    };
-
-    /**
-     * ### GameBoard.updateBoard
-     *
-     * Updates the information on the game board
-     *
-     * @see printLine
-     */
-    GameBoard.prototype.updateBoard = function(pl) {
-        var player, separator;
-        var that = this;
-
-        this.status.innerHTML = 'Updating...';
-
-        if (pl.size()) {
-            that.board.innerHTML = '';
-            pl.forEach( function(p) {
-                player = printLine(p);
-
-                W.write(player, that.board);
-
-                separator = printSeparator();
-                W.write(separator, that.board);
-            });
-        }
-        this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
-    };
-
-    // ## Helper methods
-
-     /**
-     * ### printLine
-     *
-     * Returns a `String` describing the player passed in
-     *
-     * @param {Player} `p`. Player object which will be passed in by a call to
-     * `node.game.pl.forEach`.
-     *
-     * @return {String} A string describing the `Player` `p`.
-     *
-     * @see GameBoard.updateBoard
-     * @see nodegame-client/Player
-     */
-    function printLine(p) {
-
-        var line, levels, level;
-        levels = node.constants.stageLevels;
-
-        line = '[' + (p.name || p.id) + "]> \t";
-        line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' +
-                p.stage.step;
-        line += ' ';
-
-        switch (p.stageLevel) {
-
-        case levels.UNINITIALIZED:
-            level = 'uninit.';
-            break;
-
-        case levels.INITIALIZING:
-            level = 'init...';
-            break;
-
-        case levels.INITIALIZING:
-            level = 'init!';
-            break;
-
-        case levels.LOADING:
-            level = 'loading';
-            break;
-
-        case levels.LOADED:
-            level = 'loaded';
-            break;
-
-        case levels.PLAYING:
-            level = 'playing';
-            break;
-        case levels.DONE:
-            level = 'done';
-            break;
-
-        default:
-            level = p.stageLevel;
-            break;
-        }
-
-        return line + '(' + level + ')';
-    }
-
-    function printSeparator() {
-        return W.getElement('hr', null, {style: 'color: #CCC;'});
-    }
-
-})(node);
-
-/**
  * # GameTable
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that renders in each cell data captured by fired events
@@ -9000,20 +8820,11 @@
 
     node.widgets.register('GameTable', GameTable);
 
-    // ## Defaults
+    // ## Meta-data.
+    GameTable.className = 'gametable';
+    GameTable.version = '0.3.1';
 
-    GameTable.defaults = {};
-    GameTable.defaults.id = 'gametable';
-    GameTable.defaults.fieldset = {
-        legend: 'Game Table',
-        id: 'gametable_fieldset'
-    };
-
-    // ## Meta-data
-
-    GameTable.version = '0.3';
-
-    // ## Dependencies
+    // ## Dependencies,
 
     GameTable.dependencies = {
         JSUS: {}
@@ -9021,7 +8832,6 @@
 
     function GameTable(options) {
         this.options = options;
-        this.id = options.id;
         this.name = options.name || GameTable.name;
 
         this.root = null;
@@ -9033,7 +8843,7 @@
 
         if (!this.plist) this.plist = new PlayerList();
 
-        this.gtbl = new node.window.Table({
+        this.gtbl = new W.Table({
             auto_update: true,
             id: options.id || this.id,
             render: options.render
@@ -9072,7 +8882,7 @@
         node.on.plist(function(msg) {
             if (!msg.data.length) return;
 
-            //var diff = JSUS.arrayDiff(msg.data,that.plist.db);
+            //var diff = J.arrayDiff(msg.data,that.plist.db);
             var plist = new PlayerList({}, msg.data);
             var diff = plist.diff(that.plist);
             if (diff) {
@@ -9104,8 +8914,8 @@
     GameTable.prototype.addLeft = function(state, player) {
         if (!state) return;
         state = new GameStage(state);
-        if (!JSUS.in_array({content:state.toString(), type: 'left'},
-                    this.gtbl.left)) {
+        if (!J.inArray({content:state.toString(), type: 'left'},
+                       this.gtbl.left)) {
 
             this.gtbl.add2Left(state.toString());
         }
@@ -9156,8 +8966,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('LanguageSelector', LanguageSelector);
 
@@ -9339,20 +9147,17 @@
                 // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
-                        that.optionsLabel[language] =
-                            W.getElement('label',
-                                         language + 'Label', {
-                                             'for': language + 'RadioButton'
-                                         });
+                        that.optionsLabel[language] = W.get('label', {
+                            id: language + 'Label',
+                            'for': language + 'RadioButton'
+                        });
 
-                        that.optionsDisplay[language] =
-                            W.getElement('input',
-                                         language + 'RadioButton', {
-                                             type: 'radio',
-                                             name: 'languageButton',
-                                             value: msg.data[language].name
-                                         }
-                                        );
+                        that.optionsDisplay[language] = W.get('input', {
+                            id: language + 'RadioButton', 
+                            type: 'radio',
+                            name: 'languageButton',
+                            value: msg.data[language].name
+                        });
 
                         that.optionsDisplay[language].onclick =
                             makeSetLanguageOnClick(language);
@@ -9362,7 +9167,7 @@
                         that.optionsLabel[language].appendChild(
                             document.createTextNode(
                                 msg.data[language].nativeName));
-                        node.window.add('br', that.displayForm);
+                        W.add('br', that.displayForm);
                         that.optionsLabel[language].className =
                             'unselectedButtonLabel';
                         that.displayForm.appendChild(
@@ -9372,13 +9177,14 @@
             }
             else {
 
-                that.displaySelection = W.getElement('select',
-                                                     'selectLanguage');
+                that.displaySelection = W.get('select', 'selectLanguage');
                 for (language in msg.data) {
                     that.optionsLabel[language] =
                         document.createTextNode(msg.data[language].nativeName);
-                    that.optionsDisplay[language] = node.window.getElement(
-                        'option', language + 'Option', { value: language });
+                    that.optionsDisplay[language] = W.get('option', {
+                        id: language + 'Option',
+                        value: language
+                    });
                     that.optionsDisplay[language].appendChild(
                         that.optionsLabel[language]);
                     that.displaySelection.appendChild(
@@ -9476,8 +9282,8 @@
         node.on.lang(this.onLangCallback);
 
         // Display initialization.
-        this.displayForm = node.window.getElement('form', 'radioButtonForm');
-        this.loadingDiv = node.window.addDiv(this.displayForm);
+        this.displayForm = W.get('form', 'radioButtonForm');
+        this.loadingDiv = W.add('div', this.displayForm);
         this.loadingDiv.innerHTML = 'Loading language information...';
 
         this.loadLanguages();
@@ -9719,7 +9525,7 @@
      */
     MoneyTalks.prototype.update = function(amount, clear) {
         var parsedAmount;
-        parsedAmount = JSUS.isNumber(amount);
+        parsedAmount = J.isNumber(amount);
         if (parsedAmount === false) {
             node.err('MoneyTalks.update: invalid amount: ' + amount);
             return;
@@ -10004,7 +9810,7 @@
 
 /**
  * # MsgBar
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -10015,14 +9821,13 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
-        Table = W.Table;
+    var Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
 
     // ## Meta-data
 
-    MsgBar.version = '0.7.0';
+    MsgBar.version = '0.7.1';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
@@ -10165,7 +9970,7 @@
 
         if (key === 'stage' || key === 'to' || key === 'data') {
             try {
-                value = JSUS.parse(e.content.value);
+                value = J.parse(e.content.value);
             }
             catch (ex) {
                 value = e.content.value;
@@ -10178,7 +9983,7 @@
                 value = '' + value;
             }
 
-            if ((!JSUS.isArray(value) && 'string' !== typeof value) ||
+            if ((!J.isArray(value) && 'string' !== typeof value) ||
                 ('string' === typeof value && value.trim() === '')) {
 
                 alert('Invalid "to" field');
@@ -10215,7 +10020,7 @@
 
 /**
  * # NDDBBrowser
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates an interface to interact with an NDDB database
@@ -10239,7 +10044,7 @@
 
     // ## Meta-data
 
-    NDDBBrowser.version = '0.2.0';
+    NDDBBrowser.version = '0.2.1';
     NDDBBrowser.description =
         'Provides a very simple interface to control a NDDB istance.';
 
@@ -10275,15 +10080,15 @@
 
         function addButtons() {
             var id = this.id;
-            node.window.addEventButton(id + '_GO_TO_FIRST', '<<',
+            W.addEventButton(id + '_GO_TO_FIRST', '<<',
                 this.commandsDiv, 'go_to_first');
-            node.window.addEventButton(id + '_GO_TO_PREVIOUS', '<',
+            W.addEventButton(id + '_GO_TO_PREVIOUS', '<',
                 this.commandsDiv, 'go_to_previous');
-            node.window.addEventButton(id + '_GO_TO_NEXT', '>',
+            W.addEventButton(id + '_GO_TO_NEXT', '>',
                 this.commandsDiv, 'go_to_next');
-            node.window.addEventButton(id + '_GO_TO_LAST', '>>',
+            W.addEventButton(id + '_GO_TO_LAST', '>>',
                 this.commandsDiv, 'go_to_last');
-            node.window.addBreak(this.commandsDiv);
+            W.addBreak(this.commandsDiv);
         }
         function addInfoBar() {
             var span = this.commandsDiv.appendChild(
@@ -10511,8 +10316,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('Requirements', Requirements);
 
@@ -11519,8 +11322,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('VisualRound', VisualRound);
 
@@ -12639,7 +12440,7 @@
 
 /**
  * # VisualStage
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Shows current, previous and next stage.
@@ -12650,13 +12451,13 @@
 
     "use strict";
 
-    var Table = node.window.Table;
+    var Table = W.Table;
 
     node.widgets.register('VisualStage', VisualStage);
 
     // ## Meta-data
 
-    VisualStage.version = '0.2.2';
+    VisualStage.version = '0.2.3';
     VisualStage.description =
         'Visually display current, previous and next stage of the game.';
 
@@ -14485,19 +14286,16 @@
 
 /**
  * # Wall
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
- * Creates a wall where log and other information is added
- * with a number and timestamp
+ * Creates a wall where logs and other info is added with number and timestamp
  *
  * www.nodegame.org
  */
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('Wall', Wall);
 
@@ -14522,18 +14320,8 @@
      * `Wall` prints all LOG events into a PRE.
      *
      * @param {object} options Optional. Configuration options
-     * The options it can take are:
-     *
-     *   - id: The id of the PRE in which to write.
-     *   - name: The name of this Wall.
      */
     function Wall(options) {
-        /**
-         * ### Wall.id
-         *
-         * The id of the PRE in which to write
-         */
-        this.id = options.id || 'wall';
 
         /**
          * ### Wall.name
@@ -14561,7 +14349,7 @@
          *
          * The PRE in which to write
          */
-        this.wall = node.window.getElement('pre', this.id);
+        this.wall = W.get('pre', this.id);
     }
 
     // ## Wall methods
@@ -14569,7 +14357,7 @@
     /**
      * ### Wall.init
      *
-     * Initializes the instance.
+     * Initializes the instance
      *
      * If options are provided, the counter is set to `options.counter`
      * otherwise nothing happens.
@@ -14621,8 +14409,9 @@
      * If the document is ready, the buffer content is written into this.wall
      */
     Wall.prototype.debuffer = function() {
+        var i;
         if (document.readyState === 'complete' && this.buffer.length > 0) {
-            for (var i=0; i < this.buffer.length; i++) {
+            for (i=0; i < this.buffer.length; i++) {
                 this.write(this.buffer[i]);
             }
             this.buffer = [];

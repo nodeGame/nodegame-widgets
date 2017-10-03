@@ -1,6 +1,6 @@
 /**
  * # DebugInfo
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player
@@ -11,15 +11,13 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
-    var Table = node.window.Table;
+    var Table = W.Table;
 
     node.widgets.register('DebugInfo', DebugInfo);
 
     // ## Meta-data
 
-    DebugInfo.version = '0.6.0';
+    DebugInfo.version = '0.6.1';
     DebugInfo.description = 'Display basic info a client\'s status.';
 
     DebugInfo.title = 'Debug Info';

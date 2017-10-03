@@ -11,9 +11,6 @@
 
     "use strict";
 
-    var J;
-    J = JSUS;
-
     // Register the widget in the widgets collection.
     node.widgets.register('EndScreen', EndScreen);
 

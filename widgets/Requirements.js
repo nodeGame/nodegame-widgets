@@ -14,8 +14,6 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('Requirements', Requirements);
 
     // ## Meta-data
