@@ -7113,14 +7113,14 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.0';
+    DoneButton.version = '0.2.1';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
     DoneButton.title = 'Done Button';
     DoneButton.className = 'donebutton';
 
-    DoneButton.text = 'I am done';
+    DoneButton.text = 'Done';
 
     // ## Dependencies
 
@@ -7870,12 +7870,12 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.3.0';
+    EndScreen.version = '0.3.1';
     EndScreen.description = 'Game end screen. With end game message, ' +
         'email form, and exit code.';
 
     EndScreen.title = 'End Screen';
-    EndScreen.className = 'end-screen';
+    EndScreen.className = 'endscreen';
 
     // ## Dependencies
 
@@ -8144,14 +8144,14 @@
         if (this.showEmailForm) {
             node.widgets.append(this.emailForm, endScreenElement, {
                 title: false,
-                frame: false
+                panel: false
             });
         }
 
         if (this.showFeedbackForm) {
             node.widgets.append(this.feedback, endScreenElement, {
                 title: false,
-                frame: false
+                panel: false
             });
         }
 

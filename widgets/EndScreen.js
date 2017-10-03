@@ -16,12 +16,12 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.3.0';
+    EndScreen.version = '0.3.1';
     EndScreen.description = 'Game end screen. With end game message, ' +
         'email form, and exit code.';
 
     EndScreen.title = 'End Screen';
-    EndScreen.className = 'end-screen';
+    EndScreen.className = 'endscreen';
 
     // ## Dependencies
 
@@ -290,14 +290,14 @@
         if (this.showEmailForm) {
             node.widgets.append(this.emailForm, endScreenElement, {
                 title: false,
-                frame: false
+                panel: false
             });
         }
 
         if (this.showFeedbackForm) {
             node.widgets.append(this.feedback, endScreenElement, {
                 title: false,
-                frame: false
+                panel: false
             });
         }
 

@@ -15,14 +15,14 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.0';
+    DoneButton.version = '0.2.1';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
     DoneButton.title = 'Done Button';
     DoneButton.className = 'donebutton';
 
-    DoneButton.text = 'I am done';
+    DoneButton.text = 'Done';
 
     // ## Dependencies
 
