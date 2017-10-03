@@ -129,6 +129,15 @@
          */
         this.oldStageId = null;
 
+        /**
+         * ### VisualRound.separator
+         *
+         * Stages and rounds are separated with this string, if needed
+         *
+         * E.g., Stage 3/5
+         */
+        this.separator = ' / ';
+
     }
 
     // ## VisualRound methods
@@ -194,11 +203,17 @@
         this.updateInformation();
 
         if (!this.options.displayModeNames) {
-            this.setDisplayMode(['COUNT_UP_ROUNDS_TO_TOTAL',
-                'COUNT_UP_STAGES_TO_TOTAL']);
+            this.setDisplayMode([
+                'COUNT_UP_ROUNDS_TO_TOTAL',
+                'COUNT_UP_STAGES_TO_TOTAL'
+            ]);
         }
         else {
             this.setDisplayMode(this.options.displayModeNames);
+        }
+
+        if ('undefined' !== typeof options.separator) {
+            this.separator = options.separator;
         }
 
         this.updateDisplay();
@@ -217,9 +232,7 @@
      * @see VisualRound.displayMode
      */
     VisualRound.prototype.updateDisplay = function() {
-        if (this.displayMode) {
-            this.displayMode.updateDisplay();
-        }
+        if (this.displayMode) this.displayMode.updateDisplay();
     };
 
     /**
@@ -247,61 +260,60 @@
      * @see VisualRound.init
      */
     VisualRound.prototype.setDisplayMode = function(displayModeNames) {
-        var index, compoundDisplayModeName, displayModes;
+        var i, len, compoundDisplayModeName, displayModes;
 
         // Validation of input parameter.
         if (!J.isArray(displayModeNames)) {
-            throw TypeError;
+            throw new TypeError('VisualRound.setDisplayMode: ' +
+                                'displayModeNames must be an array. Found: ' +
+                                displayModeNames);
         }
-
-        // Build compound name.
-        compoundDisplayModeName = '';
-        for (index in displayModeNames) {
-            if (displayModeNames.hasOwnProperty(index)) {
-                compoundDisplayModeName += displayModeNames[index] + '&';
-            }
+        len = displayModeNames.length;
+        if (len === 0) {
+            throw new Error('VisualRound.setDisplayMode: ' +
+                            'displayModeNames is empty.');
         }
-
-        // Remove trailing '&'.
-        compoundDisplayModeName = compoundDisplayModeName.substr(0,
-            compoundDisplayModeName, compoundDisplayModeName.length -1);
 
         if (this.displayMode) {
-            if (compoundDisplayModeName !== this.displayMode.name) {
-                this.deactivate(this.displayMode);
-            }
-            else {
-                return;
-            }
+            // Build compound name.
+            compoundDisplayModeName = displayModeNames.join('&');
+            // Nothing to do if mode is already active.
+            if (compoundDisplayModeName === this.displayMode.name) return;
+            this.deactivate(this.displayMode);
         }
+
+        i = -1;
+        for (; ++i < len; ) {
+            compoundDisplayModeName += displayModeNames[i];
+            if (i !== (len-1)) compoundDisplayModeName += '&';
+        }
+
 
         // Build `CompoundDisplayMode`.
         displayModes = [];
-        for (index in displayModeNames) {
-            if (displayModeNames.hasOwnProperty(index)) {
-                switch (displayModeNames[index]) {
-                    case 'COUNT_UP_STAGES_TO_TOTAL':
-                        displayModes.push(new CountUpStages(this,
-                            {toTotal: true}));
-                        break;
-                    case 'COUNT_UP_STAGES':
-                        displayModes.push(new CountUpStages(this));
-                        break;
-                    case 'COUNT_DOWN_STAGES':
-                        displayModes.push(new CountDownStages(this));
-                        break;
-                    case 'COUNT_UP_ROUNDS_TO_TOTAL':
-                        displayModes.push(new CountUpRounds(this,
-                            {toTotal: true}));
-                        break;
-                    case 'COUNT_UP_ROUNDS':
-                        displayModes.push(new CountUpRounds(this));
-                        break;
-                    case 'COUNT_DOWN_ROUNDS':
-                        displayModes.push(new CountDownRounds(this));
-                        break;
-                }
+        i = -1;
+        for (; ++i < len; ) {
+            switch (displayModeNames[i]) {
+            case 'COUNT_UP_STAGES_TO_TOTAL':
+                displayModes.push(new CountUpStages(this, { toTotal: true }));
+                break;
+            case 'COUNT_UP_STAGES':
+                displayModes.push(new CountUpStages(this));
+                break;
+            case 'COUNT_DOWN_STAGES':
+                displayModes.push(new CountDownStages(this));
+                break;
+            case 'COUNT_UP_ROUNDS_TO_TOTAL':
+                displayModes.push(new CountUpRounds(this, { toTotal: true }));
+                break;
+            case 'COUNT_UP_ROUNDS':
+                displayModes.push(new CountUpRounds(this));
+                break;
+            case 'COUNT_DOWN_ROUNDS':
+                displayModes.push(new CountDownRounds(this));
+                break;
             }
+
         }
         this.displayMode = new CompoundDisplayMode(this, displayModes);
         this.activate(this.displayMode);
@@ -330,12 +342,8 @@
      * @see VisualRound.deactivate
      */
     VisualRound.prototype.activate = function(displayMode) {
-        if (this.bodyDiv) {
-            this.bodyDiv.appendChild(displayMode.displayDiv);
-        }
-        if (displayMode.activate) {
-            displayMode.activate();
-        }
+        if (this.bodyDiv) this.bodyDiv.appendChild(displayMode.displayDiv);
+        if (displayMode.activate) displayMode.activate();
     };
 
     /**
@@ -351,18 +359,15 @@
      */
     VisualRound.prototype.deactivate = function(displayMode) {
         this.bodyDiv.removeChild(displayMode.displayDiv);
-        if (displayMode.deactivate) {
-            displayMode.deactivate();
-        }
+        if (displayMode.deactivate) displayMode.deactivate();
     };
 
     VisualRound.prototype.listeners = function() {
-        var that = this;
-
+        var that;
+        that = this;
         node.on('STEP_CALLBACK_EXECUTED', function() {
             that.updateInformation();
         });
-
         // TODO: Game over and init?
     };
 
@@ -400,7 +405,6 @@
         }
         // Normal mode.
         else {
-
             this.curStage = stage.stage;
             // Stage can be indexed by id or number in the sequence.
             if ('string' === typeof this.curStage) {
@@ -420,90 +424,15 @@
         this.updateDisplay();
     };
 
-   /**
-     * # EmptyDisplayMode
-     *
-     * Copyright(c) 2015 Stefano Balietti
-     * MIT Licensed
-     *
-     * Defines a displayMode for the `VisualRound` which displays nothing
-     */
-
-    /**
-     * ## EmptyDisplayMode constructor
-     *
-     * Display a displayMode which contains the bare minumum (nothing)
-     *
-     * @param {VisualRound} visualRound The `VisualRound` object to which the
-     *   displayMode belongs
-     * @param {object} options Optional. Configuration options
-     *
-     * @see VisualRound
-     */
-    function EmptyDisplayMode(visualRound, options) {
-
-        /**
-         * ### EmptyDisplayMode.name
-         *
-         * The name of the displayMode
-         */
-        this.name = 'EMPTY';
-        this.options = options || {};
-
-        /**
-         * ### EmptyDisplayMode.visualRound
-         *
-         * The `VisualRound` object to which the displayMode belongs
-         *
-         * @see VisualRound
-         */
-        this.visualRound = visualRound;
-
-        /**
-         * ### EmptyDisplayMode.displayDiv
-         *
-         * The DIV in which the information is displayed
-         */
-        this.displayDiv = null;
-
-        this.init(this.options);
-    }
-
-    // ## EmptyDisplayMode methods
-
-    /**
-     * ### EmptyDisplayMode.init
-     *
-     * Initializes the instance
-     *
-     * @param {object} options The options taken
-     *
-     * @see EmptyDisplayMode.updateDisplay
-     */
-    EmptyDisplayMode.prototype.init = function(options) {
-        this.displayDiv = W.get('div');
-        this.displayDiv.className = 'rounddiv';
-
-        this.updateDisplay();
-    };
-
-    /**
-     * ### EmptyDisplayMode.updateDisplay
-     *
-     * Does nothing
-     *
-     * @see VisualRound.updateDisplay
-     */
-    EmptyDisplayMode.prototype.updateDisplay = function() {};
+    // ## Display Modes.
 
     /**
      * # CountUpStages
      *
-     * Copyright(c) 2015 Stefano Balietti
+     * Copyright(c) 2017 Stefano Balietti
      * MIT Licensed
      *
-     * Defines a displayMode for the `VisualRound` which displays the current
-     * and, possibly, the total number of stages
+     * Display mode for `VisualRound` which with current/total number of stages
      */
 
     /**
@@ -522,34 +451,8 @@
      * @see VisualRound
      */
     function CountUpStages(visualRound, options) {
-        this.options = options || {};
 
-        /**
-         * ### CountUpStages.name
-         *
-         * The name of the displayMode
-         */
-        this.name = 'COUNT_UP_STAGES';
-
-        if (this.options.toTotal) {
-            this.name += '_TO_TOTAL';
-        }
-
-        /**
-         * ### CountUpStages.visualRound
-         *
-         * The `VisualRound` object to which the displayMode belongs
-         *
-         * @see VisualRound
-         */
-        this.visualRound = visualRound;
-
-        /**
-         * ### CountUpStages.displayDiv
-         *
-         * The DIV in which the information is displayed
-         */
-        this.displayDiv = null;
+        generalConstructor(this, visualRound, 'COUNT_UP_STAGES', options);
 
         /**
          * ### CountUpStages.curStageNumber
@@ -561,16 +464,9 @@
         /**
          * ### CountUpStages.totStageNumber
          *
-         * The element in which the total stage number is displayed
+         * The span in which the total stage number is displayed
          */
         this.totStageNumber = null;
-
-        /**
-         * ### CountUpStages.displayDiv
-         *
-         * The DIV in which the title is displayed
-         */
-        this.titleDiv = null;
 
         /**
          * ### CountUpStages.displayDiv
@@ -579,7 +475,8 @@
          */
         this.textDiv = null;
 
-        this.init(this.options);
+        // Inits it!
+        this.init();
     }
 
     // ## CountUpStages methods
@@ -589,39 +486,23 @@
      *
      * Initializes the instance
      *
-     * @param {object} options Optional. Configuration options. If
-     *   `options.toTotal == true`, then the total number of stages is displayed
-     *
      * @see CountUpStages.updateDisplay
      */
-    CountUpStages.prototype.init = function(options) {
-        this.displayDiv = W.get('div');
-        this.displayDiv.className = 'stagediv';
+    CountUpStages.prototype.init = function() {
+        generalInit(this, 'stagediv', 'Stage');
 
-        this.titleDiv = W.add('div', this.displayDiv);
-        this.titleDiv.className = 'title';
-        this.titleDiv.innerHTML = 'Stage:';
-
+        this.curStageNumber = W.append('span', this.contentDiv, {
+            className: 'number'
+        });
         if (this.options.toTotal) {
-            this.curStageNumber = W.add('span',
-                this.displayDiv);
-            this.curStageNumber.className = 'number';
+            this.textDiv = W.append('span', this.contentDiv, {
+                className: 'text',
+                innerHTML: this.visualRound.separator
+            });
+            this.totStageNumber = W.append('span', this.contentDiv, {
+                className: 'number'
+            });
         }
-        else {
-            this.curStageNumber = W.add('div', this.displayDiv);
-            this.curStageNumber.className = 'number';
-        }
-
-        if (this.options.toTotal) {
-            this.textDiv = W.add('span', this.displayDiv);
-            this.textDiv.className = 'text';
-            this.textDiv.innerHTML = ' of ';
-
-            this.totStageNumber = W.add('span',
-                this.displayDiv);
-            this.totStageNumber.className = 'number';
-        }
-
         this.updateDisplay();
     };
 
@@ -644,7 +525,7 @@
    /**
      * # CountDownStages
      *
-     * Copyright(c) 2015 Stefano Balietti
+     * Copyright(c) 2017 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
@@ -664,29 +545,7 @@
      */
     function CountDownStages(visualRound, options) {
 
-        /**
-         * ### CountDownStages.name
-         *
-         * The name of the displayMode
-         */
-        this.name = 'COUNT_DOWN_STAGES';
-        this.options = options || {};
-
-        /**
-         * ### CountDownStages.visualRound
-         *
-         * The `VisualRound` object to which the displayMode belongs
-         *
-         * @see VisualRound
-         */
-        this.visualRound = visualRound;
-
-        /**
-         * ### CountDownStages.displayDiv
-         *
-         * The DIV in which the information is displayed
-         */
-        this.displayDiv = null;
+        generalConstructor(this, visualRound, 'COUNT_DOWN_STAGES', options);
 
         /**
          * ### CountDownStages.stagesLeft
@@ -695,14 +554,7 @@
          */
         this.stagesLeft = null;
 
-        /**
-         * ### CountDownStages.displayDiv
-         *
-         * The DIV in which the title is displayed
-         */
-        this.titleDiv = null;
-
-        this.init(this.options);
+        this.init();
     }
 
     // ## CountDownStages methods
@@ -712,21 +564,13 @@
      *
      * Initializes the instance
      *
-     * @param {object} options Optional. Configuration options
-     *
      * @see CountDownStages.updateDisplay
      */
-    CountDownStages.prototype.init = function(options) {
-        this.displayDiv = W.get('div');
-        this.displayDiv.className = 'stagediv';
-
-        this.titleDiv = W.add('div', this.displayDiv);
-        this.titleDiv.className = 'title';
-        this.titleDiv.innerHTML = 'Stages left: ';
-
-        this.stagesLeft = W.add('div', this.displayDiv);
-        this.stagesLeft.className = 'number';
-
+    CountDownStages.prototype.init = function() {
+        generalInit(this, 'stagediv', 'Stage left');
+        this.stagesLeft = W.add('div', this.contentDiv, {
+            className: 'number'
+        });
         this.updateDisplay();
     };
 
@@ -738,18 +582,20 @@
      * @see VisualRound.updateDisplay
      */
     CountDownStages.prototype.updateDisplay = function() {
-        if (this.visualRound.totStage === this.visualRound.curStage) {
+        var v;
+        v = this.visualRound;
+        if (v.totStage === v.curStage) {
             this.stagesLeft.innerHTML = 0;
-            return;
         }
-        this.stagesLeft.innerHTML =
-                (this.visualRound.totStage - this.visualRound.curStage) || '?';
+        else {
+            this.stagesLeft.innerHTML = (v.totStage - v.curStage) || '?';
+        }
     };
 
    /**
      * # CountUpRounds
      *
-     * Copyright(c) 2015 Stefano Balietti
+     * Copyright(c) 2017 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the current
@@ -771,34 +617,8 @@
      * @see VisualRound
      */
     function CountUpRounds(visualRound, options) {
-        this.options = options || {};
 
-        /**
-         * ### CountUpRounds.name
-         *
-         * The name of the displayMode
-         */
-        this.name = 'COUNT_UP_ROUNDS';
-
-        if (this.options.toTotal) {
-            this.name += '_TO_TOTAL';
-        }
-
-        /**
-         * ### CountUpRounds.visualRound
-         *
-         * The `VisualRound` object to which the displayMode belongs
-         *
-         * @see VisualRound
-         */
-        this.visualRound = visualRound;
-
-        /**
-         * ### CountUpRounds.displayDiv
-         *
-         * The DIV in which the information is displayed
-         */
-        this.displayDiv = null;
+        generalConstructor(this, visualRound, 'COUNT_UP_ROUNDS', options);
 
         /**
          * ### CountUpRounds.curRoundNumber
@@ -814,21 +634,7 @@
          */
         this.totRoundNumber = null;
 
-        /**
-         * ### CountUpRounds.displayDiv
-         *
-         * The DIV in which the title is displayed
-         */
-        this.titleDiv = null;
-
-        /**
-         * ### CountUpRounds.displayDiv
-         *
-         * The span in which the text ` of ` is displayed
-         */
-        this.textDiv = null;
-
-        this.init(this.options);
+        this.init();
     }
 
     // ## CountUpRounds methods
@@ -843,33 +649,23 @@
      *
      * @see CountUpRounds.updateDisplay
      */
-    CountUpRounds.prototype.init = function(options) {
-        this.displayDiv = W.get('div');
-        this.displayDiv.className = 'rounddiv';
+    CountUpRounds.prototype.init = function() {
 
-        this.titleDiv = W.add('div', this.displayDiv);
-        this.titleDiv.className = 'title';
-        this.titleDiv.innerHTML = 'Round:';
+        generalInit(this, 'rounddiv', 'Round');
 
+        this.curRoundNumber = W.add('span', this.contentDiv, {
+            className: 'number'
+        });
         if (this.options.toTotal) {
-            this.curRoundNumber = W.add('span', this.displayDiv);
-            this.curRoundNumber.className = 'number';
-        }
-        else {
-            this.curRoundNumber = W.add('div', this.displayDiv);
-            this.curRoundNumber.className = 'number';
-        }
+            this.textDiv = W.add('span', this.contentDiv, {
+                className: 'text',
+                innerHTML: this.visualRound.separator
+            });
 
-        if (this.options.toTotal) {
-            this.textDiv = W.add('span', this.displayDiv);
-            this.textDiv.className = 'text';
-            this.textDiv.innerHTML = ' of ';
-
-            this.totRoundNumber = W.add('span',
-                this.displayDiv);
-            this.totRoundNumber.className = 'number';
+            this.totRoundNumber = W.add('span', this.contentDiv,  {
+                className: 'number'
+            });
         }
-
         this.updateDisplay();
     };
 
@@ -893,7 +689,7 @@
    /**
      * # CountDownRounds
      *
-     * Copyright(c) 2015 Stefano Balietti
+     * Copyright(c) 2017 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
@@ -913,29 +709,7 @@
      */
     function CountDownRounds(visualRound, options) {
 
-        /**
-         * ### CountDownRounds.name
-         *
-         * The name of the displayMode
-         */
-        this.name = 'COUNT_DOWN_ROUNDS';
-        this.options = options || {};
-
-        /**
-         * ### CountDownRounds.visualRound
-         *
-         * The `VisualRound` object to which the displayMode belongs
-         *
-         * @see VisualRound
-         */
-        this.visualRound = visualRound;
-
-        /**
-         * ### CountDownRounds.displayDiv
-         *
-         * The DIV in which the information is displayed
-         */
-        this.displayDiv = null;
+        generalConstructor(this, visualRound, 'COUNT_DOWN_ROUNDS', options);
 
         /**
          * ### CountDownRounds.roundsLeft
@@ -944,14 +718,7 @@
          */
         this.roundsLeft = null;
 
-        /**
-         * ### CountDownRounds.displayDiv
-         *
-         * The DIV in which the title is displayed
-         */
-        this.titleDiv = null;
-
-        this.init(this.options);
+        this.init();
     }
 
     // ## CountDownRounds methods
@@ -961,17 +728,10 @@
      *
      * Initializes the instance
      *
-     * @param {object} options Optional. Configuration options
-     *
      * @see CountDownRounds.updateDisplay
      */
-    CountDownRounds.prototype.init = function(options) {
-        this.displayDiv = W.get('div');
-        this.displayDiv.className = 'rounddiv';
-
-        this.titleDiv = W.add('div', this.displayDiv);
-        this.titleDiv.className = 'title';
-        this.titleDiv.innerHTML = 'Round left: ';
+    CountDownRounds.prototype.init = function() {
+        generalInit(this, 'rounddiv', 'Round Left');
 
         this.roundsLeft = W.add('div', this.displayDiv);
         this.roundsLeft.className = 'number';
@@ -987,18 +747,20 @@
      * @see VisualRound.updateDisplay
      */
     CountDownRounds.prototype.updateDisplay = function() {
-        if (this.visualRound.totRound === this.visualRound.curRound) {
+        var v;
+        v = this.visualRound;
+        if (v.totRound === v.curRound) {
             this.roundsLeft.innerHTML = 0;
-            return;
         }
-        this.roundsLeft.innerHTML =
-                (this.visualRound.totRound - this.visualRound.curRound) || '?';
+        else {
+            this.roundsLeft.innerHTML = (v.totRound - v.curRound) || '?';
+        }
     };
 
     /**
      * # CompoundDisplayMode
      *
-     * Copyright(c) 2015 Stefano Balietti
+     * Copyright(c) 2017 Stefano Balietti
      * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the
@@ -1019,24 +781,6 @@
      * @see VisualRound
      */
     function CompoundDisplayMode(visualRound, displayModes, options) {
-        var index;
-
-        /**
-         * ### CompoundDisplayMode.name
-         *
-         * The name of the displayMode
-         */
-        this.name = '';
-
-        for (index in displayModes) {
-            if (displayModes.hasOwnProperty(index)) {
-                this.name += displayModes[index].name + '&';
-            }
-        }
-
-        this.name = this.name.substr(0, this.name.length -1);
-
-        this.options = options || {};
 
         /**
          * ### CompoundDisplayMode.visualRound
@@ -1053,6 +797,20 @@
          * The array of displayModes to be used in combination
          */
         this.displayModes = displayModes;
+
+        /**
+         * ### CompoundDisplayMode.name
+         *
+         * The name of the displayMode
+         */
+        this.name = displayModes.join('&');
+
+        /**
+         * ### CompoundDisplayMode.options
+         *
+         * Current options
+         */
+        this.options = options || {};
 
         /**
          * ### CompoundDisplayMode.displayDiv
@@ -1076,17 +834,13 @@
      * @see CompoundDisplayMode.updateDisplay
      */
      CompoundDisplayMode.prototype.init = function(options) {
-        var index;
-        this.displayDiv = W.get('div');
-
-        for (index in this.displayModes) {
-            if (this.displayModes.hasOwnProperty(index)) {
-                this.displayDiv.appendChild(
-                    this.displayModes[index].displayDiv);
-            }
-        }
-
-        this.updateDisplay();
+         var i, len;
+         this.displayDiv = W.get('div');
+         i = -1, len = this.displayModes.length;
+         for (; ++i < len; ) {
+             this.displayDiv.appendChild(this.displayModes[i].displayDiv);
+         }
+         this.updateDisplay();
      };
 
     /**
@@ -1097,34 +851,120 @@
      * @see VisualRound.updateDisplay
      */
     CompoundDisplayMode.prototype.updateDisplay = function() {
-        var index;
-        for (index in this.displayModes) {
-            if (this.displayModes.hasOwnProperty(index)) {
-                this.displayModes[index].updateDisplay();
-            }
+        var i, len;
+        i = -1, len = this.displayModes.length;
+        for (; ++i < len; ) {
+            this.displayModes[i].updateDisplay();
         }
     };
 
     CompoundDisplayMode.prototype.activate = function() {
-        var index;
-        for (index in this.displayModes) {
-            if (this.displayModes.hasOwnProperty(index)) {
-                if (this.displayModes[index].activate) {
-                    this.displayModes[index].activate();
-                }
+        var i, len;
+        i = -1, len = this.displayModes.length;
+        for (; ++i < len; ) {
+            if (this.displayModes[i].activate) {
+                this.displayModes[i].activate();
             }
         }
     };
 
     CompoundDisplayMode.prototype.deactivate = function() {
-        var index;
-        for (index in this.displayModes) {
-            if (this.displayModes.hasOwnProperty(index)) {
-                if (this.displayModes[index].deactivate) {
-                    this.displayMode[index].deactivate();
-                }
+        var i, len;
+        i = -1, len = this.displayModes.length;
+        for (; ++i < len; ) {
+            if (this.displayModes[i].deactivate) {
+                this.displayModes[i].deactivate();
             }
         }
     };
+
+    // ## Helper Methods
+
+    /**
+     * ### generalConstructor
+     *
+     * Sets up the basic attributes of visualization mode for VisualRound
+     *
+     * @param {object} that The visualization mode instance
+     * @param {VisualRound} visualRound The VisualRound instance
+     * @param {string} name The name of the visualization mode
+     * @param {object} options Additional options, e.g. 'toTotal'
+     */
+    function generalConstructor(that, visualRound, name, options) {
+
+        /**
+         * #### visualRound
+         *
+         * The `VisualRound` object to which the displayMode belongs
+         *
+         * @see VisualRound
+         */
+        that.visualRound = visualRound;
+
+        /**
+         * #### name
+         *
+         * The name of the displayMode
+         */
+        that.name = name;
+        if (options.toTotal) that.name += '_TO_TOTAL';
+
+        /**
+         * #### options
+         *
+         * The options for this instance
+         */
+        that.options = options || {};
+
+        /**
+         * #### displayDiv
+         *
+         * The DIV in which the information is displayed
+         */
+        that.displayDiv = null;
+
+        /**
+         * #### displayDiv
+         *
+         * The DIV in which the title is displayed
+         */
+        that.titleDiv = null;
+
+        /**
+         * #### contentDiv
+         *
+         * The DIV containing the actual information
+         */
+        that.contentDiv = null;
+
+        /**
+         * #### textDiv
+         *
+         * The span in which the text ` of ` is displayed
+         */
+        that.textDiv = null;
+
+    }
+
+    /**
+     * ### generalInit
+     *
+     * Adds three divs: a container with a nested title and content div
+     *
+     * Adds references to the instance: displayDiv, titleDiv, contentDiv.
+     *
+     * @param {object} The instance to which the references are added.
+     * @param {string} The name of the container div
+     */
+    function generalInit(that, containerName, title) {
+        that.displayDiv = W.get('div', { className: containerName });
+        that.titleDiv = W.add('div', that.displayDiv, {
+            className: 'title',
+            innerHTML: title
+        });
+        that.contentDiv = W.add('div', that.displayDiv, {
+            className: 'content'
+        });
+    }
 
 })(node);
