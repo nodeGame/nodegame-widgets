@@ -261,10 +261,13 @@
      *
      * @param {string|HTMLElement|false} Optional. The title for the heading,
      *    div an HTML element, or false to remove the header completely.
+     * @param {object} Optional. Options to be passed to `W.add` if a new
+     *    heading div is created. Default: { className: 'panel-heading' }
      *
      * @see Widget.headingDiv
+     * @see GameWindow.add
      */
-    Widget.prototype.setTitle = function(title) {
+    Widget.prototype.setTitle = function(title, options) {
         var tmp;
         if (!this.panelDiv) {
             throw new Error('Widget.setTitle: panelDiv is missing.');
@@ -280,8 +283,15 @@
         else {
             if (!this.headingDiv) {
                 // Add heading.
-                this.headingDiv = W.add('div', this.panelDiv,
-                                        { className: 'panel-heading' });
+                if (!options) {
+                    options = { className: 'panel-heading' };
+                }
+                else if ('object' !== typeof options) {
+                    throw new TypeError('Widget.setTitle: options must ' +
+                                        'be object or undefined. Found: ' +
+                                        options);                    
+                }                
+                this.headingDiv = W.add('div', this.panelDiv, options);
                 // Move it to before the body (IE cannot have undefined).
                 tmp = (this.bodyDiv && this.bodyDiv.childNodes[0]) || null;
                 this.panelDiv.insertBefore(this.headingDiv, tmp);
@@ -313,10 +323,13 @@
      *
      * @param {string|HTMLElement|false} Optional. The title for the header,
      *    an HTML element, or false to remove the header completely.
+     * @param {object} Optional. Options to be passed to `W.add` if a new
+     *    footer div is created. Default: { className: 'panel-footer' }
      *
      * @see Widget.footerDiv
+     * @see GameWindow.add
      */
-    Widget.prototype.setFooter = function(footer) {
+    Widget.prototype.setFooter = function(footer, options) {
         if (!this.panelDiv) {
             throw new Error('Widget.setFooter: panelDiv is missing.');
         }
@@ -331,8 +344,15 @@
         else {
             if (!this.footerDiv) {
                 // Add footer.
-                this.footerDiv = W.add('div', this.panelDiv,
-                                       { className: 'panel-footer' });
+                if (!options) {
+                    options = { className: 'panel-footer' };
+                }
+                else if ('object' !== typeof options) {
+                    throw new TypeError('Widget.setFooter: options must ' +
+                                        'be object or undefined. Found: ' +
+                                        options);                    
+                }
+                this.footerDiv = W.add('div', this.panelDiv, options);
             }
 
             // Set footer contents.
@@ -433,8 +453,6 @@
 (function(window, node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     // ## Widgets constructor
 
@@ -801,31 +819,30 @@
         // In this case a dependencies check is done.
         if ('string' === typeof w) w = this.get(w, options);
 
-        // Add panelDiv (with or without frame around).
-        tmp = options.frame === false ?
-            [ 'ng_widget', 'panel', w.className ] :
+        // Add panelDiv (with or without panel).
+        tmp = options.panel === false ?
+            [ 'ng_widget',  'no-panel', w.className ] :
             [ 'ng_widget', 'panel', 'panel-default', w.className ];
-
-        // w.panelDiv = document.createElement('div');
-        // root.appendChild(w.panelDiv);
-        // w.panelDiv.className = tmp;
         
         w.panelDiv = W.append('div', root, { className: tmp });
 
-        // Optionally add title.
-        if (options.title !== false && w.title) w.setTitle(w.title);
+        // Optionally add title (and div).
+        if (options.title !== false && w.title) {
+            tmp = options.panel === false ?
+                'no-panel-heading' : 'panel-heading';
+            w.setTitle(w.title, { className: tmp });
+        }
 
-        // Add body (with or without margins around).
-
-        // w.bodyDiv = document.createElement('div');
-        // w.panelDiv.appendChild(w.bodyDiv);
-        // if (options.frame !== false) w.bodyDiv.className = 'panel-body';
-        
-        tmp = options.frame !== false ? { className: 'panel-body' } : undefined;
-        w.bodyDiv = W.append('div', w.panelDiv, tmp);
+        // Add body (with or without panel).        
+        tmp = options.panel !== false ? 'panel-body' : 'no-panel-body';
+        w.bodyDiv = W.append('div', w.panelDiv, { className: tmp });
         
         // Optionally add footer.
-        if (w.footer) w.setFooter(w.footer);
+        if (w.footer) {
+            tmp = options.panel === false ?
+                'no-panel-heading' : 'panel-heading';            
+            w.setFooter(w.footer);
+        }
 
         // Optionally set context.
         if (w.context) w.setContext(w.context);
@@ -973,13 +990,6 @@
 
     // ## Helper functions
 
-//    function appendDiv(root, options) {
-//        var div;
-//        div = document.createElement('div');
-//        // TODO: Check every parameter
-//        return W.addDiv(root, undefined, options.attributes);
-//    }
-//
 //     function createListenerFunction(w, e, l) {
 //         if (!w || !e || !l) return;
 //         w.panelDiv[e] = function() { l.call(w); };
