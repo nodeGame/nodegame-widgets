@@ -138,6 +138,16 @@
          */
         this.separator = ' / ';
 
+
+        /**
+         * ### VisualRound.layout
+         *
+         * Display layout
+         *
+         * @see VisualRound.setLayout
+         */
+        this.layout = 'vertical';
+
     }
 
     // ## VisualRound methods
@@ -214,6 +224,10 @@
 
         if ('undefined' !== typeof options.separator) {
             this.separator = options.separator;
+        }
+
+        if ('undefined' !== typeof options.layout) {
+            this.layout = options.layout;
         }
 
         this.updateDisplay();
@@ -424,9 +438,13 @@
         this.updateDisplay();
     };
 
-
-    VisualRound.prototype.arrangeLayout = function(layout) {
-        if (this.displayMode) this.displayMode.arrangeLayout(layout);
+    VisualRound.prototype.setLayout = function(layout) {
+        if ('string' !== typeof layout || layout.trim() === '') {
+            throw new TypeError('VisualRound.setLayout: layout must be ' +
+                                'a non-empty string. Found: ' + layout);
+        }
+        this.layout = layout;
+        if (this.displayMode) this.displayMode.setLayout(layout);
     };
 
     // ## Display Modes.
@@ -864,70 +882,76 @@
     };
 
     CompoundDisplayMode.prototype.activate = function() {
-        var i, len;
-        i = -1, len = this.displayModes.length;
-        for (; ++i < len; ) {
-            if (this.displayModes[i].activate) {
-                this.displayModes[i].activate();
-            }
-        }
-    };
-
-    CompoundDisplayMode.prototype.deactivate = function() {
-        var i, len;
-        i = -1, len = this.displayModes.length;
-        for (; ++i < len; ) {
-            if (this.displayModes[i].deactivate) {
-                this.displayModes[i].deactivate();
-            }
-        }
-    };
-
-    CompoundDisplayMode.prototype.arrangeLayout = function(layout) {
         var i, len, d;
         i = -1, len = this.displayModes.length;
         for (; ++i < len; ) {
             d = this.displayModes[i];
-            if (layout === 'vertical' || layout === 'multimode_vertical' ||
-                layout === 'all_vertical') {
+            if (d.activate) this.displayModes[i].activate();
+            setLayout(d, this.visualRound.layout, i === (len-1));
+        }
+    };
 
-                d.displayDiv.style.float = 'none';
-                d.titleDiv.style.float = 'none';
-                d.titleDiv.style['margin-right'] = '0px';
-                d.contentDiv.style.float = 'none';
-            }
-            else if (layout === 'horizontal') {
-                d.displayDiv.style.float = 'none';
-                d.titleDiv.style.float = 'left';
-                d.titleDiv.style['margin-right'] = '6px';
-                d.contentDiv.style.float = 'right';
-            }
-            else if (layout === 'multimode_horizontal') {
-                d.displayDiv.style.float = 'left';
-                d.titleDiv.style.float = 'none';
-                d.titleDiv.style['margin-right'] = '0px';
-                d.contentDiv.style.float = 'none';
-                if (i !== (len-1)) {
-                    d.displayDiv.style['margin-right'] = '10px';
-                }
-            }
-            else if (layout === 'all_horizontal') {
-                d.displayDiv.style.float = 'left';
-                d.titleDiv.style.float = 'left';
-                d.titleDiv.style['margin-right'] = '6px';
-                d.contentDiv.style.float = 'right';
-                if (i !== (len-1)) {
-                    d.displayDiv.style['margin-right'] = '10px';
-                }
-            }
-            else {
-                throw new Error('CompoundDisplayMode.arrangeLayout: ' +
-                                'unknown layout: ' + layout);
-            }
+    CompoundDisplayMode.prototype.deactivate = function() {
+        var i, len, d;
+        i = -1, len = this.displayModes.length;
+        for (; ++i < len; ) {
+            d = this.displayModes[i];
+            if (d.deactivate) d.deactivate();
+        }
+    };
+
+    CompoundDisplayMode.prototype.setLayout = function(layout) {
+        var i, len, d;
+        i = -1, len = this.displayModes.length;
+        for (; ++i < len; ) {
+            d = this.displayModes[i];
+            setLayout(d, layout, i === (len-1));
         }
     };
 
     // ## Helper Methods.
+
+
+    function setLayout(d, layout, lastDisplay) {
+        if (layout === 'vertical' || layout === 'multimode_vertical' ||
+            layout === 'all_vertical') {
+
+            d.displayDiv.style.float = 'none';
+            d.titleDiv.style.float = 'none';
+            d.titleDiv.style['margin-right'] = '0px';
+            d.contentDiv.style.float = 'none';
+            return true;
+        }
+        if (layout === 'horizontal') {
+            d.displayDiv.style.float = 'none';
+            d.titleDiv.style.float = 'left';
+            d.titleDiv.style['margin-right'] = '6px';
+            d.contentDiv.style.float = 'right';
+            return true;
+        }
+        if (layout === 'multimode_horizontal') {
+            d.displayDiv.style.float = 'left';
+            d.titleDiv.style.float = 'none';
+            d.titleDiv.style['margin-right'] = '0px';
+            d.contentDiv.style.float = 'none';
+            if (!lastDisplay) {
+                d.displayDiv.style['margin-right'] = '10px';
+            }
+            return true;
+        }
+        if (layout === 'all_horizontal') {
+            d.displayDiv.style.float = 'left';
+            d.titleDiv.style.float = 'left';
+            d.titleDiv.style['margin-right'] = '6px';
+            d.contentDiv.style.float = 'right';
+            if (!lastDisplay) {
+                d.displayDiv.style['margin-right'] = '10px';
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * ### generalConstructor
