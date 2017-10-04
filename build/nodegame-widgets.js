@@ -12077,7 +12077,7 @@
 
         this.roundsLeft = W.add('div', this.displayDiv);
         this.roundsLeft.className = 'number';
-        
+
         this.updateDisplay();
     };
 
@@ -12206,7 +12206,7 @@
         for (; ++i < len; ) {
             d = this.displayModes[i];
             if (d.activate) this.displayModes[i].activate();
-            setLayout(d, this.visualRound.layout, i === (len-1));            
+            setLayout(d, this.visualRound.layout, i === (len-1));
         }
     };
 
@@ -12215,7 +12215,7 @@
         i = -1, len = this.displayModes.length;
         for (; ++i < len; ) {
             d = this.displayModes[i];
-            if (d.deactivate) d.deactivate();            
+            if (d.deactivate) d.deactivate();
         }
     };
 
@@ -12225,7 +12225,7 @@
         for (; ++i < len; ) {
             d = this.displayModes[i];
             setLayout(d, layout, i === (len-1));
-        }    
+        }
     };
 
     // ## Helper Methods.
@@ -12268,10 +12268,10 @@
             }
             return true;
         }
-        return false;               
+        return false;
     }
 
-        
+
     /**
      * ### generalConstructor
      *

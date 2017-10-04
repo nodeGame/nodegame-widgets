@@ -138,7 +138,6 @@
          */
         this.separator = ' / ';
 
-
         /**
          * ### VisualRound.layout
          *
