@@ -424,6 +424,11 @@
         this.updateDisplay();
     };
 
+
+    VisualRound.prototype.arrangeLayout = function(layout) {
+        if (this.displayMode) this.displayMode.arrangeLayout(layout);
+    };
+
     // ## Display Modes.
 
     /**
@@ -878,7 +883,51 @@
         }
     };
 
-    // ## Helper Methods
+    CompoundDisplayMode.prototype.arrangeLayout = function(layout) {
+        var i, len, d;
+        i = -1, len = this.displayModes.length;
+        for (; ++i < len; ) {
+            d = this.displayModes[i];
+            if (layout === 'vertical' || layout === 'multimode_vertical' ||
+                layout === 'all_vertical') {
+
+                d.displayDiv.style.float = 'none';
+                d.titleDiv.style.float = 'none';
+                d.titleDiv.style['margin-right'] = '0px';
+                d.contentDiv.style.float = 'none';
+            }
+            else if (layout === 'horizontal') {
+                d.displayDiv.style.float = 'none';
+                d.titleDiv.style.float = 'left';
+                d.titleDiv.style['margin-right'] = '6px';
+                d.contentDiv.style.float = 'right';
+            }
+            else if (layout === 'multimode_horizontal') {
+                d.displayDiv.style.float = 'left';
+                d.titleDiv.style.float = 'none';
+                d.titleDiv.style['margin-right'] = '0px';
+                d.contentDiv.style.float = 'none';
+                if (i !== (len-1)) {
+                    d.displayDiv.style['margin-right'] = '10px';
+                }
+            }
+            else if (layout === 'all_horizontal') {
+                d.displayDiv.style.float = 'left';
+                d.titleDiv.style.float = 'left';
+                d.titleDiv.style['margin-right'] = '6px';
+                d.contentDiv.style.float = 'right';
+                if (i !== (len-1)) {
+                    d.displayDiv.style['margin-right'] = '10px';
+                }
+            }
+            else {
+                throw new Error('CompoundDisplayMode.arrangeLayout: ' +
+                                'unknown layout: ' + layout);
+            }
+        }
+    };
+
+    // ## Helper Methods.
 
     /**
      * ### generalConstructor
