@@ -268,7 +268,7 @@
      * @param {object} conf Configuration object.
      */
     WaitingRoom.prototype.init = function(conf) {
-        
+
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
                                 'Found: ' + conf);
@@ -518,7 +518,7 @@
             }
             // Not selected/no game/etc.
             else {
-                reportExitCode = that.getText('exitCode', msg.data);
+                reportExitCode = that.getText('exitCode', data);
 
                 if (data.action === 'NotEnoughPlayers') {
                     that.bodyDiv.innerHTML = that.getText('notEnoughPlayers');
@@ -533,7 +533,8 @@
                         that.bodyDiv.innerHTML =
                             that.getText('notSelectedClosed');
 
-                        that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                        that.disconnect(that.bodyDiv.innerHTML +
+                                        reportExitCode);
                     }
                     else {
                         that.msgDiv.innerHTML = that.getText('notSelectedOpen');
@@ -613,9 +614,9 @@
     WaitingRoom.prototype.alertPlayer = function() {
         var clearBlink, onFrame;
         var sound;
-        
+
         sound = this.getSound('dispatch');
-        
+
         // Play sound, if requested.
         if (sound) J.playSound(sound);
 
@@ -800,8 +801,7 @@
      * @see WaitingRoom.getTexts
      */
     WaitingRoom.prototype.getText = function(name, param) {
-        return strGetter(this, name, 'texts',
-                         'WaitingRoom.getText', undefined, param);
+        return strGetter(this, name, 'texts', 'WaitingRoom.getText', param);
     };
 
     /**
@@ -876,16 +876,13 @@
         if (!that.constructor[collection].hasOwnProperty(name)) {
             throw new Error(method + ': name not found: ' + name);
         }
-        res = that[collection][name];
+        res = that[collection][name] || that.constructor[collection][name];
         if ('function' === typeof res) {
             res = res(that, param);
             if ('string' !== typeof res) {
                 throw new TypeError(method + ': cb "' + name +
                                     'did not return a string. Found: ' + res);
             }
-        }
-        else if ('undefined' === typeof res) {
-            res = that.constructor[collection][name];
         }
         return res;
     }
@@ -978,7 +975,7 @@
         if ('string' === typeof value ||
             'function' === typeof value ||
             false === value) {
-           
+
             that[collection][name] = value;
         }
         else {

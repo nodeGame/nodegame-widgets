@@ -11457,7 +11457,6 @@
          */
         this.separator = ' / ';
 
-
         /**
          * ### VisualRound.layout
          *
@@ -12497,7 +12496,7 @@
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
-    VisualTimer.title = 'Time left';
+    VisualTimer.title = 'Time Left';
     VisualTimer.className = 'visualtimer';
 
     // ## Dependencies
@@ -13735,7 +13734,7 @@
             }
             // Not selected/no game/etc.
             else {
-                reportExitCode = that.getText('exitCode', msg.data);
+                reportExitCode = that.getText('exitCode', data);
 
                 if (data.action === 'NotEnoughPlayers') {
                     that.bodyDiv.innerHTML = that.getText('notEnoughPlayers');
@@ -14017,8 +14016,7 @@
      * @see WaitingRoom.getTexts
      */
     WaitingRoom.prototype.getText = function(name, param) {
-        return strGetter(this, name, 'texts',
-                         'WaitingRoom.getText', undefined, param);
+        return strGetter(this, name, 'texts', 'WaitingRoom.getText', param);
     };
 
     /**
@@ -14093,16 +14091,13 @@
         if (!that.constructor[collection].hasOwnProperty(name)) {
             throw new Error(method + ': name not found: ' + name);
         }
-        res = that[collection][name];
+        res = that[collection][name] || that.constructor[collection][name];
         if ('function' === typeof res) {
             res = res(that, param);
             if ('string' !== typeof res) {
                 throw new TypeError(method + ': cb "' + name +
                                     'did not return a string. Found: ' + res);
             }
-        }
-        else if ('undefined' === typeof res) {
-            res = that.constructor[collection][name];
         }
         return res;
     }
