@@ -13484,7 +13484,7 @@
      * @param {object} conf Configuration object.
      */
     WaitingRoom.prototype.init = function(conf) {
-        
+
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
                                 'Found: ' + conf);
@@ -13749,7 +13749,8 @@
                         that.bodyDiv.innerHTML =
                             that.getText('notSelectedClosed');
 
-                        that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                        that.disconnect(that.bodyDiv.innerHTML +
+                                        reportExitCode);
                     }
                     else {
                         that.msgDiv.innerHTML = that.getText('notSelectedOpen');
@@ -13829,9 +13830,9 @@
     WaitingRoom.prototype.alertPlayer = function() {
         var clearBlink, onFrame;
         var sound;
-        
+
         sound = this.getSound('dispatch');
-        
+
         // Play sound, if requested.
         if (sound) J.playSound(sound);
 
@@ -14190,7 +14191,7 @@
         if ('string' === typeof value ||
             'function' === typeof value ||
             false === value) {
-           
+
             that[collection][name] = value;
         }
         else {
