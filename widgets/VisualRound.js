@@ -145,7 +145,7 @@
          *
          * @see VisualRound.setLayout
          */
-        this.layout = 'vertical';
+        this.layout = null;
 
     }
 
@@ -437,6 +437,17 @@
         this.updateDisplay();
     };
 
+    /**
+     * ### VisualRound.setLayout
+     *
+     * Arranges the relative position of the various elements of VisualRound
+     *
+     * @param {string} layout. Admitted values:
+     *   - 'vertical' (alias: 'multimode_vertical')
+     *   - 'horizontal'
+     *   - 'multimode_horizontal'
+     *   - 'all_horizontal'
+     */
     VisualRound.prototype.setLayout = function(layout) {
         if ('string' !== typeof layout || layout.trim() === '') {
             throw new TypeError('VisualRound.setLayout: layout must be ' +
@@ -881,12 +892,13 @@
     };
 
     CompoundDisplayMode.prototype.activate = function() {
-        var i, len, d;
+        var i, len, d, layout;
+        layout = this.visualRound.layout;
         i = -1, len = this.displayModes.length;
         for (; ++i < len; ) {
             d = this.displayModes[i];
             if (d.activate) this.displayModes[i].activate();
-            setLayout(d, this.visualRound.layout, i === (len-1));
+            if (layout) setLayout(d, layout, i === (len-1));
         }
     };
 
