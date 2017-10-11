@@ -513,19 +513,19 @@
             data = msg.data || {};
 
             // Alert player he/she is about to play.
-            if (data.action === 'AllPlayersConnected') {
+            if (data.action === 'allPlayersConnected') {
                 that.alertPlayer();
             }
             // Not selected/no game/etc.
             else {
                 reportExitCode = that.getText('exitCode', data);
 
-                if (data.action === 'NotEnoughPlayers') {
-                    that.bodyDiv.innerHTML = that.getText('notEnoughPlayers');
+                if (data.action === 'notEnoughPlayers') {
+                    that.bodyDiv.innerHTML = that.getText(data.action);
                     if (that.onTimeout) that.onTimeout(msg.data);
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
                 }
-                else if (data.action === 'NotSelected') {
+                else if (data.action === 'notSelected') {
 
                     if (false === data.shouldDispatchMoreGames ||
                         that.disconnectIfNotSelected) {
@@ -540,7 +540,7 @@
                         that.msgDiv.innerHTML = that.getText('notSelectedOpen');
                     }
                 }
-                else if (data.action === 'Disconnect') {
+                else if (data.action === 'disconnect') {
                     that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
                 }
             }
