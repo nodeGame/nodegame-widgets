@@ -683,9 +683,11 @@
             WidgetPrototype.className : options.className;
         widget.context = 'undefined' === typeof options.context ?
             WidgetPrototype.context : options.context;
+        widget.sounds = 'undefined' === typeof options.sounds ?
+            WidgetPrototype.sounds : options.sounds;
         widget.widgetName = widgetName;
         // Fixed properties.
-
+    
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
         // Add enabled.
