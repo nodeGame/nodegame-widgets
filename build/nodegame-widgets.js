@@ -683,7 +683,7 @@
             WidgetPrototype.className : options.className;
         widget.context = 'undefined' === typeof options.context ?
             WidgetPrototype.context : options.context;
-
+        widget.widgetName = widgetName;
         // Fixed properties.
 
         // Add random unique widget id.
@@ -805,7 +805,7 @@
 
         // Init default values.
         options = options || {};
-        
+
         // If no root is defined, use the body element of the main frame,
         // if none is found, use the document.body.
         if (!root) {
@@ -815,10 +815,10 @@
         }
         else if (root === W.getHeader() &&
                  'undefined' === typeof options.panel) {
-            
+
             options.panel = false;
         }
-        
+
         // Check if it is a object (new widget).
         // If it is a string is the name of an existing widget.
         // In this case a dependencies check is done.
@@ -828,7 +828,7 @@
         tmp = options.panel === false ?
             [ 'ng_widget',  'no-panel', w.className ] :
             [ 'ng_widget', 'panel', 'panel-default', w.className ];
-        
+
         w.panelDiv = W.append('div', root, { className: tmp });
 
         // Optionally add title (and div).
@@ -838,14 +838,14 @@
             w.setTitle(w.title, { className: tmp });
         }
 
-        // Add body (with or without panel).        
+        // Add body (with or without panel).
         tmp = options.panel !== false ? 'panel-body' : 'no-panel-body';
         w.bodyDiv = W.append('div', w.panelDiv, { className: tmp });
-        
+
         // Optionally add footer.
         if (w.footer) {
             tmp = options.panel === false ?
-                'no-panel-heading' : 'panel-heading';            
+                'no-panel-heading' : 'panel-heading';
             w.setFooter(w.footer);
         }
 
@@ -11766,7 +11766,7 @@
      *
      * Arranges the relative position of the various elements of VisualRound
      *
-     * @param {string} layout. Admitted values: 
+     * @param {string} layout. Admitted values:
      *   - 'vertical' (alias: 'multimode_vertical')
      *   - 'horizontal'
      *   - 'multimode_horizontal'
