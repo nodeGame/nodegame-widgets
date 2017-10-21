@@ -1,6 +1,6 @@
 /**
  * # MsgBar
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -11,14 +11,13 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
-        Table = W.Table;
+    var Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
 
     // ## Meta-data
 
-    MsgBar.version = '0.7.0';
+    MsgBar.version = '0.7.1';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
@@ -161,7 +160,7 @@
 
         if (key === 'stage' || key === 'to' || key === 'data') {
             try {
-                value = JSUS.parse(e.content.value);
+                value = J.parse(e.content.value);
             }
             catch (ex) {
                 value = e.content.value;
@@ -174,7 +173,7 @@
                 value = '' + value;
             }
 
-            if ((!JSUS.isArray(value) && 'string' !== typeof value) ||
+            if ((!J.isArray(value) && 'string' !== typeof value) ||
                 ('string' === typeof value && value.trim() === '')) {
 
                 alert('Invalid "to" field');

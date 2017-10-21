@@ -1,18 +1,15 @@
 /**
  * # Wall
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
- * Creates a wall where log and other information is added
- * with a number and timestamp
+ * Creates a wall where logs and other info is added with number and timestamp
  *
  * www.nodegame.org
  */
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('Wall', Wall);
 
@@ -37,18 +34,8 @@
      * `Wall` prints all LOG events into a PRE.
      *
      * @param {object} options Optional. Configuration options
-     * The options it can take are:
-     *
-     *   - id: The id of the PRE in which to write.
-     *   - name: The name of this Wall.
      */
     function Wall(options) {
-        /**
-         * ### Wall.id
-         *
-         * The id of the PRE in which to write
-         */
-        this.id = options.id || 'wall';
 
         /**
          * ### Wall.name
@@ -76,7 +63,7 @@
          *
          * The PRE in which to write
          */
-        this.wall = node.window.getElement('pre', this.id);
+        this.wall = W.get('pre', this.id);
     }
 
     // ## Wall methods
@@ -84,7 +71,7 @@
     /**
      * ### Wall.init
      *
-     * Initializes the instance.
+     * Initializes the instance
      *
      * If options are provided, the counter is set to `options.counter`
      * otherwise nothing happens.
@@ -136,8 +123,9 @@
      * If the document is ready, the buffer content is written into this.wall
      */
     Wall.prototype.debuffer = function() {
+        var i;
         if (document.readyState === 'complete' && this.buffer.length > 0) {
-            for (var i=0; i < this.buffer.length; i++) {
+            for (i=0; i < this.buffer.length; i++) {
                 this.write(this.buffer[i]);
             }
             this.buffer = [];

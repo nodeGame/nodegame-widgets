@@ -1,26 +1,48 @@
-(function() {  // self-executing function for encapsulation
+/**
+ * # EndScreen
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * MIT Licensed
+ *
+ * Creates an interface to display final earnings, exit code, etc.
+ *
+ * www.nodegame.org
+ */
+(function(node) {
+
+    "use strict";
 
     // Register the widget in the widgets collection.
     node.widgets.register('EndScreen', EndScreen);
 
-    // Add Meta-data
-    EndScreen.version = '0.1.0';
+    // ## Add Meta-data
+
+    EndScreen.version = '0.3.1';
     EndScreen.description = 'Game end screen. With end game message, ' +
-    'email form, and exit code.';
+        'email form, and exit code.';
 
-    // Title is displayed in the header.
-    // is this necessary?
     EndScreen.title = 'End Screen';
-    // Classname is added to the widgets.
-    EndScreen.className = 'end-screen';
+    EndScreen.className = 'endscreen';
 
-    // Dependencies are checked when the widget is created.
-    EndScreen.dependencies = { JSUS: {} };
+    // ## Dependencies
 
-    // Constructor taking a configuration parameter.
-    // The options object is always existing even if no
-    //
+    // Checked when the widget is created.
+    EndScreen.dependencies = {
+        JSUS: {},
+        Feedback: {},
+        EmailForm: {}
+    };
+
+    /**
+     * ## EndScreen constructor
+     *
+     * Creates a new instance of EndScreen
+     *
+     * @param {object} options Configuration options
+     *
+     * @see EndScreen.init
+     */
     function EndScreen(options) {
+
         /**
          * ### EndScreen.headerMessage
          *
@@ -147,13 +169,53 @@
         }
 
         /**
+         * ### EndScreen.totalWinCurrency
+         *
+         * The currency displayed after totalWin
+         *
+         * Default: 'USD'
+         */
+        if ('undefined' === typeof options.totalWinCurrency) {
+            this.totalWinCurrency = 'USD';
+        }
+        else if ('string' === typeof options.totalWinCurrency &&
+                 options.totalWinCurrency.trim() !== '') {
+
+            this.totalWinCurrency = options.totalWinCurrency;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: ' +
+                                'options.totalWinCurrency must be undefined ' +
+                                'or a non-empty string. Found: ' +
+                                options.totalWinCurrency);
+        }
+
+        /**
+         * ### EndScreen.emailForm
+         *
+         * EmailForm widget element
+         *
+         * @see EmailForm
+         */
+        if (this.showEmailForm) {
+            this.emailForm = node.widgets.get('EmailForm', J.mixin({
+                label: 'Would you like to be contacted again for future ' +
+                    'experiments? If so, leave your email here and ' +
+                    'press submit: ',
+                onsubmit: { say: true, emailOnly: true, updateUI: true }
+            }, options.email));
+        }
+
+        /**
          * ### EndScreen.feedback
          *
          * Feedback widget element
          *
-         * Default: new Feedback(option)
+         * @see Feedback
          */
-        this.feedback = node.widgets.get('Feedback', options);
+        if (this.showFeedbackForm) {
+            this.feedback = node.widgets.get('Feedback', options.feedback);
+        }
 
         /**
          * ### EndScreen.endScreenElement
@@ -164,14 +226,12 @@
          * null initially, element added on append()
          */
         this.endScreenHTML = null;
-
-        this.init();
     }
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
         this.endScreenHTML = this.makeEndScreen();
-        this.bodyDiv.append(this.endScreenHTML);
+        this.bodyDiv.appendChild(this.endScreenHTML);
     };
 
     // makes the end screen
@@ -180,12 +240,6 @@
         var headerElement, messageElement;
         var totalWinElement, totalWinParaElement, totalWinInputElement;
         var exitCodeElement, exitCodeParaElement, exitCodeInputElement;
-        var emailElement, emailFormElement, emailLabelElement,
-            emailInputElement, emailButtonElement;
-        var emailErrorString;
-
-        emailErrorString = 'Not a valid email address, ' +
-                           'please correct it and submit again.';
 
         endScreenElement = document.createElement('div');
         endScreenElement.className = 'endscreen';
@@ -202,7 +256,7 @@
             totalWinElement = document.createElement('div');
 
             totalWinParaElement = document.createElement('p');
-            totalWinParaElement.innerHTML = 'Your total win: ';
+            totalWinParaElement.innerHTML = '<strong>Your total win:</strong>';
 
             totalWinInputElement = document.createElement('input');
             totalWinInputElement.className = 'endscreen-total form-control';
@@ -219,7 +273,7 @@
             exitCodeElement = document.createElement('div');
 
             exitCodeParaElement = document.createElement('p');
-            exitCodeParaElement.innerHTML = 'Your exit code: ';
+            exitCodeParaElement.innerHTML = '<strong>Your exit code:</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
@@ -234,66 +288,17 @@
         }
 
         if (this.showEmailForm) {
-            emailElement = document.createElement('div');
-            emailFormElement = document.createElement('form');
-            emailFormElement.className = 'endscreen-email-form';
-
-            emailLabelElement = document.createElement('label');
-            emailLabelElement.innerHTML = 'Would you like to be contacted ' +
-                                          'again for future experiments? ' +
-                                          'If so, leave your email here ' +
-                                          'and press submit: ';
-
-            emailInputElement = document.createElement('input');
-            emailInputElement.setAttribute('type', 'text');
-            emailInputElement.setAttribute('placeholder', 'Email');
-            emailInputElement.className = 'endscreen-email-input form-control';
-
-            emailButtonElement = document.createElement('input');
-            emailButtonElement.setAttribute('type', 'submit');
-            emailButtonElement.setAttribute('value', 'Submit email');
-            emailButtonElement.className = 'btn btn-lg btn-primary ' +
-                                           'endscreen-email-submit';
-
-            emailFormElement.appendChild(emailLabelElement);
-            emailFormElement.appendChild(emailInputElement);
-            emailFormElement.appendChild(emailButtonElement);
-
-            emailElement.appendChild(emailFormElement);
-            endScreenElement.appendChild(emailElement);
-
-            emailFormElement.addEventListener('submit', function(event) {
-                var email, indexAt, indexDot;
-
-                event.preventDefault();
-                email = emailInputElement.value;
-
-                if (email.trim().length > 5) {
-                    indexAt = email.indexOf('@');
-                    if (indexAt !== -1 &&
-                        indexAt !== 0 &&
-                        indexAt !== (email.length-1)) {
-
-                        indexDot = email.lastIndexOf('.');
-                        if (indexDot !== -1 &&
-                            indexDot !== (email.length-1) &&
-                            indexDot > (indexAt+1)) {
-
-                            node.say('email', 'SERVER', email);
-
-                            emailButtonElement.disabled = true;
-                            emailInputElement.disabled = true;
-                            emailButtonElement.value = 'Sent!';
-                        }
-                    }
-                }
-
-                emailButtonElement.value = emailErrorString;
-            }, true);
+            node.widgets.append(this.emailForm, endScreenElement, {
+                title: false,
+                panel: false
+            });
         }
 
         if (this.showFeedbackForm) {
-            node.widgets.append(this.feedback, endScreenElement);
+            node.widgets.append(this.feedback, endScreenElement, {
+                title: false,
+                panel: false
+            });
         }
 
         return endScreenElement;
@@ -308,22 +313,37 @@
         // Listeners added here are automatically removed
         // when the widget is destroyed.
         node.on.data('WIN', function(message) {
-            var totalWin;
-            var exitCode;
             var data;
-
+            var preWin, totalWin, exitCode;
             var totalHTML, exitCodeHTML;
 
             data = message.data;
-            totalWin = data.total;
             exitCode = data.exit;
 
-            if (JSUS.isNumber(totalWin, 0) === false) {
-                node.err('EndScreen error, invalid exit code: ' + totalWin);
+            totalWin = J.isNumber(data.total, 0);
+            if (totalWin === false) {
+                node.err('EndScreen error, invalid total win: ' + data.total);
                 totalWin = 'Error: invalid total win.';
             }
+            else if (data.partials) {
+                if (!J.isArray(data.partials)) {
+                    node.err('EndScreen error, invalid partials win: ' +
+                             data.partials);
+                }
+                else {
+                    preWin = data.partials.join(' + ');
 
-            if ((typeof exitCode !== 'string')) {
+                    if ('undefined' !== typeof data.totalRaw) {
+                        preWin += ' = ' + data.totalRaw;
+                        if ('undefined' !== typeof data.exchangeRate) {
+                            preWin += '*' + data.exchangeRate;
+                        }
+                        totalWin = preWin + ' = ' + totalWin;
+                    }
+                }
+            }
+
+            if ('string' !== typeof exitCode) {
                 node.err('EndScreen error, invalid exit code: ' + exitCode);
                 exitCode = 'Error: invalid exit code.';
             }
@@ -332,7 +352,7 @@
             exitCodeHTML = that.exitCodeInputElement;
 
             if (totalHTML && that.showTotalWin) {
-                totalHTML.value = totalWin;
+                totalHTML.value = totalWin + ' ' + that.totalWinCurrency;
             }
 
             if (exitCodeHTML && that.showExitCode) {
