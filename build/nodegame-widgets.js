@@ -8052,8 +8052,10 @@
         /**
          * ### EndScreen.totalWinCb
          *
-         * If defined, it will  
+         * If defined, the return value is displayed inside the totalWin box
          *
+         * Accepts two parameters: a data object (as sent from server), and
+         * the reference to the EndScreen.
          */
         if (options.totalWinCb) {
             if ('function' === typeof options.totalWinCb) {
@@ -8066,7 +8068,7 @@
                                     'Found: ' + options.totalWinCb);
             }
         }
-        
+
         /**
          * ### EndScreen.emailForm
          *
@@ -8111,7 +8113,11 @@
         this.bodyDiv.appendChild(this.endScreenHTML);
     };
 
-    // makes the end screen
+    /**
+     * ### EndScreen.makeEndScreen
+     *
+     * Builds up the end screen (HTML + nested widgets)
+     */
     EndScreen.prototype.makeEndScreen = function() {
         var endScreenElement;
         var headerElement, messageElement;
@@ -8184,66 +8190,73 @@
     // Implements the Widget.listeners method.
     EndScreen.prototype.listeners = function() {
         var that;
-
         that = this;
-
-        // Listeners added here are automatically removed
-        // when the widget is destroyed.
         node.on.data('WIN', function(message) {
-            var data;
-            var preWin, totalWin, exitCode;
-            var totalHTML, exitCodeHTML;
-
-            data = message.data;
-
-            if (that.totalWinCb) {
-                totalWin = that.totalWinCb(data, that);
-            }
-            else {
-                totalWin = J.isNumber(data.total, 0);
-                if (totalWin === false) {
-                    node.err('EndScreen error, invalid total win: ' +
-                             data.total);
-                    totalWin = 'Error: invalid total win.';
-                }
-                else if (data.partials) {
-                    if (!J.isArray(data.partials)) {
-                        node.err('EndScreen error, invalid partials win: ' +
-                                 data.partials);
-                    }
-                    else {
-                        preWin = data.partials.join(' + ');
-
-                        if ('undefined' !== typeof data.totalRaw) {
-                            preWin += ' = ' + data.totalRaw;
-                            if ('undefined' !== typeof data.exchangeRate) {
-                                preWin += '*' + data.exchangeRate;
-                            }
-                            totalWin = preWin + ' = ' + totalWin;
-                        }
-                    }
-                }
-                totalWin += ' ' + that.totalWinCurrency;
-            }
-
-            exitCode = data.exit;            
-            if ('string' !== typeof exitCode) {
-                node.err('EndScreen error, invalid exit code: ' + exitCode);
-                exitCode = 'Error: invalid exit code.';
-            }
-
-            totalHTML = that.totalWinInputElement;
-            exitCodeHTML = that.exitCodeInputElement;
-
-            if (totalHTML && that.showTotalWin) {
-                totalHTML.value = totalWin;
-            }
-
-            if (exitCodeHTML && that.showExitCode) {
-                exitCodeHTML.value = exitCode;
-            }
+            that.updateDisplay(message.data);
         });
     };
+
+    /**
+     * ### EndScreen.updateDisplay
+     *
+     * Updates the display
+     *
+     * @param {object} data An object containing the info to update. Format:
+     *    - total: The total won.
+     *    - exit: An exit code.
+     */
+    EndScreen.prototype.updateDisplay = function(data) {
+        var preWin, totalWin, exitCode;
+        var totalHTML, exitCodeHTML;
+
+        if (this.totalWinCb) {
+            totalWin = this.totalWinCb(data, this);
+        }
+        else {
+            totalWin = J.isNumber(data.total, 0);
+            if (totalWin === false) {
+                node.err('EndScreen error, invalid total win: ' +
+                         data.total);
+                totalWin = 'Error: invalid total win.';
+            }
+            else if (data.partials) {
+                if (!J.isArray(data.partials)) {
+                    node.err('EndScreen error, invalid partials win: ' +
+                             data.partials);
+                }
+                else {
+                    preWin = data.partials.join(' + ');
+
+                    if ('undefined' !== typeof data.totalRaw) {
+                        preWin += ' = ' + data.totalRaw;
+                        if ('undefined' !== typeof data.exchangeRate) {
+                            preWin += '*' + data.exchangeRate;
+                        }
+                        totalWin = preWin + ' = ' + totalWin;
+                    }
+                }
+            }
+            totalWin += ' ' + this.totalWinCurrency;
+        }
+
+        exitCode = data.exit;
+        if ('string' !== typeof exitCode) {
+            node.err('EndScreen error, invalid exit code: ' + exitCode);
+            exitCode = 'Error: invalid exit code.';
+        }
+
+        totalHTML = this.totalWinInputElement;
+        exitCodeHTML = this.exitCodeInputElement;
+
+        if (totalHTML && this.showTotalWin) {
+            totalHTML.value = totalWin;
+        }
+
+        if (exitCodeHTML && this.showExitCode) {
+            exitCodeHTML.value = exitCode;
+        }    
+    };
+    
 })(node);
 
 /**
