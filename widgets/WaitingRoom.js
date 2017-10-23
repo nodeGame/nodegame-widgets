@@ -225,29 +225,6 @@
          */
         this.disconnectIfNotSelected = null;
 
-        /**
-         * ### WaitingRoom.texts
-         *
-         * Contains all the texts displayed to the players
-         *
-         * @see WaitingRoom.setText
-         * @see WaitingRoom.getText
-         * @see WaitingRoom.setTexts
-         * @see WaitingRoom.getTexts
-         */
-        this.texts = {};
-
-        /**
-         * ### WaitingRoom.sounds
-         *
-         * List of custom sounds to play to the players
-         *
-         * @see WaitingRoom.setSound
-         * @see WaitingRoom.getSound
-         * @see WaitingRoom.setSounds
-         * @see WaitingRoom.getSounds
-         */
-        this.sounds = {};
     }
 
     // ## WaitingRoom methods
