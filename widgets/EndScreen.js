@@ -16,7 +16,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.3.1';
+    EndScreen.version = '0.4.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
         'email form, and exit code.';
 
