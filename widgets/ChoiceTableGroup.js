@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.2.0';
+    ChoiceTableGroup.version = '1.3.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -162,6 +162,13 @@
         this.itemsById = {};
 
         /**
+         * ### ChoiceTableGroup.itemsMap
+         *
+         * Maps items ids to the position in the items array
+         */
+        this.itemsMap = {};
+
+        /**
          * ### ChoiceTableGroup.choices
          *
          * Array of default choices (if passed as global parameter)
@@ -187,9 +194,22 @@
         /**
          * ### ChoiceTableGroup.order
          *
-         * The order of the items as displayed (if shuffled)
+         * The current order of display of choices
+         *
+         * May differ from `originalOrder` if shuffled.
+         *
+         * @see ChoiceTableGroup.originalOrder
          */
         this.order = null;
+
+        /**
+         * ### ChoiceTableGroup.originalOrder
+         *
+         * The initial order of display of choices
+         *
+         * @see ChoiceTable.order
+         */
+        this.originalOrder = null;
 
         /**
          * ### ChoiceTableGroup.shuffleItems
@@ -534,11 +554,11 @@
         var len;
         if (!J.isArray(items)) {
             throw new TypeError('ChoiceTableGroup.setItems: ' +
-                                'items must be array.');
+                                'items must be array. Found: ' + items);
         }
         if (!items.length) {
             throw new Error('ChoiceTableGroup.setItems: ' +
-                            'items is empty array.');
+                            'items is an empty array.');
         }
 
         len = items.length;
@@ -548,6 +568,7 @@
         // Save the order in which the items will be added.
         this.order = J.seq(0, len-1);
         if (this.shuffleItems) this.order = J.shuffle(this.order);
+        this.originalOrder = this.order;
 
         // Build the table and items at once (faster).
         if (this.table) this.buildTable();
@@ -997,20 +1018,41 @@
      * JSUS.shuffleElements
      */
     ChoiceTableGroup.prototype.shuffle = function(opts) {
-        var order, i, len, j, lenJ;
-        if (!this.items || !this.items.length) return;
+        var order, i, len, j, lenJ, that, cb, newOrder;
+        if (!this.items) return;
+        len = this.items.length;
+        if (!len) return;
+        that = this;
+        newOrder = new Array(len);
+        // Updates the groupOrder property of each item,
+        // and saves the order of items correctly.
+        cb = function(el, newPos, oldPos) {
+            var i;
+            i = el.id.split(that.separator);
+            i = that.orientation === 'H' ? i[2] : i[0];
+            i = that.itemsMap[i];
+            that.items[i].groupOrder = (newPos+1);
+            newOrder[newPos] = i;
+        };
         order = J.shuffle(this.order);
         if (this.orientation === 'H') {
-            J.shuffleElements(this.table, order);
+            J.shuffleElements(this.table, order, cb);
         }
         else {
-            i = -1, len = this.trs.length;
-            for ( ; ++i < len ; ) {
-                J.shuffleElements(this.trs[i], order);
+            // Here we maintain the columns manually. Each TR contains TD
+            // belonging to different items, we make sure the order is the
+            // same for all TR.
+            len = this.trs.length;
+            for ( i = -1 ; ++i < len ; ) {
+                J.shuffleElements(this.trs[i], order, cb);
+                // Call cb only on first iteration.
+                cb = undefined;
             }
         }
-        this.order = order;
+        this.order = newOrder;
     };
+
+
 
     // ## Helper methods.
 
@@ -1085,8 +1127,9 @@
      * @see mixinSettings
      */
     function getChoiceTable(that, i) {
-        var ct, s;
-        s = mixinSettings(that, that.itemsSettings[that.order[i]], i);
+        var ct, s, idx;
+        idx = that.order[i];
+        s = mixinSettings(that, that.itemsSettings[idx], i);
         ct = node.widgets.get('ChoiceTable', s);
         if (that.itemsById[ct.id]) {
             throw new Error('ChoiceTableGroup.buildTable: an item ' +
@@ -1097,7 +1140,8 @@
                             'is missing a left cell: ' + s.id);
         }
         that.itemsById[ct.id] = ct;
-        that.items[i] = ct;
+        that.items[idx] = ct;
+        that.itemsMap[ct.id] = idx;
         return ct;
     }
 

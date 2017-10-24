@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.2.0';
+    ChoiceTable.version = '1.3.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -227,9 +227,22 @@
         /**
          * ### ChoiceTable.order
          *
-         * The order of the choices as displayed (if shuffled)
+         * The current order of display of choices
+         *
+         * May differ from `originalOrder` if shuffled.
+         *
+         * @see ChoiceTable.originalOrder
          */
         this.order = null;
+
+        /**
+         * ### ChoiceTable.originalOrder
+         *
+         * The initial order of display of choices
+         *
+         * @see ChoiceTable.order
+         */
+        this.originalOrder = null;
 
         /**
          * ### ChoiceTable.correctChoice
@@ -474,10 +487,9 @@
 
         // Set the groupOrder, if any.
         if ('number' === typeof options.groupOrder) {
-
             this.groupOrder = options.groupOrder;
         }
-        else if ('undefined' !== typeof options.group) {
+        else if ('undefined' !== typeof options.groupOrder) {
             throw new TypeError('ChoiceTable.init: options.groupOrder must ' +
                                 'be number or undefined. Found: ' +
                                 options.groupOrder);
@@ -660,6 +672,7 @@
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
         if (this.shuffleChoices) this.order = J.shuffle(this.order);
+        this.originalOrder = this.order;
 
         // Build the table and choices at once (faster).
         if (this.table) this.buildTableAndChoices();
@@ -1268,6 +1281,7 @@
             obj.choice = opts.processChoice.call(this, obj.choice);
         }
         if (this.shuffleChoices) {
+            obj.originalOrder = this.originalOrder;
             obj.order = this.order;
         }
         if (this.group === 0 || this.group) {
