@@ -21,6 +21,8 @@
     EmailForm.title = 'Email';
     EmailForm.className = 'emailform';
 
+    EmailForm.texts.label = 'Enter your email:';
+
     // ## Dependencies
 
     EmailForm.dependencies = { JSUS: {} };
@@ -43,12 +45,14 @@
             this.label = 'Enter your email:';
         }
         else if ('string' === typeof options.label) {
-            this.label = options.label;
+            console.log('***EmailForm: options.label is deprecated.' +
+                ' Use options.texts.label');
+            this.setText('label', options.label);
         }
         else {
             throw new TypeError('EmailForm constructor: options.label ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.label);
+                'must be string or undefined. ' +
+                'Found: ' + options.label);
         }
 
         /**
@@ -67,8 +71,8 @@
         }
         else {
             throw new TypeError('EmailForm constructor: options.errString ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.errString);
+                'must be string or undefined. ' +
+                'Found: ' + options.errString);
         }
 
         /**
@@ -86,8 +90,8 @@
         }
         else {
             throw new TypeError('EmailForm constructor: options.onsubmit ' +
-                                'must be string or object. Found: ' +
-                                options.onsubmit);
+                'must be string or object. Found: ' +
+                options.onsubmit);
         }
 
         /**
@@ -289,7 +293,7 @@
         email = getEmail.call(this);
 
         if (opts.verify !== false) res = this.verifyInput(opts.markAttempt,
-                                                          opts.updateUI);
+            opts.updateUI);
 
         // Only value.
         if (!opts.emailOnly) {
@@ -353,7 +357,7 @@
         if (!this.inputElement) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('EmailForm.highlight: border must be ' +
-                                'string or undefined. Found: ' + border);
+                'string or undefined. Found: ' + border);
         }
         this.inputElement.style.border = border || '3px solid red';
         this.highlighted = true;

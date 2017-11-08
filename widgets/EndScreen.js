@@ -23,6 +23,18 @@
     EndScreen.title = 'End Screen';
     EndScreen.className = 'endscreen';
 
+    EndScreen.texts.thanks = 'Thank you for participating!';
+    EndScreen.texts.complete = 'You have now completed this task ' +
+        'and your data has been saved. ' +
+        'Please go back to the Amazon Mechanical Turk ' +
+        'web site and ' +
+        'submit the HIT.';
+    EndScreen.texts.contact_question = 'Would you like to be contacted again' +
+        'for future experiments? If so, leave'
+        + 'your email here and press submit: ';
+    EndScreen.texts.total_win = 'Your total win:';
+    EndScreen.texts.exit_code = 'Your exit code:';
+
     // ## Dependencies
 
     // Checked when the widget is created.
@@ -50,18 +62,17 @@
          *
          * Default: 'Thank you for participating!'
          */
-        if ('undefined' === typeof options.headerMessage) {
-            this.headerMessage = 'Thank you for participating!';
-        }
-        else if ('string' === typeof options.headerMessage) {
+        if ('string' === typeof options.headerMessage) {
             this.headerMessage = options.headerMessage;
         }
-        else {
+        else if ('undefined' !== typeof options.headerMessage) {
             throw new TypeError('EndScreen constructor: ' +
-                                'options.headerMessage ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.headerMessage);
+                'options.headerMessage ' +
+                'must be string or undefined. ' +
+                'Found: ' + options.headerMessage);
         }
+
+        this.headerMessage = this.getText('thanks');
 
         /**
          * ### EndScreen.message
@@ -73,19 +84,16 @@
          *           Turk web site and submit the HIT.'
          */
         if ('undefined' === typeof options.message) {
-            this.message =  'You have now completed this task ' +
-                            'and your data has been saved. ' +
-                            'Please go back to the Amazon Mechanical Turk ' +
-                            'web site and ' +
-                            'submit the HIT.';
+            this.message = this.getText('complete');
         }
         else if ('string' === typeof options.message) {
-            this.message = options.message;
+            this.setText('complete', options.message);
+            this.message = this.getText('complete');
         }
         else {
             throw new TypeError('EndScreen constructor: options.message ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.message);
+                'must be string or undefined. ' +
+                'Found: ' + options.message);
         }
 
         /**
@@ -103,9 +111,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                                'options.showEmailForm ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showEmailForm);
+                'options.showEmailForm ' +
+                'must be boolean or undefined. ' +
+                'Found: ' + options.showEmailForm);
         }
 
         /**
@@ -123,9 +131,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                                'options.showFeedbackForm ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showFeedbackForm);
+                'options.showFeedbackForm ' +
+                'must be boolean or undefined. ' +
+                'Found: ' + options.showFeedbackForm);
         }
 
         /**
@@ -143,9 +151,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                                'options.showTotalWin ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showTotalWin);
+                'options.showTotalWin ' +
+                'must be boolean or undefined. ' +
+                'Found: ' + options.showTotalWin);
         }
 
         /**
@@ -163,9 +171,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                                'options.showExitCode ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showExitCode);
+                'options.showExitCode ' +
+                'must be boolean or undefined. ' +
+                'Found: ' + options.showExitCode);
         }
 
         /**
@@ -179,15 +187,15 @@
             this.totalWinCurrency = 'USD';
         }
         else if ('string' === typeof options.totalWinCurrency &&
-                 options.totalWinCurrency.trim() !== '') {
+            options.totalWinCurrency.trim() !== '') {
 
             this.totalWinCurrency = options.totalWinCurrency;
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                                'options.totalWinCurrency must be undefined ' +
-                                'or a non-empty string. Found: ' +
-                                options.totalWinCurrency);
+                'options.totalWinCurrency must be undefined ' +
+                'or a non-empty string. Found: ' +
+                options.totalWinCurrency);
         }
 
         /**
@@ -199,9 +207,7 @@
          */
         if (this.showEmailForm) {
             this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: 'Would you like to be contacted again for future ' +
-                    'experiments? If so, leave your email here and ' +
-                    'press submit: ',
+                label: this.getText('contact_question'),
                 onsubmit: { say: true, emailOnly: true, updateUI: true }
             }, options.email));
         }
@@ -256,7 +262,9 @@
             totalWinElement = document.createElement('div');
 
             totalWinParaElement = document.createElement('p');
-            totalWinParaElement.innerHTML = '<strong>Your total win:</strong>';
+            totalWinParaElement.innerHTML = '<strong>' +
+                this.getText('total_win') +
+                '</strong>';
 
             totalWinInputElement = document.createElement('input');
             totalWinInputElement.className = 'endscreen-total form-control';
@@ -273,11 +281,13 @@
             exitCodeElement = document.createElement('div');
 
             exitCodeParaElement = document.createElement('p');
-            exitCodeParaElement.innerHTML = '<strong>Your exit code:</strong>';
+            exitCodeParaElement.innerHTML = '<strong>' +
+                this.getText('exit_code') +
+                '</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
-                                             'form-control';
+                'form-control';
             exitCodeInputElement.setAttribute('disabled', 'true');
 
             exitCodeParaElement.appendChild(exitCodeInputElement);
@@ -328,7 +338,7 @@
             else if (data.partials) {
                 if (!J.isArray(data.partials)) {
                     node.err('EndScreen error, invalid partials win: ' +
-                             data.partials);
+                        data.partials);
                 }
                 else {
                     preWin = data.partials.join(' + ');

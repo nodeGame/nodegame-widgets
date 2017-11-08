@@ -470,7 +470,7 @@
      */
     Widget.prototype.setSounds = function(sounds) {
         strSetterMulti(this, sounds, 'sounds', 'setSound',
-                       'Widget.setSounds');
+                       J.funcName(this.constructor) + '.setSounds');
     };
 
     /**
@@ -490,7 +490,8 @@
      * @see Widget.getSounds
      */
     Widget.prototype.getSound = function(name, param) {
-        return strGetter(this, name, 'sounds', 'Widget.getSound', param);
+        return strGetter(this, name, 'sounds',
+                        J.funcName(this.constructor) + '.getSound', param);
     };
 
     /**
@@ -513,7 +514,7 @@
      */
     Widget.prototype.getSounds = function(keys, param) {
         return strGetterMulti(this, 'sounds', 'getSound',
-                              'Widget.getSounds', keys, param);
+                              J.funcName(this.constructor) + '.getSounds', keys, param);
     };
 
     /**
@@ -530,7 +531,7 @@
      */
     Widget.prototype.getAllSounds = function(param) {
         return strGetterMulti(this, 'sounds', 'getSound',
-                              'Widget.getAllSounds', undefined, param);
+                              J.funcName(this.constructor) + '.getAllSounds', undefined, param);
     };
 
     /**
@@ -550,7 +551,7 @@
      * @see Widget.getTexts
      */
     Widget.prototype.setText = function(name, value) {
-        strSetter(this, name, value, 'texts', 'Widget.setText');
+        strSetter(this, name, value, 'texts', J.funcName(this.constructor) + '.setText');
     };
 
     /**
@@ -566,7 +567,7 @@
      * @see Widget.getTexts
      */
     Widget.prototype.setTexts = function(texts) {
-        strSetterMulti(this, texts, 'texts', 'setText', 'Widget.setTexts');
+        strSetterMulti(this, texts, 'texts', 'setText', J.funcName(this.constructor) + '.setTexts');
     };
 
     /**
@@ -585,7 +586,7 @@
      * @see Widget.getTexts
      */
     Widget.prototype.getText = function(name, param) {
-        return strGetter(this, name, 'texts', 'Widget.getText', param);
+        return strGetter(this, name, 'texts', J.funcName(this.constructor) + '.getText', param);
     };
 
     /**
@@ -609,7 +610,7 @@
      */
     Widget.prototype.getTexts = function(keys, param) {
         return strGetterMulti(this, 'texts', 'getText',
-                              'Widget.getTexts', keys, param);
+                              J.funcName(this.constructor) + '.getTexts', keys, param);
     };
 
     /**
@@ -629,7 +630,7 @@
      */
     Widget.prototype.getAllTexts = function(param) {
         return strGetterMulti(this, 'texts', 'getText',
-                              'Widget.getAllTexts', undefined, param);
+                              J.funcName(this.constructor) +'.getAllTexts', undefined, param);
     };
 
     // ## Helper methods.
@@ -687,7 +688,7 @@
      *    is a function, this parameter is passed to it, when invoked to get
      *    a return value. Default: undefined
      *
-     * @return {string} res The requested value.
+     * @return {string} out The requested value.
      *
      * @see strGetter
      */
@@ -7383,6 +7384,7 @@
 
     DisconnectBox.title = 'Disconnect';
     DisconnectBox.className = 'disconnectbox';
+    DisconnectBox.texts.leave = "Leave Experiment";
 
     // ## Dependencies
 
@@ -7412,7 +7414,7 @@
      * @see DisconnectBox.writeStage
      */
     DisconnectBox.prototype.append = function() {
-        this.disconnectButton = W.getButton(undefined, 'Leave Experiment');
+        this.disconnectButton = W.get('button', this.getText('leave'));
         this.disconnectButton.className = 'btn btn-lg';
         this.bodyDiv.appendChild(this.disconnectButton);
 
@@ -7466,8 +7468,7 @@
 
     DoneButton.title = 'Done Button';
     DoneButton.className = 'donebutton';
-
-    DoneButton.text = 'Done';
+    DoneButton.texts.done = 'Done';
 
     // ## Dependencies
 
@@ -7574,8 +7575,20 @@
         this.button.className = tmp;
 
 
+        
+
+        this._setText = this.setText;
+        this.setText = function(text, value) {
+            this._setText(text, value);
+            this.button.value = value;
+        }
         // Button text.
-        this.setText(options.text);
+        if ('undefined' !== typeof options.text) {
+            this.setText('done', options.text);
+        }
+        else {
+            this.button.value = this.getText('done');
+        }
     };
 
     DoneButton.prototype.append = function() {
@@ -7817,6 +7830,8 @@
     EmailForm.title = 'Email';
     EmailForm.className = 'emailform';
 
+    EmailForm.texts.label = 'Enter your email:';
+
     // ## Dependencies
 
     EmailForm.dependencies = { JSUS: {} };
@@ -7839,7 +7854,8 @@
             this.label = 'Enter your email:';
         }
         else if ('string' === typeof options.label) {
-            this.label = options.label;
+            console.log('***EmailForm: options.label is deprecated. Use options.texts.label');
+            this.setText('label', options.label);
         }
         else {
             throw new TypeError('EmailForm constructor: options.label ' +
@@ -8224,6 +8240,18 @@
     EndScreen.title = 'End Screen';
     EndScreen.className = 'endscreen';
 
+    EndScreen.texts.thanks = 'Thank you for participating!';
+    EndScreen.texts.complete = 'You have now completed this task ' +
+                               'and your data has been saved. ' +
+                               'Please go back to the Amazon Mechanical Turk ' +
+                               'web site and ' +
+                               'submit the HIT.';
+    EndScreen.texts.contact_question = 'Would you like to be contacted again for future ' +
+                                       'experiments? If so, leave your email here and ' +
+                                       'press submit: ';
+    EndScreen.texts.total_win = 'Your total win:';
+    EndScreen.texts.exit_code = 'Your exit code:';
+
     // ## Dependencies
 
     // Checked when the widget is created.
@@ -8251,18 +8279,17 @@
          *
          * Default: 'Thank you for participating!'
          */
-        if ('undefined' === typeof options.headerMessage) {
-            this.headerMessage = 'Thank you for participating!';
-        }
-        else if ('string' === typeof options.headerMessage) {
+        if ('string' === typeof options.headerMessage) {
             this.headerMessage = options.headerMessage;
         }
-        else {
+        else if ('undefined' !== typeof options.headerMessage) {
             throw new TypeError('EndScreen constructor: ' +
                                 'options.headerMessage ' +
                                 'must be string or undefined. ' +
                                 'Found: ' + options.headerMessage);
         }
+
+        this.headerMessage = this.getText('thanks');
 
         /**
          * ### EndScreen.message
@@ -8274,14 +8301,11 @@
          *           Turk web site and submit the HIT.'
          */
         if ('undefined' === typeof options.message) {
-            this.message =  'You have now completed this task ' +
-                            'and your data has been saved. ' +
-                            'Please go back to the Amazon Mechanical Turk ' +
-                            'web site and ' +
-                            'submit the HIT.';
+            this.message =  this.getText('complete');
         }
         else if ('string' === typeof options.message) {
-            this.message = options.message;
+            this.setText('complete', options.message);
+            this.message = this.getText('complete');
         }
         else {
             throw new TypeError('EndScreen constructor: options.message ' +
@@ -8400,9 +8424,7 @@
          */
         if (this.showEmailForm) {
             this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: 'Would you like to be contacted again for future ' +
-                    'experiments? If so, leave your email here and ' +
-                    'press submit: ',
+                label: this.getText('contact_question'),
                 onsubmit: { say: true, emailOnly: true, updateUI: true }
             }, options.email));
         }
@@ -8457,7 +8479,9 @@
             totalWinElement = document.createElement('div');
 
             totalWinParaElement = document.createElement('p');
-            totalWinParaElement.innerHTML = '<strong>Your total win:</strong>';
+            totalWinParaElement.innerHTML = '<strong>' + 
+                                            this.getText('total_win') +
+                                            '</strong>';
 
             totalWinInputElement = document.createElement('input');
             totalWinInputElement.className = 'endscreen-total form-control';
@@ -8474,7 +8498,9 @@
             exitCodeElement = document.createElement('div');
 
             exitCodeParaElement = document.createElement('p');
-            exitCodeParaElement.innerHTML = '<strong>Your exit code:</strong>';
+            exitCodeParaElement.innerHTML = '<strong>' +
+                                            this.getText('exit_code') +
+                                            '</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
