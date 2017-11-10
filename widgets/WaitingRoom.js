@@ -45,6 +45,9 @@
      */
     WaitingRoom.texts = {
 
+        // #### blinkTitle
+        blinkTitle: 'GAME STARTS!',
+
         // #### disconnect
         disconnect: '<span style="color: red">You have been ' +
             '<strong>disconnected</strong>. Please try again later.' +
@@ -613,8 +616,9 @@
 
     WaitingRoom.prototype.alertPlayer = function() {
         var clearBlink, onFrame;
-        var sound;
+        var blink, sound;
 
+        blink = this.getText('blinkTitle');
         sound = this.getSound('dispatch');
 
         // Play sound, if requested.
@@ -622,14 +626,14 @@
 
         // If document.hasFocus() returns TRUE, then just one repeat is enough.
         if (document.hasFocus && document.hasFocus()) {
-            J.blinkTitle('GAME STARTS!', { repeatFor: 1 });
+            J.blinkTitle(blink, { repeatFor: 1 });
         }
         // Otherwise we repeat blinking until an event that shows that the
         // user is active on the page happens, e.g. focus and click. However,
         // the iframe is not created yet, and even later. if the user clicks it
         // it won't be detected in the main window, so we need to handle it.
         else {
-            clearBlink = J.blinkTitle('GAME STARTS!', {
+            clearBlink = J.blinkTitle(blink, {
                 stopOnFocus: true,
                 stopOnClick: window
             });
