@@ -31,7 +31,7 @@
      * @see Widgets.get
      * @see Widget.init
      */
-    function Widget() {}
+    function Widget() { }
 
     /**
      * ### Widget.init
@@ -42,7 +42,7 @@
      *
      * @see Widgets.get
      */
-    Widget.prototype.init = function(options) {};
+    Widget.prototype.init = function(options) { };
 
     /**
      * ### Widget.listeners
@@ -55,7 +55,7 @@
      * @see EventEmitter.setRecordChanges
      * @see Widgets.destroy
      */
-    Widget.prototype.listeners = function() {};
+    Widget.prototype.listeners = function() { };
 
     /**
      * ### Widget.append
@@ -79,7 +79,7 @@
      * @see Widget.footerDiv
      * @see Widget.headingDiv
      */
-    Widget.prototype.append = function() {};
+    Widget.prototype.append = function() { };
 
     /**
      * ### Widget.getValues
@@ -90,7 +90,7 @@
      *
      * @return {mixed} The values of the widget
      */
-    Widget.prototype.getValues = function(options) {};
+    Widget.prototype.getValues = function(options) { };
 
     /**
      * ### Widget.getValues
@@ -101,7 +101,7 @@
      *
      * @param {mixed} values The values to store
      */
-    Widget.prototype.setValues = function(values) {};
+    Widget.prototype.setValues = function(values) { };
 
     /**
      * ### Widget.reset
@@ -111,7 +111,7 @@
      * Deletes current selection, any highlighting, and other data
      * that the widget might have collected to far.
      */
-    Widget.prototype.reset = function(options) {};
+    Widget.prototype.reset = function(options) { };
 
     /**
      * ### Widget.highlight
@@ -123,7 +123,7 @@
      *
      * @param {mixed} options Settings controlling the type of highlighting
      */
-    Widget.prototype.highlight = function(options) {};
+    Widget.prototype.highlight = function(options) { };
 
     /**
      * ### Widget.highlight
@@ -139,7 +139,7 @@
      *
      * @see Widget.highlighted
      */
-    Widget.prototype.unhighlight = function() {};
+    Widget.prototype.unhighlight = function() { };
 
     /**
      * ### Widget.isHighlighted
@@ -159,7 +159,7 @@
      *
      * An enabled widget allows the user to interact with it
      */
-    Widget.prototype.enable = function() {};
+    Widget.prototype.enable = function() { };
 
     /**
      * ### Widget.disable
@@ -168,7 +168,7 @@
      *
      * A disabled widget is still visible, but user cannot interact with it
      */
-    Widget.prototype.disable = function() {};
+    Widget.prototype.disable = function() { };
 
     /**
      * ### Widget.isDisabled
@@ -288,8 +288,8 @@
                 }
                 else if ('object' !== typeof options) {
                     throw new TypeError('Widget.setTitle: options must ' +
-                                        'be object or undefined. Found: ' +
-                                        options);
+                        'be object or undefined. Found: ' +
+                        options);
                 }
                 this.headingDiv = W.add('div', this.panelDiv, options);
                 // Move it to before the body (IE cannot have undefined).
@@ -308,8 +308,8 @@
             }
             else {
                 throw new TypeError(J.funcName(this.constructor) +
-                                    '.setTitle: title must be string, ' +
-                                    'HTML element or falsy. Found: ' + title);
+                    '.setTitle: title must be string, ' +
+                    'HTML element or falsy. Found: ' + title);
             }
         }
     };
@@ -349,8 +349,8 @@
                 }
                 else if ('object' !== typeof options) {
                     throw new TypeError('Widget.setFooter: options must ' +
-                                        'be object or undefined. Found: ' +
-                                        options);
+                        'be object or undefined. Found: ' +
+                        options);
                 }
                 this.footerDiv = W.add('div', this.panelDiv, options);
             }
@@ -366,8 +366,8 @@
             }
             else {
                 throw new TypeError(J.funcName(this.constructor) +
-                                    '.setFooter: footer must be string, ' +
-                                    'HTML element or falsy. Found: ' + title);
+                    '.setFooter: footer must be string, ' +
+                    'HTML element or falsy. Found: ' + title);
             }
         }
     };
@@ -384,74 +384,74 @@
     Widget.prototype.setContext = function(context) {
         if ('string' !== typeof context) {
             throw new TypeError(J.funcName(this.constructor) + '.setContext: ' +
-                                'context must be string. Found: ' + context);
+                'context must be string. Found: ' + context);
 
         }
         W.removeClass(this.panelDiv, 'panel-[a-z]*');
         W.addClass(this.panelDiv, 'panel-' + context);
     };
 
-     /**
-      * ### Widget.addFrame
-      *
-      * Adds a border and margins around the bodyDiv element
-      *
-      * @param {string} context The type of bootstrap context.
-      *   Default: 'default'
-      *
-      * @see Widget.panelDiv
-      * @see Widget.bodyDiv
-      */
-     Widget.prototype.addFrame = function(context) {
-         if ('undefined' === typeof context) {
-             context = 'default';
-         }
-         else if ('string' !== typeof context || context.trim() === '') {
-             throw new TypeError(J.funcName(this.constructor) +
-                                 '.addFrame: context must be a non-empty ' +
-                                 'string or undefined. Found: ' + context);
-         }
-         if (this.panelDiv) {
-             if (this.panelDiv.className.indexOf('panel-') === -1) {
-                 W.addClass(this.panelDiv, 'panel-' + context);
-             }
-         }
-         if (this.bodyDiv) {
-             if (this.bodyDiv.className.indexOf('panel-body') === -1) {
-                 W.addClass(this.bodyDiv, 'panel-body');
-             }
-         }
-     };
-
-     /**
-      * ### Widget.removeFrame
-      *
-      * Removes the border and the margins around the bodyDiv element
-      *
-      * @see Widget.panelDiv
-      * @see Widget.bodyDiv
-      */
-     Widget.prototype.removeFrame = function() {
-         if (this.panelDiv) W.removeClass(this.panelDiv, 'panel-[a-z]*');
-         if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
-     };
-
-     /**
-     * ### Widget.setSound
+    /**
+     * ### Widget.addFrame
      *
-     * Checks and assigns the value of a sound to play to user
+     * Adds a border and margins around the bodyDiv element
      *
-     * Throws an error if value is invalid
+     * @param {string} context The type of bootstrap context.
+     *   Default: 'default'
      *
-     * @param {string} name The name of the sound to check
-     * @param {mixed} path Optional. The path to the audio file. If undefined
-     *    the default value from Widget.sounds is used
-     *
-     * @see Widget.sounds
-     * @see Widget.getSound
-     * @see Widget.setSounds
-     * @see Widget.getSounds
+     * @see Widget.panelDiv
+     * @see Widget.bodyDiv
      */
+    Widget.prototype.addFrame = function(context) {
+        if ('undefined' === typeof context) {
+            context = 'default';
+        }
+        else if ('string' !== typeof context || context.trim() === '') {
+            throw new TypeError(J.funcName(this.constructor) +
+                '.addFrame: context must be a non-empty ' +
+                'string or undefined. Found: ' + context);
+        }
+        if (this.panelDiv) {
+            if (this.panelDiv.className.indexOf('panel-') === -1) {
+                W.addClass(this.panelDiv, 'panel-' + context);
+            }
+        }
+        if (this.bodyDiv) {
+            if (this.bodyDiv.className.indexOf('panel-body') === -1) {
+                W.addClass(this.bodyDiv, 'panel-body');
+            }
+        }
+    };
+
+    /**
+     * ### Widget.removeFrame
+     *
+     * Removes the border and the margins around the bodyDiv element
+     *
+     * @see Widget.panelDiv
+     * @see Widget.bodyDiv
+     */
+    Widget.prototype.removeFrame = function() {
+        if (this.panelDiv) W.removeClass(this.panelDiv, 'panel-[a-z]*');
+        if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
+    };
+
+    /**
+    * ### Widget.setSound
+    *
+    * Checks and assigns the value of a sound to play to user
+    *
+    * Throws an error if value is invalid
+    *
+    * @param {string} name The name of the sound to check
+    * @param {mixed} path Optional. The path to the audio file. If undefined
+    *    the default value from Widget.sounds is used
+    *
+    * @see Widget.sounds
+    * @see Widget.getSound
+    * @see Widget.setSounds
+    * @see Widget.getSounds
+    */
     Widget.prototype.setSound = function(name, value) {
         strSetter(this, name, value, 'sounds', 'Widget.setSound');
     };
@@ -470,7 +470,7 @@
      */
     Widget.prototype.setSounds = function(sounds) {
         strSetterMulti(this, sounds, 'sounds', 'setSound',
-                       J.funcName(this.constructor) + '.setSounds');
+            J.funcName(this.constructor) + '.setSounds');
     };
 
     /**
@@ -491,7 +491,7 @@
      */
     Widget.prototype.getSound = function(name, param) {
         return strGetter(this, name, 'sounds',
-                        J.funcName(this.constructor) + '.getSound', param);
+            J.funcName(this.constructor) + '.getSound', param);
     };
 
     /**
@@ -514,7 +514,8 @@
      */
     Widget.prototype.getSounds = function(keys, param) {
         return strGetterMulti(this, 'sounds', 'getSound',
-                              J.funcName(this.constructor) + '.getSounds', keys, param);
+            J.funcName(this.constructor)
+            + '.getSounds', keys, param);
     };
 
     /**
@@ -531,7 +532,8 @@
      */
     Widget.prototype.getAllSounds = function(param) {
         return strGetterMulti(this, 'sounds', 'getSound',
-                              J.funcName(this.constructor) + '.getAllSounds', undefined, param);
+            J.funcName(this.constructor)
+            + '.getAllSounds', undefined, param);
     };
 
     /**
@@ -551,7 +553,8 @@
      * @see Widget.getTexts
      */
     Widget.prototype.setText = function(name, value) {
-        strSetter(this, name, value, 'texts', J.funcName(this.constructor) + '.setText');
+        strSetter(this, name, value, 'texts', J.funcName(this.constructor)
+            + '.setText');
     };
 
     /**
@@ -567,7 +570,8 @@
      * @see Widget.getTexts
      */
     Widget.prototype.setTexts = function(texts) {
-        strSetterMulti(this, texts, 'texts', 'setText', J.funcName(this.constructor) + '.setTexts');
+        strSetterMulti(this, texts, 'texts', 'setText',
+            J.funcName(this.constructor) + '.setTexts');
     };
 
     /**
@@ -586,7 +590,8 @@
      * @see Widget.getTexts
      */
     Widget.prototype.getText = function(name, param) {
-        return strGetter(this, name, 'texts', J.funcName(this.constructor) + '.getText', param);
+        return strGetter(this, name, 'texts',
+            J.funcName(this.constructor) + '.getText', param);
     };
 
     /**
@@ -610,7 +615,8 @@
      */
     Widget.prototype.getTexts = function(keys, param) {
         return strGetterMulti(this, 'texts', 'getText',
-                              J.funcName(this.constructor) + '.getTexts', keys, param);
+            J.funcName(this.constructor)
+            + '.getTexts', keys, param);
     };
 
     /**
@@ -630,7 +636,8 @@
      */
     Widget.prototype.getAllTexts = function(param) {
         return strGetterMulti(this, 'texts', 'getText',
-                              J.funcName(this.constructor) +'.getAllTexts', undefined, param);
+            J.funcName(this.constructor)
+            + '.getAllTexts', undefined, param);
     };
 
     // ## Helper methods.
@@ -666,7 +673,7 @@
             res = res(that, param);
             if ('string' !== typeof res) {
                 throw new TypeError(method + ': cb "' + name +
-                                    'did not return a string. Found: ' + res);
+                    'did not return a string. Found: ' + res);
             }
         }
         return res;
@@ -701,7 +708,7 @@
         out = {};
         if (J.isArray(keys)) {
             k = -1, len = keys.length;
-            for ( ; ++k < len; ) {
+            for ( ; ++k < len;) {
                 out[keys[k]] = that[getMethod](keys[k], param);
             }
         }
@@ -731,8 +738,8 @@
     function strSetterMulti(that, obj, collection, setMethod, method) {
         var i;
         if ('object' !== typeof obj && 'undefined' !== typeof obj) {
-            throw new TypeError(method + ': ' +  collection +
-                                ' must be object or undefined. Found: ' + obj);
+            throw new TypeError(method + ': ' + collection +
+                ' must be object or undefined. Found: ' + obj);
         }
         for (i in obj) {
             if (obj.hasOwnProperty(i)) {
@@ -766,8 +773,8 @@
         }
         else {
             throw new TypeError(method + ': value for item "' + name +
-                                '" must be string, function or false. ' +
-                                'Found: ' + value);
+                '" must be string, function or false. ' +
+                'Found: ' + value);
         }
     }
 
@@ -776,7 +783,7 @@
 })(
     // Widgets works only in the browser environment.
     ('undefined' !== typeof node) ? node : module.parent.exports.node
-);
+    );
 
 /**
  * # Widgets
@@ -7574,14 +7581,11 @@
         }
         this.button.className = tmp;
 
-
-        
-
         this._setText = this.setText;
         this.setText = function(text, value) {
             this._setText(text, value);
             this.button.value = value;
-        }
+        };
         // Button text.
         if ('undefined' !== typeof options.text) {
             this.setText('done', options.text);
@@ -7831,6 +7835,8 @@
     EmailForm.className = 'emailform';
 
     EmailForm.texts.label = 'Enter your email:';
+    EmailForm.texts.errString = 'Not a valid email address, ' +
+                                'please correct it and submit it again.';
 
     // ## Dependencies
 
@@ -7844,44 +7850,6 @@
      * @param {object} options configuration option
      */
     function EmailForm(options) {
-
-        /**
-         * ### EmailForm.label
-         *
-         * The label for the email element
-         */
-        if ('undefined' === typeof options.label) {
-            this.label = 'Enter your email:';
-        }
-        else if ('string' === typeof options.label) {
-            console.log('***EmailForm: options.label is deprecated. Use options.texts.label');
-            this.setText('label', options.label);
-        }
-        else {
-            throw new TypeError('EmailForm constructor: options.label ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.label);
-        }
-
-        /**
-         * ### EmailForm.errString
-         *
-         * The error message in case of invalid email format
-         *
-         * Notice! It is displayed only if the submit button is displayed.
-         */
-        if ('undefined' === typeof options.errString) {
-            this.errString = 'Not a valid email address, ' +
-                'please correct it and submit again.';
-        }
-        else if ('string' === typeof options.errString) {
-            this.errString = options.errString;
-        }
-        else {
-            throw new TypeError('EmailForm constructor: options.errString ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.errString);
-        }
 
         /**
          * ### EmailForm.onsubmit
@@ -7898,8 +7866,8 @@
         }
         else {
             throw new TypeError('EmailForm constructor: options.onsubmit ' +
-                                'must be string or object. Found: ' +
-                                options.onsubmit);
+                'must be string or object. Found: ' +
+                options.onsubmit);
         }
 
         /**
@@ -7961,7 +7929,7 @@
         formElement.className = 'emailform-form';
 
         labelElement = document.createElement('label');
-        labelElement.innerHTML = this.label;
+        labelElement.innerHTML = this.getText('label');
 
         inputElement = document.createElement('input');
         inputElement.setAttribute('type', 'text');
@@ -8029,7 +7997,7 @@
         }
         else {
             if (updateUI && this.buttonElement) {
-                this.buttonElement.value = this.errString;
+                this.buttonElement.value = this.getText('errString');
             }
             if ('undefined' === typeof markAttempt || markAttempt) {
                 this.attempts.push(email);
@@ -8101,7 +8069,7 @@
         email = getEmail.call(this);
 
         if (opts.verify !== false) res = this.verifyInput(opts.markAttempt,
-                                                          opts.updateUI);
+            opts.updateUI);
 
         // Only value.
         if (!opts.emailOnly) {
@@ -8165,7 +8133,7 @@
         if (!this.inputElement) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('EmailForm.highlight: border must be ' +
-                                'string or undefined. Found: ' + border);
+                'string or undefined. Found: ' + border);
         }
         this.inputElement.style.border = border || '3px solid red';
         this.highlighted = true;
@@ -8233,22 +8201,21 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.3.1';
+    EndScreen.version = '0.4.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
-        'email form, and exit code.';
+                            'email form, and exit code.';
 
     EndScreen.title = 'End Screen';
     EndScreen.className = 'endscreen';
 
-    EndScreen.texts.thanks = 'Thank you for participating!';
-    EndScreen.texts.complete = 'You have now completed this task ' +
+    EndScreen.texts.headerMessage = 'Thank you for participating!';
+    EndScreen.texts.message = 'You have now completed this task ' +
                                'and your data has been saved. ' +
                                'Please go back to the Amazon Mechanical Turk ' +
-                               'web site and ' +
-                               'submit the HIT.';
-    EndScreen.texts.contact_question = 'Would you like to be contacted again for future ' +
-                                       'experiments? If so, leave your email here and ' +
-                                       'press submit: ';
+                               'web site and submit the HIT.';
+    EndScreen.texts.contact_question = 'Would you like to be contacted again' +
+                                       'for future experiments? If so, leave' +
+                                       'your email here and press submit: ';
     EndScreen.texts.total_win = 'Your total win:';
     EndScreen.texts.exit_code = 'Your exit code:';
 
@@ -8271,47 +8238,6 @@
      * @see EndScreen.init
      */
     function EndScreen(options) {
-
-        /**
-         * ### EndScreen.headerMessage
-         *
-         * The header message displayed at the top of the screen
-         *
-         * Default: 'Thank you for participating!'
-         */
-        if ('string' === typeof options.headerMessage) {
-            this.headerMessage = options.headerMessage;
-        }
-        else if ('undefined' !== typeof options.headerMessage) {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.headerMessage ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.headerMessage);
-        }
-
-        this.headerMessage = this.getText('thanks');
-
-        /**
-         * ### EndScreen.message
-         *
-         * The informational message displayed in the body of the screen
-         *
-         * Default: 'You have now completed this task and your data
-         *           has been saved. Please go back to the Amazon Mechanical
-         *           Turk web site and submit the HIT.'
-         */
-        if ('undefined' === typeof options.message) {
-            this.message =  this.getText('complete');
-        }
-        else if ('string' === typeof options.message) {
-            this.setText('complete', options.message);
-            this.message = this.getText('complete');
-        }
-        else {
-            throw new TypeError('EndScreen constructor: options.message ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.message);
-        }
 
         /**
          * ### EndScreen.showEmailForm
@@ -8404,7 +8330,7 @@
             this.totalWinCurrency = 'USD';
         }
         else if ('string' === typeof options.totalWinCurrency &&
-                 options.totalWinCurrency.trim() !== '') {
+            options.totalWinCurrency.trim() !== '') {
 
             this.totalWinCurrency = options.totalWinCurrency;
         }
@@ -8422,12 +8348,7 @@
          *
          * @see EmailForm
          */
-        if (this.showEmailForm) {
-            this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: this.getText('contact_question'),
-                onsubmit: { say: true, emailOnly: true, updateUI: true }
-            }, options.email));
-        }
+        this.emailForm = null;
 
         /**
          * ### EndScreen.feedback
@@ -8436,10 +8357,8 @@
          *
          * @see Feedback
          */
-        if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback', options.feedback);
-        }
-
+        this.feedback = null;
+        
         /**
          * ### EndScreen.endScreenElement
          *
@@ -8450,6 +8369,19 @@
          */
         this.endScreenHTML = null;
     }
+
+    EndScreen.prototype.init = function(options) {
+        if (this.showEmailForm && !this.emailForm) {
+            this.emailForm = node.widgets.get('EmailForm', J.mixin({
+                label: this.getText('contact_question'),
+                onsubmit: { say: true, emailOnly: true, updateUI: true }
+            }, options.email));
+        }
+
+        if (this.showFeedbackForm) {
+            this.feedback = node.widgets.get('Feedback', options.feedback);
+        }
+    };
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
@@ -8468,20 +8400,20 @@
         endScreenElement.className = 'endscreen';
 
         headerElement = document.createElement('h1');
-        headerElement.innerHTML = this.headerMessage;
+        headerElement.innerHTML = this.getText('headerMessage');
         endScreenElement.appendChild(headerElement);
 
         messageElement = document.createElement('p');
-        messageElement.innerHTML = this.message;
+        messageElement.innerHTML = this.getText('message');
         endScreenElement.appendChild(messageElement);
 
         if (this.showTotalWin) {
             totalWinElement = document.createElement('div');
 
             totalWinParaElement = document.createElement('p');
-            totalWinParaElement.innerHTML = '<strong>' + 
-                                            this.getText('total_win') +
-                                            '</strong>';
+            totalWinParaElement.innerHTML = '<strong>' +
+                this.getText('total_win') +
+                '</strong>';
 
             totalWinInputElement = document.createElement('input');
             totalWinInputElement.className = 'endscreen-total form-control';
@@ -8499,12 +8431,12 @@
 
             exitCodeParaElement = document.createElement('p');
             exitCodeParaElement.innerHTML = '<strong>' +
-                                            this.getText('exit_code') +
-                                            '</strong>';
+                this.getText('exit_code') +
+                '</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
-                                             'form-control';
+                'form-control';
             exitCodeInputElement.setAttribute('disabled', 'true');
 
             exitCodeParaElement.appendChild(exitCodeInputElement);
@@ -8555,7 +8487,7 @@
             else if (data.partials) {
                 if (!J.isArray(data.partials)) {
                     node.err('EndScreen error, invalid partials win: ' +
-                             data.partials);
+                        data.partials);
                 }
                 else {
                     preWin = data.partials.join(' + ');

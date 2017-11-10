@@ -16,22 +16,21 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.3.1';
+    EndScreen.version = '0.4.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
-        'email form, and exit code.';
+                            'email form, and exit code.';
 
     EndScreen.title = 'End Screen';
     EndScreen.className = 'endscreen';
 
-    EndScreen.texts.thanks = 'Thank you for participating!';
-    EndScreen.texts.complete = 'You have now completed this task ' +
-        'and your data has been saved. ' +
-        'Please go back to the Amazon Mechanical Turk ' +
-        'web site and ' +
-        'submit the HIT.';
+    EndScreen.texts.headerMessage = 'Thank you for participating!';
+    EndScreen.texts.message = 'You have now completed this task ' +
+                               'and your data has been saved. ' +
+                               'Please go back to the Amazon Mechanical Turk ' +
+                               'web site and submit the HIT.';
     EndScreen.texts.contact_question = 'Would you like to be contacted again' +
-        'for future experiments? If so, leave'
-        + 'your email here and press submit: ';
+                                       'for future experiments? If so, leave' +
+                                       'your email here and press submit: ';
     EndScreen.texts.total_win = 'Your total win:';
     EndScreen.texts.exit_code = 'Your exit code:';
 
@@ -56,47 +55,6 @@
     function EndScreen(options) {
 
         /**
-         * ### EndScreen.headerMessage
-         *
-         * The header message displayed at the top of the screen
-         *
-         * Default: 'Thank you for participating!'
-         */
-        if ('string' === typeof options.headerMessage) {
-            this.headerMessage = options.headerMessage;
-        }
-        else if ('undefined' !== typeof options.headerMessage) {
-            throw new TypeError('EndScreen constructor: ' +
-                'options.headerMessage ' +
-                'must be string or undefined. ' +
-                'Found: ' + options.headerMessage);
-        }
-
-        this.headerMessage = this.getText('thanks');
-
-        /**
-         * ### EndScreen.message
-         *
-         * The informational message displayed in the body of the screen
-         *
-         * Default: 'You have now completed this task and your data
-         *           has been saved. Please go back to the Amazon Mechanical
-         *           Turk web site and submit the HIT.'
-         */
-        if ('undefined' === typeof options.message) {
-            this.message = this.getText('complete');
-        }
-        else if ('string' === typeof options.message) {
-            this.setText('complete', options.message);
-            this.message = this.getText('complete');
-        }
-        else {
-            throw new TypeError('EndScreen constructor: options.message ' +
-                'must be string or undefined. ' +
-                'Found: ' + options.message);
-        }
-
-        /**
          * ### EndScreen.showEmailForm
          *
          * If true, the email form is shown
@@ -111,9 +69,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                'options.showEmailForm ' +
-                'must be boolean or undefined. ' +
-                'Found: ' + options.showEmailForm);
+                                'options.showEmailForm ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showEmailForm);
         }
 
         /**
@@ -131,9 +89,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                'options.showFeedbackForm ' +
-                'must be boolean or undefined. ' +
-                'Found: ' + options.showFeedbackForm);
+                                'options.showFeedbackForm ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showFeedbackForm);
         }
 
         /**
@@ -151,9 +109,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                'options.showTotalWin ' +
-                'must be boolean or undefined. ' +
-                'Found: ' + options.showTotalWin);
+                                'options.showTotalWin ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showTotalWin);
         }
 
         /**
@@ -171,9 +129,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                'options.showExitCode ' +
-                'must be boolean or undefined. ' +
-                'Found: ' + options.showExitCode);
+                                'options.showExitCode ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showExitCode);
         }
 
         /**
@@ -193,9 +151,9 @@
         }
         else {
             throw new TypeError('EndScreen constructor: ' +
-                'options.totalWinCurrency must be undefined ' +
-                'or a non-empty string. Found: ' +
-                options.totalWinCurrency);
+                                'options.totalWinCurrency must be undefined ' +
+                                'or a non-empty string. Found: ' +
+                                options.totalWinCurrency);
         }
 
         /**
@@ -205,12 +163,7 @@
          *
          * @see EmailForm
          */
-        if (this.showEmailForm) {
-            this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: this.getText('contact_question'),
-                onsubmit: { say: true, emailOnly: true, updateUI: true }
-            }, options.email));
-        }
+        this.emailForm = null;
 
         /**
          * ### EndScreen.feedback
@@ -219,9 +172,7 @@
          *
          * @see Feedback
          */
-        if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback', options.feedback);
-        }
+        this.feedback = null;
 
         /**
          * ### EndScreen.endScreenElement
@@ -233,6 +184,19 @@
          */
         this.endScreenHTML = null;
     }
+
+    EndScreen.prototype.init = function(options) {
+        if (this.showEmailForm && !this.emailForm) {
+            this.emailForm = node.widgets.get('EmailForm', J.mixin({
+                label: this.getText('contact_question'),
+                onsubmit: { say: true, emailOnly: true, updateUI: true }
+            }, options.email));
+        }
+
+        if (this.showFeedbackForm) {
+            this.feedback = node.widgets.get('Feedback', options.feedback);
+        }
+    };
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
@@ -251,11 +215,11 @@
         endScreenElement.className = 'endscreen';
 
         headerElement = document.createElement('h1');
-        headerElement.innerHTML = this.headerMessage;
+        headerElement.innerHTML = this.getText('headerMessage');
         endScreenElement.appendChild(headerElement);
 
         messageElement = document.createElement('p');
-        messageElement.innerHTML = this.message;
+        messageElement.innerHTML = this.getText('message');
         endScreenElement.appendChild(messageElement);
 
         if (this.showTotalWin) {

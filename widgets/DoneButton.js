@@ -127,14 +127,11 @@
         }
         this.button.className = tmp;
 
-
-
-
         this._setText = this.setText;
         this.setText = function(text, value) {
             this._setText(text, value);
             this.button.value = value;
-        }
+        };
         // Button text.
         if ('undefined' !== typeof options.text) {
             this.setText('done', options.text);
