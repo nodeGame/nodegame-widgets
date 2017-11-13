@@ -23,6 +23,8 @@
     LanguageSelector.title = 'Language';
     LanguageSelector.className = 'languageselector';
 
+    LanguageSelector.texts.loading = 'Loading language information...';
+
     // ## Dependencies
 
     LanguageSelector.dependencies = {
@@ -199,7 +201,7 @@
                         });
 
                         that.optionsDisplay[language] = W.get('input', {
-                            id: language + 'RadioButton', 
+                            id: language + 'RadioButton',
                             type: 'radio',
                             name: 'languageButton',
                             value: msg.data[language].name
@@ -330,7 +332,7 @@
         // Display initialization.
         this.displayForm = W.get('form', 'radioButtonForm');
         this.loadingDiv = W.add('div', this.displayForm);
-        this.loadingDiv.innerHTML = 'Loading language information...';
+        this.loadingDiv.innerHTML = this.getText('loading');
 
         this.loadLanguages();
     };

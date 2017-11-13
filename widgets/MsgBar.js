@@ -23,6 +23,8 @@
     MsgBar.title = 'Send MSG';
     MsgBar.className = 'msgbar';
 
+    MsgBar.texts.advButton = 'Toggle advanced options';
+
     function MsgBar() {
         this.recipient = null;
         this.actionSel = null;
@@ -112,7 +114,7 @@
 
         // Show a button that expands the table of advanced fields.
         advButton =
-            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+            W.addButton(this.bodyDiv, undefined, this.getText('advButton'));
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
