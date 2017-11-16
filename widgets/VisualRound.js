@@ -28,7 +28,7 @@
     VisualRound.texts.round = 'Round';
     VisualRound.texts.stage = 'Stage';
     VisualRound.texts.roundLeft = 'Round Left';
-    VisualRounds.texts.stageLeft = 'Stage left';
+    VisualRound.texts.stageLeft = 'Stage left';
 
     // ## Dependencies
 
@@ -527,7 +527,7 @@
      * @see CountUpStages.updateDisplay
      */
     CountUpStages.prototype.init = function() {
-        generalInit(this, 'stagediv', this.getText('stage'));
+        generalInit(this, 'stagediv', this.visualRound.getText('stage'));
 
         this.curStageNumber = W.append('span', this.contentDiv, {
             className: 'number'
@@ -605,7 +605,7 @@
      * @see CountDownStages.updateDisplay
      */
     CountDownStages.prototype.init = function() {
-        generalInit(this, 'stagediv', this.getText('stageLeft'));
+        generalInit(this, 'stagediv', this.visualRound.getText('stageLeft'));
         this.stagesLeft = W.add('div', this.contentDiv, {
             className: 'number'
         });
@@ -689,7 +689,7 @@
      */
     CountUpRounds.prototype.init = function() {
 
-        generalInit(this, 'rounddiv', this.getText('round'));
+        generalInit(this, 'rounddiv', this.visualRound.getText('round'));
 
         this.curRoundNumber = W.add('span', this.contentDiv, {
             className: 'number'
@@ -769,7 +769,7 @@
      * @see CountDownRounds.updateDisplay
      */
     CountDownRounds.prototype.init = function() {
-        generalInit(this, 'rounddiv', this.getText('roundLeft'));
+        generalInit(this, 'rounddiv', this.visualRound.getText('roundLeft'));
 
         this.roundsLeft = W.add('div', this.displayDiv);
         this.roundsLeft.className = 'number';

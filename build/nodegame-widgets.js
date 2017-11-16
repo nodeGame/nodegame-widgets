@@ -8358,7 +8358,7 @@
          * @see Feedback
          */
         this.feedback = null;
-        
+
         /**
          * ### EndScreen.endScreenElement
          *
@@ -8544,6 +8544,9 @@
     Feedback.title = 'Feedback';
     Feedback.className = 'feedback';
 
+    Feedback.texts.label = 'Any feedback about the experiment? Let us know' +
+                           ' here:';
+
     // ## Dependencies
 
     Feedback.dependencies = {
@@ -8564,25 +8567,6 @@
      *    - label: The text to display above the textarea
      */
     function Feedback(options) {
-
-        /**
-         * ### Feedback.label
-         *
-         * The label for the feedback element
-         *
-         * Default: 'Any feedback about the experiment? Let us know here: '
-         */
-        if ('undefined' === typeof options.label) {
-            this.label = 'Any feedback about the experiment? Let us know here:';
-        }
-        else if ('string' === typeof options.label) {
-            this.label = options.label;
-        }
-        else {
-            throw new TypeError('Feedback constructor: options.label ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.label);
-        }
 
         /**
          * ### Feedback.maxLength
@@ -8762,7 +8746,7 @@
 
         feedbackLabel = document.createElement('label');
         feedbackLabel.setAttribute('for', 'feedback-input');
-        feedbackLabel.innerHTML = this.label;
+        feedbackLabel.innerHTML = this.getText('label');
         feedbackForm.appendChild(feedbackLabel);
 
         feedbackTextarea = document.createElement('textarea');
@@ -9292,6 +9276,8 @@
     LanguageSelector.title = 'Language';
     LanguageSelector.className = 'languageselector';
 
+    LanguageSelector.texts.loading = 'Loading language information...';
+
     // ## Dependencies
 
     LanguageSelector.dependencies = {
@@ -9468,7 +9454,7 @@
                         });
 
                         that.optionsDisplay[language] = W.get('input', {
-                            id: language + 'RadioButton', 
+                            id: language + 'RadioButton',
                             type: 'radio',
                             name: 'languageButton',
                             value: msg.data[language].name
@@ -9599,7 +9585,7 @@
         // Display initialization.
         this.displayForm = W.get('form', 'radioButtonForm');
         this.loadingDiv = W.add('div', this.displayForm);
-        this.loadingDiv.innerHTML = 'Loading language information...';
+        this.loadingDiv.innerHTML = this.getText('loading');
 
         this.loadLanguages();
     };
@@ -9887,8 +9873,10 @@
     MoodGauge.title = 'Mood Gauge';
     MoodGauge.className = 'moodgauge';
 
-    // ## Dependencies
+    MoodGauge.texts.mainText = 'Thinking about yourself and how you normally' +
+                ' feel, to what extent do you generally feel: ';
 
+    // ## Dependencies
     MoodGauge.dependencies = {
         JSUS: {}
     };
@@ -10064,17 +10052,8 @@
 
     // ### I_PANAS_SF
     function I_PANAS_SF(options) {
-        var items, emotions, mainText, choices, left, right;
+        var items, emotions, choices, left, right;
         var gauge, i, len;
-
-        if ('undefined' === typeof options.mainText) {
-            mainText = 'Thinking about yourself and how you normally feel, ' +
-                'to what extent do you generally feel: ';
-        }
-        else if ('string' === typeof options.mainText) {
-            mainText = options.mainText;
-        }
-        // Other types ignored.
 
         choices = options.choices ||
             [ '1', '2', '3', '4', '5' ];
@@ -10113,7 +10092,7 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'ipnassf',
             items: items,
-            mainText: mainText,
+            mainText: this.getText('mainText'),
             title: false,
             requiredChoice: true
         });
@@ -10147,6 +10126,8 @@
 
     MsgBar.title = 'Send MSG';
     MsgBar.className = 'msgbar';
+
+    MsgBar.texts.advButton = 'Toggle advanced options';
 
     function MsgBar() {
         this.recipient = null;
@@ -10237,7 +10218,7 @@
 
         // Show a button that expands the table of advanced fields.
         advButton =
-            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+            W.addButton(this.bodyDiv, undefined, this.getText('advButton'));
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
@@ -10514,6 +10495,9 @@
     NextPreviousStep.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
 
+    NextPreviousStep.texts.rew = '<<';
+    NextPreviousStep.texts.fwd = '>>';
+
     /**
      * ## NextPreviousStep constructor
      */
@@ -10553,10 +10537,10 @@
         that = this;
 
         this.rew = document.createElement('button');
-        this.rew.innerHTML = '<<';
+        this.rew.innerHTML = this.getText('rew');
 
         this.fwd = document.createElement('button');
-        this.fwd.innerHTML = '>>';
+        this.fwd.innerHTML = this.getText('fwd');
 
         this.checkbox = document.createElement('input');
         this.checkbox.type = 'checkbox';
@@ -10642,6 +10626,12 @@
 
     Requirements.title = 'Requirements';
     Requirements.className = 'requirements';
+
+    Requirements.texts.errStr = 'One or more function is taking too long. ' +
+                                'This is likely to be due to a compatibility' +
+                                ' issue with your browser or to bad network' +
+                                ' connectivity.';
+    Requirements.texts.testPassed = 'All tests passed.';
 
     // ## Dependencies
 
@@ -10784,7 +10774,7 @@
          * Callback to be executed at the end of all tests
          */
         this.onFailure = null;
-        
+
         /**
          * ### Requirements.callbacksExecuted
          *
@@ -10984,13 +10974,13 @@
             }
         }
 
-        if (this.withTimeout) this.addTimeout();        
+        if (this.withTimeout) this.addTimeout();
 
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
 
-        if (this.isCheckingFinished()) this.checkingFinished();        
+        if (this.isCheckingFinished()) this.checkingFinished();
 
         return errors;
     };
@@ -11008,13 +10998,10 @@
      */
     Requirements.prototype.addTimeout = function() {
         var that = this;
-        var errStr = 'One or more function is taking too long. This is ' +
-            'likely to be due to a compatibility issue with your browser ' +
-            'or to bad network connectivity.';
 
         this.timeoutId = setTimeout(function() {
             if (that.stillChecking > 0) {
-                that.displayResults([errStr]);
+                that.displayResults([this.getText('errStr')]);
             }
             that.timeoutId = null;
             that.hasFailed = true;
@@ -11098,10 +11085,10 @@
         // Sometimes, if all requirements are almost synchronous, it
         // can happen that this function is called twice (from resultCb
         // and at the end of all requirements checkings.
-        if (this.callbacksExecuted && !force) return;        
+        if (this.callbacksExecuted && !force) return;
         this.callbacksExecuted = true;
-        
-        if (this.timeoutId) clearTimeout(this.timeoutId);        
+
+        if (this.timeoutId) clearTimeout(this.timeoutId);
 
         this.dots.stop();
 
@@ -11118,7 +11105,7 @@
         }
 
         if (this.onComplete) this.onComplete();
-        
+
         if (this.hasFailed) {
             if (this.onFailure) this.onFailure();
         }
@@ -11164,7 +11151,7 @@
             // All tests passed.
             this.list.addDT({
                 success: true,
-                text:'All tests passed.'
+                text: this.getText('testPassed')
             });
         }
         else {
@@ -11256,7 +11243,7 @@
                 data: data
             });
 
-            if (that.isCheckingFinished()) that.checkingFinished();            
+            if (that.isCheckingFinished()) that.checkingFinished();
         };
 
         req = that.requirements[i];
@@ -11316,6 +11303,10 @@
 
     SVOGauge.title = 'SVO Gauge';
     SVOGauge.className = 'svogauge';
+
+    SVOGauge.texts.mainText = 'Select your preferred option among those' +
+                               ' available below:';
+    SVOGauge.texts.left = 'You:<hr/>Other:';
 
     // ## Dependencies
 
@@ -11500,18 +11491,9 @@
 
     // ### SVO_Slider
     function SVO_Slider(options) {
-        var items, sliders, mainText;
+        var items, sliders;
         var gauge, i, len;
-        var left, renderer;
-
-        if ('undefined' === typeof options.mainText) {
-            mainText =
-                'Select your preferred option among those available below:';
-        }
-        else if ('string' === typeof options.mainText) {
-            mainText = options.mainText;
-        }
-        // Other types ignored.
+        var renderer;
 
         sliders = options.sliders || [
             [
@@ -11589,13 +11571,6 @@
             td.innerHTML = choice[0] + '<hr/>' + choice[1];
         };
 
-        if (options.left) {
-            left = options.left;
-        }
-        else {
-            left = 'You:<hr/>Other:';
-        }
-
         len = sliders.length;
         items = new Array(len);
 
@@ -11603,7 +11578,7 @@
         for ( ; ++i < len ; ) {
             items[i] = {
                 id: (i+1),
-                left: left,
+                left: this.getText('left'),
                 choices: sliders[i]
             };
         }
@@ -11611,7 +11586,7 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'svo_slider',
             items: items,
-            mainText: mainText,
+            mainText: this.getText('mainText'),
             title: false,
             renderer: renderer,
             requiredChoice: true
@@ -11648,6 +11623,11 @@
 
     VisualRound.title = 'Round info';
     VisualRound.className = 'visualround';
+
+    VisualRound.texts.round = 'Round';
+    VisualRound.texts.stage = 'Stage';
+    VisualRound.texts.roundLeft = 'Round Left';
+    VisualRound.texts.stageLeft = 'Stage left';
 
     // ## Dependencies
 
@@ -12146,7 +12126,7 @@
      * @see CountUpStages.updateDisplay
      */
     CountUpStages.prototype.init = function() {
-        generalInit(this, 'stagediv', 'Stage');
+        generalInit(this, 'stagediv', this.visualRound.getText('stage'));
 
         this.curStageNumber = W.append('span', this.contentDiv, {
             className: 'number'
@@ -12224,7 +12204,7 @@
      * @see CountDownStages.updateDisplay
      */
     CountDownStages.prototype.init = function() {
-        generalInit(this, 'stagediv', 'Stage left');
+        generalInit(this, 'stagediv', this.visualRound.getText('stageLeft'));
         this.stagesLeft = W.add('div', this.contentDiv, {
             className: 'number'
         });
@@ -12308,7 +12288,7 @@
      */
     CountUpRounds.prototype.init = function() {
 
-        generalInit(this, 'rounddiv', 'Round');
+        generalInit(this, 'rounddiv', this.visualRound.getText('round'));
 
         this.curRoundNumber = W.add('span', this.contentDiv, {
             className: 'number'
@@ -12388,7 +12368,7 @@
      * @see CountDownRounds.updateDisplay
      */
     CountDownRounds.prototype.init = function() {
-        generalInit(this, 'rounddiv', 'Round Left');
+        generalInit(this, 'rounddiv', this.visualRound.getText('roundLeft'));
 
         this.roundsLeft = W.add('div', this.displayDiv);
         this.roundsLeft.className = 'number';

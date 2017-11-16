@@ -22,9 +22,9 @@
     SVOGauge.title = 'SVO Gauge';
     SVOGauge.className = 'svogauge';
 
-    SVOGauage.texts.mainText = 'Select your preferred option among those' +
+    SVOGauge.texts.mainText = 'Select your preferred option among those' +
                                ' available below:';
-    SVOGauage.texts.left = 'You:<hr/>Other:';
+    SVOGauge.texts.left = 'You:<hr/>Other:';
 
     // ## Dependencies
 
