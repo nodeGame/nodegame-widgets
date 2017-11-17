@@ -145,7 +145,7 @@
             this.totalWinCurrency = 'USD';
         }
         else if ('string' === typeof options.totalWinCurrency &&
-            options.totalWinCurrency.trim() !== '') {
+                 options.totalWinCurrency.trim() !== '') {
 
             this.totalWinCurrency = options.totalWinCurrency;
         }
@@ -246,12 +246,12 @@
 
             exitCodeParaElement = document.createElement('p');
             exitCodeParaElement.innerHTML = '<strong>' +
-                this.getText('exit_code') +
-                '</strong>';
+                                            this.getText('exit_code') +
+                                            '</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
-                'form-control';
+                                             'form-control';
             exitCodeInputElement.setAttribute('disabled', 'true');
 
             exitCodeParaElement.appendChild(exitCodeInputElement);
