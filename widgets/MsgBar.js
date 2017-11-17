@@ -1,6 +1,6 @@
 /**
  * # MsgBar
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2016 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -11,19 +11,18 @@
 
     "use strict";
 
-    var Table = W.Table;
+    var JSUS = node.JSUS,
+        Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
 
     // ## Meta-data
 
-    MsgBar.version = '0.7.2';
+    MsgBar.version = '0.7.0';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
     MsgBar.className = 'msgbar';
-
-    MsgBar.texts.advButton = 'Toggle advanced options';
 
     function MsgBar() {
         this.recipient = null;
@@ -114,7 +113,7 @@
 
         // Show a button that expands the table of advanced fields.
         advButton =
-            W.addButton(this.bodyDiv, undefined, this.getText('advButton'));
+            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
@@ -162,7 +161,7 @@
 
         if (key === 'stage' || key === 'to' || key === 'data') {
             try {
-                value = J.parse(e.content.value);
+                value = JSUS.parse(e.content.value);
             }
             catch (ex) {
                 value = e.content.value;
@@ -175,7 +174,7 @@
                 value = '' + value;
             }
 
-            if ((!J.isArray(value) && 'string' !== typeof value) ||
+            if ((!JSUS.isArray(value) && 'string' !== typeof value) ||
                 ('string' === typeof value && value.trim() === '')) {
 
                 alert('Invalid "to" field');

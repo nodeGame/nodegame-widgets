@@ -11,6 +11,8 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.widgets.register('ChoiceManager', ChoiceManager);
 
     // ## Meta-data
@@ -509,7 +511,7 @@
         opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
-            form = this.forms[i];
+            form = this.forms[i]
             obj.forms[form.id] = form.getValues(opts);
             if (obj.forms[form.id].choice === null) {
                 obj.missValues.push(form.id);

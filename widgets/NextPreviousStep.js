@@ -18,12 +18,9 @@
     NextPreviousStep.className = 'nextprevious';
     NextPreviousStep.title = 'Next/Previous Step';
 
-    NextPreviousStep.version = '1.0.1';
+    NextPreviousStep.version = '1.0.0';
     NextPreviousStep.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
-
-    NextPreviousStep.texts.rew = '<<';
-    NextPreviousStep.texts.fwd = '>>';
 
     /**
      * ## NextPreviousStep constructor
@@ -64,10 +61,10 @@
         that = this;
 
         this.rew = document.createElement('button');
-        this.rew.innerHTML = this.getText('rew');
+        this.rew.innerHTML = '<<';
 
         this.fwd = document.createElement('button');
-        this.fwd.innerHTML = this.getText('fwd');
+        this.fwd.innerHTML = '>>';
 
         this.checkbox = document.createElement('input');
         this.checkbox.type = 'checkbox';

@@ -101,7 +101,7 @@
         var o, x, y;
         D3.call(this, options);
 
-        this.options = o = J.merge(D3ts.defaults, options);
+        this.options = o = JSUS.merge(D3ts.defaults, options);
         this.n = o.n;
         this.data = [0];
 

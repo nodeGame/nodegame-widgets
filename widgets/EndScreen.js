@@ -1,58 +1,70 @@
-/**
- * # EndScreen
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
- * MIT Licensed
- *
- * Creates an interface to display final earnings, exit code, etc.
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
+(function() {  // self-executing function for encapsulation
 
     // Register the widget in the widgets collection.
     node.widgets.register('EndScreen', EndScreen);
 
-    // ## Add Meta-data
-
-    EndScreen.version = '0.4.0';
+    // Add Meta-data
+    EndScreen.version = '0.1.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
-                            'email form, and exit code.';
+    'email form, and exit code.';
 
+    // Title is displayed in the header.
+    // is this necessary?
     EndScreen.title = 'End Screen';
-    EndScreen.className = 'endscreen';
+    // Classname is added to the widgets.
+    EndScreen.className = 'end-screen';
 
-    EndScreen.texts.headerMessage = 'Thank you for participating!';
-    EndScreen.texts.message = 'You have now completed this task ' +
-                               'and your data has been saved. ' +
-                               'Please go back to the Amazon Mechanical Turk ' +
-                               'web site and submit the HIT.';
-    EndScreen.texts.contact_question = 'Would you like to be contacted again' +
-                                       'for future experiments? If so, leave' +
-                                       'your email here and press submit: ';
-    EndScreen.texts.total_win = 'Your total win:';
-    EndScreen.texts.exit_code = 'Your exit code:';
+    // Dependencies are checked when the widget is created.
+    EndScreen.dependencies = { JSUS: {} };
 
-    // ## Dependencies
-
-    // Checked when the widget is created.
-    EndScreen.dependencies = {
-        JSUS: {},
-        Feedback: {},
-        EmailForm: {}
-    };
-
-    /**
-     * ## EndScreen constructor
-     *
-     * Creates a new instance of EndScreen
-     *
-     * @param {object} options Configuration options
-     *
-     * @see EndScreen.init
-     */
+    // Constructor taking a configuration parameter.
+    // The options object is always existing even if no
+    //
     function EndScreen(options) {
+        /**
+         * ### EndScreen.headerMessage
+         *
+         * The header message displayed at the top of the screen
+         *
+         * Default: 'Thank you for participating!'
+         */
+        if ('undefined' === typeof options.headerMessage) {
+            this.headerMessage = 'Thank you for participating!';
+        }
+        else if ('string' === typeof options.headerMessage) {
+            this.headerMessage = options.headerMessage;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: ' +
+                                'options.headerMessage ' +
+                                'must be string or undefined. ' +
+                                'Found: ' + options.headerMessage);
+        }
+
+        /**
+         * ### EndScreen.message
+         *
+         * The informational message displayed in the body of the screen
+         *
+         * Default: 'You have now completed this task and your data
+         *           has been saved. Please go back to the Amazon Mechanical
+         *           Turk web site and submit the HIT.'
+         */
+        if ('undefined' === typeof options.message) {
+            this.message =  'You have now completed this task ' +
+                            'and your data has been saved. ' +
+                            'Please go back to the Amazon Mechanical Turk ' +
+                            'web site and ' +
+                            'submit the HIT.';
+        }
+        else if ('string' === typeof options.message) {
+            this.message = options.message;
+        }
+        else {
+            throw new TypeError('EndScreen constructor: options.message ' +
+                                'must be string or undefined. ' +
+                                'Found: ' + options.message);
+        }
 
         /**
          * ### EndScreen.showEmailForm
@@ -135,44 +147,13 @@
         }
 
         /**
-         * ### EndScreen.totalWinCurrency
-         *
-         * The currency displayed after totalWin
-         *
-         * Default: 'USD'
-         */
-        if ('undefined' === typeof options.totalWinCurrency) {
-            this.totalWinCurrency = 'USD';
-        }
-        else if ('string' === typeof options.totalWinCurrency &&
-                 options.totalWinCurrency.trim() !== '') {
-
-            this.totalWinCurrency = options.totalWinCurrency;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.totalWinCurrency must be undefined ' +
-                                'or a non-empty string. Found: ' +
-                                options.totalWinCurrency);
-        }
-
-        /**
-         * ### EndScreen.emailForm
-         *
-         * EmailForm widget element
-         *
-         * @see EmailForm
-         */
-        this.emailForm = null;
-
-        /**
          * ### EndScreen.feedback
          *
          * Feedback widget element
          *
-         * @see Feedback
+         * Default: new Feedback(option)
          */
-        this.feedback = null;
+        this.feedback = node.widgets.get('Feedback', options);
 
         /**
          * ### EndScreen.endScreenElement
@@ -183,25 +164,14 @@
          * null initially, element added on append()
          */
         this.endScreenHTML = null;
+
+        this.init();
     }
-
-    EndScreen.prototype.init = function(options) {
-        if (this.showEmailForm && !this.emailForm) {
-            this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: this.getText('contact_question'),
-                onsubmit: { say: true, emailOnly: true, updateUI: true }
-            }, options.email));
-        }
-
-        if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback', options.feedback);
-        }
-    };
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
         this.endScreenHTML = this.makeEndScreen();
-        this.bodyDiv.appendChild(this.endScreenHTML);
+        this.bodyDiv.append(this.endScreenHTML);
     };
 
     // makes the end screen
@@ -210,25 +180,29 @@
         var headerElement, messageElement;
         var totalWinElement, totalWinParaElement, totalWinInputElement;
         var exitCodeElement, exitCodeParaElement, exitCodeInputElement;
+        var emailElement, emailFormElement, emailLabelElement,
+            emailInputElement, emailButtonElement;
+        var emailErrorString;
+
+        emailErrorString = 'Not a valid email address, ' +
+                           'please correct it and submit again.';
 
         endScreenElement = document.createElement('div');
         endScreenElement.className = 'endscreen';
 
         headerElement = document.createElement('h1');
-        headerElement.innerHTML = this.getText('headerMessage');
+        headerElement.innerHTML = this.headerMessage;
         endScreenElement.appendChild(headerElement);
 
         messageElement = document.createElement('p');
-        messageElement.innerHTML = this.getText('message');
+        messageElement.innerHTML = this.message;
         endScreenElement.appendChild(messageElement);
 
         if (this.showTotalWin) {
             totalWinElement = document.createElement('div');
 
             totalWinParaElement = document.createElement('p');
-            totalWinParaElement.innerHTML = '<strong>' +
-                this.getText('total_win') +
-                '</strong>';
+            totalWinParaElement.innerHTML = 'Your total win: ';
 
             totalWinInputElement = document.createElement('input');
             totalWinInputElement.className = 'endscreen-total form-control';
@@ -245,9 +219,7 @@
             exitCodeElement = document.createElement('div');
 
             exitCodeParaElement = document.createElement('p');
-            exitCodeParaElement.innerHTML = '<strong>' +
-                                            this.getText('exit_code') +
-                                            '</strong>';
+            exitCodeParaElement.innerHTML = 'Your exit code: ';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
@@ -262,17 +234,66 @@
         }
 
         if (this.showEmailForm) {
-            node.widgets.append(this.emailForm, endScreenElement, {
-                title: false,
-                panel: false
-            });
+            emailElement = document.createElement('div');
+            emailFormElement = document.createElement('form');
+            emailFormElement.className = 'endscreen-email-form';
+
+            emailLabelElement = document.createElement('label');
+            emailLabelElement.innerHTML = 'Would you like to be contacted ' +
+                                          'again for future experiments? ' +
+                                          'If so, leave your email here ' +
+                                          'and press submit: ';
+
+            emailInputElement = document.createElement('input');
+            emailInputElement.setAttribute('type', 'text');
+            emailInputElement.setAttribute('placeholder', 'Email');
+            emailInputElement.className = 'endscreen-email-input form-control';
+
+            emailButtonElement = document.createElement('input');
+            emailButtonElement.setAttribute('type', 'submit');
+            emailButtonElement.setAttribute('value', 'Submit email');
+            emailButtonElement.className = 'btn btn-lg btn-primary ' +
+                                           'endscreen-email-submit';
+
+            emailFormElement.appendChild(emailLabelElement);
+            emailFormElement.appendChild(emailInputElement);
+            emailFormElement.appendChild(emailButtonElement);
+
+            emailElement.appendChild(emailFormElement);
+            endScreenElement.appendChild(emailElement);
+
+            emailFormElement.addEventListener('submit', function(event) {
+                var email, indexAt, indexDot;
+
+                event.preventDefault();
+                email = emailInputElement.value;
+
+                if (email.trim().length > 5) {
+                    indexAt = email.indexOf('@');
+                    if (indexAt !== -1 &&
+                        indexAt !== 0 &&
+                        indexAt !== (email.length-1)) {
+
+                        indexDot = email.lastIndexOf('.');
+                        if (indexDot !== -1 &&
+                            indexDot !== (email.length-1) &&
+                            indexDot > (indexAt+1)) {
+
+                            node.say('email', 'SERVER', email);
+
+                            emailButtonElement.disabled = true;
+                            emailInputElement.disabled = true;
+                            emailButtonElement.value = 'Sent!';
+                        }
+                    }
+                }
+
+                emailButtonElement.value = emailErrorString;
+            }, true);
         }
 
         if (this.showFeedbackForm) {
-            node.widgets.append(this.feedback, endScreenElement, {
-                title: false,
-                panel: false
-            });
+            node.widgets.append(this.feedback, endScreenElement);
         }
 
         return endScreenElement;
@@ -287,37 +308,22 @@
         // Listeners added here are automatically removed
         // when the widget is destroyed.
         node.on.data('WIN', function(message) {
+            var totalWin;
+            var exitCode;
             var data;
-            var preWin, totalWin, exitCode;
+
             var totalHTML, exitCodeHTML;
 
             data = message.data;
+            totalWin = data.total;
             exitCode = data.exit;
 
-            totalWin = J.isNumber(data.total, 0);
-            if (totalWin === false) {
-                node.err('EndScreen error, invalid total win: ' + data.total);
+            if (JSUS.isNumber(totalWin, 0) === false) {
+                node.err('EndScreen error, invalid exit code: ' + totalWin);
                 totalWin = 'Error: invalid total win.';
             }
-            else if (data.partials) {
-                if (!J.isArray(data.partials)) {
-                    node.err('EndScreen error, invalid partials win: ' +
-                        data.partials);
-                }
-                else {
-                    preWin = data.partials.join(' + ');
 
-                    if ('undefined' !== typeof data.totalRaw) {
-                        preWin += ' = ' + data.totalRaw;
-                        if ('undefined' !== typeof data.exchangeRate) {
-                            preWin += '*' + data.exchangeRate;
-                        }
-                        totalWin = preWin + ' = ' + totalWin;
-                    }
-                }
-            }
-
-            if ('string' !== typeof exitCode) {
+            if ((typeof exitCode !== 'string')) {
                 node.err('EndScreen error, invalid exit code: ' + exitCode);
                 exitCode = 'Error: invalid exit code.';
             }
@@ -326,7 +332,7 @@
             exitCodeHTML = that.exitCodeInputElement;
 
             if (totalHTML && that.showTotalWin) {
-                totalHTML.value = totalWin + ' ' + that.totalWinCurrency;
+                totalHTML.value = totalWin;
             }
 
             if (exitCodeHTML && that.showExitCode) {

@@ -1,20 +1,27 @@
 #!/usr/bin/env node
 
-// # widgets make script
+// # JSUS make script
+
+
+/**
+ * Module dependencies.
+ */
 
 var program = require('commander'),
-    fs = require('fs'),
-    path = require('path'),
-    exec = require('child_process').exec,
-    J = require('JSUS').JSUS;
+os = require('os'),
+fs = require('fs'),
+util = require('util'),
+path = require('path'),
+exec = require('child_process').exec,
+J = require('JSUS').JSUS;
 
 var pkg = require('../package.json'),
-    version = pkg.version;
+version = pkg.version;
 
 var build = require('./build.js').build;
 
 var rootDir = path.resolve(__dirname, '..') + '/';
-var buildDir = path.resolve(rootDir, 'build') + '/';
+var buildDir = rootDir + 'build/';
 
 function list(val) {
     return val.split(',');
@@ -22,6 +29,13 @@ function list(val) {
 
 program
     .version(version);
+
+program
+    .command('clean')
+    .description('Removes all files from build folder')
+    .action(function(){
+        J.cleanDir(buildDir);
+    });
 
 program
     .command('build [options]')
@@ -63,12 +77,3 @@ program
 
 // Parsing options
 program.parse(process.argv);
-
-// Old code.
-
-// program
-//     .command('clean')
-//     .description('Removes all files from build folder')
-//     .action(function(){
-//         J.cleanDir(buildDir);
-//     });

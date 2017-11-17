@@ -72,6 +72,8 @@
          * Precision of floating point number to display
          */
         this.precision = 2;
+
+        this.init(options);
     }
 
     // ## MoneyTalks methods
@@ -133,7 +135,7 @@
      */
     MoneyTalks.prototype.update = function(amount, clear) {
         var parsedAmount;
-        parsedAmount = J.isNumber(amount);
+        parsedAmount = JSUS.isNumber(amount);
         if (parsedAmount === false) {
             node.err('MoneyTalks.update: invalid amount: ' + amount);
             return;

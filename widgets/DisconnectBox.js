@@ -21,7 +21,6 @@
 
     DisconnectBox.title = 'Disconnect';
     DisconnectBox.className = 'disconnectbox';
-    DisconnectBox.texts.leave = "Leave Experiment";
 
     // ## Dependencies
 
@@ -51,7 +50,7 @@
      * @see DisconnectBox.writeStage
      */
     DisconnectBox.prototype.append = function() {
-        this.disconnectButton = W.get('button', this.getText('leave'));
+        this.disconnectButton = W.getButton(undefined, 'Leave Experiment');
         this.disconnectButton.className = 'btn btn-lg';
         this.bodyDiv.appendChild(this.disconnectButton);
 

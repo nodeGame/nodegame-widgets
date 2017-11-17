@@ -1,15 +1,5 @@
 # nodegame-widgets change log
 
-## 4.0.0 (current)
-- `EndScreen` widget displays information such earnings, exit code, feedback and email forms.
-- `Feedback` widget (compatible as Choice-Like widget).
-- `EmailForm` widget (compatible as Choice-Like widget).
-- `#Widget.addFrame()` and `#Widget.removeFrame()` display/remove the border and margins around the bodyDiv element of the widget.
-- `frame` can be passed as an option to the `#node.widgets.append()` method and if FALSE it behaves like `#Widget.removeFrame()`.
-- `LanguageSelector` sets Window URI prefix and notify server of language selections, according to options.
-- Removed `init()` method from all widget's contructor (it is called automatically by API).
-- Removed css/ folder, now in nodegame-server.
-
 ## 3.5.7
 - Last appended widget is available under `node.widgets.lastAppended`.
 - `#Widgets.isWidget()` returns TRUE if object is widget-like (see inline comment).

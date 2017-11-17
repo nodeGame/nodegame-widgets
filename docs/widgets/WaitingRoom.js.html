@@ -28,30 +28,6 @@
         <a href="#dependencies">Dependencies</a>
       </div>
       <div class="heading h2">
-        <a href="#prototype%20properties.">Prototype Properties.</a>
-      </div>
-      <div class="heading h3">
-        <a href="#waitingroom.sounds">WaitingRoom.sounds</a>
-      </div>
-      <div class="heading h4">
-        <a href="#dispatch">dispatch</a>
-      </div>
-      <div class="heading h3">
-        <a href="#waitingroom.texts">WaitingRoom.texts</a>
-      </div>
-      <div class="heading h4">
-        <a href="#disconnect">disconnect</a>
-      </div>
-      <div class="heading h4">
-        <a href="#waitedtoolong">waitedTooLong</a>
-      </div>
-      <div class="heading h4">
-        <a href="#notenoughplayers">notEnoughPlayers</a>
-      </div>
-      <div class="heading h4">
-        <a href="#roomclosed">roomClosed</a>
-      </div>
-      <div class="heading h2">
         <a href="#waitingroom%20constructor">WaitingRoom constructor</a>
       </div>
       <div class="heading h3">
@@ -100,16 +76,10 @@
         <a href="#waitingroom.ontimeout">WaitingRoom.onTimeout</a>
       </div>
       <div class="heading h3">
+        <a href="#waitingroom.disconnectmessage">WaitingRoom.disconnectMessage</a>
+      </div>
+      <div class="heading h3">
         <a href="#waitingroom.disconnectifnotselected">WaitingRoom.disconnectIfNotSelected</a>
-      </div>
-      <div class="heading h3">
-        <a href="#waitingroom.disconnecttext">WaitingRoom.disconnectText</a>
-      </div>
-      <div class="heading h3">
-        <a href="#waitingroom.roomclosedtext">WaitingRoom.roomClosedText</a>
-      </div>
-      <div class="heading h3">
-        <a href="#waitingroom.dispatchsound">WaitingRoom.dispatchSound</a>
       </div>
       <div class="heading h2">
         <a href="#waitingroom%20methods">WaitingRoom methods</a>
@@ -118,7 +88,7 @@
         <a href="#waitingroom.init">WaitingRoom.init</a>
       </div>
       <div class="heading h3">
-        <a href="#waitingroom.starttimer">WaitingRoom.startTimer</a>
+        <a href="#waitingroom.addtimeout">WaitingRoom.addTimeout</a>
       </div>
       <div class="heading h3">
         <a href="#waitingroom.cleartimeout">WaitingRoom.clearTimeout</a>
@@ -146,13 +116,10 @@
 </div>
 
 
-<p>Copyright(c) 2017 Stefano Balietti <a href="m&#97;&#x69;&#108;&#116;&#x6F;:&#x73;&#x74;&#x65;&#64;&#x6E;&#111;&#x64;&#x65;&#x67;&#97;&#x6D;e&#46;or&#x67;">&#x73;&#x74;&#x65;&#64;&#x6E;&#111;&#x64;&#x65;&#x67;&#97;&#x6D;e&#46;or&#x67;</a>
+<p>Copyright(c) 2016 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Display the number of connected / required players to start a game</p>
-
-<p>TODO: accepts functions for <code>texts</code> variables, so that they can
-integrate current values</p>
 
 <p>www.nodegame.org</p>
   </div>
@@ -163,6 +130,7 @@ integrate current values</p>
     <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
 
     <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;WaitingRoom&#39;</span><span class="p">,</span> <span class="nx">WaitingRoom</span><span class="p">);</span>
+
 
 </pre></div>
         </td>
@@ -179,7 +147,7 @@ integrate current values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;1.1.1&#39;</span><span class="p">;</span>
+    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;1.1.0&#39;</span><span class="p">;</span>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a waiting room for clients.&#39;</span><span class="p">;</span>
 
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Waiting Room&#39;</span><span class="p">;</span>
@@ -204,162 +172,6 @@ integrate current values</p>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{},</span>
         <span class="nx">VisualTimer</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="prototype%20properties.">
-  <h2>
-    <a href="#prototype%20properties." name="prototype%20properties." class="pilcrow">&#182;</a>
-    Prototype Properties.
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.sounds">
-  <h3>
-    <a href="#waitingroom.sounds" name="waitingroom.sounds" class="pilcrow">&#182;</a>
-    WaitingRoom.sounds
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Default sounds to play on particular events</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">sounds</span> <span class="o">=</span> <span class="p">{</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="dispatch">
-  <h4>
-    <a href="#dispatch" name="dispatch" class="pilcrow">&#182;</a>
-    dispatch
-  </h4>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">dispatch</span><span class="o">:</span> <span class="s1">&#39;/sounds/doorbell.ogg&#39;</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.texts">
-  <h3>
-    <a href="#waitingroom.texts" name="waitingroom.texts" class="pilcrow">&#182;</a>
-    WaitingRoom.texts
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Default texts to display</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">texts</span> <span class="o">=</span> <span class="p">{</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="disconnect">
-  <h4>
-    <a href="#disconnect" name="disconnect" class="pilcrow">&#182;</a>
-    disconnect
-  </h4>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">disconnect</span><span class="o">:</span> <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt;You have been &#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;strong&gt;disconnected&lt;/strong&gt;. Please try again later.&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">,</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="waitedtoolong">
-  <h4>
-    <a href="#waitedtoolong" name="waitedtoolong" class="pilcrow">&#182;</a>
-    waitedTooLong
-  </h4>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">waitedTooLong</span><span class="o">:</span> <span class="s1">&#39;Waiting for too long. Please look &#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;for a HIT called &lt;strong&gt;Trouble Ticket&lt;/strong&gt; and file&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39; a new trouble ticket reporting your experience.&#39;</span><span class="p">,</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="notenoughplayers">
-  <h4>
-    <a href="#notenoughplayers" name="notenoughplayers" class="pilcrow">&#182;</a>
-    notEnoughPlayers
-  </h4>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">notEnoughPlayers</span><span class="o">:</span> <span class="s1">&#39;&lt;h3 align=&quot;center&quot; style=&quot;color: red&quot;&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;Thank you for your patience.&lt;br&gt;&#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;Unfortunately, there are not enough participants in &#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;your group to start the experiment.&lt;br&gt;&#39;</span><span class="p">,</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="roomclosed">
-  <h4>
-    <a href="#roomclosed" name="roomclosed" class="pilcrow">&#182;</a>
-    roomClosed
-  </h4>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">roomClosed</span><span class="o">:</span> <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt; The &#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;waiting room is &lt;strong&gt;CLOSED&lt;/strong&gt;. You have been &#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;disconnected. Please try again later.&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span>
     <span class="p">};</span>
 
 
@@ -744,6 +556,30 @@ integrate current values</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="waitingroom.disconnectmessage">
+  <h3>
+    <a href="#waitingroom.disconnectmessage" name="waitingroom.disconnectmessage" class="pilcrow">&#182;</a>
+    WaitingRoom.disconnectMessage
+  </h3>
+</div>
+
+  </div>
+  <div class="body"><p>String to be put into <code>this.bodyDiv.innerHTML</code> when player
+is disconnected.</p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+
 </pre></div>
         </td>
       </tr>
@@ -764,83 +600,6 @@ integrate current values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.disconnecttext">
-  <h3>
-    <a href="#waitingroom.disconnecttext" name="waitingroom.disconnecttext" class="pilcrow">&#182;</a>
-    WaitingRoom.disconnectText
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Content of <code>this.bodyDiv.innerHTML</code> when player is disconnected</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.roomclosedtext">
-  <h3>
-    <a href="#waitingroom.roomclosedtext" name="waitingroom.roomclosedtext" class="pilcrow">&#182;</a>
-    WaitingRoom.roomClosedText
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Content of <code>this.bodyDiv.innerHTML</code> when player room is closed</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">roomClosedText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.dispatchsound">
-  <h3>
-    <a href="#waitingroom.dispatchsound" name="waitingroom.dispatchsound" class="pilcrow">&#182;</a>
-    WaitingRoom.dispatchSound
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Flag that indicates that a sound should be played before dispatching</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">WaitingRoom.sounds.dispatch</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">WaitingRoom.alertPlayer
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">dispatchSound</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">}</span>
 
 
@@ -882,8 +641,7 @@ integrate current values</p>
 <li>onComplete: function executed with either failure or success
 <ul><li>onTimeout: function executed when timer runs out</li>
 <li>onSuccess: function executed when all tests succeed</li>
-<li>waitTime: max waiting time to execute all tests (in milliseconds)</li>
-<li>startDate: max waiting time to execute all tests (in milliseconds)</li></ul></li>
+<li>waitTime: max waiting time to execute all tests (in milliseconds)</li></ul></li>
 </ul>
   </div>
   <div class="details">
@@ -899,25 +657,21 @@ integrate current values</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf must be object. &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">conf</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf must be object.&#39;</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.onTimeout must &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;be function, null or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">);</span>
+                                    <span class="s1">&#39;be function, null or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">;</span>
         <span class="p">}</span>
-
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">waitTime</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">waitTime</span> <span class="o">&amp;&amp;</span>
                 <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">waitTime</span><span class="p">)</span> <span class="p">{</span>
 
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.waitTime &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number, null or undefined. &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">waitTime</span><span class="p">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.onMaxExecTime &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;must be number, null or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">waitTime</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">waitTime</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">startTimer</span><span class="p">();</span>
@@ -929,7 +683,7 @@ integrate current values</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>TODO: check conditions?</p>
         </td>
@@ -941,8 +695,7 @@ integrate current values</p>
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.poolSize &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">);</span>
+                                    <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">;</span>
         <span class="p">}</span>
@@ -950,16 +703,14 @@ integrate current values</p>
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.groupSize &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">);</span>
+                                    <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.nGames &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span><span class="p">);</span>
+                                    <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">nGames</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">nGames</span><span class="p">;</span>
         <span class="p">}</span>
@@ -967,30 +718,29 @@ integrate current values</p>
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.connected &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">);</span>
+                                    <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.&#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;disconnectText must be string or &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
+                        <span class="s1">&#39;conf.disconnectMessage must be string or undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">texts</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt;You have been &#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;strong&gt;disconnected&lt;/strong&gt;. Please try again later.&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;conf.disconnectIfNotSelected must be boolean or &#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">);</span>
+                    <span class="s1">&#39;undefined.&#39;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span><span class="p">;</span>
         <span class="p">}</span>
@@ -998,75 +748,6 @@ integrate current values</p>
             <span class="k">this</span><span class="p">.</span><span class="nx">disconnectIfNotSelected</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;conf.dispatchSound must be boolean, &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">dispatchSound</span> <span class="o">=</span> <span class="p">(</span><span class="kc">true</span> <span class="o">===</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">)</span> <span class="o">?</span>
-                <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">sounds</span><span class="p">.</span><span class="nx">dispatch</span> <span class="o">:</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">;</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
-</div>
-<p>Texts.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">notEnoughPlayersText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">notEnoughPlayersText</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;conf.notEnoughPlayersText must be &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">notEnoughPlayersText</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">notEnoughPlayersText</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">notEnoughPlayersText</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;conf.disconnectText must be string &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">waitedTooLongText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">waitedTooLongText</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;conf.waitedTooLongText must be string &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">waitedTooLongText</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">waitedTooLongText</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">waitedTooLongText</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">roomClosedText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">roomClosedText</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;conf.roomClosedText must be string &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">conf</span><span class="p">.</span><span class="nx">roomClosedText</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">roomClosedText</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">roomClosedText</span><span class="p">;</span>
-        <span class="p">}</span>
     <span class="p">};</span>
 
 
@@ -1076,10 +757,10 @@ integrate current values</p>
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="waitingroom.starttimer">
+<div class="pilwrap" id="waitingroom.addtimeout">
   <h3>
-    <a href="#waitingroom.starttimer" name="waitingroom.starttimer" class="pilcrow">&#182;</a>
-    WaitingRoom.startTimer
+    <a href="#waitingroom.addtimeout" name="waitingroom.addtimeout" class="pilcrow">&#182;</a>
+    WaitingRoom.addTimeout
   </h3>
 </div>
 
@@ -1103,7 +784,10 @@ integrate current values</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">timer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;VisualTimer&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span><span class="p">,</span> <span class="p">{</span>
             <span class="nx">milliseconds</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">waitTime</span><span class="p">,</span>
             <span class="nx">timeup</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">waitedTooLongText</span><span class="p">;</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span>
+                    <span class="s1">&#39;Waiting for too long. Please look for a HIT called &#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;&lt;strong&gt;ETH Descil Trouble Ticket&lt;/strong&gt; and file&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39; a new trouble ticket reporting your experience.&#39;</span><span class="p">;</span>
             <span class="p">},</span>
             <span class="nx">update</span><span class="o">:</span> <span class="mi">1000</span>
         <span class="p">});</span>
@@ -1114,7 +798,7 @@ integrate current values</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>Style up: delete title and border;</p>
         </td>
@@ -1128,7 +812,7 @@ integrate current values</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>Append to bodyDiv.</p>
         </td>
@@ -1257,18 +941,6 @@ integrate current values</p>
             <span class="k">this</span><span class="p">.</span><span class="nx">playerCount</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;span style=&quot;color:red&quot;&gt;&#39;</span> <span class="o">+</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span> <span class="o">+</span> <span class="s1">&#39; / &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">playerCountTooHigh</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
-</div>
-<p>TODO: make it parametric like other strings.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
             <span class="k">this</span><span class="p">.</span><span class="nx">playerCountTooHigh</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;There are more players in &#39;</span> <span class="o">+</span>
                 <span class="s1">&#39;this waiting room than there are playslots in the game. &#39;</span> <span class="o">+</span>
                 <span class="s1">&#39;Only &#39;</span> <span class="o">+</span> <span class="nx">numberOfGameSlots</span> <span class="o">+</span> <span class="s1">&#39; players will be selected to &#39;</span> <span class="o">+</span>
@@ -1333,7 +1005,7 @@ integrate current values</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Configure all requirements.</p>
         </td>
@@ -1350,7 +1022,7 @@ integrate current values</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>NodeGame Listeners.</p>
         </td>
@@ -1377,7 +1049,11 @@ integrate current values</p>
 
             <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">action</span> <span class="o">===</span> <span class="s1">&#39;NotEnoughPlayers&#39;</span><span class="p">)</span> <span class="p">{</span>
 
-                <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">notEnoughPlayersText</span><span class="p">;</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span>
+                    <span class="s1">&#39;&lt;h3 align=&quot;center&quot; style=&quot;color: red&quot;&gt;&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;Thank you for your patience.&lt;br&gt;&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;Unfortunately, there are not enough participants in &#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;your group to start the experiment.&lt;br&gt;&#39;</span><span class="p">;</span>
 
                 <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
 
@@ -1386,18 +1062,6 @@ integrate current values</p>
 
             <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">action</span> <span class="o">===</span> <span class="s1">&#39;NotSelected&#39;</span><span class="p">)</span> <span class="p">{</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
-</div>
-<p>TODO: make all strings parameteric.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
                 <span class="nx">notSelected</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3 align=&quot;center&quot;&gt;&#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt;Unfortunately, you were &#39;</span> <span class="o">+</span>
                     <span class="s1">&#39;&lt;strong&gt;not selected&lt;/strong&gt; to join the game this time&#39;</span><span class="p">;</span>
@@ -1437,7 +1101,7 @@ integrate current values</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Start waiting time timer.</p>
         </td>
@@ -1451,7 +1115,7 @@ integrate current values</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>Avoid running multiple timers.
 if (timeCheck) clearInterval(timeCheck);</p>
@@ -1472,7 +1136,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>Terminate countdown.</p>
         </td>
@@ -1486,12 +1150,12 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Write about disconnection in page.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">disconnectText</span><span class="p">;</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">disconnectMessage</span><span class="p">;</span>
 
 
 </pre></div>
@@ -1500,7 +1164,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 
 <div class="highlight"><pre><code>        <span class="c1">// Enough to not display it in case of page refresh.</span>
@@ -1515,7 +1179,10 @@ if (timeCheck) clearInterval(timeCheck);</p>
         <span class="p">});</span>
 
         <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;ROOM_CLOSED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">roomClosedText</span><span class="p">);</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt; The waiting &#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;room is &lt;strong&gt;CLOSED&lt;/strong&gt;. You have been disconnected.&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39; Please try again later.&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">);</span>
         <span class="p">});</span>
     <span class="p">};</span>
 
@@ -1533,7 +1200,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
     <span class="p">};</span>
 
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">disconnect</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">disconnectText</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">disconnectMessage</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">;</span>
         <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">stopTimer</span><span class="p">();</span>
     <span class="p">};</span>
@@ -1541,6 +1208,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
     <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">alertPlayer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">clearBlink</span><span class="p">,</span> <span class="nx">onFrame</span><span class="p">;</span>
 
+        <span class="nx">JSUS</span><span class="p">.</span><span class="nx">playSound</span><span class="p">(</span><span class="s1">&#39;/sounds/doorbell.ogg&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -1548,21 +1216,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
-</div>
-<p>Play sound, if requested.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">)</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">playSound</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dispatchSound</span><span class="p">);</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>If document.hasFocus() returns TRUE, then just one repeat is enough.</p>
         </td>
@@ -1577,7 +1231,7 @@ if (timeCheck) clearInterval(timeCheck);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>Otherwise we repeat blinking until an event that shows that the
 user is active on the page happens, e.g. focus and click. However,

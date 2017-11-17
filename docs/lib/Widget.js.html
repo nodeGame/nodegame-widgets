@@ -81,12 +81,6 @@
       <div class="heading h3">
         <a href="#widget.setcontext">Widget.setContext</a>
       </div>
-      <div class="heading h3">
-        <a href="#widget.addframe">Widget.addFrame</a>
-      </div>
-      <div class="heading h3">
-        <a href="#widget.removeframe">Widget.removeFrame</a>
-      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -104,7 +98,7 @@
 </div>
 
 
-<p>Copyright(c) 2017 Stefano Balietti
+<p>Copyright(c) 2016 Stefano Balietti
 MIT Licensed</p>
   </div>
   <div class="body"><p>Prototype of a widget class</p>
@@ -873,9 +867,9 @@ default cleanup operations.</p>
                 <span class="k">this</span><span class="p">.</span><span class="nx">headingDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">funcName</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">constructor</span><span class="p">)</span> <span class="o">+</span>
-                                    <span class="s1">&#39;.setTitle: title must be string, &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;HTML element or falsy. Found: &#39;</span> <span class="o">+</span> <span class="nx">title</span><span class="p">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">funcName</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.setTitle: &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;title must be string, HTML element or &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;falsy. Found: &#39;</span> <span class="o">+</span> <span class="nx">title</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">};</span>
@@ -991,9 +985,9 @@ default cleanup operations.</p>
                 <span class="k">this</span><span class="p">.</span><span class="nx">footerDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">footer</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">funcName</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">constructor</span><span class="p">)</span> <span class="o">+</span>
-                                    <span class="s1">&#39;.setFooter: footer must be string, &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;HTML element or falsy. Found: &#39;</span> <span class="o">+</span> <span class="nx">title</span><span class="p">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">funcName</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.setFooter: &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;footer must be string, HTML element or &#39;</span> <span class="o">+</span>
+                                    <span class="s1">&#39;falsy. Found: &#39;</span> <span class="o">+</span> <span class="nx">title</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">};</span>
@@ -1030,108 +1024,13 @@ default cleanup operations.</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setContext</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">funcName</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">constructor</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.setContext: &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;context must be string. Found: &#39;</span> <span class="o">+</span> <span class="nx">context</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">funcName</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.setContext: &#39;</span> <span class="o">+</span>
+                                <span class="s1">&#39;footer must be string. Found: &#39;</span> <span class="o">+</span> <span class="nx">context</span><span class="p">);</span>
 
         <span class="p">}</span>
         <span class="nx">W</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="s1">&#39;panel-[a-z]*&#39;</span><span class="p">);</span>
         <span class="nx">W</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="s1">&#39;panel-&#39;</span> <span class="o">+</span> <span class="nx">context</span><span class="p">);</span>
     <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="widget.addframe">
-  <h3>
-    <a href="#widget.addframe" name="widget.addframe" class="pilcrow">&#182;</a>
-    Widget.addFrame
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Adds a border and margins around the bodyDiv element</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">context</span>
-      <span class="dox_type">string</span>
-      <span>The type of bootstrap context.
-  Default: 'default'</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widget.panelDiv</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widget.bodyDiv
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addFrame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-             <span class="nx">context</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span><span class="p">;</span>
-         <span class="p">}</span>
-         <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">context</span> <span class="o">||</span> <span class="nx">context</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
-             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">funcName</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">constructor</span><span class="p">)</span> <span class="o">+</span>
-                                 <span class="s1">&#39;.addFrame: context must be a non-empty &#39;</span> <span class="o">+</span>
-                                 <span class="s1">&#39;string or undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">context</span><span class="p">);</span>
-         <span class="p">}</span>
-         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">)</span> <span class="p">{</span>
-             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;panel-&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-                 <span class="nx">W</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="s1">&#39;panel-&#39;</span> <span class="o">+</span> <span class="nx">context</span><span class="p">);</span>
-             <span class="p">}</span>
-         <span class="p">}</span>
-         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">)</span> <span class="p">{</span>
-             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;panel-body&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-                 <span class="nx">W</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="s1">&#39;panel-body&#39;</span><span class="p">);</span>
-             <span class="p">}</span>
-         <span class="p">}</span>
-     <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="widget.removeframe">
-  <h3>
-    <a href="#widget.removeframe" name="widget.removeframe" class="pilcrow">&#182;</a>
-    Widget.removeFrame
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Removes the border and the margins around the bodyDiv element</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widget.panelDiv</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widget.bodyDiv
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-     <span class="nx">Widget</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">removeFrame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">)</span> <span class="nx">W</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="s1">&#39;panel-[a-z]*&#39;</span><span class="p">);</span>
-         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">)</span> <span class="nx">W</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="s1">&#39;panel-body&#39;</span><span class="p">);</span>
-     <span class="p">};</span>
 
 <span class="p">})(</span>
 
@@ -1141,7 +1040,7 @@ default cleanup operations.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>Widgets works only in the browser environment.</p>
         </td>

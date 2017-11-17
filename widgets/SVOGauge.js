@@ -15,16 +15,12 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.5.1';
+    SVOGauge.version = '0.5.0';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
     SVOGauge.title = 'SVO Gauge';
     SVOGauge.className = 'svogauge';
-
-    SVOGauge.texts.mainText = 'Select your preferred option among those' +
-                               ' available below:';
-    SVOGauge.texts.left = 'You:<hr/>Other:';
 
     // ## Dependencies
 
@@ -209,9 +205,18 @@
 
     // ### SVO_Slider
     function SVO_Slider(options) {
-        var items, sliders;
+        var items, sliders, mainText;
         var gauge, i, len;
-        var renderer;
+        var left, renderer;
+
+        if ('undefined' === typeof options.mainText) {
+            mainText =
+                'Select your preferred option among those available below:';
+        }
+        else if ('string' === typeof options.mainText) {
+            mainText = options.mainText;
+        }
+        // Other types ignored.
 
         sliders = options.sliders || [
             [
@@ -289,6 +294,13 @@
             td.innerHTML = choice[0] + '<hr/>' + choice[1];
         };
 
+        if (options.left) {
+            left = options.left;
+        }
+        else {
+            left = 'You:<hr/>Other:';
+        }
+
         len = sliders.length;
         items = new Array(len);
 
@@ -296,7 +308,7 @@
         for ( ; ++i < len ; ) {
             items[i] = {
                 id: (i+1),
-                left: this.getText('left'),
+                left: left,
                 choices: sliders[i]
             };
         }
@@ -304,7 +316,7 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'svo_slider',
             items: items,
-            mainText: this.getText('mainText'),
+            mainText: mainText,
             title: false,
             renderer: renderer,
             requiredChoice: true

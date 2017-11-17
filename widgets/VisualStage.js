@@ -1,6 +1,6 @@
 /**
  * # VisualStage
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Shows current, previous and next stage.
@@ -11,13 +11,13 @@
 
     "use strict";
 
-    var Table = W.Table;
+    var Table = node.window.Table;
 
     node.widgets.register('VisualStage', VisualStage);
 
     // ## Meta-data
 
-    VisualStage.version = '0.2.3';
+    VisualStage.version = '0.2.2';
     VisualStage.description =
         'Visually display current, previous and next stage of the game.';
 

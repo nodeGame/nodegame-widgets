@@ -1,11 +1,9 @@
 /**
  * # GameTable
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that renders in each cell data captured by fired events
- *
- * TODO: needs refactoring
  *
  * www.nodegame.org
  */
@@ -18,30 +16,42 @@
 
     node.widgets.register('GameTable', GameTable);
 
-    // ## Meta-data.
-    GameTable.className = 'gametable';
-    GameTable.version = '0.3.1';
+    // ## Defaults
 
-    // ## Dependencies,
+    GameTable.defaults = {};
+    GameTable.defaults.id = 'gametable';
+    GameTable.defaults.fieldset = {
+        legend: 'Game Table',
+        id: 'gametable_fieldset'
+    };
+
+    // ## Meta-data
+
+    GameTable.version = '0.3';
+
+    // ## Dependencies
 
     GameTable.dependencies = {
         JSUS: {}
     };
 
-    function GameTable(options) {
+    function GameTable (options) {
         this.options = options;
+        this.id = options.id;
         this.name = options.name || GameTable.name;
 
         this.root = null;
         this.gtbl = null;
         this.plist = null;
+
+        this.init(this.options);
     }
 
     GameTable.prototype.init = function(options) {
 
         if (!this.plist) this.plist = new PlayerList();
 
-        this.gtbl = new W.Table({
+        this.gtbl = new node.window.Table({
             auto_update: true,
             id: options.id || this.id,
             render: options.render
@@ -80,7 +90,7 @@
         node.on.plist(function(msg) {
             if (!msg.data.length) return;
 
-            //var diff = J.arrayDiff(msg.data,that.plist.db);
+            //var diff = JSUS.arrayDiff(msg.data,that.plist.db);
             var plist = new PlayerList({}, msg.data);
             var diff = plist.diff(that.plist);
             if (diff) {
@@ -112,8 +122,8 @@
     GameTable.prototype.addLeft = function(state, player) {
         if (!state) return;
         state = new GameStage(state);
-        if (!J.inArray({content:state.toString(), type: 'left'},
-                       this.gtbl.left)) {
+        if (!JSUS.in_array({content:state.toString(), type: 'left'},
+                    this.gtbl.left)) {
 
             this.gtbl.add2Left(state.toString());
         }

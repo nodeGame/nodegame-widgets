@@ -1,29 +1,27 @@
 /**
  * # LanguageSelector
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Manages and displays information about languages available and selected
  *
- * @TODO: bubble event in case of buttons (now there are many listeners).
- *
  * www.nodegame.org
  */
-(function(node) {
+ (function(node) {
 
     "use strict";
+
+    var J = node.JSUS;
 
     node.widgets.register('LanguageSelector', LanguageSelector);
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.6.2';
+    LanguageSelector.version = '0.3.1';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
     LanguageSelector.className = 'languageselector';
-
-    LanguageSelector.texts.loading = 'Loading language information...';
 
     // ## Dependencies
 
@@ -124,46 +122,8 @@
          * ## LanguageSelector.usingButtons
          *
          * Flag indicating if the interface should have buttons
-         *
-         * Default: TRUE.
          */
-        this.usingButtons = true;
-
-        /**
-         * ## LanguageSelector.updatePlayer
-         *
-         * Specifies when updating the player
-         *
-         * Available options:
-         *
-         *   - false: alias for 'never',
-         *   - 'never': never notifies,
-         *   - 'onselect': each time a selection is made,
-         *   - 'ondone': when current step is done.
-         *
-         * Default: 'ondone'
-         */
-        this.updatePlayer = 'ondone';
-
-        /**
-         * ## LanguageSelector.setUriPrefix
-         *
-         * If TRUE, the Window URI prefix is updated when the player is updated
-         *
-         * Default: TRUE.
-         *
-         * @see GameWindow.setUriPrefix
-         */
-        this.setUriPrefix = true;
-
-        /**
-         * ## LanguageSelector.notifyServer
-         *
-         * If TRUE, a message is sent to the server when the player is updated
-         *
-         * Default: TRUE.
-         */
-        this.notifyServer = true;
+        this.usingButtons = null;
 
         /**
          * ### LanguageSelector.onLangCallback
@@ -195,17 +155,18 @@
                 // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
-                        that.optionsLabel[language] = W.get('label', {
-                            id: language + 'Label',
-                            'for': language + 'RadioButton'
-                        });
+                        that.optionsLabel[language] = W.getElement('label',
+                            language + 'Label', {
+                                'for': language + 'RadioButton'
+                            });
 
-                        that.optionsDisplay[language] = W.get('input', {
-                            id: language + 'RadioButton',
-                            type: 'radio',
-                            name: 'languageButton',
-                            value: msg.data[language].name
-                        });
+                        that.optionsDisplay[language] = W.getElement('input',
+                            language + 'RadioButton', {
+                                type: 'radio',
+                                name: 'languageButton',
+                                value: msg.data[language].name
+                            }
+                        );
 
                         that.optionsDisplay[language].onclick =
                             makeSetLanguageOnClick(language);
@@ -215,24 +176,23 @@
                         that.optionsLabel[language].appendChild(
                             document.createTextNode(
                                 msg.data[language].nativeName));
-                        W.add('br', that.displayForm);
+                        node.window.addElement('br', that.displayForm);
                         that.optionsLabel[language].className =
                             'unselectedButtonLabel';
                         that.displayForm.appendChild(
-                            that.optionsLabel[language]);
+                                that.optionsLabel[language]);
                     }
                 }
             }
             else {
 
-                that.displaySelection = W.get('select', 'selectLanguage');
+                that.displaySelection = node.window.getElement('select',
+                    'selectLanguage');
                 for (language in msg.data) {
                     that.optionsLabel[language] =
                         document.createTextNode(msg.data[language].nativeName);
-                    that.optionsDisplay[language] = W.get('option', {
-                        id: language + 'Option',
-                        value: language
-                    });
+                    that.optionsDisplay[language] = node.window.getElement(
+                        'option', language + 'Option', { value: language });
                     that.optionsDisplay[language].appendChild(
                         that.optionsLabel[language]);
                     that.displaySelection.appendChild(
@@ -241,17 +201,15 @@
                 }
                 that.displayForm.appendChild(that.displaySelection);
                 that.displayForm.onchange = function() {
-                    that.setLanguage(that.displaySelection.value,
-                                     that.updatePlayer === 'onselect');
+                    that.setLanguage(that.displaySelection.value);
                 };
             }
 
             that.loadingDiv.style.display = 'none';
             that.languagesLoaded = true;
 
-            // Initialize with current value inside player object,
-            // or default to English. Does not update the player object yet.
-            that.setLanguage(node.player.lang.shortName || 'en', false);
+            // Initialize to English.
+            that.setLanguage('en');
 
             // Extension point.
             if (that.onLangCallbackExtension) {
@@ -259,9 +217,9 @@
                 that.onLangCallbackExtension = null;
             }
 
-            function makeSetLanguageOnClick(langStr) {
+            function makeSetLanguageOnClick(langName) {
                 return function() {
-                    that.setLanguage(langStr, that.updatePlayer === 'onselect');
+                    that.setLanguage(langName);
                 };
             }
         };
@@ -274,6 +232,8 @@
          * @see LanguageSelector.onLangCallback
          */
         this.onLangCallbackExtension = null;
+
+        this.init(this.options);
     }
 
     // ## LanguageSelector methods
@@ -291,48 +251,16 @@
         J.mixout(options, this.options);
         this.options = options;
 
-        if ('undefined' !== typeof this.options.usingButtons) {
-            this.usingButtons = !!this.options.usingButtons;
-        }
-
-        if ('undefined' !== typeof this.options.notifyServer) {
-            if (false === this.options.notifyServer) {
-                this.options.notifyServer = 'never';
-            }
-            else if ('string' === typeof this.options.notifyServer) {
-                if ('never' === this.options.notifyServer ||
-                    'onselect' === this.options.notifyServer ||
-                    'ondone' === this.options.notifyServer) {
-
-                    this.notifyServer = this.options.notifyServer;
-                }
-                else {
-                    throw new Error('LanguageSelector.init: invalid value ' +
-                                    'for notifyServer: "' +
-                                    this.options.notifyServer + '". Valid ' +
-                                    'values: "never","onselect", "ondone".');
-                }
-            }
-            else {
-                throw new Error('LanguageSelector.init: options.notifyServer ' +
-                                'must be ' +
-                                this.options.notifyServer);
-            }
-        }
-
-        if ('undefined' !== typeof this.options.setUriPrefix) {
-            this.setUriPrefix = !!this.options.setUriPrefix;
-        }
+        this.usingButtons = this.options.usingButtons || true;
 
         // Register listener.
         // TODO: should it be moved into the listeners method?
-        // TODO: calling init twice will add it twice.
         node.on.lang(this.onLangCallback);
 
         // Display initialization.
-        this.displayForm = W.get('form', 'radioButtonForm');
-        this.loadingDiv = W.add('div', this.displayForm);
-        this.loadingDiv.innerHTML = this.getText('loading');
+        this.displayForm = node.window.getElement('form', 'radioButtonForm');
+        this.loadingDiv = node.window.addDiv(this.displayForm);
+        this.loadingDiv.innerHTML = 'Loading language information...';
 
         this.loadLanguages();
     };
@@ -344,16 +272,13 @@
     /**
      * ### LanguageSelector.setLanguage
      *
-     * Sets language within the widget and globally and updates the display
+     * Sets language and updates view
      *
      * @param {string} langName shortName of language to be set
-     * @param {boolean} updatePlayer If FALSE, the language is set only
-     *   inside the widget, and no changes are made to the player object.
-     *   Default: TRUE
      *
      * @see NodeGameClient.setLanguage
      */
-    LanguageSelector.prototype.setLanguage = function(langName, updatePlayer) {
+    LanguageSelector.prototype.setLanguage = function(langName) {
 
         if (this.usingButtons) {
 
@@ -372,6 +297,7 @@
         this.currentLanguage = langName;
 
         if (this.usingButtons) {
+
             // Check language button and change className of label.
             this.optionsDisplay[this.currentLanguage].checked = 'checked';
             this.optionsLabel[this.currentLanguage].className =
@@ -382,10 +308,7 @@
         }
 
         // Update node.player.
-        if (updatePlayer !== false) {
-            node.setLanguage(this.availableLanguages[this.currentLanguage],
-                             this.setUriPrefix, this.notifyServer);
-        }
+        node.setLanguage(this.availableLanguages[this.currentLanguage]);
     };
 
     /**
@@ -416,24 +339,15 @@
      * @see LanguageSelector.updateAvalaibleLanguages
      */
     LanguageSelector.prototype.loadLanguages = function(options) {
-        if (!this.languagesLoaded) this.updateAvalaibleLanguages(options);
-        else if (options && options.callback) options.callback();
-    };
-
-    /**
-     * ### LanguageSelector.listeners
-     *
-     * Implements Widget.listeners
-     */
-    LanguageSelector.prototype.listeners = function() {
-        var that;
-        that = this;
-        node.events.step.on('REALLY_DONE', function() {
-            if (that.updatePlayer === 'ondone') {
-                node.setLanguage(that.availableLanguages[that.currentLanguage],
-                                 that.setUriPrefix, that.notifyServer);
+        if(!this.languagesLoaded) {
+            this.updateAvalaibleLanguages(options);
+        }
+        else {
+            if (options && options.callback) {
+                options.callback();
             }
-        });
+
+        }
     };
 
 })(node);

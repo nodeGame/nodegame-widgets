@@ -1,6 +1,6 @@
 /**
  * # NDDBBrowser
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
  *
  * Creates an interface to interact with an NDDB database
@@ -24,7 +24,7 @@
 
     // ## Meta-data
 
-    NDDBBrowser.version = '0.2.1';
+    NDDBBrowser.version = '0.2.0';
     NDDBBrowser.description =
         'Provides a very simple interface to control a NDDB istance.';
 
@@ -60,15 +60,15 @@
 
         function addButtons() {
             var id = this.id;
-            W.addEventButton(id + '_GO_TO_FIRST', '<<',
+            node.window.addEventButton(id + '_GO_TO_FIRST', '<<',
                 this.commandsDiv, 'go_to_first');
-            W.addEventButton(id + '_GO_TO_PREVIOUS', '<',
+            node.window.addEventButton(id + '_GO_TO_PREVIOUS', '<',
                 this.commandsDiv, 'go_to_previous');
-            W.addEventButton(id + '_GO_TO_NEXT', '>',
+            node.window.addEventButton(id + '_GO_TO_NEXT', '>',
                 this.commandsDiv, 'go_to_next');
-            W.addEventButton(id + '_GO_TO_LAST', '>>',
+            node.window.addEventButton(id + '_GO_TO_LAST', '>>',
                 this.commandsDiv, 'go_to_last');
-            W.addBreak(this.commandsDiv);
+            node.window.addBreak(this.commandsDiv);
         }
         function addInfoBar() {
             var span = this.commandsDiv.appendChild(
