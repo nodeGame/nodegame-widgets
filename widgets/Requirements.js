@@ -18,12 +18,18 @@
 
     // ## Meta-data
 
-    Requirements.version = '0.7.0';
+    Requirements.version = '0.7.1';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
     Requirements.title = 'Requirements';
     Requirements.className = 'requirements';
+
+    Requirements.texts.errStr = 'One or more function is taking too long. ' +
+                                'This is likely to be due to a compatibility' +
+                                ' issue with your browser or to bad network' +
+                                ' connectivity.';
+    Requirements.texts.testPassed = 'All tests passed.';
 
     // ## Dependencies
 
@@ -166,7 +172,7 @@
          * Callback to be executed at the end of all tests
          */
         this.onFailure = null;
-        
+
         /**
          * ### Requirements.callbacksExecuted
          *
@@ -366,13 +372,13 @@
             }
         }
 
-        if (this.withTimeout) this.addTimeout();        
+        if (this.withTimeout) this.addTimeout();
 
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
 
-        if (this.isCheckingFinished()) this.checkingFinished();        
+        if (this.isCheckingFinished()) this.checkingFinished();
 
         return errors;
     };
@@ -390,13 +396,10 @@
      */
     Requirements.prototype.addTimeout = function() {
         var that = this;
-        var errStr = 'One or more function is taking too long. This is ' +
-            'likely to be due to a compatibility issue with your browser ' +
-            'or to bad network connectivity.';
 
         this.timeoutId = setTimeout(function() {
             if (that.stillChecking > 0) {
-                that.displayResults([errStr]);
+                that.displayResults([this.getText('errStr')]);
             }
             that.timeoutId = null;
             that.hasFailed = true;
@@ -480,10 +483,10 @@
         // Sometimes, if all requirements are almost synchronous, it
         // can happen that this function is called twice (from resultCb
         // and at the end of all requirements checkings.
-        if (this.callbacksExecuted && !force) return;        
+        if (this.callbacksExecuted && !force) return;
         this.callbacksExecuted = true;
-        
-        if (this.timeoutId) clearTimeout(this.timeoutId);        
+
+        if (this.timeoutId) clearTimeout(this.timeoutId);
 
         this.dots.stop();
 
@@ -500,7 +503,7 @@
         }
 
         if (this.onComplete) this.onComplete();
-        
+
         if (this.hasFailed) {
             if (this.onFailure) this.onFailure();
         }
@@ -546,7 +549,7 @@
             // All tests passed.
             this.list.addDT({
                 success: true,
-                text:'All tests passed.'
+                text: this.getText('testPassed')
             });
         }
         else {
@@ -638,7 +641,7 @@
                 data: data
             });
 
-            if (that.isCheckingFinished()) that.checkingFinished();            
+            if (that.isCheckingFinished()) that.checkingFinished();
         };
 
         req = that.requirements[i];

@@ -15,14 +15,13 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.1';
+    DoneButton.version = '0.2.2';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
     DoneButton.title = 'Done Button';
     DoneButton.className = 'donebutton';
-
-    DoneButton.text = 'Done';
+    DoneButton.texts.done = 'Done';
 
     // ## Dependencies
 
@@ -128,9 +127,18 @@
         }
         this.button.className = tmp;
 
-
+        this._setText = this.setText;
+        this.setText = function(text, value) {
+            this._setText(text, value);
+            this.button.value = value;
+        };
         // Button text.
-        this.setText(options.text);
+        if ('undefined' !== typeof options.text) {
+            this.setText('done', options.text);
+        }
+        else {
+            this.button.value = this.getText('done');
+        }
     };
 
     DoneButton.prototype.append = function() {

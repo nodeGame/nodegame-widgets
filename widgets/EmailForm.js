@@ -21,6 +21,10 @@
     EmailForm.title = 'Email';
     EmailForm.className = 'emailform';
 
+    EmailForm.texts.label = 'Enter your email:';
+    EmailForm.texts.errString = 'Not a valid email address, ' +
+                                'please correct it and submit it again.';
+
     // ## Dependencies
 
     EmailForm.dependencies = { JSUS: {} };
@@ -33,43 +37,6 @@
      * @param {object} options configuration option
      */
     function EmailForm(options) {
-
-        /**
-         * ### EmailForm.label
-         *
-         * The label for the email element
-         */
-        if ('undefined' === typeof options.label) {
-            this.label = 'Enter your email:';
-        }
-        else if ('string' === typeof options.label) {
-            this.label = options.label;
-        }
-        else {
-            throw new TypeError('EmailForm constructor: options.label ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.label);
-        }
-
-        /**
-         * ### EmailForm.errString
-         *
-         * The error message in case of invalid email format
-         *
-         * Notice! It is displayed only if the submit button is displayed.
-         */
-        if ('undefined' === typeof options.errString) {
-            this.errString = 'Not a valid email address, ' +
-                'please correct it and submit again.';
-        }
-        else if ('string' === typeof options.errString) {
-            this.errString = options.errString;
-        }
-        else {
-            throw new TypeError('EmailForm constructor: options.errString ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.errString);
-        }
 
         /**
          * ### EmailForm.onsubmit
@@ -149,7 +116,7 @@
         formElement.className = 'emailform-form';
 
         labelElement = document.createElement('label');
-        labelElement.innerHTML = this.label;
+        labelElement.innerHTML = this.getText('label');
 
         inputElement = document.createElement('input');
         inputElement.setAttribute('type', 'text');
@@ -217,7 +184,7 @@
         }
         else {
             if (updateUI && this.buttonElement) {
-                this.buttonElement.value = this.errString;
+                this.buttonElement.value = this.getText('errString');
             }
             if ('undefined' === typeof markAttempt || markAttempt) {
                 this.attempts.push(email);
@@ -288,8 +255,9 @@
 
         email = getEmail.call(this);
 
-        if (opts.verify !== false) res = this.verifyInput(opts.markAttempt,
-                                                          opts.updateUI);
+        if (opts.verify !== false) {
+            res = this.verifyInput(opts.markAttempt, opts.updateUI);
+        }
 
         // Only value.
         if (!opts.emailOnly) {

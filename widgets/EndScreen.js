@@ -18,10 +18,21 @@
 
     EndScreen.version = '0.4.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
-        'email form, and exit code.';
+                            'email form, and exit code.';
 
     EndScreen.title = 'End Screen';
     EndScreen.className = 'endscreen';
+
+    EndScreen.texts.headerMessage = 'Thank you for participating!';
+    EndScreen.texts.message = 'You have now completed this task ' +
+                               'and your data has been saved. ' +
+                               'Please go back to the Amazon Mechanical Turk ' +
+                               'web site and submit the HIT.';
+    EndScreen.texts.contact_question = 'Would you like to be contacted again' +
+                                       'for future experiments? If so, leave' +
+                                       'your email here and press submit: ';
+    EndScreen.texts.total_win = 'Your total win:';
+    EndScreen.texts.exit_code = 'Your exit code:';
 
     // ## Dependencies
 
@@ -42,51 +53,6 @@
      * @see EndScreen.init
      */
     function EndScreen(options) {
-
-        /**
-         * ### EndScreen.headerMessage
-         *
-         * The header message displayed at the top of the screen
-         *
-         * Default: 'Thank you for participating!'
-         */
-        if ('undefined' === typeof options.headerMessage) {
-            this.headerMessage = 'Thank you for participating!';
-        }
-        else if ('string' === typeof options.headerMessage) {
-            this.headerMessage = options.headerMessage;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.headerMessage ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.headerMessage);
-        }
-
-        /**
-         * ### EndScreen.message
-         *
-         * The informational message displayed in the body of the screen
-         *
-         * Default: 'You have now completed this task and your data
-         *           has been saved. Please go back to the Amazon Mechanical
-         *           Turk web site and submit the HIT.'
-         */
-        if ('undefined' === typeof options.message) {
-            this.message =  'You have now completed this task ' +
-                            'and your data has been saved. ' +
-                            'Please go back to the Amazon Mechanical Turk ' +
-                            'web site and ' +
-                            'submit the HIT.';
-        }
-        else if ('string' === typeof options.message) {
-            this.message = options.message;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: options.message ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.message);
-        }
 
         /**
          * ### EndScreen.showEmailForm
@@ -217,14 +183,7 @@
          *
          * @see EmailForm
          */
-        if (this.showEmailForm) {
-            this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: 'Would you like to be contacted again for future ' +
-                    'experiments? If so, leave your email here and ' +
-                    'press submit: ',
-                onsubmit: { say: true, emailOnly: true, updateUI: true }
-            }, options.email));
-        }
+        this.emailForm = null;
 
         /**
          * ### EndScreen.feedback
@@ -233,9 +192,7 @@
          *
          * @see Feedback
          */
-        if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback', options.feedback);
-        }
+        this.feedback = null;
 
         /**
          * ### EndScreen.endScreenElement
@@ -247,6 +204,19 @@
          */
         this.endScreenHTML = null;
     }
+
+    EndScreen.prototype.init = function(options) {
+        if (this.showEmailForm && !this.emailForm) {
+            this.emailForm = node.widgets.get('EmailForm', J.mixin({
+                label: this.getText('contact_question'),
+                onsubmit: { say: true, emailOnly: true, updateUI: true }
+            }, options.email));
+        }
+
+        if (this.showFeedbackForm) {
+            this.feedback = node.widgets.get('Feedback', options.feedback);
+        }
+    };
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
@@ -269,18 +239,20 @@
         endScreenElement.className = 'endscreen';
 
         headerElement = document.createElement('h1');
-        headerElement.innerHTML = this.headerMessage;
+        headerElement.innerHTML = this.getText('headerMessage');
         endScreenElement.appendChild(headerElement);
 
         messageElement = document.createElement('p');
-        messageElement.innerHTML = this.message;
+        messageElement.innerHTML = this.getText('message');
         endScreenElement.appendChild(messageElement);
 
         if (this.showTotalWin) {
             totalWinElement = document.createElement('div');
 
             totalWinParaElement = document.createElement('p');
-            totalWinParaElement.innerHTML = '<strong>Your total win:</strong>';
+            totalWinParaElement.innerHTML = '<strong>' +
+                this.getText('total_win') +
+                '</strong>';
 
             totalWinInputElement = document.createElement('input');
             totalWinInputElement.className = 'endscreen-total form-control';
@@ -297,7 +269,9 @@
             exitCodeElement = document.createElement('div');
 
             exitCodeParaElement = document.createElement('p');
-            exitCodeParaElement.innerHTML = '<strong>Your exit code:</strong>';
+            exitCodeParaElement.innerHTML = '<strong>' +
+                                            this.getText('exit_code') +
+                                            '</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
@@ -363,7 +337,7 @@
             else if (data.partials) {
                 if (!J.isArray(data.partials)) {
                     node.err('EndScreen error, invalid partials win: ' +
-                             data.partials);
+                        data.partials);
                 }
                 else {
                     preWin = data.partials.join(' + ');

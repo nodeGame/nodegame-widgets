@@ -16,6 +16,8 @@
 
     "use strict";
 
+    var J = node.JSUS;
+
     node.Widget = Widget;
 
     /**
@@ -31,7 +33,7 @@
      * @see Widgets.get
      * @see Widget.init
      */
-    function Widget() {}
+    function Widget() { }
 
     /**
      * ### Widget.init
@@ -42,7 +44,7 @@
      *
      * @see Widgets.get
      */
-    Widget.prototype.init = function(options) {};
+    Widget.prototype.init = function(options) { };
 
     /**
      * ### Widget.listeners
@@ -55,7 +57,7 @@
      * @see EventEmitter.setRecordChanges
      * @see Widgets.destroy
      */
-    Widget.prototype.listeners = function() {};
+    Widget.prototype.listeners = function() { };
 
     /**
      * ### Widget.append
@@ -79,7 +81,7 @@
      * @see Widget.footerDiv
      * @see Widget.headingDiv
      */
-    Widget.prototype.append = function() {};
+    Widget.prototype.append = function() { };
 
     /**
      * ### Widget.getValues
@@ -90,7 +92,7 @@
      *
      * @return {mixed} The values of the widget
      */
-    Widget.prototype.getValues = function(options) {};
+    Widget.prototype.getValues = function(options) { };
 
     /**
      * ### Widget.getValues
@@ -101,7 +103,7 @@
      *
      * @param {mixed} values The values to store
      */
-    Widget.prototype.setValues = function(values) {};
+    Widget.prototype.setValues = function(values) { };
 
     /**
      * ### Widget.reset
@@ -111,7 +113,7 @@
      * Deletes current selection, any highlighting, and other data
      * that the widget might have collected to far.
      */
-    Widget.prototype.reset = function(options) {};
+    Widget.prototype.reset = function(options) { };
 
     /**
      * ### Widget.highlight
@@ -123,7 +125,7 @@
      *
      * @param {mixed} options Settings controlling the type of highlighting
      */
-    Widget.prototype.highlight = function(options) {};
+    Widget.prototype.highlight = function(options) { };
 
     /**
      * ### Widget.highlight
@@ -139,7 +141,7 @@
      *
      * @see Widget.highlighted
      */
-    Widget.prototype.unhighlight = function() {};
+    Widget.prototype.unhighlight = function() { };
 
     /**
      * ### Widget.isHighlighted
@@ -159,7 +161,7 @@
      *
      * An enabled widget allows the user to interact with it
      */
-    Widget.prototype.enable = function() {};
+    Widget.prototype.enable = function() { };
 
     /**
      * ### Widget.disable
@@ -168,7 +170,7 @@
      *
      * A disabled widget is still visible, but user cannot interact with it
      */
-    Widget.prototype.disable = function() {};
+    Widget.prototype.disable = function() { };
 
     /**
      * ### Widget.isDisabled
@@ -288,9 +290,9 @@
                 }
                 else if ('object' !== typeof options) {
                     throw new TypeError('Widget.setTitle: options must ' +
-                                        'be object or undefined. Found: ' +
-                                        options);                    
-                }                
+                        'be object or undefined. Found: ' +
+                        options);
+                }
                 this.headingDiv = W.add('div', this.panelDiv, options);
                 // Move it to before the body (IE cannot have undefined).
                 tmp = (this.bodyDiv && this.bodyDiv.childNodes[0]) || null;
@@ -308,8 +310,8 @@
             }
             else {
                 throw new TypeError(J.funcName(this.constructor) +
-                                    '.setTitle: title must be string, ' +
-                                    'HTML element or falsy. Found: ' + title);
+                    '.setTitle: title must be string, ' +
+                    'HTML element or falsy. Found: ' + title);
             }
         }
     };
@@ -349,8 +351,8 @@
                 }
                 else if ('object' !== typeof options) {
                     throw new TypeError('Widget.setFooter: options must ' +
-                                        'be object or undefined. Found: ' +
-                                        options);                    
+                        'be object or undefined. Found: ' +
+                        options);
                 }
                 this.footerDiv = W.add('div', this.panelDiv, options);
             }
@@ -366,8 +368,8 @@
             }
             else {
                 throw new TypeError(J.funcName(this.constructor) +
-                                    '.setFooter: footer must be string, ' +
-                                    'HTML element or falsy. Found: ' + title);
+                    '.setFooter: footer must be string, ' +
+                    'HTML element or falsy. Found: ' + title);
             }
         }
     };
@@ -384,62 +386,406 @@
     Widget.prototype.setContext = function(context) {
         if ('string' !== typeof context) {
             throw new TypeError(J.funcName(this.constructor) + '.setContext: ' +
-                                'context must be string. Found: ' + context);
+                'context must be string. Found: ' + context);
 
         }
         W.removeClass(this.panelDiv, 'panel-[a-z]*');
         W.addClass(this.panelDiv, 'panel-' + context);
     };
 
-     /**
-      * ### Widget.addFrame
-      *
-      * Adds a border and margins around the bodyDiv element
-      *
-      * @param {string} context The type of bootstrap context.
-      *   Default: 'default'
-      *
-      * @see Widget.panelDiv
-      * @see Widget.bodyDiv
-      */
-     Widget.prototype.addFrame = function(context) {
-         if ('undefined' === typeof context) {
-             context = 'default';
-         }
-         else if ('string' !== typeof context || context.trim() === '') {
-             throw new TypeError(J.funcName(this.constructor) +
-                                 '.addFrame: context must be a non-empty ' +
-                                 'string or undefined. Found: ' + context);
-         }
-         if (this.panelDiv) {
-             if (this.panelDiv.className.indexOf('panel-') === -1) {
-                 W.addClass(this.panelDiv, 'panel-' + context);
-             }
-         }
-         if (this.bodyDiv) {
-             if (this.bodyDiv.className.indexOf('panel-body') === -1) {
-                 W.addClass(this.bodyDiv, 'panel-body');
-             }
-         }
-     };
+    /**
+     * ### Widget.addFrame
+     *
+     * Adds a border and margins around the bodyDiv element
+     *
+     * @param {string} context The type of bootstrap context.
+     *   Default: 'default'
+     *
+     * @see Widget.panelDiv
+     * @see Widget.bodyDiv
+     */
+    Widget.prototype.addFrame = function(context) {
+        if ('undefined' === typeof context) {
+            context = 'default';
+        }
+        else if ('string' !== typeof context || context.trim() === '') {
+            throw new TypeError(J.funcName(this.constructor) +
+                '.addFrame: context must be a non-empty ' +
+                'string or undefined. Found: ' + context);
+        }
+        if (this.panelDiv) {
+            if (this.panelDiv.className.indexOf('panel-') === -1) {
+                W.addClass(this.panelDiv, 'panel-' + context);
+            }
+        }
+        if (this.bodyDiv) {
+            if (this.bodyDiv.className.indexOf('panel-body') === -1) {
+                W.addClass(this.bodyDiv, 'panel-body');
+            }
+        }
+    };
 
-     /**
-      * ### Widget.removeFrame
-      *
-      * Removes the border and the margins around the bodyDiv element
-      *
-      * @see Widget.panelDiv
-      * @see Widget.bodyDiv
-      */
-     Widget.prototype.removeFrame = function() {
-         if (this.panelDiv) W.removeClass(this.panelDiv, 'panel-[a-z]*');
-         if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
-     };
+    /**
+     * ### Widget.removeFrame
+     *
+     * Removes the border and the margins around the bodyDiv element
+     *
+     * @see Widget.panelDiv
+     * @see Widget.bodyDiv
+     */
+    Widget.prototype.removeFrame = function() {
+        if (this.panelDiv) W.removeClass(this.panelDiv, 'panel-[a-z]*');
+        if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
+    };
+
+    /**
+    * ### Widget.setSound
+    *
+    * Checks and assigns the value of a sound to play to user
+    *
+    * Throws an error if value is invalid
+    *
+    * @param {string} name The name of the sound to check
+    * @param {mixed} path Optional. The path to the audio file. If undefined
+    *    the default value from Widget.sounds is used
+    *
+    * @see Widget.sounds
+    * @see Widget.getSound
+    * @see Widget.setSounds
+    * @see Widget.getSounds
+    */
+    Widget.prototype.setSound = function(name, value) {
+        strSetter(this, name, value, 'sounds', 'Widget.setSound');
+    };
+
+    /**
+     * ### Widget.setSounds
+     *
+     * Assigns multiple sounds at the same time
+     *
+     * @param {object} sounds Optional. Object containing sound paths
+     *
+     * @see Widget.sounds
+     * @see Widget.setSound
+     * @see Widget.getSound
+     * @see Widget.getSounds
+     */
+    Widget.prototype.setSounds = function(sounds) {
+        strSetterMulti(this, sounds, 'sounds', 'setSound',
+            J.funcName(this.constructor) + '.setSounds');
+    };
+
+    /**
+     * ### Widget.getSound
+     *
+     * Returns the requested sound path
+     *
+     * @param {string} name The name of the sound variable.
+     * @param {mixed} param Optional. Additional info to pass to the
+     *   callback, if any
+     *
+     * @return {string} The requested sound
+     *
+     * @see Widget.sounds
+     * @see Widget.setSound
+     * @see Widget.getSound
+     * @see Widget.getSounds
+     */
+    Widget.prototype.getSound = function(name, param) {
+        return strGetter(this, name, 'sounds',
+            J.funcName(this.constructor) + '.getSound', param);
+    };
+
+    /**
+     * ### Widget.getSounds
+     *
+     * Returns an object with selected sounds (paths)
+     *
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of  to select the properties to return.
+     *   Default: all properties in the collection object.
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} Selected sounds (paths)
+     *
+     * @see Widget.sounds
+     * @see Widget.setSound
+     * @see Widget.getSound
+     * @see Widget.setSounds
+     */
+    Widget.prototype.getSounds = function(keys, param) {
+        return strGetterMulti(this, 'sounds', 'getSound',
+            J.funcName(this.constructor)
+            + '.getSounds', keys, param);
+    };
+
+    /**
+     * ### Widget.getAllSounds
+     *
+     * Returns an object with all current sounds
+     *
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} All current sounds
+     *
+     * @see Widget.getSound
+     */
+    Widget.prototype.getAllSounds = function(param) {
+        return strGetterMulti(this, 'sounds', 'getSound',
+            J.funcName(this.constructor)
+            + '.getAllSounds', undefined, param);
+    };
+
+    /**
+     * ### Widget.setText
+     *
+     * Checks and assigns the value of a text to display to user
+     *
+     * Throws an error if value is invalid
+     *
+     * @param {string} name The name of the property to check
+     * @param {mixed} value Optional. The value for the text. If undefined
+     *    the default value from Widget.texts is used
+     *
+     * @see Widget.texts
+     * @see Widget.getText
+     * @see Widget.setTexts
+     * @see Widget.getTexts
+     */
+    Widget.prototype.setText = function(name, value) {
+        strSetter(this, name, value, 'texts', J.funcName(this.constructor)
+            + '.setText');
+    };
+
+    /**
+     * ### Widget.setTexts
+     *
+     * Assigns all texts
+     *
+     * @param {object} texts Optional. Object containing texts
+     *
+     * @see Widget.texts
+     * @see Widget.setText
+     * @see Widget.getText
+     * @see Widget.getTexts
+     */
+    Widget.prototype.setTexts = function(texts) {
+        strSetterMulti(this, texts, 'texts', 'setText',
+            J.funcName(this.constructor) + '.setTexts');
+    };
+
+    /**
+     * ### Widget.getText
+     *
+     * Returns the requested text
+     *
+     * @param {string} name The name of the text variable.
+     * @param {mixed} param Optional. Additional to pass to the callback, if any
+     *
+     * @return {string} The requested text
+     *
+     * @see Widget.texts
+     * @see Widget.setText
+     * @see Widget.setTexts
+     * @see Widget.getTexts
+     */
+    Widget.prototype.getText = function(name, param) {
+        return strGetter(this, name, 'texts',
+            J.funcName(this.constructor) + '.getText', param);
+    };
+
+    /**
+     * ### Widget.getTexts
+     *
+     * Returns an object with selected texts
+     *
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of  to select the properties to return.
+     *   Default: all properties in the collection object.
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} Selected texts
+     *
+     * @see Widget.texts
+     * @see Widget.setText
+     * @see Widget.getText
+     * @see Widget.setTexts
+     * @see Widget.getAllTexts
+     */
+    Widget.prototype.getTexts = function(keys, param) {
+        return strGetterMulti(this, 'texts', 'getText',
+            J.funcName(this.constructor)
+            + '.getTexts', keys, param);
+    };
+
+    /**
+     * ### Widget.getAllTexts
+     *
+     * Returns an object with all current texts
+     *
+     * @param {object|array} param Optional. Object containing parameters
+     *   to pass to the texts functions (if any)
+     *
+     * @return {object} All current texts
+     *
+     * @see Widget.texts
+     * @see Widget.setText
+     * @see Widget.setTexts
+     * @see Widget.getText
+     */
+    Widget.prototype.getAllTexts = function(param) {
+        return strGetterMulti(this, 'texts', 'getText',
+            J.funcName(this.constructor)
+            + '.getAllTexts', undefined, param);
+    };
+
+    // ## Helper methods.
+
+    /**
+     * ### strGetter
+     *
+     * Returns the value a property from a collection in instance/constructor
+     *
+     * If the string is not found in the live instance, the default value
+     * from the same collection inside the contructor is returned instead.
+     *
+     * If the property is not found in the corresponding static
+     * collection in the constructor of the instance, an error is thrown.
+     *
+     * @param {object} that The main instance
+     * @param {string} name The name of the property inside the collection
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} method The name of the invoking method (for error string)
+     * @param {mixed} param Optional. If the value of the requested property
+     *   is a function, this parameter is passed to it to get a return value.
+     *
+     * @return {string} res The value of requested property as found
+     *   in the instance, or its default value as found in the constructor
+     */
+    function strGetter(that, name, collection, method, param) {
+        var res;
+        if (!that.constructor[collection].hasOwnProperty(name)) {
+            throw new Error(method + ': name not found: ' + name);
+        }
+        res = that[collection][name] || that.constructor[collection][name];
+        if ('function' === typeof res) {
+            res = res(that, param);
+            if ('string' !== typeof res) {
+                throw new TypeError(method + ': cb "' + name +
+                    'did not return a string. Found: ' + res);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * ### strGetterMulti
+     *
+     * Same as strGetter, but returns multiple values at once
+     *
+     * @param {object} that The main instance
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} getMethod The name of the method to get each value
+     * @param {string} method The name of the invoking method (for error string)
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of this object are to select the properties
+     *   to return. Default: all properties in the collection object.
+     * @param {mixed} param Optional. If the value of the requested property
+     *    is a function, this parameter is passed to it, when invoked to get
+     *    a return value. Default: undefined
+     *
+     * @return {string} out The requested value.
+     *
+     * @see strGetter
+     */
+    function strGetterMulti(that, collection, getMethod, method, keys, param) {
+        var out, k, len;
+        if (!keys) keys = that.constructor[collection];
+        if ('undefined' === typeof param) {
+            param = {};
+        }
+        out = {};
+        if (J.isArray(keys)) {
+            k = -1, len = keys.length;
+            for ( ; ++k < len;) {
+                out[keys[k]] = that[getMethod](keys[k], param);
+            }
+        }
+        else {
+            for (k in keys) {
+                if (keys.hasOwnProperty(k)) {
+                    out[k] = that[getMethod](k, param);
+                }
+            }
+        }
+        return out;
+    }
+
+    /**
+     * ### strSetterMulti
+     *
+     * Same as strSetter, but sets multiple values at once
+     *
+     * @param {object} that The main instance
+     * @param {object} obj List of properties to set and their values
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} setMethod The name of the method to set each value
+     * @param {string} method The name of the invoking method (for error string)
+     *
+     * @see strSetter
+     */
+    function strSetterMulti(that, obj, collection, setMethod, method) {
+        var i;
+        if ('object' !== typeof obj && 'undefined' !== typeof obj) {
+            throw new TypeError(method + ': ' + collection +
+                ' must be object or undefined. Found: ' + obj);
+        }
+        for (i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                that[setMethod](i, obj[i]);
+            }
+        }
+    }
+
+    /**
+     * ### strSetter
+     *
+     * Sets the value of a property in a collection if string, function or false
+     *
+     * @param {object} that The main instance
+     * @param {string} name The name of the property to set
+     * @param {string|function|false} value The value for the property
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} method The name of the invoking method (for error string)
+     *
+     * @see strSetter
+     */
+    function strSetter(that, name, value, collection, method) {
+        if ('undefined' === typeof that.constructor[collection][name]) {
+            throw new TypeError(method + ': name not found: ' + name);
+        }
+        if ('string' === typeof value ||
+            'function' === typeof value ||
+            false === value) {
+
+            that[collection][name] = value;
+        }
+        else {
+            throw new TypeError(method + ': value for item "' + name +
+                '" must be string, function or false. ' +
+                'Found: ' + value);
+        }
+    }
+
+
 
 })(
     // Widgets works only in the browser environment.
     ('undefined' !== typeof node) ? node : module.parent.exports.node
-);
+    );
 
 /**
  * # Widgets
@@ -561,6 +907,8 @@
             throw new TypeError('Widgets.register: w must be function.' +
                                'Found: ' + w);
         }
+        if ('undefined' === typeof w.sounds) w.sounds = {};
+        if ('undefined' === typeof w.texts) w.texts = {};
         // Add default properties to widget prototype.
         J.mixout(w.prototype, new node.Widget());
         this.widgets[name] = w;
@@ -683,6 +1031,10 @@
             WidgetPrototype.className : options.className;
         widget.context = 'undefined' === typeof options.context ?
             WidgetPrototype.context : options.context;
+        widget.sounds = 'undefined' === typeof options.sounds ?
+            WidgetPrototype.sounds : options.sounds;
+        widget.texts = 'undefined' === typeof options.texts ?
+            WidgetPrototype.texts : option.texts;
         widget.widgetName = widgetName;
         // Fixed properties.
 
@@ -3813,7 +4165,7 @@
          * @see ChoiceTable.order
          */
         this.originalOrder = null;
-        
+
         /**
          * ### ChoiceTable.correctChoice
          *
@@ -4243,7 +4595,7 @@
         this.order = J.seq(0, len-1);
         if (this.shuffleChoices) this.order = J.shuffle(this.order);
         this.originalOrder = this.order;
-        
+
         // Build the table and choices at once (faster).
         if (this.table) this.buildTableAndChoices();
         // Or just build choices.
@@ -5258,7 +5610,7 @@
          * Maps items ids to the position in the items array
          */
         this.itemsMap = {};
-        
+
         /**
          * ### ChoiceTableGroup.choices
          *
@@ -6125,7 +6477,7 @@
             that.items[i].groupOrder = (newPos+1);
             newOrder[newPos] = i;
         };
-        order = J.shuffle(this.order);      
+        order = J.shuffle(this.order);
         if (this.orientation === 'H') {
             J.shuffleElements(this.table, order, cb);
         }
@@ -6144,7 +6496,7 @@
     };
 
 
-    
+
     // ## Helper methods.
 
     /**
@@ -7099,6 +7451,7 @@
 
     DisconnectBox.title = 'Disconnect';
     DisconnectBox.className = 'disconnectbox';
+    DisconnectBox.texts.leave = "Leave Experiment";
 
     // ## Dependencies
 
@@ -7128,7 +7481,7 @@
      * @see DisconnectBox.writeStage
      */
     DisconnectBox.prototype.append = function() {
-        this.disconnectButton = W.getButton(undefined, 'Leave Experiment');
+        this.disconnectButton = W.get('button', this.getText('leave'));
         this.disconnectButton.className = 'btn btn-lg';
         this.bodyDiv.appendChild(this.disconnectButton);
 
@@ -7176,14 +7529,13 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.1';
+    DoneButton.version = '0.2.2';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
     DoneButton.title = 'Done Button';
     DoneButton.className = 'donebutton';
-
-    DoneButton.text = 'Done';
+    DoneButton.texts.done = 'Done';
 
     // ## Dependencies
 
@@ -7289,9 +7641,18 @@
         }
         this.button.className = tmp;
 
-
+        this._setText = this.setText;
+        this.setText = function(text, value) {
+            this._setText(text, value);
+            this.button.value = value;
+        };
         // Button text.
-        this.setText(options.text);
+        if ('undefined' !== typeof options.text) {
+            this.setText('done', options.text);
+        }
+        else {
+            this.button.value = this.getText('done');
+        }
     };
 
     DoneButton.prototype.append = function() {
@@ -7533,6 +7894,10 @@
     EmailForm.title = 'Email';
     EmailForm.className = 'emailform';
 
+    EmailForm.texts.label = 'Enter your email:';
+    EmailForm.texts.errString = 'Not a valid email address, ' +
+                                'please correct it and submit it again.';
+
     // ## Dependencies
 
     EmailForm.dependencies = { JSUS: {} };
@@ -7545,43 +7910,6 @@
      * @param {object} options configuration option
      */
     function EmailForm(options) {
-
-        /**
-         * ### EmailForm.label
-         *
-         * The label for the email element
-         */
-        if ('undefined' === typeof options.label) {
-            this.label = 'Enter your email:';
-        }
-        else if ('string' === typeof options.label) {
-            this.label = options.label;
-        }
-        else {
-            throw new TypeError('EmailForm constructor: options.label ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.label);
-        }
-
-        /**
-         * ### EmailForm.errString
-         *
-         * The error message in case of invalid email format
-         *
-         * Notice! It is displayed only if the submit button is displayed.
-         */
-        if ('undefined' === typeof options.errString) {
-            this.errString = 'Not a valid email address, ' +
-                'please correct it and submit again.';
-        }
-        else if ('string' === typeof options.errString) {
-            this.errString = options.errString;
-        }
-        else {
-            throw new TypeError('EmailForm constructor: options.errString ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.errString);
-        }
 
         /**
          * ### EmailForm.onsubmit
@@ -7661,7 +7989,7 @@
         formElement.className = 'emailform-form';
 
         labelElement = document.createElement('label');
-        labelElement.innerHTML = this.label;
+        labelElement.innerHTML = this.getText('label');
 
         inputElement = document.createElement('input');
         inputElement.setAttribute('type', 'text');
@@ -7729,7 +8057,7 @@
         }
         else {
             if (updateUI && this.buttonElement) {
-                this.buttonElement.value = this.errString;
+                this.buttonElement.value = this.getText('errString');
             }
             if ('undefined' === typeof markAttempt || markAttempt) {
                 this.attempts.push(email);
@@ -7800,8 +8128,9 @@
 
         email = getEmail.call(this);
 
-        if (opts.verify !== false) res = this.verifyInput(opts.markAttempt,
-                                                          opts.updateUI);
+        if (opts.verify !== false) {
+            res = this.verifyInput(opts.markAttempt, opts.updateUI);
+        }
 
         // Only value.
         if (!opts.emailOnly) {
@@ -7935,10 +8264,21 @@
 
     EndScreen.version = '0.4.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
-        'email form, and exit code.';
+                            'email form, and exit code.';
 
     EndScreen.title = 'End Screen';
     EndScreen.className = 'endscreen';
+
+    EndScreen.texts.headerMessage = 'Thank you for participating!';
+    EndScreen.texts.message = 'You have now completed this task ' +
+                               'and your data has been saved. ' +
+                               'Please go back to the Amazon Mechanical Turk ' +
+                               'web site and submit the HIT.';
+    EndScreen.texts.contact_question = 'Would you like to be contacted again' +
+                                       'for future experiments? If so, leave' +
+                                       'your email here and press submit: ';
+    EndScreen.texts.total_win = 'Your total win:';
+    EndScreen.texts.exit_code = 'Your exit code:';
 
     // ## Dependencies
 
@@ -7959,51 +8299,6 @@
      * @see EndScreen.init
      */
     function EndScreen(options) {
-
-        /**
-         * ### EndScreen.headerMessage
-         *
-         * The header message displayed at the top of the screen
-         *
-         * Default: 'Thank you for participating!'
-         */
-        if ('undefined' === typeof options.headerMessage) {
-            this.headerMessage = 'Thank you for participating!';
-        }
-        else if ('string' === typeof options.headerMessage) {
-            this.headerMessage = options.headerMessage;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.headerMessage ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.headerMessage);
-        }
-
-        /**
-         * ### EndScreen.message
-         *
-         * The informational message displayed in the body of the screen
-         *
-         * Default: 'You have now completed this task and your data
-         *           has been saved. Please go back to the Amazon Mechanical
-         *           Turk web site and submit the HIT.'
-         */
-        if ('undefined' === typeof options.message) {
-            this.message =  'You have now completed this task ' +
-                            'and your data has been saved. ' +
-                            'Please go back to the Amazon Mechanical Turk ' +
-                            'web site and ' +
-                            'submit the HIT.';
-        }
-        else if ('string' === typeof options.message) {
-            this.message = options.message;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: options.message ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.message);
-        }
 
         /**
          * ### EndScreen.showEmailForm
@@ -8134,14 +8429,7 @@
          *
          * @see EmailForm
          */
-        if (this.showEmailForm) {
-            this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: 'Would you like to be contacted again for future ' +
-                    'experiments? If so, leave your email here and ' +
-                    'press submit: ',
-                onsubmit: { say: true, emailOnly: true, updateUI: true }
-            }, options.email));
-        }
+        this.emailForm = null;
 
         /**
          * ### EndScreen.feedback
@@ -8150,9 +8438,7 @@
          *
          * @see Feedback
          */
-        if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback', options.feedback);
-        }
+        this.feedback = null;
 
         /**
          * ### EndScreen.endScreenElement
@@ -8164,6 +8450,19 @@
          */
         this.endScreenHTML = null;
     }
+
+    EndScreen.prototype.init = function(options) {
+        if (this.showEmailForm && !this.emailForm) {
+            this.emailForm = node.widgets.get('EmailForm', J.mixin({
+                label: this.getText('contact_question'),
+                onsubmit: { say: true, emailOnly: true, updateUI: true }
+            }, options.email));
+        }
+
+        if (this.showFeedbackForm) {
+            this.feedback = node.widgets.get('Feedback', options.feedback);
+        }
+    };
 
     // Implements the Widget.append method.
     EndScreen.prototype.append = function() {
@@ -8186,18 +8485,20 @@
         endScreenElement.className = 'endscreen';
 
         headerElement = document.createElement('h1');
-        headerElement.innerHTML = this.headerMessage;
+        headerElement.innerHTML = this.getText('headerMessage');
         endScreenElement.appendChild(headerElement);
 
         messageElement = document.createElement('p');
-        messageElement.innerHTML = this.message;
+        messageElement.innerHTML = this.getText('message');
         endScreenElement.appendChild(messageElement);
 
         if (this.showTotalWin) {
             totalWinElement = document.createElement('div');
 
             totalWinParaElement = document.createElement('p');
-            totalWinParaElement.innerHTML = '<strong>Your total win:</strong>';
+            totalWinParaElement.innerHTML = '<strong>' +
+                this.getText('total_win') +
+                '</strong>';
 
             totalWinInputElement = document.createElement('input');
             totalWinInputElement.className = 'endscreen-total form-control';
@@ -8214,7 +8515,9 @@
             exitCodeElement = document.createElement('div');
 
             exitCodeParaElement = document.createElement('p');
-            exitCodeParaElement.innerHTML = '<strong>Your exit code:</strong>';
+            exitCodeParaElement.innerHTML = '<strong>' +
+                                            this.getText('exit_code') +
+                                            '</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.className = 'endscreen-exit-code ' +
@@ -8280,7 +8583,7 @@
             else if (data.partials) {
                 if (!J.isArray(data.partials)) {
                     node.err('EndScreen error, invalid partials win: ' +
-                             data.partials);
+                        data.partials);
                 }
                 else {
                     preWin = data.partials.join(' + ');
@@ -8334,11 +8637,14 @@
 
     // ## Meta-data
 
-    Feedback.version = '0.9.0';
+    Feedback.version = '0.9.1';
     Feedback.description = 'Displays a configurable feedback form.';
 
     Feedback.title = 'Feedback';
     Feedback.className = 'feedback';
+
+    Feedback.texts.label = 'Any feedback about the experiment? Let us know' +
+                           ' here:';
 
     // ## Dependencies
 
@@ -8360,25 +8666,6 @@
      *    - label: The text to display above the textarea
      */
     function Feedback(options) {
-
-        /**
-         * ### Feedback.label
-         *
-         * The label for the feedback element
-         *
-         * Default: 'Any feedback about the experiment? Let us know here: '
-         */
-        if ('undefined' === typeof options.label) {
-            this.label = 'Any feedback about the experiment? Let us know here:';
-        }
-        else if ('string' === typeof options.label) {
-            this.label = options.label;
-        }
-        else {
-            throw new TypeError('Feedback constructor: options.label ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.label);
-        }
 
         /**
          * ### Feedback.maxLength
@@ -8558,7 +8845,7 @@
 
         feedbackLabel = document.createElement('label');
         feedbackLabel.setAttribute('for', 'feedback-input');
-        feedbackLabel.innerHTML = this.label;
+        feedbackLabel.innerHTML = this.getText('label');
         feedbackForm.appendChild(feedbackLabel);
 
         feedbackTextarea = document.createElement('textarea');
@@ -9082,11 +9369,13 @@
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.6.1';
+    LanguageSelector.version = '0.6.2';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
     LanguageSelector.className = 'languageselector';
+
+    LanguageSelector.texts.loading = 'Loading language information...';
 
     // ## Dependencies
 
@@ -9264,7 +9553,7 @@
                         });
 
                         that.optionsDisplay[language] = W.get('input', {
-                            id: language + 'RadioButton', 
+                            id: language + 'RadioButton',
                             type: 'radio',
                             name: 'languageButton',
                             value: msg.data[language].name
@@ -9395,7 +9684,7 @@
         // Display initialization.
         this.displayForm = W.get('form', 'radioButtonForm');
         this.loadingDiv = W.add('div', this.displayForm);
-        this.loadingDiv.innerHTML = 'Loading language information...';
+        this.loadingDiv.innerHTML = this.getText('loading');
 
         this.loadLanguages();
     };
@@ -9676,15 +9965,17 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.2.0';
+    MoodGauge.version = '0.2.1';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
     MoodGauge.title = 'Mood Gauge';
     MoodGauge.className = 'moodgauge';
 
-    // ## Dependencies
+    MoodGauge.texts.mainText = 'Thinking about yourself and how you normally' +
+                ' feel, to what extent do you generally feel: ';
 
+    // ## Dependencies
     MoodGauge.dependencies = {
         JSUS: {}
     };
@@ -9860,17 +10151,8 @@
 
     // ### I_PANAS_SF
     function I_PANAS_SF(options) {
-        var items, emotions, mainText, choices, left, right;
+        var items, emotions, choices, left, right;
         var gauge, i, len;
-
-        if ('undefined' === typeof options.mainText) {
-            mainText = 'Thinking about yourself and how you normally feel, ' +
-                'to what extent do you generally feel: ';
-        }
-        else if ('string' === typeof options.mainText) {
-            mainText = options.mainText;
-        }
-        // Other types ignored.
 
         choices = options.choices ||
             [ '1', '2', '3', '4', '5' ];
@@ -9909,7 +10191,7 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'ipnassf',
             items: items,
-            mainText: mainText,
+            mainText: this.getText('mainText'),
             title: false,
             requiredChoice: true
         });
@@ -9938,11 +10220,13 @@
 
     // ## Meta-data
 
-    MsgBar.version = '0.7.1';
+    MsgBar.version = '0.7.2';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
     MsgBar.className = 'msgbar';
+
+    MsgBar.texts.advButton = 'Toggle advanced options';
 
     function MsgBar() {
         this.recipient = null;
@@ -10033,7 +10317,7 @@
 
         // Show a button that expands the table of advanced fields.
         advButton =
-            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+            W.addButton(this.bodyDiv, undefined, this.getText('advButton'));
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
@@ -10306,9 +10590,12 @@
     NextPreviousStep.className = 'nextprevious';
     NextPreviousStep.title = 'Next/Previous Step';
 
-    NextPreviousStep.version = '1.0.0';
+    NextPreviousStep.version = '1.0.1';
     NextPreviousStep.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
+
+    NextPreviousStep.texts.rew = '<<';
+    NextPreviousStep.texts.fwd = '>>';
 
     /**
      * ## NextPreviousStep constructor
@@ -10349,10 +10636,10 @@
         that = this;
 
         this.rew = document.createElement('button');
-        this.rew.innerHTML = '<<';
+        this.rew.innerHTML = this.getText('rew');
 
         this.fwd = document.createElement('button');
-        this.fwd.innerHTML = '>>';
+        this.fwd.innerHTML = this.getText('fwd');
 
         this.checkbox = document.createElement('input');
         this.checkbox.type = 'checkbox';
@@ -10432,12 +10719,18 @@
 
     // ## Meta-data
 
-    Requirements.version = '0.7.0';
+    Requirements.version = '0.7.1';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
     Requirements.title = 'Requirements';
     Requirements.className = 'requirements';
+
+    Requirements.texts.errStr = 'One or more function is taking too long. ' +
+                                'This is likely to be due to a compatibility' +
+                                ' issue with your browser or to bad network' +
+                                ' connectivity.';
+    Requirements.texts.testPassed = 'All tests passed.';
 
     // ## Dependencies
 
@@ -10580,7 +10873,7 @@
          * Callback to be executed at the end of all tests
          */
         this.onFailure = null;
-        
+
         /**
          * ### Requirements.callbacksExecuted
          *
@@ -10780,13 +11073,13 @@
             }
         }
 
-        if (this.withTimeout) this.addTimeout();        
+        if (this.withTimeout) this.addTimeout();
 
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
 
-        if (this.isCheckingFinished()) this.checkingFinished();        
+        if (this.isCheckingFinished()) this.checkingFinished();
 
         return errors;
     };
@@ -10804,13 +11097,10 @@
      */
     Requirements.prototype.addTimeout = function() {
         var that = this;
-        var errStr = 'One or more function is taking too long. This is ' +
-            'likely to be due to a compatibility issue with your browser ' +
-            'or to bad network connectivity.';
 
         this.timeoutId = setTimeout(function() {
             if (that.stillChecking > 0) {
-                that.displayResults([errStr]);
+                that.displayResults([this.getText('errStr')]);
             }
             that.timeoutId = null;
             that.hasFailed = true;
@@ -10894,10 +11184,10 @@
         // Sometimes, if all requirements are almost synchronous, it
         // can happen that this function is called twice (from resultCb
         // and at the end of all requirements checkings.
-        if (this.callbacksExecuted && !force) return;        
+        if (this.callbacksExecuted && !force) return;
         this.callbacksExecuted = true;
-        
-        if (this.timeoutId) clearTimeout(this.timeoutId);        
+
+        if (this.timeoutId) clearTimeout(this.timeoutId);
 
         this.dots.stop();
 
@@ -10914,7 +11204,7 @@
         }
 
         if (this.onComplete) this.onComplete();
-        
+
         if (this.hasFailed) {
             if (this.onFailure) this.onFailure();
         }
@@ -10960,7 +11250,7 @@
             // All tests passed.
             this.list.addDT({
                 success: true,
-                text:'All tests passed.'
+                text: this.getText('testPassed')
             });
         }
         else {
@@ -11052,7 +11342,7 @@
                 data: data
             });
 
-            if (that.isCheckingFinished()) that.checkingFinished();            
+            if (that.isCheckingFinished()) that.checkingFinished();
         };
 
         req = that.requirements[i];
@@ -11106,12 +11396,16 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.5.0';
+    SVOGauge.version = '0.5.1';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
     SVOGauge.title = 'SVO Gauge';
     SVOGauge.className = 'svogauge';
+
+    SVOGauge.texts.mainText = 'Select your preferred option among those' +
+                               ' available below:';
+    SVOGauge.texts.left = 'You:<hr/>Other:';
 
     // ## Dependencies
 
@@ -11296,18 +11590,9 @@
 
     // ### SVO_Slider
     function SVO_Slider(options) {
-        var items, sliders, mainText;
+        var items, sliders;
         var gauge, i, len;
-        var left, renderer;
-
-        if ('undefined' === typeof options.mainText) {
-            mainText =
-                'Select your preferred option among those available below:';
-        }
-        else if ('string' === typeof options.mainText) {
-            mainText = options.mainText;
-        }
-        // Other types ignored.
+        var renderer;
 
         sliders = options.sliders || [
             [
@@ -11385,13 +11670,6 @@
             td.innerHTML = choice[0] + '<hr/>' + choice[1];
         };
 
-        if (options.left) {
-            left = options.left;
-        }
-        else {
-            left = 'You:<hr/>Other:';
-        }
-
         len = sliders.length;
         items = new Array(len);
 
@@ -11399,7 +11677,7 @@
         for ( ; ++i < len ; ) {
             items[i] = {
                 id: (i+1),
-                left: left,
+                left: this.getText('left'),
                 choices: sliders[i]
             };
         }
@@ -11407,7 +11685,7 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'svo_slider',
             items: items,
-            mainText: mainText,
+            mainText: this.getText('mainText'),
             title: false,
             renderer: renderer,
             requiredChoice: true
@@ -11438,12 +11716,17 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.7.1';
+    VisualRound.version = '0.7.2';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
     VisualRound.title = 'Round info';
     VisualRound.className = 'visualround';
+
+    VisualRound.texts.round = 'Round';
+    VisualRound.texts.stage = 'Stage';
+    VisualRound.texts.roundLeft = 'Round Left';
+    VisualRound.texts.stageLeft = 'Stage left';
 
     // ## Dependencies
 
@@ -11942,7 +12225,7 @@
      * @see CountUpStages.updateDisplay
      */
     CountUpStages.prototype.init = function() {
-        generalInit(this, 'stagediv', 'Stage');
+        generalInit(this, 'stagediv', this.visualRound.getText('stage'));
 
         this.curStageNumber = W.append('span', this.contentDiv, {
             className: 'number'
@@ -12020,7 +12303,7 @@
      * @see CountDownStages.updateDisplay
      */
     CountDownStages.prototype.init = function() {
-        generalInit(this, 'stagediv', 'Stage left');
+        generalInit(this, 'stagediv', this.visualRound.getText('stageLeft'));
         this.stagesLeft = W.add('div', this.contentDiv, {
             className: 'number'
         });
@@ -12104,7 +12387,7 @@
      */
     CountUpRounds.prototype.init = function() {
 
-        generalInit(this, 'rounddiv', 'Round');
+        generalInit(this, 'rounddiv', this.visualRound.getText('round'));
 
         this.curRoundNumber = W.add('span', this.contentDiv, {
             className: 'number'
@@ -12184,7 +12467,7 @@
      * @see CountDownRounds.updateDisplay
      */
     CountDownRounds.prototype.init = function() {
-        generalInit(this, 'rounddiv', 'Round Left');
+        generalInit(this, 'rounddiv', this.visualRound.getText('roundLeft'));
 
         this.roundsLeft = W.add('div', this.displayDiv);
         this.roundsLeft.className = 'number';
@@ -13374,6 +13657,9 @@
      */
     WaitingRoom.texts = {
 
+        // #### blinkTitle
+        blinkTitle: 'GAME STARTS!',
+
         // #### disconnect
         disconnect: '<span style="color: red">You have been ' +
             '<strong>disconnected</strong>. Please try again later.' +
@@ -13554,29 +13840,6 @@
          */
         this.disconnectIfNotSelected = null;
 
-        /**
-         * ### WaitingRoom.texts
-         *
-         * Contains all the texts displayed to the players
-         *
-         * @see WaitingRoom.setText
-         * @see WaitingRoom.getText
-         * @see WaitingRoom.setTexts
-         * @see WaitingRoom.getTexts
-         */
-        this.texts = {};
-
-        /**
-         * ### WaitingRoom.sounds
-         *
-         * List of custom sounds to play to the players
-         *
-         * @see WaitingRoom.setSound
-         * @see WaitingRoom.getSound
-         * @see WaitingRoom.setSounds
-         * @see WaitingRoom.getSounds
-         */
-        this.sounds = {};
     }
 
     // ## WaitingRoom methods
@@ -13942,8 +14205,9 @@
 
     WaitingRoom.prototype.alertPlayer = function() {
         var clearBlink, onFrame;
-        var sound;
+        var blink, sound;
 
+        blink = this.getText('blinkTitle');
         sound = this.getSound('dispatch');
 
         // Play sound, if requested.
@@ -13951,14 +14215,14 @@
 
         // If document.hasFocus() returns TRUE, then just one repeat is enough.
         if (document.hasFocus && document.hasFocus()) {
-            J.blinkTitle('GAME STARTS!', { repeatFor: 1 });
+            J.blinkTitle(blink, { repeatFor: 1 });
         }
         // Otherwise we repeat blinking until an event that shows that the
         // user is active on the page happens, e.g. focus and click. However,
         // the iframe is not created yet, and even later. if the user clicks it
         // it won't be detected in the main window, so we need to handle it.
         else {
-            clearBlink = J.blinkTitle('GAME STARTS!', {
+            clearBlink = J.blinkTitle(blink, {
                 stopOnFocus: true,
                 stopOnClick: window
             });
@@ -13980,339 +14244,6 @@
         if (this.dots) this.dots.stop();
         node.deregisterSetup('waitroom');
     };
-
-    /**
-     * ### WaitingRoom.setSound
-     *
-     * Checks and assigns the value of a sound to play to user
-     *
-     * Throws an error if value is invalid
-     *
-     * @param {string} name The name of the sound to check
-     * @param {mixed} path Optional. The path to the audio file. If undefined
-     *    the default value from WaitingRoom.sounds is used
-     *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.getSound
-     * @see WaitingRoom.setSounds
-     * @see WaitingRoom.getSounds
-     */
-    WaitingRoom.prototype.setSound = function(name, value) {
-        strSetter(this, name, value, 'sounds', 'WaitingRoom.setSound');
-    };
-
-    /**
-     * ### WaitingRoom.setSounds
-     *
-     * Assigns multiple sounds at the same time
-     *
-     * @param {object} sounds Optional. Object containing sound paths
-     *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.setSound
-     * @see WaitingRoom.getSound
-     * @see WaitingRoom.getSounds
-     */
-    WaitingRoom.prototype.setSounds = function(sounds) {
-        strSetterMulti(this, sounds, 'sounds', 'setSound',
-                       'WaitingRoom.setSounds');
-    };
-
-    /**
-     * ### WaitingRoom.getSound
-     *
-     * Returns the requested sound path
-     *
-     * @param {string} name The name of the sound variable.
-     * @param {mixed} param Optional. Additional info to pass to the
-     *   callback, if any
-     *
-     * @return {string} The requested sound
-     *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.setSound
-     * @see WaitingRoom.getSound
-     * @see WaitingRoom.getSounds
-     */
-    WaitingRoom.prototype.getSound = function(name, param) {
-        return strGetter(this, name, 'sounds', 'WaitingRoom.getSound', param);
-    };
-
-    /**
-     * ### WaitingRoom.getSounds
-     *
-     * Returns an object with selected sounds (paths)
-     *
-     * @param {object|array} keys Optional. An object whose keys, or an array
-     *   whose values, are used of  to select the properties to return.
-     *   Default: all properties in the collection object.
-     * @param {object} param Optional. Object containing parameters to pass
-     *   to the sounds functions (if any)
-     *
-     * @return {object} out Selected sounds (paths)
-     *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.setSound
-     * @see WaitingRoom.getSound
-     * @see WaitingRoom.setSounds
-     */
-    WaitingRoom.prototype.getSounds = function(keys, param) {
-        return strGetterMulti(this, 'sounds', 'getSound',
-                              'WaitingRoom.getSounds', keys, param);
-    };
-
-    /**
-     * ### WaitingRoom.getAllSounds
-     *
-     * Returns an object with all current sounds
-     *
-     * @param {object} param Optional. Object containing parameters to pass
-     *   to the sounds functions (if any)
-     *
-     * @return {object} out All current sounds
-     *
-     * @see WaitingRoom.getSound
-     */
-    WaitingRoom.prototype.getAllSounds = function(param) {
-        return strGetterMulti(this, 'sounds', 'getSound',
-                              'WaitingRoom.getAllSounds', undefined, param);
-    };
-
-    /**
-     * ### WaitingRoom.setText
-     *
-     * Checks and assigns the value of a text to display to user
-     *
-     * Throws an error if value is invalid
-     *
-     * @param {string} name The name of the property to check
-     * @param {mixed} value Optional. The value for the text. If undefined
-     *    the default value from WaitingRoom.texts is used
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.getText
-     * @see WaitingRoom.setTexts
-     * @see WaitingRoom.getTexts
-     */
-    WaitingRoom.prototype.setText = function(name, value) {
-        strSetter(this, name, value, 'texts', 'WaitingRoom.setText');
-    };
-
-    /**
-     * ### WaitingRoom.setTexts
-     *
-     * Assigns all texts
-     *
-     * @param {object} texts Optional. Object containing texts
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.setText
-     * @see WaitingRoom.getText
-     * @see WaitingRoom.getTexts
-     */
-    WaitingRoom.prototype.setTexts = function(texts) {
-        strSetterMulti(this, texts, 'texts', 'setText', 'WaitingRoom.setTexts');
-    };
-
-    /**
-     * ### WaitingRoom.getText
-     *
-     * Returns the requested text
-     *
-     * @param {string} name The name of the text variable.
-     * @param {mixed} param Optional. Additional to pass to the callback, if any
-     *
-     * @return {string} The requested text
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.setText
-     * @see WaitingRoom.setTexts
-     * @see WaitingRoom.getTexts
-     */
-    WaitingRoom.prototype.getText = function(name, param) {
-        return strGetter(this, name, 'texts', 'WaitingRoom.getText', param);
-    };
-
-    /**
-     * ### WaitingRoom.getTexts
-     *
-     * Returns an object with selected texts
-     *
-     * @param {object|array} keys Optional. An object whose keys, or an array
-     *   whose values, are used of  to select the properties to return.
-     *   Default: all properties in the collection object.
-     * @param {object} param Optional. Object containing parameters to pass
-     *   to the sounds functions (if any)
-     *
-     * @return {object} out Selected texts
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.setText
-     * @see WaitingRoom.getText
-     * @see WaitingRoom.setTexts
-     * @see WaitingRoom.getAllTexts
-     */
-    WaitingRoom.prototype.getTexts = function(keys, param) {
-        return strGetterMulti(this, 'texts', 'getText',
-                              'WaitingRoom.getTexts', keys, param);
-    };
-
-    /**
-     * ### WaitingRoom.getAllTexts
-     *
-     * Returns an object with all current texts
-     *
-     * @param {object|array} param Optional. Object containing parameters
-     *   to pass to the texts functions (if any)
-     *
-     * @return {object} out All current texts
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.setText
-     * @see WaitingRoom.setTexts
-     * @see WaitingRoom.getText
-     */
-    WaitingRoom.prototype.getAllTexts = function(param) {
-        return strGetterMulti(this, 'texts', 'getText',
-                              'WaitingRoom.getAllTexts', undefined, param);
-    };
-
-    // ## Helper methods.
-
-    /**
-     * ### strGetter
-     *
-     * Returns the value a property from a collection in instance/constructor
-     *
-     * If the string is not found in the live instance, the default value
-     * from the same collection inside the contructor is returned instead.
-     *
-     * If the property is not found in the corresponding static
-     * collection in the constructor of the instance, an error is thrown.
-     *
-     * @param {object} that The main instance
-     * @param {string} name The name of the property inside the collection
-     * @param {string} collection The name of the collection inside the instance
-     * @param {string} method The name of the invoking method (for error string)
-     * @param {mixed} param Optional. If the value of the requested property
-     *   is a function, this parameter is passed to it to get a return value.
-     *
-     * @return {string} res The value of requested property as found
-     *   in the instance, or its default value as found in the constructor
-     */
-    function strGetter(that, name, collection, method, param) {
-        var res;
-        if (!that.constructor[collection].hasOwnProperty(name)) {
-            throw new Error(method + ': name not found: ' + name);
-        }
-        res = that[collection][name] || that.constructor[collection][name];
-        if ('function' === typeof res) {
-            res = res(that, param);
-            if ('string' !== typeof res) {
-                throw new TypeError(method + ': cb "' + name +
-                                    'did not return a string. Found: ' + res);
-            }
-        }
-        return res;
-    }
-
-    /**
-     * ### strGetterMulti
-     *
-     * Same as strGetter, but returns multiple values at once
-     *
-     * @param {object} that The main instance
-     * @param {string} collection The name of the collection inside the instance
-     * @param {string} getMethod The name of the method to get each value
-     * @param {string} method The name of the invoking method (for error string)
-     * @param {object|array} keys Optional. An object whose keys, or an array
-     *   whose values, are used of this object are to select the properties
-     *   to return. Default: all properties in the collection object.
-     * @param {mixed} param Optional. If the value of the requested property
-     *    is a function, this parameter is passed to it, when invoked to get
-     *    a return value. Default: undefined
-     *
-     * @return {string} res The requested value.
-     *
-     * @see strGetter
-     */
-    function strGetterMulti(that, collection, getMethod, method, keys, param) {
-        var out, k, len;
-        if (!keys) keys = that.constructor[collection];
-
-        out = {};
-        if (J.isArray(keys)) {
-            k = -1, len = keys.length;
-            for ( ; ++k < len; ) {
-                out[keys[k]] = that[getMethod](keys[k], param);
-            }
-        }
-        else {
-            for (k in keys) {
-                if (keys.hasOwnProperty(k)) {
-                    out[k] = that[getMethod](k, param);
-                }
-            }
-        }
-        return out;
-    }
-
-    /**
-     * ### strSetterMulti
-     *
-     * Same as strSetter, but sets multiple values at once
-     *
-     * @param {object} that The main instance
-     * @param {object} obj List of properties to set and their values
-     * @param {string} collection The name of the collection inside the instance
-     * @param {string} setMethod The name of the method to set each value
-     * @param {string} method The name of the invoking method (for error string)
-     *
-     * @see strSetter
-     */
-    function strSetterMulti(that, obj, collection, setMethod, method) {
-        var i, out;
-        out = out || {};
-        if ('object' !== typeof obj && 'undefined' !== typeof obj) {
-            throw new TypeError(method + ': ' +  collection +
-                                ' must be object or undefined. Found: ' + obj);
-        }
-        for (i in obj) {
-            if (obj.hasOwnProperty(i)) {
-                that[setMethod](i, obj[i]);
-            }
-        }
-    }
-
-    /**
-     * ### strSetter
-     *
-     * Sets the value of a property in a collection if string, function or false
-     *
-     * @param {object} that The main instance
-     * @param {string} name The name of the property to set
-     * @param {string|function|false} value The value for the property
-     * @param {string} collection The name of the collection inside the instance
-     * @param {string} method The name of the invoking method (for error string)
-     *
-     * @see strSetter
-     */
-    function strSetter(that, name, value, collection, method) {
-        if ('undefined' === typeof that.constructor[collection][name]) {
-            throw new TypeError(method + ': name not found: ' + name);
-        }
-        if ('string' === typeof value ||
-            'function' === typeof value ||
-            false === value) {
-
-            that[collection][name] = value;
-        }
-        else {
-            throw new TypeError(method + ': value for item "' + name +
-                                '" must be string, function or false. ' +
-                                'Found: ' + value);
-        }
-    }
 
 })(node);
 

@@ -15,11 +15,14 @@
 
     // ## Meta-data
 
-    Feedback.version = '0.9.0';
+    Feedback.version = '0.9.1';
     Feedback.description = 'Displays a configurable feedback form.';
 
     Feedback.title = 'Feedback';
     Feedback.className = 'feedback';
+
+    Feedback.texts.label = 'Any feedback about the experiment? Let us know' +
+                           ' here:';
 
     // ## Dependencies
 
@@ -41,25 +44,6 @@
      *    - label: The text to display above the textarea
      */
     function Feedback(options) {
-
-        /**
-         * ### Feedback.label
-         *
-         * The label for the feedback element
-         *
-         * Default: 'Any feedback about the experiment? Let us know here: '
-         */
-        if ('undefined' === typeof options.label) {
-            this.label = 'Any feedback about the experiment? Let us know here:';
-        }
-        else if ('string' === typeof options.label) {
-            this.label = options.label;
-        }
-        else {
-            throw new TypeError('Feedback constructor: options.label ' +
-                                'must be string or undefined. ' +
-                                'Found: ' + options.label);
-        }
 
         /**
          * ### Feedback.maxLength
@@ -239,7 +223,7 @@
 
         feedbackLabel = document.createElement('label');
         feedbackLabel.setAttribute('for', 'feedback-input');
-        feedbackLabel.innerHTML = this.label;
+        feedbackLabel.innerHTML = this.getText('label');
         feedbackForm.appendChild(feedbackLabel);
 
         feedbackTextarea = document.createElement('textarea');
