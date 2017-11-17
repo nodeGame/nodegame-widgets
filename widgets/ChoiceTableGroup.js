@@ -13,8 +13,6 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('ChoiceTableGroup', ChoiceTableGroup);
 
     // ## Meta-data

@@ -1,6 +1,6 @@
 /**
  * # Requirements
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Checks a list of requirements and displays the results
@@ -14,18 +14,22 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('Requirements', Requirements);
 
     // ## Meta-data
 
-    Requirements.version = '0.7.0';
+    Requirements.version = '0.7.1';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
     Requirements.title = 'Requirements';
     Requirements.className = 'requirements';
+
+    Requirements.texts.errStr = 'One or more function is taking too long. ' +
+                                'This is likely to be due to a compatibility' +
+                                ' issue with your browser or to bad network' +
+                                ' connectivity.';
+    Requirements.texts.testPassed = 'All tests passed.';
 
     // ## Dependencies
 
@@ -170,6 +174,13 @@
         this.onFailure = null;
 
         /**
+         * ### Requirements.callbacksExecuted
+         *
+         * TRUE, the callbacks have been executed
+         */
+        this.callbacksExecuted = false;
+
+        /**
          * ### Requirements.list
          *
          * `List` to render the results
@@ -226,12 +237,14 @@
      */
     Requirements.prototype.init = function(conf) {
         if ('object' !== typeof conf) {
-            throw new TypeError('Requirements.init: conf must be object.');
+            throw new TypeError('Requirements.init: conf must be object. ' +
+                                'Found: ' + conf);
         }
         if (conf.requirements) {
             if (!J.isArray(conf.requirements)) {
                 throw new TypeError('Requirements.init: conf.requirements ' +
-                                    'must be array or undefined.');
+                                    'must be array or undefined. Found: ' +
+                                    conf.requirements);
             }
             this.requirements = conf.requirements;
         }
@@ -240,7 +253,8 @@
                 'function' !== typeof conf.onComplete) {
 
                 throw new TypeError('Requirements.init: conf.onComplete must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onComplete);
             }
             this.onComplete = conf.onComplete;
         }
@@ -249,7 +263,8 @@
                 'function' !== typeof conf.onSuccess) {
 
                 throw new TypeError('Requirements.init: conf.onSuccess must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onSuccess);
             }
             this.onSuccess = conf.onSuccess;
         }
@@ -258,7 +273,8 @@
                 'function' !== typeof conf.onFailure) {
 
                 throw new TypeError('Requirements.init: conf.onFailure must ' +
-                                    'be function, null or undefined.');
+                                    'be function, null or undefined. Found: ' +
+                                    conf.onFailure);
             }
             this.onFailure = conf.onFailure;
         }
@@ -267,7 +283,8 @@
                 'number' !== typeof conf.maxExecTime) {
 
                 throw new TypeError('Requirements.init: conf.onMaxExecTime ' +
-                                    'must be number, null or undefined.');
+                                    'must be number, null or undefined. ' +
+                                    'Found: ' + conf.maxExecTime);
             }
             this.withTimeout = !!conf.maxExecTime;
             this.timeoutTime = conf.maxExecTime;
@@ -299,7 +316,8 @@
                 'object' !== typeof arguments[i] ) {
 
                 throw new TypeError('Requirements.addRequirements: ' +
-                                    'requirements must be function or object.');
+                                    'requirements must be function or ' +
+                                    'object. Found: ' + arguments[i]);
             }
             this.requirements.push(arguments[i]);
         }
@@ -327,7 +345,7 @@
         var errors, cbName, errMsg;
         if (!this.requirements.length) {
             throw new Error('Requirements.checkRequirements: no requirements ' +
-                            'to check found.');
+                            'to check.');
         }
 
         this.updateStillChecking(this.requirements.length, true);
@@ -354,17 +372,13 @@
             }
         }
 
-        if (this.withTimeout) {
-            this.addTimeout();
-        }
+        if (this.withTimeout) this.addTimeout();
 
         if ('undefined' === typeof display ? true : false) {
             this.displayResults(errors);
         }
 
-        if (this.isCheckingFinished()) {
-            this.checkingFinished();
-        }
+        if (this.isCheckingFinished()) this.checkingFinished();
 
         return errors;
     };
@@ -382,13 +396,10 @@
      */
     Requirements.prototype.addTimeout = function() {
         var that = this;
-        var errStr = 'One or more function is taking too long. This is ' +
-            'likely to be due to a compatibility issue with your browser ' +
-            'or to bad network connectivity.';
 
         this.timeoutId = setTimeout(function() {
             if (that.stillChecking > 0) {
-                that.displayResults([errStr]);
+                that.displayResults([this.getText('errStr')]);
             }
             that.timeoutId = null;
             that.hasFailed = true;
@@ -449,13 +460,16 @@
     };
 
     /**
-     * ### Requirements.CheckingFinished
+     * ### Requirements.checkingFinished
      *
-     * Cleans up timer and dots, and executes final requirements accordingly
+     * Clears up timer and dots, and executes final callbacks accordingly
      *
      * First, executes the `onComplete` callback in any case. Then if no
      * errors have been raised executes the `onSuccess` callback, otherwise
      * the `onFailure` callback.
+     *
+     * @param {boolean} force If TRUE, the function is executed again,
+     *   regardless of whether it was already executed. Default: FALSE
      *
      * @see this.onComplete
      * @see this.onSuccess
@@ -463,12 +477,16 @@
      * @see this.stillCheckings
      * @see this.requirements
      */
-    Requirements.prototype.checkingFinished = function() {
+    Requirements.prototype.checkingFinished = function(force) {
         var results;
 
-        if (this.timeoutId) {
-            clearTimeout(this.timeoutId);
-        }
+        // Sometimes, if all requirements are almost synchronous, it
+        // can happen that this function is called twice (from resultCb
+        // and at the end of all requirements checkings.
+        if (this.callbacksExecuted && !force) return;
+        this.callbacksExecuted = true;
+
+        if (this.timeoutId) clearTimeout(this.timeoutId);
 
         this.dots.stop();
 
@@ -484,9 +502,7 @@
             node.say(this.sayResultsLabel, 'SERVER', results);
         }
 
-        if (this.onComplete) {
-            this.onComplete();
-        }
+        if (this.onComplete) this.onComplete();
 
         if (this.hasFailed) {
             if (this.onFailure) this.onFailure();
@@ -525,7 +541,7 @@
 
         if (!J.isArray(results)) {
             throw new TypeError('Requirements.displayResults: results must ' +
-                                'be array.');
+                                'be array. Found: ' + results);
         }
 
         // No errors.
@@ -533,7 +549,7 @@
             // All tests passed.
             this.list.addDT({
                 success: true,
-                text:'All tests passed.'
+                text: this.getText('testPassed')
             });
         }
         else {
@@ -612,7 +628,8 @@
             if (errors) {
                 if (!J.isArray(errors)) {
                     throw new Error('Requirements.checkRequirements: ' +
-                                    'errors must be array or undefined.');
+                                    'errors must be array or undefined. ' +
+                                    'Found: ' + errors);
                 }
                 that.displayResults(errors);
             }
@@ -624,9 +641,7 @@
                 data: data
             });
 
-            if (that.isCheckingFinished()) {
-                that.checkingFinished();
-            }
+            if (that.isCheckingFinished()) that.checkingFinished();
         };
 
         req = that.requirements[i];
