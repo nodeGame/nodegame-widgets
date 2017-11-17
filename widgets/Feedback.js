@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '0.9.0';
+    Feedback.version = '0.9.1';
     Feedback.description = 'Displays a configurable feedback form.';
 
     Feedback.title = 'Feedback';

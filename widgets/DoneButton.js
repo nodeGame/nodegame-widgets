@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.1';
+    DoneButton.version = '0.2.2';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 

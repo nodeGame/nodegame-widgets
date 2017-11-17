@@ -18,7 +18,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.7.1';
+    VisualRound.version = '0.7.2';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 

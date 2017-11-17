@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.6.1';
+    LanguageSelector.version = '0.6.2';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';

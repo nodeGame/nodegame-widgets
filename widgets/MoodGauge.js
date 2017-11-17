@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.2.0';
+    MoodGauge.version = '0.2.1';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 

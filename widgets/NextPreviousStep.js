@@ -18,7 +18,7 @@
     NextPreviousStep.className = 'nextprevious';
     NextPreviousStep.title = 'Next/Previous Step';
 
-    NextPreviousStep.version = '1.0.0';
+    NextPreviousStep.version = '1.0.1';
     NextPreviousStep.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
 

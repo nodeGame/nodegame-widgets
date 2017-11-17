@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    MsgBar.version = '0.7.1';
+    MsgBar.version = '0.7.2';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';

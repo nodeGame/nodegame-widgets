@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.5.0';
+    SVOGauge.version = '0.5.1';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 

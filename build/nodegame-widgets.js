@@ -7469,7 +7469,7 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.1';
+    DoneButton.version = '0.2.2';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
@@ -8538,7 +8538,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '0.9.0';
+    Feedback.version = '0.9.1';
     Feedback.description = 'Displays a configurable feedback form.';
 
     Feedback.title = 'Feedback';
@@ -9270,7 +9270,7 @@
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.6.1';
+    LanguageSelector.version = '0.6.2';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
@@ -9866,7 +9866,7 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.2.0';
+    MoodGauge.version = '0.2.1';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
@@ -10121,7 +10121,7 @@
 
     // ## Meta-data
 
-    MsgBar.version = '0.7.1';
+    MsgBar.version = '0.7.2';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
@@ -10491,7 +10491,7 @@
     NextPreviousStep.className = 'nextprevious';
     NextPreviousStep.title = 'Next/Previous Step';
 
-    NextPreviousStep.version = '1.0.0';
+    NextPreviousStep.version = '1.0.1';
     NextPreviousStep.description = 'Adds two buttons to push forward or ' +
         'rewind the state of the game by one step.';
 
@@ -10620,7 +10620,7 @@
 
     // ## Meta-data
 
-    Requirements.version = '0.7.0';
+    Requirements.version = '0.7.1';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
@@ -11297,7 +11297,7 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.5.0';
+    SVOGauge.version = '0.5.1';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
@@ -11617,7 +11617,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.7.1';
+    VisualRound.version = '0.7.2';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
