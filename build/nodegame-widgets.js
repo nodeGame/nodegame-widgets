@@ -8306,8 +8306,11 @@
          * If true, the email form is shown
          *
          * Default: true
-         */
-        if ('undefined' === typeof options.showEmailForm) {
+         */        
+        if (options.email === false) {
+            options.showEmailForm = false;
+        }
+        else if ('undefined' === typeof options.showEmailForm) {
             this.showEmailForm = true;
         }
         else if ('boolean' === typeof options.showEmailForm) {
@@ -8327,7 +8330,10 @@
          *
          * Default: true
          */
-        if ('undefined' === typeof options.showFeedbackForm) {
+        if (options.feedback === false) {
+            options.showFeedbackForm = false;
+        }
+        else if ('undefined' === typeof options.showFeedbackForm) {
             this.showFeedbackForm = true;
         }
         else if ('boolean' === typeof options.showFeedbackForm) {
@@ -8347,7 +8353,10 @@
          *
          * Default: true
          */
-        if ('undefined' === typeof options.showTotalWin) {
+        if (options.totalWin === false) {
+            options.showTotalWin = false;
+        }
+        else if ('undefined' === typeof options.showTotalWin) {
             this.showTotalWin = true;
         }
         else if ('boolean' === typeof options.showTotalWin) {
@@ -8367,7 +8376,10 @@
          *
          * Default: true
          */
-        if ('undefined' === typeof options.showExitCode) {
+        if (options.exitCode === false) {
+            options.showExitCode !== false
+        }
+        else if ('undefined' === typeof options.showExitCode) {
             this.showExitCode = true;
         }
         else if ('boolean' === typeof options.showExitCode) {
