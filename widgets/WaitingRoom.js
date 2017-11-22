@@ -228,6 +228,13 @@
          */
         this.disconnectIfNotSelected = null;
 
+        /**
+         * ### WaitingRoom.playWithBotOption
+         *
+         * Flag that indicates whether to display button that lets player begin
+         * the game with bots
+         */
+        this.playWithBotOption = null;
     }
 
     // ## WaitingRoom methods
@@ -323,6 +330,23 @@
         }
         else {
             this.disconnectIfNotSelected = false;
+        }
+
+        if (conf.playWithBotOption) {
+            this.playWithBotOption = true;
+        }
+        else {
+            this.playWithBotOption = false;
+        }
+
+        if (this.playWithBotOption) {
+            this.playBotBtn = document.createElement('input');
+            this.playBotBtn.value = 'Play With Bot';
+            this.playBotBtn.type = 'button';
+            this.playBotBtn.onclick = function () {
+                node.say('PLAYWITHBOT');
+            };
+            this.bodyDiv.appendChild(this.playBotBtn);
         }
 
         // Sounds.
