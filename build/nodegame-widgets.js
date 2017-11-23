@@ -8306,7 +8306,7 @@
          * If true, the email form is shown
          *
          * Default: true
-         */        
+         */
         if (options.email === false) {
             options.showEmailForm = false;
         }
