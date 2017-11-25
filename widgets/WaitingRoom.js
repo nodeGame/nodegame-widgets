@@ -98,7 +98,10 @@
                 ('undefined' !== typeof data.exit ?
                  ('Please report this exit code: ' + data.exit) : '') +
                 '<br></h3>';
-        }
+        },
+
+        // #### playBot
+        playBot: 'Play With Bot'
     };
 
     /**
@@ -251,6 +254,7 @@
      *   - onSuccess: function executed when all tests succeed
      *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *   - startDate: max waiting time to execute all tests (in milliseconds)
+     *   - playWithBotOption: display button to dispatch players with bots
      *
      * @param {object} conf Configuration object.
      */
@@ -341,19 +345,14 @@
 
         if (this.playWithBotOption) {
             this.playBotBtn = document.createElement('input');
-            this.playBotBtn.value = 'Play With Bot';
+            this.playBotBtn.className = 'btn btn-secondary';
+            this.playBotBtn.value = this.getText('playBot');
             this.playBotBtn.type = 'button';
             this.playBotBtn.onclick = function () {
                 node.say('PLAYWITHBOT');
             };
             this.bodyDiv.appendChild(this.playBotBtn);
         }
-
-        // Sounds.
-        this.setSounds(conf.sounds);
-
-        // Texts.
-        this.setTexts(conf.texts);
     };
 
     /**
@@ -485,7 +484,6 @@
         if (this.waitTime) {
             this.startTimer();
         }
-
     };
 
     WaitingRoom.prototype.listeners = function() {
@@ -498,6 +496,13 @@
                 node.warn('waiting room widget: invalid setup object: ' + conf);
                 return;
             }
+
+            // Sounds.
+            that.setSounds(conf.sounds);
+
+            // Texts.
+            that.setTexts(conf.texts);
+
             // Configure all requirements.
             that.init(conf);
 
