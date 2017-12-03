@@ -345,12 +345,13 @@
 
         if (this.playWithBotOption) {
             this.playBotBtn = document.createElement('input');
-            this.playBotBtn.className = 'btn btn-secondary';
+            this.playBotBtn.className = 'btn btn-secondary btn-lg';
             this.playBotBtn.value = this.getText('playBot');
             this.playBotBtn.type = 'button';
             this.playBotBtn.onclick = function () {
                 node.say('PLAYWITHBOT');
             };
+            this.bodyDiv.appendChild(document.createElement('br'));
             this.bodyDiv.appendChild(this.playBotBtn);
         }
     };
@@ -580,10 +581,10 @@
             // Write about disconnection in page.
             that.bodyDiv.innerHTML = that.getText('disconnect');
 
-//             // Enough to not display it in case of page refresh.
-//             setTimeout(function() {
-//                 alert('Disconnection from server detected!');
-//             }, 200);
+            // Enough to not display it in case of page refresh.
+            // setTimeout(function() {
+            //              alert('Disconnection from server detected!');
+            //             }, 200);
         });
 
         node.on.data('ROOM_CLOSED', function() {
