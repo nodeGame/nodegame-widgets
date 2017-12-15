@@ -11990,11 +11990,13 @@
     VisualRound.prototype.setDisplayMode = function(displayModeNames) {
         var i, len, compoundDisplayModeName, displayModes;
 
-        // Validation of input parameter.
-        if (!J.isArray(displayModeNames)) {
+        if ('string' === typeof displayModeNames) {
+            displayModeNames = [ displayModeNames ];
+        }        
+        else if (!J.isArray(displayModeNames)) {
             throw new TypeError('VisualRound.setDisplayMode: ' +
-                                'displayModeNames must be an array. Found: ' +
-                                displayModeNames);
+                                'displayModeNames must be array or string. ' +
+                                'Found: ' + displayModeNames);
         }
         len = displayModeNames.length;
         if (len === 0) {
