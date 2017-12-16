@@ -11728,7 +11728,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.7.2';
+    VisualRound.version = '0.8.0';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -11893,8 +11893,10 @@
      *   - `oldStageId`:
      *     When (re)starting in `flexibleMode`, sets the id of the current
      *     stage
-     *   - `displayModeNames`:
+     *   - `displayMode`:
      *     Array of strings which determines the display style of the widget
+     *   - `displayModeNames`: alias of displayMode, deprecated
+     *     
      *
      * @see VisualRound.setDisplayMode
      * @see GameStager
@@ -11926,14 +11928,20 @@
 
         this.updateInformation();
 
-        if (!this.options.displayModeNames) {
+        if (!this.options.displayMode && this.options.displayModeNames) {
+            console.log('***VisualTimer.init: options.displayModeNames is ' +
+                        'deprecated. Use options.displayMode instead.***');
+            this.options.displayMode = this.options.displayModeNames;
+        }
+
+        if (!this.options.displayMode) {
             this.setDisplayMode([
-                'COUNT_UP_ROUNDS_TO_TOTAL',
+                'COUNT_UP_ROUNDS_TO_TOTAL_IFNOT1',
                 'COUNT_UP_STAGES_TO_TOTAL'
             ]);
         }
         else {
-            this.setDisplayMode(this.options.displayModeNames);
+            this.setDisplayMode(this.options.displayMode);
         }
 
         if ('undefined' !== typeof options.separator) {
@@ -11981,49 +11989,39 @@
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
      * - `COUNT_DOWN_ROUNDS`: Display number of rounds left in this stage.
      *
-     * @param {array} displayModeNames Array of strings representing the names
+     * @param {array|string} displayMode Array of strings representing the names
      *
      * @see VisualRound.displayMode
      * @see CompoundDisplayMode
      * @see VisualRound.init
      */
-    VisualRound.prototype.setDisplayMode = function(displayModeNames) {
-        var i, len, compoundDisplayModeName, displayModes;
+    VisualRound.prototype.setDisplayMode = function(displayMode) {
+        var i, len, displayModes;
 
-        if ('string' === typeof displayModeNames) {
-            displayModeNames = [ displayModeNames ];
-        }        
-        else if (!J.isArray(displayModeNames)) {
-            throw new TypeError('VisualRound.setDisplayMode: ' +
-                                'displayModeNames must be array or string. ' +
-                                'Found: ' + displayModeNames);
+        if ('string' === typeof displayMode) {
+            displayMode = [ displayMode ];
         }
-        len = displayModeNames.length;
+        else if (!J.isArray(displayMode)) {
+            throw new TypeError('VisualRound.setDisplayMode: ' +
+                                'displayMode must be array or string. ' +
+                                'Found: ' + displayMode);
+        }
+        len = displayMode.length;
         if (len === 0) {
-            throw new Error('VisualRound.setDisplayMode: ' +
-                            'displayModeNames is empty.');
+            throw new Error('VisualRound.setDisplayMode: displayMode is empty');
         }
 
         if (this.displayMode) {
-            // Build compound name.
-            compoundDisplayModeName = displayModeNames.join('&');
             // Nothing to do if mode is already active.
-            if (compoundDisplayModeName === this.displayMode.name) return;
+            if (displayMode.join('&') === this.displayMode.name) return;
             this.deactivate(this.displayMode);
         }
-
-        i = -1;
-        for (; ++i < len; ) {
-            compoundDisplayModeName += displayModeNames[i];
-            if (i !== (len-1)) compoundDisplayModeName += '&';
-        }
-
 
         // Build `CompoundDisplayMode`.
         displayModes = [];
         i = -1;
         for (; ++i < len; ) {
-            switch (displayModeNames[i]) {
+            switch (displayMode[i]) {
             case 'COUNT_UP_STAGES_TO_TOTAL':
                 displayModes.push(new CountUpStages(this, { toTotal: true }));
                 break;
@@ -12039,11 +12037,22 @@
             case 'COUNT_UP_ROUNDS':
                 displayModes.push(new CountUpRounds(this));
                 break;
+            case 'COUNT_UP_ROUNDS_TO_TOTAL_IFNOT1':
+                displayModes.push(new CountUpRounds(this, {
+                    toTotal: true,
+                    ifNotOne: true
+                }));
+                break;
+            case 'COUNT_UP_ROUNDS_IFNOT1':
+                displayModes.push(new CountUpRounds(this, { ifNotOne: true }));
+                break;
             case 'COUNT_DOWN_ROUNDS':
                 displayModes.push(new CountDownRounds(this));
                 break;
+            default:
+                throw new Error('VisualRound.setDisplayMode: unknown mode: ' +
+                                displayMode[i]);
             }
-
         }
         this.displayMode = new CompoundDisplayMode(this, displayModes);
         this.activate(this.displayMode);
@@ -12429,9 +12438,16 @@
      * @see VisualRound.updateDisplay
      */
     CountUpRounds.prototype.updateDisplay = function() {
-        this.curRoundNumber.innerHTML = this.visualRound.curRound;
-        if (this.options.toTotal) {
-            this.totRoundNumber.innerHTML = this.visualRound.totRound || '?';
+        if (this.options.ifNotOne && this.visualRound.totRound === 1) {
+            this.displayDiv.style.display = 'none';
+        }
+        else {
+            this.curRoundNumber.innerHTML = this.visualRound.curRound;
+            if (this.options.toTotal) {
+                this.totRoundNumber.innerHTML =
+                    this.visualRound.totRound || '?';
+            }
+            this.displayDiv.style.display = '';
         }
     };
 
