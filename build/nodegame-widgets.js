@@ -14193,10 +14193,10 @@
             // Write about disconnection in page.
             that.bodyDiv.innerHTML = that.getText('disconnect');
 
-//             // Enough to not display it in case of page refresh.
-//             setTimeout(function() {
-//                 alert('Disconnection from server detected!');
-//             }, 200);
+            // Enough to not display it in case of page refresh.
+            // setTimeout(function() {
+            //              alert('Disconnection from server detected!');
+            //             }, 200);
         });
 
         node.on.data('ROOM_CLOSED', function() {
