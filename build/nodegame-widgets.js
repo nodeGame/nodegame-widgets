@@ -1034,7 +1034,7 @@
         widget.sounds = 'undefined' === typeof options.sounds ?
             WidgetPrototype.sounds : options.sounds;
         widget.texts = 'undefined' === typeof options.texts ?
-            WidgetPrototype.texts : option.texts;
+            WidgetPrototype.texts : options.texts;
         widget.widgetName = widgetName;
         // Fixed properties.
 
@@ -9819,7 +9819,7 @@
 
     // ## Meta-data
 
-    MoneyTalks.version = '0.3.0';
+    MoneyTalks.version = '0.4.0';
     MoneyTalks.description = 'Displays the earnings of a player.';
 
     MoneyTalks.title = 'Earnings';
@@ -9847,14 +9847,14 @@
          *
          * The SPAN which holds information on the currency
          */
-        this.spanCurrency = document.createElement('span');
+        this.spanCurrency = null;
 
         /**
          * ### MoneyTalks.spanMoney
          *
          * The SPAN which holds information about the money earned so far
          */
-        this.spanMoney = document.createElement('span');
+        this.spanMoney = null;
 
         /**
          * ### MoneyTalks.currency
@@ -9876,6 +9876,13 @@
          * Precision of floating point number to display
          */
         this.precision = 2;
+
+        /**
+         * ### MoneyTalks.showCurrency
+         *
+         * If TRUE, the currency is displayed after the money
+         */
+        this.showCurrency = true;
     }
 
     // ## MoneyTalks methods
@@ -9897,6 +9904,9 @@
     MoneyTalks.prototype.init = function(options) {
         this.currency = 'string' === typeof options.currency ?
             options.currency : this.currency;
+        if ('undefined' !== typeof options.showCurrency) {
+            this.showCurrency = !!options.showCurrency;
+        }
         this.money = 'number' === typeof options.money ?
             options.money : this.money;
         this.precision = 'number' === typeof options.precision ?
@@ -9912,6 +9922,14 @@
     };
 
     MoneyTalks.prototype.append = function() {
+        if (!this.spanMoney) {
+            this.spanMoney = document.createElement('span');
+        }
+        if (!this.spanCurrency) {
+            this.spanCurrency = document.createElement('span');
+        }
+        if (!this.showCurrency) this.spanCurrency.style.display = 'none';
+
         this.bodyDiv.appendChild(this.spanMoney);
         this.bodyDiv.appendChild(this.spanCurrency);
     };
@@ -11896,7 +11914,7 @@
      *   - `displayMode`:
      *     Array of strings which determines the display style of the widget
      *   - `displayModeNames`: alias of displayMode, deprecated
-     *     
+     *
      *
      * @see VisualRound.setDisplayMode
      * @see GameStager
@@ -13740,7 +13758,10 @@
                 ('undefined' !== typeof data.exit ?
                  ('Please report this exit code: ' + data.exit) : '') +
                 '<br></h3>';
-        }
+        },
+
+        // #### playBot
+        playBot: 'Play With Bot'
     };
 
     /**
@@ -13870,6 +13891,13 @@
          */
         this.disconnectIfNotSelected = null;
 
+        /**
+         * ### WaitingRoom.playWithBotOption
+         *
+         * Flag that indicates whether to display button that lets player begin
+         * the game with bots
+         */
+        this.playWithBotOption = null;
     }
 
     // ## WaitingRoom methods
@@ -13886,6 +13914,7 @@
      *   - onSuccess: function executed when all tests succeed
      *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *   - startDate: max waiting time to execute all tests (in milliseconds)
+     *   - playWithBotOption: display button to dispatch players with bots
      *
      * @param {object} conf Configuration object.
      */
@@ -13967,11 +13996,24 @@
             this.disconnectIfNotSelected = false;
         }
 
-        // Sounds.
-        this.setSounds(conf.sounds);
+        if (conf.playWithBotOption) {
+            this.playWithBotOption = true;
+        }
+        else {
+            this.playWithBotOption = false;
+        }
 
-        // Texts.
-        this.setTexts(conf.texts);
+        if (this.playWithBotOption) {
+            this.playBotBtn = document.createElement('input');
+            this.playBotBtn.className = 'btn btn-secondary btn-lg';
+            this.playBotBtn.value = this.getText('playBot');
+            this.playBotBtn.type = 'button';
+            this.playBotBtn.onclick = function () {
+                node.say('PLAYWITHBOT');
+            };
+            this.bodyDiv.appendChild(document.createElement('br'));
+            this.bodyDiv.appendChild(this.playBotBtn);
+        }
     };
 
     /**
@@ -14103,7 +14145,6 @@
         if (this.waitTime) {
             this.startTimer();
         }
-
     };
 
     WaitingRoom.prototype.listeners = function() {
@@ -14116,6 +14157,13 @@
                 node.warn('waiting room widget: invalid setup object: ' + conf);
                 return;
             }
+
+            // Sounds.
+            that.setSounds(conf.sounds);
+
+            // Texts.
+            that.setTexts(conf.texts);
+
             // Configure all requirements.
             that.init(conf);
 
@@ -14193,10 +14241,10 @@
             // Write about disconnection in page.
             that.bodyDiv.innerHTML = that.getText('disconnect');
 
-//             // Enough to not display it in case of page refresh.
-//             setTimeout(function() {
-//                 alert('Disconnection from server detected!');
-//             }, 200);
+            // Enough to not display it in case of page refresh.
+            // setTimeout(function() {
+            //              alert('Disconnection from server detected!');
+            //             }, 200);
         });
 
         node.on.data('ROOM_CLOSED', function() {

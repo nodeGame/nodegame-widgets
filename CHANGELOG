@@ -9,6 +9,7 @@
 - `LanguageSelector` sets Window URI prefix and notify server of language selections, according to options.
 - Removed `init()` method from all widget's contructor (it is called automatically by API).
 - Removed css/ folder, now in nodegame-server.
+- Other improvements...
 
 ## 3.5.7
 - Last appended widget is available under `node.widgets.lastAppended`.

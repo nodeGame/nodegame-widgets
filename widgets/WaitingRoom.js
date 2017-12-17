@@ -98,7 +98,10 @@
                 ('undefined' !== typeof data.exit ?
                  ('Please report this exit code: ' + data.exit) : '') +
                 '<br></h3>';
-        }
+        },
+
+        // #### playBot
+        playBot: 'Play With Bot'
     };
 
     /**
@@ -228,6 +231,13 @@
          */
         this.disconnectIfNotSelected = null;
 
+        /**
+         * ### WaitingRoom.playWithBotOption
+         *
+         * Flag that indicates whether to display button that lets player begin
+         * the game with bots
+         */
+        this.playWithBotOption = null;
     }
 
     // ## WaitingRoom methods
@@ -244,6 +254,7 @@
      *   - onSuccess: function executed when all tests succeed
      *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *   - startDate: max waiting time to execute all tests (in milliseconds)
+     *   - playWithBotOption: display button to dispatch players with bots
      *
      * @param {object} conf Configuration object.
      */
@@ -325,11 +336,24 @@
             this.disconnectIfNotSelected = false;
         }
 
-        // Sounds.
-        this.setSounds(conf.sounds);
+        if (conf.playWithBotOption) {
+            this.playWithBotOption = true;
+        }
+        else {
+            this.playWithBotOption = false;
+        }
 
-        // Texts.
-        this.setTexts(conf.texts);
+        if (this.playWithBotOption) {
+            this.playBotBtn = document.createElement('input');
+            this.playBotBtn.className = 'btn btn-secondary btn-lg';
+            this.playBotBtn.value = this.getText('playBot');
+            this.playBotBtn.type = 'button';
+            this.playBotBtn.onclick = function () {
+                node.say('PLAYWITHBOT');
+            };
+            this.bodyDiv.appendChild(document.createElement('br'));
+            this.bodyDiv.appendChild(this.playBotBtn);
+        }
     };
 
     /**
@@ -461,7 +485,6 @@
         if (this.waitTime) {
             this.startTimer();
         }
-
     };
 
     WaitingRoom.prototype.listeners = function() {
@@ -474,6 +497,13 @@
                 node.warn('waiting room widget: invalid setup object: ' + conf);
                 return;
             }
+
+            // Sounds.
+            that.setSounds(conf.sounds);
+
+            // Texts.
+            that.setTexts(conf.texts);
+
             // Configure all requirements.
             that.init(conf);
 
@@ -551,10 +581,10 @@
             // Write about disconnection in page.
             that.bodyDiv.innerHTML = that.getText('disconnect');
 
-//             // Enough to not display it in case of page refresh.
-//             setTimeout(function() {
-//                 alert('Disconnection from server detected!');
-//             }, 200);
+            // Enough to not display it in case of page refresh.
+            // setTimeout(function() {
+            //              alert('Disconnection from server detected!');
+            //             }, 200);
         });
 
         node.on.data('ROOM_CLOSED', function() {
