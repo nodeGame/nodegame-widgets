@@ -38,6 +38,7 @@
      * @see MoneyTalks.init
      */
     function MoneyTalks(options) {
+
         /**
          * ### MoneyTalks.spanCurrency
          *
@@ -79,6 +80,20 @@
          * If TRUE, the currency is displayed after the money
          */
         this.showCurrency = true;
+
+        /**
+         * ### MoneyTalks.currencyClassname
+         *
+         * Class name to be attached to the currency span
+         */
+        this.classnameCurrency = 'moneytalkscurrency';
+
+        /**
+         * ### MoneyTalks.currencyClassname
+         *
+         * Class name to be attached to the money span
+         */
+        this.classnameMoney = 'moneytalksmoney';
     }
 
     // ## MoneyTalks methods
@@ -91,30 +106,33 @@
      * @param {object} options Optional. Configuration options.
      *
      * The  options object can have the following attributes:
-     *   - `currency`: String describing currency to use.
-     *   - `money`: Current amount of money earned.
-     *   - `precision`: Precision of floating point output to use.
+     *
+     *   - `currency`: The name of currency.
+     *   - `money`: Initial amount of money earned.
+     *   - `precision`: How mamy floating point digits to use.
      *   - `currencyClassName`: Class name to be set for this.spanCurrency.
-     *   - `moneyClassName`: Class name to be set for this.spanMoney;
+     *   - `moneyClassName`: Class name to be set for this.spanMoney.
+     *   - `showCurrency`: Flag whether the name of currency is to be displayed.
      */
     MoneyTalks.prototype.init = function(options) {
-        this.currency = 'string' === typeof options.currency ?
-            options.currency : this.currency;
+        if ('string' === typeof options.currency) {
+            this.currency = options.currency;
+        }
         if ('undefined' !== typeof options.showCurrency) {
             this.showCurrency = !!options.showCurrency;
         }
-        this.money = 'number' === typeof options.money ?
-            options.money : this.money;
-        this.precision = 'number' === typeof options.precision ?
-            options.precision : this.precision;
-
-        this.spanCurrency.className = options.currencyClassName ||
-            this.spanCurrency.className || 'moneytalkscurrency';
-        this.spanMoney.className = options.moneyClassName ||
-            this.spanMoney.className || 'moneytalksmoney';
-
-        this.spanCurrency.innerHTML = this.currency;
-        this.spanMoney.innerHTML = this.money;
+        if ('number' === typeof options.money) {
+            this.money = options.money;
+        }
+        if ('number' === typeof options.precision) {
+            this.precision = options.precision;
+        }
+        if ('string' === typeof options.MoneyClassName) {
+            this.classnameMoney = options.MoneyClassName;
+        }
+        if ('string' === typeof options.currencyClassName) {
+            this.classnameCurrency = options.currencyClassName;
+        }
     };
 
     MoneyTalks.prototype.append = function() {
@@ -125,6 +143,12 @@
             this.spanCurrency = document.createElement('span');
         }
         if (!this.showCurrency) this.spanCurrency.style.display = 'none';
+
+        this.spanMoney.className = this.classnameMoney;
+        this.spanCurrency.className = this.classnameCurrency;
+
+        this.spanCurrency.innerHTML = this.currency;
+        this.spanMoney.innerHTML = this.money;
 
         this.bodyDiv.appendChild(this.spanMoney);
         this.bodyDiv.appendChild(this.spanCurrency);
