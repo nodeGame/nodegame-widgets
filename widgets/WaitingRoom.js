@@ -259,6 +259,7 @@
      * @param {object} conf Configuration object.
      */
     WaitingRoom.prototype.init = function(conf) {
+        var that = this;
 
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
@@ -349,6 +350,7 @@
             this.playBotBtn.value = this.getText('playBot');
             this.playBotBtn.type = 'button';
             this.playBotBtn.onclick = function () {
+                that.playBotBtn.setAttribute('disabled', true);
                 node.say('PLAYWITHBOT');
             };
             this.bodyDiv.appendChild(document.createElement('br'));
