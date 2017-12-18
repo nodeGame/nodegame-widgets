@@ -101,7 +101,10 @@
         },
 
         // #### playBot
-        playBot: 'Play With Bot'
+        playBot: 'Play With Bot',
+
+        // #### connectingBots
+        connectingBots: 'Connecting bot/s, please wait...'
     };
 
     /**
@@ -350,6 +353,7 @@
             this.playBotBtn.value = this.getText('playBot');
             this.playBotBtn.type = 'button';
             this.playBotBtn.onclick = function () {
+                that.playBotBtn.value = that.getText('connectingBots');
                 that.playBotBtn.setAttribute('disabled', true);
                 node.say('PLAYWITHBOT');
             };

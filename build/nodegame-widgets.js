@@ -8596,7 +8596,7 @@
             }
 
             if ('undefined' !== typeof data.total) {
-                totalWin = J.isNumber(data.total, 0);                
+                totalWin = J.isNumber(data.total, 0);
                 if (totalWin === false) {
                     node.err('EndScreen.updateDisplay: invalid data.total: ' +
                              data.total);
@@ -8604,7 +8604,7 @@
                     err = true;
                 }
             }
-            
+
             if (data.partials) {
                 if (!J.isArray(data.partials)) {
                     node.err('EndScreen error, invalid partials win: ' +
@@ -8615,7 +8615,7 @@
                 }
             }
 
-            if ('undefined' !== typeof data.totalRaw) {                
+            if ('undefined' !== typeof data.totalRaw) {
                 if (preWin) preWin += ' = ';
                 else preWin = '';
                 preWin += data.totalRaw;
@@ -8626,12 +8626,12 @@
 
                 // If we have an exchange rate, check if we have a totalRaw.
                 if ('undefined' !== typeof ex) preWin += '*' + ex;
-                
+
                 // Need to compute total manually.
                 if ('undefined' === typeof totalWin) {
                     totalRaw = J.isNumber(data.totalRaw, 0);
                     totalWin = parseFloat(ex*data.totalRaw).toFixed(2);
-                    totalWin = J.isNumber(totalWin, 0);                
+                    totalWin = J.isNumber(totalWin, 0);
                     if (totalWin === false) {
                         node.err('EndScreen.updateDisplay: invalid : ' +
                                  'totalWin calculation from totalRaw.');
@@ -13818,7 +13818,10 @@
         },
 
         // #### playBot
-        playBot: 'Play With Bot'
+        playBot: 'Play With Bot',
+
+        // #### connectingBots
+        connectingBots: 'Connecting bot/s, please wait...'
     };
 
     /**
@@ -13976,6 +13979,7 @@
      * @param {object} conf Configuration object.
      */
     WaitingRoom.prototype.init = function(conf) {
+        var that = this;
 
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
@@ -14066,6 +14070,8 @@
             this.playBotBtn.value = this.getText('playBot');
             this.playBotBtn.type = 'button';
             this.playBotBtn.onclick = function () {
+                that.playBotBtn.value = that.getText('connectingBots');
+                that.playBotBtn.setAttribute('disabled', true);
                 node.say('PLAYWITHBOT');
             };
             this.bodyDiv.appendChild(document.createElement('br'));
