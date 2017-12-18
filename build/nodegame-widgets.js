@@ -8262,7 +8262,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.4.0';
+    EndScreen.version = '0.5.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
@@ -8274,11 +8274,13 @@
                                'and your data has been saved. ' +
                                'Please go back to the Amazon Mechanical Turk ' +
                                'web site and submit the HIT.';
-    EndScreen.texts.contact_question = 'Would you like to be contacted again' +
+    EndScreen.texts.contactQuestion = 'Would you like to be contacted again' +
                                        'for future experiments? If so, leave' +
                                        'your email here and press submit: ';
-    EndScreen.texts.total_win = 'Your total win:';
-    EndScreen.texts.exit_code = 'Your exit code:';
+    EndScreen.texts.totalWin = 'Your total win:';
+    EndScreen.texts.exitCode = 'Your exit code:';
+    EndScreen.texts.errTotalWin = 'Error: invalid total win.';
+    EndScreen.texts.errExitCode = 'Error: invalid exit code.';
 
     // ## Dependencies
 
@@ -8466,7 +8468,7 @@
     EndScreen.prototype.init = function(options) {
         if (this.showEmailForm && !this.emailForm) {
             this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: this.getText('contact_question'),
+                label: this.getText('contactQuestion'),
                 onsubmit: { say: true, emailOnly: true, updateUI: true }
             }, options.email));
         }
@@ -8509,7 +8511,7 @@
 
             totalWinParaElement = document.createElement('p');
             totalWinParaElement.innerHTML = '<strong>' +
-                this.getText('total_win') +
+                this.getText('totalWin') +
                 '</strong>';
 
             totalWinInputElement = document.createElement('input');
@@ -8528,7 +8530,7 @@
 
             exitCodeParaElement = document.createElement('p');
             exitCodeParaElement.innerHTML = '<strong>' +
-                                            this.getText('exit_code') +
+                                            this.getText('exitCode') +
                                             '</strong>';
 
             exitCodeInputElement = document.createElement('input');
@@ -8579,43 +8581,74 @@
      *    - exit: An exit code.
      */
     EndScreen.prototype.updateDisplay = function(data) {
-        var preWin, totalWin, exitCode;
-        var totalHTML, exitCodeHTML;
+        var preWin, totalWin, totalRaw, exitCode;
+        var totalHTML, exitCodeHTML, ex, err;
 
         if (this.totalWinCb) {
             totalWin = this.totalWinCb(data, this);
         }
         else {
-            totalWin = J.isNumber(data.total, 0);
-            if (totalWin === false) {
-                node.err('EndScreen error, invalid total win: ' +
-                         data.total);
-                totalWin = 'Error: invalid total win.';
+            if ('undefined' === typeof data.total &&
+                'undefined' === typeof data.totalRaw) {
+
+                throw new Error('EndScreen.updateDisplay: data.total and ' +
+                                'data.totalRaw cannot be both undefined.');
             }
-            else if (data.partials) {
+
+            if ('undefined' !== typeof data.total) {
+                totalWin = J.isNumber(data.total, 0);                
+                if (totalWin === false) {
+                    node.err('EndScreen.updateDisplay: invalid data.total: ' +
+                             data.total);
+                    totalWin = this.getText('errTotalWin');
+                    err = true;
+                }
+            }
+            
+            if (data.partials) {
                 if (!J.isArray(data.partials)) {
                     node.err('EndScreen error, invalid partials win: ' +
-                        data.partials);
+                             data.partials);
                 }
                 else {
                     preWin = data.partials.join(' + ');
-
-                    if ('undefined' !== typeof data.totalRaw) {
-                        preWin += ' = ' + data.totalRaw;
-                        if ('undefined' !== typeof data.exchangeRate) {
-                            preWin += '*' + data.exchangeRate;
-                        }
-                        totalWin = preWin + ' = ' + totalWin;
-                    }
                 }
             }
-            totalWin += ' ' + this.totalWinCurrency;
+
+            if ('undefined' !== typeof data.totalRaw) {                
+                if (preWin) preWin += ' = ';
+                else preWin = '';
+                preWin += data.totalRaw;
+
+                // Get Exchange Rate.
+                ex = 'undefined' !== typeof data.exchangeRate ?
+                    data.exchangeRate : node.game.settings.EXCHANGE_RATE;
+
+                // If we have an exchange rate, check if we have a totalRaw.
+                if ('undefined' !== typeof ex) preWin += '*' + ex;
+                
+                // Need to compute total manually.
+                if ('undefined' === typeof totalWin) {
+                    totalRaw = J.isNumber(data.totalRaw, 0);
+                    totalWin = parseFloat(ex*data.totalRaw).toFixed(2);
+                    totalWin = J.isNumber(totalWin, 0);                
+                    if (totalWin === false) {
+                        node.err('EndScreen.updateDisplay: invalid : ' +
+                                 'totalWin calculation from totalRaw.');
+                        totalWin = this.getText('errTotalWin');
+                        err = true;
+                    }
+                }
+                if (!err) totalWin = preWin + ' = ' + totalWin;
+            }
+
+            if (!err) totalWin += ' ' + this.totalWinCurrency;
         }
 
         exitCode = data.exit;
         if ('string' !== typeof exitCode) {
             node.err('EndScreen error, invalid exit code: ' + exitCode);
-            exitCode = 'Error: invalid exit code.';
+            exitCode = this.getText('errExitCode');
         }
 
         totalHTML = this.totalWinInputElement;
@@ -9953,7 +9986,7 @@
 
         this.spanCurrency.innerHTML = this.currency;
         this.spanMoney.innerHTML = this.money;
-        
+
         this.bodyDiv.appendChild(this.spanMoney);
         this.bodyDiv.appendChild(this.spanCurrency);
     };
