@@ -8682,15 +8682,17 @@
 
     // ## Meta-data
 
-    Feedback.version = '0.9.1';
-    Feedback.description = 'Displays a configurable feedback form.';
+    Feedback.version = '1.0.0';
+    Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
     Feedback.className = 'feedback';
 
-    Feedback.texts.label = 'Any feedback about the experiment? Let us know' +
-                           ' here:';
-
+    Feedback.texts = {
+        label: 'Any feedback about the experiment? Let us know here:',
+        sent: 'Sent!'
+    };
+    
     // ## Dependencies
 
     Feedback.dependencies = {
@@ -8737,10 +8739,10 @@
          * The minimum character length for feedback to be submitted
          *
          * If minLength = 0, then there is no minimum length checked.
-         * Default: 0
+         * Default: 1
          */
         if ('undefined' === typeof options.minLength) {
-            this.minLength = 0;
+            this.minLength = 1;
         }
         else if (J.isNumber(options.minLength, 0) !== false) {
             this.minLength = options.minLength;
@@ -8769,9 +8771,10 @@
                                                      options.maxAttemptLength);
         }
         else {
-            throw new TypeError('Feedback constructor: options.maxLength ' +
-                                'must be a number >= 0 or undefined. ' +
-                                'Found: ' + options.maxAttemptLength);
+            throw new TypeError('Feedback constructor: ' +
+                                'options.maxAttemptLength must be a number ' +
+                                '>= 0 or undefined. Found: ' +
+                                options.maxAttemptLength);
         }
 
         /**
@@ -8952,7 +8955,7 @@
      */
     Feedback.prototype.verifyFeedback = function(markAttempt, updateUI) {
         var feedback, length, updateCount, updateColor, res;
-        var submitButton, charCounter;
+        var submitButton, charCounter, tmp;
 
         feedback = getFeedback.call(this);
         length = feedback ? feedback.length : 0;
@@ -8960,20 +8963,28 @@
         submitButton = this.submitButton;
         charCounter = this.charCounter;
 
-
         if (length < this.minLength) {
             res = false;
-            updateCount = (this.minLength - length) + ' characters needed.';
+            tmp = this.minLength - length;
+            updateCount = tmp + ' character';
+            if (tmp > 1) updateCount += 's';
+            updateCount += ' needed.';
             updateColor = '#a32020'; // #f2dede';
         }
         else if (length > this.maxLength) {
             res = false;
-            updateCount = (length - this.maxLength) + ' characters over.';
+            tmp = length - this.maxLength;
+            updateCount = tmp + ' character';
+            if (tmp > 1) updateCount += 's';
+            updateCount += ' over.';
             updateColor = '#a32020'; // #f2dede';
         }
         else {
             res = true;
-            updateCount = (this.maxLength - length) + ' characters remaining.';
+            tmp = this.maxLength - length;
+            updateCount = tmp + ' character';
+            if (tmp > 1) updateCount += 's';
+            updateCount += ' remaining.';
             updateColor = '#78b360'; // '#dff0d8';
         }
 
@@ -8991,26 +9002,6 @@
             }
             this.attempts.push(feedback);
         }
-
-//         res = true; // TODO: check if valid.
-//         if (res && updateUI) {
-//             if (this.inputElement) this.inputElement.disabled = true;
-//             if (this.submitButton) {
-//                 this.submitButton.disabled = true;
-//                 this.submitButton.value = 'Sent!';
-//             }
-//         }
-//         else {
-//             if (updateUI && this.submitButton) {
-//                 this.submitButton.value = this.errString;
-//             }
-//             if ('undefined' === typeof markAttempt || markAttempt) {
-//                 if (feedback.length > this.maxAttemptLength) {
-//                     feedback = feedback.substr(0, this.maxAttemptLength);
-//                 }
-//                 this.attempts.push(feedback);
-//             }
-//         }
         return res;
     };
 
@@ -9101,7 +9092,7 @@
         if ((opts.say && res) || opts.sayAnyway) {
             this.sendValues({ values: feedback });
             if (opts.updateUI) {
-                this.submitButton.setAttribute('value', 'Sent!');
+                this.submitButton.setAttribute('value', this.getText('sent'));
                 this.submitButton.disabled = true;
                 this.textareaElement.disabled = true;
             }
@@ -9183,48 +9174,6 @@
     };
 
     // ## Helper functions.
-
-//     /**
-//      * ### checkLength
-//      *
-//      * Checks the feedback length
-//      *
-//      * @param {HTMLElement} feedbackTextarea The textarea with feedback
-//      * @param {HTMLElement} charCounter The span counting the characthers
-//      * @param {HTMLElement} submit The submit button
-//      * @param {number} minLength The minimum length of feedback
-//      * @param {number} maxLength The max length of feedback
-//      */
-//     function checkLength(feedbackTextarea, charCounter,
-//                                  submit, minLength, maxLength) {
-//         var length, res;
-//
-//         length = feedbackTextarea.value.trim().length;
-//
-//         if (length < minLength) {
-//             res = false;
-//             submit.disabled = true;
-//             charCounter.innerHTML = (minLength - length) +
-//                 ' characters needed.';
-//             charCounter.style.backgroundColor = '#f2dede';
-//         }
-//         else if (length > maxLength) {
-//             res = false;
-//             submit.disabled = true;
-//             charCounter.innerHTML = (length - maxLength) +
-//                 ' characters over.';
-//             charCounter.style.backgroundColor = '#f2dede';
-//         }
-//         else {
-//             res = true;
-//             submit.disabled = false;
-//             charCounter.innerHTML = (maxLength - length) +
-//                 ' characters remaining.';
-//             charCounter.style.backgroundColor = '#dff0d8';
-//         }
-//
-//         return true;
-//     }
 
     /**
      * ### getFeedback
@@ -13731,7 +13680,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-    WaitingRoom.version = '1.2.0';
+    WaitingRoom.version = '1.2.1';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -13818,10 +13767,10 @@
         },
 
         // #### playBot
-        playBot: 'Play With Bot',
+        playBot: 'Play With Bot/s',
 
         // #### connectingBots
-        connectingBots: 'Connecting bot/s, please wait...'
+        connectingBots: 'Connecting Bot/s, Please Wait...'
     };
 
     /**
