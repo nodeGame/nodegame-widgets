@@ -14,7 +14,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-    WaitingRoom.version = '1.2.0';
+    WaitingRoom.version = '1.2.1';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -101,10 +101,10 @@
         },
 
         // #### playBot
-        playBot: 'Play With Bot',
+        playBot: 'Play With Bot/s',
 
         // #### connectingBots
-        connectingBots: 'Connecting bot/s, please wait...'
+        connectingBots: 'Connecting Bot/s, Please Wait...'
     };
 
     /**
