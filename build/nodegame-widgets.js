@@ -8692,7 +8692,7 @@
         label: 'Any feedback about the experiment? Let us know here:',
         sent: 'Sent!'
     };
-    
+
     // ## Dependencies
 
     Feedback.dependencies = {
@@ -14193,6 +14193,8 @@
             var data, reportExitCode;
             msg = msg || {};
             data = msg.data || {};
+
+            if (that.dots) that.dots.stop();
 
             // Alert player he/she is about to play.
             if (data.action === 'allPlayersConnected') {

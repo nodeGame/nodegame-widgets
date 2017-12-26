@@ -528,6 +528,8 @@
             msg = msg || {};
             data = msg.data || {};
 
+            if (that.dots) that.dots.stop();
+
             // Alert player he/she is about to play.
             if (data.action === 'allPlayersConnected') {
                 that.alertPlayer();
