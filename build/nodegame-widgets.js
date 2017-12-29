@@ -8912,6 +8912,8 @@
             charCounter = document.createElement('span');
             charCounter.className = 'feedback-char-count badge';
             charCounter.innerHTML = this.maxLength;
+            // Until no char is inserted is hidden.
+            charCounter.style.display = 'none';
             feedbackForm.appendChild(charCounter);
         }
 
@@ -8991,6 +8993,7 @@
         if (updateUI) {
             submitButton.disabled = !res;
             if (charCounter) {
+                charCounter.style.display = length ? '' : 'none';
                 charCounter.style.backgroundColor = updateColor;
                 charCounter.innerHTML = updateCount;
             }
