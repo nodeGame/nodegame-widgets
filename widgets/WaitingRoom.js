@@ -344,14 +344,18 @@
             this.playWithBotOption = false;
         }
 
-        if (this.playWithBotOption) {
+        if (this.playWithBotOption && !document.getElementById('bot_btn')) {
             this.playBotBtn = document.createElement('input');
             this.playBotBtn.className = 'btn btn-secondary btn-lg';
             this.playBotBtn.value = this.getText('playBot');
+            this.playBotBtn.id = 'bot_btn';
             this.playBotBtn.type = 'button';
             this.playBotBtn.onclick = function () {
-                that.playBotBtn.setAttribute('disabled', true);
+                that.playBotBtn.disabled = true;
                 node.say('PLAYWITHBOT');
+                setTimeout(function (){
+                    that.playBotBtn.disabled = false;
+                }, 5000);
             };
             this.bodyDiv.appendChild(document.createElement('br'));
             this.bodyDiv.appendChild(this.playBotBtn);
