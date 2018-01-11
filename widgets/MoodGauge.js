@@ -118,7 +118,7 @@
     };
 
     MoodGauge.prototype.append = function() {
-        node.widgets.append(this.gauge, this.bodyDiv);
+        node.widgets.append(this.gauge, this.bodyDiv, { panel: false });
     };
 
     MoodGauge.prototype.listeners = function() {};

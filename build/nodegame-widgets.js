@@ -8682,7 +8682,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.0.0';
+    Feedback.version = '1.0.1';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
@@ -10107,7 +10107,7 @@
     };
 
     MoodGauge.prototype.append = function() {
-        node.widgets.append(this.gauge, this.bodyDiv);
+        node.widgets.append(this.gauge, this.bodyDiv, { panel: false });
     };
 
     MoodGauge.prototype.listeners = function() {};
