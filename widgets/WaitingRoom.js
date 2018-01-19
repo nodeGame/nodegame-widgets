@@ -350,7 +350,7 @@
             this.playBotBtn.value = this.getText('playBot');
             this.playBotBtn.id = 'bot_btn';
             this.playBotBtn.type = 'button';
-            this.playBotBtn.onclick = function () {
+            this.playBotBtn.onclick = function() {
                 that.playBotBtn.disabled = true;
                 node.say('PLAYWITHBOT');
                 setTimeout(function (){
