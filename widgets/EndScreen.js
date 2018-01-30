@@ -35,8 +35,10 @@
     EndScreen.texts.exitCode = 'Your exit code:';
     EndScreen.texts.errTotalWin = 'Error: invalid total win.';
     EndScreen.texts.errExitCode = 'Error: invalid exit code.';
-    EndScreen.texts.copyButton = 'Copy to clipboard';
+    EndScreen.texts.copyButton = 'Copy';
     EndScreen.texts.exitCopyMsg = 'Exit code copied to clipboard.';
+    EndScreen.texts.exitCopyError = 'Failed to copy exit code. Please copy it' +
+                                    ' manually.';
 
     // ## Dependencies
 
@@ -250,7 +252,7 @@
         var headerElement, messageElement;
         var totalWinElement, totalWinParaElement, totalWinInputElement;
         var exitCodeElement, exitCodeParaElement, exitCodeInputElement;
-        var exitCodeBtn;
+        var exitCodeBtn, exitCodeGroup;
         var that = this;
 
         endScreenElement = document.createElement('div');
@@ -285,6 +287,7 @@
 
         if (this.showExitCode) {
             exitCodeElement = document.createElement('div');
+            exitCodeElement.className = 'input-group';
 
             exitCodeParaElement = document.createElement('p');
             exitCodeParaElement.innerHTML = '<strong>' +
@@ -297,7 +300,10 @@
                                              'form-control';
             exitCodeInputElement.setAttribute('disabled', 'true');
 
-            exitCodeParaElement.appendChild(exitCodeInputElement);
+            exitCodeGroup = document.createElement('span');
+            exitCodeGroup.className = 'input-group-btn';
+
+
 
             exitCodeBtn = document.createElement('input');
             exitCodeBtn.className = 'btn btn-secondary';
@@ -306,8 +312,12 @@
             exitCodeBtn.onclick = function() {
                 that.copy(exitCodeInputElement.value);
             };
-            exitCodeElement.appendChild(exitCodeParaElement);
-            exitCodeElement.appendChild(exitCodeBtn);
+
+            exitCodeGroup.appendChild(exitCodeBtn);
+            endScreenElement.appendChild(exitCodeParaElement);
+            exitCodeElement.appendChild(exitCodeGroup);
+            exitCodeElement.appendChild(exitCodeInputElement);
+
 
             endScreenElement.appendChild(exitCodeElement);
             this.exitCodeInputElement = exitCodeInputElement;
@@ -339,14 +349,18 @@
         });
     };
 
-    EndScreen.prototype.copy = function(that) {
+    EndScreen.prototype.copy = function(text) {
         var inp = document.createElement('input');
-        document.body.appendChild(inp);
-        inp.value = that;
-        inp.select();
-        document.execCommand('copy', false);
-        inp.remove();
-        alert(this.getText('exitCopyMsg'));
+        try {
+            document.body.appendChild(inp);
+            inp.value = text;
+            inp.select();
+            document.execCommand('copy', false);
+            inp.remove();
+            alert(this.getText('exitCopyMsg'));
+        } catch (err) {
+            alert(this.getText('exitCopyError'));
+        }
     };
 
     /**
