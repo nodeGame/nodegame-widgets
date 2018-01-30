@@ -639,10 +639,14 @@
         var blink, sound;
 
         blink = this.getText('blinkTitle');
+
         sound = this.getSound('dispatch');
 
         // Play sound, if requested.
         if (sound) J.playSound(sound);
+
+        // If blinkTitle is falsy, don't blink the title
+        if (!blink) return;
 
         // If document.hasFocus() returns TRUE, then just one repeat is enough.
         if (document.hasFocus && document.hasFocus()) {
