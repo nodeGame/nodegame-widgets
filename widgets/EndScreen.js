@@ -303,8 +303,6 @@
             exitCodeGroup = document.createElement('span');
             exitCodeGroup.className = 'input-group-btn';
 
-
-
             exitCodeBtn = document.createElement('input');
             exitCodeBtn.className = 'btn btn-secondary';
             exitCodeBtn.value = this.getText('copyButton');
@@ -317,7 +315,6 @@
             endScreenElement.appendChild(exitCodeParaElement);
             exitCodeElement.appendChild(exitCodeGroup);
             exitCodeElement.appendChild(exitCodeInputElement);
-
 
             endScreenElement.appendChild(exitCodeElement);
             this.exitCodeInputElement = exitCodeInputElement;
