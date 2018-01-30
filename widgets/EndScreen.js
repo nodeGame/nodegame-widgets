@@ -35,6 +35,8 @@
     EndScreen.texts.exitCode = 'Your exit code:';
     EndScreen.texts.errTotalWin = 'Error: invalid total win.';
     EndScreen.texts.errExitCode = 'Error: invalid exit code.';
+    EndScreen.texts.copyButton = 'Copy to clipboard';
+    EndScreen.texts.exitCopyMsg = 'Exit code copied to clipboard.';
 
     // ## Dependencies
 
@@ -248,6 +250,8 @@
         var headerElement, messageElement;
         var totalWinElement, totalWinParaElement, totalWinInputElement;
         var exitCodeElement, exitCodeParaElement, exitCodeInputElement;
+        var exitCodeBtn;
+        var that = this;
 
         endScreenElement = document.createElement('div');
         endScreenElement.className = 'endscreen';
@@ -288,12 +292,22 @@
                                             '</strong>';
 
             exitCodeInputElement = document.createElement('input');
+            exitCodeInputElement.id = 'exit_code';
             exitCodeInputElement.className = 'endscreen-exit-code ' +
                                              'form-control';
             exitCodeInputElement.setAttribute('disabled', 'true');
 
             exitCodeParaElement.appendChild(exitCodeInputElement);
+
+            exitCodeBtn = document.createElement('input');
+            exitCodeBtn.className = 'btn btn-secondary';
+            exitCodeBtn.value = this.getText('copyButton');
+            exitCodeBtn.type = 'button';
+            exitCodeBtn.onclick = function() {
+                that.copy(exitCodeInputElement.value);
+            };
             exitCodeElement.appendChild(exitCodeParaElement);
+            exitCodeElement.appendChild(exitCodeBtn);
 
             endScreenElement.appendChild(exitCodeElement);
             this.exitCodeInputElement = exitCodeInputElement;
@@ -323,6 +337,16 @@
         node.on.data('WIN', function(message) {
             that.updateDisplay(message.data);
         });
+    };
+
+    EndScreen.prototype.copy = function(that) {
+        var inp = document.createElement('input');
+        document.body.appendChild(inp);
+        inp.value = that;
+        inp.select();
+        document.execCommand('copy', false);
+        inp.remove();
+        alert(this.getText('exitCopyMsg'));
     };
 
     /**
