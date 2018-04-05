@@ -8285,6 +8285,10 @@
     EndScreen.texts.exitCode = 'Your exit code:';
     EndScreen.texts.errTotalWin = 'Error: invalid total win.';
     EndScreen.texts.errExitCode = 'Error: invalid exit code.';
+    EndScreen.texts.copyButton = 'Copy';
+    EndScreen.texts.exitCopyMsg = 'Exit code copied to clipboard.';
+    EndScreen.texts.exitCopyError = 'Failed to copy exit code. Please copy it' +
+                                    ' manually.';
 
     // ## Dependencies
 
@@ -8498,6 +8502,8 @@
         var headerElement, messageElement;
         var totalWinElement, totalWinParaElement, totalWinInputElement;
         var exitCodeElement, exitCodeParaElement, exitCodeInputElement;
+        var exitCodeBtn, exitCodeGroup;
+        var that = this;
 
         endScreenElement = document.createElement('div');
         endScreenElement.className = 'endscreen';
@@ -8531,6 +8537,7 @@
 
         if (this.showExitCode) {
             exitCodeElement = document.createElement('div');
+            exitCodeElement.className = 'input-group';
 
             exitCodeParaElement = document.createElement('p');
             exitCodeParaElement.innerHTML = '<strong>' +
@@ -8538,12 +8545,26 @@
                                             '</strong>';
 
             exitCodeInputElement = document.createElement('input');
+            exitCodeInputElement.id = 'exit_code';
             exitCodeInputElement.className = 'endscreen-exit-code ' +
                                              'form-control';
             exitCodeInputElement.setAttribute('disabled', 'true');
 
-            exitCodeParaElement.appendChild(exitCodeInputElement);
-            exitCodeElement.appendChild(exitCodeParaElement);
+            exitCodeGroup = document.createElement('span');
+            exitCodeGroup.className = 'input-group-btn';
+
+            exitCodeBtn = document.createElement('input');
+            exitCodeBtn.className = 'btn btn-secondary';
+            exitCodeBtn.value = this.getText('copyButton');
+            exitCodeBtn.type = 'button';
+            exitCodeBtn.onclick = function() {
+                that.copy(exitCodeInputElement.value);
+            };
+
+            exitCodeGroup.appendChild(exitCodeBtn);
+            endScreenElement.appendChild(exitCodeParaElement);
+            exitCodeElement.appendChild(exitCodeGroup);
+            exitCodeElement.appendChild(exitCodeInputElement);
 
             endScreenElement.appendChild(exitCodeElement);
             this.exitCodeInputElement = exitCodeInputElement;
@@ -8573,6 +8594,20 @@
         node.on.data('WIN', function(message) {
             that.updateDisplay(message.data);
         });
+    };
+
+    EndScreen.prototype.copy = function(text) {
+        var inp = document.createElement('input');
+        try {
+            document.body.appendChild(inp);
+            inp.value = text;
+            inp.select();
+            document.execCommand('copy', false);
+            inp.remove();
+            alert(this.getText('exitCopyMsg'));
+        } catch (err) {
+            alert(this.getText('exitCopyError'));
+        }
     };
 
     /**
@@ -14318,7 +14353,7 @@
         // Play sound, if requested.
         if (sound) J.playSound(sound);
 
-        // If blinkTitle is falsy, don't blink the title
+        // If blinkTitle is falsy, don't blink the title.
         if (!blink) return;
 
         // If document.hasFocus() returns TRUE, then just one repeat is enough.
