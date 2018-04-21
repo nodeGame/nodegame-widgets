@@ -1,6 +1,6 @@
 # nodegame-widgets
 
-[![Build Status](https://travis-ci.org/nodeGame/nodegame-widgets.png?branch=master)](https://travis-ci.org/nodeGame/nodegame-client)
+[![Build Status](https://travis-ci.org/nodeGame/nodegame-widgets.png?branch=master)](https://travis-ci.org/nodeGame/nodegame-widgets)
 
 
 Collection of reusable components (widgets) for nodeGame. 
