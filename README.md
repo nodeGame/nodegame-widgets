@@ -10,7 +10,6 @@ Widgets can display timers, count rounds, display total earnings, draw Chernoff 
 ## Resources
 
 - See [documentation](https://github.com/nodeGame/nodegame/wiki).
-- Browse [inline comments](http://nodegame.github.io/nodegame-widgets/index.js.html).
 
 ## License
 
