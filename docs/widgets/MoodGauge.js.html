@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/MoodGauge.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/MoodGauge.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,605 +21,621 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#moodgauge">MoodGauge</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#moodgauge%20constructor">MoodGauge constructor</a>
+        <a href="#moodgauge-constructor">MoodGauge constructor</a>
       </div>
+
       <div class="heading h3">
         <a href="#moodgauge.methods">MoodGauge.methods</a>
       </div>
+
       <div class="heading h2">
         <a href="#moodgauge.method">MoodGauge.method</a>
       </div>
+
       <div class="heading h2">
         <a href="#svogauge.gauge">SVOGauge.gauge</a>
       </div>
+
       <div class="heading h2">
-        <a href="#moodgauge%20methods.">MoodGauge methods.</a>
+        <a href="#moodgauge-methods">MoodGauge methods.</a>
       </div>
+
       <div class="heading h3">
         <a href="#moodgauge.init">MoodGauge.init</a>
       </div>
+
       <div class="heading h2">
         <a href="#moodgauge.addmethod">MoodGauge.addMethod</a>
       </div>
+
       <div class="heading h2">
-        <a href="#helper%20functions.">Helper functions.</a>
+        <a href="#helper-functions">Helper functions.</a>
       </div>
+
       <div class="heading h3">
         <a href="#checkgauge">checkGauge</a>
       </div>
+
       <div class="heading h2">
-        <a href="#available%20methods.">Available methods.</a>
+        <a href="#available-methods">Available methods.</a>
       </div>
+
       <div class="heading h3">
         <a href="#i_panas_sf">I_PANAS_SF</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="moodgauge">
   <h1>
-    <a href="#moodgauge" name="moodgauge" class="pilcrow">&#182;</a>
-    MoodGauge
+    <a href="#moodgauge" name="moodgauge" class="pilcrow"></a>
+MoodGauge
   </h1>
 </div>
-
-
 <p>Copyright(c) 2016 Stefano Balietti
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Displays an interface to query users about mood, emotions and well-being</p>
-
+</div>
+<div class="body">
+<p>Displays an interface to query users about mood, emotions and well-being</p>
 <p>www.nodegame.org</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    node.widgets.register(<span class="hljs-string">'MoodGauge'</span>, MoodGauge);
 
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;MoodGauge&#39;</span><span class="p">,</span> <span class="nx">MoodGauge</span><span class="p">);</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    MoodGauge.version = <span class="hljs-string">'0.2.1'</span>;
+    MoodGauge.description = <span class="hljs-string">'Displays an interface to measure mood '</span> +
+        <span class="hljs-string">'and emotions.'</span>;
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.0&#39;</span><span class="p">;</span>
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays an interface to measure mood &#39;</span> <span class="o">+</span>
-        <span class="s1">&#39;and emotions.&#39;</span><span class="p">;</span>
+    MoodGauge.title = <span class="hljs-string">'Mood Gauge'</span>;
+    MoodGauge.className = <span class="hljs-string">'moodgauge'</span>;
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Mood Gauge&#39;</span><span class="p">;</span>
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;moodgauge&#39;</span><span class="p">;</span>
+    MoodGauge.texts.mainText = <span class="hljs-string">'Thinking about yourself and how you normally'</span> +
+                <span class="hljs-string">' feel, to what extent do you generally feel: '</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">    MoodGauge.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {}
+    };
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="moodgauge%20constructor">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moodgauge-constructor">
   <h2>
-    <a href="#moodgauge%20constructor" name="moodgauge%20constructor" class="pilcrow">&#182;</a>
-    MoodGauge constructor
+    <a href="#moodgauge-constructor" name="moodgauge-constructor" class="pilcrow"></a>
+MoodGauge constructor
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>Creates a new instance of MoodGauge</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options
-which is forwarded to MoodGauge.init.</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">MoodGauge.init
+</div>
+<div class="body">
+<p>Creates a new instance of MoodGauge</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options which is forwarded to MoodGauge.init.
 </span>
-    </div>
-  </div>
 </div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">MoodGauge.init</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">MoodGauge</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MoodGauge</span>(<span class="hljs-params">options</span>) </span>{
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="moodgauge.methods">
   <h3>
-    <a href="#moodgauge.methods" name="moodgauge.methods" class="pilcrow">&#182;</a>
-    MoodGauge.methods
+    <a href="#moodgauge.methods" name="moodgauge.methods" class="pilcrow"></a>
+MoodGauge.methods
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>List of available methods</p>
-
+</div>
+<div class="body">
+<p>List of available methods</p>
 <p>Maps names to functions.</p>
-
 <p>Each function is called with <code>this</code> instance as context,
 and accepts the <code>options</code> parameters passed to constructor.
 Each method must return widget-like gauge object
 implementing functions: append, enable, disable, getValues</p>
-
 <p>or an error will be thrown</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">methods</span> <span class="o">=</span> <span class="p">{};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.methods = {};
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="moodgauge.method">
   <h2>
-    <a href="#moodgauge.method" name="moodgauge.method" class="pilcrow">&#182;</a>
-    MoodGauge.method
+    <a href="#moodgauge.method" name="moodgauge.method" class="pilcrow"></a>
+MoodGauge.method
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>The method used to measure mood</p>
-
-<p>Available methods: 'I-PANAS-SF'</p>
-
-<p>Default method is: 'I-PANAS-SF'</p>
-
-<p>References:</p>
-
-<p>'I-PANAS-SF', Thompson E.R. (2007) "Development
-and Validation of an Internationally Reliable Short-Form of
-the Positive and Negative Affect Schedule (PANAS)"</p>
-  </div>
 </div>
+<div class="body">
+<p>The method used to measure mood</p>
+<p>Available methods: 'I-PANAS-SF'</p>
+<p>Default method is: 'I-PANAS-SF'</p>
+<p>References:</p>
+<p>'I-PANAS-SF', Thompson E.R. (2007) &quot;Development
+and Validation of an Internationally Reliable Short-Form of
+the Positive and Negative Affect Schedule (PANAS)&quot;</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="s1">&#39;I-PANAS-SF&#39;</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.method = <span class="hljs-string">'I-PANAS-SF'</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="svogauge.gauge">
   <h2>
-    <a href="#svogauge.gauge" name="svogauge.gauge" class="pilcrow">&#182;</a>
-    SVOGauge.gauge
+    <a href="#svogauge.gauge" name="svogauge.gauge" class="pilcrow"></a>
+SVOGauge.gauge
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>The object measuring mood</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">SVOGauge.method
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>The object measuring mood</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">SVOGauge.method</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.gauge = <span class="hljs-literal">null</span>;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">addMethod</span><span class="p">(</span><span class="s1">&#39;I-PANAS-SF&#39;</span><span class="p">,</span> <span class="nx">I_PANAS_SF</span><span class="p">);</span>
-    <span class="p">}</span>
+        <span class="hljs-keyword">this</span>.addMethod(<span class="hljs-string">'I-PANAS-SF'</span>, I_PANAS_SF);
+    }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="moodgauge%20methods.">
+          <div class="pilwrap" id="moodgauge-methods">
   <h2>
-    <a href="#moodgauge%20methods." name="moodgauge%20methods." class="pilcrow">&#182;</a>
-    MoodGauge methods.
+    <a href="#moodgauge-methods" name="moodgauge-methods" class="pilcrow"></a>
+MoodGauge methods.
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="moodgauge.init">
   <h3>
-    <a href="#moodgauge.init" name="moodgauge.init" class="pilcrow">&#182;</a>
-    MoodGauge.init
+    <a href="#moodgauge.init" name="moodgauge.init" class="pilcrow"></a>
+MoodGauge.init
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Initializes the widget</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options.</span>
-    </div>
-  </div>
 </div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">gauge</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: options.method must be &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;string or undefined: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">methods</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">])</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: options.method is not a &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;valid method: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">;</span>
-        <span class="p">}</span>
+<div class="body">
+<p>Initializes the widget</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options.
+</span>
+</div>
+</div>
+</div>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    MoodGauge.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> gauge;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.method) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> options.method) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'MoodGauge.init: options.method must be '</span> +
+                                    <span class="hljs-string">'string or undefined: '</span> + options.method);
+            }
+            <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.methods[options.method]) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.init: options.method is not a '</span> +
+                                <span class="hljs-string">'valid method: '</span> + options.method);
+            }
+            <span class="hljs-keyword">this</span>.method = options.method;
+        }
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10"></a>
 </div>
 <p>Call method.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">gauge</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">methods</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">method</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        gauge = <span class="hljs-keyword">this</span>.methods[<span class="hljs-keyword">this</span>.method].call(<span class="hljs-keyword">this</span>, options);
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11"></a>
 </div>
 <p>Check properties.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">checkGauge</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">method</span><span class="p">,</span> <span class="nx">gauge</span><span class="p">);</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        checkGauge(<span class="hljs-keyword">this</span>.method, gauge);
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12"></a>
 </div>
 <p>Approved.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span> <span class="o">=</span> <span class="nx">gauge</span><span class="p">;</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.gauge = gauge;
+    };
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
-    <span class="p">};</span>
+    MoodGauge.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        node.widgets.append(<span class="hljs-keyword">this</span>.gauge, <span class="hljs-keyword">this</span>.bodyDiv, { <span class="hljs-attr">panel</span>: <span class="hljs-literal">false</span> });
+    };
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+    MoodGauge.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{};
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="moodgauge.addmethod">
   <h2>
-    <a href="#moodgauge.addmethod" name="moodgauge.addmethod" class="pilcrow">&#182;</a>
-    MoodGauge.addMethod
+    <a href="#moodgauge.addmethod" name="moodgauge.addmethod" class="pilcrow"></a>
+MoodGauge.addMethod
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>Adds a new method to measure mood</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">name</span>
-      <span class="dox_type">string</span>
-      <span>The name of the method</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">cb</span>
-      <span class="dox_type">function</span>
-      <span>The callback implementing it</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Adds a new method to measure mood</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">name</span>
+<span class="dox_type">string</span>
+<span>The name of the method
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">cb</span>
+<span class="dox_type">function</span>
+<span>The callback implementing it
+</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addMethod</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.addMethod: name must be string: &#39;</span> <span class="o">+</span>
-                            <span class="nx">name</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.addMethod: cb must be function: &#39;</span> <span class="o">+</span>
-                            <span class="nx">cb</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">methods</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.addMethod: name already existing: &#39;</span> <span class="o">+</span>
-                            <span class="nx">name</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">methods</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">cb</span><span class="p">;</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    MoodGauge.prototype.addMethod = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name, cb</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> name) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.addMethod: name must be string: '</span> +
+                            name);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> cb) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.addMethod: cb must be function: '</span> +
+                            cb);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.methods[name]) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.addMethod: name already existing: '</span> +
+                            name);
+        }
+        <span class="hljs-keyword">this</span>.methods[name] = cb;
+    };
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">getValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
-    <span class="p">};</span>
+    MoodGauge.prototype.getValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gauge.getValues(opts);
+    };
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setValues</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">setValues</span><span class="p">(</span><span class="nx">opts</span><span class="p">);</span>
-    <span class="p">};</span>
+    MoodGauge.prototype.setValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gauge.setValues(opts);
+    };
 
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span>
-    <span class="p">};</span>
-    <span class="nx">MoodGauge</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">enable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">gauge</span><span class="p">.</span><span class="nx">disable</span><span class="p">();</span>
-    <span class="p">};</span>
+    MoodGauge.prototype.enable = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gauge.enable();
+    };
+    MoodGauge.prototype.enable = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gauge.disable();
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="helper%20functions.">
+          <div class="pilwrap" id="helper-functions">
   <h2>
-    <a href="#helper%20functions." name="helper%20functions." class="pilcrow">&#182;</a>
-    Helper functions.
+    <a href="#helper-functions" name="helper-functions" class="pilcrow"></a>
+Helper functions.
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="checkgauge">
   <h3>
-    <a href="#checkgauge" name="checkgauge" class="pilcrow">&#182;</a>
-    checkGauge
+    <a href="#checkgauge" name="checkgauge" class="pilcrow"></a>
+checkGauge
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Checks if a gauge is properly constructed, throws an error otherwise</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">method</span>
-      <span class="dox_type">string</span>
-      <span>The name of the method creating it</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">gauge</span>
-      <span class="dox_type">object</span>
-      <span>The object to check</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">ModdGauge.init
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Checks if a gauge is properly constructed, throws an error otherwise</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">method</span>
+<span class="dox_type">string</span>
+<span>The name of the method creating it
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">gauge</span>
+<span class="dox_type">object</span>
+<span>The object to check
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ModdGauge.init</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">checkGauge</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">gauge</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">gauge</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: method &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span>
-                            <span class="s1">&#39;did not create element gauge.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">gauge</span><span class="p">.</span><span class="nx">getValues</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: method &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span>
-                            <span class="s1">&#39;: gauge missing function getValues.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">gauge</span><span class="p">.</span><span class="nx">enable</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: method &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span>
-                            <span class="s1">&#39;: gauge missing function enable.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">gauge</span><span class="p">.</span><span class="nx">disable</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: method &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span>
-                            <span class="s1">&#39;: gauge missing function disable.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">gauge</span><span class="p">.</span><span class="nx">append</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;MoodGauge.init: method &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span>
-                            <span class="s1">&#39;: gauge missing function append.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkGauge</span>(<span class="hljs-params">method, gauge</span>) </span>{
+        <span class="hljs-keyword">if</span> (!gauge) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.init: method '</span> + method +
+                            <span class="hljs-string">'did not create element gauge.'</span>);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> gauge.getValues) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.init: method '</span> + method +
+                            <span class="hljs-string">': gauge missing function getValues.'</span>);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> gauge.enable) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.init: method '</span> + method +
+                            <span class="hljs-string">': gauge missing function enable.'</span>);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> gauge.disable) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.init: method '</span> + method +
+                            <span class="hljs-string">': gauge missing function disable.'</span>);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> gauge.append) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'MoodGauge.init: method '</span> + method +
+                            <span class="hljs-string">': gauge missing function append.'</span>);
+        }
+    }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="available%20methods.">
+          <div class="pilwrap" id="available-methods">
   <h2>
-    <a href="#available%20methods." name="available%20methods." class="pilcrow">&#182;</a>
-    Available methods.
+    <a href="#available-methods" name="available-methods" class="pilcrow"></a>
+Available methods.
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="i_panas_sf">
+          <div class="pilwrap" id="i_panas_sf">
   <h3>
-    <a href="#i_panas_sf" name="i_panas_sf" class="pilcrow">&#182;</a>
-    I_PANAS_SF
+    <a href="#i_panas_sf" name="i_panas_sf" class="pilcrow"></a>
+I_PANAS_SF
   </h3>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">I_PANAS_SF</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">items</span><span class="p">,</span> <span class="nx">emotions</span><span class="p">,</span> <span class="nx">mainText</span><span class="p">,</span> <span class="nx">choices</span><span class="p">,</span> <span class="nx">left</span><span class="p">,</span> <span class="nx">right</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">gauge</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">I_PANAS_SF</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> items, emotions, choices, left, right;
+        <span class="hljs-keyword">var</span> gauge, i, len;
 
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">mainText</span> <span class="o">=</span> <span class="s1">&#39;Thinking about yourself and how you normally feel, &#39;</span> <span class="o">+</span>
-                <span class="s1">&#39;to what extent do you generally feel: &#39;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">mainText</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mainText</span><span class="p">;</span>
-        <span class="p">}</span>
+        choices = options.choices ||
+            [ <span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'5'</span> ];
 
-</pre></div>
+        emotions = options.emotions || [
+            <span class="hljs-string">'Upset'</span>,
+            <span class="hljs-string">'Hostile'</span>,
+            <span class="hljs-string">'Alert'</span>,
+            <span class="hljs-string">'Ashamed'</span>,
+            <span class="hljs-string">'Inspired'</span>,
+            <span class="hljs-string">'Nervous'</span>,
+            <span class="hljs-string">'Determined'</span>,
+            <span class="hljs-string">'Attentive'</span>,
+            <span class="hljs-string">'Afraid'</span>,
+            <span class="hljs-string">'Active'</span>
+        ];
+
+        left = options.left || <span class="hljs-string">'never'</span>;
+
+        right = options.right || <span class="hljs-string">'always'</span>;
+
+        len = emotions.length;
+
+        items = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(len);
+
+        i = <span class="hljs-number">-1</span>;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            items[i] = {
+                <span class="hljs-attr">id</span>: emotions[i],
+                <span class="hljs-attr">left</span>: <span class="hljs-string">'&lt;span class="emotion"&gt;'</span> + emotions[i] + <span class="hljs-string">':&lt;/span&gt; never'</span>,
+                <span class="hljs-attr">right</span>: right,
+                <span class="hljs-attr">choices</span>: choices
+            };
+        }
+
+        gauge = node.widgets.get(<span class="hljs-string">'ChoiceTableGroup'</span>, {
+            <span class="hljs-attr">id</span>: <span class="hljs-string">'ipnassf'</span>,
+            <span class="hljs-attr">items</span>: items,
+            <span class="hljs-attr">mainText</span>: <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'mainText'</span>),
+            <span class="hljs-attr">title</span>: <span class="hljs-literal">false</span>,
+            <span class="hljs-attr">requiredChoice</span>: <span class="hljs-literal">true</span>
+        });
+
+        <span class="hljs-keyword">return</span> gauge;
+    }
+
+})(node);
+
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
-</div>
-<p>Other types ignored.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-        <span class="nx">choices</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">choices</span> <span class="o">||</span>
-            <span class="p">[</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span> <span class="p">];</span>
-
-        <span class="nx">emotions</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">emotions</span> <span class="o">||</span> <span class="p">[</span>
-            <span class="s1">&#39;Upset&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Hostile&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Alert&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Ashamed&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Inspired&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Nervous&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Determined&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Attentive&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Afraid&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Active&#39;</span>
-        <span class="p">];</span>
-
-        <span class="nx">left</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">left</span> <span class="o">||</span> <span class="s1">&#39;never&#39;</span><span class="p">;</span>
-
-        <span class="nx">right</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">right</span> <span class="o">||</span> <span class="s1">&#39;always&#39;</span><span class="p">;</span>
-
-        <span class="nx">len</span> <span class="o">=</span> <span class="nx">emotions</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-
-        <span class="nx">items</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">);</span>
-
-        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">id</span><span class="o">:</span> <span class="nx">emotions</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span>
-                <span class="nx">left</span><span class="o">:</span> <span class="s1">&#39;&lt;span class=&quot;emotion&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">emotions</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:&lt;/span&gt; never&#39;</span><span class="p">,</span>
-                <span class="nx">right</span><span class="o">:</span> <span class="nx">right</span><span class="p">,</span>
-                <span class="nx">choices</span><span class="o">:</span> <span class="nx">choices</span>
-            <span class="p">};</span>
-        <span class="p">}</span>
-
-        <span class="nx">gauge</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ChoiceTableGroup&#39;</span><span class="p">,</span> <span class="p">{</span>
-            <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;ipnassf&#39;</span><span class="p">,</span>
-            <span class="nx">items</span><span class="o">:</span> <span class="nx">items</span><span class="p">,</span>
-            <span class="nx">mainText</span><span class="o">:</span> <span class="nx">mainText</span><span class="p">,</span>
-            <span class="nx">title</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-            <span class="nx">requiredChoice</span><span class="o">:</span> <span class="kc">true</span>
-        <span class="p">});</span>
-
-        <span class="k">return</span> <span class="nx">gauge</span><span class="p">;</span>
-    <span class="p">}</span>
-
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
-        </td>
-      </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

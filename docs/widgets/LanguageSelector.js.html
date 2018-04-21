@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/LanguageSelector.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/LanguageSelector.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,1087 +21,1150 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#languageselector">LanguageSelector</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#languageselector%20constructor">LanguageSelector constructor</a>
+        <a href="#languageselector-constructor">LanguageSelector constructor</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.availablelanguages">LanguageSelector.availableLanguages</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.currentlanguageindex">LanguageSelector.currentLanguageIndex</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.buttonlistlength">LanguageSelector.buttonListLength</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.displayform">LanguageSelector.displayForm</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.optionslabel">LanguageSelector.optionsLabel</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.optionsdisplay">LanguageSelector.optionsDisplay</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.loadingdiv">LanguageSelector.loadingDiv</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.languagesloaded">LanguageSelector.languagesLoaded</a>
       </div>
+
       <div class="heading h2">
         <a href="#languageselector.usingbuttons">LanguageSelector.usingButtons</a>
       </div>
+
       <div class="heading h2">
         <a href="#languageselector.updateplayer">LanguageSelector.updatePlayer</a>
       </div>
+
       <div class="heading h2">
         <a href="#languageselector.seturiprefix">LanguageSelector.setUriPrefix</a>
       </div>
+
       <div class="heading h2">
         <a href="#languageselector.notifyserver">LanguageSelector.notifyServer</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.onlangcallback">LanguageSelector.onLangCallback</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.onlangcallbackextension">LanguageSelector.onLangCallbackExtension</a>
       </div>
+
       <div class="heading h2">
-        <a href="#languageselector%20methods">LanguageSelector methods</a>
+        <a href="#languageselector-methods">LanguageSelector methods</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.init">LanguageSelector.init</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.setlanguage">LanguageSelector.setLanguage</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.updateavailablelanguages">LanguageSelector.updateAvailableLanguages</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.loadlanguages">LanguageSelector.loadLanguages</a>
       </div>
+
       <div class="heading h3">
         <a href="#languageselector.listeners">LanguageSelector.listeners</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector">
   <h1>
-    <a href="#languageselector" name="languageselector" class="pilcrow">&#182;</a>
-    LanguageSelector
+    <a href="#languageselector" name="languageselector" class="pilcrow"></a>
+LanguageSelector
   </h1>
 </div>
-
-
-<p>Copyright(c) 2017 Stefano Balietti <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6F;:&#115;&#x74;&#101;&#64;&#110;o&#100;&#x65;&#103;a&#109;&#101;&#46;&#x6F;rg">&#115;&#x74;&#101;&#64;&#110;o&#100;&#x65;&#103;a&#109;&#101;&#46;&#x6F;rg</a>
+<p>Copyright(c) 2017 Stefano Balietti <a href="mailto:ste@nodegame.org.html">ste@nodegame.org</a>
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Manages and displays information about languages available and selected</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">TODO:</div>
-    <div class="dox_tag_detail">
-      <span>bubble event in case of buttons (now there are many listeners).
-
-www.nodegame.org</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Manages and displays information about languages available and selected</p>
+</div>
+<div class="details">
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    node.widgets.register(<span class="hljs-string">'LanguageSelector'</span>, LanguageSelector);
 
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;LanguageSelector&#39;</span><span class="p">,</span> <span class="nx">LanguageSelector</span><span class="p">);</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    LanguageSelector.version = <span class="hljs-string">'0.6.2'</span>;
+    LanguageSelector.description = <span class="hljs-string">'Display information about the current '</span> +
+        <span class="hljs-string">'language and allows to change language.'</span>;
+    LanguageSelector.title = <span class="hljs-string">'Language'</span>;
+    LanguageSelector.className = <span class="hljs-string">'languageselector'</span>;
 
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.6.0&#39;</span><span class="p">;</span>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display information about the current &#39;</span> <span class="o">+</span>
-        <span class="s1">&#39;language and allows to change language.&#39;</span><span class="p">;</span>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Language&#39;</span><span class="p">;</span>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;languageselector&#39;</span><span class="p">;</span>
+    LanguageSelector.texts.loading = <span class="hljs-string">'Loading language information...'</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    LanguageSelector.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {}
+    };
 
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="languageselector%20constructor">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="languageselector-constructor">
   <h2>
-    <a href="#languageselector%20constructor" name="languageselector%20constructor" class="pilcrow">&#182;</a>
-    LanguageSelector constructor
+    <a href="#languageselector-constructor" name="languageselector-constructor" class="pilcrow"></a>
+LanguageSelector constructor
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>Manages the setting and display of the language used</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Player.lang
+</div>
+<div class="body">
+<p>Manages the setting and display of the language used</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options
 </span>
-    </div>
-  </div>
 </div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Player.lang</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">LanguageSelector</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">LanguageSelector</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+        <span class="hljs-keyword">this</span>.options = options;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.availablelanguages">
   <h3>
-    <a href="#languageselector.availablelanguages" name="languageselector.availablelanguages" class="pilcrow">&#182;</a>
-    LanguageSelector.availableLanguages
+    <a href="#languageselector.availablelanguages" name="languageselector.availablelanguages" class="pilcrow"></a>
+LanguageSelector.availableLanguages
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Object containing an object per availble language.</p>
-
+</div>
+<div class="body">
+<p>Object containing an object per availble language.</p>
 <p>The language object contains at least the following properties:</p>
-
 <ul>
 <li><code>name</code>: Name of the language in English.</li>
 <li><code>nativeName</code>: Native name of the language</li>
 <li><code>shortName</code>: An abbreviation for the language, also determines the
 path to the context files for this language.</li>
 </ul>
-
 <p>The key for each language object is its <code>shortName</code>.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Player.lang
-</span>
-    </div>
-  </div>
 </div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Player.lang</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="nx">en</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;English&#39;</span><span class="p">,</span>
-                <span class="nx">nativeName</span><span class="o">:</span> <span class="s1">&#39;English&#39;</span><span class="p">,</span>
-                <span class="nx">shortName</span><span class="o">:</span> <span class="s1">&#39;en&#39;</span>
-            <span class="p">}</span>
-        <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.availableLanguages = {
+            <span class="hljs-attr">en</span>: {
+                <span class="hljs-attr">name</span>: <span class="hljs-string">'English'</span>,
+                <span class="hljs-attr">nativeName</span>: <span class="hljs-string">'English'</span>,
+                <span class="hljs-attr">shortName</span>: <span class="hljs-string">'en'</span>
+            }
+        };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.currentlanguageindex">
   <h3>
-    <a href="#languageselector.currentlanguageindex" name="languageselector.currentlanguageindex" class="pilcrow">&#182;</a>
-    LanguageSelector.currentLanguageIndex
+    <a href="#languageselector.currentlanguageindex" name="languageselector.currentlanguageindex" class="pilcrow"></a>
+LanguageSelector.currentLanguageIndex
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>A reference to the currently used language</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">LanguageSelector.availableLanguages
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>A reference to the currently used language</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">LanguageSelector.availableLanguages</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.currentLanguage = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.buttonlistlength">
   <h3>
-    <a href="#languageselector.buttonlistlength" name="languageselector.buttonlistlength" class="pilcrow">&#182;</a>
-    LanguageSelector.buttonListLength
+    <a href="#languageselector.buttonlistlength" name="languageselector.buttonlistlength" class="pilcrow"></a>
+LanguageSelector.buttonListLength
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Specifies maximum number of radio buttons used in selection tool</p>
-  </div>
 </div>
+<div class="body">
+<p>Specifies maximum number of radio buttons used in selection tool</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">buttonListLength</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.buttonListLength = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.displayform">
   <h3>
-    <a href="#languageselector.displayform" name="languageselector.displayform" class="pilcrow">&#182;</a>
-    LanguageSelector.displayForm
+    <a href="#languageselector.displayform" name="languageselector.displayform" class="pilcrow"></a>
+LanguageSelector.displayForm
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The form in which the widget displays the language information</p>
-  </div>
 </div>
+<div class="body">
+<p>The form in which the widget displays the language information</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">displayForm</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.displayForm = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.optionslabel">
   <h3>
-    <a href="#languageselector.optionslabel" name="languageselector.optionslabel" class="pilcrow">&#182;</a>
-    LanguageSelector.optionsLabel
+    <a href="#languageselector.optionslabel" name="languageselector.optionslabel" class="pilcrow"></a>
+LanguageSelector.optionsLabel
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Array containing the labels for the language selection optionsDisplay</p>
-  </div>
 </div>
+<div class="body">
+<p>Array containing the labels for the language selection optionsDisplay</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">optionsLabel</span> <span class="o">=</span> <span class="p">{};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.optionsLabel = {};
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.optionsdisplay">
   <h3>
-    <a href="#languageselector.optionsdisplay" name="languageselector.optionsdisplay" class="pilcrow">&#182;</a>
-    LanguageSelector.optionsDisplay
+    <a href="#languageselector.optionsdisplay" name="languageselector.optionsdisplay" class="pilcrow"></a>
+LanguageSelector.optionsDisplay
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Array containing the optionsDisplay for the language selection</p>
-  </div>
 </div>
+<div class="body">
+<p>Array containing the optionsDisplay for the language selection</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">optionsDisplay</span> <span class="o">=</span> <span class="p">{};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.optionsDisplay = {};
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.loadingdiv">
   <h3>
-    <a href="#languageselector.loadingdiv" name="languageselector.loadingdiv" class="pilcrow">&#182;</a>
-    LanguageSelector.loadingDiv
+    <a href="#languageselector.loadingdiv" name="languageselector.loadingdiv" class="pilcrow"></a>
+LanguageSelector.loadingDiv
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Div displaying information on whether the languages have been loaded</p>
-  </div>
 </div>
+<div class="body">
+<p>Div displaying information on whether the languages have been loaded</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">loadingDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.loadingDiv = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.languagesloaded">
   <h3>
-    <a href="#languageselector.languagesloaded" name="languageselector.languagesloaded" class="pilcrow">&#182;</a>
-    LanguageSelector.languagesLoaded
+    <a href="#languageselector.languagesloaded" name="languageselector.languagesloaded" class="pilcrow"></a>
+LanguageSelector.languagesLoaded
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Flag indicating whether languages have been loaded from server</p>
-  </div>
 </div>
+<div class="body">
+<p>Flag indicating whether languages have been loaded from server</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">languagesLoaded</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.languagesLoaded = <span class="hljs-literal">false</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.usingbuttons">
   <h2>
-    <a href="#languageselector.usingbuttons" name="languageselector.usingbuttons" class="pilcrow">&#182;</a>
-    LanguageSelector.usingButtons
+    <a href="#languageselector.usingbuttons" name="languageselector.usingbuttons" class="pilcrow"></a>
+LanguageSelector.usingButtons
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>Flag indicating if the interface should have buttons</p>
-
-<p>Default: TRUE.</p>
-  </div>
 </div>
+<div class="body">
+<p>Flag indicating if the interface should have buttons</p>
+<p>Default: TRUE.</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.usingButtons = <span class="hljs-literal">true</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.updateplayer">
   <h2>
-    <a href="#languageselector.updateplayer" name="languageselector.updateplayer" class="pilcrow">&#182;</a>
-    LanguageSelector.updatePlayer
+    <a href="#languageselector.updateplayer" name="languageselector.updateplayer" class="pilcrow"></a>
+LanguageSelector.updatePlayer
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>Specifies when updating the player</p>
-
-<p>Available options:</p>
-
-<ul>
-<li>false: alias for 'never',
-<ul><li>'never': never notifies,</li>
-<li>'onselect': each time a selection is made,</li>
-<li>'ondone': when current step is done.</li></ul></li>
-</ul>
-
-<p>Default: 'ondone'</p>
-  </div>
 </div>
+<div class="body">
+<p>Specifies when updating the player</p>
+<p>Available options:</p>
+<ul>
+<li>false: alias for 'never',</li>
+<li>'never': never notifies,</li>
+<li>'onselect': each time a selection is made,</li>
+<li>'ondone': when current step is done.</li>
+</ul>
+<p>Default: 'ondone'</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">updatePlayer</span> <span class="o">=</span> <span class="s1">&#39;ondone&#39;</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.updatePlayer = <span class="hljs-string">'ondone'</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.seturiprefix">
   <h2>
-    <a href="#languageselector.seturiprefix" name="languageselector.seturiprefix" class="pilcrow">&#182;</a>
-    LanguageSelector.setUriPrefix
+    <a href="#languageselector.seturiprefix" name="languageselector.seturiprefix" class="pilcrow"></a>
+LanguageSelector.setUriPrefix
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>If TRUE, the Window URI prefix is updated when the player is updated</p>
-
-<p>Default: TRUE.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">GameWindow.setUriPrefix
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>If TRUE, the Window URI prefix is updated when the player is updated</p>
+<p>Default: TRUE.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">GameWindow.setUriPrefix</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">setUriPrefix</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.setUriPrefix = <span class="hljs-literal">true</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.notifyserver">
   <h2>
-    <a href="#languageselector.notifyserver" name="languageselector.notifyserver" class="pilcrow">&#182;</a>
-    LanguageSelector.notifyServer
+    <a href="#languageselector.notifyserver" name="languageselector.notifyserver" class="pilcrow"></a>
+LanguageSelector.notifyServer
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>If TRUE, a message is sent to the server when the player is updated</p>
-
-<p>Default: TRUE.</p>
-  </div>
 </div>
+<div class="body">
+<p>If TRUE, a message is sent to the server when the player is updated</p>
+<p>Default: TRUE.</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.notifyServer = <span class="hljs-literal">true</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.onlangcallback">
   <h3>
-    <a href="#languageselector.onlangcallback" name="languageselector.onlangcallback" class="pilcrow">&#182;</a>
-    LanguageSelector.onLangCallback
+    <a href="#languageselector.onlangcallback" name="languageselector.onlangcallback" class="pilcrow"></a>
+LanguageSelector.onLangCallback
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Function to be called when languages have been loaded</p>
-
+</div>
+<div class="body">
+<p>Function to be called when languages have been loaded</p>
 <p>Initializes form displaying the information as well
 as the optionsDisplay and their labels.
 Initializes language to English.
 Forwards to <code>LanguageSelector.onLangCallbackExtension</code> at the very
 end.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">msg</span>
-      <span class="dox_type">object</span>
-      <span>GameMsg</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">LanguageSelector.setLanguage
-</span>
-    </div>
-  </div>
 </div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">msg</span>
+<span class="dox_type">object</span>
+<span>GameMsg
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">LanguageSelector.setLanguage</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onLangCallback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">language</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.onLangCallback = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+            <span class="hljs-keyword">var</span> language;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18"></a>
 </div>
 <p>Clear display.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">while</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">while</span> (that.displayForm.firstChild) {
+                that.displayForm.removeChild(that.displayForm.firstChild);
+            }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19"></a>
 </div>
 <p>Initialize widget.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">availableLanguages</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">            that.availableLanguages = msg.data;
+            <span class="hljs-keyword">if</span> (that.usingButtons) {
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20"></a>
 </div>
 <p>Creates labeled buttons.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">for</span> <span class="p">(</span><span class="nx">language</span> <span class="k">in</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">language</span><span class="p">))</span> <span class="p">{</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">]</span> <span class="o">=</span>
-                            <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span>
-                                         <span class="nx">language</span> <span class="o">+</span> <span class="s1">&#39;Label&#39;</span><span class="p">,</span> <span class="p">{</span>
-                                             <span class="s1">&#39;for&#39;</span><span class="o">:</span> <span class="nx">language</span> <span class="o">+</span> <span class="s1">&#39;RadioButton&#39;</span>
-                                         <span class="p">});</span>
+        <td class="code highlight">
+          <pre class="javascript">                <span class="hljs-keyword">for</span> (language <span class="hljs-keyword">in</span> msg.data) {
+                    <span class="hljs-keyword">if</span> (msg.data.hasOwnProperty(language)) {
+                        that.optionsLabel[language] = W.get(<span class="hljs-string">'label'</span>, {
+                            <span class="hljs-attr">id</span>: language + <span class="hljs-string">'Label'</span>,
+                            <span class="hljs-string">'for'</span>: language + <span class="hljs-string">'RadioButton'</span>
+                        });
 
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">]</span> <span class="o">=</span>
-                            <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span>
-                                         <span class="nx">language</span> <span class="o">+</span> <span class="s1">&#39;RadioButton&#39;</span><span class="p">,</span> <span class="p">{</span>
-                                             <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span><span class="p">,</span>
-                                             <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;languageButton&#39;</span><span class="p">,</span>
-                                             <span class="nx">value</span><span class="o">:</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">name</span>
-                                         <span class="p">}</span>
-                                        <span class="p">);</span>
+                        that.optionsDisplay[language] = W.get(<span class="hljs-string">'input'</span>, {
+                            <span class="hljs-attr">id</span>: language + <span class="hljs-string">'RadioButton'</span>,
+                            <span class="hljs-attr">type</span>: <span class="hljs-string">'radio'</span>,
+                            <span class="hljs-attr">name</span>: <span class="hljs-string">'languageButton'</span>,
+                            <span class="hljs-attr">value</span>: msg.data[language].name
+                        });
 
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">onclick</span> <span class="o">=</span>
-                            <span class="nx">makeSetLanguageOnClick</span><span class="p">(</span><span class="nx">language</span><span class="p">);</span>
+                        that.optionsDisplay[language].onclick =
+                            makeSetLanguageOnClick(language);
 
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span>
-                            <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">]);</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span>
-                            <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span>
-                                <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">nativeName</span><span class="p">));</span>
-                        <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addElement</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">);</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">className</span> <span class="o">=</span>
-                            <span class="s1">&#39;unselectedButtonLabel&#39;</span><span class="p">;</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span>
-                            <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">]);</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
+                        that.optionsLabel[language].appendChild(
+                            that.optionsDisplay[language]);
+                        that.optionsLabel[language].appendChild(
+                            <span class="hljs-built_in">document</span>.createTextNode(
+                                msg.data[language].nativeName));
+                        W.add(<span class="hljs-string">'br'</span>, that.displayForm);
+                        that.optionsLabel[language].className =
+                            <span class="hljs-string">'unselectedButtonLabel'</span>;
+                        that.displayForm.appendChild(
+                            that.optionsLabel[language]);
+                    }
+                }
+            }
+            <span class="hljs-keyword">else</span> {
 
-                <span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span>
-                                                     <span class="s1">&#39;selectLanguage&#39;</span><span class="p">);</span>
-                <span class="k">for</span> <span class="p">(</span><span class="nx">language</span> <span class="k">in</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">]</span> <span class="o">=</span>
-                        <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">nativeName</span><span class="p">);</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">]</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span>
-                        <span class="s1">&#39;option&#39;</span><span class="p">,</span> <span class="nx">language</span> <span class="o">+</span> <span class="s1">&#39;Option&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">language</span> <span class="p">});</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">].</span><span class="nx">appendChild</span><span class="p">(</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="nx">language</span><span class="p">]);</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="nx">language</span><span class="p">]);</span>
+                that.displaySelection = W.get(<span class="hljs-string">'select'</span>, <span class="hljs-string">'selectLanguage'</span>);
+                <span class="hljs-keyword">for</span> (language <span class="hljs-keyword">in</span> msg.data) {
+                    that.optionsLabel[language] =
+                        <span class="hljs-built_in">document</span>.createTextNode(msg.data[language].nativeName);
+                    that.optionsDisplay[language] = W.get(<span class="hljs-string">'option'</span>, {
+                        <span class="hljs-attr">id</span>: language + <span class="hljs-string">'Option'</span>,
+                        <span class="hljs-attr">value</span>: language
+                    });
+                    that.optionsDisplay[language].appendChild(
+                        that.optionsLabel[language]);
+                    that.displaySelection.appendChild(
+                        that.optionsDisplay[language]);
 
-                <span class="p">}</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">);</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span>
-                                     <span class="nx">that</span><span class="p">.</span><span class="nx">updatePlayer</span> <span class="o">===</span> <span class="s1">&#39;onselect&#39;</span><span class="p">);</span>
-                <span class="p">};</span>
-            <span class="p">}</span>
+                }
+                that.displayForm.appendChild(that.displaySelection);
+                that.displayForm.onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                    that.setLanguage(that.displaySelection.value,
+                                     that.updatePlayer === <span class="hljs-string">'onselect'</span>);
+                };
+            }
 
-            <span class="nx">that</span><span class="p">.</span><span class="nx">loadingDiv</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">languagesLoaded</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            that.loadingDiv.style.display = <span class="hljs-string">'none'</span>;
+            that.languagesLoaded = <span class="hljs-literal">true</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21"></a>
 </div>
 <p>Initialize with current value inside player object,
 or default to English. Does not update the player object yet.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">shortName</span> <span class="o">||</span> <span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">            that.setLanguage(node.player.lang.shortName || <span class="hljs-string">'en'</span>, <span class="hljs-literal">false</span>);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22"></a>
 </div>
 <p>Extension point.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (that.onLangCallbackExtension) {
+                that.onLangCallbackExtension(msg);
+                that.onLangCallbackExtension = <span class="hljs-literal">null</span>;
+            }
 
-            <span class="kd">function</span> <span class="nx">makeSetLanguageOnClick</span><span class="p">(</span><span class="nx">langStr</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">that</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">langStr</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">updatePlayer</span> <span class="o">===</span> <span class="s1">&#39;onselect&#39;</span><span class="p">);</span>
-                <span class="p">};</span>
-            <span class="p">}</span>
-        <span class="p">};</span>
+            <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeSetLanguageOnClick</span>(<span class="hljs-params">langStr</span>) </span>{
+                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                    that.setLanguage(langStr, that.updatePlayer === <span class="hljs-string">'onselect'</span>);
+                };
+            }
+        };
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="languageselector.onlangcallbackextension">
-  <h3>
-    <a href="#languageselector.onlangcallbackextension" name="languageselector.onlangcallbackextension" class="pilcrow">&#182;</a>
-    LanguageSelector.onLangCallbackExtension
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Extension point to <code>LanguageSelector.onLangCallback</code></p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">LanguageSelector.onLangCallback
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="p">}</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="languageselector%20methods">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="languageselector.onlangcallbackextension">
+  <h3>
+    <a href="#languageselector.onlangcallbackextension" name="languageselector.onlangcallbackextension" class="pilcrow"></a>
+LanguageSelector.onLangCallbackExtension
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Extension point to <code>LanguageSelector.onLangCallback</code></p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">LanguageSelector.onLangCallback</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.onLangCallbackExtension = <span class="hljs-literal">null</span>;
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="languageselector-methods">
   <h2>
-    <a href="#languageselector%20methods" name="languageselector%20methods" class="pilcrow">&#182;</a>
-    LanguageSelector methods
+    <a href="#languageselector-methods" name="languageselector-methods" class="pilcrow"></a>
+LanguageSelector methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="languageselector.init">
-  <h3>
-    <a href="#languageselector.init" name="languageselector.init" class="pilcrow">&#182;</a>
-    LanguageSelector.init
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Initializes the widget</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">LanguageSelector.onLangCallback
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span> <span class="o">=</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">=</span> <span class="s1">&#39;never&#39;</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;never&#39;</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">||</span>
-                    <span class="s1">&#39;onselect&#39;</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">||</span>
-                    <span class="s1">&#39;ondone&#39;</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">)</span> <span class="p">{</span>
-
-                    <span class="k">this</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="p">{</span>
-                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;LanguageSelector.init: invalid value &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;for notifyServer: &quot;&#39;</span> <span class="o">+</span>
-                                    <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span> <span class="o">+</span> <span class="s1">&#39;&quot;. Valid &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;values: &quot;never&quot;,&quot;onselect&quot;, &quot;ondone&quot;.&#39;</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;LanguageSelector.init: options.notifyServer &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;must be &#39;</span> <span class="o">+</span>
-                                <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">setUriPrefix</span> <span class="o">=</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">;</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="languageselector.init">
+  <h3>
+    <a href="#languageselector.init" name="languageselector.init" class="pilcrow"></a>
+LanguageSelector.init
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Initializes the widget</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">LanguageSelector.onLangCallback</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    LanguageSelector.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        J.mixout(options, <span class="hljs-keyword">this</span>.options);
+        <span class="hljs-keyword">this</span>.options = options;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.options.usingButtons) {
+            <span class="hljs-keyword">this</span>.usingButtons = !!<span class="hljs-keyword">this</span>.options.usingButtons;
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.options.notifyServer) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span> === <span class="hljs-keyword">this</span>.options.notifyServer) {
+                <span class="hljs-keyword">this</span>.options.notifyServer = <span class="hljs-string">'never'</span>;
+            }
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.options.notifyServer) {
+                <span class="hljs-keyword">if</span> (<span class="hljs-string">'never'</span> === <span class="hljs-keyword">this</span>.options.notifyServer ||
+                    <span class="hljs-string">'onselect'</span> === <span class="hljs-keyword">this</span>.options.notifyServer ||
+                    <span class="hljs-string">'ondone'</span> === <span class="hljs-keyword">this</span>.options.notifyServer) {
+
+                    <span class="hljs-keyword">this</span>.notifyServer = <span class="hljs-keyword">this</span>.options.notifyServer;
+                }
+                <span class="hljs-keyword">else</span> {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'LanguageSelector.init: invalid value '</span> +
+                                    <span class="hljs-string">'for notifyServer: "'</span> +
+                                    <span class="hljs-keyword">this</span>.options.notifyServer + <span class="hljs-string">'". Valid '</span> +
+                                    <span class="hljs-string">'values: "never","onselect", "ondone".'</span>);
+                }
+            }
+            <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'LanguageSelector.init: options.notifyServer '</span> +
+                                <span class="hljs-string">'must be '</span> +
+                                <span class="hljs-keyword">this</span>.options.notifyServer);
+            }
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.options.setUriPrefix) {
+            <span class="hljs-keyword">this</span>.setUriPrefix = !!<span class="hljs-keyword">this</span>.options.setUriPrefix;
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26"></a>
 </div>
 <p>Register listener.
 TODO: should it be moved into the listeners method?
 TODO: calling init twice will add it twice.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">lang</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onLangCallback</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        node.on.lang(<span class="hljs-keyword">this</span>.onLangCallback);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27"></a>
 </div>
 <p>Display initialization.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">displayForm</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">,</span> <span class="s1">&#39;radioButtonForm&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">loadingDiv</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">loadingDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Loading language information...&#39;</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.displayForm = W.get(<span class="hljs-string">'form'</span>, <span class="hljs-string">'radioButtonForm'</span>);
+        <span class="hljs-keyword">this</span>.loadingDiv = W.add(<span class="hljs-string">'div'</span>, <span class="hljs-keyword">this</span>.displayForm);
+        <span class="hljs-keyword">this</span>.loadingDiv.innerHTML = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'loading'</span>);
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">loadLanguages</span><span class="p">();</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">this</span>.loadLanguages();
+    };
 
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">displayForm</span><span class="p">);</span>
-    <span class="p">};</span>
+    LanguageSelector.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.displayForm);
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.setlanguage">
   <h3>
-    <a href="#languageselector.setlanguage" name="languageselector.setlanguage" class="pilcrow">&#182;</a>
-    LanguageSelector.setLanguage
+    <a href="#languageselector.setlanguage" name="languageselector.setlanguage" class="pilcrow"></a>
+LanguageSelector.setLanguage
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Sets language within the widget and globally and updates the display</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">langName</span>
-      <span class="dox_type">string</span>
-      <span>shortName of language to be set</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">updatePlayer</span>
-      <span class="dox_type">boolean</span>
-      <span>If FALSE, the language is set only
-  inside the widget, and no changes are made to the player object.
-  Default: TRUE</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">NodeGameClient.setLanguage
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Sets language within the widget and globally and updates the display</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">langName</span>
+<span class="dox_type">string</span>
+<span>shortName of language to be set
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">updatePlayer</span>
+<span class="dox_type">boolean</span>
+<span>If FALSE, the language is set only   inside the widget, and no changes are made to the player object.
+Default: TRUE
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">NodeGameClient.setLanguage</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setLanguage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">langName</span><span class="p">,</span> <span class="nx">updatePlayer</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">    LanguageSelector.prototype.setLanguage = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">langName, updatePlayer</span>) </span>{
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.usingButtons) {
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-29" id="section-29"></a>
 </div>
 <p>Uncheck current language button and change className of label.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="nx">langName</span><span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.currentLanguage !== <span class="hljs-literal">null</span> &amp;&amp;
+                <span class="hljs-keyword">this</span>.currentLanguage !== <span class="hljs-keyword">this</span>.availableLanguages[langName] ) {
 
-                <span class="k">this</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">].</span><span class="nx">checked</span> <span class="o">=</span>
-                    <span class="s1">&#39;unchecked&#39;</span><span class="p">;</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">].</span><span class="nx">className</span> <span class="o">=</span>
-                    <span class="s1">&#39;unselectedButtonLabel&#39;</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+                <span class="hljs-keyword">this</span>.optionsDisplay[<span class="hljs-keyword">this</span>.currentLanguage].checked =
+                    <span class="hljs-string">'unchecked'</span>;
+                <span class="hljs-keyword">this</span>.optionsLabel[<span class="hljs-keyword">this</span>.currentLanguage].className =
+                    <span class="hljs-string">'unselectedButtonLabel'</span>;
+            }
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-30" id="section-30"></a>
 </div>
 <p>Set current language index.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span> <span class="o">=</span> <span class="nx">langName</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.currentLanguage = langName;
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">usingButtons</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.usingButtons) {
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-31" id="section-31"></a>
 </div>
 <p>Check language button and change className of label.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">this</span><span class="p">.</span><span class="nx">optionsDisplay</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">].</span><span class="nx">checked</span> <span class="o">=</span> <span class="s1">&#39;checked&#39;</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">optionsLabel</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">].</span><span class="nx">className</span> <span class="o">=</span>
-                <span class="s1">&#39;selectedButtonLabel&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">displaySelection</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">;</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">this</span>.optionsDisplay[<span class="hljs-keyword">this</span>.currentLanguage].checked = <span class="hljs-string">'checked'</span>;
+            <span class="hljs-keyword">this</span>.optionsLabel[<span class="hljs-keyword">this</span>.currentLanguage].className =
+                <span class="hljs-string">'selectedButtonLabel'</span>;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.displaySelection.value = <span class="hljs-keyword">this</span>.currentLanguage;
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-32" id="section-32"></a>
 </div>
 <p>Update node.player.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">updatePlayer</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">],</span>
-                             <span class="k">this</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (updatePlayer !== <span class="hljs-literal">false</span>) {
+            node.setLanguage(<span class="hljs-keyword">this</span>.availableLanguages[<span class="hljs-keyword">this</span>.currentLanguage],
+                             <span class="hljs-keyword">this</span>.setUriPrefix, <span class="hljs-keyword">this</span>.notifyServer);
+        }
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.updateavailablelanguages">
   <h3>
-    <a href="#languageselector.updateavailablelanguages" name="languageselector.updateavailablelanguages" class="pilcrow">&#182;</a>
-    LanguageSelector.updateAvailableLanguages
+    <a href="#languageselector.updateavailablelanguages" name="languageselector.updateavailablelanguages" class="pilcrow"></a>
+LanguageSelector.updateAvailableLanguages
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Updates available languages asynchronously</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Updates available languages asynchronously</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options
+</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateAvalaibleLanguages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">onLangCallbackExtension</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">msg</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
-            <span class="nx">target</span><span class="o">:</span> <span class="s2">&quot;LANG&quot;</span><span class="p">,</span>
-            <span class="nx">to</span><span class="o">:</span> <span class="s2">&quot;SERVER&quot;</span><span class="p">,</span>
-            <span class="nx">action</span><span class="o">:</span> <span class="s2">&quot;get&quot;</span>
-        <span class="p">}));</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    LanguageSelector.prototype.updateAvalaibleLanguages = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">if</span> (options &amp;&amp; options.callback) {
+            <span class="hljs-keyword">this</span>.onLangCallbackExtension = options.callback;
+        }
+        node.socket.send(node.msg.create({
+            <span class="hljs-attr">target</span>: <span class="hljs-string">"LANG"</span>,
+            <span class="hljs-attr">to</span>: <span class="hljs-string">"SERVER"</span>,
+            <span class="hljs-attr">action</span>: <span class="hljs-string">"get"</span>
+        }));
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.loadlanguages">
   <h3>
-    <a href="#languageselector.loadlanguages" name="languageselector.loadlanguages" class="pilcrow">&#182;</a>
-    LanguageSelector.loadLanguages
+    <a href="#languageselector.loadlanguages" name="languageselector.loadlanguages" class="pilcrow"></a>
+LanguageSelector.loadLanguages
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Loads languages once from server</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">LanguageSelector.updateAvalaibleLanguages
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Loads languages once from server</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">LanguageSelector.updateAvalaibleLanguages</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">loadLanguages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">languagesLoaded</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">updateAvalaibleLanguages</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">();</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    LanguageSelector.prototype.loadLanguages = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.languagesLoaded) <span class="hljs-keyword">this</span>.updateAvalaibleLanguages(options);
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options &amp;&amp; options.callback) options.callback();
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="languageselector.listeners">
   <h3>
-    <a href="#languageselector.listeners" name="languageselector.listeners" class="pilcrow">&#182;</a>
-    LanguageSelector.listeners
+    <a href="#languageselector.listeners" name="languageselector.listeners" class="pilcrow"></a>
+LanguageSelector.listeners
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Implements Widget.listeners</p>
-  </div>
 </div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">LanguageSelector</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">step</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;REALLY_DONE&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">updatePlayer</span> <span class="o">===</span> <span class="s1">&#39;ondone&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">setLanguage</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">availableLanguages</span><span class="p">[</span><span class="nx">that</span><span class="p">.</span><span class="nx">currentLanguage</span><span class="p">],</span>
-                                 <span class="nx">that</span><span class="p">.</span><span class="nx">setUriPrefix</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">notifyServer</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">});</span>
-    <span class="p">};</span>
+<div class="body">
+<p>Implements Widget.listeners</p>
+</div>
+</div>
 
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    LanguageSelector.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that;
+        that = <span class="hljs-keyword">this</span>;
+        node.events.step.on(<span class="hljs-string">'REALLY_DONE'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">if</span> (that.updatePlayer === <span class="hljs-string">'ondone'</span>) {
+                node.setLanguage(that.availableLanguages[that.currentLanguage],
+                                 that.setUriPrefix, that.notifyServer);
+            }
+        });
+    };
+
+})(node);
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

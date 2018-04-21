@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/Chat.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/Chat.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,725 +21,789 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#chat">Chat</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.modes">Chat.modes</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#chat%20constructor">Chat constructor</a>
+        <a href="#chat-constructor">Chat constructor</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.mode">Chat.mode</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.recipient">Chat.recipient</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.textarea">Chat.textarea</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.textareaid">Chat.textareaId</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.chat">Chat.chat</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.chatid">Chat.chatId</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.submit">Chat.submit</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.submitid">Chat.submitId</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.submittext">Chat.submitText</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.chatevent">Chat.chatEvent</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.displayname">Chat.displayName</a>
       </div>
+
       <div class="heading h3">
-        <a href="#chat.recipient">Chat.recipient</a>
+        <a href="#chat.recipient-1">Chat.recipient</a>
       </div>
+
       <div class="heading h2">
-        <a href="#chat%20methods">Chat methods</a>
+        <a href="#chat-methods">Chat methods</a>
       </div>
+
       <div class="heading h3">
         <a href="#chat.init">Chat.init</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="chat">
   <h1>
-    <a href="#chat" name="chat" class="pilcrow">&#182;</a>
-    Chat
+    <a href="#chat" name="chat" class="pilcrow"></a>
+Chat
   </h1>
 </div>
-
-
-<p>Copyright(c) 2016 Stefano Balietti
+<p>Copyright(c) 2017 Stefano Balietti
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Creates a simple configurable chat</p>
-
-<p>www.nodegame.org</p>
-  </div>
 </div>
+<div class="body">
+<p>Creates a simple configurable chat</p>
+<p>www.nodegame.org</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    node.widgets.register(<span class="hljs-string">'Chat'</span>, Chat);
 
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Chat&#39;</span><span class="p">,</span> <span class="nx">Chat</span><span class="p">);</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    Chat.version = <span class="hljs-string">'0.5.2'</span>;
+    Chat.description = <span class="hljs-string">'Offers a uni-/bi-directional communication interface '</span> +
+        <span class="hljs-string">'between players, or between players and the experimenter.'</span>;
 
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.1&#39;</span><span class="p">;</span>
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Offers a uni-/bi-directional communication interface &#39;</span> <span class="o">+</span>
-        <span class="s1">&#39;between players, or between players and the experimenter.&#39;</span><span class="p">;</span>
+    Chat.title = <span class="hljs-string">'Chat'</span>;
+    Chat.className = <span class="hljs-string">'chat'</span>;
 
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Chat&#39;</span><span class="p">;</span>
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;chat&#39;</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="chat.modes">
+          <div class="pilwrap" id="chat.modes">
   <h3>
-    <a href="#chat.modes" name="chat.modes" class="pilcrow">&#182;</a>
-    Chat.modes
+    <a href="#chat.modes" name="chat.modes" class="pilcrow"></a>
+Chat.modes
   </h3>
 </div>
-
-
 <ul>
-<li><p>MANY_TO_MANY: everybody can see all the messages, and it possible
-to send private messages.</p></li>
-<li><p>MANY_TO_ONE: everybody can see all the messages, private messages can
-be received, but not sent.</p></li>
-<li><p>ONE_TO_ONE: everybody sees only personal messages, private messages can
-be received, but not sent. All messages are sent to the SERVER.</p></li>
-<li><p>RECEIVER_ONLY: messages can only be received, but not sent.</p></li>
+<li>
+<p>MANY_TO_MANY: everybody can see all the messages, and it possible
+to send private messages.</p>
+</li>
+<li>
+<p>MANY_TO_ONE: everybody can see all the messages, private messages can
+be received, but not sent.</p>
+</li>
+<li>
+<p>ONE_TO_ONE: everybody sees only personal messages, private messages can
+be received, but not sent. All messages are sent to the SERVER.</p>
+</li>
+<li>
+<p>RECEIVER_ONLY: messages can only be received, but not sent.</p>
+</li>
 </ul>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">MANY_TO_MANY</span><span class="o">:</span> <span class="s1">&#39;MANY_TO_MANY&#39;</span><span class="p">,</span>
-        <span class="nx">MANY_TO_ONE</span><span class="o">:</span> <span class="s1">&#39;MANY_TO_ONE&#39;</span><span class="p">,</span>
-        <span class="nx">ONE_TO_ONE</span><span class="o">:</span> <span class="s1">&#39;ONE_TO_ONE&#39;</span><span class="p">,</span>
-        <span class="nx">RECEIVER_ONLY</span><span class="o">:</span> <span class="s1">&#39;RECEIVER_ONLY&#39;</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    Chat.modes = {
+        <span class="hljs-attr">MANY_TO_MANY</span>: <span class="hljs-string">'MANY_TO_MANY'</span>,
+        <span class="hljs-attr">MANY_TO_ONE</span>: <span class="hljs-string">'MANY_TO_ONE'</span>,
+        <span class="hljs-attr">ONE_TO_ONE</span>: <span class="hljs-string">'ONE_TO_ONE'</span>,
+        <span class="hljs-attr">RECEIVER_ONLY</span>: <span class="hljs-string">'RECEIVER_ONLY'</span>
+    };
 
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    Chat.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {}
+    };
 
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat%20constructor">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat-constructor">
   <h2>
-    <a href="#chat%20constructor" name="chat%20constructor" class="pilcrow">&#182;</a>
-    Chat constructor
+    <a href="#chat-constructor" name="chat-constructor" class="pilcrow"></a>
+Chat constructor
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p><code>Chat</code> is a simple configurable chat</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Chat.init
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p><code>Chat</code> is a simple configurable chat</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Chat.init</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">Chat</span><span class="p">()</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Chat</span>(<span class="hljs-params"></span>) </span>{
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="chat.mode">
   <h3>
-    <a href="#chat.mode" name="chat.mode" class="pilcrow">&#182;</a>
-    Chat.mode
+    <a href="#chat.mode" name="chat.mode" class="pilcrow"></a>
+Chat.mode
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Determines to mode of communication</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Chat.modes
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Determines to mode of communication</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Chat.modes</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.mode = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.recipient">
-  <h3>
-    <a href="#chat.recipient" name="chat.recipient" class="pilcrow">&#182;</a>
-    Chat.recipient
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Determines recipient of the messages</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.textarea">
-  <h3>
-    <a href="#chat.textarea" name="chat.textarea" class="pilcrow">&#182;</a>
-    Chat.textarea
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The textarea wherein to write and read</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.textareaid">
-  <h3>
-    <a href="#chat.textareaid" name="chat.textareaid" class="pilcrow">&#182;</a>
-    Chat.textareaId
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The id of the textarea</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">textareaId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.chat">
-  <h3>
-    <a href="#chat.chat" name="chat.chat" class="pilcrow">&#182;</a>
-    Chat.chat
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The DIV wherein to display the chat</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">chat</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.chatid">
-  <h3>
-    <a href="#chat.chatid" name="chat.chatid" class="pilcrow">&#182;</a>
-    Chat.chatId
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The id of the chat DIV</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">chatId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.submit">
-  <h3>
-    <a href="#chat.submit" name="chat.submit" class="pilcrow">&#182;</a>
-    Chat.submit
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The submit button</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.submitid">
-  <h3>
-    <a href="#chat.submitid" name="chat.submitid" class="pilcrow">&#182;</a>
-    Chat.submitId
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The id of the submit butten</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submitId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.submittext">
-  <h3>
-    <a href="#chat.submittext" name="chat.submittext" class="pilcrow">&#182;</a>
-    Chat.submitText
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The text on the submit button</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submitText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.chatevent">
-  <h3>
-    <a href="#chat.chatevent" name="chat.chatevent" class="pilcrow">&#182;</a>
-    Chat.chatEvent
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The event to fire when sending a message</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">chatEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.displayname">
-  <h3>
-    <a href="#chat.displayname" name="chat.displayname" class="pilcrow">&#182;</a>
-    Chat.displayName
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Function which displays the sender's name</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">displayName</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="chat.recipient">
-  <h3>
-    <a href="#chat.recipient" name="chat.recipient" class="pilcrow">&#182;</a>
-    Chat.recipient
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Object containing the value of the recipient of the message</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">value</span><span class="o">:</span> <span class="kc">null</span> <span class="p">};</span>
-    <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="chat%20methods">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.recipient">
+  <h3>
+    <a href="#chat.recipient" name="chat.recipient" class="pilcrow"></a>
+Chat.recipient
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Determines recipient of the messages</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.recipient = <span class="hljs-literal">null</span>;
+
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.textarea">
+  <h3>
+    <a href="#chat.textarea" name="chat.textarea" class="pilcrow"></a>
+Chat.textarea
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The textarea wherein to write and read</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.textarea = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.textareaid">
+  <h3>
+    <a href="#chat.textareaid" name="chat.textareaid" class="pilcrow"></a>
+Chat.textareaId
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The id of the textarea</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.textareaId = <span class="hljs-literal">null</span>;
+
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.chat">
+  <h3>
+    <a href="#chat.chat" name="chat.chat" class="pilcrow"></a>
+Chat.chat
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The DIV wherein to display the chat</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.chat = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.chatid">
+  <h3>
+    <a href="#chat.chatid" name="chat.chatid" class="pilcrow"></a>
+Chat.chatId
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The id of the chat DIV</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.chatId = <span class="hljs-literal">null</span>;
+
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.submit">
+  <h3>
+    <a href="#chat.submit" name="chat.submit" class="pilcrow"></a>
+Chat.submit
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The submit button</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.submit = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.submitid">
+  <h3>
+    <a href="#chat.submitid" name="chat.submitid" class="pilcrow"></a>
+Chat.submitId
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The id of the submit butten</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.submitId = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.submittext">
+  <h3>
+    <a href="#chat.submittext" name="chat.submittext" class="pilcrow"></a>
+Chat.submitText
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The text on the submit button</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.submitText = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.chatevent">
+  <h3>
+    <a href="#chat.chatevent" name="chat.chatevent" class="pilcrow"></a>
+Chat.chatEvent
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The event to fire when sending a message</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.chatEvent = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.displayname">
+  <h3>
+    <a href="#chat.displayname" name="chat.displayname" class="pilcrow"></a>
+Chat.displayName
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Function which displays the sender's name</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.displayName = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="chat.recipient-1">
+  <h3>
+    <a href="#chat.recipient-1" name="chat.recipient-1" class="pilcrow"></a>
+Chat.recipient
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Object containing the value of the recipient of the message</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.recipient = { <span class="hljs-attr">value</span>: <span class="hljs-literal">null</span> };
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="chat-methods">
   <h2>
-    <a href="#chat%20methods" name="chat%20methods" class="pilcrow">&#182;</a>
-    Chat methods
+    <a href="#chat-methods" name="chat-methods" class="pilcrow"></a>
+Chat methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="chat.init">
   <h3>
-    <a href="#chat.init" name="chat.init" class="pilcrow">&#182;</a>
-    Chat.init
+    <a href="#chat.init" name="chat.init" class="pilcrow"></a>
+Chat.init
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Initializes the widget</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options.
-
-The  options object can have the following attributes:
-  - <code>mode</code>: Determines to mode of communication
-  - <code>textareaId</code>: The id of the textarea
-  - <code>chatId</code>: The id of the chat DIV
-  - <code>submitId</code>: The id of the submit butten
-  - <code>submitText</code>: The text on the submit button
-  - <code>chatEvent</code>: The event to fire when sending a message
-  - <code>displayName</code>: Function which displays the sender's name</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Initializes the widget</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options.
+The  options object can have the following attributes:
+<ul>
+<li><code>mode</code>: Determines to mode of communication</li>
+<li><code>textareaId</code>: The id of the textarea</li>
+<li><code>chatId</code>: The id of the chat DIV</li>
+<li><code>submitId</code>: The id of the submit butten</li>
+<li><code>submitText</code>: The text on the submit button</li>
+<li><code>chatEvent</code>: The event to fire when sending a message</li>
+<li><code>displayName</code>: Function which displays the sender's name</li>
+</ul>
+</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">tmp</span><span class="p">;</span>
-        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+        <td class="code highlight">
+          <pre class="javascript">    Chat.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> tmp;
+        options = options || {};
 
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.mode) {
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20"></a>
 </div>
 <p>Will be setup later.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="s1">&#39;MANY_TO_MANY&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">switch</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">RECEIVER_ONLY</span><span class="o">:</span>
-                <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">;</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_ONE</span><span class="o">:</span>
-                <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;ROOM&#39;</span><span class="p">;</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">ONE_TO_ONE</span><span class="o">:</span>
-                <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">;</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_MANY</span><span class="o">:</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="k">default</span><span class="o">:</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Chat.init: options.mode is invalid: &#39;</span> <span class="o">+</span>
-                                <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Chat.init: options.mode must be string or &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">);</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            options.mode = <span class="hljs-string">'MANY_TO_MANY'</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.mode) {
+            <span class="hljs-keyword">switch</span>(options.mode) {
+            <span class="hljs-keyword">case</span> Chat.modes.RECEIVER_ONLY:
+                tmp = <span class="hljs-string">'SERVER'</span>;
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> Chat.modes.MANY_TO_ONE:
+                tmp = <span class="hljs-string">'ROOM'</span>;
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> Chat.modes.ONE_TO_ONE:
+                tmp = <span class="hljs-string">'SERVER'</span>;
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> Chat.modes.MANY_TO_MANY:
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">default</span>:
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Chat.init: options.mode is invalid: '</span> +
+                                options.mode);
+            }
+            <span class="hljs-keyword">this</span>.recipient.value = tmp;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Chat.init: options.mode must be string or '</span> +
+                            <span class="hljs-string">'undefined. Found: '</span> + options.mode);
+        }
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mode</span><span class="p">;</span>
+        <span class="hljs-keyword">this</span>.mode = options.mode;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">textareaId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">textareaId</span> <span class="o">||</span> <span class="s1">&#39;chat_textarea&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">chatId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">chatId</span> <span class="o">||</span> <span class="s1">&#39;chat_chat&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submitId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">submitId</span> <span class="o">||</span> <span class="s1">&#39;chat_submit&#39;</span><span class="p">;</span>
+        <span class="hljs-keyword">this</span>.textareaId = options.textareaId || <span class="hljs-string">'chat_textarea'</span>;
+        <span class="hljs-keyword">this</span>.chatId = options.chatId || <span class="hljs-string">'chat_chat'</span>;
+        <span class="hljs-keyword">this</span>.submitId = options.submitId || <span class="hljs-string">'chat_submit'</span>;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">chatEvent</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">chatEvent</span> <span class="o">||</span> <span class="s1">&#39;CHAT&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submitText</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">submitText</span> <span class="o">||</span> <span class="s1">&#39;chat&#39;</span><span class="p">;</span>
+        <span class="hljs-keyword">this</span>.chatEvent = options.chatEvent || <span class="hljs-string">'CHAT'</span>;
+        <span class="hljs-keyword">this</span>.submitText = options.submitText || <span class="hljs-string">'chat'</span>;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">displayName</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">displayName</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(</span><span class="nx">from</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">from</span><span class="p">;</span>
-        <span class="p">};</span>
-    <span class="p">};</span>
-
-
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">chat</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chatId</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">);</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">!==</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">RECEIVER_ONLY</span><span class="p">)</span> <span class="p">{</span>
+        <span class="hljs-keyword">this</span>.displayName = options.displayName || <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">from</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">from</span>;
+        };
+    };
 
 
-</pre></div>
+    Chat.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+
+        <span class="hljs-keyword">this</span>.chat = W.get(<span class="hljs-string">'div'</span>, <span class="hljs-keyword">this</span>.chatId);
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.chat);
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.mode !== Chat.modes.RECEIVER_ONLY) {
+
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21"></a>
 </div>
 <p>Create buttons to send messages, if allowed.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getEventButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chatEvent</span><span class="p">,</span>
-                                           <span class="k">this</span><span class="p">.</span><span class="nx">submitText</span><span class="p">,</span>
-                                           <span class="k">this</span><span class="p">.</span><span class="nx">submitId</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;btn btn-sm btn-secondary&#39;</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">textareaId</span><span class="p">);</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">this</span>.submit = W.getEventButton(<span class="hljs-keyword">this</span>.chatEvent,
+                                           <span class="hljs-keyword">this</span>.submitText,
+                                           <span class="hljs-keyword">this</span>.submitId);
+            <span class="hljs-keyword">this</span>.submit.className = <span class="hljs-string">'btn btn-sm btn-secondary'</span>;
+            <span class="hljs-keyword">this</span>.textarea = W.get(<span class="hljs-string">'textarea'</span>, <span class="hljs-keyword">this</span>.textareaId);
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22"></a>
 </div>
 <p>Append them.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
-            <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">            W.writeln(<span class="hljs-string">''</span>, <span class="hljs-keyword">this</span>.bodyDiv);
+            <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.textarea);
+            W.writeln(<span class="hljs-string">''</span>, <span class="hljs-keyword">this</span>.bodyDiv);
+            <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.submit);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23"></a>
 </div>
 <p>Add recipient selector, if requested.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_MANY</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getRecipientSelector</span><span class="p">();</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.mode === Chat.modes.MANY_TO_MANY) {
+                <span class="hljs-keyword">this</span>.recipient = W.getRecipientSelector();
+                <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.recipient);
+            }
+        }
+    };
 
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">readTA</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">txt</span><span class="p">;</span>
-        <span class="nx">txt</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-        <span class="k">return</span> <span class="nx">txt</span><span class="p">;</span>
-    <span class="p">};</span>
+    Chat.prototype.readTA = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> txt;
+        txt = <span class="hljs-keyword">this</span>.textarea.value;
+        <span class="hljs-keyword">this</span>.textarea.value = <span class="hljs-string">''</span>;
+        <span class="hljs-keyword">return</span> txt;
+    };
 
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">writeTA</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">string</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">J</span><span class="p">.</span><span class="nx">sprintf</span><span class="p">(</span><span class="nx">string</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">);</span>
-        <span class="nx">W</span><span class="p">.</span><span class="nx">writeln</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">chat</span><span class="p">.</span><span class="nx">scrollHeight</span><span class="p">;</span>
-    <span class="p">};</span>
+    Chat.prototype.writeTA = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">string, args</span>) </span>{
+        J.sprintf(string, args, <span class="hljs-keyword">this</span>.chat);
+        W.writeln(<span class="hljs-string">''</span>, <span class="hljs-keyword">this</span>.chat);
+        <span class="hljs-keyword">this</span>.chat.scrollTop = <span class="hljs-keyword">this</span>.chat.scrollHeight;
+    };
 
-    <span class="nx">Chat</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    Chat.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chatEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">msg</span><span class="p">,</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">args</span><span class="p">;</span>
-            <span class="nx">msg</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">readTA</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">msg</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        node.on(<span class="hljs-keyword">this</span>.chatEvent, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">var</span> msg, to, args;
+            msg = that.readTA();
+            <span class="hljs-keyword">if</span> (!msg) <span class="hljs-keyword">return</span>;
 
-            <span class="nx">to</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-            <span class="nx">args</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;%s&#39;</span><span class="o">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_me&#39;</span>
-                <span class="p">},</span>
-                <span class="s1">&#39;%msg&#39;</span><span class="o">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_msg&#39;</span>
-                <span class="p">},</span>
-                <span class="s1">&#39;!txt&#39;</span><span class="o">:</span> <span class="nx">msg</span><span class="p">,</span>
-                <span class="s1">&#39;!to&#39;</span><span class="o">:</span> <span class="nx">to</span>
-            <span class="p">};</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">writeTA</span><span class="p">(</span><span class="s1">&#39;%sMe -&gt; !to%s: %msg!txt%msg&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">chatEvent</span><span class="p">,</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">trim</span><span class="p">());</span>
-        <span class="p">});</span>
+            to = that.recipient.value;
+            args = {
+                <span class="hljs-string">'%s'</span>: {
+                    <span class="hljs-string">'class'</span>: <span class="hljs-string">'chat_me'</span>
+                },
+                <span class="hljs-string">'%msg'</span>: {
+                    <span class="hljs-string">'class'</span>: <span class="hljs-string">'chat_msg'</span>
+                },
+                <span class="hljs-string">'!txt'</span>: msg,
+                <span class="hljs-string">'!to'</span>: to
+            };
+            that.writeTA(<span class="hljs-string">'%sMe -&gt; !to%s: %msg!txt%msg'</span>, args);
+            node.say(that.chatEvent, to, msg.trim());
+        });
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">MANY_TO_MANY</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;UPDATED_PLIST&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="nx">W</span><span class="p">.</span><span class="nx">populateRecipientSelector</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span>
-                    <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">.</span><span class="nx">fetch</span><span class="p">());</span>
-            <span class="p">});</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.mode === Chat.modes.MANY_TO_MANY) {
+            node.on(<span class="hljs-string">'UPDATED_PLIST'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                W.populateRecipientSelector(that.recipient,
+                    node.game.pl.fetch());
+            });
+        }
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chatEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">args</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">from</span> <span class="o">===</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">from</span> <span class="o">===</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">sid</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">return</span><span class="p">;</span>
-            <span class="p">}</span>
+        node.on.data(<span class="hljs-keyword">this</span>.chatEvent, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+            <span class="hljs-keyword">var</span> <span class="hljs-keyword">from</span>, args;
+            <span class="hljs-keyword">if</span> (msg.from === node.player.id || msg.from === node.player.sid) {
+                <span class="hljs-keyword">return</span>;
+            }
 
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">Chat</span><span class="p">.</span><span class="nx">modes</span><span class="p">.</span><span class="nx">ONE_TO_ONE</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">from</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.mode === Chat.modes.ONE_TO_ONE) {
+                <span class="hljs-keyword">if</span> (msg.from === <span class="hljs-keyword">this</span>.recipient.value) {
+                    <span class="hljs-keyword">return</span>;
+                }
+            }
 
-            <span class="nx">from</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">displayName</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">from</span><span class="p">);</span>
-            <span class="nx">args</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;%s&#39;</span><span class="o">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_others&#39;</span>
-                <span class="p">},</span>
-                <span class="s1">&#39;%msg&#39;</span><span class="o">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;class&#39;</span><span class="o">:</span> <span class="s1">&#39;chat_msg&#39;</span>
-                <span class="p">},</span>
-                <span class="s1">&#39;!txt&#39;</span><span class="o">:</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
-                <span class="s1">&#39;!from&#39;</span><span class="o">:</span> <span class="nx">from</span>
-            <span class="p">};</span>
+            <span class="hljs-keyword">from</span> = that.displayName(msg.from);
+            args = {
+                <span class="hljs-string">'%s'</span>: {
+                    <span class="hljs-string">'class'</span>: <span class="hljs-string">'chat_others'</span>
+                },
+                <span class="hljs-string">'%msg'</span>: {
+                    <span class="hljs-string">'class'</span>: <span class="hljs-string">'chat_msg'</span>
+                },
+                <span class="hljs-string">'!txt'</span>: msg.data,
+                <span class="hljs-string">'!from'</span>: <span class="hljs-keyword">from</span>
+            };
 
-            <span class="nx">that</span><span class="p">.</span><span class="nx">writeTA</span><span class="p">(</span><span class="s1">&#39;%s!from%s: %msg!txt%msg&#39;</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
-        <span class="p">});</span>
-    <span class="p">};</span>
+            that.writeTA(<span class="hljs-string">'%s!from%s: %msg!txt%msg'</span>, args);
+        });
+    };
 
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+})(node);
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

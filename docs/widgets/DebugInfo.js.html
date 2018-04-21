@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/DebugInfo.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/DebugInfo.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,442 +21,417 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#debuginfo">DebugInfo</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#debuginfo%20constructor">DebugInfo constructor</a>
+        <a href="#debuginfo-constructor">DebugInfo constructor</a>
       </div>
+
       <div class="heading h3">
         <a href="#debuginfo.table">DebugInfo.table</a>
       </div>
+
       <div class="heading h3">
         <a href="#debuginfo.interval">DebugInfo.interval</a>
       </div>
+
       <div class="heading h3">
         <a href="#debuginfo.intervaltime">DebugInfo.intervalTime</a>
       </div>
+
       <div class="heading h2">
-        <a href="#debuginfo%20methods">DebugInfo methods</a>
+        <a href="#debuginfo-methods">DebugInfo methods</a>
       </div>
+
       <div class="heading h3">
         <a href="#debuginfo.init">DebugInfo.init</a>
       </div>
+
       <div class="heading h3">
         <a href="#debuginfo.append">DebugInfo.append</a>
       </div>
+
       <div class="heading h3">
         <a href="#debuginfo.updateall">DebugInfo.updateAll</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="debuginfo">
   <h1>
-    <a href="#debuginfo" name="debuginfo" class="pilcrow">&#182;</a>
-    DebugInfo
+    <a href="#debuginfo" name="debuginfo" class="pilcrow"></a>
+DebugInfo
   </h1>
 </div>
-
-
-<p>Copyright(c) 2016 Stefano Balietti
+<p>Copyright(c) 2017 Stefano Balietti
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Display information about the state of a player</p>
-
+</div>
+<div class="body">
+<p>Display information about the state of a player</p>
 <p>www.nodegame.org</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    <span class="hljs-keyword">var</span> Table = W.Table;
 
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
+    node.widgets.register(<span class="hljs-string">'DebugInfo'</span>, DebugInfo);
 
-    <span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;DebugInfo&#39;</span><span class="p">,</span> <span class="nx">DebugInfo</span><span class="p">);</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    DebugInfo.version = <span class="hljs-string">'0.6.1'</span>;
+    DebugInfo.description = <span class="hljs-string">'Display basic info a client\'s status.'</span>;
 
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.6.0&#39;</span><span class="p">;</span>
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Display basic info a client\&#39;s status.&#39;</span><span class="p">;</span>
+    DebugInfo.title = <span class="hljs-string">'Debug Info'</span>;
+    DebugInfo.className = <span class="hljs-string">'debuginfo'</span>;
 
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Debug Info&#39;</span><span class="p">;</span>
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;debuginfo&#39;</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    DebugInfo.dependencies = {
+        <span class="hljs-attr">Table</span>: {}
+    };
 
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">Table</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="debuginfo%20constructor">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="debuginfo-constructor">
   <h2>
-    <a href="#debuginfo%20constructor" name="debuginfo%20constructor" class="pilcrow">&#182;</a>
-    DebugInfo constructor
+    <a href="#debuginfo-constructor" name="debuginfo-constructor" class="pilcrow"></a>
+DebugInfo constructor
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p><code>DebugInfo</code> displays information about the state of a player</p>
-  </div>
 </div>
+<div class="body">
+<p><code>DebugInfo</code> displays information about the state of a player</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">DebugInfo</span><span class="p">()</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DebugInfo</span>(<span class="hljs-params"></span>) </span>{
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="debuginfo.table">
   <h3>
-    <a href="#debuginfo.table" name="debuginfo.table" class="pilcrow">&#182;</a>
-    DebugInfo.table
+    <a href="#debuginfo.table" name="debuginfo.table" class="pilcrow"></a>
+DebugInfo.table
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The <code>Table</code> which holds the information</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span>nodegame-window/Table</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>The <code>Table</code> which holds the information</p>
+</div>
+<div class="details">
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.table = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="debuginfo.interval">
-  <h3>
-    <a href="#debuginfo.interval" name="debuginfo.interval" class="pilcrow">&#182;</a>
-    DebugInfo.interval
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The interval checking node properties</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">interval</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="debuginfo.intervaltime">
-  <h3>
-    <a href="#debuginfo.intervaltime" name="debuginfo.intervaltime" class="pilcrow">&#182;</a>
-    DebugInfo.intervalTime
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The frequency of update of the interval. Default: 1000</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">intervalTime</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
-    <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="debuginfo%20methods">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="debuginfo.interval">
+  <h3>
+    <a href="#debuginfo.interval" name="debuginfo.interval" class="pilcrow"></a>
+DebugInfo.interval
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The interval checking node properties</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.interval = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="debuginfo.intervaltime">
+  <h3>
+    <a href="#debuginfo.intervaltime" name="debuginfo.intervaltime" class="pilcrow"></a>
+DebugInfo.intervalTime
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The frequency of update of the interval. Default: 1000</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.intervalTime = <span class="hljs-number">1000</span>;
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="debuginfo-methods">
   <h2>
-    <a href="#debuginfo%20methods" name="debuginfo%20methods" class="pilcrow">&#182;</a>
-    DebugInfo methods
+    <a href="#debuginfo-methods" name="debuginfo-methods" class="pilcrow"></a>
+DebugInfo methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="debuginfo.init">
   <h3>
-    <a href="#debuginfo.init" name="debuginfo.init" class="pilcrow">&#182;</a>
-    DebugInfo.init
+    <a href="#debuginfo.init" name="debuginfo.init" class="pilcrow"></a>
+DebugInfo.init
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Appends widget to <code>this.bodyDiv</code> and calls <code>this.updateAll</code></p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">DebugInfo.updateAll
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Appends widget to <code>this.bodyDiv</code> and calls <code>this.updateAll</code></p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">DebugInfo.updateAll</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">intervalTime</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">intervalTime</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">intervalTime</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    DebugInfo.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> options.intervalTime) {
+            <span class="hljs-keyword">this</span>.intervalTime = options.intervalTime;
+        }
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="debuginfo.append">
   <h3>
-    <a href="#debuginfo.append" name="debuginfo.append" class="pilcrow">&#182;</a>
-    DebugInfo.append
+    <a href="#debuginfo.append" name="debuginfo.append" class="pilcrow"></a>
+DebugInfo.append
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Appends widget to <code>this.bodyDiv</code> and calls <code>this.updateAll</code></p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">DebugInfo.updateAll
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Appends widget to <code>this.bodyDiv</code> and calls <code>this.updateAll</code></p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">DebugInfo.updateAll</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    DebugInfo.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+        <span class="hljs-keyword">this</span>.table = <span class="hljs-keyword">new</span> Table();
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.table.table);
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">updateAll</span><span class="p">();</span>
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">interval</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateAll</span><span class="p">();</span>
-        <span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">intervalTime</span><span class="p">);</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">this</span>.updateAll();
+        that = <span class="hljs-keyword">this</span>;
+        <span class="hljs-keyword">this</span>.interval = setInterval(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            that.updateAll();
+        }, <span class="hljs-keyword">this</span>.intervalTime);
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="debuginfo.updateall">
   <h3>
-    <a href="#debuginfo.updateall" name="debuginfo.updateall" class="pilcrow">&#182;</a>
-    DebugInfo.updateAll
+    <a href="#debuginfo.updateall" name="debuginfo.updateall" class="pilcrow"></a>
+DebugInfo.updateAll
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Updates information in <code>this.table</code></p>
-  </div>
 </div>
+<div class="body">
+<p>Updates information in <code>this.table</code></p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">stage</span><span class="p">,</span> <span class="nx">stageNo</span><span class="p">,</span> <span class="nx">stageId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">stageLevel</span><span class="p">,</span> <span class="nx">stateLevel</span><span class="p">,</span> <span class="nx">winLevel</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">errMsg</span><span class="p">,</span> <span class="nx">connected</span><span class="p">,</span> <span class="nx">treatment</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">tmp</span><span class="p">,</span> <span class="nx">miss</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    DebugInfo.prototype.updateAll = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> stage, stageNo, stageId, playerId;
+        <span class="hljs-keyword">var</span> stageLevel, stateLevel, winLevel;
+        <span class="hljs-keyword">var</span> errMsg, connected, treatment;
+        <span class="hljs-keyword">var</span> tmp, miss;
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;DebugInfo.updateAll: bodyDiv not found.&#39;</span><span class="p">);</span>
-            <span class="k">return</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.bodyDiv) {
+            node.err(<span class="hljs-string">'DebugInfo.updateAll: bodyDiv not found.'</span>);
+            <span class="hljs-keyword">return</span>;
+        }
 
-        <span class="nx">miss</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="p">;</span>
+        miss = <span class="hljs-string">'-'</span>;
 
-        <span class="nx">stageId</span> <span class="o">=</span> <span class="nx">miss</span><span class="p">;</span>
-        <span class="nx">stageNo</span> <span class="o">=</span> <span class="nx">miss</span><span class="p">;</span>
+        stageId = miss;
+        stageNo = miss;
 
-        <span class="nx">stage</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentGameStage</span><span class="p">();</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">stage</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getStep</span><span class="p">(</span><span class="nx">stage</span><span class="p">);</span>
-            <span class="nx">stageId</span> <span class="o">=</span> <span class="nx">tmp</span> <span class="o">?</span> <span class="nx">tmp</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="s1">&#39;-&#39;</span><span class="p">;</span>
-            <span class="nx">stageNo</span> <span class="o">=</span> <span class="nx">stage</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
-        <span class="p">}</span>
+        stage = node.game.getCurrentGameStage();
+        <span class="hljs-keyword">if</span> (stage) {
+            tmp = node.game.plot.getStep(stage);
+            stageId = tmp ? tmp.id : <span class="hljs-string">'-'</span>;
+            stageNo = stage.toString();
+        }
 
-        <span class="nx">stageLevel</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getKeyByValue</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">constants</span><span class="p">.</span><span class="nx">stageLevels</span><span class="p">,</span>
-                                     <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getStageLevel</span><span class="p">());</span>
+        stageLevel = J.getKeyByValue(node.constants.stageLevels,
+                                     node.game.getStageLevel());
 
-        <span class="nx">stateLevel</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getKeyByValue</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">constants</span><span class="p">.</span><span class="nx">stateLevels</span><span class="p">,</span>
-                                     <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getStateLevel</span><span class="p">());</span>
+        stateLevel = J.getKeyByValue(node.constants.stateLevels,
+                                     node.game.getStateLevel());
 
-        <span class="nx">winLevel</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getKeyByValue</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">constants</span><span class="p">.</span><span class="nx">windowLevels</span><span class="p">,</span>
-                                   <span class="nx">W</span><span class="p">.</span><span class="nx">getStateLevel</span><span class="p">());</span>
-
-
-        <span class="nx">playerId</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span> <span class="o">?</span> <span class="nx">node</span><span class="p">.</span><span class="nx">player</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
-
-        <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">errorManager</span><span class="p">.</span><span class="nx">lastErr</span> <span class="o">||</span> <span class="nx">miss</span><span class="p">;</span>
-
-        <span class="nx">treatment</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">settings</span> <span class="o">&amp;&amp;</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">treatmentName</span> <span class="o">?</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">settings</span><span class="p">.</span><span class="nx">treatmentName</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
-
-        <span class="nx">connected</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">connected</span> <span class="o">?</span> <span class="s1">&#39;yes&#39;</span> <span class="o">:</span> <span class="s1">&#39;no&#39;</span><span class="p">;</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">clear</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Treatment: &#39;</span><span class="p">,</span> <span class="nx">treatment</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Connected: &#39;</span><span class="p">,</span> <span class="nx">connected</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Player Id: &#39;</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Stage  No: &#39;</span><span class="p">,</span> <span class="nx">stageNo</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Stage  Id: &#39;</span><span class="p">,</span> <span class="nx">stageId</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Stage Lvl: &#39;</span><span class="p">,</span> <span class="nx">stageLevel</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;State Lvl: &#39;</span><span class="p">,</span> <span class="nx">stateLevel</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Players  : &#39;</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">pl</span><span class="p">.</span><span class="nx">size</span><span class="p">()]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Win   Lvl: &#39;</span><span class="p">,</span> <span class="nx">winLevel</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Win Loads: &#39;</span><span class="p">,</span> <span class="nx">W</span><span class="p">.</span><span class="nx">areLoading</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Last  Err: &#39;</span><span class="p">,</span> <span class="nx">errMsg</span><span class="p">]);</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-
-    <span class="p">};</span>
-
-<<<<<<< HEAD
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">clearInterval</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">interval</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">interval</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">silly</span><span class="p">(</span><span class="s1">&#39;DebugInfo destroyed.&#39;</span><span class="p">);</span>
-=======
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">,</span> <span class="nx">ee</span><span class="p">;</span>
-
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="nx">ee</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">game</span><span class="p">;</span>
-
-        <span class="nx">ee</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;STEP_CALLBACK_EXECUTED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateAll</span><span class="p">();</span>
-        <span class="p">});</span>
-
-        <span class="nx">ee</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;SOCKET_CONNECT&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateAll</span><span class="p">();</span>
-        <span class="p">});</span>
-
-        <span class="nx">ee</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;SOCKET_DISCONNECT&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateAll</span><span class="p">();</span>
-        <span class="p">});</span>
+        winLevel = J.getKeyByValue(node.constants.windowLevels,
+                                   W.getStateLevel());
 
 
-</pre></div>
+        playerId = node.player ? node.player.id : miss;
+
+        errMsg = node.errorManager.lastErr || miss;
+
+        treatment = node.game.settings &amp;&amp; node.game.settings.treatmentName ?
+            node.game.settings.treatmentName : miss;
+
+        connected = node.socket.connected ? <span class="hljs-string">'yes'</span> : <span class="hljs-string">'no'</span>;
+
+        <span class="hljs-keyword">this</span>.table.clear(<span class="hljs-literal">true</span>);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Treatment: '</span>, treatment]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Connected: '</span>, connected]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Player Id: '</span>, playerId]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Stage  No: '</span>, stageNo]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Stage  Id: '</span>, stageId]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Stage Lvl: '</span>, stageLevel]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'State Lvl: '</span>, stateLevel]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Players  : '</span>, node.game.pl.size()]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Win   Lvl: '</span>, winLevel]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Win Loads: '</span>, W.areLoading]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Last  Err: '</span>, errMsg]);
+
+        <span class="hljs-keyword">this</span>.table.parse();
+
+    };
+
+    DebugInfo.prototype.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        clearInterval(<span class="hljs-keyword">this</span>.interval);
+        <span class="hljs-keyword">this</span>.interval = <span class="hljs-literal">null</span>;
+        node.silly(<span class="hljs-string">'DebugInfo destroyed.'</span>);
+    };
+
+})(node);
+
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
-</div>
-<p>TODO Write more listeners. Separate functions. Get event emitter.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="p">};</span>
-
-    <span class="nx">DebugInfo</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
-</div>
-<p>TODO proper cleanup.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;DebugInfo destroyed.&#39;</span><span class="p">);</span>
->>>>>>> refactorWaitingRoom
-    <span class="p">};</span>
-
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
-        </td>
-      </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

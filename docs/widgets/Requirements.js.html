@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/Requirements.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/Requirements.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,1512 +21,1652 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#requirements">Requirements</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#requirements%20constructor">Requirements constructor</a>
+        <a href="#requirements-constructor">Requirements constructor</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.callbacks">Requirements.callbacks</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.stillchecking">Requirements.stillChecking</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.withtimeout">Requirements.withTimeout</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.timeouttime">Requirements.timeoutTime</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.timeoutid">Requirements.timeoutId</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.summary">Requirements.summary</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.summaryupdate">Requirements.summaryUpdate</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.summaryresults">Requirements.summaryResults</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.dots">Requirements.dots</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.hasfailed">Requirements.hasFailed</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.results">Requirements.results</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.completed">Requirements.completed</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.sayresult">Requirements.sayResult</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.sayresultlabel">Requirements.sayResultLabel</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.addtoresults">Requirements.addToResults</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.oncomplete">Requirements.onComplete</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.onsuccess">Requirements.onSuccess</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.onfailure">Requirements.onFailure</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#requirements.callbacksexecuted">Requirements.callbacksExecuted</a>
+      </div>
+
       <div class="heading h3">
         <a href="#requirements.list">Requirements.list</a>
       </div>
+
       <div class="heading h2">
-        <a href="#requirements%20methods">Requirements methods</a>
+        <a href="#requirements-methods">Requirements methods</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.init">Requirements.init</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.addrequirements">Requirements.addRequirements</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.checkrequirements">Requirements.checkRequirements</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.addtimeout">Requirements.addTimeout</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.cleartimeout">Requirements.clearTimeout</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.updatestillchecking">Requirements.updateStillChecking</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.ischeckingfinished">Requirements.isCheckingFinished</a>
       </div>
+
       <div class="heading h3">
-        <a href="#requirements.checkingfinished">Requirements.CheckingFinished</a>
+        <a href="#requirements.checkingfinished">Requirements.checkingFinished</a>
       </div>
+
       <div class="heading h3">
         <a href="#requirements.displayresults">Requirements.displayResults</a>
       </div>
+
       <div class="heading h2">
-        <a href="#helper%20methods.">Helper methods.</a>
+        <a href="#helper-methods">Helper methods.</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements">
   <h1>
-    <a href="#requirements" name="requirements" class="pilcrow">&#182;</a>
-    Requirements
+    <a href="#requirements" name="requirements" class="pilcrow"></a>
+Requirements
   </h1>
 </div>
-
-
-<p>Copyright(c) 2017 Stefano Balietti <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6F;:&#x73;&#116;&#x65;&#x40;&#110;&#111;d&#x65;&#x67;&#x61;&#109;&#101;.&#x6F;&#114;&#103;">&#x73;&#116;&#x65;&#x40;&#110;&#111;d&#x65;&#x67;&#x61;&#109;&#101;.&#x6F;&#114;&#103;</a>
+<p>Copyright(c) 2017 Stefano Balietti <a href="mailto:ste@nodegame.org.html">ste@nodegame.org</a>
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Checks a list of requirements and displays the results</p>
-
+</div>
+<div class="body">
+<p>Checks a list of requirements and displays the results</p>
 <p>TODO: see if we need to reset the state between two
 consecutive calls to checkRequirements (results array).</p>
-
 <p>www.nodegame.org</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    node.widgets.register(<span class="hljs-string">'Requirements'</span>, Requirements);
 
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Requirements&#39;</span><span class="p">,</span> <span class="nx">Requirements</span><span class="p">);</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    Requirements.version = <span class="hljs-string">'0.7.1'</span>;
+    Requirements.description = <span class="hljs-string">'Checks a set of requirements and display the '</span> +
+        <span class="hljs-string">'results'</span>;
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.7.0&#39;</span><span class="p">;</span>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Checks a set of requirements and display the &#39;</span> <span class="o">+</span>
-        <span class="s1">&#39;results&#39;</span><span class="p">;</span>
+    Requirements.title = <span class="hljs-string">'Requirements'</span>;
+    Requirements.className = <span class="hljs-string">'requirements'</span>;
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Requirements&#39;</span><span class="p">;</span>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;requirements&#39;</span><span class="p">;</span>
+    Requirements.texts.errStr = <span class="hljs-string">'One or more function is taking too long. '</span> +
+                                <span class="hljs-string">'This is likely to be due to a compatibility'</span> +
+                                <span class="hljs-string">' issue with your browser or to bad network'</span> +
+                                <span class="hljs-string">' connectivity.'</span>;
+    Requirements.texts.testPassed = <span class="hljs-string">'All tests passed.'</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    Requirements.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {},
+        <span class="hljs-attr">List</span>: {}
+    };
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{},</span>
-        <span class="nx">List</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="requirements%20constructor">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="requirements-constructor">
   <h2>
-    <a href="#requirements%20constructor" name="requirements%20constructor" class="pilcrow">&#182;</a>
-    Requirements constructor
+    <a href="#requirements-constructor" name="requirements-constructor" class="pilcrow"></a>
+Requirements constructor
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>Instantiates a new Requirements object</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options
-</span>
-      <span class="dox_type">object</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Instantiates a new Requirements object</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">Requirements</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Requirements</span>(<span class="hljs-params">options</span>) </span>{
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.callbacks">
   <h3>
-    <a href="#requirements.callbacks" name="requirements.callbacks" class="pilcrow">&#182;</a>
-    Requirements.callbacks
+    <a href="#requirements.callbacks" name="requirements.callbacks" class="pilcrow"></a>
+Requirements.callbacks
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Array of all test callbacks</p>
-  </div>
 </div>
+<div class="body">
+<p>Array of all test callbacks</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span> <span class="o">=</span> <span class="p">[];</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.requirements = [];
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.stillchecking">
   <h3>
-    <a href="#requirements.stillchecking" name="requirements.stillchecking" class="pilcrow">&#182;</a>
-    Requirements.stillChecking
+    <a href="#requirements.stillchecking" name="requirements.stillchecking" class="pilcrow"></a>
+Requirements.stillChecking
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Number of tests still pending</p>
-  </div>
 </div>
+<div class="body">
+<p>Number of tests still pending</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.stillChecking = <span class="hljs-number">0</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.withtimeout">
   <h3>
-    <a href="#requirements.withtimeout" name="requirements.withtimeout" class="pilcrow">&#182;</a>
-    Requirements.withTimeout
+    <a href="#requirements.withtimeout" name="requirements.withtimeout" class="pilcrow"></a>
+Requirements.withTimeout
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>If TRUE, a maximum timeout to the execution of ALL tests is set</p>
-  </div>
 </div>
+<div class="body">
+<p>If TRUE, a maximum timeout to the execution of ALL tests is set</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">withTimeout</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">withTimeout</span> <span class="o">||</span> <span class="kc">true</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.withTimeout = options.withTimeout || <span class="hljs-literal">true</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.timeouttime">
   <h3>
-    <a href="#requirements.timeouttime" name="requirements.timeouttime" class="pilcrow">&#182;</a>
-    Requirements.timeoutTime
+    <a href="#requirements.timeouttime" name="requirements.timeouttime" class="pilcrow"></a>
+Requirements.timeoutTime
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The time in milliseconds for the timeout to expire</p>
-  </div>
 </div>
+<div class="body">
+<p>The time in milliseconds for the timeout to expire</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeoutTime</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeoutTime</span> <span class="o">||</span> <span class="mi">10000</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.timeoutTime = options.timeoutTime || <span class="hljs-number">10000</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.timeoutid">
   <h3>
-    <a href="#requirements.timeoutid" name="requirements.timeoutid" class="pilcrow">&#182;</a>
-    Requirements.timeoutId
+    <a href="#requirements.timeoutid" name="requirements.timeoutid" class="pilcrow"></a>
+Requirements.timeoutId
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The id of the timeout, if created</p>
-  </div>
 </div>
+<div class="body">
+<p>The id of the timeout, if created</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.timeoutId = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.summary">
   <h3>
-    <a href="#requirements.summary" name="requirements.summary" class="pilcrow">&#182;</a>
-    Requirements.summary
+    <a href="#requirements.summary" name="requirements.summary" class="pilcrow"></a>
+Requirements.summary
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Span summarizing the status of the tests</p>
-  </div>
 </div>
+<div class="body">
+<p>Span summarizing the status of the tests</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.summary = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.summaryupdate">
   <h3>
-    <a href="#requirements.summaryupdate" name="requirements.summaryupdate" class="pilcrow">&#182;</a>
-    Requirements.summaryUpdate
+    <a href="#requirements.summaryupdate" name="requirements.summaryupdate" class="pilcrow"></a>
+Requirements.summaryUpdate
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Span counting how many tests have been completed</p>
-  </div>
 </div>
+<div class="body">
+<p>Span counting how many tests have been completed</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.summaryUpdate = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.summaryresults">
   <h3>
-    <a href="#requirements.summaryresults" name="requirements.summaryresults" class="pilcrow">&#182;</a>
-    Requirements.summaryResults
+    <a href="#requirements.summaryresults" name="requirements.summaryresults" class="pilcrow"></a>
+Requirements.summaryResults
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Span displaying the results of the tests</p>
-  </div>
 </div>
+<div class="body">
+<p>Span displaying the results of the tests</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.summaryResults = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.dots">
   <h3>
-    <a href="#requirements.dots" name="requirements.dots" class="pilcrow">&#182;</a>
-    Requirements.dots
+    <a href="#requirements.dots" name="requirements.dots" class="pilcrow"></a>
+Requirements.dots
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Looping dots to give the user the feeling of code execution</p>
-  </div>
 </div>
+<div class="body">
+<p>Looping dots to give the user the feeling of code execution</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">dots</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.dots = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.hasfailed">
   <h3>
-    <a href="#requirements.hasfailed" name="requirements.hasfailed" class="pilcrow">&#182;</a>
-    Requirements.hasFailed
+    <a href="#requirements.hasfailed" name="requirements.hasfailed" class="pilcrow"></a>
+Requirements.hasFailed
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>TRUE if at least one test has failed</p>
-  </div>
 </div>
+<div class="body">
+<p>TRUE if at least one test has failed</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.hasFailed = <span class="hljs-literal">false</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.results">
   <h3>
-    <a href="#requirements.results" name="requirements.results" class="pilcrow">&#182;</a>
-    Requirements.results
+    <a href="#requirements.results" name="requirements.results" class="pilcrow"></a>
+Requirements.results
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The outcomes of all tests</p>
-  </div>
 </div>
+<div class="body">
+<p>The outcomes of all tests</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">results</span> <span class="o">=</span> <span class="p">[];</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.results = [];
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.completed">
   <h3>
-    <a href="#requirements.completed" name="requirements.completed" class="pilcrow">&#182;</a>
-    Requirements.completed
+    <a href="#requirements.completed" name="requirements.completed" class="pilcrow"></a>
+Requirements.completed
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Maps all tests that have been completed already to avoid duplication</p>
-  </div>
 </div>
+<div class="body">
+<p>Maps all tests that have been completed already to avoid duplication</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">completed</span> <span class="o">=</span> <span class="p">{};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.completed = {};
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.sayresult">
   <h3>
-    <a href="#requirements.sayresult" name="requirements.sayresult" class="pilcrow">&#182;</a>
-    Requirements.sayResult
+    <a href="#requirements.sayresult" name="requirements.sayresult" class="pilcrow"></a>
+Requirements.sayResult
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>If true, the final result of the tests will be sent to the server</p>
-  </div>
 </div>
+<div class="body">
+<p>If true, the final result of the tests will be sent to the server</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sayResults</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sayResults</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.sayResults = options.sayResults || <span class="hljs-literal">false</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.sayresultlabel">
   <h3>
-    <a href="#requirements.sayresultlabel" name="requirements.sayresultlabel" class="pilcrow">&#182;</a>
-    Requirements.sayResultLabel
+    <a href="#requirements.sayresultlabel" name="requirements.sayresultlabel" class="pilcrow"></a>
+Requirements.sayResultLabel
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The label of the SAY message that will be sent to the server</p>
-  </div>
 </div>
+<div class="body">
+<p>The label of the SAY message that will be sent to the server</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">sayResultsLabel</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sayResultLabel</span> <span class="o">||</span> <span class="s1">&#39;requirements&#39;</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.sayResultsLabel = options.sayResultLabel || <span class="hljs-string">'requirements'</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.addtoresults">
   <h3>
-    <a href="#requirements.addtoresults" name="requirements.addtoresults" class="pilcrow">&#182;</a>
-    Requirements.addToResults
+    <a href="#requirements.addtoresults" name="requirements.addtoresults" class="pilcrow"></a>
+Requirements.addToResults
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Callback to add properties to result object sent to server</p>
-  </div>
 </div>
+<div class="body">
+<p>Callback to add properties to result object sent to server</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">addToResults</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">addToResults</span> <span class="o">||</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.addToResults = options.addToResults || <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.oncomplete">
   <h3>
-    <a href="#requirements.oncomplete" name="requirements.oncomplete" class="pilcrow">&#182;</a>
-    Requirements.onComplete
+    <a href="#requirements.oncomplete" name="requirements.oncomplete" class="pilcrow"></a>
+Requirements.onComplete
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Callback to be executed at the end of all tests</p>
-  </div>
 </div>
+<div class="body">
+<p>Callback to be executed at the end of all tests</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onComplete</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.onComplete = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.onsuccess">
   <h3>
-    <a href="#requirements.onsuccess" name="requirements.onsuccess" class="pilcrow">&#182;</a>
-    Requirements.onSuccess
+    <a href="#requirements.onsuccess" name="requirements.onsuccess" class="pilcrow"></a>
+Requirements.onSuccess
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Callback to be executed at the end of all tests</p>
-  </div>
 </div>
+<div class="body">
+<p>Callback to be executed at the end of all tests</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.onSuccess = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.onfailure">
   <h3>
-    <a href="#requirements.onfailure" name="requirements.onfailure" class="pilcrow">&#182;</a>
-    Requirements.onFailure
+    <a href="#requirements.onfailure" name="requirements.onfailure" class="pilcrow"></a>
+Requirements.onFailure
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Callback to be executed at the end of all tests</p>
-  </div>
 </div>
+<div class="body">
+<p>Callback to be executed at the end of all tests</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">onFailure</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.onFailure = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="requirements.callbacksexecuted">
+  <h3>
+    <a href="#requirements.callbacksexecuted" name="requirements.callbacksexecuted" class="pilcrow"></a>
+Requirements.callbacksExecuted
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>TRUE, the callbacks have been executed</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.callbacksExecuted = <span class="hljs-literal">false</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.list">
   <h3>
-    <a href="#requirements.list" name="requirements.list" class="pilcrow">&#182;</a>
-    Requirements.list
+    <a href="#requirements.list" name="requirements.list" class="pilcrow"></a>
+Requirements.list
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p><code>List</code> to render the results</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">nodegame-server/List
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p><code>List</code> to render the results</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">nodegame-server/List</span>
+</div>
+</div>
+</div>
+TODO: simplify render syntax.
 
-<p>TODO: simplify render syntax.</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">W</span><span class="p">.</span><span class="nx">List</span><span class="p">({</span>
-            <span class="nx">render</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">pipeline</span><span class="o">:</span> <span class="nx">renderResult</span><span class="p">,</span>
-                <span class="nx">returnAt</span><span class="o">:</span> <span class="s1">&#39;first&#39;</span>
-            <span class="p">}</span>
-        <span class="p">});</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.list = <span class="hljs-keyword">new</span> W.List({
+            <span class="hljs-attr">render</span>: {
+                <span class="hljs-attr">pipeline</span>: renderResult,
+                <span class="hljs-attr">returnAt</span>: <span class="hljs-string">'first'</span>
+            }
+        });
 
-        <span class="kd">function</span> <span class="nx">renderResult</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">imgPath</span><span class="p">,</span> <span class="nx">img</span><span class="p">,</span> <span class="nx">span</span><span class="p">,</span> <span class="nx">text</span><span class="p">;</span>
-            <span class="nx">imgPath</span> <span class="o">=</span> <span class="s1">&#39;/images/&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">success</span> <span class="o">?</span>
-                                    <span class="s1">&#39;success-icon.png&#39;</span> <span class="o">:</span> <span class="s1">&#39;delete-icon.png&#39;</span><span class="p">);</span>
-            <span class="nx">img</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span>
-            <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">imgPath</span><span class="p">;</span>
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderResult</span>(<span class="hljs-params">o</span>) </span>{
+            <span class="hljs-keyword">var</span> imgPath, img, span, text;
+            imgPath = <span class="hljs-string">'/images/'</span> + (o.content.success ?
+                                    <span class="hljs-string">'success-icon.png'</span> : <span class="hljs-string">'delete-icon.png'</span>);
+            img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'img'</span>);
+            img.src = imgPath;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-25" id="section-25"></a>
 </div>
 <p>Might be the full exception object.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">o</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">o</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">extractErrorMsg</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> === <span class="hljs-keyword">typeof</span> o.content.text) {
+                o.content.text = extractErrorMsg(o.content.text);
+            }
 
-            <span class="nx">text</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
-            <span class="nx">span</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
-            <span class="nx">span</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;requirement&#39;</span><span class="p">;</span>
-            <span class="nx">span</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+            text = <span class="hljs-built_in">document</span>.createTextNode(o.content.text);
+            span = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+            span.className = <span class="hljs-string">'requirement'</span>;
+            span.appendChild(img);
 
-            <span class="nx">span</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-            <span class="k">return</span> <span class="nx">span</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+            span.appendChild(text);
+            <span class="hljs-keyword">return</span> span;
+        }
+    }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="requirements%20methods">
+          <div class="pilwrap" id="requirements-methods">
   <h2>
-    <a href="#requirements%20methods" name="requirements%20methods" class="pilcrow">&#182;</a>
-    Requirements methods
+    <a href="#requirements-methods" name="requirements-methods" class="pilcrow"></a>
+Requirements methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="requirements.init">
-  <h3>
-    <a href="#requirements.init" name="requirements.init" class="pilcrow">&#182;</a>
-    Requirements.init
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Setups the requirements widget</p>
-
-<p>Available options:</p>
-
-<ul>
-<li>requirements: array of callback functions or objects formatted as
- { cb: function [, params: object] [, name: string] };
-<ul><li>onComplete: function executed with either failure or success</li>
-<li>onFailure: function executed when at least one test fails</li>
-<li>onSuccess: function executed when all tests succeed</li>
-<li>maxWaitTime: max waiting time to execute all tests (in milliseconds)</li></ul></li>
-</ul>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">conf</span>
-      <span class="dox_type">object</span>
-      <span>Configuration object.</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf must be object.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">requirements</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">requirements</span><span class="p">))</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.requirements &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be array or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">requirements</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onComplete</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onComplete</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onComplete</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.onComplete must &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;be function, null or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">onComplete</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onComplete</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.onSuccess must &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;be function, null or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onFailure</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.onFailure must &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;be function, null or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">onFailure</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span><span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.init: conf.onMaxExecTime &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number, null or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">withTimeout</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">timeoutTime</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxExecTime</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="requirements.addrequirements">
-  <h3>
-    <a href="#requirements.addrequirements" name="requirements.addrequirements" class="pilcrow">&#182;</a>
-    Requirements.addRequirements
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Adds any number of requirements to the requirements array</p>
-
-<p>Callbacks can be asynchronous or synchronous.</p>
-
-<p>An asynchronous callback must call the <code>results</code> function
-passed as input parameter to communicate the outcome of the test.</p>
-
-<p>A synchronous callback must return the value immediately.</p>
-
-<p>In both cases the return is an array, where every item is an
-error message. Empty array means test passed.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addRequirements</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
-        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
-
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.addRequirements: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;requirements must be function or object.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="requirements.checkrequirements">
-  <h3>
-    <a href="#requirements.checkrequirements" name="requirements.checkrequirements" class="pilcrow">&#182;</a>
-    Requirements.checkRequirements
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Asynchronously or synchronously checks all registered callbacks</p>
-
-<p>Can add a timeout for the max execution time of the callbacks, if the
-corresponding option is set.</p>
-
-<p>Results are displayed conditionally</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">display</span>
-      <span class="dox_type">boolean</span>
-      <span>If TRUE, results are displayed</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">array</span>
-      <span>The array containing the errors</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.withTimeout</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkRequirements</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">display</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">errMsg</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: no requirements &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;to check found.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-
-        <span class="nx">errors</span> <span class="o">=</span> <span class="p">[];</span>
-        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="requirements.init">
+  <h3>
+    <a href="#requirements.init" name="requirements.init" class="pilcrow"></a>
+Requirements.init
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Setups the requirements widget</p>
+<p>Available options:</p>
+<ul>
+<li>requirements: array of callback functions or objects formatted as
+{ cb: function [, params: object] [, name: string] };</li>
+<li>onComplete: function executed with either failure or success</li>
+<li>onFailure: function executed when at least one test fails</li>
+<li>onSuccess: function executed when all tests succeed</li>
+<li>maxWaitTime: max waiting time to execute all tests (in milliseconds)</li>
+</ul>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">conf</span>
+<span class="dox_type">object</span>
+<span>Configuration object.
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">conf</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> conf) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.init: conf must be object. '</span> +
+                                <span class="hljs-string">'Found: '</span> + conf);
+        }
+        <span class="hljs-keyword">if</span> (conf.requirements) {
+            <span class="hljs-keyword">if</span> (!J.isArray(conf.requirements)) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.init: conf.requirements '</span> +
+                                    <span class="hljs-string">'must be array or undefined. Found: '</span> +
+                                    conf.requirements);
+            }
+            <span class="hljs-keyword">this</span>.requirements = conf.requirements;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> conf.onComplete) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> !== conf.onComplete &amp;&amp;
+                <span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> conf.onComplete) {
+
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.init: conf.onComplete must '</span> +
+                                    <span class="hljs-string">'be function, null or undefined. Found: '</span> +
+                                    conf.onComplete);
+            }
+            <span class="hljs-keyword">this</span>.onComplete = conf.onComplete;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> conf.onSuccess) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> !== conf.onSuccess &amp;&amp;
+                <span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> conf.onSuccess) {
+
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.init: conf.onSuccess must '</span> +
+                                    <span class="hljs-string">'be function, null or undefined. Found: '</span> +
+                                    conf.onSuccess);
+            }
+            <span class="hljs-keyword">this</span>.onSuccess = conf.onSuccess;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> conf.onFailure) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> !== conf.onFailure &amp;&amp;
+                <span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> conf.onFailure) {
+
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.init: conf.onFailure must '</span> +
+                                    <span class="hljs-string">'be function, null or undefined. Found: '</span> +
+                                    conf.onFailure);
+            }
+            <span class="hljs-keyword">this</span>.onFailure = conf.onFailure;
+        }
+        <span class="hljs-keyword">if</span> (conf.maxExecTime) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> !== conf.maxExecTime &amp;&amp;
+                <span class="hljs-string">'number'</span> !== <span class="hljs-keyword">typeof</span> conf.maxExecTime) {
+
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.init: conf.onMaxExecTime '</span> +
+                                    <span class="hljs-string">'must be number, null or undefined. '</span> +
+                                    <span class="hljs-string">'Found: '</span> + conf.maxExecTime);
+            }
+            <span class="hljs-keyword">this</span>.withTimeout = !!conf.maxExecTime;
+            <span class="hljs-keyword">this</span>.timeoutTime = conf.maxExecTime;
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="requirements.addrequirements">
+  <h3>
+    <a href="#requirements.addrequirements" name="requirements.addrequirements" class="pilcrow"></a>
+Requirements.addRequirements
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Adds any number of requirements to the requirements array</p>
+<p>Callbacks can be asynchronous or synchronous.</p>
+<p>An asynchronous callback must call the <code>results</code> function
+passed as input parameter to communicate the outcome of the test.</p>
+<p>A synchronous callback must return the value immediately.</p>
+<p>In both cases the return is an array, where every item is an
+error message. Empty array means test passed.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.addRequirements = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-built_in">arguments</span>.length;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">arguments</span>[i] &amp;&amp;
+                <span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">arguments</span>[i] ) {
+
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.addRequirements: '</span> +
+                                    <span class="hljs-string">'requirements must be function or '</span> +
+                                    <span class="hljs-string">'object. Found: '</span> + <span class="hljs-built_in">arguments</span>[i]);
+            }
+            <span class="hljs-keyword">this</span>.requirements.push(<span class="hljs-built_in">arguments</span>[i]);
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="requirements.checkrequirements">
+  <h3>
+    <a href="#requirements.checkrequirements" name="requirements.checkrequirements" class="pilcrow"></a>
+Requirements.checkRequirements
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Asynchronously or synchronously checks all registered callbacks</p>
+<p>Can add a timeout for the max execution time of the callbacks, if the
+corresponding option is set.</p>
+<p>Results are displayed conditionally</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">display</span>
+<span class="dox_type">boolean</span>
+<span>If TRUE, results are displayed
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">array</span>
+<span>The array containing the errors
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.withTimeout</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.checkRequirements = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">display</span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
+        <span class="hljs-keyword">var</span> errors, cbName, errMsg;
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.requirements.length) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Requirements.checkRequirements: no requirements '</span> +
+                            <span class="hljs-string">'to check.'</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.updateStillChecking(<span class="hljs-keyword">this</span>.requirements.length, <span class="hljs-literal">true</span>);
+
+        errors = [];
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.requirements.length;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-30" id="section-30"></a>
 </div>
 <p>Get Test Name.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">cbName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">cbName</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">try</span> <span class="p">{</span>
-                <span class="nx">resultCb</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">cbName</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-                <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">extractErrorMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-                <span class="nx">errors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;An error occurred in requirement n.&#39;</span> <span class="o">+</span>
-                            <span class="nx">cbName</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nx">errMsg</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.requirements[i] &amp;&amp; <span class="hljs-keyword">this</span>.requirements[i].name) {
+                cbName = <span class="hljs-keyword">this</span>.requirements[i].name;
+            }
+            <span class="hljs-keyword">else</span> {
+                cbName = i + <span class="hljs-number">1</span>;
+            }
+            <span class="hljs-keyword">try</span> {
+                resultCb(<span class="hljs-keyword">this</span>, cbName, i);
+            }
+            <span class="hljs-keyword">catch</span>(e) {
+                <span class="hljs-keyword">this</span>.hasFailed = <span class="hljs-literal">true</span>;
+                errMsg = extractErrorMsg(e);
+                <span class="hljs-keyword">this</span>.updateStillChecking(<span class="hljs-number">-1</span>);
+                errors.push(<span class="hljs-string">'An error occurred in requirement n.'</span> +
+                            cbName + <span class="hljs-string">': '</span> + errMsg);
+            }
+        }
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">withTimeout</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">addTimeout</span><span class="p">();</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.withTimeout) <span class="hljs-keyword">this</span>.addTimeout();
 
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">display</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">displayResults</span><span class="p">(</span><span class="nx">errors</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> display ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>) {
+            <span class="hljs-keyword">this</span>.displayResults(errors);
+        }
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isCheckingFinished</span><span class="p">())</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">checkingFinished</span><span class="p">();</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isCheckingFinished()) <span class="hljs-keyword">this</span>.checkingFinished();
 
-        <span class="k">return</span> <span class="nx">errors</span><span class="p">;</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">return</span> errors;
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.addtimeout">
   <h3>
-    <a href="#requirements.addtimeout" name="requirements.addtimeout" class="pilcrow">&#182;</a>
-    Requirements.addTimeout
+    <a href="#requirements.addtimeout" name="requirements.addtimeout" class="pilcrow"></a>
+Requirements.addTimeout
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Starts a timeout for the max execution time of the requirements</p>
-
-<p>Upon time out results are checked, and eventually displayed.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.stillCheckings</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.withTimeout</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Starts a timeout for the max execution time of the requirements</p>
+<p>Upon time out results are checked, and eventually displayed.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.stillCheckings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.withTimeout</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addTimeout</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">errStr</span> <span class="o">=</span> <span class="s1">&#39;One or more function is taking too long. This is &#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;likely to be due to a compatibility issue with your browser &#39;</span> <span class="o">+</span>
-            <span class="s1">&#39;or to bad network connectivity.&#39;</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.addTimeout = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">displayResults</span><span class="p">([</span><span class="nx">errStr</span><span class="p">]);</span>
-            <span class="p">}</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">timeoutId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">checkingFinished</span><span class="p">();</span>
-        <span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeoutTime</span><span class="p">);</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">this</span>.timeoutId = setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">if</span> (that.stillChecking &gt; <span class="hljs-number">0</span>) {
+                that.displayResults([<span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'errStr'</span>)]);
+            }
+            that.timeoutId = <span class="hljs-literal">null</span>;
+            that.hasFailed = <span class="hljs-literal">true</span>;
+            that.checkingFinished();
+        }, <span class="hljs-keyword">this</span>.timeoutTime);
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.cleartimeout">
   <h3>
-    <a href="#requirements.cleartimeout" name="requirements.cleartimeout" class="pilcrow">&#182;</a>
-    Requirements.clearTimeout
+    <a href="#requirements.cleartimeout" name="requirements.cleartimeout" class="pilcrow"></a>
+Requirements.clearTimeout
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Clears the timeout for the max execution time of the requirements</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.timeoutId</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.stillCheckings</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Clears the timeout for the max execution time of the requirements</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.timeoutId</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.stillCheckings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">clearTimeout</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">clearTimeout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.clearTimeout = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.timeoutId) {
+            clearTimeout(<span class="hljs-keyword">this</span>.timeoutId);
+            <span class="hljs-keyword">this</span>.timeoutId = <span class="hljs-literal">null</span>;
+        }
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.updatestillchecking">
   <h3>
-    <a href="#requirements.updatestillchecking" name="requirements.updatestillchecking" class="pilcrow">&#182;</a>
-    Requirements.updateStillChecking
+    <a href="#requirements.updatestillchecking" name="requirements.updatestillchecking" class="pilcrow"></a>
+Requirements.updateStillChecking
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Updates the number of requirements still running on the display</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">update</span>
-      <span class="dox_type">number</span>
-      <span>The number of requirements still running, or an
-  increment as compared to the current value</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">absolute</span>
-      <span class="dox_type">boolean</span>
-      <span>TRUE, if <code>update</code> is to be interpreted as an
-  absolute value</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.summaryUpdate</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.stillCheckings</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Updates the number of requirements still running on the display</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">update</span>
+<span class="dox_type">number</span>
+<span>The number of requirements still running, or an   increment as compared to the current value
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">absolute</span>
+<span class="dox_type">boolean</span>
+<span>TRUE, if <code>update</code> is to be interpreted as an   absolute value
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.summaryUpdate</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.stillCheckings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateStillChecking</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">update</span><span class="p">,</span> <span class="nx">absolute</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">total</span><span class="p">,</span> <span class="nx">remaining</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.updateStillChecking = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">update, absolute</span>) </span>{
+        <span class="hljs-keyword">var</span> total, remaining;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">=</span> <span class="nx">absolute</span> <span class="o">?</span> <span class="nx">update</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">+</span> <span class="nx">update</span><span class="p">;</span>
+        <span class="hljs-keyword">this</span>.stillChecking = absolute ? update : <span class="hljs-keyword">this</span>.stillChecking + update;
 
-        <span class="nx">total</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">requirements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-        <span class="nx">remaining</span> <span class="o">=</span> <span class="nx">total</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39; (&#39;</span> <span class="o">+</span>  <span class="nx">remaining</span> <span class="o">+</span> <span class="s1">&#39; / &#39;</span> <span class="o">+</span> <span class="nx">total</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">;</span>
-    <span class="p">};</span>
+        total = <span class="hljs-keyword">this</span>.requirements.length;
+        remaining = total - <span class="hljs-keyword">this</span>.stillChecking;
+        <span class="hljs-keyword">this</span>.summaryUpdate.innerHTML = <span class="hljs-string">' ('</span> +  remaining + <span class="hljs-string">' / '</span> + total + <span class="hljs-string">')'</span>;
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.ischeckingfinished">
   <h3>
-    <a href="#requirements.ischeckingfinished" name="requirements.ischeckingfinished" class="pilcrow">&#182;</a>
-    Requirements.isCheckingFinished
+    <a href="#requirements.ischeckingfinished" name="requirements.ischeckingfinished" class="pilcrow"></a>
+Requirements.isCheckingFinished
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Returns TRUE if all requirements have returned</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.stillCheckings</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Returns TRUE if all requirements have returned</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.stillCheckings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isCheckingFinished</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.isCheckingFinished = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.stillChecking &lt;= <span class="hljs-number">0</span>;
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.checkingfinished">
   <h3>
-    <a href="#requirements.checkingfinished" name="requirements.checkingfinished" class="pilcrow">&#182;</a>
-    Requirements.CheckingFinished
+    <a href="#requirements.checkingfinished" name="requirements.checkingfinished" class="pilcrow"></a>
+Requirements.checkingFinished
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Cleans up timer and dots, and executes final requirements accordingly</p>
-
+</div>
+<div class="body">
+<p>Clears up timer and dots, and executes final callbacks accordingly</p>
 <p>First, executes the <code>onComplete</code> callback in any case. Then if no
 errors have been raised executes the <code>onSuccess</code> callback, otherwise
 the <code>onFailure</code> callback.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.onComplete</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.onSuccess</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.onFailure</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.stillCheckings</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
 </div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">force</span>
+<span class="dox_type">boolean</span>
+<span>If TRUE, the function is executed again,   regardless of whether it was already executed. Default: FALSE
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.onComplete</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.onSuccess</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.onFailure</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.stillCheckings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkingFinished</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">results</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.checkingFinished = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">force</span>) </span>{
+        <span class="hljs-keyword">var</span> results;
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">clearTimeout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">dots</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sayResults</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">results</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">success</span><span class="o">:</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span><span class="p">,</span>
-                <span class="nx">results</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">results</span>
-            <span class="p">};</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">addToResults</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">J</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">addToResults</span><span class="p">());</span>
-            <span class="p">}</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sayResultsLabel</span><span class="p">,</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">,</span> <span class="nx">results</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onComplete</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">onComplete</span><span class="p">();</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">onFailure</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-36" id="section-36"></a>
+</div>
+<p>Sometimes, if all requirements are almost synchronous, it
+can happen that this function is called twice (from resultCb
+and at the end of all requirements checkings.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.callbacksExecuted &amp;&amp; !force) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">this</span>.callbacksExecuted = <span class="hljs-literal">true</span>;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.timeoutId) clearTimeout(<span class="hljs-keyword">this</span>.timeoutId);
+
+        <span class="hljs-keyword">this</span>.dots.stop();
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.sayResults) {
+            results = {
+                <span class="hljs-attr">success</span>: !<span class="hljs-keyword">this</span>.hasFailed,
+                <span class="hljs-attr">results</span>: <span class="hljs-keyword">this</span>.results
+            };
+
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.addToResults) {
+                J.mixin(results, <span class="hljs-keyword">this</span>.addToResults());
+            }
+            node.say(<span class="hljs-keyword">this</span>.sayResultsLabel, <span class="hljs-string">'SERVER'</span>, results);
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.onComplete) <span class="hljs-keyword">this</span>.onComplete();
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.hasFailed) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.onFailure) <span class="hljs-keyword">this</span>.onFailure();
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.onSuccess) {
+            <span class="hljs-keyword">this</span>.onSuccess();
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="requirements.displayresults">
   <h3>
-    <a href="#requirements.displayresults" name="requirements.displayresults" class="pilcrow">&#182;</a>
-    Requirements.displayResults
+    <a href="#requirements.displayresults" name="requirements.displayresults" class="pilcrow"></a>
+Requirements.displayResults
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Displays the results of the requirements on the screen</p>
-
+</div>
+<div class="body">
+<p>Displays the results of the requirements on the screen</p>
 <p>Creates a new item in the list of results for every error found
 in the results array.</p>
-
 <p>If no error was raised, the results array should be empty.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">results</span>
-      <span class="dox_type">array</span>
-      <span>The array containing the return values of all
-  the requirements</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.onComplete</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.onSuccess</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.onFailure</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.stillCheckings</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
 </div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">results</span>
+<span class="dox_type">array</span>
+<span>The array containing the return values of all   the requirements
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.onComplete</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.onSuccess</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.onFailure</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.stillCheckings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">displayResults</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    Requirements.prototype.displayResults = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">results</span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.displayResults: list not found. &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;Have you called .append() first?&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.list) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Requirements.displayResults: list not found. '</span> +
+                            <span class="hljs-string">'Have you called .append() first?'</span>);
+        }
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.displayResults: results must &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;be array.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (!J.isArray(results)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.displayResults: results must '</span> +
+                                <span class="hljs-string">'be array. Found: '</span> + results);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-38" id="section-38"></a>
 </div>
 <p>No errors.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">stillChecking</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.hasFailed &amp;&amp; <span class="hljs-keyword">this</span>.stillChecking &lt;= <span class="hljs-number">0</span>) {
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39"></a>
 </div>
 <p>All tests passed.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">({</span>
-                <span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-                <span class="nx">text</span><span class="o">:</span><span class="s1">&#39;All tests passed.&#39;</span>
-            <span class="p">});</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">this</span>.list.addDT({
+                <span class="hljs-attr">success</span>: <span class="hljs-literal">true</span>,
+                <span class="hljs-attr">text</span>: <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'testPassed'</span>)
+            });
+        }
+        <span class="hljs-keyword">else</span> {
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40"></a>
 </div>
 <p>Add the errors.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">results</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">addDT</span><span class="p">({</span>
-                    <span class="nx">success</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-                    <span class="nx">text</span><span class="o">:</span> <span class="nx">results</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
-                <span class="p">});</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            i = <span class="hljs-number">-1</span>, len = results.length;
+            <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+                <span class="hljs-keyword">this</span>.list.addDT({
+                    <span class="hljs-attr">success</span>: <span class="hljs-literal">false</span>,
+                    <span class="hljs-attr">text</span>: results[i]
+                });
+            }
+        }
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-41" id="section-41"></a>
 </div>
 <p>Parse deletes previously existing nodes in the list.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.list.parse();
+    };
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    Requirements.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span>
-            <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Evaluating requirements&#39;</span><span class="p">));</span>
+        <span class="hljs-keyword">this</span>.summary = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+        <span class="hljs-keyword">this</span>.summary.appendChild(
+            <span class="hljs-built_in">document</span>.createTextNode(<span class="hljs-string">'Evaluating requirements'</span>));
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summaryUpdate</span><span class="p">);</span>
+        <span class="hljs-keyword">this</span>.summaryUpdate = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+        <span class="hljs-keyword">this</span>.summary.appendChild(<span class="hljs-keyword">this</span>.summaryUpdate);
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">dots</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getLoadingDots</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dots</span><span class="p">.</span><span class="nx">span</span><span class="p">);</span>
+        <span class="hljs-keyword">this</span>.dots = W.getLoadingDots();
+        <span class="hljs-keyword">this</span>.summary.appendChild(<span class="hljs-keyword">this</span>.dots.span);
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">));</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summaryResults</span><span class="p">);</span>
+        <span class="hljs-keyword">this</span>.summaryResults = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        <span class="hljs-keyword">this</span>.summary.appendChild(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'br'</span>));
+        <span class="hljs-keyword">this</span>.summary.appendChild(<span class="hljs-keyword">this</span>.summaryResults);
 
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">summary</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">());</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.summary);
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.list.getRoot());
+    };
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">registerSetup</span><span class="p">(</span><span class="s1">&#39;requirements&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">conf</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;requirements widget: invalid setup object: &#39;</span> <span class="o">+</span> <span class="nx">conf</span><span class="p">);</span>
-                <span class="k">return</span><span class="p">;</span>
-            <span class="p">}</span>
-
-</pre></div>
+    Requirements.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that;
+        that = <span class="hljs-keyword">this</span>;
+        node.registerSetup(<span class="hljs-string">'requirements'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">conf</span>) </span>{
+            <span class="hljs-keyword">if</span> (!conf) <span class="hljs-keyword">return</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> conf) {
+                node.warn(<span class="hljs-string">'requirements widget: invalid setup object: '</span> + conf);
+                <span class="hljs-keyword">return</span>;
+            }
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-42" id="section-42"></a>
 </div>
 <p>Configure all requirements.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">conf</span><span class="p">);</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            that.init(conf);
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-43" id="section-43"></a>
 </div>
 <p>Start a checking immediately if requested.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">doChecking</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">checkRequirements</span><span class="p">();</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (conf.doChecking !== <span class="hljs-literal">false</span>) that.checkRequirements();
 
-            <span class="k">return</span> <span class="nx">conf</span><span class="p">;</span>
-        <span class="p">});</span>
-    <span class="p">};</span>
+            <span class="hljs-keyword">return</span> conf;
+        });
+    };
 
-    <span class="nx">Requirements</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">deregisterSetup</span><span class="p">(</span><span class="s1">&#39;requirements&#39;</span><span class="p">);</span>
-    <span class="p">};</span>
+    Requirements.prototype.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        node.deregisterSetup(<span class="hljs-string">'requirements'</span>);
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="helper%20methods.">
+          <div class="pilwrap" id="helper-methods">
   <h2>
-    <a href="#helper%20methods." name="helper%20methods." class="pilcrow">&#182;</a>
-    Helper methods.
+    <a href="#helper-methods" name="helper-methods" class="pilcrow"></a>
+Helper methods.
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resultCb</span>(<span class="hljs-params">that, name, i</span>) </span>{
+        <span class="hljs-keyword">var</span> req, update, res;
 
-    <span class="kd">function</span> <span class="nx">resultCb</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">update</span><span class="p">,</span> <span class="nx">res</span><span class="p">;</span>
+        update = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">success, errors, data</span>) </span>{
+            <span class="hljs-keyword">if</span> (that.completed[name]) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Requirements.checkRequirements: test '</span> +
+                                <span class="hljs-string">'already completed: '</span> + name);
+            }
+            that.completed[name] = <span class="hljs-literal">true</span>;
+            that.updateStillChecking(<span class="hljs-number">-1</span>);
+            <span class="hljs-keyword">if</span> (!success) that.hasFailed = <span class="hljs-literal">true</span>;
 
-        <span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">,</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">completed</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: test &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;already completed: &#39;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">completed</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateStillChecking</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">success</span><span class="p">)</span> <span class="nx">that</span><span class="p">.</span><span class="nx">hasFailed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> errors) errors = [ errors ];
 
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">errors</span><span class="p">)</span> <span class="nx">errors</span> <span class="o">=</span> <span class="p">[</span> <span class="nx">errors</span> <span class="p">];</span>
+            <span class="hljs-keyword">if</span> (errors) {
+                <span class="hljs-keyword">if</span> (!J.isArray(errors)) {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Requirements.checkRequirements: '</span> +
+                                    <span class="hljs-string">'errors must be array or undefined. '</span> +
+                                    <span class="hljs-string">'Found: '</span> + errors);
+                }
+                that.displayResults(errors);
+            }
 
-            <span class="k">if</span> <span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">errors</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;errors must be array or undefined.&#39;</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">displayResults</span><span class="p">(</span><span class="nx">errors</span><span class="p">);</span>
-            <span class="p">}</span>
+            that.results.push({
+                <span class="hljs-attr">name</span>: name,
+                <span class="hljs-attr">success</span>: success,
+                <span class="hljs-attr">errors</span>: errors,
+                <span class="hljs-attr">data</span>: data
+            });
 
-            <span class="nx">that</span><span class="p">.</span><span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
-                <span class="nx">name</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span>
-                <span class="nx">success</span><span class="o">:</span> <span class="nx">success</span><span class="p">,</span>
-                <span class="nx">errors</span><span class="o">:</span> <span class="nx">errors</span><span class="p">,</span>
-                <span class="nx">data</span><span class="o">:</span> <span class="nx">data</span>
-            <span class="p">});</span>
+            <span class="hljs-keyword">if</span> (that.isCheckingFinished()) that.checkingFinished();
+        };
 
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">isCheckingFinished</span><span class="p">())</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">checkingFinished</span><span class="p">();</span>
-            <span class="p">}</span>
-        <span class="p">};</span>
-
-        <span class="nx">req</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">requirements</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">res</span> <span class="o">=</span> <span class="nx">req</span><span class="p">(</span><span class="nx">update</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">res</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">cb</span><span class="p">(</span><span class="nx">update</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span> <span class="o">||</span> <span class="p">{});</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Requirements.checkRequirements: invalid &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;requirement: &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-
-</pre></div>
+        req = that.requirements[i];
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> === <span class="hljs-keyword">typeof</span> req) {
+            res = req(update);
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> === <span class="hljs-keyword">typeof</span> req) {
+            res = req.cb(update, req.params || {});
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Requirements.checkRequirements: invalid '</span> +
+                                <span class="hljs-string">'requirement: '</span> + name + <span class="hljs-string">'.'</span>);
+        }
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-45" id="section-45"></a>
 </div>
 <p>Synchronous checking.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="nx">update</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">success</span><span class="p">,</span> <span class="nx">res</span><span class="p">.</span><span class="nx">errors</span><span class="p">,</span> <span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-    <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (res) update(res.success, res.errors, res.data);
+    }
 
-    <span class="kd">function</span> <span class="nx">extractErrorMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">errMsg</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">msg</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">description</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">errMsg</span><span class="p">.</span><span class="nx">description</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">errMsg</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">errMsg</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extractErrorMsg</span>(<span class="hljs-params">e</span>) </span>{
+        <span class="hljs-keyword">var</span> errMsg;
+        <span class="hljs-keyword">if</span> (e.msg) {
+            errMsg = e.msg;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (e.message) {
+            errMsg = e.message;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (e.description) {
+            errMsg = errMsg.description;
+        }
+        <span class="hljs-keyword">else</span> {
+            errMsg = e.toString();
+        }
+        <span class="hljs-keyword">return</span> errMsg;
+    }
 
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+})(node);
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

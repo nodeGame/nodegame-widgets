@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## 4.0.0 (current)
+## 4.0.0
 - `EndScreen` widget displays information such earnings, exit code, feedback and email forms.
 - `Feedback` widget (compatible as Choice-Like widget).
 - `EmailForm` widget (compatible as Choice-Like widget).

@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/MsgBar.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/MsgBar.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,374 +21,395 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#msgbar">MsgBar</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h1">
-        <a href="#helper%20function.">Helper Function.</a>
+        <a href="#helper-function">Helper Function.</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="msgbar">
-  <h1>
-    <a href="#msgbar" name="msgbar" class="pilcrow">&#182;</a>
-    MsgBar
-  </h1>
-</div>
-
-
-<p>Copyright(c) 2016 Stefano Balietti
-MIT Licensed</p>
-  </div>
-  <div class="body"><p>Creates a tool for sending messages to other connected clients</p>
-
-<p>www.nodegame.org</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
-
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-
-    <span class="kd">var</span> <span class="nx">JSUS</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">,</span>
-        <span class="nx">Table</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;MsgBar&#39;</span><span class="p">,</span> <span class="nx">MsgBar</span><span class="p">);</span>
-
-
-</pre></div>
-        </td>
-      </tr>
+    
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="msgbar">
+  <h1>
+    <a href="#msgbar" name="msgbar" class="pilcrow"></a>
+MsgBar
+  </h1>
+</div>
+<p>Copyright(c) 2017 Stefano Balietti
+MIT Licensed</p>
+</div>
+<div class="body">
+<p>Creates a tool for sending messages to other connected clients</p>
+<p>www.nodegame.org</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
+
+    <span class="hljs-keyword">var</span> Table = W.Table;
+
+    node.widgets.register(<span class="hljs-string">'MsgBar'</span>, MsgBar);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    MsgBar.version = <span class="hljs-string">'0.7.2'</span>;
+    MsgBar.description = <span class="hljs-string">'Send a nodeGame message to players'</span>;
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.7.0&#39;</span><span class="p">;</span>
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Send a nodeGame message to players&#39;</span><span class="p">;</span>
+    MsgBar.title = <span class="hljs-string">'Send MSG'</span>;
+    MsgBar.className = <span class="hljs-string">'msgbar'</span>;
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Send MSG&#39;</span><span class="p">;</span>
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;msgbar&#39;</span><span class="p">;</span>
+    MsgBar.texts.advButton = <span class="hljs-string">'Toggle advanced options'</span>;
 
-    <span class="kd">function</span> <span class="nx">MsgBar</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MsgBar</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.recipient = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">this</span>.actionSel = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">this</span>.targetSel = <span class="hljs-literal">null</span>;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="p">}</span>
+        <span class="hljs-keyword">this</span>.table = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">this</span>.tableAdvanced = <span class="hljs-literal">null</span>;
+    }
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
-    <span class="p">};</span>
+    MsgBar.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.id = <span class="hljs-keyword">this</span>.id || MsgBar.className;
+    };
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">advButton</span><span class="p">,</span> <span class="nx">sendButton</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">field</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">table</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+    MsgBar.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> advButton, sendButton;
+        <span class="hljs-keyword">var</span> fields, i, field;
+        <span class="hljs-keyword">var</span> table;
+        <span class="hljs-keyword">var</span> that;
 
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        that = <span class="hljs-keyword">this</span>;
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
+        <span class="hljs-keyword">this</span>.table = <span class="hljs-keyword">new</span> Table();
+        <span class="hljs-keyword">this</span>.tableAdvanced = <span class="hljs-keyword">new</span> Table();
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3"></a>
 </div>
 <p>Create fields.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;priority&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;reliable&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="s1">&#39;session&#39;</span><span class="p">,</span> <span class="s1">&#39;stage&#39;</span><span class="p">,</span> <span class="s1">&#39;created&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">];</span>
+        <td class="code highlight">
+          <pre class="javascript">        fields = [<span class="hljs-string">'to'</span>, <span class="hljs-string">'action'</span>, <span class="hljs-string">'target'</span>, <span class="hljs-string">'text'</span>, <span class="hljs-string">'data'</span>, <span class="hljs-string">'from'</span>, <span class="hljs-string">'priority'</span>,
+                  <span class="hljs-string">'reliable'</span>, <span class="hljs-string">'forward'</span>, <span class="hljs-string">'session'</span>, <span class="hljs-string">'stage'</span>, <span class="hljs-string">'created'</span>, <span class="hljs-string">'id'</span>];
 
-        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">field</span> <span class="o">=</span> <span class="nx">fields</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; fields.length; ++i) {
+            field = fields[i];
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4"></a>
 </div>
 <p>Put TO, ACTION, TARGET, TEXT, DATA in the first table which is
-always visible, the other fields in the "advanced" table which
+always visible, the other fields in the &quot;advanced&quot; table which
 is hidden by default.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">table</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">            table = i &lt; <span class="hljs-number">5</span> ? <span class="hljs-keyword">this</span>.table : <span class="hljs-keyword">this</span>.tableAdvanced;
 
-            <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">field</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-            <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">W</span><span class="p">.</span><span class="nx">getTextInput</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">field</span><span class="p">,</span> <span class="p">{</span><span class="nx">tabindex</span><span class="o">:</span> <span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">}),</span>
-                                     <span class="nx">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            table.add(field, i, <span class="hljs-number">0</span>);
+            table.add(W.getTextInput(<span class="hljs-keyword">this</span>.id + <span class="hljs-string">'_'</span> + field, {<span class="hljs-attr">tabindex</span>: i+<span class="hljs-number">1</span>}),
+                                     i, <span class="hljs-number">1</span>);
 
-            <span class="k">if</span> <span class="p">(</span><span class="nx">field</span> <span class="o">===</span> <span class="s1">&#39;to&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span> <span class="o">=</span>
-                    <span class="nx">W</span><span class="p">.</span><span class="nx">getRecipientSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_recipients&#39;</span><span class="p">);</span>
-                <span class="nx">W</span><span class="p">.</span><span class="nx">addAttributes2Elem</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span>
-                        <span class="p">{</span><span class="nx">tabindex</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">length</span><span class="o">+</span><span class="mi">1</span><span class="p">});</span>
-                <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_to&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">recipient</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-                <span class="p">};</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">field</span> <span class="o">===</span> <span class="s1">&#39;action&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getActionSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_actions&#39;</span><span class="p">);</span>
-                <span class="nx">W</span><span class="p">.</span><span class="nx">addAttributes2Elem</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">,</span>
-                        <span class="p">{</span><span class="nx">tabindex</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">length</span><span class="o">+</span><span class="mi">2</span><span class="p">});</span>
-                <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_action&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">actionSel</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-                <span class="p">};</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">field</span> <span class="o">===</span> <span class="s1">&#39;target&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getTargetSelector</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_targets&#39;</span><span class="p">);</span>
-                <span class="nx">W</span><span class="p">.</span><span class="nx">addAttributes2Elem</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">,</span>
-                        <span class="p">{</span><span class="nx">tabindex</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">length</span><span class="o">+</span><span class="mi">3</span><span class="p">});</span>
-                <span class="nx">table</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_target&#39;</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">targetSel</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-                <span class="p">};</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+            <span class="hljs-keyword">if</span> (field === <span class="hljs-string">'to'</span>) {
+                <span class="hljs-keyword">this</span>.recipient =
+                    W.getRecipientSelector(<span class="hljs-keyword">this</span>.id + <span class="hljs-string">'_recipients'</span>);
+                W.addAttributes2Elem(<span class="hljs-keyword">this</span>.recipient,
+                        {<span class="hljs-attr">tabindex</span>: fields.length+<span class="hljs-number">1</span>});
+                table.add(<span class="hljs-keyword">this</span>.recipient, i, <span class="hljs-number">2</span>);
+                <span class="hljs-keyword">this</span>.recipient.onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                    W.getElementById(that.id + <span class="hljs-string">'_to'</span>).value =
+                        that.recipient.value;
+                };
+            }
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (field === <span class="hljs-string">'action'</span>) {
+                <span class="hljs-keyword">this</span>.actionSel = W.getActionSelector(<span class="hljs-keyword">this</span>.id + <span class="hljs-string">'_actions'</span>);
+                W.addAttributes2Elem(<span class="hljs-keyword">this</span>.actionSel,
+                        {<span class="hljs-attr">tabindex</span>: fields.length+<span class="hljs-number">2</span>});
+                table.add(<span class="hljs-keyword">this</span>.actionSel, i, <span class="hljs-number">2</span>);
+                <span class="hljs-keyword">this</span>.actionSel.onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                    W.getElementById(that.id + <span class="hljs-string">'_action'</span>).value =
+                        that.actionSel.value;
+                };
+            }
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (field === <span class="hljs-string">'target'</span>) {
+                <span class="hljs-keyword">this</span>.targetSel = W.getTargetSelector(<span class="hljs-keyword">this</span>.id + <span class="hljs-string">'_targets'</span>);
+                W.addAttributes2Elem(<span class="hljs-keyword">this</span>.targetSel,
+                        {<span class="hljs-attr">tabindex</span>: fields.length+<span class="hljs-number">3</span>});
+                table.add(<span class="hljs-keyword">this</span>.targetSel, i, <span class="hljs-number">2</span>);
+                <span class="hljs-keyword">this</span>.targetSel.onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                    W.getElementById(that.id + <span class="hljs-string">'_target'</span>).value =
+                        that.targetSel.value;
+                };
+            }
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5"></a>
 </div>
 <p>Show table of basic fields.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.table.table);
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.tableAdvanced.table);
+        <span class="hljs-keyword">this</span>.tableAdvanced.table.style.display = <span class="hljs-string">'none'</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6"></a>
 </div>
 <p>Show 'Send' button.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">sendButton</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">);</span>
-        <span class="nx">sendButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">msg</span><span class="p">;</span>
-            <span class="nx">msg</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-        <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        sendButton = W.addButton(<span class="hljs-keyword">this</span>.bodyDiv);
+        sendButton.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">var</span> msg;
+            msg = that.parse();
+            <span class="hljs-keyword">if</span> (msg) node.socket.send(msg);
+        };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7"></a>
 </div>
 <p>Show a button that expands the table of advanced fields.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">advButton</span> <span class="o">=</span>
-            <span class="nx">W</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="s1">&#39;Toggle advanced options&#39;</span><span class="p">);</span>
-        <span class="nx">advButton</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span> <span class="o">?</span> <span class="s1">&#39;none&#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-        <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        advButton =
+            W.addButton(<span class="hljs-keyword">this</span>.bodyDiv, <span class="hljs-literal">undefined</span>, <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'advButton'</span>));
+        advButton.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            that.tableAdvanced.table.style.display =
+                that.tableAdvanced.table.style.display === <span class="hljs-string">''</span> ? <span class="hljs-string">'none'</span> : <span class="hljs-string">''</span>;
+        };
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">this</span>.table.parse();
+        <span class="hljs-keyword">this</span>.tableAdvanced.parse();
+    };
 
-    <span class="nx">MsgBar</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">msg</span><span class="p">,</span> <span class="nx">gameMsg</span><span class="p">;</span>
+    MsgBar.prototype.parse = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> msg, gameMsg;
 
-        <span class="nx">msg</span> <span class="o">=</span> <span class="p">{};</span>
+        msg = {};
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">validateTableMsg</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">tableAdvanced</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">validateTableMsg</span><span class="p">,</span> <span class="nx">msg</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">delete</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">_lastKey</span><span class="p">;</span>
-        <span class="k">delete</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span><span class="p">;</span>
-        <span class="nx">gameMsg</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">msg</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;MsgBar msg created. &#39;</span> <span class="o">+</span>  <span class="nx">gameMsg</span><span class="p">.</span><span class="nx">toSMS</span><span class="p">());</span>
-        <span class="k">return</span> <span class="nx">gameMsg</span><span class="p">;</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">this</span>.table.forEach(validateTableMsg, msg);
+        <span class="hljs-keyword">if</span> (msg._invalid) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">this</span>.tableAdvanced.forEach(validateTableMsg, msg);
+        <span class="hljs-keyword">if</span> (msg._invalid) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">delete</span> msg._lastKey;
+        <span class="hljs-keyword">delete</span> msg._invalid;
+        gameMsg = node.msg.create(msg);
+        node.info(<span class="hljs-string">'MsgBar msg created. '</span> +  gameMsg.toSMS());
+        <span class="hljs-keyword">return</span> gameMsg;
+    };
 
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="helper%20function.">
+          <div class="pilwrap" id="helper-function">
   <h1>
-    <a href="#helper%20function." name="helper%20function." class="pilcrow">&#182;</a>
-    Helper Function.
+    <a href="#helper-function" name="helper-function" class="pilcrow"></a>
+Helper Function.
   </h1>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">validateTableMsg</span>(<span class="hljs-params">e, msg</span>) </span>{
+        <span class="hljs-keyword">var</span> key, value;
 
-    <span class="kd">function</span> <span class="nx">validateTableMsg</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">;</span>
+        <span class="hljs-keyword">if</span> (msg._invalid) <span class="hljs-keyword">return</span>;
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="hljs-keyword">if</span> (e.y === <span class="hljs-number">2</span>) <span class="hljs-keyword">return</span>;
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">y</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">y</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
+        <span class="hljs-keyword">if</span> (e.y === <span class="hljs-number">0</span>) {
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9"></a>
 </div>
 <p>Saving the value of last key.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">msg</span><span class="p">.</span><span class="nx">_lastKey</span> <span class="o">=</span>  <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">;</span>
-            <span class="k">return</span><span class="p">;</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            msg._lastKey =  e.content;
+            <span class="hljs-keyword">return</span>;
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10"></a>
 </div>
 <p>Fetching the value of last key.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">key</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">_lastKey</span><span class="p">;</span>
-        <span class="nx">value</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        key = msg._lastKey;
+        value = e.content.value;
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;stage&#39;</span> <span class="o">||</span> <span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;to&#39;</span> <span class="o">||</span> <span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">try</span> <span class="p">{</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (key === <span class="hljs-string">'stage'</span> || key === <span class="hljs-string">'to'</span> || key === <span class="hljs-string">'data'</span>) {
+            <span class="hljs-keyword">try</span> {
+                value = J.parse(e.content.value);
+            }
+            <span class="hljs-keyword">catch</span> (ex) {
+                value = e.content.value;
+            }
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11"></a>
 </div>
 <p>Validate input.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;to&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (key === <span class="hljs-string">'to'</span>) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> value) {
+                value = <span class="hljs-string">''</span> + value;
+            }
 
-            <span class="k">if</span> <span class="p">((</span><span class="o">!</span><span class="nx">JSUS</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">)</span> <span class="o">||</span>
-                <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">))</span> <span class="p">{</span>
+            <span class="hljs-keyword">if</span> ((!J.isArray(value) &amp;&amp; <span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> value) ||
+                (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> value &amp;&amp; value.trim() === <span class="hljs-string">''</span>)) {
 
-                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Invalid &quot;to&quot; field&#39;</span><span class="p">);</span>
-                <span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+                alert(<span class="hljs-string">'Invalid "to" field'</span>);
+                msg._invalid = <span class="hljs-literal">true</span>;
+            }
+        }
 
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;action&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Missing &quot;action&quot; field&#39;</span><span class="p">);</span>
-                <span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
-            <span class="p">}</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (key === <span class="hljs-string">'action'</span>) {
+            <span class="hljs-keyword">if</span> (value.trim() === <span class="hljs-string">''</span>) {
+                alert(<span class="hljs-string">'Missing "action" field'</span>);
+                msg._invalid = <span class="hljs-literal">true</span>;
+            }
+            <span class="hljs-keyword">else</span> {
+                value = value.toLowerCase();
+            }
 
-        <span class="p">}</span>
+        }
 
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;target&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Missing &quot;target&quot; field&#39;</span><span class="p">);</span>
-                <span class="nx">msg</span><span class="p">.</span><span class="nx">_invalid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">();</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (key === <span class="hljs-string">'target'</span>) {
+            <span class="hljs-keyword">if</span> (value.trim() === <span class="hljs-string">''</span>) {
+                alert(<span class="hljs-string">'Missing "target" field'</span>);
+                msg._invalid = <span class="hljs-literal">true</span>;
+            }
+            <span class="hljs-keyword">else</span> {
+                value = value.toUpperCase();
+            }
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12"></a>
 </div>
 <p>Assigning the value.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">msg</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-    <span class="p">}</span>
 
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        msg[key] = value;
+    }
+
+})(node);
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/EndScreen.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/EndScreen.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,714 +21,884 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#endscreen">EndScreen</a>
       </div>
+
       <div class="heading h2">
-        <a href="#add%20meta-data">Add Meta-data</a>
+        <a href="#add-meta-data">Add Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#endscreen%20constructor">EndScreen constructor</a>
+        <a href="#endscreen-constructor">EndScreen constructor</a>
       </div>
-      <div class="heading h3">
-        <a href="#endscreen.headermessage">EndScreen.headerMessage</a>
-      </div>
-      <div class="heading h3">
-        <a href="#endscreen.message">EndScreen.message</a>
-      </div>
+
       <div class="heading h3">
         <a href="#endscreen.showemailform">EndScreen.showEmailForm</a>
       </div>
+
       <div class="heading h3">
         <a href="#endscreen.showfeedbackform">EndScreen.showFeedbackForm</a>
       </div>
+
       <div class="heading h3">
         <a href="#endscreen.showtotalwin">EndScreen.showTotalWin</a>
       </div>
+
       <div class="heading h3">
         <a href="#endscreen.showexitcode">EndScreen.showExitCode</a>
       </div>
+
       <div class="heading h3">
         <a href="#endscreen.totalwincurrency">EndScreen.totalWinCurrency</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#endscreen.totalwincb">EndScreen.totalWinCb</a>
+      </div>
+
       <div class="heading h3">
         <a href="#endscreen.emailform">EndScreen.emailForm</a>
       </div>
+
       <div class="heading h3">
         <a href="#endscreen.feedback">EndScreen.feedback</a>
       </div>
+
       <div class="heading h3">
         <a href="#endscreen.endscreenelement">EndScreen.endScreenElement</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#endscreen.makeendscreen">EndScreen.makeEndScreen</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#endscreen.updatedisplay">EndScreen.updateDisplay</a>
+      </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen">
   <h1>
-    <a href="#endscreen" name="endscreen" class="pilcrow">&#182;</a>
-    EndScreen
+    <a href="#endscreen" name="endscreen" class="pilcrow"></a>
+EndScreen
   </h1>
 </div>
-
-
-<p>Copyright(c) 2017 Stefano Balietti <a href="&#109;&#97;&#105;&#108;&#116;&#111;:s&#116;&#101;&#x40;&#110;&#111;&#100;&#101;&#x67;&#97;&#x6D;&#x65;&#x2E;&#x6F;&#x72;&#103;">s&#116;&#101;&#x40;&#110;&#111;&#100;&#101;&#x67;&#97;&#x6D;&#x65;&#x2E;&#x6F;&#x72;&#103;</a>
+<p>Copyright(c) 2018 Stefano Balietti <a href="mailto:ste@nodegame.org.html">ste@nodegame.org</a>
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Creates an interface to display final earnings, exit code, etc.</p>
-
-<p>www.nodegame.org</p>
-  </div>
 </div>
+<div class="body">
+<p>Creates an interface to display final earnings, exit code, etc.</p>
+<p>www.nodegame.org</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-
-    <span class="kd">var</span> <span class="nx">J</span><span class="p">;</span>
-    <span class="nx">J</span> <span class="o">=</span> <span class="nx">JSUS</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2"></a>
 </div>
 <p>Register the widget in the widgets collection.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;EndScreen&#39;</span><span class="p">,</span> <span class="nx">EndScreen</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">    node.widgets.register(<span class="hljs-string">'EndScreen'</span>, EndScreen);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="add%20meta-data">
+          <div class="pilwrap" id="add-meta-data">
   <h2>
-    <a href="#add%20meta-data" name="add%20meta-data" class="pilcrow">&#182;</a>
-    Add Meta-data
+    <a href="#add-meta-data" name="add-meta-data" class="pilcrow"></a>
+Add Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    EndScreen.version = <span class="hljs-string">'0.5.0'</span>;
+    EndScreen.description = <span class="hljs-string">'Game end screen. With end game message, '</span> +
+                            <span class="hljs-string">'email form, and exit code.'</span>;
 
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.0&#39;</span><span class="p">;</span>
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Game end screen. With end game message, &#39;</span> <span class="o">+</span>
-        <span class="s1">&#39;email form, and exit code.&#39;</span><span class="p">;</span>
+    EndScreen.title = <span class="hljs-string">'End Screen'</span>;
+    EndScreen.className = <span class="hljs-string">'endscreen'</span>;
 
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;End Screen&#39;</span><span class="p">;</span>
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;end-screen&#39;</span><span class="p">;</span>
+    EndScreen.texts.headerMessage = <span class="hljs-string">'Thank you for participating!'</span>;
+    EndScreen.texts.message = <span class="hljs-string">'You have now completed this task '</span> +
+                               <span class="hljs-string">'and your data has been saved. '</span> +
+                               <span class="hljs-string">'Please go back to the Amazon Mechanical Turk '</span> +
+                               <span class="hljs-string">'web site and submit the HIT.'</span>;
+    EndScreen.texts.contactQuestion = <span class="hljs-string">'Would you like to be contacted again'</span> +
+                                       <span class="hljs-string">'for future experiments? If so, leave'</span> +
+                                       <span class="hljs-string">'your email here and press submit: '</span>;
+    EndScreen.texts.totalWin = <span class="hljs-string">'Your total win:'</span>;
+    EndScreen.texts.exitCode = <span class="hljs-string">'Your exit code:'</span>;
+    EndScreen.texts.errTotalWin = <span class="hljs-string">'Error: invalid total win.'</span>;
+    EndScreen.texts.errExitCode = <span class="hljs-string">'Error: invalid exit code.'</span>;
+    EndScreen.texts.copyButton = <span class="hljs-string">'Copy'</span>;
+    EndScreen.texts.exitCopyMsg = <span class="hljs-string">'Exit code copied to clipboard.'</span>;
+    EndScreen.texts.exitCopyError = <span class="hljs-string">'Failed to copy exit code. Please copy it'</span> +
+                                    <span class="hljs-string">' manually.'</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5"></a>
 </div>
 <p>Checked when the widget is created.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{},</span>
-        <span class="nx">Feedback</span><span class="o">:</span> <span class="p">{},</span>
-        <span class="nx">EmailForm</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    EndScreen.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {},
+        <span class="hljs-attr">Feedback</span>: {},
+        <span class="hljs-attr">EmailForm</span>: {}
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="endscreen%20constructor">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="endscreen-constructor">
   <h2>
-    <a href="#endscreen%20constructor" name="endscreen%20constructor" class="pilcrow">&#182;</a>
-    EndScreen constructor
+    <a href="#endscreen-constructor" name="endscreen-constructor" class="pilcrow"></a>
+EndScreen constructor
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p>Creates a new instance of EndScreen</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Configuration options</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">EndScreen.init
+</div>
+<div class="body">
+<p>Creates a new instance of EndScreen</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Configuration options
 </span>
-    </div>
-  </div>
 </div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">EndScreen.init</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">EndScreen</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">EndScreen</span>(<span class="hljs-params">options</span>) </span>{
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="endscreen.headermessage">
-  <h3>
-    <a href="#endscreen.headermessage" name="endscreen.headermessage" class="pilcrow">&#182;</a>
-    EndScreen.headerMessage
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The header message displayed at the top of the screen</p>
-
-<p>Default: 'Thank you for participating!'</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">headerMessage</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">headerMessage</span> <span class="o">=</span> <span class="s1">&#39;Thank you for participating!&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">headerMessage</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">headerMessage</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">headerMessage</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EndScreen constructor: &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;options.headerMessage &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;must be string or undefined. &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">headerMessage</span><span class="p">);</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="endscreen.message">
-  <h3>
-    <a href="#endscreen.message" name="endscreen.message" class="pilcrow">&#182;</a>
-    EndScreen.message
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The informational message displayed in the body of the screen</p>
-
-<p>Default: 'You have now completed this task and your data
-          has been saved. Please go back to the Amazon Mechanical
-          Turk web site and submit the HIT.'</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span>  <span class="s1">&#39;You have now completed this task &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;and your data has been saved. &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;Please go back to the Amazon Mechanical Turk &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;web site and &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;submit the HIT.&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EndScreen constructor: options.message &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;must be string or undefined. &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
-        <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen.showemailform">
   <h3>
-    <a href="#endscreen.showemailform" name="endscreen.showemailform" class="pilcrow">&#182;</a>
-    EndScreen.showEmailForm
+    <a href="#endscreen.showemailform" name="endscreen.showemailform" class="pilcrow"></a>
+EndScreen.showEmailForm
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>If true, the email form is shown</p>
-
-<p>Default: true</p>
-  </div>
 </div>
+<div class="body">
+<p>If true, the email form is shown</p>
+<p>Default: true</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showEmailForm</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showEmailForm</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EndScreen constructor: &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;options.showEmailForm &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;must be boolean or undefined. &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">);</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (options.email === <span class="hljs-literal">false</span>) {
+            options.showEmailForm = <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.showEmailForm) {
+            <span class="hljs-keyword">this</span>.showEmailForm = <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'boolean'</span> === <span class="hljs-keyword">typeof</span> options.showEmailForm) {
+            <span class="hljs-keyword">this</span>.showEmailForm = options.showEmailForm;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'EndScreen constructor: '</span> +
+                                <span class="hljs-string">'options.showEmailForm '</span> +
+                                <span class="hljs-string">'must be boolean or undefined. '</span> +
+                                <span class="hljs-string">'Found: '</span> + options.showEmailForm);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen.showfeedbackform">
   <h3>
-    <a href="#endscreen.showfeedbackform" name="endscreen.showfeedbackform" class="pilcrow">&#182;</a>
-    EndScreen.showFeedbackForm
+    <a href="#endscreen.showfeedbackform" name="endscreen.showfeedbackform" class="pilcrow"></a>
+EndScreen.showFeedbackForm
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>If true, the feedback form is shown</p>
-
-<p>Default: true</p>
-  </div>
 </div>
+<div class="body">
+<p>If true, the feedback form is shown</p>
+<p>Default: true</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showFeedbackForm</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showFeedbackForm</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EndScreen constructor: &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;options.showFeedbackForm &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;must be boolean or undefined. &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">);</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (options.feedback === <span class="hljs-literal">false</span>) {
+            options.showFeedbackForm = <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.showFeedbackForm) {
+            <span class="hljs-keyword">this</span>.showFeedbackForm = <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'boolean'</span> === <span class="hljs-keyword">typeof</span> options.showFeedbackForm) {
+            <span class="hljs-keyword">this</span>.showFeedbackForm = options.showFeedbackForm;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'EndScreen constructor: '</span> +
+                                <span class="hljs-string">'options.showFeedbackForm '</span> +
+                                <span class="hljs-string">'must be boolean or undefined. '</span> +
+                                <span class="hljs-string">'Found: '</span> + options.showFeedbackForm);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen.showtotalwin">
   <h3>
-    <a href="#endscreen.showtotalwin" name="endscreen.showtotalwin" class="pilcrow">&#182;</a>
-    EndScreen.showTotalWin
+    <a href="#endscreen.showtotalwin" name="endscreen.showtotalwin" class="pilcrow"></a>
+EndScreen.showTotalWin
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>If true, the total win is shown</p>
-
-<p>Default: true</p>
-  </div>
 </div>
+<div class="body">
+<p>If true, the total win is shown</p>
+<p>Default: true</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showTotalWin</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showTotalWin</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showTotalWin</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showTotalWin</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showTotalWin</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EndScreen constructor: &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;options.showTotalWin &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;must be boolean or undefined. &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showTotalWin</span><span class="p">);</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (options.totalWin === <span class="hljs-literal">false</span>) {
+            options.showTotalWin = <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.showTotalWin) {
+            <span class="hljs-keyword">this</span>.showTotalWin = <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'boolean'</span> === <span class="hljs-keyword">typeof</span> options.showTotalWin) {
+            <span class="hljs-keyword">this</span>.showTotalWin = options.showTotalWin;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'EndScreen constructor: '</span> +
+                                <span class="hljs-string">'options.showTotalWin '</span> +
+                                <span class="hljs-string">'must be boolean or undefined. '</span> +
+                                <span class="hljs-string">'Found: '</span> + options.showTotalWin);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen.showexitcode">
   <h3>
-    <a href="#endscreen.showexitcode" name="endscreen.showexitcode" class="pilcrow">&#182;</a>
-    EndScreen.showExitCode
+    <a href="#endscreen.showexitcode" name="endscreen.showexitcode" class="pilcrow"></a>
+EndScreen.showExitCode
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>If true, the exit code is shown</p>
-
-<p>Default: true</p>
-  </div>
 </div>
+<div class="body">
+<p>If true, the exit code is shown</p>
+<p>Default: true</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showExitCode</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showExitCode</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;boolean&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showExitCode</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">showExitCode</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showExitCode</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EndScreen constructor: &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;options.showExitCode &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;must be boolean or undefined. &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showExitCode</span><span class="p">);</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (options.exitCode === <span class="hljs-literal">false</span>) {
+            options.showExitCode !== <span class="hljs-literal">false</span>
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.showExitCode) {
+            <span class="hljs-keyword">this</span>.showExitCode = <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'boolean'</span> === <span class="hljs-keyword">typeof</span> options.showExitCode) {
+            <span class="hljs-keyword">this</span>.showExitCode = options.showExitCode;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'EndScreen constructor: '</span> +
+                                <span class="hljs-string">'options.showExitCode '</span> +
+                                <span class="hljs-string">'must be boolean or undefined. '</span> +
+                                <span class="hljs-string">'Found: '</span> + options.showExitCode);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen.totalwincurrency">
   <h3>
-    <a href="#endscreen.totalwincurrency" name="endscreen.totalwincurrency" class="pilcrow">&#182;</a>
-    EndScreen.totalWinCurrency
+    <a href="#endscreen.totalwincurrency" name="endscreen.totalwincurrency" class="pilcrow"></a>
+EndScreen.totalWinCurrency
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The currency displayed after totalWin</p>
-
-<p>Default: 'USD'</p>
-  </div>
 </div>
+<div class="body">
+<p>The currency displayed after totalWin</p>
+<p>Default: 'USD'</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">totalWinCurrency</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">totalWinCurrency</span> <span class="o">=</span> <span class="s1">&#39;USD&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">totalWinCurrency</span> <span class="o">&amp;&amp;</span>
-                 <span class="nx">options</span><span class="p">.</span><span class="nx">totalWinCurrency</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span> <span class="o">!==</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.totalWinCurrency) {
+            <span class="hljs-keyword">this</span>.totalWinCurrency = <span class="hljs-string">'USD'</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.totalWinCurrency &amp;&amp;
+                 options.totalWinCurrency.trim() !== <span class="hljs-string">''</span>) {
 
-            <span class="k">this</span><span class="p">.</span><span class="nx">totalWinCurrency</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">totalWinCurrency</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;EndScreen constructor: &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;options.totalWinCurrency must be undefined &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;or a non-empty string. Found: &#39;</span> <span class="o">+</span>
-                                <span class="nx">options</span><span class="p">.</span><span class="nx">totalWinCurrency</span><span class="p">);</span>
-        <span class="p">}</span>
+            <span class="hljs-keyword">this</span>.totalWinCurrency = options.totalWinCurrency;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'EndScreen constructor: '</span> +
+                                <span class="hljs-string">'options.totalWinCurrency must be undefined '</span> +
+                                <span class="hljs-string">'or a non-empty string. Found: '</span> +
+                                options.totalWinCurrency);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="endscreen.totalwincb">
+  <h3>
+    <a href="#endscreen.totalwincb" name="endscreen.totalwincb" class="pilcrow"></a>
+EndScreen.totalWinCb
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>If defined, the return value is displayed inside the totalWin box</p>
+<p>Accepts two parameters: a data object (as sent from server), and
+the reference to the EndScreen.</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (options.totalWinCb) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> === <span class="hljs-keyword">typeof</span> options.totalWinCb) {
+                <span class="hljs-keyword">this</span>.totalWinCb = options.totalWinCb;
+            }
+            <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'EndScreen constructor: '</span> +
+                                    <span class="hljs-string">'options.totalWinCb '</span> +
+                                    <span class="hljs-string">'must be function or undefined. '</span> +
+                                    <span class="hljs-string">'Found: '</span> + options.totalWinCb);
+            }
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen.emailform">
   <h3>
-    <a href="#endscreen.emailform" name="endscreen.emailform" class="pilcrow">&#182;</a>
-    EndScreen.emailForm
+    <a href="#endscreen.emailform" name="endscreen.emailform" class="pilcrow"></a>
+EndScreen.emailForm
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>EmailForm widget element</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">EmailForm
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>EmailForm widget element</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">EmailForm</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">emailForm</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;EmailForm&#39;</span><span class="p">,</span> <span class="nx">J</span><span class="p">.</span><span class="nx">mixin</span><span class="p">({</span>
-                <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Would you like to be contacted again for future &#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;experiments? If so, leave your email here and &#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;press submit: &#39;</span><span class="p">,</span>
-                <span class="nx">onsubmit</span><span class="o">:</span> <span class="p">{</span> <span class="nx">say</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">emailOnly</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">updateUI</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span>
-            <span class="p">},</span> <span class="nx">options</span><span class="p">.</span><span class="nx">email</span><span class="p">));</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.emailForm = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen.feedback">
   <h3>
-    <a href="#endscreen.feedback" name="endscreen.feedback" class="pilcrow">&#182;</a>
-    EndScreen.feedback
+    <a href="#endscreen.feedback" name="endscreen.feedback" class="pilcrow"></a>
+EndScreen.feedback
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Feedback widget element</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Feedback
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Feedback widget element</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">feedback</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">feedback</span><span class="p">);</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.feedback = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="endscreen.endscreenelement">
   <h3>
-    <a href="#endscreen.endscreenelement" name="endscreen.endscreenelement" class="pilcrow">&#182;</a>
-    EndScreen.endScreenElement
+    <a href="#endscreen.endscreenelement" name="endscreen.endscreenelement" class="pilcrow"></a>
+EndScreen.endScreenElement
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Endscreen HTML element</p>
-
+</div>
+<div class="body">
+<p>Endscreen HTML element</p>
 <p>Default: an HTML element,
 null initially, element added on append()</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">endScreenHTML</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.endScreenHTML = <span class="hljs-literal">null</span>;
+    }
 
+    EndScreen.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.showEmailForm &amp;&amp; !<span class="hljs-keyword">this</span>.emailForm) {
+            <span class="hljs-keyword">this</span>.emailForm = node.widgets.get(<span class="hljs-string">'EmailForm'</span>, J.mixin({
+                <span class="hljs-attr">label</span>: <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'contactQuestion'</span>),
+                <span class="hljs-attr">onsubmit</span>: { <span class="hljs-attr">say</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">emailOnly</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">updateUI</span>: <span class="hljs-literal">true</span> }
+            }, options.email));
+        }
 
-</pre></div>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.showFeedbackForm) {
+            <span class="hljs-keyword">this</span>.feedback = node.widgets.get(<span class="hljs-string">'Feedback'</span>, options.feedback);
+        }
+    };
+
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16"></a>
 </div>
 <p>Implements the Widget.append method.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">endScreenHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">makeEndScreen</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">endScreenHTML</span><span class="p">);</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    EndScreen.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.endScreenHTML = <span class="hljs-keyword">this</span>.makeEndScreen();
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.endScreenHTML);
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="endscreen.makeendscreen">
+  <h3>
+    <a href="#endscreen.makeendscreen" name="endscreen.makeendscreen" class="pilcrow"></a>
+EndScreen.makeEndScreen
+  </h3>
 </div>
-<p>makes the end screen</p>
+</div>
+<div class="body">
+<p>Builds up the end screen (HTML + nested widgets)</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">makeEndScreen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">endScreenElement</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">headerElement</span><span class="p">,</span> <span class="nx">messageElement</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">totalWinElement</span><span class="p">,</span> <span class="nx">totalWinParaElement</span><span class="p">,</span> <span class="nx">totalWinInputElement</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">exitCodeElement</span><span class="p">,</span> <span class="nx">exitCodeParaElement</span><span class="p">,</span> <span class="nx">exitCodeInputElement</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    EndScreen.prototype.makeEndScreen = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> endScreenElement;
+        <span class="hljs-keyword">var</span> headerElement, messageElement;
+        <span class="hljs-keyword">var</span> totalWinElement, totalWinParaElement, totalWinInputElement;
+        <span class="hljs-keyword">var</span> exitCodeElement, exitCodeParaElement, exitCodeInputElement;
+        <span class="hljs-keyword">var</span> exitCodeBtn, exitCodeGroup;
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
 
-        <span class="nx">endScreenElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-        <span class="nx">endScreenElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;endscreen&#39;</span><span class="p">;</span>
+        endScreenElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        endScreenElement.className = <span class="hljs-string">'endscreen'</span>;
 
-        <span class="nx">headerElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">);</span>
-        <span class="nx">headerElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">headerMessage</span><span class="p">;</span>
-        <span class="nx">endScreenElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">headerElement</span><span class="p">);</span>
+        headerElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'h1'</span>);
+        headerElement.innerHTML = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'headerMessage'</span>);
+        endScreenElement.appendChild(headerElement);
 
-        <span class="nx">messageElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
-        <span class="nx">messageElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
-        <span class="nx">endScreenElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">messageElement</span><span class="p">);</span>
+        messageElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'p'</span>);
+        messageElement.innerHTML = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'message'</span>);
+        endScreenElement.appendChild(messageElement);
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showTotalWin</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">totalWinElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.showTotalWin) {
+            totalWinElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
 
-            <span class="nx">totalWinParaElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
-            <span class="nx">totalWinParaElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;strong&gt;Your total win:&lt;/strong&gt;&#39;</span><span class="p">;</span>
+            totalWinParaElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'p'</span>);
+            totalWinParaElement.innerHTML = <span class="hljs-string">'&lt;strong&gt;'</span> +
+                <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'totalWin'</span>) +
+                <span class="hljs-string">'&lt;/strong&gt;'</span>;
 
-            <span class="nx">totalWinInputElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
-            <span class="nx">totalWinInputElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;endscreen-total form-control&#39;</span><span class="p">;</span>
-            <span class="nx">totalWinInputElement</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;disabled&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">);</span>
+            totalWinInputElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'input'</span>);
+            totalWinInputElement.className = <span class="hljs-string">'endscreen-total form-control'</span>;
+            totalWinInputElement.setAttribute(<span class="hljs-string">'disabled'</span>, <span class="hljs-string">'true'</span>);
 
-            <span class="nx">totalWinParaElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">totalWinInputElement</span><span class="p">);</span>
-            <span class="nx">totalWinElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">totalWinParaElement</span><span class="p">);</span>
+            totalWinParaElement.appendChild(totalWinInputElement);
+            totalWinElement.appendChild(totalWinParaElement);
 
-            <span class="nx">endScreenElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">totalWinElement</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">totalWinInputElement</span> <span class="o">=</span> <span class="nx">totalWinInputElement</span><span class="p">;</span>
-        <span class="p">}</span>
+            endScreenElement.appendChild(totalWinElement);
+            <span class="hljs-keyword">this</span>.totalWinInputElement = totalWinInputElement;
+        }
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showExitCode</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">exitCodeElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.showExitCode) {
+            exitCodeElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+            exitCodeElement.className = <span class="hljs-string">'input-group'</span>;
 
-            <span class="nx">exitCodeParaElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
-            <span class="nx">exitCodeParaElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;strong&gt;Your exit code:&lt;/strong&gt;&#39;</span><span class="p">;</span>
+            exitCodeParaElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+            exitCodeParaElement.innerHTML = <span class="hljs-string">'&lt;strong&gt;'</span> +
+                <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'exitCode'</span>) + <span class="hljs-string">'&lt;/strong&gt;'</span>;
 
-            <span class="nx">exitCodeInputElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
-            <span class="nx">exitCodeInputElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;endscreen-exit-code &#39;</span> <span class="o">+</span>
-                                             <span class="s1">&#39;form-control&#39;</span><span class="p">;</span>
-            <span class="nx">exitCodeInputElement</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;disabled&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">);</span>
+            exitCodeInputElement = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'input'</span>);
+            exitCodeInputElement.id = <span class="hljs-string">'exit_code'</span>;
+            exitCodeInputElement.className = <span class="hljs-string">'endscreen-exit-code '</span> +
+                                             <span class="hljs-string">'form-control'</span>;
+            exitCodeInputElement.setAttribute(<span class="hljs-string">'disabled'</span>, <span class="hljs-string">'true'</span>);
 
-            <span class="nx">exitCodeParaElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">exitCodeInputElement</span><span class="p">);</span>
-            <span class="nx">exitCodeElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">exitCodeParaElement</span><span class="p">);</span>
+            exitCodeGroup = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+            exitCodeGroup.className = <span class="hljs-string">'input-group-btn'</span>;
 
-            <span class="nx">endScreenElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">exitCodeElement</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">exitCodeInputElement</span> <span class="o">=</span> <span class="nx">exitCodeInputElement</span><span class="p">;</span>
-        <span class="p">}</span>
+            exitCodeBtn = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'button'</span>);
+            exitCodeBtn.className = <span class="hljs-string">'btn btn-default endscreen-copy-btn'</span>;
+            exitCodeBtn.innerHTML = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'copyButton'</span>);
+            exitCodeBtn.type = <span class="hljs-string">'button'</span>;
+            exitCodeBtn.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                that.copy(exitCodeInputElement.value);
+            };
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showEmailForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">emailForm</span><span class="p">,</span> <span class="nx">endScreenElement</span><span class="p">,</span> <span class="p">{</span>
-                <span class="nx">title</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-                <span class="nx">frame</span><span class="o">:</span> <span class="kc">false</span>
-            <span class="p">});</span>
-        <span class="p">}</span>
+            exitCodeGroup.appendChild(exitCodeBtn);
+            endScreenElement.appendChild(exitCodeParaElement);
+            exitCodeElement.appendChild(exitCodeGroup);
+            exitCodeElement.appendChild(exitCodeInputElement);
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">showFeedbackForm</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">feedback</span><span class="p">,</span> <span class="nx">endScreenElement</span><span class="p">,</span> <span class="p">{</span>
-                <span class="nx">title</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-                <span class="nx">frame</span><span class="o">:</span> <span class="kc">false</span>
-            <span class="p">});</span>
-        <span class="p">}</span>
+            endScreenElement.appendChild(exitCodeElement);
+            <span class="hljs-keyword">this</span>.exitCodeInputElement = exitCodeInputElement;
+        }
 
-        <span class="k">return</span> <span class="nx">endScreenElement</span><span class="p">;</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.showEmailForm) {
+            node.widgets.append(<span class="hljs-keyword">this</span>.emailForm, endScreenElement, {
+                <span class="hljs-attr">title</span>: <span class="hljs-literal">false</span>,
+                <span class="hljs-attr">panel</span>: <span class="hljs-literal">false</span>
+            });
+        }
 
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.showFeedbackForm) {
+            node.widgets.append(<span class="hljs-keyword">this</span>.feedback, endScreenElement, {
+                <span class="hljs-attr">title</span>: <span class="hljs-literal">false</span>,
+                <span class="hljs-attr">panel</span>: <span class="hljs-literal">false</span>
+            });
+        }
 
-</pre></div>
+        <span class="hljs-keyword">return</span> endScreenElement;
+    };
+
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18"></a>
 </div>
 <p>Implements the Widget.listeners method.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">EndScreen</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    EndScreen.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that;
+        that = <span class="hljs-keyword">this</span>;
+        node.on.data(<span class="hljs-string">'WIN'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message</span>) </span>{
+            that.updateDisplay(message.data);
+        });
+    };
 
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    EndScreen.prototype.copy = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">text</span>) </span>{
+        <span class="hljs-keyword">var</span> inp = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'input'</span>);
+        <span class="hljs-keyword">try</span> {
+            <span class="hljs-built_in">document</span>.body.appendChild(inp);
+            inp.value = text;
+            inp.select();
+            <span class="hljs-built_in">document</span>.execCommand(<span class="hljs-string">'copy'</span>, <span class="hljs-literal">false</span>);
+            inp.remove();
+            alert(<span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'exitCopyMsg'</span>));
+        } <span class="hljs-keyword">catch</span> (err) {
+            alert(<span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'exitCopyError'</span>));
+        }
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="endscreen.updatedisplay">
+  <h3>
+    <a href="#endscreen.updatedisplay" name="endscreen.updatedisplay" class="pilcrow"></a>
+EndScreen.updateDisplay
+  </h3>
 </div>
-<p>Listeners added here are automatically removed
-when the widget is destroyed.</p>
+</div>
+<div class="body">
+<p>Updates the display</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">data</span>
+<span class="dox_type">object</span>
+<span>An object containing the info to update. Format:    - total: The total won.
+<ul>
+<li>exit: An exit code.</li>
+</ul>
+</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;WIN&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">data</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">preWin</span><span class="p">,</span> <span class="nx">totalWin</span><span class="p">,</span> <span class="nx">exitCode</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">totalHTML</span><span class="p">,</span> <span class="nx">exitCodeHTML</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    EndScreen.prototype.updateDisplay = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{
+        <span class="hljs-keyword">var</span> preWin, totalWin, totalRaw, exitCode;
+        <span class="hljs-keyword">var</span> totalHTML, exitCodeHTML, ex, err;
 
-            <span class="nx">data</span> <span class="o">=</span> <span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-            <span class="nx">exitCode</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">exit</span><span class="p">;</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.totalWinCb) {
+            totalWin = <span class="hljs-keyword">this</span>.totalWinCb(data, <span class="hljs-keyword">this</span>);
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> data.total &amp;&amp;
+                <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> data.totalRaw) {
 
-            <span class="nx">totalWin</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">total</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">totalWin</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;EndScreen error, invalid total win: &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">total</span><span class="p">);</span>
-                <span class="nx">totalWin</span> <span class="o">=</span> <span class="s1">&#39;Error: invalid total win.&#39;</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">partials</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">partials</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;EndScreen error, invalid partials win: &#39;</span> <span class="o">+</span>
-                             <span class="nx">data</span><span class="p">.</span><span class="nx">partials</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">preWin</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">partials</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; + &#39;</span><span class="p">);</span>
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'EndScreen.updateDisplay: data.total and '</span> +
+                                <span class="hljs-string">'data.totalRaw cannot be both undefined.'</span>);
+            }
 
-                    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">data</span><span class="p">.</span><span class="nx">totalRaw</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">preWin</span> <span class="o">+=</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">totalRaw</span><span class="p">;</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">data</span><span class="p">.</span><span class="nx">exchangeRate</span><span class="p">)</span> <span class="p">{</span>
-                            <span class="nx">preWin</span> <span class="o">+=</span> <span class="s1">&#39;*&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">exchangeRate</span><span class="p">;</span>
-                        <span class="p">}</span>
-                        <span class="nx">totalWin</span> <span class="o">=</span> <span class="nx">preWin</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="nx">totalWin</span><span class="p">;</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> data.total) {
+                totalWin = J.isNumber(data.total, <span class="hljs-number">0</span>);
+                <span class="hljs-keyword">if</span> (totalWin === <span class="hljs-literal">false</span>) {
+                    node.err(<span class="hljs-string">'EndScreen.updateDisplay: invalid data.total: '</span> +
+                             data.total);
+                    totalWin = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'errTotalWin'</span>);
+                    err = <span class="hljs-literal">true</span>;
+                }
+            }
 
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">exitCode</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="s1">&#39;EndScreen error, invalid exit code: &#39;</span> <span class="o">+</span> <span class="nx">exitCode</span><span class="p">);</span>
-                <span class="nx">exitCode</span> <span class="o">=</span> <span class="s1">&#39;Error: invalid exit code.&#39;</span><span class="p">;</span>
-            <span class="p">}</span>
+            <span class="hljs-keyword">if</span> (data.partials) {
+                <span class="hljs-keyword">if</span> (!J.isArray(data.partials)) {
+                    node.err(<span class="hljs-string">'EndScreen error, invalid partials win: '</span> +
+                             data.partials);
+                }
+                <span class="hljs-keyword">else</span> {
+                    preWin = data.partials.join(<span class="hljs-string">' + '</span>);
+                }
+            }
 
-            <span class="nx">totalHTML</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">totalWinInputElement</span><span class="p">;</span>
-            <span class="nx">exitCodeHTML</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">exitCodeInputElement</span><span class="p">;</span>
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> data.totalRaw) {
+                <span class="hljs-keyword">if</span> (preWin) preWin += <span class="hljs-string">' = '</span>;
+                <span class="hljs-keyword">else</span> preWin = <span class="hljs-string">''</span>;
+                preWin += data.totalRaw;
 
-            <span class="k">if</span> <span class="p">(</span><span class="nx">totalHTML</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">showTotalWin</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">totalHTML</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">totalWin</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">totalWinCurrency</span><span class="p">;</span>
-            <span class="p">}</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nx">exitCodeHTML</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">showExitCode</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">exitCodeHTML</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">exitCode</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">});</span>
-    <span class="p">};</span>
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+</pre>
         </td>
       </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20"></a>
+</div>
+<p>Get Exchange Rate.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                ex = <span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> data.exchangeRate ?
+                    data.exchangeRate : node.game.settings.EXCHANGE_RATE;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21"></a>
+</div>
+<p>If we have an exchange rate, check if we have a totalRaw.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> ex) preWin += <span class="hljs-string">'*'</span> + ex;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22"></a>
+</div>
+<p>Need to compute total manually.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> totalWin) {
+                    totalRaw = J.isNumber(data.totalRaw, <span class="hljs-number">0</span>);
+                    totalWin = <span class="hljs-built_in">parseFloat</span>(ex*data.totalRaw).toFixed(<span class="hljs-number">2</span>);
+                    totalWin = J.isNumber(totalWin, <span class="hljs-number">0</span>);
+                    <span class="hljs-keyword">if</span> (totalWin === <span class="hljs-literal">false</span>) {
+                        node.err(<span class="hljs-string">'EndScreen.updateDisplay: invalid : '</span> +
+                                 <span class="hljs-string">'totalWin calculation from totalRaw.'</span>);
+                        totalWin = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'errTotalWin'</span>);
+                        err = <span class="hljs-literal">true</span>;
+                    }
+                }
+                <span class="hljs-keyword">if</span> (!err) totalWin = preWin + <span class="hljs-string">' = '</span> + totalWin;
+            }
+
+            <span class="hljs-keyword">if</span> (!err) totalWin += <span class="hljs-string">' '</span> + <span class="hljs-keyword">this</span>.totalWinCurrency;
+        }
+
+        exitCode = data.exit;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> exitCode) {
+            node.err(<span class="hljs-string">'EndScreen error, invalid exit code: '</span> + exitCode);
+            exitCode = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'errExitCode'</span>);
+        }
+
+        totalHTML = <span class="hljs-keyword">this</span>.totalWinInputElement;
+        exitCodeHTML = <span class="hljs-keyword">this</span>.exitCodeInputElement;
+
+        <span class="hljs-keyword">if</span> (totalHTML &amp;&amp; <span class="hljs-keyword">this</span>.showTotalWin) {
+            totalHTML.value = totalWin;
+        }
+
+        <span class="hljs-keyword">if</span> (exitCodeHTML &amp;&amp; <span class="hljs-keyword">this</span>.showExitCode) {
+            exitCodeHTML.value = exitCode;
+        }
+    };
+
+})(node);
+
+</pre>
+        </td>
+      </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

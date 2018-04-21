@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "lib/Widgets.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "lib/Widgets.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,1424 +21,1499 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#widgets">Widgets</a>
       </div>
+
       <div class="heading h2">
-        <a href="#widgets%20constructor">Widgets constructor</a>
+        <a href="#widgets-constructor">Widgets constructor</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.widgets">Widgets.widgets</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.instances">Widgets.instances</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.lastappended">Widgets.lastAppended</a>
       </div>
+
       <div class="heading h2">
-        <a href="#widgets%20methods">Widgets methods</a>
+        <a href="#widgets-methods">Widgets methods</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.register">Widgets.register</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.get">Widgets.get</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.append">Widgets.append</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.iswidget">Widgets.isWidget</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.destroy">Widgets.destroy</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.destroyall">Widgets.destroyAll</a>
       </div>
+
       <div class="heading h3">
         <a href="#widgets.checkdependencies">Widgets.checkDependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#helper%20functions">Helper functions</a>
+        <a href="#helper-functions">Helper functions</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets">
   <h1>
-    <a href="#widgets" name="widgets" class="pilcrow">&#182;</a>
-    Widgets
+    <a href="#widgets" name="widgets" class="pilcrow"></a>
+Widgets
   </h1>
 </div>
-
-
 <p>Copyright(c) 2017 Stefano Balietti
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Helper class to interact with nodeGame widgets</p>
-
-<p><a href='http://nodegame.org'>http://nodegame.org</a></p>
-  </div>
 </div>
+<div class="body">
+<p>Helper class to interact with nodeGame widgets</p>
+<p>http://nodegame.org</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">window, node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="widgets%20constructor">
+          <div class="pilwrap" id="widgets-constructor">
   <h2>
-    <a href="#widgets%20constructor" name="widgets%20constructor" class="pilcrow">&#182;</a>
-    Widgets constructor
+    <a href="#widgets-constructor" name="widgets-constructor" class="pilcrow"></a>
+Widgets constructor
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Widgets</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that;
 
-    <span class="kd">function</span> <span class="nx">Widgets</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.widgets">
   <h3>
-    <a href="#widgets.widgets" name="widgets.widgets" class="pilcrow">&#182;</a>
-    Widgets.widgets
+    <a href="#widgets.widgets" name="widgets.widgets" class="pilcrow"></a>
+Widgets.widgets
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Container of currently registered widgets</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.register
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Container of currently registered widgets</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.register</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span> <span class="o">=</span> <span class="p">{};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.widgets = {};
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.instances">
   <h3>
-    <a href="#widgets.instances" name="widgets.instances" class="pilcrow">&#182;</a>
-    Widgets.instances
+    <a href="#widgets.instances" name="widgets.instances" class="pilcrow"></a>
+Widgets.instances
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Container of appended widget instances</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.append</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.lastAppended
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Container of appended widget instances</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.append</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.lastAppended</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">instances</span> <span class="o">=</span> <span class="p">[];</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.instances = [];
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.lastappended">
   <h3>
-    <a href="#widgets.lastappended" name="widgets.lastappended" class="pilcrow">&#182;</a>
-    Widgets.lastAppended
+    <a href="#widgets.lastappended" name="widgets.lastappended" class="pilcrow"></a>
+Widgets.lastAppended
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Reference to lastAppended widget</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.append
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Reference to lastAppended widget</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.append</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">lastAppended</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.lastAppended = <span class="hljs-literal">null</span>;
 
 
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">registerSetup</span><span class="p">(</span><span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">root</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">conf</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        that = <span class="hljs-keyword">this</span>;
+        node.registerSetup(<span class="hljs-string">'widgets'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">conf</span>) </span>{
+            <span class="hljs-keyword">var</span> name, root;
+            <span class="hljs-keyword">if</span> (!conf) <span class="hljs-keyword">return</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6"></a>
 </div>
 <p>Add new widgets.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">widgets</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">for</span> <span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">widgets</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">name</span><span class="p">))</span> <span class="p">{</span>
-                        <span class="nx">that</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">widgets</span><span class="p">[</span><span class="nx">name</span><span class="p">]);</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (conf.widgets) {
+                <span class="hljs-keyword">for</span> (name <span class="hljs-keyword">in</span> conf.widgets) {
+                    <span class="hljs-keyword">if</span> (conf.widgets.hasOwnProperty(name)) {
+                        that.register(name, conf.widgets[name]);
+                    }
+                }
+            }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7"></a>
 </div>
 <p>Destroy all existing widgets.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">destroyAll</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">destroyAll</span><span class="p">();</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (conf.destroyAll) {
+                that.destroyAll();
+            }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8"></a>
 </div>
 <p>Append existing widgets.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">append</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">for</span> <span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">append</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">append</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">name</span><span class="p">))</span> <span class="p">{</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (conf.append) {
+                <span class="hljs-keyword">for</span> (name <span class="hljs-keyword">in</span> conf.append) {
+                    <span class="hljs-keyword">if</span> (conf.append.hasOwnProperty(name)) {
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9"></a>
 </div>
 <p>Determine root.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">append</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-                            <span class="nx">root</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">append</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">root</span><span class="p">);</span>
-                        <span class="p">}</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span><span class="p">)</span> <span class="nx">root</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getScreen</span><span class="p">();</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-                            <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;setup widgets: could not find a root &#39;</span> <span class="o">+</span>
-                                      <span class="s1">&#39;for widget &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
-                        <span class="p">}</span>
-                        <span class="k">else</span> <span class="p">{</span>
-                            <span class="nx">that</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">append</span><span class="p">[</span><span class="nx">name</span><span class="p">]);</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">                        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> conf.append[name].root) {
+                            root = W.getElementById(conf.append[name].root);
+                        }
+                        <span class="hljs-keyword">if</span> (!root) root = W.getScreen();
+                        <span class="hljs-keyword">if</span> (!root) {
+                            node.warn(<span class="hljs-string">'setup widgets: could not find a root '</span> +
+                                      <span class="hljs-string">'for widget '</span> + name + <span class="hljs-string">'.'</span>);
+                        }
+                        <span class="hljs-keyword">else</span> {
+                            that.append(name, root, conf.append[name]);
+                        }
+                    }
+                }
+            }
 
-            <span class="k">return</span> <span class="nx">conf</span><span class="p">;</span>
-        <span class="p">});</span>
+            <span class="hljs-keyword">return</span> conf;
+        });
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;node-widgets: loading.&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
+        node.info(<span class="hljs-string">'node-widgets: loading.'</span>);
+    }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="widgets%20methods">
+          <div class="pilwrap" id="widgets-methods">
   <h2>
-    <a href="#widgets%20methods" name="widgets%20methods" class="pilcrow">&#182;</a>
-    Widgets methods
+    <a href="#widgets-methods" name="widgets-methods" class="pilcrow"></a>
+Widgets methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.register">
   <h3>
-    <a href="#widgets.register" name="widgets.register" class="pilcrow">&#182;</a>
-    Widgets.register
+    <a href="#widgets.register" name="widgets.register" class="pilcrow"></a>
+Widgets.register
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Registers a new widget in the collection</p>
-
+</div>
+<div class="body">
+<p>Registers a new widget in the collection</p>
 <p>A name and a prototype class must be provided. All properties
 that are present in <code>node.Widget</code>, but missing in the prototype
 are added.</p>
-
 <p>Registered widgets can be loaded with Widgets.get or Widgets.append.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">name</span>
-      <span class="dox_type">string</span>
-      <span>The id under which to register the widget</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">w</span>
-      <span class="dox_type">function</span>
-      <span>The widget to add</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">object</span>
-      <span class="dox_type">boolean</span>
-      <span>The registered widget,
-  or FALSE if an error occurs</span>
-    </div>
-  </div>
 </div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.register: name must be string. &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.register: w must be function.&#39;</span> <span class="o">+</span>
-                               <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">w</span><span class="p">);</span>
-        <span class="p">}</span>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">name</span>
+<span class="dox_type">string</span>
+<span>The id under which to register the widget
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">w</span>
+<span class="dox_type">function</span>
+<span>The widget to add
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">object</span>
+<span class="dox_type">boolean</span>
+<span>The registered widget,   or FALSE if an error occurs
+</span>
+</div>
+</div>
+</div>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Widgets.prototype.register = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name, w</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> name) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.register: name must be string. '</span> +
+                                <span class="hljs-string">'Found: '</span> + name);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> w) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.register: w must be function.'</span> +
+                               <span class="hljs-string">'Found: '</span> + w);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> w.sounds) w.sounds = {};
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> w.texts) w.texts = {};
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12"></a>
 </div>
 <p>Add default properties to widget prototype.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="k">new</span> <span class="nx">node</span><span class="p">.</span><span class="nx">Widget</span><span class="p">());</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">w</span><span class="p">;</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        J.mixout(w.prototype, <span class="hljs-keyword">new</span> node.Widget());
+        <span class="hljs-keyword">this</span>.widgets[name] = w;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.widgets[name];
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.get">
   <h3>
-    <a href="#widgets.get" name="widgets.get" class="pilcrow">&#182;</a>
-    Widgets.get
+    <a href="#widgets.get" name="widgets.get" class="pilcrow"></a>
+Widgets.get
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Retrieves, instantiates and returns the specified widget</p>
-
+</div>
+<div class="body">
+<p>Retrieves, instantiates and returns the specified widget</p>
 <p>Performs the following checkings:</p>
-
 <ul>
-<li>dependencies, as specified by widget prototype, must exist
-<ul><li>id, if specified in options, must be string</li></ul></li>
+<li>dependencies, as specified by widget prototype, must exist</li>
+<li>id, if specified in options, must be string</li>
 </ul>
-
 <p>and throws an error if conditions are not met.</p>
-
 <p>Adds the following properties to the widget object:</p>
-
 <ul>
-<li>title: as specified by the user or as found in the prototype
-<ul><li>footer: as specified by the user or as found in the prototype</li>
+<li>title: as specified by the user or as found in the prototype</li>
+<li>footer: as specified by the user or as found in the prototype</li>
 <li>context: as specified by the user or as found in the prototype</li>
 <li>className: as specified by the user or as found in the prototype</li>
 <li>id: user-defined id, if specified in options</li>
 <li>wid: random unique widget id</li>
 <li>disabled: boolean flag indicating the widget state, set to FALSE</li>
 <li>highlighted: boolean flag indicating whether the panelDiv is
-highlighted, set to FALSE</li></ul></li>
+highlighted, set to FALSE</li>
 </ul>
-
 <p>Calls the <code>listeners</code> method of the widget. Any event listener
 registered here will be automatically removed when the widget
 is destroyed. !Important: it will erase previously recorded changes
 by the event listener. If <code>options.listeners</code> is equal to false, the
 listeners method is skipped.</p>
-
 <p>A <code>.destroy</code> method is added to the widget that perform the
 following operations:</p>
-
 <ul>
-<li>calls original widget.destroy method, if defined,
-<ul><li>removes the widget from DOM (if it was appended),</li>
+<li>calls original widget.destroy method, if defined,</li>
+<li>removes the widget from DOM (if it was appended),</li>
 <li>removes listeners defined during the creation,</li>
-<li>and remove the widget from Widget.instances</li></ul></li>
+<li>and remove the widget from Widget.instances</li>
 </ul>
-
 <p>Finally a reference to the widget is kept in <code>Widgets.instances</code>.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">widgetName</span>
-      <span class="dox_type">string</span>
-      <span>The name of the widget to load</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options, will be
-   mixed out with attributes in the <code>defaults</code> property
-   of the widget prototype.</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">object</span>
-      <span>widget The requested widget</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.append</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.instances
-</span>
-    </div>
-  </div>
 </div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">widgetName</span>
+<span class="dox_type">string</span>
+<span>The name of the widget to load
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options, will be    mixed out with attributes in the <code>defaults</code> property
+of the widget prototype.
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">object</span>
+<span>widget The requested widget
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.append</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.instances</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">widgetName</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">WidgetPrototype</span><span class="p">,</span> <span class="nx">widget</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">changes</span><span class="p">,</span> <span class="nx">origDestroy</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">widgetName</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: widgetName must be string.&#39;</span> <span class="o">+</span>
-                               <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">widgetName</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: options must be object or &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">);</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">    Widgets.prototype.get = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">widgetName, options</span>) </span>{
+        <span class="hljs-keyword">var</span> WidgetPrototype, widget;
+        <span class="hljs-keyword">var</span> changes, origDestroy;
+        <span class="hljs-keyword">var</span> that;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> widgetName) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.get: widgetName must be string.'</span> +
+                               <span class="hljs-string">'Found: '</span> + widgetName);
+        }
+        <span class="hljs-keyword">if</span> (!options) {
+            options = {};
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> options) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.get: options must be object or '</span> +
+                                <span class="hljs-string">'undefined. Found: '</span> + options);
+        }
 
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        that = <span class="hljs-keyword">this</span>;
 
-        <span class="nx">WidgetPrototype</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">getNestedValue</span><span class="p">(</span><span class="nx">widgetName</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">);</span>
+        WidgetPrototype = J.getNestedValue(widgetName, <span class="hljs-keyword">this</span>.widgets);
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">WidgetPrototype</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">widgetName</span> <span class="o">+</span> <span class="s1">&#39; not found.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (!WidgetPrototype) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Widgets.get: '</span> + widgetName + <span class="hljs-string">' not found.'</span>);
+        }
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;creating widget &#39;</span> <span class="o">+</span> <span class="nx">widgetName</span>  <span class="o">+</span>
-                  <span class="s1">&#39; v.&#39;</span> <span class="o">+</span>  <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">version</span><span class="p">);</span>
+        node.info(<span class="hljs-string">'creating widget '</span> + widgetName  +
+                  <span class="hljs-string">' v.'</span> +  WidgetPrototype.version);
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">checkDependencies</span><span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Widgets.get: &#39;</span> <span class="o">+</span> <span class="nx">widgetName</span> <span class="o">+</span> <span class="s1">&#39; has unmet &#39;</span> <span class="o">+</span>
-                            <span class="s1">&#39;dependencies.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.checkDependencies(WidgetPrototype)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Widgets.get: '</span> + widgetName + <span class="hljs-string">' has unmet '</span> +
+                            <span class="hljs-string">'dependencies.'</span>);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14"></a>
 </div>
 <p>Add default properties to the user options.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">defaults</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">J</span><span class="p">.</span><span class="nx">mixout</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">J</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">defaults</span><span class="p">));</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (WidgetPrototype.defaults) {
+            J.mixout(options, J.clone(WidgetPrototype.defaults));
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15"></a>
 </div>
 <p>Create widget.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WidgetPrototype</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        widget = <span class="hljs-keyword">new</span> WidgetPrototype(options);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16"></a>
 </div>
 <p>TODO: check do we need this?
 Re-inject defaults.
 widget.defaults = options;</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17"></a>
 </div>
 <p>Set ID.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">widget</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.get: options.id must be &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;string, number or undefined. Found: &#39;</span> <span class="o">+</span>
-                                    <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.id) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> options.id) options.id = <span class="hljs-string">''</span> + options.id;
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.id) {
+                widget.id = options.id;
+            }
+            <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.get: options.id must be '</span> +
+                                    <span class="hljs-string">'string, number or undefined. Found: '</span> +
+                                    options.id);
+            }
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18"></a>
 </div>
 <p>Set prototype values or options values.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">?</span>
-            <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">title</span> <span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">footer</span> <span class="o">?</span>
-            <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">footer</span> <span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">footer</span><span class="p">;</span>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span> <span class="o">?</span>
-            <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">className</span> <span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">context</span> <span class="o">?</span>
-            <span class="nx">WidgetPrototype</span><span class="p">.</span><span class="nx">context</span> <span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">context</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        widget.title = <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.title ?
+            WidgetPrototype.title : options.title;
+        widget.footer = <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.footer ?
+            WidgetPrototype.footer : options.footer;
+        widget.className = <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.className ?
+            WidgetPrototype.className : options.className;
+        widget.context = <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.context ?
+            WidgetPrototype.context : options.context;
+        widget.sounds = <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.sounds ?
+            WidgetPrototype.sounds : options.sounds;
+        widget.texts = <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.texts ?
+            WidgetPrototype.texts : options.texts;
 
 
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19"></a>
 </div>
 <p>Fixed properties.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20"></a>
+</div>
+<p>Widget Name.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        widget.widgetName = widgetName;
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21"></a>
 </div>
 <p>Add random unique widget id.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">wid</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">J</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10000000000000000000</span><span class="p">);</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        widget.wid = <span class="hljs-string">''</span> + J.randomInt(<span class="hljs-number">0</span>,<span class="hljs-number">10000000000000000000</span>);
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22"></a>
 </div>
 <p>Add enabled.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        widget.disabled = <span class="hljs-literal">null</span>;
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23"></a>
 </div>
 <p>Add highlighted.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">highlighted</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        widget.highlighted = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24"></a>
 </div>
 <p>Call init.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        widget.init(options);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-25" id="section-25"></a>
 </div>
 <p>Call listeners.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (options.listeners !== <span class="hljs-literal">false</span>) {
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26"></a>
 </div>
 <p>Start recording changes.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">setRecordChanges</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">            node.events.setRecordChanges(<span class="hljs-literal">true</span>);
 
-            <span class="nx">widget</span><span class="p">.</span><span class="nx">listeners</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
+            widget.listeners.call(widget);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27"></a>
 </div>
 <p>Get registered listeners, clear changes, and stop recording.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">changes</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">getChanges</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">setRecordChanges</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
-        <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            changes = node.events.getChanges(<span class="hljs-literal">true</span>);
+            node.events.setRecordChanges(<span class="hljs-literal">false</span>);
+        }
 
-        <span class="nx">origDestroy</span> <span class="o">=</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">destroy</span><span class="p">;</span>
+        origDestroy = widget.destroy;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-28" id="section-28"></a>
 </div>
 <p>If any listener was added or removed, the original situation will
 be restored when the widget is destroyed.
 The widget is also automatically removed from parent.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">widget</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">,</span> <span class="nx">ee</span><span class="p">,</span> <span class="nx">eeName</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        widget.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">var</span> i, len, ee, eeName;
 
-            <span class="k">try</span> <span class="p">{</span>
-
-</pre></div>
+            <span class="hljs-keyword">try</span> {
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-29" id="section-29"></a>
 </div>
 <p>Call original function.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">origDestroy</span><span class="p">)</span> <span class="nx">origDestroy</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> === <span class="hljs-keyword">typeof</span> origDestroy) origDestroy.call(widget);
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-30" id="section-30"></a>
 </div>
 <p>Remove the widget's div from its parent.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span> <span class="o">&amp;&amp;</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">widget</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">widgetName</span> <span class="o">+</span> <span class="s1">&#39;.destroy: error caught. &#39;</span> <span class="o">+</span> <span class="nx">e</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">                <span class="hljs-keyword">if</span> (widget.panelDiv &amp;&amp; widget.panelDiv.parentNode) {
+                    widget.panelDiv.parentNode.removeChild(widget.panelDiv);
+                }
+            }
+            <span class="hljs-keyword">catch</span>(e) {
+                node.warn(widgetName + <span class="hljs-string">'.destroy: error caught. '</span> + e + <span class="hljs-string">'.'</span>);
+            }
 
-            <span class="k">if</span> <span class="p">(</span><span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">for</span> <span class="p">(</span><span class="nx">eeName</span> <span class="k">in</span> <span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">changes</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">eeName</span><span class="p">))</span> <span class="p">{</span>
-                        <span class="nx">ee</span> <span class="o">=</span> <span class="nx">changes</span><span class="p">[</span><span class="nx">eeName</span><span class="p">];</span>
-                        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">ee</span><span class="p">.</span><span class="nx">added</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-                        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-                            <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">ee</span><span class="p">[</span><span class="nx">eeName</span><span class="p">].</span><span class="nx">off</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">added</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">type</span><span class="p">,</span>
-                                                       <span class="nx">ee</span><span class="p">.</span><span class="nx">added</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">listener</span><span class="p">);</span>
-                        <span class="p">}</span>
-                        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">changes</span><span class="p">[</span><span class="nx">eeName</span><span class="p">].</span><span class="nx">removed</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-                        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-                            <span class="nx">node</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">ee</span><span class="p">[</span><span class="nx">eeName</span><span class="p">].</span><span class="nx">on</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">removed</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">type</span><span class="p">,</span>
-                                                      <span class="nx">ee</span><span class="p">.</span><span class="nx">removed</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">listener</span><span class="p">);</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="hljs-keyword">if</span> (changes) {
+                <span class="hljs-keyword">for</span> (eeName <span class="hljs-keyword">in</span> changes) {
+                    <span class="hljs-keyword">if</span> (changes.hasOwnProperty(eeName)) {
+                        ee = changes[eeName];
+                        i = <span class="hljs-number">-1</span>, len = ee.added.length;
+                        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+                            node.events.ee[eeName].off(ee.added[i].type,
+                                                       ee.added[i].listener);
+                        }
+                        i = <span class="hljs-number">-1</span>, len = changes[eeName].removed.length;
+                        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+                            node.events.ee[eeName].on(ee.removed[i].type,
+                                                      ee.removed[i].listener);
+                        }
+                    }
+                }
+            }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-31" id="section-31"></a>
 </div>
 <p>Remove widget from current instances, if found.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">wid</span> <span class="o">===</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">wid</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">            i = <span class="hljs-number">-1</span>, len = node.widgets.instances.length;
+            <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+                <span class="hljs-keyword">if</span> (node.widgets.instances[i].wid === widget.wid) {
+                    node.widgets.instances.splice(i,<span class="hljs-number">1</span>);
+                    <span class="hljs-keyword">break</span>;
+                }
+            }
+        };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-32" id="section-32"></a>
 </div>
 <p>Store widget instance (e.g. used for destruction).</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.instances.push(widget);
 
-        <span class="k">return</span> <span class="nx">widget</span><span class="p">;</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">return</span> widget;
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.append">
   <h3>
-    <a href="#widgets.append" name="widgets.append" class="pilcrow">&#182;</a>
-    Widgets.append
+    <a href="#widgets.append" name="widgets.append" class="pilcrow"></a>
+Widgets.append
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Appends a widget to the specified root element</p>
-
+</div>
+<div class="body">
+<p>Appends a widget to the specified root element</p>
 <p>If no root element is specified the widget is append to the global root.</p>
-
 <p>The first parameter can be string representing the name of the widget or
 a valid widget already loaded, for example through Widgets.get.
 In the latter case, dependencies are checked, and it returns FALSE if
 conditions are not met.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">w</span>
-      <span class="dox_type">string</span>
-      <span class="dox_type">object</span>
-      <span>The name of the widget to load or a loaded
-  widget object</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">root</span>
-      <span class="dox_type">object</span>
-      <span>Optional. The HTML element under which the widget
-  will be appended. Default: the <code>document.body</code> element of the main
-  frame (if one is defined), or <code>document.body</code> elment of the page</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">options</span>
-      <span>Optional. Configuration options to be passed
-  to the widget</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">object</span>
-      <span class="dox_type">boolean</span>
-      <span>The requested widget, or FALSE is an error
-  occurs</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.get
-</span>
-    </div>
-  </div>
 </div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">w</span>
+<span class="dox_type">string</span>
+<span class="dox_type">object</span>
+<span>The name of the widget to load or a loaded   widget object
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">root</span>
+<span class="dox_type">object</span>
+<span>Optional. The HTML element under which the widget   will be appended. Default: the <code>document.body</code> element of the main
+frame (if one is defined), or <code>document.body</code> elment of the page
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">options</span>
+<span>Optional. Configuration options to be passed   to the widget
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">object</span>
+<span class="dox_type">boolean</span>
+<span>The requested widget, or FALSE is an error   occurs
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.get</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">tmp</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    Widgets.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">w, root, options</span>) </span>{
+        <span class="hljs-keyword">var</span> tmp;
 
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.append: w must be string or object. &#39;</span> <span class="o">+</span>
-                               <span class="s1">&#39;Found: &#39;</span> <span class="o">+</span> <span class="nx">w</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">root</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">J</span><span class="p">.</span><span class="nx">isElement</span><span class="p">(</span><span class="nx">root</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.append: root must be HTMLElement &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;or undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">root</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.append: options must be object or &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;undefined. Found: &#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> w &amp;&amp; <span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> w) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.append: w must be string or object. '</span> +
+                               <span class="hljs-string">'Found: '</span> + w);
+        }
+        <span class="hljs-keyword">if</span> (root &amp;&amp; !J.isElement(root)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.append: root must be HTMLElement '</span> +
+                                <span class="hljs-string">'or undefined. Found: '</span> + root);
+        }
+        <span class="hljs-keyword">if</span> (options &amp;&amp; <span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> options) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.append: options must be object or '</span> +
+                                <span class="hljs-string">'undefined. Found: '</span> + options);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-34" id="section-34"></a>
 </div>
 <p>Init default values.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">        options = options || {};
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35"></a>
 </div>
 <p>If no root is defined, use the body element of the main frame,
 if none is found, use the document.body.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">root</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getFrameDocument</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="nx">root</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">root</span><span class="p">)</span> <span class="nx">root</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (!root) {
+            root = W.getFrameDocument();
+            <span class="hljs-keyword">if</span> (root) root = root.body;
+            <span class="hljs-keyword">if</span> (!root) root = <span class="hljs-built_in">document</span>.body;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (root === W.getHeader() &amp;&amp;
+                 <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.panel) {
 
+            options.panel = <span class="hljs-literal">false</span>;
+        }
 
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-36" id="section-36"></a>
 </div>
 <p>Check if it is a object (new widget).
 If it is a string is the name of an existing widget.
 In this case a dependencies check is done.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">)</span> <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> w) w = <span class="hljs-keyword">this</span>.get(w, options);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37"></a>
 </div>
-<p>Add panelDiv (with or without frame around).</p>
+<p>Add panelDiv (with or without panel).</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">frame</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">?</span>
-            <span class="p">[</span> <span class="s1">&#39;ng_widget&#39;</span><span class="p">,</span> <span class="s1">&#39;panel&#39;</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">className</span> <span class="p">]</span> <span class="o">:</span>
-            <span class="p">[</span> <span class="s1">&#39;ng_widget&#39;</span><span class="p">,</span> <span class="s1">&#39;panel&#39;</span><span class="p">,</span> <span class="s1">&#39;panel-default&#39;</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">className</span> <span class="p">];</span>
+        <td class="code highlight">
+          <pre class="javascript">        tmp = options.panel === <span class="hljs-literal">false</span> ?
+            [ <span class="hljs-string">'ng_widget'</span>,  <span class="hljs-string">'no-panel'</span>, w.className ] :
+            [ <span class="hljs-string">'ng_widget'</span>, <span class="hljs-string">'panel'</span>, <span class="hljs-string">'panel-default'</span>, w.className ];
 
-        <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span> <span class="o">=</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="p">{</span> <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span> <span class="nx">className</span><span class="o">:</span> <span class="nx">tmp</span> <span class="p">}</span> <span class="p">});</span>
+        w.panelDiv = W.append(<span class="hljs-string">'div'</span>, root, { <span class="hljs-attr">className</span>: tmp });
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-38" id="section-38"></a>
 </div>
-<p>Optionally add title.</p>
+<p>Optionally add title (and div).</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">!==</span> <span class="kc">false</span> <span class="o">&amp;&amp;</span> <span class="nx">w</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span> <span class="nx">w</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (options.title !== <span class="hljs-literal">false</span> &amp;&amp; w.title) {
+            tmp = options.panel === <span class="hljs-literal">false</span> ?
+                <span class="hljs-string">'no-panel-heading'</span> : <span class="hljs-string">'panel-heading'</span>;
+            w.setTitle(w.title, { <span class="hljs-attr">className</span>: tmp });
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39"></a>
 </div>
-<p>Add body (with or without margins around).</p>
+<p>Add body (with or without panel).</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">frame</span> <span class="o">!==</span> <span class="kc">false</span> <span class="o">?</span> <span class="p">{</span> <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;panel-body&#39;</span> <span class="p">}</span> <span class="o">:</span> <span class="kc">undefined</span><span class="p">;</span>
-        <span class="nx">w</span><span class="p">.</span><span class="nx">bodyDiv</span> <span class="o">=</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">,</span> <span class="p">{</span>
-            <span class="nx">attributes</span><span class="o">:</span> <span class="nx">tmp</span>
-        <span class="p">});</span>
+        <td class="code highlight">
+          <pre class="javascript">        tmp = options.panel !== <span class="hljs-literal">false</span> ? <span class="hljs-string">'panel-body'</span> : <span class="hljs-string">'no-panel-body'</span>;
+        w.bodyDiv = W.append(<span class="hljs-string">'div'</span>, w.panelDiv, { <span class="hljs-attr">className</span>: tmp });
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40"></a>
 </div>
 <p>Optionally add footer.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">footer</span><span class="p">)</span> <span class="nx">w</span><span class="p">.</span><span class="nx">setFooter</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">footer</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (w.footer) {
+            tmp = options.panel === <span class="hljs-literal">false</span> ?
+                <span class="hljs-string">'no-panel-heading'</span> : <span class="hljs-string">'panel-heading'</span>;
+            w.setFooter(w.footer);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-41" id="section-41"></a>
 </div>
 <p>Optionally set context.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">)</span> <span class="nx">w</span><span class="p">.</span><span class="nx">setContext</span><span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">context</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (w.context) w.setContext(w.context);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-42" id="section-42"></a>
 </div>
 <p>User listeners.
 attachListeners(w);</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+        w.append();
 
-        <span class="nx">w</span><span class="p">.</span><span class="nx">append</span><span class="p">();</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-43" id="section-43"></a>
 </div>
 <p>Store reference of last appended widget.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">lastAppended</span> <span class="o">=</span> <span class="nx">w</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.lastAppended = w;
 
-        <span class="k">return</span> <span class="nx">w</span><span class="p">;</span>
-    <span class="p">};</span>
+        <span class="hljs-keyword">return</span> w;
+    };
 
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;***Widgets.add is deprecated. Use &#39;</span> <span class="o">+</span>
-                    <span class="s1">&#39;Widgets.append instead.***&#39;</span><span class="p">);</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-    <span class="p">};</span>
+    Widgets.prototype.add = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">w, root, options</span>) </span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'***Widgets.add is deprecated. Use '</span> +
+                    <span class="hljs-string">'Widgets.append instead.***'</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.append(w, root, options);
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.iswidget">
   <h3>
-    <a href="#widgets.iswidget" name="widgets.iswidget" class="pilcrow">&#182;</a>
-    Widgets.isWidget
+    <a href="#widgets.iswidget" name="widgets.iswidget" class="pilcrow"></a>
+Widgets.isWidget
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Returns TRUE if the object is a widget-like</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">w</span>
-      <span class="dox_type">object</span>
-      <span>The object to test</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">strict</span>
-      <span class="dox_type">boolean</span>
-      <span>If TRUE, it checks if object is an
-  instance of the Widget class. If FALSE, it just have to
-  implement some of its methods (append and getValues).</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">boolean</span>
-      <span>TRUE, if the widget was found and destroyed.</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.get</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.destroyAll
-</span>
-    </div>
-    <div class="dox_tag_title">API</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">experimental
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Returns TRUE if the object is a widget-like</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">w</span>
+<span class="dox_type">object</span>
+<span>The object to test
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">strict</span>
+<span class="dox_type">boolean</span>
+<span>If TRUE, it checks if object is an   instance of the Widget class. If FALSE, it just have to
+implement some of its methods (append and getValues).
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">boolean</span>
+<span>TRUE, if the widget was found and destroyed.
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.get</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.destroyAll</span>
+</div>
+<div class="dox_tag_title">API</div>
+<div class="dox_tag_detail">
+<span class="dox_type">experimental</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isWidget</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">strict</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">strict</span><span class="p">)</span> <span class="k">return</span> <span class="nx">w</span> <span class="k">instanceof</span> <span class="nx">node</span><span class="p">.</span><span class="nx">Widget</span><span class="p">;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">.</span><span class="nx">append</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">.</span><span class="nx">getValues</span><span class="p">)</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    Widgets.prototype.isWidget = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">w, strict</span>) </span>{
+        <span class="hljs-keyword">if</span> (strict) <span class="hljs-keyword">return</span> w <span class="hljs-keyword">instanceof</span> node.Widget;
+        <span class="hljs-keyword">return</span> (<span class="hljs-string">'object'</span> === <span class="hljs-keyword">typeof</span> w &amp;&amp;
+                <span class="hljs-string">'function'</span> === <span class="hljs-keyword">typeof</span> w.append &amp;&amp;
+                <span class="hljs-string">'function'</span> === <span class="hljs-keyword">typeof</span> w.getValues)
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.destroy">
   <h3>
-    <a href="#widgets.destroy" name="widgets.destroy" class="pilcrow">&#182;</a>
-    Widgets.destroy
+    <a href="#widgets.destroy" name="widgets.destroy" class="pilcrow"></a>
+Widgets.destroy
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Destroys the widget with the specified id</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">id</span>
-      <span class="dox_type">string</span>
-      <span>The id of the widget to destroy</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">boolean</span>
-      <span>TRUE, if the widget was found and destroyed.</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.get</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.destroyAll
-</span>
-    </div>
-  </div>
 </div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">id</span> <span class="o">||</span> <span class="o">!</span><span class="nx">id</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;Widgets.destroy: id must be a non-empty &#39;</span> <span class="o">+</span>
-                                <span class="s1">&#39;string. Found: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+<div class="body">
+<p>Destroys the widget with the specified id</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">id</span>
+<span class="dox_type">string</span>
+<span>The id of the widget to destroy
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">boolean</span>
+<span>TRUE, if the widget was found and destroyed.
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.get</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.destroyAll</span>
+</div>
+</div>
+</div>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Widgets.prototype.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">id</span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> id || !id.trim().length) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Widgets.destroy: id must be a non-empty '</span> +
+                                <span class="hljs-string">'string. Found: '</span> + id);
+        }
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.instances.length;
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-46" id="section-46"></a>
 </div>
 <p>Nested widgets can be destroyed by previous calls to destroy,
 and each call to destroy modify the array of instances.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">id</span> <span class="o">===</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">destroy</span><span class="p">();</span>
-                <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;node.widgets.destroy: widget could not be destroyed: &#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
-        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.instances[i].id === id) {
+                <span class="hljs-keyword">this</span>.instances[i].destroy();
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+            }
+        }
+        node.warn(<span class="hljs-string">'node.widgets.destroy: widget could not be destroyed: '</span> + id);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.destroyall">
   <h3>
-    <a href="#widgets.destroyall" name="widgets.destroyall" class="pilcrow">&#182;</a>
-    Widgets.destroyAll
+    <a href="#widgets.destroyall" name="widgets.destroyall" class="pilcrow"></a>
+Widgets.destroyAll
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Removes all widgets that have been created through Widgets.get</p>
-
-<p>Exceptions thrown in the widgets' destroy methods are caught.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.get</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">Widgets.destroy
-</span>
-    </div>
-  </div>
 </div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroyAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
-        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+<div class="body">
+<p>Removes all widgets that have been created through Widgets.get</p>
+<p>Exceptions thrown in the widgets' destroy methods are caught.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.get</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widgets.destroy</span>
+</div>
+</div>
+</div>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Widgets.prototype.destroyAll = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.instances.length;
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-48" id="section-48"></a>
 </div>
 <p>Nested widgets can be destroyed by previous calls to destroy,
 and each call to destroy modify the array of instances.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">destroy</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;node.widgets.destroyAll: some widgets could &#39;</span> <span class="o">+</span>
-                      <span class="s1">&#39;not be destroyed.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            <span class="hljs-keyword">this</span>.instances[<span class="hljs-number">0</span>].destroy();
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.instances.length) {
+            node.warn(<span class="hljs-string">'node.widgets.destroyAll: some widgets could '</span> +
+                      <span class="hljs-string">'not be destroyed.'</span>);
+        }
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="widgets.checkdependencies">
   <h3>
-    <a href="#widgets.checkdependencies" name="widgets.checkdependencies" class="pilcrow">&#182;</a>
-    Widgets.checkDependencies
+    <a href="#widgets.checkdependencies" name="widgets.checkdependencies" class="pilcrow"></a>
+Widgets.checkDependencies
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Checks if all the dependencies are already loaded</p>
-
+</div>
+<div class="body">
+<p>Checks if all the dependencies are already loaded</p>
 <p>Dependencies are searched for in the following objects:</p>
-
 <ul>
 <li>window</li>
 <li>node</li>
 <li>this.widgets</li>
 <li>node.window</li>
 </ul>
-
 <p>TODO: Check for version and other constraints.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">w</span>
-      <span class="dox_type">object</span>
-      <span>The widget to check</span>
-    </div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">quiet</span>
-      <span class="dox_type">boolean</span>
-      <span>Optional. If TRUE, no warning will be raised.
-  Default: FALSE</span>
-    </div>
-    <div class="dox_tag_title">Returns</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name"></span>
-      <span class="dox_type">boolean</span>
-      <span>TRUE, if all dependencies are met</span>
-    </div>
-  </div>
 </div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">w</span>
+<span class="dox_type">object</span>
+<span>The widget to check
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">quiet</span>
+<span class="dox_type">boolean</span>
+<span>Optional. If TRUE, no warning will be raised.   Default: FALSE
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">boolean</span>
+<span>TRUE, if all dependencies are met
+</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Widgets</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">checkDependencies</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">quiet</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">parents</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">lib</span><span class="p">,</span> <span class="nx">found</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">w</span><span class="p">.</span><span class="nx">dependencies</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    Widgets.prototype.checkDependencies = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">w, quiet</span>) </span>{
+        <span class="hljs-keyword">var</span> parents, d, lib, found, i;
+        <span class="hljs-keyword">if</span> (!w.dependencies) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
 
-        <span class="nx">parents</span> <span class="o">=</span> <span class="p">[</span><span class="nb">window</span><span class="p">,</span> <span class="nx">node</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">widgets</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">];</span>
+        parents = [<span class="hljs-built_in">window</span>, node, <span class="hljs-keyword">this</span>.widgets, node.window];
 
-        <span class="nx">d</span> <span class="o">=</span> <span class="nx">w</span><span class="p">.</span><span class="nx">dependencies</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="nx">lib</span> <span class="k">in</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">lib</span><span class="p">))</span> <span class="p">{</span>
-                <span class="nx">found</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-                <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">parents</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">J</span><span class="p">.</span><span class="nx">getNestedValue</span><span class="p">(</span><span class="nx">lib</span><span class="p">,</span> <span class="nx">parents</span><span class="p">[</span><span class="nx">i</span><span class="p">]))</span> <span class="p">{</span>
-                        <span class="nx">found</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-                        <span class="k">break</span><span class="p">;</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">found</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">quiet</span><span class="p">)</span> <span class="nx">checkDepErrMsg</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">lib</span><span class="p">);</span>
-                    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="p">};</span>
+        d = w.dependencies;
+        <span class="hljs-keyword">for</span> (lib <span class="hljs-keyword">in</span> d) {
+            <span class="hljs-keyword">if</span> (d.hasOwnProperty(lib)) {
+                found = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; parents.length; i++) {
+                    <span class="hljs-keyword">if</span> (J.getNestedValue(lib, parents[i])) {
+                        found = <span class="hljs-literal">true</span>;
+                        <span class="hljs-keyword">break</span>;
+                    }
+                }
+                <span class="hljs-keyword">if</span> (!found) {
+                    <span class="hljs-keyword">if</span> (!quiet) checkDepErrMsg(w, lib);
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+                }
+            }
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    };
 
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="helper%20functions">
+          <div class="pilwrap" id="helper-functions">
   <h2>
-    <a href="#helper%20functions" name="helper%20functions" class="pilcrow">&#182;</a>
-    Helper functions
+    <a href="#helper-functions" name="helper-functions" class="pilcrow"></a>
+Helper functions
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="kd">function</span> <span class="nx">appendDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-51" id="section-51"></a>
 </div>
-<p>TODO: Check every parameter</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">return</span> <span class="nx">W</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">attributes</span><span class="p">);</span>
-    <span class="p">}</span>
+<pre><code>function createListenerFunction(w, e, l) {
+    if (!w || !e || !l) return;
+    w.panelDiv[e] = function() { l.call(w); };
+}
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
-</div>
-
-<div class="highlight"><pre><code><span class="kd">function</span> <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">w</span> <span class="o">||</span> <span class="o">!</span><span class="nx">e</span> <span class="o">||</span> <span class="o">!</span><span class="nx">l</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="nx">w</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">[</span><span class="nx">e</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">l</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span> <span class="p">};</span>
-<span class="p">}</span>
-
-<span class="kd">function</span> <span class="nx">attachListeners</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">events</span><span class="p">,</span> <span class="nx">isEvent</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
-    <span class="nx">isEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="nx">events</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;onclick&#39;</span><span class="p">,</span> <span class="s1">&#39;onfocus&#39;</span><span class="p">,</span> <span class="s1">&#39;onblur&#39;</span><span class="p">,</span> <span class="s1">&#39;onchange&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;onsubmit&#39;</span><span class="p">,</span> <span class="s1">&#39;onload&#39;</span><span class="p">,</span> <span class="s1">&#39;onunload&#39;</span><span class="p">,</span> <span class="s1">&#39;onmouseover&#39;</span><span class="p">];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span> <span class="p">{</span>
-            <span class="nx">isEvent</span> <span class="o">=</span> <span class="nx">J</span><span class="p">.</span><span class="nx">inArray</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">events</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">isEvent</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;function&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
-                <span class="nx">createListenerFunction</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
+function attachListeners(w) {
+    var events, isEvent, i;
+    isEvent = false;
+    events = ['onclick', 'onfocus', 'onblur', 'onchange',
+              'onsubmit', 'onload', 'onunload', 'onmouseover'];
+    for (i in w.options) {
+        if (w.options.hasOwnProperty(i)) {
+            isEvent = J.inArray(i, events);
+            if (isEvent &amp;&amp; 'function' === typeof w.options[i]) {
+                createListenerFunction(w, i, w.options[i]);
+            }
+        }
+    }
+}
+</code></pre>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkDepErrMsg</span>(<span class="hljs-params">w, d</span>) </span>{
+        <span class="hljs-keyword">var</span> name = w.name || w.id;<span class="hljs-comment">// || w.toString();</span>
+        node.err(d + <span class="hljs-string">' not found. '</span> + name + <span class="hljs-string">' cannot be loaded.'</span>);
+    }
 
-    <span class="kd">function</span> <span class="nx">checkDepErrMsg</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">w</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">w</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span><span class="c1">// || w.toString();</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">err</span><span class="p">(</span><span class="nx">d</span> <span class="o">+</span> <span class="s1">&#39; not found. &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; cannot be loaded.&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-52" id="section-52"></a>
 </div>
 <p>Expose Widgets to the global object.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Widgets</span><span class="p">();</span>
+        <td class="code highlight">
+          <pre class="javascript">    node.widgets = <span class="hljs-keyword">new</span> Widgets();
 
-<span class="p">})(</span>
-
-</pre></div>
+})(
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-53" id="section-53"></a>
 </div>
 <p>Widgets works only in the browser environment.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nb">window</span><span class="p">)</span> <span class="o">?</span> <span class="nb">window</span> <span class="o">:</span> <span class="nx">module</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nb">window</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nb">window</span><span class="p">)</span> <span class="o">?</span> <span class="nb">window</span><span class="p">.</span><span class="nx">node</span> <span class="o">:</span> <span class="nx">module</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">node</span>
-<span class="p">);</span>
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">    (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span>) ? <span class="hljs-built_in">window</span> : <span class="hljs-built_in">module</span>.parent.exports.window,
+    (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span>) ? <span class="hljs-built_in">window</span>.node : <span class="hljs-built_in">module</span>.parent.exports.node
+);
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>
