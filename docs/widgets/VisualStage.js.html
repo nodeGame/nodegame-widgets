@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/VisualStage.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/VisualStage.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,264 +21,285 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#visualstage">VisualStage</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#visualstage%20constructor">VisualStage constructor</a>
+        <a href="#visualstage-constructor">VisualStage constructor</a>
       </div>
+
       <div class="heading h2">
-        <a href="#visualstage%20methods">VisualStage methods</a>
+        <a href="#visualstage-methods">VisualStage methods</a>
       </div>
+
       <div class="heading h3">
         <a href="#visualstage.append">VisualStage.append</a>
       </div>
+
       <div class="heading h3">
         <a href="#visualstage.writestage">VisualStage.writeStage</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="visualstage">
   <h1>
-    <a href="#visualstage" name="visualstage" class="pilcrow">&#182;</a>
-    VisualStage
+    <a href="#visualstage" name="visualstage" class="pilcrow"></a>
+VisualStage
   </h1>
 </div>
-
-
-<p>Copyright(c) 2015 Stefano Balietti
+<p>Copyright(c) 2017 Stefano Balietti
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Shows current, previous and next stage.</p>
-
+</div>
+<div class="body">
+<p>Shows current, previous and next stage.</p>
 <p>www.nodegame.org</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    <span class="hljs-keyword">var</span> Table = W.Table;
 
-    <span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
+    node.widgets.register(<span class="hljs-string">'VisualStage'</span>, VisualStage);
 
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;VisualStage&#39;</span><span class="p">,</span> <span class="nx">VisualStage</span><span class="p">);</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    VisualStage.version = <span class="hljs-string">'0.2.3'</span>;
+    VisualStage.description =
+        <span class="hljs-string">'Visually display current, previous and next stage of the game.'</span>;
 
-    <span class="nx">VisualStage</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2.2&#39;</span><span class="p">;</span>
-    <span class="nx">VisualStage</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span>
-        <span class="s1">&#39;Visually display current, previous and next stage of the game.&#39;</span><span class="p">;</span>
+    VisualStage.title = <span class="hljs-string">'Stage'</span>;
+    VisualStage.className = <span class="hljs-string">'visualstage'</span>;
 
-    <span class="nx">VisualStage</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Stage&#39;</span><span class="p">;</span>
-    <span class="nx">VisualStage</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;visualstage&#39;</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    VisualStage.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {},
+        <span class="hljs-attr">Table</span>: {}
+    };
 
-    <span class="nx">VisualStage</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{},</span>
-        <span class="nx">Table</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="visualstage%20constructor">
-  <h2>
-    <a href="#visualstage%20constructor" name="visualstage%20constructor" class="pilcrow">&#182;</a>
-    VisualStage constructor
-  </h2>
-</div>
-
-  </div>
-  <div class="body"><p><code>VisualStage</code> displays current, previous and next stage of the game</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">VisualStage</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">();</span>
-    <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="visualstage%20methods">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="visualstage-constructor">
   <h2>
-    <a href="#visualstage%20methods" name="visualstage%20methods" class="pilcrow">&#182;</a>
-    VisualStage methods
+    <a href="#visualstage-constructor" name="visualstage-constructor" class="pilcrow"></a>
+VisualStage constructor
+  </h2>
+</div>
+</div>
+<div class="body">
+<p><code>VisualStage</code> displays current, previous and next stage of the game</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">VisualStage</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.table = <span class="hljs-keyword">new</span> Table();
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="visualstage-methods">
+  <h2>
+    <a href="#visualstage-methods" name="visualstage-methods" class="pilcrow"></a>
+VisualStage methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="visualstage.append">
   <h3>
-    <a href="#visualstage.append" name="visualstage.append" class="pilcrow">&#182;</a>
-    VisualStage.append
+    <a href="#visualstage.append" name="visualstage.append" class="pilcrow"></a>
+VisualStage.append
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Appends widget to <code>this.bodyDiv</code> and writes the stage</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">VisualStage.writeStage
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Appends widget to <code>this.bodyDiv</code> and writes the stage</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">VisualStage.writeStage</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">VisualStage</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">table</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">writeStage</span><span class="p">();</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    VisualStage.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.table.table);
+        <span class="hljs-keyword">this</span>.writeStage();
+    };
 
-    <span class="nx">VisualStage</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    VisualStage.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;STEP_CALLBACK_EXECUTED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">writeStage</span><span class="p">();</span>
-        <span class="p">});</span>
-
-</pre></div>
+        node.on(<span class="hljs-string">'STEP_CALLBACK_EXECUTED'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            that.writeStage();
+        });
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7"></a>
 </div>
 <p>Game over and init?</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="visualstage.writestage">
   <h3>
-    <a href="#visualstage.writestage" name="visualstage.writestage" class="pilcrow">&#182;</a>
-    VisualStage.writeStage
+    <a href="#visualstage.writestage" name="visualstage.writestage" class="pilcrow"></a>
+VisualStage.writeStage
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Writes the current, previous and next stage into <code>this.table</code></p>
-  </div>
 </div>
+<div class="body">
+<p>Writes the current, previous and next stage into <code>this.table</code></p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">VisualStage</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">writeStage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">miss</span><span class="p">,</span> <span class="nx">stage</span><span class="p">,</span> <span class="nx">pr</span><span class="p">,</span> <span class="nx">nx</span><span class="p">,</span> <span class="nx">tmp</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">curStep</span><span class="p">,</span> <span class="nx">nextStep</span><span class="p">,</span> <span class="nx">prevStep</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">t</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    VisualStage.prototype.writeStage = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> miss, stage, pr, nx, tmp;
+        <span class="hljs-keyword">var</span> curStep, nextStep, prevStep;
+        <span class="hljs-keyword">var</span> t;
 
-        <span class="nx">miss</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="p">;</span>
-        <span class="nx">stage</span> <span class="o">=</span> <span class="s1">&#39;Uninitialized&#39;</span><span class="p">;</span>
-        <span class="nx">pr</span> <span class="o">=</span> <span class="nx">miss</span><span class="p">;</span>
-        <span class="nx">nx</span> <span class="o">=</span> <span class="nx">miss</span><span class="p">;</span>
+        miss = <span class="hljs-string">'-'</span>;
+        stage = <span class="hljs-string">'Uninitialized'</span>;
+        pr = miss;
+        nx = miss;
 
-        <span class="nx">curStep</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">getCurrentGameStage</span><span class="p">();</span>
+        curStep = node.game.getCurrentGameStage();
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">curStep</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getStep</span><span class="p">(</span><span class="nx">curStep</span><span class="p">);</span>
-            <span class="nx">stage</span> <span class="o">=</span> <span class="nx">tmp</span> <span class="o">?</span> <span class="nx">tmp</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
+        <span class="hljs-keyword">if</span> (curStep) {
+            tmp = node.game.plot.getStep(curStep);
+            stage = tmp ? tmp.id : miss;
 
-            <span class="nx">prevStep</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">previous</span><span class="p">(</span><span class="nx">curStep</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">prevStep</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getStep</span><span class="p">(</span><span class="nx">prevStep</span><span class="p">);</span>
-                <span class="nx">pr</span> <span class="o">=</span> <span class="nx">tmp</span> <span class="o">?</span> <span class="nx">tmp</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
-            <span class="p">}</span>
+            prevStep = node.game.plot.previous(curStep);
+            <span class="hljs-keyword">if</span> (prevStep) {
+                tmp = node.game.plot.getStep(prevStep);
+                pr = tmp ? tmp.id : miss;
+            }
 
-            <span class="nx">nextStep</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">curStep</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">nextStep</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">game</span><span class="p">.</span><span class="nx">plot</span><span class="p">.</span><span class="nx">getStep</span><span class="p">(</span><span class="nx">nextStep</span><span class="p">);</span>
-                <span class="nx">nx</span> <span class="o">=</span> <span class="nx">tmp</span> <span class="o">?</span> <span class="nx">tmp</span><span class="p">.</span><span class="nx">id</span> <span class="o">:</span> <span class="nx">miss</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+            nextStep = node.game.plot.next(curStep);
+            <span class="hljs-keyword">if</span> (nextStep) {
+                tmp = node.game.plot.getStep(nextStep);
+                nx = tmp ? tmp.id : miss;
+            }
+        }
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">clear</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+        <span class="hljs-keyword">this</span>.table.clear(<span class="hljs-literal">true</span>);
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Previous: &#39;</span><span class="p">,</span> <span class="nx">pr</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Current: &#39;</span><span class="p">,</span> <span class="nx">stage</span><span class="p">]);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">addRow</span><span class="p">([</span><span class="s1">&#39;Next: &#39;</span><span class="p">,</span> <span class="nx">nx</span><span class="p">]);</span>
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Previous: '</span>, pr]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Current: '</span>, stage]);
+        <span class="hljs-keyword">this</span>.table.addRow([<span class="hljs-string">'Next: '</span>, nx]);
 
-        <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">selexec</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-        <span class="nx">t</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;strong&#39;</span><span class="p">);</span>
-        <span class="nx">t</span><span class="p">.</span><span class="nx">selexec</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;underline&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
-    <span class="p">};</span>
+        t = <span class="hljs-keyword">this</span>.table.selexec(<span class="hljs-string">'y'</span>, <span class="hljs-string">'='</span>, <span class="hljs-number">0</span>);
+        t.addClass(<span class="hljs-string">'strong'</span>);
+        t.selexec(<span class="hljs-string">'x'</span>, <span class="hljs-string">'='</span>, <span class="hljs-number">2</span>).addClass(<span class="hljs-string">'underline'</span>);
+        <span class="hljs-keyword">this</span>.table.parse();
+    };
 
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+})(node);
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

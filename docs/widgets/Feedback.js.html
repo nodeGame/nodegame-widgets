@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/Feedback.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/Feedback.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,252 +21,1286 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#feedback">Feedback</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#feedback%20constructor">Feedback constructor</a>
+        <a href="#feedback-constructor">Feedback constructor</a>
       </div>
+
       <div class="heading h3">
-        <a href="#feedback.textarea">Feedback.textarea</a>
+        <a href="#feedback.maxlength">Feedback.maxLength</a>
       </div>
+
       <div class="heading h3">
-        <a href="#feedback.submit">Feedback.submit</a>
+        <a href="#feedback.minlength">Feedback.minLength</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#feedback.maxattemptlength">Feedback.maxAttemptLength</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.showcharcount">Feedback.showCharCount</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.onsubmit">Feedback.onsubmit</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback._feedback">Feedback._feedback</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.attempts">Feedback.attempts</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.timebegin">Feedback.timeBegin</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.feedbackhtml">Feedback.feedbackHTML</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.textareaelement">Feedback.textareaElement</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.charcounter">Feedback.charCounter</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.submitbutton">Feedback.submitButton</a>
+      </div>
+
       <div class="heading h2">
-        <a href="#feedback%20methods">Feedback methods</a>
+        <a href="#feedback-methods">Feedback methods</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#feedback.createform">Feedback.createForm</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.verifyfeedback">Feedback.verifyFeedback</a>
+      </div>
+
       <div class="heading h3">
         <a href="#feedback.append">Feedback.append</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#feedback.setvalues">Feedback.setValues</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.getvalues">Feedback.getValues</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.sendvalues">Feedback.sendValues</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.highlight">Feedback.highlight</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.unhighlight">Feedback.unhighlight</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#feedback.reset">Feedback.reset</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#helper-functions">Helper functions.</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#getfeedback">getFeedback</a>
+      </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="feedback">
   <h1>
-    <a href="#feedback" name="feedback" class="pilcrow">&#182;</a>
-    Feedback
+    <a href="#feedback" name="feedback" class="pilcrow"></a>
+Feedback
   </h1>
 </div>
-
-
-<p>Copyright(c) 2015 Stefano Balietti
+<p>Copyright(c) 2017 Stefano Balietti
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Sends a feedback message to the server</p>
-
+</div>
+<div class="body">
+<p>Sends a feedback message to the server</p>
 <p>www.nodegame.org</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    node.widgets.register(<span class="hljs-string">'Feedback'</span>, Feedback);
 
-    <span class="kd">var</span> <span class="nx">J</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">JSUS</span><span class="p">;</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;Feedback&#39;</span><span class="p">,</span> <span class="nx">Feedback</span><span class="p">);</span>
-
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    Feedback.version = <span class="hljs-string">'1.0.1'</span>;
+    Feedback.description = <span class="hljs-string">'Displays a configurable feedback form'</span>;
 
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span><span class="p">;</span>
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a simple feedback form.&#39;</span><span class="p">;</span>
+    Feedback.title = <span class="hljs-string">'Feedback'</span>;
+    Feedback.className = <span class="hljs-string">'feedback'</span>;
 
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Feedback&#39;</span><span class="p">;</span>
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;feedback&#39;</span><span class="p">;</span>
+    Feedback.texts = {
+        <span class="hljs-attr">label</span>: <span class="hljs-string">'Any feedback about the experiment? Let us know here:'</span>,
+        <span class="hljs-attr">sent</span>: <span class="hljs-string">'Sent!'</span>
+    };
 
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    Feedback.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {}
+    };
 
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="feedback%20constructor">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback-constructor">
   <h2>
-    <a href="#feedback%20constructor" name="feedback%20constructor" class="pilcrow">&#182;</a>
-    Feedback constructor
+    <a href="#feedback-constructor" name="feedback-constructor" class="pilcrow"></a>
+Feedback constructor
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p><code>Feedback</code> sends a feedback message to the server</p>
-  </div>
 </div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">Feedback</span><span class="p">()</span> <span class="p">{</span>
+<div class="body">
+<p><code>Feedback</code> sends a feedback message to the server</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration option.   Available options:
+<ul>
+<li>showCount: If TRUE, the character count is displayed</li>
+<li>minLength: The minimum number of characters in textarea</li>
+<li>maxLength: The max number of characters in textarea</li>
+<li>label: The text to display above the textarea</li>
+</ul>
+</span>
+</div>
+</div>
+</div>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Feedback</span>(<span class="hljs-params">options</span>) </span>{
+
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="feedback.textarea">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.maxlength">
   <h3>
-    <a href="#feedback.textarea" name="feedback.textarea" class="pilcrow">&#182;</a>
-    Feedback.textarea
+    <a href="#feedback.maxlength" name="feedback.maxlength" class="pilcrow"></a>
+Feedback.maxLength
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The TEXTAREA wherein clients can enter feedback</p>
-  </div>
 </div>
+<div class="body">
+<p>The maximum character length for feedback to be submitted</p>
+<p>Default: 800</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.maxLength) {
+            <span class="hljs-keyword">this</span>.maxLength = <span class="hljs-number">800</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (J.isNumber(options.maxLength, <span class="hljs-number">0</span>) !== <span class="hljs-literal">false</span>) {
+            <span class="hljs-keyword">this</span>.maxLength = options.maxLength;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Feedback constructor: options.maxLength '</span> +
+                                <span class="hljs-string">'must be a number &gt;= 0 or undefined. '</span> +
+                                <span class="hljs-string">'Found: '</span> + options.maxLength);
+        }
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="feedback.submit">
-  <h3>
-    <a href="#feedback.submit" name="feedback.submit" class="pilcrow">&#182;</a>
-    Feedback.submit
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Button to submit the feedback form</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="feedback%20methods">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.minlength">
+  <h3>
+    <a href="#feedback.minlength" name="feedback.minlength" class="pilcrow"></a>
+Feedback.minLength
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The minimum character length for feedback to be submitted</p>
+<p>If minLength = 0, then there is no minimum length checked.
+Default: 1</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.minLength) {
+            <span class="hljs-keyword">this</span>.minLength = <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (J.isNumber(options.minLength, <span class="hljs-number">0</span>) !== <span class="hljs-literal">false</span>) {
+            <span class="hljs-keyword">this</span>.minLength = options.minLength;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Feedback constructor: options.minLength '</span> +
+                                <span class="hljs-string">'must be a number &gt;= 0 or undefined. '</span> +
+                                <span class="hljs-string">'Found: '</span> + options.minLength);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.maxattemptlength">
+  <h3>
+    <a href="#feedback.maxattemptlength" name="feedback.maxattemptlength" class="pilcrow"></a>
+Feedback.maxAttemptLength
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The maximum character length for an attempt to submit feedback</p>
+<p>Attempts are stored in the attempts array. This allows to store
+longer texts than accepts feedbacks</p>
+<p>Default: Max(2000, maxLength)</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.maxAttemptLength) {
+            <span class="hljs-keyword">this</span>.maxAttemptLength = <span class="hljs-number">2000</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (J.isNumber(options.maxAttemptLength, <span class="hljs-number">0</span>) !== <span class="hljs-literal">false</span>) {
+            <span class="hljs-keyword">this</span>.maxAttemptLength = <span class="hljs-built_in">Math</span>.max(<span class="hljs-keyword">this</span>.maxLength,
+                                                     options.maxAttemptLength);
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Feedback constructor: '</span> +
+                                <span class="hljs-string">'options.maxAttemptLength must be a number '</span> +
+                                <span class="hljs-string">'&gt;= 0 or undefined. Found: '</span> +
+                                options.maxAttemptLength);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.showcharcount">
+  <h3>
+    <a href="#feedback.showcharcount" name="feedback.showcharcount" class="pilcrow"></a>
+Feedback.showCharCount
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>If TRUE, the character count is shown</p>
+<p>Default: true</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.charCounter</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.showCount) {
+            <span class="hljs-keyword">this</span>.showCharCount = <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.showCharCount = !!options.showCount;
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.onsubmit">
+  <h3>
+    <a href="#feedback.onsubmit" name="feedback.onsubmit" class="pilcrow"></a>
+Feedback.onsubmit
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Options passed to <code>getValues</code> when the submit button is pressed</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.getValues</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (!options.onsubmit) {
+            <span class="hljs-keyword">this</span>.onsubmit = { <span class="hljs-attr">feedbackOnly</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">say</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">updateUI</span>: <span class="hljs-literal">true</span> };
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> === <span class="hljs-keyword">typeof</span> options.onsubmit) {
+            <span class="hljs-keyword">this</span>.onsubmit = options.onsubmit;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Feedback constructor: options.onsubmit '</span> +
+                                <span class="hljs-string">'must be string or object. Found: '</span> +
+                                options.onsubmit);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback._feedback">
+  <h3>
+    <a href="#feedback._feedback" name="feedback._feedback" class="pilcrow"></a>
+Feedback._feedback
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Internal storage of the value of the feedback</p>
+<p>This value is used when the form has not been created yet</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.createForm</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>._feedback = options.feedback || <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.attempts">
+  <h3>
+    <a href="#feedback.attempts" name="feedback.attempts" class="pilcrow"></a>
+Feedback.attempts
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Invalid feedbacks tried</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.attempts = [];
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.timebegin">
+  <h3>
+    <a href="#feedback.timebegin" name="feedback.timebegin" class="pilcrow"></a>
+Feedback.timeBegin
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Time when feedback was inserted (first character, last attempt)</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.timeBegin = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.feedbackhtml">
+  <h3>
+    <a href="#feedback.feedbackhtml" name="feedback.feedbackhtml" class="pilcrow"></a>
+Feedback.feedbackHTML
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The HTML element containing the form elements</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.feedbackHTML = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.textareaelement">
+  <h3>
+    <a href="#feedback.textareaelement" name="feedback.textareaelement" class="pilcrow"></a>
+Feedback.textareaElement
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The HTML textarea element containing the feedback</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.textareaElement = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.charcounter">
+  <h3>
+    <a href="#feedback.charcounter" name="feedback.charcounter" class="pilcrow"></a>
+Feedback.charCounter
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The HTML span element containing the characters count</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.charCounter = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.submitbutton">
+  <h3>
+    <a href="#feedback.submitbutton" name="feedback.submitbutton" class="pilcrow"></a>
+Feedback.submitButton
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The HTML submit button</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.submitButton = <span class="hljs-literal">null</span>;
+
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="feedback-methods">
   <h2>
-    <a href="#feedback%20methods" name="feedback%20methods" class="pilcrow">&#182;</a>
-    Feedback methods
+    <a href="#feedback-methods" name="feedback-methods" class="pilcrow"></a>
+Feedback methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.createform">
+  <h3>
+    <a href="#feedback.createform" name="feedback.createform" class="pilcrow"></a>
+Feedback.createForm
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Builds the HTML forms</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.createForm = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+
+        <span class="hljs-keyword">var</span> that;
+        <span class="hljs-keyword">var</span> feedbackHTML;
+        <span class="hljs-keyword">var</span> feedbackForm;
+        <span class="hljs-keyword">var</span> feedbackLabel;
+        <span class="hljs-keyword">var</span> feedbackTextarea;
+        <span class="hljs-keyword">var</span> submit;
+        <span class="hljs-keyword">var</span> charCounter;
+
+        that = <span class="hljs-keyword">this</span>;
+
+        feedbackHTML = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        feedbackHTML.className = <span class="hljs-string">'feedback'</span>;
+
+        feedbackForm = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'form'</span>);
+        feedbackForm.className = <span class="hljs-string">'feedback-form'</span>;
+        feedbackHTML.appendChild(feedbackForm);
+
+        feedbackLabel = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'label'</span>);
+        feedbackLabel.setAttribute(<span class="hljs-string">'for'</span>, <span class="hljs-string">'feedback-input'</span>);
+        feedbackLabel.innerHTML = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'label'</span>);
+        feedbackForm.appendChild(feedbackLabel);
+
+        feedbackTextarea = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'textarea'</span>);
+        feedbackTextarea.className = <span class="hljs-string">'feedback-textarea form-control'</span>;
+        feedbackTextarea.setAttribute(<span class="hljs-string">'type'</span>, <span class="hljs-string">'text'</span>);
+        feedbackTextarea.setAttribute(<span class="hljs-string">'rows'</span>, <span class="hljs-string">'3'</span>);
+        feedbackForm.appendChild(feedbackTextarea);
+
+        submit = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'input'</span>);
+        submit.className = <span class="hljs-string">'btn btn-lg btn-primary'</span>;
+        submit.setAttribute(<span class="hljs-string">'type'</span>, <span class="hljs-string">'submit'</span>);
+        submit.setAttribute(<span class="hljs-string">'value'</span>, <span class="hljs-string">'Submit feedback'</span>);
+        feedbackForm.appendChild(submit);
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.showCharCount) {
+            charCounter = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+            charCounter.className = <span class="hljs-string">'feedback-char-count badge'</span>;
+            charCounter.innerHTML = <span class="hljs-keyword">this</span>.maxLength;
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19"></a>
+</div>
+<p>Until no char is inserted is hidden.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            charCounter.style.display = <span class="hljs-string">'none'</span>;
+            feedbackForm.appendChild(charCounter);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20"></a>
+</div>
+<p>Add listeners.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        J.addEvent(feedbackForm, <span class="hljs-string">'submit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+            event.preventDefault();
+            that.getValues(that.onsubmit);
+        });
+
+        J.addEvent(feedbackForm, <span class="hljs-string">'input'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+            that.verifyFeedback(<span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>);
+        });
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21"></a>
+</div>
+<p>Store references.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.submitButton = submit;
+        <span class="hljs-keyword">this</span>.feedbackHTML = feedbackHTML;
+        <span class="hljs-keyword">this</span>.textareaElement = feedbackTextarea;
+        <span class="hljs-keyword">this</span>.charCounter = charCounter || <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22"></a>
+</div>
+<p>Check it once at the beginning to initialize counter.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.verifyFeedback(<span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>);
+
+        <span class="hljs-keyword">return</span> feedbackHTML;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.verifyfeedback">
+  <h3>
+    <a href="#feedback.verifyfeedback" name="feedback.verifyfeedback" class="pilcrow"></a>
+Feedback.verifyFeedback
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Verify feedback and optionally marks attempt and updates interface</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">markAttempt</span>
+<span class="dox_type">boolean</span>
+<span>Optional. If TRUE, the current feedback    is added to the attempts array (if too long, may be truncateed).
+Default: TRUE
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">updateUI</span>
+<span class="dox_type">boolean</span>
+<span>Optional. If TRUE, the interface is updated.    Default: FALSE
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">boolean</span>
+<span>TRUE, if the feedback is valid
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.getValues</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">getFeedback</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.verifyFeedback = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">markAttempt, updateUI</span>) </span>{
+        <span class="hljs-keyword">var</span> feedback, length, updateCount, updateColor, res;
+        <span class="hljs-keyword">var</span> submitButton, charCounter, tmp;
+
+        feedback = getFeedback.call(<span class="hljs-keyword">this</span>);
+        length = feedback ? feedback.length : <span class="hljs-number">0</span>;
+
+        submitButton = <span class="hljs-keyword">this</span>.submitButton;
+        charCounter = <span class="hljs-keyword">this</span>.charCounter;
+
+        <span class="hljs-keyword">if</span> (length &lt; <span class="hljs-keyword">this</span>.minLength) {
+            res = <span class="hljs-literal">false</span>;
+            tmp = <span class="hljs-keyword">this</span>.minLength - length;
+            updateCount = tmp + <span class="hljs-string">' character'</span>;
+            <span class="hljs-keyword">if</span> (tmp &gt; <span class="hljs-number">1</span>) updateCount += <span class="hljs-string">'s'</span>;
+            updateCount += <span class="hljs-string">' needed.'</span>;
+            updateColor = <span class="hljs-string">'#a32020'</span>; <span class="hljs-comment">// #f2dede';</span>
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (length &gt; <span class="hljs-keyword">this</span>.maxLength) {
+            res = <span class="hljs-literal">false</span>;
+            tmp = length - <span class="hljs-keyword">this</span>.maxLength;
+            updateCount = tmp + <span class="hljs-string">' character'</span>;
+            <span class="hljs-keyword">if</span> (tmp &gt; <span class="hljs-number">1</span>) updateCount += <span class="hljs-string">'s'</span>;
+            updateCount += <span class="hljs-string">' over.'</span>;
+            updateColor = <span class="hljs-string">'#a32020'</span>; <span class="hljs-comment">// #f2dede';</span>
+        }
+        <span class="hljs-keyword">else</span> {
+            res = <span class="hljs-literal">true</span>;
+            tmp = <span class="hljs-keyword">this</span>.maxLength - length;
+            updateCount = tmp + <span class="hljs-string">' character'</span>;
+            <span class="hljs-keyword">if</span> (tmp &gt; <span class="hljs-number">1</span>) updateCount += <span class="hljs-string">'s'</span>;
+            updateCount += <span class="hljs-string">' remaining.'</span>;
+            updateColor = <span class="hljs-string">'#78b360'</span>; <span class="hljs-comment">// '#dff0d8';</span>
+        }
+
+        <span class="hljs-keyword">if</span> (updateUI) {
+            submitButton.disabled = !res;
+            <span class="hljs-keyword">if</span> (charCounter) {
+                charCounter.style.display = length ? <span class="hljs-string">''</span> : <span class="hljs-string">'none'</span>;
+                charCounter.style.backgroundColor = updateColor;
+                charCounter.innerHTML = updateCount;
+            }
+        }
+
+        <span class="hljs-keyword">if</span> (!res &amp;&amp; (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> markAttempt || markAttempt)) {
+            <span class="hljs-keyword">if</span> (length &gt; <span class="hljs-keyword">this</span>.maxAttemptLength) {
+                feedback = feedback.substr(<span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.maxAttemptLength);
+            }
+            <span class="hljs-keyword">this</span>.attempts.push(feedback);
+        }
+        <span class="hljs-keyword">return</span> res;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="feedback.append">
   <h3>
-    <a href="#feedback.append" name="feedback.append" class="pilcrow">&#182;</a>
-    Feedback.append
+    <a href="#feedback.append" name="feedback.append" class="pilcrow"></a>
+Feedback.append
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Appends widget to this.bodyDiv</p>
-  </div>
 </div>
+<div class="body">
+<p>Appends widget to this.bodyDiv</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.createForm();
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.feedbackHTML);
+    };
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">textarea</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Submit&#39;</span><span class="p">));</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">feedback</span><span class="p">,</span> <span class="nx">sent</span><span class="p">;</span>
-            <span class="nx">feedback</span> <span class="o">=</span> <span class="nx">that</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">feedback</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">J</span><span class="p">.</span><span class="nx">highlight</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">textarea</span><span class="p">,</span> <span class="s1">&#39;ERR&#39;</span><span class="p">);</span>
-                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Feedback is empty, not sent.&#39;</span><span class="p">);</span>
-                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nx">sent</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="s1">&#39;FEEDBACK&#39;</span><span class="p">,</span> <span class="s1">&#39;SERVER&#39;</span><span class="p">,</span> <span class="p">{</span>
-                <span class="nx">feedback</span><span class="o">:</span> <span class="nx">feedback</span><span class="p">,</span>
-                <span class="nx">userAgent</span><span class="o">:</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span>
-            <span class="p">});</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nx">sent</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">J</span><span class="p">.</span><span class="nx">highlight</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">textarea</span><span class="p">,</span> <span class="s1">&#39;OK&#39;</span><span class="p">);</span>
-                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Feedback sent. Thank you.&#39;</span><span class="p">);</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">textarea</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">submit</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">J</span><span class="p">.</span><span class="nx">highlight</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">textarea</span><span class="p">,</span> <span class="s1">&#39;ERR&#39;</span><span class="p">);</span>
-                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;An error has occurred, feedback not sent.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">};</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">textarea</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">);</span>
-    <span class="p">};</span>
-
-    <span class="nx">Feedback</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
-
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+</pre>
         </td>
       </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.setvalues">
+  <h3>
+    <a href="#feedback.setvalues" name="feedback.setvalues" class="pilcrow"></a>
+Feedback.setValues
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Set the value of the feedback</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.setValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> feedback;
+        options = options || {};
+        <span class="hljs-keyword">if</span> (!options.feedback) {
+            feedback = J.randomString(J.randomInt(<span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.maxLength),
+                                      <span class="hljs-string">'aA_1'</span>);
+        }
+        <span class="hljs-keyword">else</span> {
+            feedback = options.feedback;
+        }
+
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.feedbackHTML) <span class="hljs-keyword">this</span>._feedback = feedback;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">this</span>.feedbackHTML.value = feedback;
+
+        <span class="hljs-keyword">this</span>.timeInputBegin = J.now();
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.getvalues">
+  <h3>
+    <a href="#feedback.getvalues" name="feedback.getvalues" class="pilcrow"></a>
+Feedback.getValues
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Returns the feedback and paradata</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">opts</span>
+<span class="dox_type">object</span>
+<span>Optional. Configures the return value.   Available optionts:
+<ul>
+<li>feedbackOnly:If TRUE, returns just the feedback (default: FALSE),</li>
+<li>verify:      If TRUE, check if the feedback is valid (default: TRUE),</li>
+<li>reset:       If TRUTHY and the feedback is valid, then it resets
+the feedback value before returning (default: FALSE),</li>
+<li>markAttempt: If TRUE, getting the value counts as an attempt
+(default: TRUE),</li>
+<li>updateUI:    If TRUE, the UI (form, input, button) is updated.
+Default: FALSE.</li>
+<li>highlight:   If TRUE, if feedback is not the valid, widget is
+is highlighted. Default: (updateUI || FALSE).</li>
+<li>say:         If TRUE, and the feedback is valid, then it sends
+a data msg. Default: FALSE.</li>
+<li>sayAnyway:   If TRUE, it sends a data msg regardless of the
+validity of the feedback. Default: FALSE.</li>
+</ul>
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">string</span>
+<span class="dox_type">object</span>
+<span>The feedback, and optional paradata
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.sendValues</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.verifyFeedback</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">getFeedback</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.getValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">var</span> feedback, res;
+
+        opts = opts || {};
+
+        feedback = getFeedback.call(<span class="hljs-keyword">this</span>);
+
+        <span class="hljs-keyword">if</span> (opts.verify !== <span class="hljs-literal">false</span>) res = <span class="hljs-keyword">this</span>.verifyFeedback(opts.markAttempt,
+                                                             opts.updateUI);
+
+        <span class="hljs-keyword">if</span> (res === <span class="hljs-literal">false</span> &amp;&amp; opts.updateUI || opts.highlight) <span class="hljs-keyword">this</span>.highlight();
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27"></a>
+</div>
+<p>Only value.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (!opts.feedbackOnly) {
+            feedback = {
+                <span class="hljs-attr">timeBegin</span>: <span class="hljs-keyword">this</span>.timeInputBegin,
+                <span class="hljs-attr">feedback</span>: feedback,
+                <span class="hljs-attr">attempts</span>: <span class="hljs-keyword">this</span>.attempts,
+                <span class="hljs-attr">valid</span>: res
+            };
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-28" id="section-28"></a>
+</div>
+<p>Send the message.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> ((opts.say &amp;&amp; res) || opts.sayAnyway) {
+            <span class="hljs-keyword">this</span>.sendValues({ <span class="hljs-attr">values</span>: feedback });
+            <span class="hljs-keyword">if</span> (opts.updateUI) {
+                <span class="hljs-keyword">this</span>.submitButton.setAttribute(<span class="hljs-string">'value'</span>, <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'sent'</span>));
+                <span class="hljs-keyword">this</span>.submitButton.disabled = <span class="hljs-literal">true</span>;
+                <span class="hljs-keyword">this</span>.textareaElement.disabled = <span class="hljs-literal">true</span>;
+            }
+        }
+
+        <span class="hljs-keyword">if</span> (opts.reset) <span class="hljs-keyword">this</span>.reset();
+
+        <span class="hljs-keyword">return</span> feedback;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.sendvalues">
+  <h3>
+    <a href="#feedback.sendvalues" name="feedback.sendvalues" class="pilcrow"></a>
+Feedback.sendValues
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Sends a DATA message with label 'feedback' with feedback and paradata</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">opts</span>
+<span class="dox_type">object</span>
+<span>Optional. Options to pass to the <code>getValues</code>    method. Additional options:
+<ul>
+<li>values: actual values to send, instead of the return
+value of <code>getValues</code></li>
+<li>to: recipient of the message. Default: 'SERVER'</li>
+</ul>
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">string</span>
+<span class="dox_type">object</span>
+<span>The feedback, and optional paradata
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.getValues</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.sendValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">var</span> values;
+        opts = opts || { <span class="hljs-attr">feedbackOnly</span>: <span class="hljs-literal">true</span> };
+        values = opts.values || <span class="hljs-keyword">this</span>.getValues(opts);
+        node.say(<span class="hljs-string">'feedback'</span>, opts.to || <span class="hljs-string">'SERVER'</span>, values);
+        <span class="hljs-keyword">return</span> values;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.highlight">
+  <h3>
+    <a href="#feedback.highlight" name="feedback.highlight" class="pilcrow"></a>
+Feedback.highlight
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Highlights the feedback form</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">The</span>
+<span class="dox_type">string</span>
+<span>style for the form border. Default: '1px solid red'
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.highlighted</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.highlight = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">border</span>) </span>{
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.feedbackHTML) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">if</span> (border &amp;&amp; <span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> border) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Feedback.highlight: border must be '</span> +
+                                <span class="hljs-string">'string or undefined. Found: '</span> + border);
+        }
+        <span class="hljs-keyword">this</span>.feedbackHTML.style.border = border || <span class="hljs-string">'3px solid red'</span>;
+        <span class="hljs-keyword">this</span>.highlighted = <span class="hljs-literal">true</span>;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.unhighlight">
+  <h3>
+    <a href="#feedback.unhighlight" name="feedback.unhighlight" class="pilcrow"></a>
+Feedback.unhighlight
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Removes highlight from the form</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Feedback.highlighted</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.unhighlight = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.feedbackHTML) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">this</span>.feedbackHTML.style.border = <span class="hljs-string">''</span>;
+        <span class="hljs-keyword">this</span>.highlighted = <span class="hljs-literal">false</span>;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="feedback.reset">
+  <h3>
+    <a href="#feedback.reset" name="feedback.reset" class="pilcrow"></a>
+Feedback.reset
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Resets feedback and collected paradata</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    Feedback.prototype.reset = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.attempts = [];
+        <span class="hljs-keyword">this</span>.timeInputBegin = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">this</span>._feedback = <span class="hljs-literal">null</span>;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.feedbackHTML) <span class="hljs-keyword">this</span>.feedbackHTML.value = <span class="hljs-string">''</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHighlighted()) <span class="hljs-keyword">this</span>.unhighlight();
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="helper-functions">
+  <h2>
+    <a href="#helper-functions" name="helper-functions" class="pilcrow"></a>
+Helper functions.
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="getfeedback">
+  <h3>
+    <a href="#getfeedback" name="getfeedback" class="pilcrow"></a>
+getFeedback
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Returns the value of the feedback textarea or in <code>_feedback</code></p>
+<p>Must be invoked with right context</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">string</span>
+<span>The value of the feedback, if any
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getFeedback</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> out;
+        out = <span class="hljs-keyword">this</span>.feedbackHTML ? <span class="hljs-keyword">this</span>.textareaElement.value : <span class="hljs-keyword">this</span>._feedback;
+        <span class="hljs-keyword">return</span> out ? out.trim() : out;
+    }
+
+})(node);
+
+</pre>
+        </td>
+      </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

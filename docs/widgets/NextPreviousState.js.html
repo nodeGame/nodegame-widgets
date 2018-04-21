@@ -22,9 +22,6 @@
         <a href="#nextpreviousstate">NextPreviousState</a>
       </div>
       <div class="heading h2">
-        <a href="#defaults">Defaults</a>
-      </div>
-      <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
     </div>
@@ -66,11 +63,9 @@ MIT Licensed</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
 </div>
-<p>TODO: Introduce rules for update: other vs self</p>
+<p>TODO: refactor!</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;NextPreviousState&#39;</span><span class="p">,</span> <span class="nx">NextPreviousState</span><span class="p">);</span>
 
 
 </pre></div>
@@ -78,19 +73,14 @@ MIT Licensed</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="defaults">
-  <h2>
-    <a href="#defaults" name="defaults" class="pilcrow">&#182;</a>
-    Defaults
-  </h2>
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
 </div>
-
+<p>TODO: Introduce rules for update: other vs self</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;nextprevious&#39;</span><span class="p">;</span>
-    <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">fieldset</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Rew-Fwd&#39;</span> <span class="p">};</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;NextPreviousState&#39;</span><span class="p">,</span> <span class="nx">NextPreviousState</span><span class="p">);</span>
 
 
 </pre></div>
@@ -108,17 +98,14 @@ MIT Licensed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-    <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.3.2&#39;</span><span class="p">;</span>
+    <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;nextprevious&#39;</span><span class="p">;</span>
+    <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;Rew-Fwd&#39;</span> <span class="p">};</span>
+
+    <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.5.0&#39;</span><span class="p">;</span>
     <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Adds two buttons to push forward or &#39;</span> <span class="o">+</span>
         <span class="s1">&#39;rewind the state of the game by one step.&#39;</span><span class="p">;</span>
 
-    <span class="kd">function</span> <span class="nx">NextPreviousState</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getRoot</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">root</span><span class="p">;</span>
-    <span class="p">};</span>
+    <span class="kd">function</span> <span class="nx">NextPreviousState</span><span class="p">()</span> <span class="p">{}</span>
 
     <span class="nx">NextPreviousState</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">idRew</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_button&#39;</span><span class="p">;</span>
@@ -126,7 +113,6 @@ MIT Licensed</p>
 
         <span class="kd">var</span> <span class="nx">rew</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">idRew</span><span class="p">,</span> <span class="s1">&#39;&lt;&lt;&#39;</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">fwd</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">root</span><span class="p">,</span> <span class="nx">idFwd</span><span class="p">,</span> <span class="s1">&#39;&gt;&gt;&#39;</span><span class="p">);</span>
-
 
         <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 

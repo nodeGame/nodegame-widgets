@@ -1,6 +1,6 @@
 /**
  * # ChernoffFacesSimple
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -11,7 +11,7 @@
 
     "use strict";
 
-    var Table = node.window.Table;
+    var Table = W.Table;
 
     node.widgets.register('ChernoffFacesSimple', ChernoffFaces);
 
@@ -25,7 +25,7 @@
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.3';
+    ChernoffFaces.version = '0.4';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -60,8 +60,6 @@
 
         this.features = null;
         this.controls = null;
-
-        this.init(this.options);
     }
 
     ChernoffFaces.prototype.init = function(options) {
@@ -83,14 +81,14 @@
                 options.height : ChernoffFaces.defaults.canvas.heigth
         };
 
-        this.canvas = node.window.getCanvas(idCanvas, this.dims);
+        this.canvas = W.getCanvas(idCanvas, this.dims);
         this.fp = new FacePainter(this.canvas);
         this.fp.draw(new FaceVector(this.features));
 
         var sc_options = {
             id: 'cf_controls',
             features:
-                JSUS.mergeOnKey(FaceVector.defaults, this.features, 'value'),
+                J.mergeOnKey(FaceVector.defaults, this.features, 'value'),
             change: this.change,
             fieldset: {id: this.id + '_controls_fieldest',
                        legend: this.controls.legend || 'Controls'
@@ -146,7 +144,7 @@
         this.fp.redraw(fv);
         // Without merging wrong values are passed as attributes
         this.sc.init({
-            features: JSUS.mergeOnKey(FaceVector.defaults, features, 'value')
+            features: J.mergeOnKey(FaceVector.defaults, features, 'value')
         });
         this.sc.refresh();
     };
@@ -161,7 +159,7 @@
         this.fp.redraw(fv);
 
         var sc_options = {
-            features: JSUS.mergeOnKey(FaceVector.defaults, fv, 'value'),
+            features: J.mergeOnKey(FaceVector.defaults, fv, 'value'),
             change: this.change
         };
         this.sc.init(sc_options);
@@ -173,7 +171,7 @@
     // FacePainter
     // The class that actually draws the faces on the Canvas
     function FacePainter(canvas, settings) {
-        this.canvas = new node.window.Canvas(canvas);
+        this.canvas = new W.Canvas(canvas);
         this.scaleX = canvas.width / ChernoffFaces.defaults.canvas.width;
         this.scaleY = canvas.height / ChernoffFaces.defaults.canvas.heigth;
     }
@@ -187,8 +185,8 @@
 
         //console.log('Face Scale ' + face.scaleY + ' ' + face.scaleX );
 
-        var x = x || this.canvas.centerX;
-        var y = y || this.canvas.centerY;
+        x = x || this.canvas.centerX;
+        y = y || this.canvas.centerY;
 
         this.drawHead(face, x, y);
 
@@ -379,7 +377,7 @@
 
     //TODO Scaling ?
     FacePainter.computeFaceOffset = function(face, offset, y) {
-        var y = y || 0;
+        y = y || 0;
         //var pos = y - face.head_radius * face.scaleY +
         //          face.head_radius * face.scaleY * 2 * offset;
         var pos = y - face.head_radius + face.head_radius * 2 * offset;
@@ -388,7 +386,7 @@
     };
 
     FacePainter.computeEyebrowOffset = function(face, y) {
-        var y = y || 0;
+        y = y || 0;
         var eyemindistance = 2;
         return FacePainter.computeFaceOffset(face, face.eye_height, y) -
             eyemindistance - face.eyebrow_eyedistance;
@@ -574,7 +572,7 @@
         var out = {};
         for (var key in FaceVector.defaults) {
             if (FaceVector.defaults.hasOwnProperty(key)) {
-                if (!JSUS.in_array(key,
+                if (!J.inArray(key,
                             ['color', 'lineWidth', 'scaleX', 'scaleY'])) {
 
                     out[key] = FaceVector.defaults[key].min +

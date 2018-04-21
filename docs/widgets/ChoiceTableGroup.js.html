@@ -1,0 +1,3181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ChoiceTableGroup.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../";
+    var thisFile = "widgets/ChoiceTableGroup.js";
+    var defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+
+      <div class="heading h1">
+        <a href="#choicetablegroup">ChoiceTableGroup</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#choicetablegroup-constructor">ChoiceTableGroup constructor</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.dl">ChoiceTableGroup.dl</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.trs">ChoiceTableGroup.trs</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#choicetablegroup.listener">ChoiceTableGroup.listener</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.maintext">ChoiceTableGroup.mainText</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.spanmaintext">ChoiceTableGroup.spanMainText</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.items">ChoiceTableGroup.items</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.itemsbyid">ChoiceTableGroup.itemsById</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.itemsmap">ChoiceTableGroup.itemsMap</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.choices">ChoiceTableGroup.choices</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.choicesbyid">ChoiceTableGroup.choicesById</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.itemssettings">ChoiceTableGroup.itemsSettings</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.order">ChoiceTableGroup.order</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.originalorder">ChoiceTableGroup.originalOrder</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.shuffleitems">ChoiceTableGroup.shuffleItems</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.requiredchoice">ChoiceTableGroup.requiredChoice</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.orientation">ChoiceTableGroup.orientation</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.group">ChoiceTableGroup.group</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.grouporder">ChoiceTableGroup.groupOrder</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.freetext">ChoiceTableGroup.freeText</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.textarea">ChoiceTableGroup.textarea</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.timefrom">ChoiceTableGroup.timeFrom</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.selectmultiple">ChoiceTableGroup.selectMultiple</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.renderer">ChoiceTableGroup.renderer</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.separator">ChoiceTableGroup.separator</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.shufflechoices">ChoiceTableGroup.shuffleChoices</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#choicetablegroup-methods">ChoiceTableGroup methods</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.init">ChoiceTableGroup.init</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.setitems">ChoiceTableGroup.setItems</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.buildtable">ChoiceTableGroup.buildTable</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.append">ChoiceTableGroup.append</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.listeners">ChoiceTableGroup.listeners</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.disable">ChoiceTableGroup.disable</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.enable">ChoiceTableGroup.enable</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.verifychoice">ChoiceTableGroup.verifyChoice</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetable.setcurrentchoice">ChoiceTable.setCurrentChoice</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.unsetcurrentchoice">ChoiceTableGroup.unsetCurrentChoice</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.highlight">ChoiceTableGroup.highlight</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.unhighlight">ChoiceTableGroup.unhighlight</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.getvalues">ChoiceTableGroup.getValues</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.setvalues">ChoiceTableGroup.setValues</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.reset">ChoiceTableGroup.reset</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#choicetablegroup.shuffle">ChoiceTableGroup.shuffle</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#helper-methods">Helper methods.</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#mixinsettings">mixinSettings</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#getchoicetable">getChoiceTable</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#createtr">createTR</a>
+      </div>
+
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container">
+    <div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+    
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup">
+  <h1>
+    <a href="#choicetablegroup" name="choicetablegroup" class="pilcrow"></a>
+ChoiceTableGroup
+  </h1>
+</div>
+<p>Copyright(c) 2017 Stefano Balietti
+MIT Licensed</p>
+</div>
+<div class="body">
+<p>Creates a table that groups together several choice tables widgets</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTable 
+www.nodegame.org</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
+
+    node.widgets.register(<span class="hljs-string">'ChoiceTableGroup'</span>, ChoiceTableGroup);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+    ChoiceTableGroup.version = <span class="hljs-string">'1.3.0'</span>;
+    ChoiceTableGroup.description = <span class="hljs-string">'Groups together and manages sets of '</span> +
+        <span class="hljs-string">'ChoiceTable widgets.'</span>;
+
+    ChoiceTableGroup.title = <span class="hljs-string">'Make your choice'</span>;
+    ChoiceTableGroup.className = <span class="hljs-string">'choicetable'</span>;
+
+    ChoiceTableGroup.separator = <span class="hljs-string">'::'</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+    ChoiceTableGroup.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {}
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup-constructor">
+  <h2>
+    <a href="#choicetablegroup-constructor" name="choicetablegroup-constructor" class="pilcrow"></a>
+ChoiceTableGroup constructor
+  </h2>
+</div>
+</div>
+<div class="body">
+<p>Creates a new instance of ChoiceTableGroup</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options.   If a <code>table</code> option is specified, it sets it as the clickable
+table. All other options are passed to the init method.
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ChoiceTableGroup</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> that;
+        that = <span class="hljs-keyword">this</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.dl">
+  <h3>
+    <a href="#choicetablegroup.dl" name="choicetablegroup.dl" class="pilcrow"></a>
+ChoiceTableGroup.dl
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The clickable table containing all the cells</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.table = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.trs">
+  <h3>
+    <a href="#choicetablegroup.trs" name="choicetablegroup.trs" class="pilcrow"></a>
+ChoiceTableGroup.trs
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Collection of all trs created</p>
+<p>Useful when shuffling items/choices</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.shuffle</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.trs = [];
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.listener">
+  <h2>
+    <a href="#choicetablegroup.listener" name="choicetablegroup.listener" class="pilcrow"></a>
+ChoiceTableGroup.listener
+  </h2>
+</div>
+</div>
+<div class="body">
+<p>The listener function</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">GameChoice.enable</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">GameChoice.disable</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.listener = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+            <span class="hljs-keyword">var</span> name, value, item, td, oldSelected;
+            <span class="hljs-keyword">var</span> time;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8"></a>
+</div>
+<p>Relative time.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> that.timeFrom) {
+                time = node.timer.getTimeSince(that.timeFrom);
+            }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9"></a>
+</div>
+<p>Absolute time.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">else</span> {
+                time = <span class="hljs-built_in">Date</span>.now ? <span class="hljs-built_in">Date</span>.now() : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getTime();
+            }
+
+            e = e || <span class="hljs-built_in">window</span>.event;
+            td = e.target || e.srcElement;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10"></a>
+</div>
+<p>Not a clickable choice.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (!td.id || td.id === <span class="hljs-string">''</span>) <span class="hljs-keyword">return</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11"></a>
+</div>
+<p>Not a clickable choice.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (!that.choicesById[td.id]) <span class="hljs-keyword">return</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12"></a>
+</div>
+<p>Id of elements are in the form of name_value or name_item_value.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            value = td.id.split(that.separator);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13"></a>
+</div>
+<p>Separator not found, not a clickable cell.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (value.length === <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span>;
+
+            name = value[<span class="hljs-number">0</span>];
+            value = value[<span class="hljs-number">1</span>];
+
+            item = that.itemsById[name];
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14"></a>
+</div>
+<p>Not a clickable cell.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (!item) <span class="hljs-keyword">return</span>;
+
+            item.timeCurrentChoice = time;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15"></a>
+</div>
+<p>One more click.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            item.numberOfClicks++;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16"></a>
+</div>
+<p>If only 1 selection allowed, remove selection from oldSelected.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (!item.selectMultiple) {
+                oldSelected = item.selected;
+                <span class="hljs-keyword">if</span> (oldSelected) J.removeClass(oldSelected, <span class="hljs-string">'selected'</span>);
+
+                <span class="hljs-keyword">if</span> (item.isChoiceCurrent(value)) {
+                    item.unsetCurrentChoice(value);
+                }
+                <span class="hljs-keyword">else</span> {
+                    item.currentChoice = value;
+                    J.addClass(td, <span class="hljs-string">'selected'</span>);
+                    item.selected = td;
+                }
+            }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17"></a>
+</div>
+<p>Remove any warning/error from form on click.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (that.isHighlighted()) that.unhighlight();
+        };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.maintext">
+  <h3>
+    <a href="#choicetablegroup.maintext" name="choicetablegroup.maintext" class="pilcrow"></a>
+ChoiceTableGroup.mainText
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The main text introducing the choices</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.spanMainText</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.mainText = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.spanmaintext">
+  <h3>
+    <a href="#choicetablegroup.spanmaintext" name="choicetablegroup.spanmaintext" class="pilcrow"></a>
+ChoiceTableGroup.spanMainText
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The span containing the main text</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.spanMainText = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.items">
+  <h3>
+    <a href="#choicetablegroup.items" name="choicetablegroup.items" class="pilcrow"></a>
+ChoiceTableGroup.items
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The array available items</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.items = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.itemsbyid">
+  <h3>
+    <a href="#choicetablegroup.itemsbyid" name="choicetablegroup.itemsbyid" class="pilcrow"></a>
+ChoiceTableGroup.itemsById
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Map of items ids to items</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.itemsById = {};
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.itemsmap">
+  <h3>
+    <a href="#choicetablegroup.itemsmap" name="choicetablegroup.itemsmap" class="pilcrow"></a>
+ChoiceTableGroup.itemsMap
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Maps items ids to the position in the items array</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.itemsMap = {};
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.choices">
+  <h3>
+    <a href="#choicetablegroup.choices" name="choicetablegroup.choices" class="pilcrow"></a>
+ChoiceTableGroup.choices
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Array of default choices (if passed as global parameter)</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.choices = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.choicesbyid">
+  <h3>
+    <a href="#choicetablegroup.choicesbyid" name="choicetablegroup.choicesbyid" class="pilcrow"></a>
+ChoiceTableGroup.choicesById
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Map of items choices ids to corresponding cell</p>
+<p>Useful to detect clickable cells.</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.choicesById = {};
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.itemssettings">
+  <h3>
+    <a href="#choicetablegroup.itemssettings" name="choicetablegroup.itemssettings" class="pilcrow"></a>
+ChoiceTableGroup.itemsSettings
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The array of settings for each item</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.itemsSettings = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.order">
+  <h3>
+    <a href="#choicetablegroup.order" name="choicetablegroup.order" class="pilcrow"></a>
+ChoiceTableGroup.order
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The current order of display of choices</p>
+<p>May differ from <code>originalOrder</code> if shuffled.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.originalOrder</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.order = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.originalorder">
+  <h3>
+    <a href="#choicetablegroup.originalorder" name="choicetablegroup.originalorder" class="pilcrow"></a>
+ChoiceTableGroup.originalOrder
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The initial order of display of choices</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTable.order</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.originalOrder = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.shuffleitems">
+  <h3>
+    <a href="#choicetablegroup.shuffleitems" name="choicetablegroup.shuffleitems" class="pilcrow"></a>
+ChoiceTableGroup.shuffleItems
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>If TRUE, items are inserted in random order</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.order</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.shuffleItems = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.requiredchoice">
+  <h3>
+    <a href="#choicetablegroup.requiredchoice" name="choicetablegroup.requiredchoice" class="pilcrow"></a>
+ChoiceTableGroup.requiredChoice
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The number of required choices.</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.requiredChoice = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.orientation">
+  <h3>
+    <a href="#choicetablegroup.orientation" name="choicetablegroup.orientation" class="pilcrow"></a>
+ChoiceTableGroup.orientation
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Orientation of display of items: vertical ('V') or horizontal ('H')</p>
+<p>Default orientation is horizontal.</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.orientation = <span class="hljs-string">'H'</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.group">
+  <h3>
+    <a href="#choicetablegroup.group" name="choicetablegroup.group" class="pilcrow"></a>
+ChoiceTableGroup.group
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The name of the group where the table belongs, if any</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.group = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.grouporder">
+  <h3>
+    <a href="#choicetablegroup.grouporder" name="choicetablegroup.grouporder" class="pilcrow"></a>
+ChoiceTableGroup.groupOrder
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The order of the choice table within the group</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.groupOrder = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.freetext">
+  <h3>
+    <a href="#choicetablegroup.freetext" name="choicetablegroup.freetext" class="pilcrow"></a>
+ChoiceTableGroup.freeText
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>If truthy, a textarea for free-text comment will be added</p>
+<p>If 'string', the text will be added inside the the textarea</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.freeText = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.textarea">
+  <h3>
+    <a href="#choicetablegroup.textarea" name="choicetablegroup.textarea" class="pilcrow"></a>
+ChoiceTableGroup.textarea
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Textarea for free-text comment</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.textarea = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35"></a>
+</div>
+<p>Options passed to each individual item.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.timefrom">
+  <h3>
+    <a href="#choicetablegroup.timefrom" name="choicetablegroup.timefrom" class="pilcrow"></a>
+ChoiceTableGroup.timeFrom
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Time is measured from timestamp as saved by node.timer</p>
+<p>Default event is a new step is loaded (user can interact with
+the screen). Set it to FALSE, to have absolute time.</p>
+<p>This option is passed to each individual item.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">mixinSettings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">node.timer.getTimeSince</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.timeFrom = <span class="hljs-string">'step'</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.selectmultiple">
+  <h3>
+    <a href="#choicetablegroup.selectmultiple" name="choicetablegroup.selectmultiple" class="pilcrow"></a>
+ChoiceTableGroup.selectMultiple
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>If TRUE, it allows to select multiple cells</p>
+<p>This option is passed to each individual item.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">mixinSettings</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.selectMultiple = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.renderer">
+  <h3>
+    <a href="#choicetablegroup.renderer" name="choicetablegroup.renderer" class="pilcrow"></a>
+ChoiceTableGroup.renderer
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>A callback that renders the content of each cell</p>
+<p>The callback must accept three parameters:</p>
+<ul>
+<li>a td HTML element,</li>
+<li>a choice</li>
+<li>the index of the choice element within the choices array</li>
+</ul>
+<p>and optionally return the <em>value</em> for the choice (otherwise
+the order in the choices array is used as value).</p>
+<p>This option is passed to each individual item.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">mixinSettings</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.renderer = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.separator">
+  <h3>
+    <a href="#choicetablegroup.separator" name="choicetablegroup.separator" class="pilcrow"></a>
+ChoiceTableGroup.separator
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Symbol used to separate tokens in the id attribute of every cell</p>
+<p>Default ChoiceTableGroup.separator</p>
+<p>This option is passed to each individual item.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">mixinSettings</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.separator = ChoiceTableGroup.separator;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.shufflechoices">
+  <h3>
+    <a href="#choicetablegroup.shufflechoices" name="choicetablegroup.shufflechoices" class="pilcrow"></a>
+ChoiceTableGroup.shuffleChoices
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>If TRUE, choices in items are shuffled</p>
+<p>This option is passed to each individual item.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">mixinSettings</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.shuffleChoices = <span class="hljs-literal">null</span>;
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="choicetablegroup-methods">
+  <h2>
+    <a href="#choicetablegroup-methods" name="choicetablegroup-methods" class="pilcrow"></a>
+ChoiceTableGroup methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.init">
+  <h3>
+    <a href="#choicetablegroup.init" name="choicetablegroup.init" class="pilcrow"></a>
+ChoiceTableGroup.init
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Initializes the instance</p>
+<p>Available options are:</p>
+<ul>
+<li>className: the className of the table (string, array), or false
+to have none.</li>
+<li>orientation: orientation of the table: vertical (v) or horizontal (h)</li>
+<li>group: the name of the group (number or string), if any</li>
+<li>groupOrder: the order of the table in the group, if any</li>
+<li>onclick: a custom onclick listener function. Context is
+<code>this</code> instance</li>
+<li>mainText: a text to be displayed above the table</li>
+<li>shuffleItems: if TRUE, items are shuffled before being added
+to the table</li>
+<li>freeText: if TRUE, a textarea will be added under the table,
+if 'string', the text will be added inside the the textarea</li>
+<li>timeFrom: The timestamp as recorded by <code>node.timer.setTimestamp</code>
+or FALSE, to measure absolute time for current choice</li>
+</ul>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Configuration options
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> tmp, that;
+        that = <span class="hljs-keyword">this</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-43" id="section-43"></a>
+</div>
+<p>TODO: many options checking are replicated. Skip them all?
+Have a method in ChoiceTable?</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.id) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.id '</span> +
+                                <span class="hljs-string">'is missing.'</span>);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-44" id="section-44"></a>
+</div>
+<p>Option orientation, default 'H'.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.orientation) {
+            tmp = <span class="hljs-string">'H'</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> options.orientation) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.orientation '</span> +
+                                <span class="hljs-string">'must be string, or undefined. Found: '</span> +
+                                options.orientation);
+        }
+        <span class="hljs-keyword">else</span> {
+            tmp = options.orientation.toLowerCase().trim();
+            <span class="hljs-keyword">if</span> (tmp === <span class="hljs-string">'horizontal'</span> || tmp === <span class="hljs-string">'h'</span>) {
+                tmp = <span class="hljs-string">'H'</span>;
+            }
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tmp === <span class="hljs-string">'vertical'</span> || tmp === <span class="hljs-string">'v'</span>) {
+                tmp = <span class="hljs-string">'V'</span>;
+            }
+            <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.orientation '</span> +
+                                <span class="hljs-string">'is invalid: '</span> + tmp);
+            }
+        }
+        <span class="hljs-keyword">this</span>.orientation = tmp;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-45" id="section-45"></a>
+</div>
+<p>Option shuffleItems, default false.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.shuffleItems) tmp = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">else</span> tmp = !!options.shuffleItems;
+        <span class="hljs-keyword">this</span>.shuffleItems = tmp;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-46" id="section-46"></a>
+</div>
+<p>Option requiredChoice, if any.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> options.requiredChoice) {
+            <span class="hljs-keyword">this</span>.requiredChoice = options.requiredChoice;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'boolean'</span> === <span class="hljs-keyword">typeof</span> options.requiredChoice) {
+            <span class="hljs-keyword">this</span>.requiredChoice = options.requiredChoice ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.requiredChoice) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: '</span> +
+                                <span class="hljs-string">'options.requiredChoice '</span> +
+                                <span class="hljs-string">'be number or boolean or undefined. Found: '</span> +
+                                options.requiredChoice);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-47" id="section-47"></a>
+</div>
+<p>Set the group, if any.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.group ||
+            <span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> options.group) {
+
+            <span class="hljs-keyword">this</span>.group = options.group;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.group) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.group must '</span> +
+                                <span class="hljs-string">'be string, number or undefined. Found: '</span> +
+                                options.group);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-48" id="section-48"></a>
+</div>
+<p>Set the groupOrder, if any.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> options.groupOrder) {
+
+            <span class="hljs-keyword">this</span>.groupOrder = options.groupOrder;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.group) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.groupOrder '</span> +
+                                <span class="hljs-string">'must be number or undefined. Found: '</span> +
+                                options.groupOrder);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-49" id="section-49"></a>
+</div>
+<p>Set the onclick listener, if any.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> === <span class="hljs-keyword">typeof</span> options.onclick) {
+            <span class="hljs-keyword">this</span>.listener = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+                options.onclick.call(<span class="hljs-keyword">this</span>, e);
+            };
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.onclick) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.onclick must '</span> +
+                                <span class="hljs-string">'be function or undefined. Found: '</span> +
+                                options.onclick);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-50" id="section-50"></a>
+</div>
+<p>Set the mainText, if any.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.mainText) {
+            <span class="hljs-keyword">this</span>.mainText = options.mainText;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.mainText) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.mainText '</span> +
+                                <span class="hljs-string">'must be string or undefined. Found: '</span> +
+                                options.mainText);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-51" id="section-51"></a>
+</div>
+<p>Set the timeFrom, if any.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (options.timeFrom === <span class="hljs-literal">false</span> ||
+            <span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.timeFrom) {
+
+            <span class="hljs-keyword">this</span>.timeFrom = options.timeFrom;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.timeFrom) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.timeFrom '</span> +
+                                <span class="hljs-string">'must be string, false, or undefined. Found: '</span> +
+                                options.timeFrom);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-52" id="section-52"></a>
+</div>
+<p>Option shuffleChoices, default false.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.shuffleChoices) {
+            <span class="hljs-keyword">this</span>.shuffleChoices = !!options.shuffleChoices;
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-53" id="section-53"></a>
+</div>
+<p>Set the renderer, if any.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> === <span class="hljs-keyword">typeof</span> options.renderer) {
+            <span class="hljs-keyword">this</span>.renderer = options.renderer;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.renderer) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.renderer '</span> +
+                                <span class="hljs-string">'must be function or undefined. Found: '</span> +
+                                options.renderer);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-54" id="section-54"></a>
+</div>
+<p>Set default choices, if any.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.choices) {
+            <span class="hljs-keyword">this</span>.choices = options.choices;
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-55" id="section-55"></a>
+</div>
+<p>Set the className, if not use default.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> options.className) {
+            <span class="hljs-keyword">this</span>.className = ChoiceTableGroup.className;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (options.className === <span class="hljs-literal">false</span> ||
+                 <span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.className ||
+                 J.isArray(options.className)) {
+
+            <span class="hljs-keyword">this</span>.className = options.className;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.'</span> +
+                                <span class="hljs-string">'className must be string, array, '</span> +
+                                <span class="hljs-string">'or undefined. Found: '</span> + options.className);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-56" id="section-56"></a>
+</div>
+<p>After all configuration options are evaluated, add items.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> === <span class="hljs-keyword">typeof</span> options.table) {
+            <span class="hljs-keyword">this</span>.table = options.table;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.table &amp;&amp;
+                 <span class="hljs-literal">false</span> !== options.table) {
+
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.init: options.table '</span> +
+                                <span class="hljs-string">'must be object, false or undefined. '</span> +
+                                <span class="hljs-string">'Found: '</span> + options.table);
+        }
+
+        <span class="hljs-keyword">this</span>.table = options.table;
+
+        <span class="hljs-keyword">this</span>.freeText = <span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.freeText ?
+            options.freeText : !!options.freeText;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-57" id="section-57"></a>
+</div>
+<p>Add the items.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.items) {
+            <span class="hljs-keyword">this</span>.setItems(options.items);
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.setitems">
+  <h3>
+    <a href="#choicetablegroup.setitems" name="choicetablegroup.setitems" class="pilcrow"></a>
+ChoiceTableGroup.setItems
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Sets the available items and optionally builds the table</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">items</span>
+<span class="dox_type">array</span>
+<span>The array of items
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.table</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.order</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.shuffleItems</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.buildTable</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.setItems = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">items</span>) </span>{
+        <span class="hljs-keyword">var</span> len;
+        <span class="hljs-keyword">if</span> (!J.isArray(items)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.setItems: '</span> +
+                                <span class="hljs-string">'items must be array. Found: '</span> + items);
+        }
+        <span class="hljs-keyword">if</span> (!items.length) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.setItems: '</span> +
+                            <span class="hljs-string">'items is an empty array.'</span>);
+        }
+
+        len = items.length;
+        <span class="hljs-keyword">this</span>.itemsSettings = items;
+        <span class="hljs-keyword">this</span>.items = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(len);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-59" id="section-59"></a>
+</div>
+<p>Save the order in which the items will be added.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.order = J.seq(<span class="hljs-number">0</span>, len<span class="hljs-number">-1</span>);
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.shuffleItems) <span class="hljs-keyword">this</span>.order = J.shuffle(<span class="hljs-keyword">this</span>.order);
+        <span class="hljs-keyword">this</span>.originalOrder = <span class="hljs-keyword">this</span>.order;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-60" id="section-60"></a>
+</div>
+<p>Build the table and items at once (faster).</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.table) <span class="hljs-keyword">this</span>.buildTable();
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.buildtable">
+  <h3>
+    <a href="#choicetablegroup.buildtable" name="choicetablegroup.buildtable" class="pilcrow"></a>
+ChoiceTableGroup.buildTable
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Builds the table of clickable items and enables it</p>
+<p>Must be called after items have been set already.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.setChoiceTables</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.order</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.buildTable = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> i, len, tr, H, ct;
+        <span class="hljs-keyword">var</span> j, lenJ, lenJOld, hasRight, cell;
+
+        H = <span class="hljs-keyword">this</span>.orientation === <span class="hljs-string">'H'</span>;
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.itemsSettings.length;
+        <span class="hljs-keyword">if</span> (H) {
+            <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-62" id="section-62"></a>
+</div>
+<p>Get item.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                ct = getChoiceTable(<span class="hljs-keyword">this</span>, i);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-63" id="section-63"></a>
+</div>
+<p>Add new TR.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                tr = createTR(<span class="hljs-keyword">this</span>, ct.id);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-64" id="section-64"></a>
+</div>
+<p>Append choices for item.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                tr.appendChild(ct.leftCell);
+                j = <span class="hljs-number">-1</span>, lenJ = ct.choicesCells.length;
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-65" id="section-65"></a>
+</div>
+<p>Make sure all items have same number of choices.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                <span class="hljs-keyword">if</span> (i === <span class="hljs-number">0</span>) {
+                    lenJOld = lenJ;
+                }
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (lenJ !== lenJOld) {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.buildTable: item '</span> +
+                                    <span class="hljs-string">'do not have same number of choices: '</span> +
+                                    ct.id);
+                }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-66" id="section-66"></a>
+</div>
+<p>TODO: might optimize. There are two loops (+1 inside ct).</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                <span class="hljs-keyword">for</span> ( ; ++j &lt; lenJ ; ) {
+                    cell = ct.choicesCells[j];
+                    tr.appendChild(cell);
+                    <span class="hljs-keyword">this</span>.choicesById[cell.id] = cell;
+                }
+                <span class="hljs-keyword">if</span> (ct.rightCell) tr.appendChild(ct.rightCell);
+            }
+        }
+        <span class="hljs-keyword">else</span> {
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-67" id="section-67"></a>
+</div>
+<p>Add new TR.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            tr = createTR(<span class="hljs-keyword">this</span>, <span class="hljs-string">'header'</span>);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-68" id="section-68"></a>
+</div>
+<p>Build all items first.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-69" id="section-69"></a>
+</div>
+<p>Get item, append choices for item.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                ct = getChoiceTable(<span class="hljs-keyword">this</span>, i);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-70" id="section-70"></a>
+</div>
+<p>Make sure all items have same number of choices.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                lenJ = ct.choicesCells.length;
+                <span class="hljs-keyword">if</span> (i === <span class="hljs-number">0</span>) {
+                    lenJOld = lenJ;
+                }
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (lenJ !== lenJOld) {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.buildTable: item '</span> +
+                                    <span class="hljs-string">'do not have same number of choices: '</span> +
+                                    ct.id);
+                }
+
+                <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> hasRight) {
+                    hasRight = !!ct.rightCell;
+                }
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((!ct.rightCell &amp;&amp; hasRight) ||
+                         (ct.rightCell &amp;&amp; !hasRight)) {
+
+                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.buildTable: either all '</span> +
+                                    <span class="hljs-string">'items or no item must have the right '</span> +
+                                    <span class="hljs-string">'cell: '</span> + ct.id);
+
+                }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-71" id="section-71"></a>
+</div>
+<p>Add left.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                tr.appendChild(ct.leftCell);
+            }
+
+            <span class="hljs-keyword">if</span> (hasRight) lenJ++;
+
+            j = <span class="hljs-number">-1</span>;
+            <span class="hljs-keyword">for</span> ( ; ++j &lt; lenJ ; ) {
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-72" id="section-72"></a>
+</div>
+<p>Add new TR.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                tr = createTR(<span class="hljs-keyword">this</span>, <span class="hljs-string">'row'</span> + (j+<span class="hljs-number">1</span>));
+
+                i = <span class="hljs-number">-1</span>;
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-73" id="section-73"></a>
+</div>
+<p>TODO: might optimize. There are two loops (+1 inside ct).</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+                    <span class="hljs-keyword">if</span> (hasRight &amp;&amp; j === (lenJ<span class="hljs-number">-1</span>)) {
+                        tr.appendChild(<span class="hljs-keyword">this</span>.items[i].rightCell);
+                    }
+                    <span class="hljs-keyword">else</span> {
+                        cell = <span class="hljs-keyword">this</span>.items[i].choicesCells[j];
+                        tr.appendChild(cell);
+                        <span class="hljs-keyword">this</span>.choicesById[cell.id] = cell;
+                    }
+                }
+            }
+
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-74" id="section-74"></a>
+</div>
+<p>Enable onclick listener.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.enable();
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.append">
+  <h3>
+    <a href="#choicetablegroup.append" name="choicetablegroup.append" class="pilcrow"></a>
+ChoiceTableGroup.append
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Implements Widget.append</p>
+<p>Checks that id is unique.</p>
+<p>Appends (all optional):</p>
+<ul>
+<li>mainText: a question or statement introducing the choices</li>
+<li>table: the table containing the choices</li>
+<li>freeText: a textarea for comments</li>
+</ul>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widget.append</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-76" id="section-76"></a>
+</div>
+<p>Id must be unique.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (W.getElementById(<span class="hljs-keyword">this</span>.id)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.append: id '</span> +
+                            <span class="hljs-string">'is not unique: '</span> + <span class="hljs-keyword">this</span>.id);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-77" id="section-77"></a>
+</div>
+<p>MainText.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.mainText) {
+            <span class="hljs-keyword">this</span>.spanMainText = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+            <span class="hljs-keyword">this</span>.spanMainText.className =
+                ChoiceTableGroup.className + <span class="hljs-string">'-maintext'</span>;
+            <span class="hljs-keyword">this</span>.spanMainText.innerHTML = <span class="hljs-keyword">this</span>.mainText;
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-78" id="section-78"></a>
+</div>
+<p>Append.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.spanMainText);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-79" id="section-79"></a>
+</div>
+<p>Create/set table, if requested.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.table !== <span class="hljs-literal">false</span>) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.table) {
+                <span class="hljs-keyword">this</span>.table = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'table'</span>);
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.items) <span class="hljs-keyword">this</span>.buildTable();
+            }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-80" id="section-80"></a>
+</div>
+<p>Set table id.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">this</span>.table.id = <span class="hljs-keyword">this</span>.id;
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.className) J.addClass(<span class="hljs-keyword">this</span>.table, <span class="hljs-keyword">this</span>.className);
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">this</span>.table.className = <span class="hljs-string">''</span>;
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-81" id="section-81"></a>
+</div>
+<p>Append table.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.table);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-82" id="section-82"></a>
+</div>
+<p>Creates a free-text textarea, possibly with placeholder text.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.freeText) {
+            <span class="hljs-keyword">this</span>.textarea = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'textarea'</span>);
+            <span class="hljs-keyword">this</span>.textarea.id = <span class="hljs-keyword">this</span>.id + <span class="hljs-string">'_text'</span>;
+            <span class="hljs-keyword">this</span>.textarea.className = ChoiceTableGroup.className + <span class="hljs-string">'-freetext'</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.freeText) {
+                <span class="hljs-keyword">this</span>.textarea.placeholder = <span class="hljs-keyword">this</span>.freeText;
+            }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-83" id="section-83"></a>
+</div>
+<p>Append textarea.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.textarea);
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.listeners">
+  <h3>
+    <a href="#choicetablegroup.listeners" name="choicetablegroup.listeners" class="pilcrow"></a>
+ChoiceTableGroup.listeners
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Implements Widget.listeners</p>
+<p>Adds two listeners two disable/enable the widget on events:
+INPUT_DISABLE, INPUT_ENABLE</p>
+<p>Notice! Nested choice tables listeners are not executed.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">Widget.listeners</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">mixinSettings</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
+        node.on(<span class="hljs-string">'INPUT_DISABLE'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            that.disable();
+        });
+        node.on(<span class="hljs-string">'INPUT_ENABLE'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            that.enable();
+        });
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.disable">
+  <h3>
+    <a href="#choicetablegroup.disable" name="choicetablegroup.disable" class="pilcrow"></a>
+ChoiceTableGroup.disable
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Disables clicking on the table and removes CSS 'clicklable' class</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.disable = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">force</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.disabled === <span class="hljs-literal">true</span>) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">this</span>.disabled = <span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.table) {
+            J.removeClass(<span class="hljs-keyword">this</span>.table, <span class="hljs-string">'clickable'</span>);
+            <span class="hljs-keyword">this</span>.table.removeEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-keyword">this</span>.listener);
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.enable">
+  <h3>
+    <a href="#choicetablegroup.enable" name="choicetablegroup.enable" class="pilcrow"></a>
+ChoiceTableGroup.enable
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Enables clicking on the table and adds CSS 'clicklable' class</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">function</span>
+<span>cb The event listener function
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.enable = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">force</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.disabled === <span class="hljs-literal">false</span>) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.table) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.enable: table not defined.'</span>);
+        }
+        <span class="hljs-keyword">this</span>.disabled = <span class="hljs-literal">false</span>;
+        J.addClass(<span class="hljs-keyword">this</span>.table, <span class="hljs-string">'clickable'</span>);
+        <span class="hljs-keyword">this</span>.table.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-keyword">this</span>.listener);
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.verifychoice">
+  <h3>
+    <a href="#choicetablegroup.verifychoice" name="choicetablegroup.verifychoice" class="pilcrow"></a>
+ChoiceTableGroup.verifyChoice
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Compares the current choice/s with the correct one/s</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">markAttempt</span>
+<span class="dox_type">boolean</span>
+<span>Optional. If TRUE, the value of   current choice is added to the attempts array. Default
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">boolean</span>
+<span>TRUE if current choice is correct,   FALSE if it is not correct, or NULL if no correct choice
+was set
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.attempts</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.setCorrectChoice</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.verifyChoice = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">markAttempt</span>) </span>{
+        <span class="hljs-keyword">var</span> i, len, out;
+        out = {};
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-88" id="section-88"></a>
+</div>
+<p>Mark attempt by default.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        markAttempt = <span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> markAttempt ? <span class="hljs-literal">true</span> : markAttempt;
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.items.length;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            out[<span class="hljs-keyword">this</span>.items[i].id] = <span class="hljs-keyword">this</span>.items[i].verifyChoice(markAttempt);
+        }
+        <span class="hljs-keyword">return</span> out;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetable.setcurrentchoice">
+  <h3>
+    <a href="#choicetable.setcurrentchoice" name="choicetable.setcurrentchoice" class="pilcrow"></a>
+ChoiceTable.setCurrentChoice
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Marks a choice as current in each item</p>
+<p>If the item allows it, multiple choices can be set as current.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">The</span>
+<span class="dox_type">number</span>
+<span class="dox_type">string</span>
+<span>choice to mark as current
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTable.currentChoice</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTable.selectMultiple</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.setCurrentChoice = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">choice</span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.items[i].length;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            <span class="hljs-keyword">this</span>.items[i].setCurrentChoice(choice);
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.unsetcurrentchoice">
+  <h3>
+    <a href="#choicetablegroup.unsetcurrentchoice" name="choicetablegroup.unsetcurrentchoice" class="pilcrow"></a>
+ChoiceTableGroup.unsetCurrentChoice
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Deletes the value for currentChoice from every item</p>
+<p>If <code>ChoiceTableGroup.selectMultiple</code> is set the</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">Optional.</span>
+<span class="dox_type">number</span>
+<span class="dox_type">string</span>
+<span>The choice to delete from currentChoice   when multiple selections are allowed
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.currentChoice</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.selectMultiple</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.unsetCurrentChoice = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">choice</span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.items.length;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            <span class="hljs-keyword">this</span>.items[i].unsetCurrentChoice(choice);
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.highlight">
+  <h3>
+    <a href="#choicetablegroup.highlight" name="choicetablegroup.highlight" class="pilcrow"></a>
+ChoiceTableGroup.highlight
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Highlights the choice table</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">The</span>
+<span class="dox_type">string</span>
+<span>style for the table's border.   Default '1px solid red'
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.highlighted</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.highlight = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">border</span>) </span>{
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.table) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">if</span> (border &amp;&amp; <span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> border) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.highlight: border must be '</span> +
+                                <span class="hljs-string">'string or undefined. Found: '</span> + border);
+        }
+        <span class="hljs-keyword">this</span>.table.style.border = border || <span class="hljs-string">'3px solid red'</span>;
+        <span class="hljs-keyword">this</span>.highlighted = <span class="hljs-literal">true</span>;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.unhighlight">
+  <h3>
+    <a href="#choicetablegroup.unhighlight" name="choicetablegroup.unhighlight" class="pilcrow"></a>
+ChoiceTableGroup.unhighlight
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Removes highlight from the choice table</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.highlighted</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.unhighlight = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.table) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">this</span>.table.style.border = <span class="hljs-string">''</span>;
+        <span class="hljs-keyword">this</span>.highlighted = <span class="hljs-literal">false</span>;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.getvalues">
+  <h3>
+    <a href="#choicetablegroup.getvalues" name="choicetablegroup.getvalues" class="pilcrow"></a>
+ChoiceTableGroup.getValues
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Returns the values for current selection and other paradata</p>
+<p>Paradata that is not set or recorded will be omitted</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">opts</span>
+<span class="dox_type">object</span>
+<span>Optional. Configures the return value.   Available optionts:
+<ul>
+<li>markAttempt: If TRUE, getting the value counts as an attempt
+to find the correct answer. Default: TRUE.</li>
+<li>highlight:   If TRUE, if current value is not the correct
+value, widget will be highlighted. Default: FALSE.</li>
+<li>reset:    If TRUTHY and no item raises an error,
+then it resets the state of all items before
+returning it. Default: FALSE.</li>
+</ul>
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">object</span>
+<span>Object containing the choice and paradata
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.verifyChoice</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.reset</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.getValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">var</span> obj, i, len, tbl, toHighlight, toReset;
+        obj = {
+            <span class="hljs-attr">id</span>: <span class="hljs-keyword">this</span>.id,
+            <span class="hljs-attr">order</span>: <span class="hljs-keyword">this</span>.order,
+            <span class="hljs-attr">items</span>: {}
+        };
+        opts = opts || {};
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-94" id="section-94"></a>
+</div>
+<p>Make sure reset is done only at the end.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        toReset = opts.reset;
+        opts.reset = <span class="hljs-literal">false</span>;
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.items.length;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            tbl = <span class="hljs-keyword">this</span>.items[i];
+            obj.items[tbl.id] = tbl.getValues(opts);
+            <span class="hljs-keyword">if</span> (obj.items[tbl.id].choice === <span class="hljs-literal">null</span>) {
+                obj.missValues = <span class="hljs-literal">true</span>;
+                <span class="hljs-keyword">if</span> (tbl.requiredChoice) toHighlight = <span class="hljs-literal">true</span>;
+            }
+            <span class="hljs-keyword">if</span> (obj.items[tbl.id].isCorrect === <span class="hljs-literal">false</span> &amp;&amp; opts.highlight) {
+                toHighlight = <span class="hljs-literal">true</span>;
+            }
+        }
+
+        <span class="hljs-keyword">if</span> (toHighlight) <span class="hljs-keyword">this</span>.highlight();
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (toReset) <span class="hljs-keyword">this</span>.reset(toReset);
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.textarea) obj.freetext = <span class="hljs-keyword">this</span>.textarea.value;
+        <span class="hljs-keyword">return</span> obj;
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.setvalues">
+  <h3>
+    <a href="#choicetablegroup.setvalues" name="choicetablegroup.setvalues" class="pilcrow"></a>
+ChoiceTableGroup.setValues
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Sets values in the choice table group as specified by the options</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Options specifying how to set   the values. If no parameter is specified, random values will
+be set.
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTable.setValues</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.setValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.items || !<span class="hljs-keyword">this</span>.items.length) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.setValues: no items found.'</span>);
+        }
+        opts = opts || {};
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.items.length;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            <span class="hljs-keyword">this</span>.items[i].setValues(opts);
+        }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-96" id="section-96"></a>
+</div>
+<p>Make a random comment.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.textarea) <span class="hljs-keyword">this</span>.textarea.value = J.randomString(<span class="hljs-number">100</span>, <span class="hljs-string">'!Aa0'</span>);
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.reset">
+  <h3>
+    <a href="#choicetablegroup.reset" name="choicetablegroup.reset" class="pilcrow"></a>
+ChoiceTableGroup.reset
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Resets all the ChoiceTable items and textarea</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Options specifying how to set   to reset each item
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTable.reset</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.shuffle</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.reset = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">var</span> i, len;
+        opts = opts || {};
+        i = <span class="hljs-number">-1</span>, len = <span class="hljs-keyword">this</span>.items.length;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            <span class="hljs-keyword">this</span>.items[i].reset(opts);
+        }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-98" id="section-98"></a>
+</div>
+<p>Delete textarea, if found.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.textarea) <span class="hljs-keyword">this</span>.textarea.value = <span class="hljs-string">''</span>;
+        <span class="hljs-keyword">if</span> (opts.shuffleItems) <span class="hljs-keyword">this</span>.shuffle();
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHighlighted()) <span class="hljs-keyword">this</span>.unhighlight();
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="choicetablegroup.shuffle">
+  <h3>
+    <a href="#choicetablegroup.shuffle" name="choicetablegroup.shuffle" class="pilcrow"></a>
+ChoiceTableGroup.shuffle
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Shuffles the order of the displayed items</p>
+<p>Assigns the new order of items to <code>this.order</code>.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Not used for now.
+TODO: shuffle choices in each item. (Note: can't use
+item.shuffle, because the cells are taken out, so
+there is no table and no tr in there)
+JSUS.shuffleElements
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    ChoiceTableGroup.prototype.shuffle = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">var</span> order, i, len, j, lenJ, that, cb, newOrder;
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.items) <span class="hljs-keyword">return</span>;
+        len = <span class="hljs-keyword">this</span>.items.length;
+        <span class="hljs-keyword">if</span> (!len) <span class="hljs-keyword">return</span>;
+        that = <span class="hljs-keyword">this</span>;
+        newOrder = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(len);
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-100" id="section-100"></a>
+</div>
+<p>Updates the groupOrder property of each item,
+and saves the order of items correctly.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        cb = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">el, newPos, oldPos</span>) </span>{
+            <span class="hljs-keyword">var</span> i;
+            i = el.id.split(that.separator);
+            i = that.orientation === <span class="hljs-string">'H'</span> ? i[<span class="hljs-number">2</span>] : i[<span class="hljs-number">0</span>];
+            i = that.itemsMap[i];
+            that.items[i].groupOrder = (newPos+<span class="hljs-number">1</span>);
+            newOrder[newPos] = i;
+        };
+        order = J.shuffle(<span class="hljs-keyword">this</span>.order);
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.orientation === <span class="hljs-string">'H'</span>) {
+            J.shuffleElements(<span class="hljs-keyword">this</span>.table, order, cb);
+        }
+        <span class="hljs-keyword">else</span> {
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-101" id="section-101"></a>
+</div>
+<p>Here we maintain the columns manually. Each TR contains TD
+belonging to different items, we make sure the order is the
+same for all TR.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            len = <span class="hljs-keyword">this</span>.trs.length;
+            <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">-1</span> ; ++i &lt; len ; ) {
+                J.shuffleElements(<span class="hljs-keyword">this</span>.trs[i], order, cb);
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-102" id="section-102"></a>
+</div>
+<p>Call cb only on first iteration.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">                cb = <span class="hljs-literal">undefined</span>;
+            }
+        }
+        <span class="hljs-keyword">this</span>.order = newOrder;
+    };
+
+
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="helper-methods">
+  <h2>
+    <a href="#helper-methods" name="helper-methods" class="pilcrow"></a>
+Helper methods.
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="mixinsettings">
+  <h3>
+    <a href="#mixinsettings" name="mixinsettings" class="pilcrow"></a>
+mixinSettings
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Mix-ins global settings with local settings for specific choice tables</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">that</span>
+<span class="dox_type">ChoiceTableGroup</span>
+<span>This instance
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">s</span>
+<span class="dox_type">object</span>
+<span class="dox_type">string</span>
+<span>The current settings for the item   (choice table), or just its id, to mixin all settings.
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">i</span>
+<span class="dox_type">number</span>
+<span>The ordinal position of the table in the group
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">object</span>
+<span>s The mixed-in settings
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mixinSettings</span>(<span class="hljs-params">that, s, i</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> s) {
+            s = { <span class="hljs-attr">id</span>: s };
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> s) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'ChoiceTableGroup.buildTable: item must be '</span> +
+                                <span class="hljs-string">'string or object. Found: '</span> + s);
+        }
+        s.group = that.id;
+        s.groupOrder = i+<span class="hljs-number">1</span>;
+        s.orientation = that.orientation;
+        s.title = <span class="hljs-literal">false</span>;
+        s.listeners = <span class="hljs-literal">false</span>;
+        s.separator = that.separator;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> s.choices &amp;&amp; that.choices) {
+            s.choices = that.choices;
+        }
+
+        <span class="hljs-keyword">if</span> (!s.renderer &amp;&amp; that.renderer) s.renderer = that.renderer;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> s.requiredChoice &amp;&amp; that.requiredChoice) {
+            s.requiredChoice = that.requiredChoice;
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> s.selectMultiple &amp;&amp;
+            <span class="hljs-literal">null</span> !== that.selectMultiple) {
+
+            s.selectMultiple = that.selectMultiple;
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> s.shuffleChoices &amp;&amp; that.shuffleChoices) {
+            s.shuffleChoices = that.shuffleChoices;
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> s.timeFrom) s.timeFrom = that.timeFrom;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> s.left) s.left = s.id;
+
+        <span class="hljs-keyword">return</span> s;
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="getchoicetable">
+  <h3>
+    <a href="#getchoicetable" name="getchoicetable" class="pilcrow"></a>
+getChoiceTable
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Creates a instance i-th of choice table with relative settings</p>
+<p>Stores a reference of each table in <code>itemsById</code></p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">that</span>
+<span class="dox_type">ChoiceTableGroup</span>
+<span>This instance
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">i</span>
+<span class="dox_type">number</span>
+<span>The ordinal position of the table in the group
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">object</span>
+<span>ct The requested choice table
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.itemsSettings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ChoiceTableGroup.itemsById</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">mixinSettings</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getChoiceTable</span>(<span class="hljs-params">that, i</span>) </span>{
+        <span class="hljs-keyword">var</span> ct, s, idx;
+        idx = that.order[i];
+        s = mixinSettings(that, that.itemsSettings[idx], i);
+        ct = node.widgets.get(<span class="hljs-string">'ChoiceTable'</span>, s);
+        <span class="hljs-keyword">if</span> (that.itemsById[ct.id]) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.buildTable: an item '</span> +
+                            <span class="hljs-string">'with the same id already exists: '</span> + ct.id);
+        }
+        <span class="hljs-keyword">if</span> (!ct.leftCell) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'ChoiceTableGroup.buildTable: item '</span> +
+                            <span class="hljs-string">'is missing a left cell: '</span> + s.id);
+        }
+        that.itemsById[ct.id] = ct;
+        that.items[idx] = ct;
+        that.itemsMap[ct.id] = idx;
+        <span class="hljs-keyword">return</span> ct;
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="createtr">
+  <h3>
+    <a href="#createtr" name="createtr" class="pilcrow"></a>
+createTR
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Creates and append a new TR element</p>
+<p>If required by current configuration, the <code>id</code> attribute is
+added to the TR in the form of: 'tr' + separator + widget_id</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">that</span>
+<span class="dox_type">ChoiceTable</span>
+<span>This instance
+</span>
+</div>
+<div class="dox_tag_title">Returns</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name"></span>
+<span class="dox_type">HTMLElement</span>
+<span>Thew newly created TR element
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createTR</span>(<span class="hljs-params">that, trid</span>) </span>{
+        <span class="hljs-keyword">var</span> tr, sep;
+        tr = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'tr'</span>);
+        that.table.appendChild(tr);
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-107" id="section-107"></a>
+</div>
+<p>Set id.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        sep = that.separator;
+        tr.id = that.id + sep + <span class="hljs-string">'tr'</span> + sep + trid;
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-108" id="section-108"></a>
+</div>
+<p>Store reference.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        that.trs.push(tr);
+        <span class="hljs-keyword">return</span> tr;
+    }
+
+})(node);
+
+</pre>
+        </td>
+      </tr>
+    
+  </tbody>
+</table>
+
+  </div>
+</body>
+</html>

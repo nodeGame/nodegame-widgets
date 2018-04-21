@@ -1,6 +1,6 @@
 /**
  * # MsgBar
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -11,38 +11,43 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
-        Table = W.Table;
+    var Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
 
     // ## Meta-data
 
-    MsgBar.version = '0.6';
+    MsgBar.version = '0.7.2';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
     MsgBar.className = 'msgbar';
 
-    function MsgBar(options) {
-        this.id = options.id || MsgBar.className;
+    MsgBar.texts.advButton = 'Toggle advanced options';
 
+    function MsgBar() {
         this.recipient = null;
         this.actionSel = null;
         this.targetSel = null;
 
-        this.table = new Table();
-        this.tableAdvanced = new Table();
-
-        this.init();
+        this.table = null;
+        this.tableAdvanced = null;
     }
 
     MsgBar.prototype.init = function() {
-        var that;
+        this.id = this.id || MsgBar.className;
+    };
+
+    MsgBar.prototype.append = function() {
+        var advButton, sendButton;
         var fields, i, field;
         var table;
+        var that;
 
         that = this;
+
+        this.table = new Table();
+        this.tableAdvanced = new Table();
 
         // Create fields.
         fields = ['to', 'action', 'target', 'text', 'data', 'from', 'priority',
@@ -93,17 +98,6 @@
             }
         }
 
-        this.table.parse();
-        this.tableAdvanced.parse();
-    };
-
-    MsgBar.prototype.append = function() {
-        var advButton;
-        var sendButton;
-        var that;
-
-        that = this;
-
         // Show table of basic fields.
         this.bodyDiv.appendChild(this.table.table);
 
@@ -113,23 +107,21 @@
         // Show 'Send' button.
         sendButton = W.addButton(this.bodyDiv);
         sendButton.onclick = function() {
-            var msg = that.parse();
-
-            if (msg) {
-                node.socket.send(msg);
-            }
+            var msg;
+            msg = that.parse();
+            if (msg) node.socket.send(msg);
         };
 
         // Show a button that expands the table of advanced fields.
         advButton =
-            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+            W.addButton(this.bodyDiv, undefined, this.getText('advButton'));
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
         };
-    };
 
-    MsgBar.prototype.listeners = function() {
+        this.table.parse();
+        this.tableAdvanced.parse();
     };
 
     MsgBar.prototype.parse = function() {
@@ -170,7 +162,7 @@
 
         if (key === 'stage' || key === 'to' || key === 'data') {
             try {
-                value = JSUS.parse(e.content.value);
+                value = J.parse(e.content.value);
             }
             catch (ex) {
                 value = e.content.value;
@@ -183,7 +175,7 @@
                 value = '' + value;
             }
 
-            if ((!JSUS.isArray(value) && 'string' !== typeof value) ||
+            if ((!J.isArray(value) && 'string' !== typeof value) ||
                 ('string' === typeof value && value.trim() === '')) {
 
                 alert('Invalid "to" field');

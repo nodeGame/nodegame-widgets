@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SVOGauge.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../";
+    var thisFile = "widgets/SVOGauge.js";
+    var defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+
+      <div class="heading h1">
+        <a href="#svogauge">SVOGauge</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#meta-data">Meta-data</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#dependencies">Dependencies</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#svogauge-constructor">SVOGauge constructor</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#svogauge.methods">SVOGauge.methods</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#svogauge.method">SVOGauge.method</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#svogauge.gauge">SVOGauge.gauge</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#svogauge-methods">SVOGauge methods.</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#svogauge.init">SVOGauge.init</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#svogauge.addmethod">SVOGauge.addMethod</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#helper-functions">Helper functions.</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#checkgauge">checkGauge</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#available-methods">Available methods.</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#svo_slider">SVO_Slider</a>
+      </div>
+
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container">
+    <div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+    
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="svogauge">
+  <h1>
+    <a href="#svogauge" name="svogauge" class="pilcrow"></a>
+SVOGauge
+  </h1>
+</div>
+<p>Copyright(c) 2016 Stefano Balietti
+MIT Licensed</p>
+</div>
+<div class="body">
+<p>Displays an interface to measure users' social value orientation (S.V.O.)</p>
+<p>www.nodegame.org</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
+
+    node.widgets.register(<span class="hljs-string">'SVOGauge'</span>, SVOGauge);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="meta-data">
+  <h2>
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+    SVOGauge.version = <span class="hljs-string">'0.5.1'</span>;
+    SVOGauge.description = <span class="hljs-string">'Displays an interface to measure social '</span> +
+        <span class="hljs-string">'value orientation (S.V.O.).'</span>;
+
+    SVOGauge.title = <span class="hljs-string">'SVO Gauge'</span>;
+    SVOGauge.className = <span class="hljs-string">'svogauge'</span>;
+
+    SVOGauge.texts.mainText = <span class="hljs-string">'Select your preferred option among those'</span> +
+                               <span class="hljs-string">' available below:'</span>;
+    SVOGauge.texts.left = <span class="hljs-string">'You:&lt;hr/&gt;Other:'</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="dependencies">
+  <h2>
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+    SVOGauge.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {}
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="svogauge-constructor">
+  <h2>
+    <a href="#svogauge-constructor" name="svogauge-constructor" class="pilcrow"></a>
+SVOGauge constructor
+  </h2>
+</div>
+</div>
+<div class="body">
+<p>Creates a new instance of SVOGauge</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options which is forwarded to SVOGauge.init.
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">SVOGauge.init</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">SVOGauge</span>(<span class="hljs-params">options</span>) </span>{
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="svogauge.methods">
+  <h3>
+    <a href="#svogauge.methods" name="svogauge.methods" class="pilcrow"></a>
+SVOGauge.methods
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>List of available methods</p>
+<p>Maps names to functions.</p>
+<p>Each function is called with <code>this</code> instance as context,
+and accepts the <code>options</code> parameters passed to constructor.
+Each method must return widget-like gauge object
+implementing functions: append, enable, disable, getValues</p>
+<p>or an error will be thrown</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.methods = {};
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="svogauge.method">
+  <h2>
+    <a href="#svogauge.method" name="svogauge.method" class="pilcrow"></a>
+SVOGauge.method
+  </h2>
+</div>
+</div>
+<div class="body">
+<p>The method used to measure svo</p>
+<p>Available methods: 'Slider'</p>
+<p>Default method is: 'Slider'</p>
+<p>References:</p>
+<p>'Slider', Murphy R.O., Ackermann K.A. and Handgraaf M.J.J. (2011).
+&quot;Measuring social value orientation&quot;</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.method = <span class="hljs-string">'Slider'</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="svogauge.gauge">
+  <h2>
+    <a href="#svogauge.gauge" name="svogauge.gauge" class="pilcrow"></a>
+SVOGauge.gauge
+  </h2>
+</div>
+</div>
+<div class="body">
+<p>The object measuring svo</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">SVOGauge.method</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.gauge = <span class="hljs-literal">null</span>;
+
+        <span class="hljs-keyword">this</span>.addMethod(<span class="hljs-string">'Slider'</span>, SVO_Slider);
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="svogauge-methods">
+  <h2>
+    <a href="#svogauge-methods" name="svogauge-methods" class="pilcrow"></a>
+SVOGauge methods.
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="svogauge.init">
+  <h3>
+    <a href="#svogauge.init" name="svogauge.init" class="pilcrow"></a>
+SVOGauge.init
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Initializes the widget</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options.
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    SVOGauge.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> gauge;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.method) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> options.method) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'SVOGauge.init: options.method must be '</span> +
+                                    <span class="hljs-string">'string or undefined: '</span> + options.method);
+            }
+            <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.methods[options.method]) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.init: options.method is not a '</span> +
+                                <span class="hljs-string">'valid method: '</span> + options.method);
+            }
+            <span class="hljs-keyword">this</span>.method = options.method;
+        }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10"></a>
+</div>
+<p>Call method.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        gauge = <span class="hljs-keyword">this</span>.methods[<span class="hljs-keyword">this</span>.method].call(<span class="hljs-keyword">this</span>, options);
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11"></a>
+</div>
+<p>Check properties.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        checkGauge(<span class="hljs-keyword">this</span>.method, gauge);
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12"></a>
+</div>
+<p>Approved.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.gauge = gauge;
+    };
+
+    SVOGauge.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        node.widgets.append(<span class="hljs-keyword">this</span>.gauge, <span class="hljs-keyword">this</span>.bodyDiv);
+    };
+
+    SVOGauge.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{};
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="svogauge.addmethod">
+  <h2>
+    <a href="#svogauge.addmethod" name="svogauge.addmethod" class="pilcrow"></a>
+SVOGauge.addMethod
+  </h2>
+</div>
+</div>
+<div class="body">
+<p>Adds a new method to measure mood</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">name</span>
+<span class="dox_type">string</span>
+<span>The name of the method
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">cb</span>
+<span class="dox_type">function</span>
+<span>The callback implementing it
+</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    SVOGauge.prototype.addMethod = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name, cb</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> !== <span class="hljs-keyword">typeof</span> name) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.addMethod: name must be string: '</span> +
+                            name);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> cb) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.addMethod: cb must be function: '</span> +
+                            cb);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.methods[name]) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.addMethod: name already existing: '</span> +
+                            name);
+        }
+        <span class="hljs-keyword">this</span>.methods[name] = cb;
+    };
+
+    SVOGauge.prototype.getValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        opts = opts || {};
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14"></a>
+</div>
+<p>Transform choice in numerical values.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> === <span class="hljs-keyword">typeof</span> opts.processChoice) {
+            opts.processChoice = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">choice</span>) </span>{
+                <span class="hljs-keyword">return</span> choice === <span class="hljs-literal">null</span> ? <span class="hljs-literal">null</span> : <span class="hljs-keyword">this</span>.choices[choice];
+            };
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gauge.getValues(opts);
+    };
+
+    SVOGauge.prototype.setValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gauge.setValues(opts);
+    };
+
+    SVOGauge.prototype.enable = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gauge.enable();
+    };
+    SVOGauge.prototype.enable = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gauge.disable();
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="helper-functions">
+  <h2>
+    <a href="#helper-functions" name="helper-functions" class="pilcrow"></a>
+Helper functions.
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="checkgauge">
+  <h3>
+    <a href="#checkgauge" name="checkgauge" class="pilcrow"></a>
+checkGauge
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Checks if a gauge is properly constructed, throws an error otherwise</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">method</span>
+<span class="dox_type">string</span>
+<span>The name of the method creating it
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">gauge</span>
+<span class="dox_type">object</span>
+<span>The object to check
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">ModdGauge.init</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkGauge</span>(<span class="hljs-params">method, gauge</span>) </span>{
+        <span class="hljs-keyword">if</span> (!gauge) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.init: method '</span> + method +
+                            <span class="hljs-string">'did not create element gauge.'</span>);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> gauge.getValues) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.init: method '</span> + method +
+                            <span class="hljs-string">': gauge missing function getValues.'</span>);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> gauge.enable) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.init: method '</span> + method +
+                            <span class="hljs-string">': gauge missing function enable.'</span>);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> gauge.disable) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.init: method '</span> + method +
+                            <span class="hljs-string">': gauge missing function disable.'</span>);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> gauge.append) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'SVOGauge.init: method '</span> + method +
+                            <span class="hljs-string">': gauge missing function append.'</span>);
+        }
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="available-methods">
+  <h2>
+    <a href="#available-methods" name="available-methods" class="pilcrow"></a>
+Available methods.
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="svo_slider">
+  <h3>
+    <a href="#svo_slider" name="svo_slider" class="pilcrow"></a>
+SVO_Slider
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">SVO_Slider</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">var</span> items, sliders;
+        <span class="hljs-keyword">var</span> gauge, i, len;
+        <span class="hljs-keyword">var</span> renderer;
+
+        sliders = options.sliders || [
+            [
+                [<span class="hljs-number">85</span>, <span class="hljs-number">85</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">76</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">68</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">59</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">50</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">41</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">33</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">24</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">15</span>]
+            ],
+            [
+                [<span class="hljs-number">85</span>, <span class="hljs-number">15</span>],
+                [<span class="hljs-number">87</span>, <span class="hljs-number">19</span>],
+                [<span class="hljs-number">89</span>, <span class="hljs-number">24</span>],
+                [<span class="hljs-number">91</span>, <span class="hljs-number">28</span>],
+                [<span class="hljs-number">93</span>, <span class="hljs-number">33</span>],
+                [<span class="hljs-number">94</span>, <span class="hljs-number">37</span>],
+                [<span class="hljs-number">96</span>, <span class="hljs-number">41</span>],
+                [<span class="hljs-number">98</span>, <span class="hljs-number">46</span>],
+                [<span class="hljs-number">100</span>, <span class="hljs-number">50</span>]
+            ],
+            [
+                [<span class="hljs-number">50</span>, <span class="hljs-number">100</span>],
+                [<span class="hljs-number">54</span>, <span class="hljs-number">98</span>],
+                [<span class="hljs-number">59</span>, <span class="hljs-number">96</span>],
+                [<span class="hljs-number">63</span>, <span class="hljs-number">94</span>],
+                [<span class="hljs-number">68</span>, <span class="hljs-number">93</span>],
+                [<span class="hljs-number">72</span>, <span class="hljs-number">91</span>],
+                [<span class="hljs-number">76</span>, <span class="hljs-number">89</span>],
+                [<span class="hljs-number">81</span>, <span class="hljs-number">87</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">85</span>]
+            ],
+            [
+                [<span class="hljs-number">50</span>, <span class="hljs-number">100</span>],
+                [<span class="hljs-number">54</span>, <span class="hljs-number">89</span>],
+                [<span class="hljs-number">59</span>, <span class="hljs-number">79</span>],
+                [<span class="hljs-number">63</span>, <span class="hljs-number">68</span>],
+                [<span class="hljs-number">68</span>, <span class="hljs-number">58</span>],
+                [<span class="hljs-number">72</span>, <span class="hljs-number">47</span>],
+                [<span class="hljs-number">76</span>, <span class="hljs-number">36</span>],
+                [<span class="hljs-number">81</span>, <span class="hljs-number">26</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">15</span>]
+            ],
+            [
+                [<span class="hljs-number">100</span>, <span class="hljs-number">50</span>],
+                [<span class="hljs-number">94</span>, <span class="hljs-number">56</span>],
+                [<span class="hljs-number">88</span>, <span class="hljs-number">63</span>],
+                [<span class="hljs-number">81</span>, <span class="hljs-number">69</span>],
+                [<span class="hljs-number">75</span>, <span class="hljs-number">75</span>],
+                [<span class="hljs-number">69</span>, <span class="hljs-number">81</span>],
+                [<span class="hljs-number">63</span>, <span class="hljs-number">88</span>],
+                [<span class="hljs-number">56</span>, <span class="hljs-number">94</span>],
+                [<span class="hljs-number">50</span>, <span class="hljs-number">100</span>]
+            ],
+            [
+                [<span class="hljs-number">100</span>, <span class="hljs-number">50</span>],
+                [<span class="hljs-number">98</span>, <span class="hljs-number">54</span>],
+                [<span class="hljs-number">96</span>, <span class="hljs-number">59</span>],
+                [<span class="hljs-number">94</span>, <span class="hljs-number">63</span>],
+                [<span class="hljs-number">93</span>, <span class="hljs-number">68</span>],
+                [<span class="hljs-number">91</span>, <span class="hljs-number">72</span>],
+                [<span class="hljs-number">89</span>, <span class="hljs-number">76</span>],
+                [<span class="hljs-number">87</span>, <span class="hljs-number">81</span>],
+                [<span class="hljs-number">85</span>, <span class="hljs-number">85</span>]
+            ]
+        ];
+
+        <span class="hljs-keyword">this</span>.sliders = sliders;
+
+
+        renderer = options.renderer || <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">td, choice, idx</span>) </span>{
+            td.innerHTML = choice[<span class="hljs-number">0</span>] + <span class="hljs-string">'&lt;hr/&gt;'</span> + choice[<span class="hljs-number">1</span>];
+        };
+
+        len = sliders.length;
+        items = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(len);
+
+        i = <span class="hljs-number">-1</span>;
+        <span class="hljs-keyword">for</span> ( ; ++i &lt; len ; ) {
+            items[i] = {
+                <span class="hljs-attr">id</span>: (i+<span class="hljs-number">1</span>),
+                <span class="hljs-attr">left</span>: <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'left'</span>),
+                <span class="hljs-attr">choices</span>: sliders[i]
+            };
+        }
+
+        gauge = node.widgets.get(<span class="hljs-string">'ChoiceTableGroup'</span>, {
+            <span class="hljs-attr">id</span>: <span class="hljs-string">'svo_slider'</span>,
+            <span class="hljs-attr">items</span>: items,
+            <span class="hljs-attr">mainText</span>: <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'mainText'</span>),
+            <span class="hljs-attr">title</span>: <span class="hljs-literal">false</span>,
+            <span class="hljs-attr">renderer</span>: renderer,
+            <span class="hljs-attr">requiredChoice</span>: <span class="hljs-literal">true</span>
+        });
+
+        <span class="hljs-keyword">return</span> gauge;
+    }
+
+})(node);
+
+</pre>
+        </td>
+      </tr>
+    
+  </tbody>
+</table>
+
+  </div>
+</body>
+</html>

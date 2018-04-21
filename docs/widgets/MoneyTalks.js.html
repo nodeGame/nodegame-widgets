@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/MoneyTalks.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/MoneyTalks.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,389 +21,581 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#moneytalks">MoneyTalks</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#moneytalks%20constructor">MoneyTalks constructor</a>
+        <a href="#moneytalks-constructor">MoneyTalks constructor</a>
       </div>
+
       <div class="heading h3">
         <a href="#moneytalks.spancurrency">MoneyTalks.spanCurrency</a>
       </div>
+
       <div class="heading h3">
         <a href="#moneytalks.spanmoney">MoneyTalks.spanMoney</a>
       </div>
+
       <div class="heading h3">
         <a href="#moneytalks.currency">MoneyTalks.currency</a>
       </div>
+
       <div class="heading h3">
         <a href="#moneytalks.money">MoneyTalks.money</a>
       </div>
+
       <div class="heading h3">
         <a href="#moneytalks.precicison">MoneyTalks.precicison</a>
       </div>
-      <div class="heading h2">
-        <a href="#moneytalks%20methods">MoneyTalks methods</a>
+
+      <div class="heading h3">
+        <a href="#moneytalks.showcurrency">MoneyTalks.showCurrency</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#moneytalks.currencyclassname">MoneyTalks.currencyClassname</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#moneytalks.currencyclassname-1">MoneyTalks.currencyClassname</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#moneytalks-methods">MoneyTalks methods</a>
+      </div>
+
       <div class="heading h3">
         <a href="#moneytalks.init">MoneyTalks.init</a>
       </div>
+
       <div class="heading h3">
         <a href="#moneytalks.update">MoneyTalks.update</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#moneytalks.getvalues">MoneyTalks.getValues</a>
+      </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="moneytalks">
   <h1>
-    <a href="#moneytalks" name="moneytalks" class="pilcrow">&#182;</a>
-    MoneyTalks
+    <a href="#moneytalks" name="moneytalks" class="pilcrow"></a>
+MoneyTalks
   </h1>
 </div>
-
-
-<p>Copyright(c) 2015 Stefano Balietti
+<p>Copyright(c) 2017 Stefano Balietti
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Displays a box for formatting currency</p>
-
+</div>
+<div class="body">
+<p>Displays a box for formatting earnings (&quot;money&quot;) in currency</p>
 <p>www.nodegame.org</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+    node.widgets.register(<span class="hljs-string">'MoneyTalks'</span>, MoneyTalks);
 
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;MoneyTalks&#39;</span><span class="p">,</span> <span class="nx">MoneyTalks</span><span class="p">);</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    MoneyTalks.version = <span class="hljs-string">'0.4.0'</span>;
+    MoneyTalks.description = <span class="hljs-string">'Displays the earnings of a player.'</span>;
 
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.1&#39;</span><span class="p">;</span>
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays the earnings of a player.&#39;</span><span class="p">;</span>
+    MoneyTalks.title = <span class="hljs-string">'Earnings'</span>;
+    MoneyTalks.className = <span class="hljs-string">'moneytalks'</span>;
 
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Earnings&#39;</span><span class="p">;</span>
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;moneytalks&#39;</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    MoneyTalks.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {}
+    };
 
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="moneytalks%20constructor">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks-constructor">
   <h2>
-    <a href="#moneytalks%20constructor" name="moneytalks%20constructor" class="pilcrow">&#182;</a>
-    MoneyTalks constructor
+    <a href="#moneytalks-constructor" name="moneytalks-constructor" class="pilcrow"></a>
+MoneyTalks constructor
   </h2>
 </div>
-
-  </div>
-  <div class="body"><p><code>MoneyTalks</code> displays the earnings of the player so far</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options
-which is forwarded to MoneyTalks.init.</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">MoneyTalks.init
+</div>
+<div class="body">
+<p><code>MoneyTalks</code> displays the earnings (&quot;money&quot;) of the player so far</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options which is forwarded to MoneyTalks.init.
 </span>
-    </div>
-  </div>
 </div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">MoneyTalks</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">MoneyTalks.init</span>
+</div>
+</div>
+</div>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MoneyTalks</span>(<span class="hljs-params">options</span>) </span>{
+
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="moneytalks.spancurrency">
   <h3>
-    <a href="#moneytalks.spancurrency" name="moneytalks.spancurrency" class="pilcrow">&#182;</a>
-    MoneyTalks.spanCurrency
+    <a href="#moneytalks.spancurrency" name="moneytalks.spancurrency" class="pilcrow"></a>
+MoneyTalks.spanCurrency
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The SPAN which holds information on the currency</p>
-  </div>
 </div>
+<div class="body">
+<p>The SPAN which holds information on the currency</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">spanCurrency</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.spanCurrency = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="moneytalks.spanmoney">
-  <h3>
-    <a href="#moneytalks.spanmoney" name="moneytalks.spanmoney" class="pilcrow">&#182;</a>
-    MoneyTalks.spanMoney
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>The SPAN which holds information about the money earned so far</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">spanMoney</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="moneytalks.currency">
-  <h3>
-    <a href="#moneytalks.currency" name="moneytalks.currency" class="pilcrow">&#182;</a>
-    MoneyTalks.currency
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>String describing the currency</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="moneytalks.money">
-  <h3>
-    <a href="#moneytalks.money" name="moneytalks.money" class="pilcrow">&#182;</a>
-    MoneyTalks.money
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Currently earned money</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="moneytalks.precicison">
-  <h3>
-    <a href="#moneytalks.precicison" name="moneytalks.precicison" class="pilcrow">&#182;</a>
-    MoneyTalks.precicison
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Precision of floating point number to display</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">precision</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-    <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="moneytalks%20methods">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.spanmoney">
+  <h3>
+    <a href="#moneytalks.spanmoney" name="moneytalks.spanmoney" class="pilcrow"></a>
+MoneyTalks.spanMoney
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The SPAN which holds information about the money earned so far</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.spanMoney = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.currency">
+  <h3>
+    <a href="#moneytalks.currency" name="moneytalks.currency" class="pilcrow"></a>
+MoneyTalks.currency
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>String describing the currency</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.currency = <span class="hljs-string">'ECU'</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.money">
+  <h3>
+    <a href="#moneytalks.money" name="moneytalks.money" class="pilcrow"></a>
+MoneyTalks.money
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Currently earned money</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.money = <span class="hljs-number">0</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.precicison">
+  <h3>
+    <a href="#moneytalks.precicison" name="moneytalks.precicison" class="pilcrow"></a>
+MoneyTalks.precicison
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Precision of floating point number to display</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.precision = <span class="hljs-number">2</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.showcurrency">
+  <h3>
+    <a href="#moneytalks.showcurrency" name="moneytalks.showcurrency" class="pilcrow"></a>
+MoneyTalks.showCurrency
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>If TRUE, the currency is displayed after the money</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.showCurrency = <span class="hljs-literal">true</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.currencyclassname">
+  <h3>
+    <a href="#moneytalks.currencyclassname" name="moneytalks.currencyclassname" class="pilcrow"></a>
+MoneyTalks.currencyClassname
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Class name to be attached to the currency span</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.classnameCurrency = <span class="hljs-string">'moneytalkscurrency'</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.currencyclassname-1">
+  <h3>
+    <a href="#moneytalks.currencyclassname-1" name="moneytalks.currencyclassname-1" class="pilcrow"></a>
+MoneyTalks.currencyClassname
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Class name to be attached to the money span</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.classnameMoney = <span class="hljs-string">'moneytalksmoney'</span>;
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="moneytalks-methods">
   <h2>
-    <a href="#moneytalks%20methods" name="moneytalks%20methods" class="pilcrow">&#182;</a>
-    MoneyTalks methods
+    <a href="#moneytalks-methods" name="moneytalks-methods" class="pilcrow"></a>
+MoneyTalks methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="moneytalks.init">
-  <h3>
-    <a href="#moneytalks.init" name="moneytalks.init" class="pilcrow">&#182;</a>
-    MoneyTalks.init
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Initializes the widget</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options</span>
-      <span class="dox_type">object</span>
-      <span>Optional. Configuration options.
-
-The  options object can have the following attributes:
-  - <code>currency</code>: String describing currency to use.
-  - <code>money</code>: Current amount of money earned.
-  - <code>precision</code>: Precision of floating point output to use.
-  - <code>currencyClassName</code>: Class name to be set for this.spanCurrency.
-  - <code>moneyClassName</code>: Class name to be set for this.spanMoney;</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">currency</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">currency</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">currency</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">money</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">precision</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">precision</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">precision</span><span class="p">;</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">spanCurrency</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">currencyClassName</span> <span class="o">||</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">spanCurrency</span><span class="p">.</span><span class="nx">className</span> <span class="o">||</span> <span class="s1">&#39;moneytalkscurrency&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">spanMoney</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">moneyClassName</span> <span class="o">||</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">spanMoney</span><span class="p">.</span><span class="nx">className</span> <span class="o">||</span> <span class="s1">&#39;moneytalksmoney&#39;</span><span class="p">;</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">spanCurrency</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">currency</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">spanMoney</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span><span class="p">;</span>
-    <span class="p">};</span>
-
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spanMoney</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spanCurrency</span><span class="p">);</span>
-    <span class="p">};</span>
-
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;MONEYTALKS&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">amount</span><span class="p">);</span>
-        <span class="p">});</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="moneytalks.update">
-  <h3>
-    <a href="#moneytalks.update" name="moneytalks.update" class="pilcrow">&#182;</a>
-    MoneyTalks.update
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Updates the contents of this.money and this.spanMoney according to amount</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">MoneyTalks</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.init">
+  <h3>
+    <a href="#moneytalks.init" name="moneytalks.init" class="pilcrow"></a>
+MoneyTalks.init
+  </h3>
 </div>
-<p>Try to parse strings</p>
+</div>
+<div class="body">
+<p>Initializes the widget</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+<span>Optional. Configuration options.
+The  options object can have the following attributes:
+<ul>
+<li><code>currency</code>: The name of currency.</li>
+<li><code>money</code>: Initial amount of money earned.</li>
+<li><code>precision</code>: How mamy floating point digits to use.</li>
+<li><code>currencyClassName</code>: Class name to be set for this.spanCurrency.</li>
+<li><code>moneyClassName</code>: Class name to be set for this.spanMoney.</li>
+<li><code>showCurrency</code>: Flag whether the name of currency is to be displayed.</li>
+</ul>
+</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">amount</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="nb">isFinite</span><span class="p">(</span><span class="nx">amount</span><span class="p">))</span> <span class="p">{</span>
-                <span class="k">return</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="nx">amount</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">spanMoney</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">precision</span><span class="p">);</span>
-    <span class="p">};</span>
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">    MoneyTalks.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.currency) {
+            <span class="hljs-keyword">this</span>.currency = options.currency;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> options.showCurrency) {
+            <span class="hljs-keyword">this</span>.showCurrency = !!options.showCurrency;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> options.money) {
+            <span class="hljs-keyword">this</span>.money = options.money;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> options.precision) {
+            <span class="hljs-keyword">this</span>.precision = options.precision;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.MoneyClassName) {
+            <span class="hljs-keyword">this</span>.classnameMoney = options.MoneyClassName;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'string'</span> === <span class="hljs-keyword">typeof</span> options.currencyClassName) {
+            <span class="hljs-keyword">this</span>.classnameCurrency = options.currencyClassName;
+        }
+    };
+
+    MoneyTalks.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.spanMoney) {
+            <span class="hljs-keyword">this</span>.spanMoney = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+        }
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.spanCurrency) {
+            <span class="hljs-keyword">this</span>.spanCurrency = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'span'</span>);
+        }
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.showCurrency) <span class="hljs-keyword">this</span>.spanCurrency.style.display = <span class="hljs-string">'none'</span>;
+
+        <span class="hljs-keyword">this</span>.spanMoney.className = <span class="hljs-keyword">this</span>.classnameMoney;
+        <span class="hljs-keyword">this</span>.spanCurrency.className = <span class="hljs-keyword">this</span>.classnameCurrency;
+
+        <span class="hljs-keyword">this</span>.spanCurrency.innerHTML = <span class="hljs-keyword">this</span>.currency;
+        <span class="hljs-keyword">this</span>.spanMoney.innerHTML = <span class="hljs-keyword">this</span>.money;
+
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.spanMoney);
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.spanCurrency);
+    };
+
+    MoneyTalks.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
+        node.on(<span class="hljs-string">'MONEYTALKS'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">amount, clear</span>) </span>{
+            that.update(amount, clear);
+        });
+    };
+
+</pre>
         </td>
       </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.update">
+  <h3>
+    <a href="#moneytalks.update" name="moneytalks.update" class="pilcrow"></a>
+MoneyTalks.update
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Updates the display and the count of available &quot;money&quot;</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">amount</span>
+<span class="dox_type">string</span>
+<span class="dox_type">number</span>
+<span>Amount to add to current value of money
+</span>
+</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">clear</span>
+<span class="dox_type">boolean</span>
+<span>Optional. If TRUE, money will be set to 0    before adding the new amount
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">MoneyTalks.money</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">MonetyTalks.spanMoney</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    MoneyTalks.prototype.update = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">amount, clear</span>) </span>{
+        <span class="hljs-keyword">var</span> parsedAmount;
+        parsedAmount = J.isNumber(amount);
+        <span class="hljs-keyword">if</span> (parsedAmount === <span class="hljs-literal">false</span>) {
+            node.err(<span class="hljs-string">'MoneyTalks.update: invalid amount: '</span> + amount);
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">if</span> (clear) <span class="hljs-keyword">this</span>.money = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">this</span>.money += parsedAmount;
+        <span class="hljs-keyword">this</span>.spanMoney.innerHTML = <span class="hljs-keyword">this</span>.money.toFixed(<span class="hljs-keyword">this</span>.precision);
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="moneytalks.getvalues">
+  <h3>
+    <a href="#moneytalks.getvalues" name="moneytalks.getvalues" class="pilcrow"></a>
+MoneyTalks.getValues
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Returns the current value of &quot;money&quot;</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">MoneyTalks.money</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    MoneyTalks.prototype.getValues = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.money;
+    };
+
+})(node);
+
+</pre>
+        </td>
+      </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

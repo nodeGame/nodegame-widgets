@@ -1,6 +1,80 @@
 # nodegame-widgets change log
 
-## 0.6.8
+## 4.0.0
+- `EndScreen` widget displays information such earnings, exit code, feedback and email forms.
+- `Feedback` widget (compatible as Choice-Like widget).
+- `EmailForm` widget (compatible as Choice-Like widget).
+- `#Widget.addFrame()` and `#Widget.removeFrame()` display/remove the border and margins around the bodyDiv element of the widget.
+- `frame` can be passed as an option to the `#node.widgets.append()` method and if FALSE it behaves like `#Widget.removeFrame()`.
+- `LanguageSelector` sets Window URI prefix and notify server of language selections, according to options.
+- Removed `init()` method from all widget's contructor (it is called automatically by API).
+- Removed css/ folder, now in nodegame-server.
+- Other improvements...
+
+## 3.5.7
+- Last appended widget is available under `node.widgets.lastAppended`.
+- `#Widgets.isWidget()` returns TRUE if object is widget-like (see inline comment).
+- Experimental EndScreen (in progress).
+
+## 3.5.6
+- VisualTimer makes sure that options are manually cloned to avoid overriding step properties.
+- Widgets.append by default appends to the iframe's body, and not the iframe's root.
+
+## 3.5.5
+- Bug Fix: `ChoiceTable.setValues()` does not unsets the value if new selected value is the same as previous.
+- Bug Fix: `ChoiceTableGroup.unsetCurrentChoice()`.
+
+## 3.5.4
+- Minor fix on Chat, ChoiceManager, MoneyTalks.
+
+## 3.5.3
+- Minor changes to ChoiceTableGroup, ChoiceTable and ChoiceManager.
+
+## 3.5.2
+- Actually implements changes in ChoiceTable and ChoiceTableGroup described in 3.5.1.
+
+## 3.5.1
+- Better error messages in Widgets.js.
+- `#ChoiceTable.shuffle()` and `#ChoiceTableGroup.shuffle()`.
+
+## 3.5.0
+- VisualTimer auto-set itself to 0:00 striken, if there are no timer settings in step.
+- Fixed travis test.
+
+## 3.0.2
+- VisualRound correctly interprets gameover stage.
+
+## 3.0.1
+- Minor update in MoneyTalk.
+
+## 3.0.0
+- 02/10/2016 NodeGame Version Upgrade.
+
+## 2.3.2
+- WaitingRoom correctly displays if a player can still join a game.
+
+## 2.3.1
+- Avoiding duplicated testing in Requirements.
+
+## 2.3.0
+- Fixed bug in WaitingRoom.destroy(). The loading dots are properly stopped now.
+
+## 2.2.0
+- Implementing .setValues in ChoiceTable ChoiceTableGroup, ChoiceManager, SVOGauge and MoodGauge.
+
+## 2.1.0
+- Fixed timer destroying in Waiting Room.
+
+## 2.0.0
+
+- `Widgets.destroy()`
+
+## 0.7.1
+
+- Improved ChernoffFaces.
+- Added option totStageOffset for VisualRound.
+
+## 0.7.0
 
 - Improved Requirements widget. Some functions are moved into separate repo (nodegame-requirements).
 - Proper cleanup by loadFrameTest in Requirements.

@@ -1,6 +1,6 @@
 /**
  * # Chat
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -11,13 +11,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('Chat', Chat);
 
     // ## Meta-data
 
-    Chat.version = '0.4.1';
+    Chat.version = '0.5.2';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the experimenter.';
 
@@ -49,7 +47,6 @@
 
     Chat.dependencies = {
         JSUS: {}
-
     };
 
     /**
@@ -57,12 +54,10 @@
      *
      * `Chat` is a simple configurable chat
      *
-     * @param {object} options Optional. Configuration options
-     * which is forwarded to Chat.init.
-     *
      * @see Chat.init
      */
-    function Chat (options) {
+    function Chat() {
+
         /**
          * ### Chat.mode
          *
@@ -131,7 +126,6 @@
          */
         this.submitText = null;
 
-
         /**
          * ### Chat.chatEvent
          *
@@ -145,7 +139,13 @@
          * Function which displays the sender's name
          */
         this.displayName = null;
-        this.init(options);
+
+        /**
+         * ### Chat.recipient
+         *
+         * Object containing the value of the recipient of the message
+         */
+        this.recipient = { value: null };
     }
 
     // ## Chat methods
@@ -167,8 +167,38 @@
      *   - `displayName`: Function which displays the sender's name
      */
     Chat.prototype.init = function(options) {
+        var tmp;
         options = options || {};
-        this.mode = options.mode || 'MANY_TO_MANY';
+
+        if ('undefined' === typeof options.mode) {
+            // Will be setup later.
+            options.mode = 'MANY_TO_MANY';
+        }
+        else if ('string' === typeof options.mode) {
+            switch(options.mode) {
+            case Chat.modes.RECEIVER_ONLY:
+                tmp = 'SERVER';
+                break;
+            case Chat.modes.MANY_TO_ONE:
+                tmp = 'ROOM';
+                break;
+            case Chat.modes.ONE_TO_ONE:
+                tmp = 'SERVER';
+                break;
+            case Chat.modes.MANY_TO_MANY:
+                break;
+            default:
+                throw new Error('Chat.init: options.mode is invalid: ' +
+                                options.mode);
+            }
+            this.recipient.value = tmp;
+        }
+        else {
+            throw new Error('Chat.init: options.mode must be string or ' +
+                            'undefined. Found: ' + options.mode);
+        }
+
+        this.mode = options.mode;
 
         this.textareaId = options.textareaId || 'chat_textarea';
         this.chatId = options.chatId || 'chat_chat';
@@ -177,47 +207,42 @@
         this.chatEvent = options.chatEvent || 'CHAT';
         this.submitText = options.submitText || 'chat';
 
-        this.submit = W.getEventButton(this.chatEvent, this.submitText,
-                                       this.submitId);
-        this.textarea = W.getElement('textarea', this.textareaId);
-        this.chat = W.getElement('div', this.chatId);
-
         this.displayName = options.displayName || function(from) {
             return from;
         };
-
-        switch(this.mode) {
-            case Chat.modes.RECEIVER_ONLY:
-                this.recipient = {value: 'SERVER'};
-                break;
-            case Chat.modes.MANY_TO_ONE:
-                this.recipient = {value: 'ROOM'};
-                break;
-            case Chat.modes.ONE_TO_ONE:
-                this.recipient = {value: 'SERVER'};
-                break;
-            default:
-                this.recipient = W.getRecipientSelector();
-        }
     };
 
 
     Chat.prototype.append = function() {
+
+        this.chat = W.get('div', this.chatId);
         this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
+
+            // Create buttons to send messages, if allowed.
+            this.submit = W.getEventButton(this.chatEvent,
+                                           this.submitText,
+                                           this.submitId);
+            this.submit.className = 'btn btn-sm btn-secondary';
+            this.textarea = W.get('textarea', this.textareaId);
+            // Append them.
             W.writeln('', this.bodyDiv);
             this.bodyDiv.appendChild(this.textarea);
             W.writeln('', this.bodyDiv);
             this.bodyDiv.appendChild(this.submit);
+
+            // Add recipient selector, if requested.
             if (this.mode === Chat.modes.MANY_TO_MANY) {
+                this.recipient = W.getRecipientSelector();
                 this.bodyDiv.appendChild(this.recipient);
             }
         }
     };
 
     Chat.prototype.readTA = function() {
-        var txt = this.textarea.value;
+        var txt;
+        txt = this.textarea.value;
         this.textarea.value = '';
         return txt;
     };
@@ -244,9 +269,10 @@
                 '%msg': {
                     'class': 'chat_msg'
                 },
-                '!txt': msg
+                '!txt': msg,
+                '!to': to
             };
-            that.writeTA('%sMe%s: %msg!txt%msg', args);
+            that.writeTA('%sMe -> !to%s: %msg!txt%msg', args);
             node.say(that.chatEvent, to, msg.trim());
         });
 

@@ -1,6 +1,6 @@
 /**
  * # Controls
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    Controls.version = '0.3.1';
+    Controls.version = '0.5.1';
     Controls.description = 'Wraps a collection of user-inputs controls.';
 
     Controls.title = 'Controls';
@@ -32,7 +32,7 @@
      * which is stored and forwarded to Controls.init.
      *
      *  The  options object can have the following attributes:
-     *   - Any option that can be passed to `node.window.List` constructor.
+     *   - Any option that can be passed to `W.List` constructor.
      *   - `change`: Event to fire when contents change.
      *   - `features`: Collection of collection attributes for individual
      *                 controls.
@@ -74,18 +74,16 @@
          * Flag to indicate whether the list has changed
          */
         this.hasChanged = false;
-
-        this.init(options);
     }
 
     Controls.prototype.add = function(root, id, attributes) {
-        // TODO: node.window.addTextInput
-        //return node.window.addTextInput(root, id, attributes);
+        // TODO: replace W.addTextInput 
+        //return W.addTextInput(root, id, attributes);
     };
 
     Controls.prototype.getItem = function(id, attributes) {
-        // TODO: node.window.addTextInput
-        //return node.window.getTextInput(id, attributes);
+        // TODO: replace W.addTextInput
+        //return W.getTextInput(id, attributes);
     };
 
     // ## Controls methods
@@ -98,7 +96,7 @@
      * @param {object} options Optional. Configuration options.
      *
      * The  options object can have the following attributes:
-     *   - Any option that can be passed to `node.window.List` constructor.
+     *   - Any option that can be passed to `W.List` constructor.
      *   - `change`: Event to fire when contents change.
      *   - `features`: Collection of collection attributes for individual
      *                 controls.
@@ -118,12 +116,10 @@
         this.list = new W.List(options);
         this.listRoot = this.list.getRoot();
 
-        if (!options.features) {
-            return;
+        if (options.features) {
+            this.features = options.features;
+            this.populate();
         }
-
-        this.features = options.features;
-        this.populate();
     };
 
     /**
@@ -146,8 +142,11 @@
                 idButton = this.options.submit.id;
                 this.option.submit = this.option.submit.name;
             }
-            this.submit = node.window.addButton(this.bodyDiv, idButton,
-                    this.options.submit, this.options.attributes);
+            this.submit = W.add('button', this.bodyDiv,
+                                J.merge(this.options.attributes, {
+                                    id: idButton,
+                                    innerHTML: this.options.submit
+                                }));
 
             this.submit.onclick = function() {
                 if (that.options.change) {
@@ -194,8 +193,11 @@
                     };
                 }
 
-                if (attributes.label) {
-                    W.addLabel(container, elem, null, attributes.label);
+                if (attributes.label) {                    
+                    W.add('label', container, {
+                        'for': elem.id,
+                        innerHTML: attributes.label
+                    });
                 }
 
                 // Element added to the list.
@@ -217,7 +219,7 @@
         var key, el;
         for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
-                el = node.window.getElementById(key);
+                el = W.getElementById(key);
                 if (el) {
                     // node.log('KEY: ' + key, 'DEBUG');
                     // node.log('VALUE: ' + el.value, 'DEBUG');
@@ -232,12 +234,12 @@
         return true;
     };
 
-    Controls.prototype.getAllValues = function() {
+    Controls.prototype.getValues = function() {
         var out, el, key;
         out = {};
         for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
-                el = node.window.getElementById(key);
+                el = W.getElementById(key);
                 if (el) out[key] = Number(el.value);
             }
         }
@@ -245,7 +247,7 @@
     };
 
     Controls.prototype.highlight = function(code) {
-        return node.window.highlight(this.listRoot, code);
+        return W.highlight(this.listRoot, code);
     };
 
     // ## Sub-classes
@@ -258,7 +260,7 @@
     SliderControls.prototype.__proto__ = Controls.prototype;
     SliderControls.prototype.constructor = SliderControls;
 
-    SliderControls.version = '0.2.1';
+    SliderControls.version = '0.2.2';
     SliderControls.description = 'Collection of Sliders.';
 
     SliderControls.title = 'Slider Controls';
@@ -276,11 +278,16 @@
     }
 
     SliderControls.prototype.add = function(root, id, attributes) {
-        return node.window.addSlider(root, id, attributes);
+        attributes = attributes || {};
+        attributes.id = id;
+        attributes.type = 'range';
+        return W.add('input', root, attributes);
     };
 
     SliderControls.prototype.getItem = function(id, attributes) {
-        return node.window.getSlider(id, attributes);
+        attributes = attributes || {};
+        attributes.id = id;
+        return W.get('input', attributes);
     };
 
     /**
@@ -347,7 +354,7 @@
     function RadioControls(options) {
         Controls.call(this,options);
         this.groupName = ('undefined' !== typeof options.name) ? options.name :
-            node.window.generateUniqueId();
+            W.generateUniqueId();
         this.radioElem = null;
     }
 
@@ -395,37 +402,33 @@
         if ('undefined' === typeof attributes.name) {
             attributes.name = this.groupName;
         }
-
-        elem = node.window.addRadioButton(root, id, attributes);
+        attributes.id = id;
+        attributes.type = 'radio';
+        elem = W.add('input', root, attributes);
         // Adding the text for the radio button
         elem.appendChild(document.createTextNode(attributes.label));
         return elem;
     };
 
     RadioControls.prototype.getItem = function(id, attributes) {
-        //console.log('ADDDING radio');
-        //console.log(attributes);
+        attributes = attributes || {};
         // add the group name if not specified
         // TODO: is this a javascript bug?
         if ('undefined' === typeof attributes.name) {
-            //                  console.log(this);
-            //                  console.log(this.name);
-            //                  console.log('MODMOD ' + this.name);
             attributes.name = this.groupName;
         }
-        //console.log(attributes);
-        return node.window.getRadioButton(id, attributes);
+        attributes.id = id;
+        attributes.type = 'radio';
+        return W.get('input', attributes);
     };
 
     // Override getAllValues for Radio Controls
-    RadioControls.prototype.getAllValues = function() {
-
-        for (var key in this.features) {
+    RadioControls.prototype.getValues = function() {
+        var key, el;
+        for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
-                var el = node.window.getElementById(key);
-                if (el.checked) {
-                    return el.value;
-                }
+                el = W.getElementById(key);
+                if (el.checked) return el.value;                
             }
         }
         return false;

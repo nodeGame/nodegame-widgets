@@ -6,9 +6,12 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "widgets/WaitingRoom.js", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "widgets/WaitingRoom.js";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
+
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -18,965 +21,1838 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#waitingroom">WaitingRoom</a>
       </div>
+
       <div class="heading h2">
         <a href="#meta-data">Meta-data</a>
       </div>
+
       <div class="heading h2">
         <a href="#dependencies">Dependencies</a>
       </div>
+
       <div class="heading h2">
-        <a href="#waitingroom%20constructor">WaitingRoom constructor</a>
+        <a href="#prototype-properties">Prototype Properties.</a>
       </div>
+
       <div class="heading h3">
-        <a href="#waitingroom.callbacks">WaitingRoom.callbacks</a>
+        <a href="#waitingroom.sounds">WaitingRoom.sounds</a>
       </div>
+
+      <div class="heading h4">
+        <a href="#dispatch">dispatch</a>
+      </div>
+
       <div class="heading h3">
-        <a href="#waitingroom.stillchecking">WaitingRoom.stillChecking</a>
+        <a href="#waitingroom.texts">WaitingRoom.texts</a>
       </div>
+
+      <div class="heading h4">
+        <a href="#blinktitle">blinkTitle</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#disconnect">disconnect</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#waitedtoolong">waitedTooLong</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#notenoughplayers">notEnoughPlayers</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#roomclosed">roomClosed</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#toomanyplayers">tooManyPlayers</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#notselectedclosed">notSelectedClosed</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#notselectedopen">notSelectedOpen</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#exitcode">exitCode</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#playbot">playBot</a>
+      </div>
+
+      <div class="heading h4">
+        <a href="#connectingbots">connectingBots</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#waitingroom-constructor">WaitingRoom constructor</a>
+      </div>
+
       <div class="heading h3">
-        <a href="#waitingroom.withtimeout">WaitingRoom.withTimeout</a>
+        <a href="#waitingroom.connected">WaitingRoom.connected</a>
       </div>
+
       <div class="heading h3">
-        <a href="#waitingroom.maxwaittime">WaitingRoom.maxWaitTime</a>
+        <a href="#waitingroom.poolsize">WaitingRoom.poolSize</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#waitingroom.ngames">WaitingRoom.nGames</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#waitingroom.groupsize">WaitingRoom.groupSize</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#waitingroom.waittime">WaitingRoom.waitTime</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#waitingroom.startdate">WaitingRoom.startDate</a>
+      </div>
+
       <div class="heading h3">
         <a href="#waitingroom.timeoutid">WaitingRoom.timeoutId</a>
       </div>
+
       <div class="heading h3">
         <a href="#waitingroom.playercountdiv">WaitingRoom.playerCountDiv</a>
       </div>
+
       <div class="heading h3">
         <a href="#waitingroom.playercount">WaitingRoom.playerCount</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#waitingroom.startdatediv">WaitingRoom.startDateDiv</a>
+      </div>
+
+      <div class="heading h3">
+        <a href="#waitingroom.msgdiv">WaitingRoom.msgDiv</a>
+      </div>
+
       <div class="heading h3">
         <a href="#waitingroom.timerdiv">WaitingRoom.timerDiv</a>
       </div>
+
       <div class="heading h3">
         <a href="#waitingroom.timer">WaitingRoom.timer</a>
       </div>
+
       <div class="heading h3">
         <a href="#waitingroom.dots">WaitingRoom.dots</a>
       </div>
-      <div class="heading h3">
-        <a href="#waitingroom.onttimeout">WaitingRoom.ontTimeout</a>
-      </div>
+
       <div class="heading h3">
         <a href="#waitingroom.ontimeout">WaitingRoom.onTimeout</a>
       </div>
-      <div class="heading h2">
-        <a href="#waitingroom%20methods">WaitingRoom methods</a>
+
+      <div class="heading h3">
+        <a href="#waitingroom.disconnectifnotselected">WaitingRoom.disconnectIfNotSelected</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#waitingroom.playwithbotoption">WaitingRoom.playWithBotOption</a>
+      </div>
+
+      <div class="heading h2">
+        <a href="#waitingroom-methods">WaitingRoom methods</a>
+      </div>
+
       <div class="heading h3">
         <a href="#waitingroom.init">WaitingRoom.init</a>
       </div>
+
       <div class="heading h3">
-        <a href="#waitingroom.addtimeout">WaitingRoom.addTimeout</a>
+        <a href="#waitingroom.starttimer">WaitingRoom.startTimer</a>
       </div>
+
       <div class="heading h3">
         <a href="#waitingroom.cleartimeout">WaitingRoom.clearTimeout</a>
       </div>
+
+      <div class="heading h3">
+        <a href="#waitingroom.updatestate">WaitingRoom.updateState</a>
+      </div>
+
       <div class="heading h3">
         <a href="#waitingroom.updatedisplay">WaitingRoom.updateDisplay</a>
       </div>
+
       <div class="heading h3">
-        <a href="#waitingroom.updatedisplay">WaitingRoom.updateDisplay</a>
+        <a href="#waitingroom.disconnect">WaitingRoom.disconnect</a>
       </div>
-      <div class="heading h2">
-        <a href="#helper%20methods">Helper methods</a>
-      </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container"><div class="background highlight"></div>
+  <div id="container">
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="waitingroom">
   <h1>
-    <a href="#waitingroom" name="waitingroom" class="pilcrow">&#182;</a>
-    WaitingRoom
+    <a href="#waitingroom" name="waitingroom" class="pilcrow"></a>
+WaitingRoom
   </h1>
 </div>
-
-
-<p>Copyright(c) 2015 Stefano Balietti
+<p>Copyright(c) 2018 Stefano Balietti <a href="mailto:ste@nodegame.org.html">ste@nodegame.org</a>
 MIT Licensed</p>
-  </div>
-  <div class="body"><p>Display the number of connected / required players to start a game</p>
-
+</div>
+<div class="body">
+<p>Displays the number of connected/required players to start a game</p>
 <p>www.nodegame.org</p>
-  </div>
 </div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+<span class="hljs-meta">
+    "use strict"</span>;
 
-    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-
-    <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;WaitingRoom&#39;</span><span class="p">,</span> <span class="nx">WaitingRoom</span><span class="p">);</span>
-
-
-</pre></div>
+    node.widgets.register(<span class="hljs-string">'WaitingRoom'</span>, WaitingRoom);
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="meta-data">
+          <div class="pilwrap" id="meta-data">
   <h2>
-    <a href="#meta-data" name="meta-data" class="pilcrow">&#182;</a>
-    Meta-data
+    <a href="#meta-data" name="meta-data" class="pilcrow"></a>
+Meta-data
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    WaitingRoom.version = <span class="hljs-string">'1.2.1'</span>;
+    WaitingRoom.description = <span class="hljs-string">'Displays a waiting room for clients.'</span>;
 
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">;</span>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s1">&#39;Displays a waiting room for clients.&#39;</span><span class="p">;</span>
+    WaitingRoom.title = <span class="hljs-string">'Waiting Room'</span>;
+    WaitingRoom.className = <span class="hljs-string">'waitingroom'</span>;
 
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Waiting Room&#39;</span><span class="p">;</span>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;waitingroom&#39;</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dependencies">
+          <div class="pilwrap" id="dependencies">
   <h2>
-    <a href="#dependencies" name="dependencies" class="pilcrow">&#182;</a>
-    Dependencies
+    <a href="#dependencies" name="dependencies" class="pilcrow"></a>
+Dependencies
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+    WaitingRoom.dependencies = {
+        <span class="hljs-attr">JSUS</span>: {},
+        <span class="hljs-attr">VisualTimer</span>: {}
+    };
 
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">JSUS</span><span class="o">:</span> <span class="p">{},</span>
-        <span class="nx">VisualTimer</span><span class="o">:</span> <span class="p">{}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom%20constructor">
+        <td class="docs">
+          <div class="pilwrap" id="prototype-properties">
   <h2>
-    <a href="#waitingroom%20constructor" name="waitingroom%20constructor" class="pilcrow">&#182;</a>
-    WaitingRoom constructor
+    <a href="#prototype-properties" name="prototype-properties" class="pilcrow"></a>
+Prototype Properties.
   </h2>
 </div>
 
-  </div>
-  <div class="body"><p>Instantiates a new WaitingRoom object</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">options
-</span>
-      <span class="dox_type">object</span>
-    </div>
-  </div>
-</div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">function</span> <span class="nx">WaitingRoom</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.callbacks">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.sounds">
   <h3>
-    <a href="#waitingroom.callbacks" name="waitingroom.callbacks" class="pilcrow">&#182;</a>
-    WaitingRoom.callbacks
+    <a href="#waitingroom.sounds" name="waitingroom.sounds" class="pilcrow"></a>
+WaitingRoom.sounds
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Array of all test callbacks</p>
-  </div>
 </div>
+<div class="body">
+<p>Default sounds to play on particular events</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    WaitingRoom.sounds = {
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.stillchecking">
+        <td class="docs">
+          <div class="pilwrap" id="dispatch">
+  <h4>
+    <a href="#dispatch" name="dispatch" class="pilcrow"></a>
+dispatch
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        dispatch: <span class="hljs-string">'/sounds/doorbell.ogg'</span>
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.texts">
   <h3>
-    <a href="#waitingroom.stillchecking" name="waitingroom.stillchecking" class="pilcrow">&#182;</a>
-    WaitingRoom.stillChecking
+    <a href="#waitingroom.texts" name="waitingroom.texts" class="pilcrow"></a>
+WaitingRoom.texts
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Number of tests still pending</p>
-  </div>
 </div>
+<div class="body">
+<p>Default texts to display</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">    WaitingRoom.texts = {
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.withtimeout">
+        <td class="docs">
+          <div class="pilwrap" id="blinktitle">
+  <h4>
+    <a href="#blinktitle" name="blinktitle" class="pilcrow"></a>
+blinkTitle
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        blinkTitle: <span class="hljs-string">'GAME STARTS!'</span>,
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="disconnect">
+  <h4>
+    <a href="#disconnect" name="disconnect" class="pilcrow"></a>
+disconnect
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        disconnect: <span class="hljs-string">'&lt;span style="color: red"&gt;You have been '</span> +
+            <span class="hljs-string">'&lt;strong&gt;disconnected&lt;/strong&gt;. Please try again later.'</span> +
+            <span class="hljs-string">'&lt;/span&gt;&lt;br&gt;&lt;br&gt;'</span>,
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="waitedtoolong">
+  <h4>
+    <a href="#waitedtoolong" name="waitedtoolong" class="pilcrow"></a>
+waitedTooLong
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        waitedTooLong: <span class="hljs-string">'Waiting for too long. Please look '</span> +
+            <span class="hljs-string">'for a HIT called &lt;strong&gt;Trouble Ticket&lt;/strong&gt; and file'</span> +
+            <span class="hljs-string">' a new trouble ticket reporting your experience.'</span>,
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="notenoughplayers">
+  <h4>
+    <a href="#notenoughplayers" name="notenoughplayers" class="pilcrow"></a>
+notEnoughPlayers
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        notEnoughPlayers: <span class="hljs-string">'&lt;h3 align="center" style="color: red"&gt;'</span> +
+            <span class="hljs-string">'Thank you for your patience.&lt;br&gt;'</span> +
+            <span class="hljs-string">'Unfortunately, there are not enough participants in '</span> +
+            <span class="hljs-string">'your group to start the experiment.&lt;br&gt;'</span>,
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="roomclosed">
+  <h4>
+    <a href="#roomclosed" name="roomclosed" class="pilcrow"></a>
+roomClosed
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        roomClosed: <span class="hljs-string">'&lt;span style="color: red"&gt; The '</span> +
+            <span class="hljs-string">'waiting room is &lt;strong&gt;CLOSED&lt;/strong&gt;. You have been '</span> +
+            <span class="hljs-string">'disconnected. Please try again later.&lt;/span&gt;&lt;br&gt;&lt;br&gt;'</span>,
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="toomanyplayers">
+  <h4>
+    <a href="#toomanyplayers" name="toomanyplayers" class="pilcrow"></a>
+tooManyPlayers
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        tooManyPlayers: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">widget, data</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-string">'There are more players in this waiting room '</span> +
+                <span class="hljs-string">'than there are playslots in the game. Only '</span> +
+                data.nGames + <span class="hljs-string">' players will be selected '</span> +
+                <span class="hljs-string">'to play the game.'</span>;
+        },
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="notselectedclosed">
+  <h4>
+    <a href="#notselectedclosed" name="notselectedclosed" class="pilcrow"></a>
+notSelectedClosed
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        notSelectedClosed: <span class="hljs-string">'&lt;h3 align="center"&gt;'</span> +
+            <span class="hljs-string">'&lt;span style="color: red"&gt;Unfortunately, you were '</span> +
+            <span class="hljs-string">'&lt;strong&gt;not selected&lt;/strong&gt; to join the game this time. '</span> +
+            <span class="hljs-string">'Thank you for your participation.&lt;/span&gt;&lt;/h3&gt;&lt;br&gt;&lt;br&gt;'</span>,
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="notselectedopen">
+  <h4>
+    <a href="#notselectedopen" name="notselectedopen" class="pilcrow"></a>
+notSelectedOpen
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        notSelectedOpen: <span class="hljs-string">'&lt;h3 align="center"&gt;'</span> +
+            <span class="hljs-string">'&lt;span style="color: red"&gt;Unfortunately, you were '</span> +
+            <span class="hljs-string">'&lt;strong&gt;not selected&lt;/strong&gt; to join the game this time, '</span> +
+            <span class="hljs-string">'but you may join the next one.&lt;/span&gt;&lt;a class="hand" '</span> +
+            <span class="hljs-string">'onclick=javascript:this.parentElement.innerHTML=""&gt;'</span> +
+            <span class="hljs-string">'Ok, I got it.&lt;/a&gt;&lt;/h3&gt;&lt;br&gt;&lt;br&gt;'</span> +
+            <span class="hljs-string">'Thank you for your participation.&lt;/span&gt;&lt;/h3&gt;&lt;br&gt;&lt;br&gt;'</span>,
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="exitcode">
+  <h4>
+    <a href="#exitcode" name="exitcode" class="pilcrow"></a>
+exitCode
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        exitCode: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">widget, data</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-string">'&lt;br&gt;You have been disconnected. '</span> +
+                (<span class="hljs-string">'undefined'</span> !== <span class="hljs-keyword">typeof</span> data.exit ?
+                 (<span class="hljs-string">'Please report this exit code: '</span> + data.exit) : <span class="hljs-string">''</span>) +
+                <span class="hljs-string">'&lt;br&gt;&lt;/h3&gt;'</span>;
+        },
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="playbot">
+  <h4>
+    <a href="#playbot" name="playbot" class="pilcrow"></a>
+playBot
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        playBot: <span class="hljs-string">'Play With Bot/s'</span>,
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="connectingbots">
+  <h4>
+    <a href="#connectingbots" name="connectingbots" class="pilcrow"></a>
+connectingBots
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        connectingBots: <span class="hljs-string">'Connecting Bot/s, Please Wait...'</span>
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom-constructor">
+  <h2>
+    <a href="#waitingroom-constructor" name="waitingroom-constructor" class="pilcrow"></a>
+WaitingRoom constructor
+  </h2>
+</div>
+</div>
+<div class="body">
+<p>Instantiates a new WaitingRoom object</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">options</span>
+<span class="dox_type">object</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">WaitingRoom</span>(<span class="hljs-params">options</span>) </span>{
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.connected">
   <h3>
-    <a href="#waitingroom.withtimeout" name="waitingroom.withtimeout" class="pilcrow">&#182;</a>
-    WaitingRoom.withTimeout
+    <a href="#waitingroom.connected" name="waitingroom.connected" class="pilcrow"></a>
+WaitingRoom.connected
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The size of the group</p>
-  </div>
 </div>
+<div class="body">
+<p>Number of players connected</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.connected = <span class="hljs-number">0</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.maxwaittime">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.poolsize">
   <h3>
-    <a href="#waitingroom.maxwaittime" name="waitingroom.maxwaittime" class="pilcrow">&#182;</a>
-    WaitingRoom.maxWaitTime
+    <a href="#waitingroom.poolsize" name="waitingroom.poolsize" class="pilcrow"></a>
+WaitingRoom.poolSize
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The time in milliseconds for the timeout to expire</p>
-  </div>
 </div>
+<div class="body">
+<p>Number of players connected before groups are made</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">maxWaitTime</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.poolSize = <span class="hljs-number">0</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.ngames">
+  <h3>
+    <a href="#waitingroom.ngames" name="waitingroom.ngames" class="pilcrow"></a>
+WaitingRoom.nGames
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Total number of games to be dispatched</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.nGames = <span class="hljs-number">0</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.groupsize">
+  <h3>
+    <a href="#waitingroom.groupsize" name="waitingroom.groupsize" class="pilcrow"></a>
+WaitingRoom.groupSize
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The size of the group</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.groupSize = <span class="hljs-number">0</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.waittime">
+  <h3>
+    <a href="#waitingroom.waittime" name="waitingroom.waittime" class="pilcrow"></a>
+WaitingRoom.waitTime
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The time in milliseconds for the timeout to expire</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.waitTime = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.startdate">
+  <h3>
+    <a href="#waitingroom.startdate" name="waitingroom.startdate" class="pilcrow"></a>
+WaitingRoom.startDate
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>The exact date and time when the game starts</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.startDate = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="waitingroom.timeoutid">
   <h3>
-    <a href="#waitingroom.timeoutid" name="waitingroom.timeoutid" class="pilcrow">&#182;</a>
-    WaitingRoom.timeoutId
+    <a href="#waitingroom.timeoutid" name="waitingroom.timeoutid" class="pilcrow"></a>
+WaitingRoom.timeoutId
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>The id of the timeout, if created</p>
-  </div>
 </div>
+<div class="body">
+<p>The id of the timeout, if created</p>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.timeoutId = <span class="hljs-literal">null</span>;
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.playercountdiv">
-  <h3>
-    <a href="#waitingroom.playercountdiv" name="waitingroom.playercountdiv" class="pilcrow">&#182;</a>
-    WaitingRoom.playerCountDiv
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Div containing the span for displaying the number of players</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">WaitingRoom.playerCount
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCountDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.playercount">
-  <h3>
-    <a href="#waitingroom.playercount" name="waitingroom.playercount" class="pilcrow">&#182;</a>
-    WaitingRoom.playerCount
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Span displaying the number of connected players</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCount</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.timerdiv">
-  <h3>
-    <a href="#waitingroom.timerdiv" name="waitingroom.timerdiv" class="pilcrow">&#182;</a>
-    WaitingRoom.timerDiv
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Div containing the timer</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">WaitingRoom.timer
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.timer">
-  <h3>
-    <a href="#waitingroom.timer" name="waitingroom.timer" class="pilcrow">&#182;</a>
-    WaitingRoom.timer
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>VisualTimer instance for max wait time.</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">VisualTimer
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.dots">
-  <h3>
-    <a href="#waitingroom.dots" name="waitingroom.dots" class="pilcrow">&#182;</a>
-    WaitingRoom.dots
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Looping dots to give the user the feeling of code execution</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">dots</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.onttimeout">
-  <h3>
-    <a href="#waitingroom.onttimeout" name="waitingroom.onttimeout" class="pilcrow">&#182;</a>
-    WaitingRoom.ontTimeout
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Callback to be executed if the timer expires</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">ontTimeout</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.ontimeout">
-  <h3>
-    <a href="#waitingroom.ontimeout" name="waitingroom.ontimeout" class="pilcrow">&#182;</a>
-    WaitingRoom.onTimeout
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>TRUE if the timer expired</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">alreadyTimeUp</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-
-    <span class="p">}</span>
-
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="waitingroom%20methods">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.playercountdiv">
+  <h3>
+    <a href="#waitingroom.playercountdiv" name="waitingroom.playercountdiv" class="pilcrow"></a>
+WaitingRoom.playerCountDiv
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Div containing the span for displaying the number of players</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">WaitingRoom.playerCount</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.playerCountDiv = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.playercount">
+  <h3>
+    <a href="#waitingroom.playercount" name="waitingroom.playercount" class="pilcrow"></a>
+WaitingRoom.playerCount
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Span displaying the number of connected players</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.playerCount = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.startdatediv">
+  <h3>
+    <a href="#waitingroom.startdatediv" name="waitingroom.startdatediv" class="pilcrow"></a>
+WaitingRoom.startDateDiv
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Div containing the start date</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.startDateDiv = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.msgdiv">
+  <h3>
+    <a href="#waitingroom.msgdiv" name="waitingroom.msgdiv" class="pilcrow"></a>
+WaitingRoom.msgDiv
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Div containing optional messages to display</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.msgDiv = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.timerdiv">
+  <h3>
+    <a href="#waitingroom.timerdiv" name="waitingroom.timerdiv" class="pilcrow"></a>
+WaitingRoom.timerDiv
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Div containing the timer</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">WaitingRoom.timer</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.timerDiv = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.timer">
+  <h3>
+    <a href="#waitingroom.timer" name="waitingroom.timer" class="pilcrow"></a>
+WaitingRoom.timer
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>VisualTimer instance for max wait time.</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">VisualTimer</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.timer = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.dots">
+  <h3>
+    <a href="#waitingroom.dots" name="waitingroom.dots" class="pilcrow"></a>
+WaitingRoom.dots
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Looping dots to give the user the feeling of code execution</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.dots = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.ontimeout">
+  <h3>
+    <a href="#waitingroom.ontimeout" name="waitingroom.ontimeout" class="pilcrow"></a>
+WaitingRoom.onTimeout
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Callback to be executed if the timer expires</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.onTimeout = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.disconnectifnotselected">
+  <h3>
+    <a href="#waitingroom.disconnectifnotselected" name="waitingroom.disconnectifnotselected" class="pilcrow"></a>
+WaitingRoom.disconnectIfNotSelected
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Flag that indicates whether to disconnect an not selected player</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.disconnectIfNotSelected = <span class="hljs-literal">null</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.playwithbotoption">
+  <h3>
+    <a href="#waitingroom.playwithbotoption" name="waitingroom.playwithbotoption" class="pilcrow"></a>
+WaitingRoom.playWithBotOption
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Flag that indicates whether to display button that lets player begin
+the game with bots</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.playWithBotOption = <span class="hljs-literal">null</span>;
+    }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap" id="waitingroom-methods">
   <h2>
-    <a href="#waitingroom%20methods" name="waitingroom%20methods" class="pilcrow">&#182;</a>
-    WaitingRoom methods
+    <a href="#waitingroom-methods" name="waitingroom-methods" class="pilcrow"></a>
+WaitingRoom methods
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="javascript">
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="waitingroom.init">
   <h3>
-    <a href="#waitingroom.init" name="waitingroom.init" class="pilcrow">&#182;</a>
-    WaitingRoom.init
+    <a href="#waitingroom.init" name="waitingroom.init" class="pilcrow"></a>
+WaitingRoom.init
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Setups the requirements widget</p>
-
+</div>
+<div class="body">
+<p>Setups the requirements widget</p>
 <p>Available options:</p>
-
 <ul>
-<li>onComplete: function executed with either failure or success
-<ul><li>onTimeout: function executed when at least one test fails</li>
+<li>onComplete: function executed with either failure or success</li>
+<li>onTimeout: function executed when timer runs out</li>
 <li>onSuccess: function executed when all tests succeed</li>
-<li>maxWaitTime: max waiting time to execute all tests (in milliseconds)</li></ul></li>
+<li>waitTime: max waiting time to execute all tests (in milliseconds)</li>
+<li>startDate: max waiting time to execute all tests (in milliseconds)</li>
+<li>playWithBotOption: display button to dispatch players with bots</li>
 </ul>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">Params</div>
-    <div class="dox_tag_detail">
-      <span class="dox_tag_name">conf</span>
-      <span class="dox_type">object</span>
-      <span>Configuration object.</span>
-    </div>
-  </div>
 </div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">conf</span>
+<span class="dox_type">object</span>
+<span>Configuration object.
+</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf must be object.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;undefined&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onTimeout</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;function&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">    WaitingRoom.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">conf</span>) </span>{
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
 
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.onTimeout must &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;be function, null or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">maxWaitTime</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">!==</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxWaitTime</span> <span class="o">&amp;&amp;</span>
-                <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxWaitTime</span><span class="p">)</span> <span class="p">{</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> conf) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'WaitingRoom.init: conf must be object. '</span> +
+                                <span class="hljs-string">'Found: '</span> + conf);
+        }
+        <span class="hljs-keyword">if</span> (conf.onTimeout) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'function'</span> !== <span class="hljs-keyword">typeof</span> conf.onTimeout) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'WaitingRoom.init: conf.onTimeout must '</span> +
+                                    <span class="hljs-string">'be function, null or undefined. Found: '</span> +
+                                    conf.onTimeout);
+            }
+            <span class="hljs-keyword">this</span>.onTimeout = conf.onTimeout;
+        }
 
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.onMaxExecTime &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number, null or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">maxWaitTime</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">maxWaitTime</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">startTimer</span><span class="p">();</span>
-        <span class="p">}</span>
+        <span class="hljs-keyword">if</span> (conf.waitTime) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> !== conf.waitTime &amp;&amp;
+                <span class="hljs-string">'number'</span> !== <span class="hljs-keyword">typeof</span> conf.waitTime) {
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.poolSize &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.groupSize &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;number&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;WaitingRoom.init: conf.connected &#39;</span> <span class="o">+</span>
-                                    <span class="s1">&#39;must be number or undefined.&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">connected</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'WaitingRoom.init: conf.waitTime '</span> +
+                                    <span class="hljs-string">'must be number, null or undefined. '</span> +
+                                    <span class="hljs-string">'Found: '</span> + conf.waitTime);
+            }
+            <span class="hljs-keyword">this</span>.waitTime = conf.waitTime;
+            <span class="hljs-keyword">this</span>.startTimer();
+        }
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.addtimeout">
-  <h3>
-    <a href="#waitingroom.addtimeout" name="waitingroom.addtimeout" class="pilcrow">&#182;</a>
-    WaitingRoom.addTimeout
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Starts a timeout for the max waiting time</p>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">startTimer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timer</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">maxWaitTime</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;timer-div&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span>
-            <span class="s1">&#39;Maximum Waiting Time: &#39;</span>
-        <span class="p">));</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timer</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;VisualTimer&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span><span class="p">,</span> <span class="p">{</span>
-            <span class="nx">milliseconds</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxWaitTime</span><span class="p">,</span>
-            <span class="nx">timeup</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">onTimeup</span><span class="p">,</span>
-            <span class="nx">update</span><span class="o">:</span> <span class="mi">1000</span>
-        <span class="p">});</span>
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39"></a>
+</div>
+<p>TODO: check conditions?</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (conf.startDate) {
+            <span class="hljs-keyword">this</span>.setStartDate(conf.startDate);
+        }
+
+        <span class="hljs-keyword">if</span> (conf.poolSize) {
+            <span class="hljs-keyword">if</span> (conf.poolSize &amp;&amp; <span class="hljs-string">'number'</span> !== <span class="hljs-keyword">typeof</span> conf.poolSize) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'WaitingRoom.init: conf.poolSize '</span> +
+                                    <span class="hljs-string">'must be number or undefined. Found: '</span> +
+                                    conf.poolSize);
+            }
+            <span class="hljs-keyword">this</span>.poolSize = conf.poolSize;
+        }
+
+        <span class="hljs-keyword">if</span> (conf.groupSize) {
+            <span class="hljs-keyword">if</span> (conf.groupSize &amp;&amp; <span class="hljs-string">'number'</span> !== <span class="hljs-keyword">typeof</span> conf.groupSize) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'WaitingRoom.init: conf.groupSize '</span> +
+                                    <span class="hljs-string">'must be number or undefined. Found: '</span> +
+                                    conf.groupSize);
+            }
+            <span class="hljs-keyword">this</span>.groupSize = conf.groupSize;
+        }
+        <span class="hljs-keyword">if</span> (conf.nGames) {
+            <span class="hljs-keyword">if</span> (conf.nGames &amp;&amp; <span class="hljs-string">'number'</span> !== <span class="hljs-keyword">typeof</span> conf.nGames) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'WaitingRoom.init: conf.nGames '</span> +
+                                    <span class="hljs-string">'must be number or undefined. Found: '</span> +
+                                    conf.nGames);
+            }
+            <span class="hljs-keyword">this</span>.nGames = conf.nGames;
+        }
+
+        <span class="hljs-keyword">if</span> (conf.connected) {
+            <span class="hljs-keyword">if</span> (conf.connected &amp;&amp; <span class="hljs-string">'number'</span> !== <span class="hljs-keyword">typeof</span> conf.connected) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'WaitingRoom.init: conf.connected '</span> +
+                                    <span class="hljs-string">'must be number or undefined. Found: '</span> +
+                                    conf.connected);
+            }
+            <span class="hljs-keyword">this</span>.connected = conf.connected;
+        }
+
+        <span class="hljs-keyword">if</span> (conf.disconnectIfNotSelected) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'boolean'</span> !== <span class="hljs-keyword">typeof</span> conf.disconnectIfNotSelected) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'WaitingRoom.init: '</span> +
+                    <span class="hljs-string">'conf.disconnectIfNotSelected must be boolean or '</span> +
+                    <span class="hljs-string">'undefined. Found: '</span> + conf.disconnectIfNotSelected);
+            }
+            <span class="hljs-keyword">this</span>.disconnectIfNotSelected = conf.disconnectIfNotSelected;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.disconnectIfNotSelected = <span class="hljs-literal">false</span>;
+        }
+
+        <span class="hljs-keyword">if</span> (conf.playWithBotOption) {
+            <span class="hljs-keyword">this</span>.playWithBotOption = <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.playWithBotOption = <span class="hljs-literal">false</span>;
+        }
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.playWithBotOption &amp;&amp; !<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'bot_btn'</span>)) {
+            <span class="hljs-keyword">this</span>.playBotBtn = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'input'</span>);
+            <span class="hljs-keyword">this</span>.playBotBtn.className = <span class="hljs-string">'btn btn-secondary btn-lg'</span>;
+            <span class="hljs-keyword">this</span>.playBotBtn.value = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'playBot'</span>);
+            <span class="hljs-keyword">this</span>.playBotBtn.id = <span class="hljs-string">'bot_btn'</span>;
+            <span class="hljs-keyword">this</span>.playBotBtn.type = <span class="hljs-string">'button'</span>;
+            <span class="hljs-keyword">this</span>.playBotBtn.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                that.playBotBtn.value = that.getText(<span class="hljs-string">'connectingBots'</span>);
+                that.playBotBtn.disabled = <span class="hljs-literal">true</span>;
+                node.say(<span class="hljs-string">'PLAYWITHBOT'</span>);
+                setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                    that.playBotBtn.value = that.getText(<span class="hljs-string">'playBot'</span>);
+                    that.playBotBtn.disabled = <span class="hljs-literal">false</span>;
+                }, <span class="hljs-number">5000</span>);
+            };
+            <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'br'</span>));
+            <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.playBotBtn);
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.starttimer">
+  <h3>
+    <a href="#waitingroom.starttimer" name="waitingroom.starttimer" class="pilcrow"></a>
+WaitingRoom.startTimer
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Starts a timeout for the max waiting time</p>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    WaitingRoom.prototype.startTimer = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that = <span class="hljs-keyword">this</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.timer) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.waitTime) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.timerDiv) {
+            <span class="hljs-keyword">this</span>.timerDiv = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+            <span class="hljs-keyword">this</span>.timerDiv.id = <span class="hljs-string">'timer-div'</span>;
+        }
+        <span class="hljs-keyword">this</span>.timerDiv.appendChild(<span class="hljs-built_in">document</span>.createTextNode(
+            <span class="hljs-string">'Maximum Waiting Time: '</span>
+        ));
+        <span class="hljs-keyword">this</span>.timer = node.widgets.append(<span class="hljs-string">'VisualTimer'</span>, <span class="hljs-keyword">this</span>.timerDiv, {
+            <span class="hljs-attr">milliseconds</span>: <span class="hljs-keyword">this</span>.waitTime,
+            <span class="hljs-attr">timeup</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                that.bodyDiv.innerHTML = that.getText(<span class="hljs-string">'waitedTooLong'</span>);
+            },
+            <span class="hljs-attr">update</span>: <span class="hljs-number">1000</span>
+        });
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-41" id="section-41"></a>
 </div>
 <p>Style up: delete title and border;</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">panelDiv</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;ng_widget visualtimer&#39;</span><span class="p">;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.timer.setTitle();
+        <span class="hljs-keyword">this</span>.timer.panelDiv.className = <span class="hljs-string">'ng_widget visualtimer'</span>;
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-42" id="section-42"></a>
 </div>
 <p>Append to bodyDiv.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timerDiv</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.timerDiv);
+        <span class="hljs-keyword">this</span>.timer.start();
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
 <div class="pilwrap" id="waitingroom.cleartimeout">
   <h3>
-    <a href="#waitingroom.cleartimeout" name="waitingroom.cleartimeout" class="pilcrow">&#182;</a>
-    WaitingRoom.clearTimeout
+    <a href="#waitingroom.cleartimeout" name="waitingroom.cleartimeout" class="pilcrow"></a>
+WaitingRoom.clearTimeout
   </h3>
 </div>
-
-  </div>
-  <div class="body"><p>Clears the timeout for the max execution time of the requirements</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.timeoutId</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.stillCheckings</span>
-    </div>
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">this.requirements
-</span>
-    </div>
-  </div>
 </div>
+<div class="body">
+<p>Clears the timeout for the max execution time of the requirements</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.timeoutId</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.stillCheckings</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">this.requirements</span>
+</div>
+</div>
+</div>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">clearTimeout</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">clearTimeout</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">timeoutId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">    WaitingRoom.prototype.clearTimeout = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.timeoutId) {
+            clearTimeout(<span class="hljs-keyword">this</span>.timeoutId);
+            <span class="hljs-keyword">this</span>.timeoutId = <span class="hljs-literal">null</span>;
+        }
+    };
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.updatedisplay">
-  <h3>
-    <a href="#waitingroom.updatedisplay" name="waitingroom.updatedisplay" class="pilcrow">&#182;</a>
-    WaitingRoom.updateDisplay
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Displays the state of the waiting room on screen</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">WaitingRoom.updateState
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateState</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">update</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">update</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">update</span><span class="p">.</span><span class="nx">connected</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="nx">update</span><span class="p">.</span><span class="nx">connected</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">update</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span> <span class="o">=</span> <span class="nx">update</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;number&#39;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">update</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">groupSize</span> <span class="o">=</span> <span class="nx">update</span><span class="p">.</span><span class="nx">groupSize</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs"><div class="dox">
-  <div class="summary">
-<div class="pilwrap" id="waitingroom.updatedisplay">
-  <h3>
-    <a href="#waitingroom.updatedisplay" name="waitingroom.updatedisplay" class="pilcrow">&#182;</a>
-    WaitingRoom.updateDisplay
-  </h3>
-</div>
-
-  </div>
-  <div class="body"><p>Displays the state of the waiting room on screen</p>
-  </div>
-  <div class="details">
-    <div class="dox_tag_title">See</div>
-    <div class="dox_tag_detail">
-      <span class="dox_type">WaitingRoom.updateState
-</span>
-    </div>
-  </div>
-</div>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">updateDisplay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCount</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">connected</span> <span class="o">+</span> <span class="s1">&#39; / &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">poolSize</span><span class="p">;</span>
-    <span class="p">};</span>
-
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">append</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCountDiv</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCountDiv</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;player-count-div&#39;</span><span class="p">;</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCountDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span>
-            <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">&#39;Waiting for All Players to Connect: &#39;</span><span class="p">));</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCount</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCount</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;player-count&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCountDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">playerCount</span><span class="p">);</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">dots</span> <span class="o">=</span> <span class="nx">W</span><span class="p">.</span><span class="nx">getLoadingDots</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">playerCountDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dots</span><span class="p">.</span><span class="nx">span</span><span class="p">);</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">playerCountDiv</span><span class="p">);</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">maxWaitTime</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">startTimer</span><span class="p">();</span>
-        <span class="p">}</span>
-
-    <span class="p">};</span>
-
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span><span class="p">;</span>
-        <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-
-        <span class="nx">node</span><span class="p">.</span><span class="nx">registerSetup</span><span class="p">(</span><span class="s1">&#39;waitroom&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">conf</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;object&#39;</span> <span class="o">!==</span> <span class="k">typeof</span> <span class="nx">conf</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">node</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;waiting room widget: invalid setup object: &#39;</span> <span class="o">+</span> <span class="nx">conf</span><span class="p">);</span>
-                <span class="k">return</span><span class="p">;</span>
-            <span class="p">}</span>
-
-</pre></div>
-        </td>
-      </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.updatestate">
+  <h3>
+    <a href="#waitingroom.updatestate" name="waitingroom.updatestate" class="pilcrow"></a>
+WaitingRoom.updateState
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Displays the state of the waiting room on screen</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">WaitingRoom.updateState</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    WaitingRoom.prototype.updateState = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">update</span>) </span>{
+        <span class="hljs-keyword">if</span> (!update) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> update.connected) {
+            <span class="hljs-keyword">this</span>.connected = update.connected;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> update.poolSize) {
+            <span class="hljs-keyword">this</span>.poolSize = update.poolSize;
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-string">'number'</span> === <span class="hljs-keyword">typeof</span> update.groupSize) {
+            <span class="hljs-keyword">this</span>.groupSize = update.groupSize;
+        }
+    };
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.updatedisplay">
+  <h3>
+    <a href="#waitingroom.updatedisplay" name="waitingroom.updatedisplay" class="pilcrow"></a>
+WaitingRoom.updateDisplay
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Displays the state of the waiting room on screen</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">WaitingRoom.updateState</span>
+</div>
+</div>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">    WaitingRoom.prototype.updateDisplay = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> numberOfGameSlots, numberOfGames;
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.connected &gt; <span class="hljs-keyword">this</span>.poolSize) {
+            numberOfGames = <span class="hljs-built_in">Math</span>.floor(<span class="hljs-keyword">this</span>.connected / <span class="hljs-keyword">this</span>.groupSize);
+            numberOfGames = numberOfGames &gt; <span class="hljs-keyword">this</span>.nGames ?
+                <span class="hljs-keyword">this</span>.nGames : numberOfGames;
+            numberOfGameSlots = numberOfGames * <span class="hljs-keyword">this</span>.groupSize;
+
+            <span class="hljs-keyword">this</span>.playerCount.innerHTML = <span class="hljs-string">'&lt;span style="color:red"&gt;'</span> +
+                <span class="hljs-keyword">this</span>.connected + <span class="hljs-string">'&lt;/span&gt;'</span> + <span class="hljs-string">' / '</span> + <span class="hljs-keyword">this</span>.poolSize;
+            <span class="hljs-keyword">this</span>.playerCountTooHigh.style.display = <span class="hljs-string">''</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-46" id="section-46"></a>
+</div>
+<p>Update text.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">this</span>.playerCountTooHigh.innerHTML =
+                <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'tooManyPlayers'</span>, { <span class="hljs-attr">nGames</span>: numberOfGameSlots });
+        }
+        <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.playerCount.innerHTML = <span class="hljs-keyword">this</span>.connected + <span class="hljs-string">' / '</span> + <span class="hljs-keyword">this</span>.poolSize;
+            <span class="hljs-keyword">this</span>.playerCountTooHigh.style.display = <span class="hljs-string">'none'</span>;
+        }
+    };
+
+    WaitingRoom.prototype.append = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>.playerCountDiv = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        <span class="hljs-keyword">this</span>.playerCountDiv.id = <span class="hljs-string">'player-count-div'</span>;
+
+        <span class="hljs-keyword">this</span>.playerCountDiv.appendChild(
+            <span class="hljs-built_in">document</span>.createTextNode(<span class="hljs-string">'Waiting for All Players to Connect: '</span>));
+
+        <span class="hljs-keyword">this</span>.playerCount = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'p'</span>);
+        <span class="hljs-keyword">this</span>.playerCount.id = <span class="hljs-string">'player-count'</span>;
+        <span class="hljs-keyword">this</span>.playerCountDiv.appendChild(<span class="hljs-keyword">this</span>.playerCount);
+
+        <span class="hljs-keyword">this</span>.playerCountTooHigh = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        <span class="hljs-keyword">this</span>.playerCountTooHigh.style.display = <span class="hljs-string">'none'</span>;
+        <span class="hljs-keyword">this</span>.playerCountDiv.appendChild(<span class="hljs-keyword">this</span>.playerCountTooHigh);
+
+        <span class="hljs-keyword">this</span>.dots = W.getLoadingDots();
+        <span class="hljs-keyword">this</span>.playerCountDiv.appendChild(<span class="hljs-keyword">this</span>.dots.span);
+
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.playerCountDiv);
+
+        <span class="hljs-keyword">this</span>.startDateDiv = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.startDateDiv);
+        <span class="hljs-keyword">this</span>.startDateDiv.style.display= <span class="hljs-string">'none'</span>;
+
+        <span class="hljs-keyword">this</span>.msgDiv = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+        <span class="hljs-keyword">this</span>.bodyDiv.appendChild(<span class="hljs-keyword">this</span>.msgDiv);
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.startDate) {
+            <span class="hljs-keyword">this</span>.setStartDate(<span class="hljs-keyword">this</span>.startDate);
+        }
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.waitTime) {
+            <span class="hljs-keyword">this</span>.startTimer();
+        }
+    };
+
+    WaitingRoom.prototype.listeners = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> that;
+        that = <span class="hljs-keyword">this</span>;
+
+        node.registerSetup(<span class="hljs-string">'waitroom'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">conf</span>) </span>{
+            <span class="hljs-keyword">if</span> (!conf) <span class="hljs-keyword">return</span>;
+            <span class="hljs-keyword">if</span> (<span class="hljs-string">'object'</span> !== <span class="hljs-keyword">typeof</span> conf) {
+                node.warn(<span class="hljs-string">'waiting room widget: invalid setup object: '</span> + conf);
+                <span class="hljs-keyword">return</span>;
+            }
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-47" id="section-47"></a>
+</div>
+<p>Sounds.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            that.setSounds(conf.sounds);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-48" id="section-48"></a>
+</div>
+<p>Texts.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            that.setTexts(conf.texts);
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-49" id="section-49"></a>
 </div>
 <p>Configure all requirements.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">conf</span><span class="p">);</span>
+        <td class="code highlight">
+          <pre class="javascript">            that.init(conf);
 
-            <span class="k">return</span> <span class="nx">conf</span><span class="p">;</span>
-        <span class="p">});</span>
+            <span class="hljs-keyword">return</span> conf;
+        });
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-50" id="section-50"></a>
 </div>
 <p>NodeGame Listeners.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;PLAYERSCONNECTED&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
-        <span class="p">});</span>
+        <td class="code highlight">
+          <pre class="javascript">        node.on.data(<span class="hljs-string">'PLAYERSCONNECTED'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+            <span class="hljs-keyword">if</span> (!msg.data) <span class="hljs-keyword">return</span>;
+            that.connected = msg.data;
+            that.updateDisplay();
+        });
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;TIME&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">timeIsUp</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">that</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-        <span class="p">});</span>
+        node.on.data(<span class="hljs-string">'DISPATCH'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+            <span class="hljs-keyword">var</span> data, reportExitCode;
+            msg = msg || {};
+            data = msg.data || {};
 
+            <span class="hljs-keyword">if</span> (that.dots) that.dots.stop();
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-51" id="section-51"></a>
+</div>
+<p>Alert player he/she is about to play.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">if</span> (data.action === <span class="hljs-string">'allPlayersConnected'</span>) {
+                that.alertPlayer();
+            }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-52" id="section-52"></a>
+</div>
+<p>Not selected/no game/etc.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">            <span class="hljs-keyword">else</span> {
+                reportExitCode = that.getText(<span class="hljs-string">'exitCode'</span>, data);
+
+                <span class="hljs-keyword">if</span> (data.action === <span class="hljs-string">'notEnoughPlayers'</span>) {
+                    that.bodyDiv.innerHTML = that.getText(data.action);
+                    <span class="hljs-keyword">if</span> (that.onTimeout) that.onTimeout(msg.data);
+                    that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                }
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (data.action === <span class="hljs-string">'notSelected'</span>) {
+
+                    <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span> === data.shouldDispatchMoreGames ||
+                        that.disconnectIfNotSelected) {
+
+                        that.bodyDiv.innerHTML =
+                            that.getText(<span class="hljs-string">'notSelectedClosed'</span>);
+
+                        that.disconnect(that.bodyDiv.innerHTML +
+                                        reportExitCode);
+                    }
+                    <span class="hljs-keyword">else</span> {
+                        that.msgDiv.innerHTML = that.getText(<span class="hljs-string">'notSelectedOpen'</span>);
+                    }
+                }
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (data.action === <span class="hljs-string">'disconnect'</span>) {
+                    that.disconnect(that.bodyDiv.innerHTML + reportExitCode);
+                }
+            }
+        });
+
+        node.on.data(<span class="hljs-string">'TIME'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+            msg = msg || {};
+            node.info(<span class="hljs-string">'waiting room: TIME IS UP!'</span>);
+            that.stopTimer();
+        });
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-53" id="section-53"></a>
 </div>
 <p>Start waiting time timer.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;WAITTIME&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+        <td class="code highlight">
+          <pre class="javascript">        node.on.data(<span class="hljs-string">'WAITTIME'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-54" id="section-54"></a>
 </div>
 <p>Avoid running multiple timers.
 if (timeCheck) clearInterval(timeCheck);</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">
+            that.updateState(msg.data);
+            that.updateDisplay();
 
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateState</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">updateDisplay</span><span class="p">();</span>
+        });
 
-        <span class="p">});</span>
+        node.on(<span class="hljs-string">'SOCKET_DISCONNECT'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;SOCKET_DISCONNECT&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">alreadyTimeUp</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-55" id="section-55"></a>
 </div>
 <p>Terminate countdown.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">timer</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">destroy</span><span class="p">();</span>
-            <span class="p">}</span>
+        <td class="code highlight">
+          <pre class="javascript">            that.stopTimer();
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-56" id="section-56"></a>
 </div>
 <p>Write about disconnection in page.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">bodyDiv</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;span style=&quot;color: red&quot;&gt;You have been &#39;</span> <span class="o">+</span>
-                <span class="s1">&#39;&lt;strong&gt;disconnected&lt;/strong&gt;. Please try again later.&#39;</span> <span class="o">+</span>
-                <span class="s1">&#39;&lt;/span&gt;&lt;br&gt;&lt;br&gt;&#39;</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">            that.bodyDiv.innerHTML = that.getText(<span class="hljs-string">'disconnect'</span>);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-57" id="section-57"></a>
 </div>
-
-<div class="highlight"><pre><code>        <span class="c1">// Enough to not display it in case of page refresh.</span>
-        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Disconnection from server detected!&#39;</span><span class="p">);</span>
-        <span class="p">},</span> <span class="mi">200</span><span class="p">);</span>
-</code></pre></div>
-
+<p>Enough to not display it in case of page refresh.
+setTimeout(function() {
+alert('Disconnection from server detected!');
+}, 200);</p>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="p">});</span>
-    <span class="p">};</span>
+        <td class="code highlight">
+          <pre class="javascript">        });
 
-    <span class="nx">WaitingRoom</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">node</span><span class="p">.</span><span class="nx">deregisterSetup</span><span class="p">(</span><span class="s1">&#39;waitroom&#39;</span><span class="p">);</span>
-    <span class="p">};</span>
+        node.on.data(<span class="hljs-string">'ROOM_CLOSED'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            that.disconnect(that.getText(<span class="hljs-string">'roomClosed'</span>));
+        });
+    };
 
+    WaitingRoom.prototype.setStartDate = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">startDate</span>) </span>{
+        <span class="hljs-keyword">this</span>.startDate = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(startDate).toString();
+        <span class="hljs-keyword">this</span>.startDateDiv.innerHTML = <span class="hljs-string">'Game starts at: &lt;br&gt;'</span> + <span class="hljs-keyword">this</span>.startDate;
+        <span class="hljs-keyword">this</span>.startDateDiv.style.display = <span class="hljs-string">''</span>;
+    };
 
-</pre></div>
+    WaitingRoom.prototype.stopTimer = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.timer) {
+            node.info(<span class="hljs-string">'waiting room: STOPPING TIMER'</span>);
+            <span class="hljs-keyword">this</span>.timer.destroy();
+        }
+    };
+
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="helper%20methods">
-  <h2>
-    <a href="#helper%20methods" name="helper%20methods" class="pilcrow">&#182;</a>
-    Helper methods
-  </h2>
+          <div class="dox">
+<div class="summary">
+<div class="pilwrap" id="waitingroom.disconnect">
+  <h3>
+    <a href="#waitingroom.disconnect" name="waitingroom.disconnect" class="pilcrow"></a>
+WaitingRoom.disconnect
+  </h3>
+</div>
+</div>
+<div class="body">
+<p>Disconnects the playr, stops the timer, and displays a msg</p>
+</div>
+<div class="details">
+<div class="dox_tag_title">Params</div>
+<div class="dox_tag_detail">
+<span class="dox_tag_name">msg.</span>
+<span class="dox_type">string</span>
+<span class="dox_type">function</span>
+<span>Optional. A disconnect message. If set,    replaces the current value for future calls.
+</span>
+</div>
+<div class="dox_tag_title">See</div>
+<div class="dox_tag_detail">
+<span class="dox_type">WaitingRoom.setText</span>
+</div>
+</div>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="javascript">    WaitingRoom.prototype.disconnect = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+        <span class="hljs-keyword">if</span> (msg) <span class="hljs-keyword">this</span>.setText(<span class="hljs-string">'disconnect'</span>, msg);
+        node.socket.disconnect();
+        <span class="hljs-keyword">this</span>.stopTimer();
+    };
 
-    <span class="kd">function</span> <span class="nx">timeIsUp</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;TIME IS UP!&#39;</span><span class="p">);</span>
+    WaitingRoom.prototype.alertPlayer = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> clearBlink, onFrame;
+        <span class="hljs-keyword">var</span> blink, sound;
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">alreadyTimeUp</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">alreadyTimeUp</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timer</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">timer</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+        blink = <span class="hljs-keyword">this</span>.getText(<span class="hljs-string">'blinkTitle'</span>);
 
-        <span class="nx">data</span> <span class="o">=</span> <span class="nx">data</span> <span class="o">||</span> <span class="p">{};</span>
+        sound = <span class="hljs-keyword">this</span>.getSound(<span class="hljs-string">'dispatch'</span>);
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-59" id="section-59"></a>
 </div>
-<p>All players have connected. Game starts.</p>
+<p>Play sound, if requested.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">over</span> <span class="o">===</span> <span class="s1">&#39;AllPlayersConnected&#39;</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (sound) J.playSound(sound);
 
-        <span class="nx">node</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">();</span>
-
-
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">onTimeout</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
-    <span class="p">}</span>
-
-<span class="p">})(</span><span class="nx">node</span><span class="p">);</span>
-</pre></div>
+</pre>
         </td>
       </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-60" id="section-60"></a>
+</div>
+<p>If blinkTitle is falsy, don't blink the title.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (!blink) <span class="hljs-keyword">return</span>;
+
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-61" id="section-61"></a>
+</div>
+<p>If document.hasFocus() returns TRUE, then just one repeat is enough.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>.hasFocus &amp;&amp; <span class="hljs-built_in">document</span>.hasFocus()) {
+            J.blinkTitle(blink, { <span class="hljs-attr">repeatFor</span>: <span class="hljs-number">1</span> });
+        }
+</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-62" id="section-62"></a>
+</div>
+<p>Otherwise we repeat blinking until an event that shows that the
+user is active on the page happens, e.g. focus and click. However,
+the iframe is not created yet, and even later. if the user clicks it
+it won't be detected in the main window, so we need to handle it.</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="javascript">        <span class="hljs-keyword">else</span> {
+            clearBlink = J.blinkTitle(blink, {
+                <span class="hljs-attr">stopOnFocus</span>: <span class="hljs-literal">true</span>,
+                <span class="hljs-attr">stopOnClick</span>: <span class="hljs-built_in">window</span>
+            });
+            onFrame = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                <span class="hljs-keyword">var</span> frame;
+                clearBlink();
+                frame = W.getFrame();
+                <span class="hljs-keyword">if</span> (frame) {
+                    frame.removeEventListener(<span class="hljs-string">'mouseover'</span>, onFrame, <span class="hljs-literal">false</span>);
+                }
+            };
+            node.events.ng.once(<span class="hljs-string">'FRAME_GENERATED'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">frame</span>) </span>{
+                frame.addEventListener(<span class="hljs-string">'mouseover'</span>, onFrame, <span class="hljs-literal">false</span>);
+            });
+        }
+    };
+
+    WaitingRoom.prototype.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.dots) <span class="hljs-keyword">this</span>.dots.stop();
+        node.deregisterSetup(<span class="hljs-string">'waitroom'</span>);
+    };
+
+})(node);
+
+</pre>
+        </td>
+      </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

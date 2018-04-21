@@ -1,9 +1,9 @@
 /**
  * # MoneyTalks
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
- * Displays a box for formatting currency
+ * Displays a box for formatting earnings ("money") in currency
  *
  * www.nodegame.org
  */
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    MoneyTalks.version = '0.1.1';
+    MoneyTalks.version = '0.4.0';
     MoneyTalks.description = 'Displays the earnings of a player.';
 
     MoneyTalks.title = 'Earnings';
@@ -30,7 +30,7 @@
     /**
      * ## MoneyTalks constructor
      *
-     * `MoneyTalks` displays the earnings of the player so far
+     * `MoneyTalks` displays the earnings ("money") of the player so far
      *
      * @param {object} options Optional. Configuration options
      * which is forwarded to MoneyTalks.init.
@@ -38,26 +38,27 @@
      * @see MoneyTalks.init
      */
     function MoneyTalks(options) {
+
         /**
          * ### MoneyTalks.spanCurrency
          *
          * The SPAN which holds information on the currency
          */
-        this.spanCurrency = document.createElement('span');
+        this.spanCurrency = null;
 
         /**
          * ### MoneyTalks.spanMoney
          *
          * The SPAN which holds information about the money earned so far
          */
-        this.spanMoney = document.createElement('span');
+        this.spanMoney = null;
 
         /**
          * ### MoneyTalks.currency
          *
          * String describing the currency
          */
-        this.currency = 'EUR';
+        this.currency = 'ECU';
 
         /**
          * ### MoneyTalks.money
@@ -73,7 +74,26 @@
          */
         this.precision = 2;
 
-        this.init(options);
+        /**
+         * ### MoneyTalks.showCurrency
+         *
+         * If TRUE, the currency is displayed after the money
+         */
+        this.showCurrency = true;
+
+        /**
+         * ### MoneyTalks.currencyClassname
+         *
+         * Class name to be attached to the currency span
+         */
+        this.classnameCurrency = 'moneytalkscurrency';
+
+        /**
+         * ### MoneyTalks.currencyClassname
+         *
+         * Class name to be attached to the money span
+         */
+        this.classnameMoney = 'moneytalksmoney';
     }
 
     // ## MoneyTalks methods
@@ -86,52 +106,94 @@
      * @param {object} options Optional. Configuration options.
      *
      * The  options object can have the following attributes:
-     *   - `currency`: String describing currency to use.
-     *   - `money`: Current amount of money earned.
-     *   - `precision`: Precision of floating point output to use.
+     *
+     *   - `currency`: The name of currency.
+     *   - `money`: Initial amount of money earned.
+     *   - `precision`: How mamy floating point digits to use.
      *   - `currencyClassName`: Class name to be set for this.spanCurrency.
-     *   - `moneyClassName`: Class name to be set for this.spanMoney;
+     *   - `moneyClassName`: Class name to be set for this.spanMoney.
+     *   - `showCurrency`: Flag whether the name of currency is to be displayed.
      */
     MoneyTalks.prototype.init = function(options) {
-        this.currency = options.currency || this.currency;
-        this.money = options.money || this.money;
-        this.precision = options.precision || this.precision;
-
-        this.spanCurrency.className = options.currencyClassName ||
-            this.spanCurrency.className || 'moneytalkscurrency';
-        this.spanMoney.className = options.moneyClassName ||
-            this.spanMoney.className || 'moneytalksmoney';
-
-        this.spanCurrency.innerHTML = this.currency;
-        this.spanMoney.innerHTML = this.money;
+        if ('string' === typeof options.currency) {
+            this.currency = options.currency;
+        }
+        if ('undefined' !== typeof options.showCurrency) {
+            this.showCurrency = !!options.showCurrency;
+        }
+        if ('number' === typeof options.money) {
+            this.money = options.money;
+        }
+        if ('number' === typeof options.precision) {
+            this.precision = options.precision;
+        }
+        if ('string' === typeof options.MoneyClassName) {
+            this.classnameMoney = options.MoneyClassName;
+        }
+        if ('string' === typeof options.currencyClassName) {
+            this.classnameCurrency = options.currencyClassName;
+        }
     };
 
     MoneyTalks.prototype.append = function() {
+        if (!this.spanMoney) {
+            this.spanMoney = document.createElement('span');
+        }
+        if (!this.spanCurrency) {
+            this.spanCurrency = document.createElement('span');
+        }
+        if (!this.showCurrency) this.spanCurrency.style.display = 'none';
+
+        this.spanMoney.className = this.classnameMoney;
+        this.spanCurrency.className = this.classnameCurrency;
+
+        this.spanCurrency.innerHTML = this.currency;
+        this.spanMoney.innerHTML = this.money;
+
         this.bodyDiv.appendChild(this.spanMoney);
         this.bodyDiv.appendChild(this.spanCurrency);
     };
 
     MoneyTalks.prototype.listeners = function() {
         var that = this;
-        node.on('MONEYTALKS', function(amount) {
-            that.update(amount);
+        node.on('MONEYTALKS', function(amount, clear) {
+            that.update(amount, clear);
         });
     };
 
     /**
      * ### MoneyTalks.update
      *
-     * Updates the contents of this.money and this.spanMoney according to amount
+     * Updates the display and the count of available "money"
+     *
+     * @param {string|number} amount Amount to add to current value of money
+     * @param {boolean} clear Optional. If TRUE, money will be set to 0
+     *    before adding the new amount
+     *
+     * @see MoneyTalks.money
+     * @see MonetyTalks.spanMoney
      */
-    MoneyTalks.prototype.update = function(amount) {
-        if ('number' !== typeof amount) {
-            // Try to parse strings
-            amount = parseInt(amount, 10);
-            if (isNaN(amount) || !isFinite(amount)) {
-                return;
-            }
+    MoneyTalks.prototype.update = function(amount, clear) {
+        var parsedAmount;
+        parsedAmount = J.isNumber(amount);
+        if (parsedAmount === false) {
+            node.err('MoneyTalks.update: invalid amount: ' + amount);
+            return;
         }
-        this.money += amount;
+        if (clear) this.money = 0;
+        this.money += parsedAmount;
         this.spanMoney.innerHTML = this.money.toFixed(this.precision);
     };
+
+    /**
+     * ### MoneyTalks.getValues
+     *
+     * Returns the current value of "money"
+     *
+     * @see MoneyTalks.money
+     */
+    MoneyTalks.prototype.getValues = function() {
+        return this.money;
+    };
+
 })(node);
