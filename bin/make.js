@@ -49,7 +49,7 @@ program
             return false;
         }
         var command = dockerDir + 'docker -i ' + rootDir +
-            ' index.js lib/ widgets/ -s true -o ' + rootDir + 'docs/ -u';
+            ' index.js lib/ widgets/ -o ' + rootDir + 'docs/ -u';
         var child = exec(command, function (error, stdout, stderr) {
             if (stdout) console.log(stdout);
             if (stderr) console.log(stderr);
