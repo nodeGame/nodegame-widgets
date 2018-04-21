@@ -1,6 +1,6 @@
 /**
  * # VisualTimer
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -13,17 +13,15 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('VisualTimer', VisualTimer);
 
     // ## Meta-data
 
-    VisualTimer.version = '0.9.0';
+    VisualTimer.version = '0.9.1';
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
-    VisualTimer.title = 'Time left';
+    VisualTimer.title = 'Time Left';
     VisualTimer.className = 'visualtimer';
 
     // ## Dependencies
@@ -141,7 +139,7 @@
         options = options || {};
         if ('object' !== typeof options) {
             throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined');
+                                'object or undefined. Found: ' + options);
         }
 
         // Important! Do not modify directly options, because it might
@@ -618,12 +616,11 @@
          */
         this.timeLeft = null;
 
-        this.boxDiv = node.window.getDiv();
-        this.titleDiv = node.window.addDiv(this.boxDiv);
-        this.bodyDiv = node.window.addDiv(this.boxDiv);
+        this.boxDiv =   W.get('div');
+        this.titleDiv = W.add('div', this.boxDiv);
+        this.bodyDiv =  W.add('div', this.boxDiv);
 
         this.init(options);
-
     }
 
     TimerBox.prototype.init = function(options) {

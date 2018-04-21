@@ -1,6 +1,6 @@
 /**
  * # DoneButton
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed emits node.done()
@@ -11,20 +11,17 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('DoneButton', DoneButton);
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.0';
+    DoneButton.version = '0.2.2';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
     DoneButton.title = 'Done Button';
     DoneButton.className = 'donebutton';
-
-    DoneButton.text = 'I am done';
+    DoneButton.texts.done = 'Done';
 
     // ## Dependencies
 
@@ -70,8 +67,6 @@
             res = node.done();
             if (res) that.disable();
         };
-
-        this.init(options);
     }
 
     // ## DoneButton methods
@@ -132,9 +127,18 @@
         }
         this.button.className = tmp;
 
-
+        this._setText = this.setText;
+        this.setText = function(text, value) {
+            this._setText(text, value);
+            this.button.value = value;
+        };
         // Button text.
-        this.setText(options.text);
+        if ('undefined' !== typeof options.text) {
+            this.setText('done', options.text);
+        }
+        else {
+            this.button.value = this.getText('done');
+        }
     };
 
     DoneButton.prototype.append = function() {

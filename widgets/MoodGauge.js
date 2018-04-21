@@ -15,15 +15,17 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.2.0';
+    MoodGauge.version = '0.2.1';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
     MoodGauge.title = 'Mood Gauge';
     MoodGauge.className = 'moodgauge';
 
-    // ## Dependencies
+    MoodGauge.texts.mainText = 'Thinking about yourself and how you normally' +
+                ' feel, to what extent do you generally feel: ';
 
+    // ## Dependencies
     MoodGauge.dependencies = {
         JSUS: {}
     };
@@ -116,7 +118,7 @@
     };
 
     MoodGauge.prototype.append = function() {
-        node.widgets.append(this.gauge, this.bodyDiv);
+        node.widgets.append(this.gauge, this.bodyDiv, { panel: false });
     };
 
     MoodGauge.prototype.listeners = function() {};
@@ -199,17 +201,8 @@
 
     // ### I_PANAS_SF
     function I_PANAS_SF(options) {
-        var items, emotions, mainText, choices, left, right;
+        var items, emotions, choices, left, right;
         var gauge, i, len;
-
-        if ('undefined' === typeof options.mainText) {
-            mainText = 'Thinking about yourself and how you normally feel, ' +
-                'to what extent do you generally feel: ';
-        }
-        else if ('string' === typeof options.mainText) {
-            mainText = options.mainText;
-        }
-        // Other types ignored.
 
         choices = options.choices ||
             [ '1', '2', '3', '4', '5' ];
@@ -248,7 +241,7 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'ipnassf',
             items: items,
-            mainText: mainText,
+            mainText: this.getText('mainText'),
             title: false,
             requiredChoice: true
         });

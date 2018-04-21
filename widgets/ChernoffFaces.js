@@ -1,6 +1,6 @@
 /**
  * # ChernoffFaces
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -11,14 +11,13 @@
 
     "use strict";
 
-    var J = node.JSUS;
-    var Table = node.window.Table;
+    var Table = W.Table;
 
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.6.1';
+    ChernoffFaces.version = '0.6.2';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -363,7 +362,7 @@
                 time: time,
                 change: features
             });
-        };
+        }
 
         // Create a new FaceVector, if features is not one, mixing-in
         // new features and old ones.
