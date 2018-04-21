@@ -1,1 +1,1 @@
-var tree={"files":["index.js"]};
+var tree={};
