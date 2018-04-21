@@ -8250,7 +8250,7 @@
 
 /**
  * # EndScreen
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -8539,10 +8539,9 @@
             exitCodeElement = document.createElement('div');
             exitCodeElement.className = 'input-group';
 
-            exitCodeParaElement = document.createElement('p');
+            exitCodeParaElement = document.createElement('span');
             exitCodeParaElement.innerHTML = '<strong>' +
-                                            this.getText('exitCode') +
-                                            '</strong>';
+                this.getText('exitCode') + '</strong>';
 
             exitCodeInputElement = document.createElement('input');
             exitCodeInputElement.id = 'exit_code';
@@ -8553,9 +8552,9 @@
             exitCodeGroup = document.createElement('span');
             exitCodeGroup.className = 'input-group-btn';
 
-            exitCodeBtn = document.createElement('input');
-            exitCodeBtn.className = 'btn btn-secondary';
-            exitCodeBtn.value = this.getText('copyButton');
+            exitCodeBtn = document.createElement('button');
+            exitCodeBtn.className = 'btn btn-default endscreen-copy-btn';
+            exitCodeBtn.innerHTML = this.getText('copyButton');
             exitCodeBtn.type = 'button';
             exitCodeBtn.onclick = function() {
                 that.copy(exitCodeInputElement.value);
@@ -8820,6 +8819,8 @@
          * ### Feedback.showCharCount
          *
          * If TRUE, the character count is shown
+         *
+         * Default: true
          *
          * @see Feedback.charCounter
          */
