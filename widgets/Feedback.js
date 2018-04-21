@@ -115,6 +115,8 @@
          *
          * If TRUE, the character count is shown
          *
+         * Default: true
+         *
          * @see Feedback.charCounter
          */
         if ('undefined' === typeof options.showCount) {
