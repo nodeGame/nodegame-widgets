@@ -1,18 +1,17 @@
 # nodegame-widgets
 
+[![Build Status](https://travis-ci.org/nodeGame/nodegame-widgets.png?branch=master)](https://travis-ci.org/nodeGame/nodegame-widgets)
 
-[![Build Status](https://travis-ci.org/nodeGame/nodegame-widgets.png?branch=master)](https://travis-ci.org/nodeGame/nodegame-client)
+
+Collection of reusable components (widgets) for nodeGame. 
+
+Widgets can display timers, count rounds, display total earnings, draw Chernoff faces and much more.
+
+## Resources
 
 - See [documentation](https://github.com/nodeGame/nodegame/wiki).
 - Browse [source code](http://nodegame.github.io/nodegame-widgets/docs/index.js.html).
 
 ## License
 
-Copyright (C) 2014 Stefano Balietti
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+[MIT](LICENSE)
