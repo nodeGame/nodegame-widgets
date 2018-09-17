@@ -14,7 +14,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-    WaitingRoom.version = '1.2.1';
+    WaitingRoom.version = '1.3.1';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -237,10 +237,47 @@
         /**
          * ### WaitingRoom.playWithBotOption
          *
-         * Flag that indicates whether to display button that lets player begin
-         * the game with bots
+         * If TRUE, it displays a button to begin the game with bots
+         *
+         * This option is set by the server, local modifications will
+         * not have an effect if server does not allow it
+         *
+         * @see WaitingRoom.playBotBtn
          */
         this.playWithBotOption = null;
+
+        /**
+         * ### WaitingRoom.playBotBtn
+         *
+         * Reference to the button to play with bots
+         *
+         * Will be created if requested by options.
+         *
+         * @see WaitingRoom.playWithBotOption
+         */
+        this.playBotBtn = null
+
+        /**
+         * ### WaitingRoom.selectTreatmentOption
+         *
+         * If TRUE, it displays a selector to choose the treatment of the game
+         *
+         * This option is set by the server, local modifications will
+         * not have an effect if server does not allow it
+         */
+        this.selectTreatmentOption = null;
+
+        /**
+         * ### WaitingRoom.treatmentBtn
+         *
+         * Reference to the button to select treatments
+         *
+         * Will be created if requested by options.
+         *
+         * @see WaitingRoom.selectTreatmentOption
+         */
+        this.treatmentBtn = null
+
     }
 
     // ## WaitingRoom methods
@@ -250,6 +287,8 @@
      *
      * Setups the requirements widget
      *
+     * TODO: Update this doc (list of options).
+     *
      * Available options:
      *
      *   - onComplete: function executed with either failure or success
@@ -257,7 +296,8 @@
      *   - onSuccess: function executed when all tests succeed
      *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *   - startDate: max waiting time to execute all tests (in milliseconds)
-     *   - playWithBotOption: display button to dispatch players with bots
+     *   - playWithBotOption: displays button to dispatch players with bots
+     *   - selectTreatmentOption: displays treatment selector
      *
      * @param {object} conf Configuration object.
      */
@@ -340,12 +380,8 @@
             this.disconnectIfNotSelected = false;
         }
 
-        if (conf.playWithBotOption) {
-            this.playWithBotOption = true;
-        }
-        else {
-            this.playWithBotOption = false;
-        }
+        if (conf.playWithBotOption) this.playWithBotOption = true;
+        else this.playWithBotOption = false;
 
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
             this.playBotBtn = document.createElement('input');
@@ -364,6 +400,33 @@
             };
             this.bodyDiv.appendChild(document.createElement('br'));
             this.bodyDiv.appendChild(this.playBotBtn);
+        }
+
+        if (conf.selectTreatmenttOption) this.selectTreatment = true;
+        else this.selectTreatmentOption = false;
+
+
+        if (this.selectTreatmentOption &&
+            !document.getElementById('treatment_btn')) {
+
+            // TODO: adjust all below (it was copied by playBot).
+
+            this.treatmentBtn = document.createElement('input');
+            this.treatmentBtn.className = 'btn btn-secondary btn-lg';
+            this.treatmentBtn.value = this.getText('playBot');
+            this.treatmentBtn.id = 'treatment_btn';
+            this.treatmentBtn.type = 'button';
+            this.treatmentBtn.onclick = function() {
+                that.treatmentBtn.value = that.getText('connectingBots');
+                that.treatmentBtn.disabled = true;
+                node.say('PLAYWITHBOT');
+                setTimeout(function() {
+                    that.treatmentBtn.value = that.getText('playBot');
+                    that.treatmentBtn.disabled = false;
+                }, 5000);
+            };
+            this.bodyDiv.appendChild(document.createElement('br'));
+            this.bodyDiv.appendChild(this.treatmentBtn);
         }
     };
 
