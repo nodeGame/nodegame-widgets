@@ -255,7 +255,7 @@
          *
          * @see WaitingRoom.playWithBotOption
          */
-        this.playBotBtn = null
+        this.playBotBtn = null;
 
         /**
          * ### WaitingRoom.selectTreatmentOption
@@ -382,8 +382,12 @@
 
         if (conf.playWithBotOption) this.playWithBotOption = true;
         else this.playWithBotOption = false;
+        if (conf.selectTreatmenttOption) this.selectTreatment = true;
+        else this.selectTreatmentOption = false;
 
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
+
+
             this.playBotBtn = document.createElement('input');
             this.playBotBtn.className = 'btn btn-secondary btn-lg';
             this.playBotBtn.value = this.getText('playBot');
@@ -402,31 +406,30 @@
             this.bodyDiv.appendChild(this.playBotBtn);
         }
 
-        if (conf.selectTreatmenttOption) this.selectTreatment = true;
-        else this.selectTreatmentOption = false;
 
 
         if (this.selectTreatmentOption &&
             !document.getElementById('treatment_btn')) {
 
-            // TODO: adjust all below (it was copied by playBot).
+            var btnGroup = document.createElement('div');
+            btnGroup.role = 'group';
+            btnGroup['aria-label'] = 'Play Buttons';
+            btnGroup.className = 'btn-group';
 
-            this.treatmentBtn = document.createElement('input');
-            this.treatmentBtn.className = 'btn btn-secondary btn-lg';
-            this.treatmentBtn.value = this.getText('playBot');
-            this.treatmentBtn.id = 'treatment_btn';
-            this.treatmentBtn.type = 'button';
-            this.treatmentBtn.onclick = function() {
-                that.treatmentBtn.value = that.getText('connectingBots');
-                that.treatmentBtn.disabled = true;
-                node.say('PLAYWITHBOT');
-                setTimeout(function() {
-                    that.treatmentBtn.value = that.getText('playBot');
-                    that.treatmentBtn.disabled = false;
-                }, 5000);
-            };
-            this.bodyDiv.appendChild(document.createElement('br'));
-            this.bodyDiv.appendChild(this.treatmentBtn);
+            var btnGroupTreatments = document.createElement('div');
+            btnGroupTreatments.role = 'group';
+            btnGroupTreatments['aria-label'] = 'Select Treatment';
+
+            var btnTreatment = document.createElement('div');
+            btnTreatment.className = 'btn-group';
+
+            var btnDropdown = document.createElement('div');
+            btnDropdown.className = 'dropdown-menu';
+
+            // TODO: continue here.
+
+
+            this.treatmentBtn = btnDropdown;
         }
     };
 
