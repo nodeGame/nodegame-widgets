@@ -403,7 +403,7 @@
 
         if (conf.playWithBotOption) this.playWithBotOption = true;
         else this.playWithBotOption = false;
-        if (conf.selectTreatmenttOption) this.selectTreatment = true;
+        if (conf.selectTreatmentOption) this.selectTreatmentOption = true;
         else this.selectTreatmentOption = false;
 
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
@@ -422,7 +422,7 @@
                 playBotBtn.onclick = function() {
                     w.playBotBtn.value = w.getText('connectingBots');
                     w.playBotBtn.disabled = true;
-                    node.say('PLAYWITHBOT');
+                    node.say('PLAYWITHBOT', 'SERVER', w.selectedTreatment);
                     setTimeout(function() {
                         w.playBotBtn.value = w.getText('playBot');
                         w.playBotBtn.disabled = false;
@@ -434,7 +434,7 @@
                 // Store reference in widget.
                 w.playBotBtn = playBotBtn;
 
-                if (true || w.selectTreatmentOption) {
+                if (w.selectTreatmentOption) {
 
                     var btnGroupTreatments = document.createElement('div');
                     btnGroupTreatments.role = 'group';
@@ -477,6 +477,9 @@
 
                     btnGroup.appendChild(btnGroupTreatments);
 
+                    // Variable toggled controls if the dropdown menu
+                    // is displayed (we are not using bootstrap js files)
+                    // and we redo the job manually here.
                     var toggled = false;
                     btnTreatment.onclick = function() {
                         if (toggled) {
