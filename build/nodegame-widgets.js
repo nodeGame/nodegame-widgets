@@ -13780,10 +13780,17 @@
 
         // #### tooManyPlayers
         tooManyPlayers: function(widget, data) {
-            return 'There are more players in this waiting room ' +
-                'than there are playslots in the game. Only ' +
-                data.nGames + ' players will be selected ' +
-                'to play the game.';
+            var str;
+            str = 'There are more players in this waiting room ' +
+                'than playslots in the game. ';
+            if (widget.poolSize === 1) {
+                str += 'Each player will play individually.';
+            }
+            else {
+                str += 'Only ' + data.nGames + ' players will be selected ' +
+                    'to play the game.';
+            }
+            return str;
         },
 
         // #### notSelectedClosed
@@ -13864,8 +13871,12 @@
          * ### WaitingRoom.nGames
          *
          * Total number of games to be dispatched
+         *
+         * Server will close the waiting room afterwards.
+         *
+         * Undefined means no limit.
          */
-        this.nGames = 0;
+        this.nGames = undefined;
 
         /**
          * ### WaitingRoom.groupSize
@@ -14300,8 +14311,10 @@
         var numberOfGameSlots, numberOfGames;
         if (this.connected > this.poolSize) {
             numberOfGames = Math.floor(this.connected / this.groupSize);
-            numberOfGames = numberOfGames > this.nGames ?
-                this.nGames : numberOfGames;
+            if ('undefined' !== typeof this.nGames) {
+                numberOfGames = numberOfGames > this.nGames ?
+                    this.nGames : numberOfGames;
+            }
             numberOfGameSlots = numberOfGames * this.groupSize;
 
             this.playerCount.innerHTML = '<span style="color:red">' +
