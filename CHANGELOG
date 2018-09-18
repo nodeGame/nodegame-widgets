@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 4.1.0 (current, not npm)
+- Waiting room supports treatment selection.
+
 ## 4.0.0
 - `EndScreen` widget displays information such earnings, exit code, feedback and email forms.
 - `Feedback` widget (compatible as Choice-Like widget).
