@@ -14,7 +14,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-    WaitingRoom.version = '1.3.1';
+    WaitingRoom.version = '1.3.0';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -467,16 +467,18 @@
 
                     var ul = document.createElement('ul');
                     ul.className = 'dropdown-menu';
+                    ul.style = 'text-align: left';
 
                     var li, a, t;
                     if (conf.availableTreatments) {
                         for (t in conf.availableTreatments) {
                             if (conf.availableTreatments.hasOwnProperty(t)) {
                                 li = document.createElement('li');
+                                li.id = t;
                                 a = document.createElement('a');
                                 a.href = '#';
-                                a.id = t;
-                                a.appendChild(document.createTextNode(t));
+                                a.innerHTML = '<strong>' + t + '</strong>: ' +
+                                    conf.availableTreatments[t];
                                 li.appendChild(a);
                                 ul.appendChild(li);
                             }
@@ -498,7 +500,7 @@
                             toggled = false;
                         }
                         else {
-                            ul.style = 'display: block';
+                            ul.style = 'display: block; text-align: left';
                             toggled = true;
                         }
                     };
@@ -506,7 +508,10 @@
                     ul.onclick = function(eventData) {
                         var t;
                         ul.style = 'display: none';
-                        t = eventData.target.id;
+                        t = eventData.target.parentNode.id;
+                        if (!t) t = eventData.target.parentNode.parentNode.id;
+                        console.log(eventData.target.parentNode);
+                        console.log(t);
                         btnTreatment.innerHTML = t + ' ';
                         btnTreatment.appendChild(span);
                         w.selectedTreatment = t;
