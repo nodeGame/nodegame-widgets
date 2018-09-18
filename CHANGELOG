@@ -2,6 +2,7 @@
 
 ## 4.1.0 (current, not npm)
 - Waiting room supports treatment selection.
+- Fixed text tooManyPlayers.
 
 ## 4.0.0
 - `EndScreen` widget displays information such earnings, exit code, feedback and email forms.
