@@ -101,10 +101,31 @@
         },
 
         // #### playBot
-        playBot: 'Play With Bot/s',
+        playBot: function(widget) {
+            if (widget.poolSize === widget.groupSize &&
+                widget.groupSize === 1) {
+
+                return 'Play';
+            }
+            if (widget.groupSize === 2) return 'Play With Bot';
+            return 'Play With Bots';
+        },
 
         // #### connectingBots
-        connectingBots: 'Connecting Bot/s, Please Wait...'
+        connectingBots:  function(widget) {
+            console.log(widget.poolSize, widget.groupSize);
+            if (widget.poolSize === widget.groupSize &&
+                widget.groupSize === 1) {
+
+                return 'Starting, Please Wait...';
+            }
+            if (widget.groupSize === 2) return 'Connecting Bot, Please Wait...';
+            return 'Connecting Bot/s, Please Wait...';
+        },
+
+        // #### selectTreatment
+        // Trailing space makes it nicer.
+        selectTreatment: 'Select Treatment '
     };
 
     /**
@@ -386,50 +407,91 @@
         else this.selectTreatmentOption = false;
 
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
+            // Closure to create button group.
+            (function(w) {
+                var btnGroup = document.createElement('div');
+                btnGroup.role = 'group';
+                btnGroup['aria-label'] = 'Play Buttons';
+                btnGroup.className = 'btn-group';
 
+                var playBotBtn = document.createElement('input');
+                playBotBtn.className = 'btn btn-secondary btn-lg';
+                playBotBtn.value = w.getText('playBot');
+                playBotBtn.id = 'bot_btn';
+                playBotBtn.type = 'button';
+                playBotBtn.onclick = function() {
+                    w.playBotBtn.value = w.getText('connectingBots');
+                    w.playBotBtn.disabled = true;
+                    node.say('PLAYWITHBOT');
+                    setTimeout(function() {
+                        w.playBotBtn.value = w.getText('playBot');
+                        w.playBotBtn.disabled = false;
+                    }, 5000);
+                };
 
-            this.playBotBtn = document.createElement('input');
-            this.playBotBtn.className = 'btn btn-secondary btn-lg';
-            this.playBotBtn.value = this.getText('playBot');
-            this.playBotBtn.id = 'bot_btn';
-            this.playBotBtn.type = 'button';
-            this.playBotBtn.onclick = function() {
-                that.playBotBtn.value = that.getText('connectingBots');
-                that.playBotBtn.disabled = true;
-                node.say('PLAYWITHBOT');
-                setTimeout(function() {
-                    that.playBotBtn.value = that.getText('playBot');
-                    that.playBotBtn.disabled = false;
-                }, 5000);
-            };
-            this.bodyDiv.appendChild(document.createElement('br'));
-            this.bodyDiv.appendChild(this.playBotBtn);
-        }
+                btnGroup.appendChild(playBotBtn);
 
+                // Store reference in widget.
+                w.playBotBtn = playBotBtn;
 
+                if (true || w.selectTreatmentOption) {
 
-        if (this.selectTreatmentOption &&
-            !document.getElementById('treatment_btn')) {
+                    var btnGroupTreatments = document.createElement('div');
+                    btnGroupTreatments.role = 'group';
+                    btnGroupTreatments['aria-label'] = 'Select Treatment';
+                    btnGroupTreatments.className = 'btn-group';
 
-            var btnGroup = document.createElement('div');
-            btnGroup.role = 'group';
-            btnGroup['aria-label'] = 'Play Buttons';
-            btnGroup.className = 'btn-group';
+                    var btnTreatment = document.createElement('button');
+                    btnTreatment.className = 'btn btn-default btn-lg ' +
+                        'dropdown-toggle';
+                    btnTreatment['data-toggle'] = 'dropdown';
+                    btnTreatment['aria-haspopup'] = 'true';
+                    btnTreatment['aria-expanded'] = 'false';
+                    btnTreatment.innerHTML = w.getText('selectTreatment');
 
-            var btnGroupTreatments = document.createElement('div');
-            btnGroupTreatments.role = 'group';
-            btnGroupTreatments['aria-label'] = 'Select Treatment';
+                    var span = document.createElement('span');
+                    span.className = 'caret';
 
-            var btnTreatment = document.createElement('div');
-            btnTreatment.className = 'btn-group';
+                    btnTreatment.appendChild(span);
 
-            var btnDropdown = document.createElement('div');
-            btnDropdown.className = 'dropdown-menu';
+                    var ul = document.createElement('ul');
+                    ul.className = 'dropdown-menu';
 
-            // TODO: continue here.
+                    var li = document.createElement('li');
+                    li.innerHTML = '<a href="#", id="standard">standard</a>';
+                    ul.appendChild(li);
 
+                    btnGroupTreatments.appendChild(btnTreatment);
+                    btnGroupTreatments.appendChild(ul);
 
-            this.treatmentBtn = btnDropdown;
+                    btnGroup.appendChild(btnGroupTreatments);
+
+                    var toggled = false;
+                    btnTreatment.onclick = function() {
+                        if (toggled) {
+                            ul.style = 'display: none';
+                            toggled = false;
+                        }
+                        else {
+                            ul.style = 'display: block';
+                            toggled = true;
+                        }
+                    };
+
+                    ul.onclick = function(eventData) {
+                        ul.style = 'display: none';
+                        btnTreatment.innerHTML = eventData.target.id + ' ';
+                        btnTreatment.appendChild(span);
+                    };
+
+                    // Store Reference in widget.
+                    w.treatmentBtn = btnTreatment;
+                }
+                // Append button group.
+                w.bodyDiv.appendChild(document.createElement('br'));
+                w.bodyDiv.appendChild(btnGroup);
+
+            })(this);
         }
     };
 
