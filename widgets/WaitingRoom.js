@@ -291,13 +291,13 @@
         /**
          * ### WaitingRoom.treatmentBtn
          *
-         * Reference to the button to select treatments
+         * Holds the name of selected treatment
          *
-         * Will be created if requested by options.
+         * Only used if `selectTreatmentOption` is enabled
          *
          * @see WaitingRoom.selectTreatmentOption
          */
-        this.treatmentBtn = null
+        this.selectedTreatment = null;
 
     }
 
@@ -457,9 +457,20 @@
                     var ul = document.createElement('ul');
                     ul.className = 'dropdown-menu';
 
-                    var li = document.createElement('li');
-                    li.innerHTML = '<a href="#", id="standard">standard</a>';
-                    ul.appendChild(li);
+                    var li, a, t;
+                    if (conf.availableTreatments) {
+                        for (t in conf.availableTreatments) {
+                            if (conf.availableTreatments.hasOwnProperty(t)) {
+                                li = document.createElement('li');
+                                a = document.createElement('a');
+                                a.href = '#';
+                                a.id = t;
+                                a.appendChild(document.createTextNode(t));
+                                li.appendChild(a);
+                                ul.appendChild(li);
+                            }
+                        }
+                    }
 
                     btnGroupTreatments.appendChild(btnTreatment);
                     btnGroupTreatments.appendChild(ul);
@@ -479,9 +490,13 @@
                     };
 
                     ul.onclick = function(eventData) {
+                        var t;
                         ul.style = 'display: none';
-                        btnTreatment.innerHTML = eventData.target.id + ' ';
+                        t = eventData.target.id;
+                        btnTreatment.innerHTML = t + ' ';
                         btnTreatment.appendChild(span);
+                        w.selectedTreatment = t;
+                        toggled = false;
                     };
 
                     // Store Reference in widget.

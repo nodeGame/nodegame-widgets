@@ -13723,7 +13723,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-    WaitingRoom.version = '1.2.1';
+    WaitingRoom.version = '1.3.1';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -13810,10 +13810,31 @@
         },
 
         // #### playBot
-        playBot: 'Play With Bot/s',
+        playBot: function(widget) {
+            if (widget.poolSize === widget.groupSize &&
+                widget.groupSize === 1) {
+
+                return 'Play';
+            }
+            if (widget.groupSize === 2) return 'Play With Bot';
+            return 'Play With Bots';
+        },
 
         // #### connectingBots
-        connectingBots: 'Connecting Bot/s, Please Wait...'
+        connectingBots:  function(widget) {
+            console.log(widget.poolSize, widget.groupSize);
+            if (widget.poolSize === widget.groupSize &&
+                widget.groupSize === 1) {
+
+                return 'Starting, Please Wait...';
+            }
+            if (widget.groupSize === 2) return 'Connecting Bot, Please Wait...';
+            return 'Connecting Bot/s, Please Wait...';
+        },
+
+        // #### selectTreatment
+        // Trailing space makes it nicer.
+        selectTreatment: 'Select Treatment '
     };
 
     /**
@@ -13946,10 +13967,47 @@
         /**
          * ### WaitingRoom.playWithBotOption
          *
-         * Flag that indicates whether to display button that lets player begin
-         * the game with bots
+         * If TRUE, it displays a button to begin the game with bots
+         *
+         * This option is set by the server, local modifications will
+         * not have an effect if server does not allow it
+         *
+         * @see WaitingRoom.playBotBtn
          */
         this.playWithBotOption = null;
+
+        /**
+         * ### WaitingRoom.playBotBtn
+         *
+         * Reference to the button to play with bots
+         *
+         * Will be created if requested by options.
+         *
+         * @see WaitingRoom.playWithBotOption
+         */
+        this.playBotBtn = null;
+
+        /**
+         * ### WaitingRoom.selectTreatmentOption
+         *
+         * If TRUE, it displays a selector to choose the treatment of the game
+         *
+         * This option is set by the server, local modifications will
+         * not have an effect if server does not allow it
+         */
+        this.selectTreatmentOption = null;
+
+        /**
+         * ### WaitingRoom.treatmentBtn
+         *
+         * Holds the name of selected treatment
+         *
+         * Only used if `selectTreatmentOption` is enabled
+         *
+         * @see WaitingRoom.selectTreatmentOption
+         */
+        this.selectedTreatment = null;
+
     }
 
     // ## WaitingRoom methods
@@ -13959,6 +14017,8 @@
      *
      * Setups the requirements widget
      *
+     * TODO: Update this doc (list of options).
+     *
      * Available options:
      *
      *   - onComplete: function executed with either failure or success
@@ -13966,7 +14026,8 @@
      *   - onSuccess: function executed when all tests succeed
      *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *   - startDate: max waiting time to execute all tests (in milliseconds)
-     *   - playWithBotOption: display button to dispatch players with bots
+     *   - playWithBotOption: displays button to dispatch players with bots
+     *   - selectTreatmentOption: displays treatment selector
      *
      * @param {object} conf Configuration object.
      */
@@ -14049,30 +14110,112 @@
             this.disconnectIfNotSelected = false;
         }
 
-        if (conf.playWithBotOption) {
-            this.playWithBotOption = true;
-        }
-        else {
-            this.playWithBotOption = false;
-        }
+        if (conf.playWithBotOption) this.playWithBotOption = true;
+        else this.playWithBotOption = false;
+        if (conf.selectTreatmenttOption) this.selectTreatment = true;
+        else this.selectTreatmentOption = false;
 
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
-            this.playBotBtn = document.createElement('input');
-            this.playBotBtn.className = 'btn btn-secondary btn-lg';
-            this.playBotBtn.value = this.getText('playBot');
-            this.playBotBtn.id = 'bot_btn';
-            this.playBotBtn.type = 'button';
-            this.playBotBtn.onclick = function() {
-                that.playBotBtn.value = that.getText('connectingBots');
-                that.playBotBtn.disabled = true;
-                node.say('PLAYWITHBOT');
-                setTimeout(function() {
-                    that.playBotBtn.value = that.getText('playBot');
-                    that.playBotBtn.disabled = false;
-                }, 5000);
-            };
-            this.bodyDiv.appendChild(document.createElement('br'));
-            this.bodyDiv.appendChild(this.playBotBtn);
+            // Closure to create button group.
+            (function(w) {
+                var btnGroup = document.createElement('div');
+                btnGroup.role = 'group';
+                btnGroup['aria-label'] = 'Play Buttons';
+                btnGroup.className = 'btn-group';
+
+                var playBotBtn = document.createElement('input');
+                playBotBtn.className = 'btn btn-secondary btn-lg';
+                playBotBtn.value = w.getText('playBot');
+                playBotBtn.id = 'bot_btn';
+                playBotBtn.type = 'button';
+                playBotBtn.onclick = function() {
+                    w.playBotBtn.value = w.getText('connectingBots');
+                    w.playBotBtn.disabled = true;
+                    node.say('PLAYWITHBOT');
+                    setTimeout(function() {
+                        w.playBotBtn.value = w.getText('playBot');
+                        w.playBotBtn.disabled = false;
+                    }, 5000);
+                };
+
+                btnGroup.appendChild(playBotBtn);
+
+                // Store reference in widget.
+                w.playBotBtn = playBotBtn;
+
+                if (true || w.selectTreatmentOption) {
+
+                    var btnGroupTreatments = document.createElement('div');
+                    btnGroupTreatments.role = 'group';
+                    btnGroupTreatments['aria-label'] = 'Select Treatment';
+                    btnGroupTreatments.className = 'btn-group';
+
+                    var btnTreatment = document.createElement('button');
+                    btnTreatment.className = 'btn btn-default btn-lg ' +
+                        'dropdown-toggle';
+                    btnTreatment['data-toggle'] = 'dropdown';
+                    btnTreatment['aria-haspopup'] = 'true';
+                    btnTreatment['aria-expanded'] = 'false';
+                    btnTreatment.innerHTML = w.getText('selectTreatment');
+
+                    var span = document.createElement('span');
+                    span.className = 'caret';
+
+                    btnTreatment.appendChild(span);
+
+                    var ul = document.createElement('ul');
+                    ul.className = 'dropdown-menu';
+
+                    var li, a, t;
+                    if (conf.availableTreatments) {
+                        for (t in conf.availableTreatments) {
+                            if (conf.availableTreatments.hasOwnProperty(t)) {
+                                li = document.createElement('li');
+                                a = document.createElement('a');
+                                a.href = '#';
+                                a.id = t;
+                                a.appendChild(document.createTextNode(t));
+                                li.appendChild(a);
+                                ul.appendChild(li);
+                            }
+                        }
+                    }
+
+                    btnGroupTreatments.appendChild(btnTreatment);
+                    btnGroupTreatments.appendChild(ul);
+
+                    btnGroup.appendChild(btnGroupTreatments);
+
+                    var toggled = false;
+                    btnTreatment.onclick = function() {
+                        if (toggled) {
+                            ul.style = 'display: none';
+                            toggled = false;
+                        }
+                        else {
+                            ul.style = 'display: block';
+                            toggled = true;
+                        }
+                    };
+
+                    ul.onclick = function(eventData) {
+                        var t;
+                        ul.style = 'display: none';
+                        t = eventData.target.id;
+                        btnTreatment.innerHTML = t + ' ';
+                        btnTreatment.appendChild(span);
+                        w.selectedTreatment = t;
+                        toggled = false;
+                    };
+
+                    // Store Reference in widget.
+                    w.treatmentBtn = btnTreatment;
+                }
+                // Append button group.
+                w.bodyDiv.appendChild(document.createElement('br'));
+                w.bodyDiv.appendChild(btnGroup);
+
+            })(this);
         }
     };
 
