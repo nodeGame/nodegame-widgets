@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## 4.1.0 (current, not npm)
+## 4.1.0
 - Waiting room supports treatment selection.
 - Fixed text tooManyPlayers.
 
