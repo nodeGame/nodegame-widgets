@@ -1,6 +1,6 @@
 /**
  * # Chat
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2018 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    Chat.version = '0.5.2';
+    Chat.version = '1.0.0';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the experimenter.';
 
@@ -66,14 +66,6 @@
          * @see Chat.modes
          */
         this.mode = null;
-
-        /**
-         * ### Chat.recipient
-         *
-         * Determines recipient of the messages
-         */
-        this.recipient = null;
-
 
         /**
          * ### Chat.textarea
@@ -167,7 +159,7 @@
      *   - `displayName`: Function which displays the sender's name
      */
     Chat.prototype.init = function(options) {
-        var tmp;
+        var tmp, that;
         options = options || {};
 
         if ('undefined' === typeof options.mode) {
@@ -183,7 +175,20 @@
                 tmp = 'ROOM';
                 break;
             case Chat.modes.ONE_TO_ONE:
-                tmp = 'SERVER';
+                tmp = options.recipient;
+                if ('string' !== typeof tmp) {
+                    throw new TypeError('Chat.init: mode=ONE_TO_ONE, but ' +
+                                        'recipient is not string. Found: ' +
+                                        tmp);
+                }
+                if (options.recipientName) {
+                    if ('string' !== typeof options.recipientName) {
+                        throw new TypeError('Chat.init: recipientName must ' +
+                                            'be string or undefined. Found: ' +
+                                            tmp);
+                    }
+                    this.recipient.name = options.recipientName;
+                }
                 break;
             case Chat.modes.MANY_TO_MANY:
                 break;
@@ -207,8 +212,14 @@
         this.chatEvent = options.chatEvent || 'CHAT';
         this.submitText = options.submitText || 'chat';
 
+        that = this;
         this.displayName = options.displayName || function(from) {
-            return from;
+            if (that.mode = Chat.modes.ONE_TO_ONE && that.recipient.name) {
+                return that.recipient.name;
+            }
+            else {
+                return from;
+            }
         };
     };
 
@@ -258,6 +269,7 @@
 
         node.on(this.chatEvent, function() {
             var msg, to, args;
+
             msg = that.readTA();
             if (!msg) return;
 
