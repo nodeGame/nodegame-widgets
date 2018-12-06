@@ -194,17 +194,30 @@
 
 
     Chat.prototype.append = function() {
+        var that;
 
         this.chat = W.get('div', { className: 'chat_chat' });
         this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
-
+            that = this;
             // Create buttons to send messages, if allowed.
-            this.submit = W.getEventButton(this.chatEvent,
-                                           this.submitText);
-            this.submit.className = 'btn btn-sm btn-secondary';
+            this.submit = W.get('button', {
+                innerHTML: this.submitText,
+                className: 'btn btn-sm btn-secondary'
+            });
+
+            this.submit.onclick = function() {
+                var msg, to;
+                msg = that.readTA();
+                if (!msg) return;
+                to = that.recipient.value;
+                that.writeTA(msg, to, true);
+                node.say(that.chatEvent, to, msg);
+            };
+
             this.textarea = W.get('textarea', { className: 'chat_textarea' });
+
             // Append them.
             W.writeln('', this.bodyDiv);
             this.bodyDiv.appendChild(this.textarea);
@@ -223,25 +236,12 @@
         var txt;
         txt = this.textarea.value;
         this.textarea.value = '';
-        return txt;
+        return txt.trim();
     };
 
-    Chat.prototype.writeTA = function(string, args) {
-        J.sprintf(string, args, this.chat);
-        W.writeln('', this.chat);
-        this.chat.scrollTop = this.chat.scrollHeight;
-    };
-
-    Chat.prototype.listeners = function() {
-        var that = this;
-
-        node.on(this.chatEvent, function() {
-            var msg, to, args;
-
-            msg = that.readTA();
-            if (!msg) return;
-
-            to = that.recipient.value;
+    Chat.prototype.writeTA = function(msg, toFrom, outgoing) {
+        var string, args;
+        if (outgoing) {
             args = {
                 '%s': {
                     'class': 'chat_me'
@@ -250,11 +250,31 @@
                     'class': 'chat_msg'
                 },
                 '!txt': msg,
-                '!to': to
+                '!to': toFrom
             };
-            that.writeTA('%sMe -> !to%s: %msg!txt%msg', args);
-            node.say(that.chatEvent, to, msg.trim());
-        });
+            string = '%sMe -> !to%s: %msg!txt%msg';
+        }
+        else {
+            toFrom = this.displayName(toFrom);
+            args = {
+                '%s': {
+                    'class': 'chat_others'
+                },
+                '%msg': {
+                    'class': 'chat_msg'
+                },
+                '!txt': msg,
+                '!from': toFrom
+            };
+            string = '%s!from%s: %msg!txt%msg';
+        }
+        J.sprintf(string, args, this.chat);
+        W.writeln('', this.chat);
+        this.chat.scrollTop = this.chat.scrollHeight;
+    };
+
+    Chat.prototype.listeners = function() {
+        var that = this;
 
         if (this.mode === Chat.modes.MANY_TO_MANY) {
             node.on('UPDATED_PLIST', function() {
@@ -275,19 +295,7 @@
                 }
             }
 
-            from = that.displayName(msg.from);
-            args = {
-                '%s': {
-                    'class': 'chat_others'
-                },
-                '%msg': {
-                    'class': 'chat_msg'
-                },
-                '!txt': msg.data,
-                '!from': from
-            };
-
-            that.writeTA('%s!from%s: %msg!txt%msg', args);
+            that.writeTA(msg.data, msg.from, false);
         });
     };
 
