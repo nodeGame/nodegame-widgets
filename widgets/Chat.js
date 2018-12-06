@@ -252,7 +252,12 @@
                 '!txt': msg,
                 '!to': toFrom
             };
-            string = '%sMe -> !to%s: %msg!txt%msg';
+            if (this.mode === Chat.modes.ONE_TO_ONE || toFrom === 'ALL') {
+                string = '%sMe%s: %msg!txt%msg';
+            }
+            else {
+                string = '%sMe to !to%s: %msg!txt%msg';
+            }
         }
         else {
             toFrom = this.displayName(toFrom);

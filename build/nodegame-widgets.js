@@ -1674,7 +1674,7 @@
                 that.writeTA(msg, to, true);
                 node.say(that.chatEvent, to, msg);
             };
-            
+
             this.textarea = W.get('textarea', { className: 'chat_textarea' });
 
             // Append them.
@@ -1690,7 +1690,7 @@
             }
         }
     };
-    
+
     Chat.prototype.readTA = function() {
         var txt;
         txt = this.textarea.value;
@@ -1711,7 +1711,12 @@
                 '!txt': msg,
                 '!to': toFrom
             };
-            string = '%sMe -> !to%s: %msg!txt%msg';
+            if (this.mode === Chat.modes.ONE_TO_ONE || toFrom === 'ALL') {
+                string = '%sMe%s: %msg!txt%msg';
+            }
+            else {
+                string = '%sMe to !to%s: %msg!txt%msg';
+            }
         }
         else {
             toFrom = this.displayName(toFrom);
