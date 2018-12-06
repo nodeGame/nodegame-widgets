@@ -81,7 +81,6 @@
          */
         this.textareaId = null;
 
-
         /**
          * ### Chat.chat
          *
@@ -249,6 +248,8 @@
                 this.bodyDiv.appendChild(this.recipient);
             }
         }
+
+
     };
 
     Chat.prototype.readTA = function() {

@@ -1,6 +1,6 @@
 /**
  * # Widget
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Prototype of a widget class
@@ -270,7 +270,7 @@
      * @see GameWindow.add
      */
     Widget.prototype.setTitle = function(title, options) {
-        var tmp;
+        var that, tmp;
         if (!this.panelDiv) {
             throw new Error('Widget.setTitle: panelDiv is missing.');
         }
@@ -283,7 +283,7 @@
             }
         }
         else {
-            if (!this.headingDiv) {
+            if (!this.headingDiv) {   
                 // Add heading.
                 if (!options) {
                     options = { className: 'panel-heading' };
@@ -312,6 +312,25 @@
                 throw new TypeError(J.funcName(this.constructor) +
                                     '.setTitle: title must be string, ' +
                                     'HTML element or falsy. Found: ' + title);
+            }
+            if (this.collapsible) {
+                that = this;
+                tmp = document.createElement('a');
+                tmp.innerHTML = 'Minimize';
+                tmp.style['float'] = 'right';
+                tmp.onclick = function() {
+                    
+                    if (that.bodyDiv.style.display === 'none') {
+                        that.bodyDiv.style.display = '';
+                        tmp.innerHTML = 'Maximize';
+                    }
+                    else {
+                        that.bodyDiv.style.display = 'none';
+                        tmp.innerHTML = 'Minimize';
+                    }
+                    
+                };
+                this.headingDiv.appendChild(tmp);
             }
         }
     };
@@ -790,7 +809,7 @@
 
 /**
  * # Widgets
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2018 Stefano Balietti
  * MIT Licensed
  *
  * Helper class to interact with nodeGame widgets
@@ -867,7 +886,7 @@
                             root = W.getElementById(root);
                         }
                         if (!root) root = W.getScreen();
-                        
+
                         if (!root) {
                             node.warn('setup widgets: could not find a root ' +
                                       'for widget ' + name + '. Requested: ' +
@@ -1042,7 +1061,7 @@
             WidgetPrototype.sounds : options.sounds;
         widget.texts = 'undefined' === typeof options.texts ?
             WidgetPrototype.texts : options.texts;
-
+        widget.collapsible = options.collapsible || false;
 
         // Fixed properties.
 
@@ -1459,7 +1478,7 @@
          * @see Chat.modes
          */
         this.mode = null;
-
+        
         /**
          * ### Chat.textarea
          *
@@ -1473,7 +1492,6 @@
          * The id of the textarea
          */
         this.textareaId = null;
-
 
         /**
          * ### Chat.chat
@@ -1642,6 +1660,8 @@
                 this.bodyDiv.appendChild(this.recipient);
             }
         }
+
+        
     };
 
     Chat.prototype.readTA = function() {
