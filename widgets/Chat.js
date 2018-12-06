@@ -75,13 +75,6 @@
         this.textarea = null;
 
         /**
-         * ### Chat.textareaId
-         *
-         * The id of the textarea
-         */
-        this.textareaId = null;
-
-        /**
          * ### Chat.chat
          *
          * The DIV wherein to display the chat
@@ -89,26 +82,11 @@
         this.chat = null;
 
         /**
-         * ### Chat.chatId
-         *
-         * The id of the chat DIV
-         */
-        this.chatId = null;
-
-
-        /**
          * ### Chat.submit
          *
          * The submit button
          */
         this.submit = null;
-
-        /**
-         * ### Chat.submitId
-         *
-         * The id of the submit butten
-         */
-        this.submitId = null;
 
         /**
          * ### Chat.submitText
@@ -150,9 +128,6 @@
      *
      * The  options object can have the following attributes:
      *   - `mode`: Determines to mode of communication
-     *   - `textareaId`: The id of the textarea
-     *   - `chatId`: The id of the chat DIV
-     *   - `submitId`: The id of the submit butten
      *   - `submitText`: The text on the submit button
      *   - `chatEvent`: The event to fire when sending a message
      *   - `displayName`: Function which displays the sender's name
@@ -203,11 +178,6 @@
         }
 
         this.mode = options.mode;
-
-        this.textareaId = options.textareaId || 'chat_textarea';
-        this.chatId = options.chatId || 'chat_chat';
-        this.submitId = options.submitId || 'chat_submit';
-
         this.chatEvent = options.chatEvent || 'CHAT';
         this.submitText = options.submitText || 'chat';
 
@@ -225,17 +195,16 @@
 
     Chat.prototype.append = function() {
 
-        this.chat = W.get('div', this.chatId);
+        this.chat = W.get('div', { className: 'chat_chat' });
         this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
 
             // Create buttons to send messages, if allowed.
             this.submit = W.getEventButton(this.chatEvent,
-                                           this.submitText,
-                                           this.submitId);
+                                           this.submitText);
             this.submit.className = 'btn btn-sm btn-secondary';
-            this.textarea = W.get('textarea', this.textareaId);
+            this.textarea = W.get('textarea', { className: 'chat_textarea' });
             // Append them.
             W.writeln('', this.bodyDiv);
             this.bodyDiv.appendChild(this.textarea);
@@ -248,8 +217,6 @@
                 this.bodyDiv.appendChild(this.recipient);
             }
         }
-
-
     };
 
     Chat.prototype.readTA = function() {

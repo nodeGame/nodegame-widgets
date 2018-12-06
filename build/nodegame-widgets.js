@@ -155,6 +155,51 @@
     };
 
     /**
+     * ### Widget.collapse
+     *
+     * Collapses the widget (hides the body)
+     *
+     * @see Widget.uncollapse
+     * @see Widget.isCollapsed
+     */
+    Widget.prototype.collapse = function() {
+        this.bodyDiv.style.display = 'none';
+        this.collapsed = true;
+        if (this.collapseButton) {
+            this.collapseButton.src = '/images/maximize_small.png';
+            this.collapseButton.title = 'Maximize';
+        }
+    };
+
+    /**
+     * ### Widget.uncollapse
+     *
+     * Uncollapses the widget (shows the body)
+     *
+     * @see Widget.collapse
+     * @see Widget.isCollapsed
+     */
+    Widget.prototype.uncollapse = function() {
+        this.bodyDiv.style.display = '';
+        this.collapsed = false;
+        if (this.collapseButton) {
+            this.collapseButton.src = '/images/minimize_small.png';
+            this.collapseButton.title = 'Minimize';
+        }
+    };
+
+    /**
+     * ### Widget.isCollapsed
+     *
+     * Returns TRUE if widget is currently collapsed
+     *
+     * @return {boolean} TRUE, if widget is currently collapsed
+     */
+    Widget.prototype.isCollapsed = function() {
+        return !!this.collapsed;
+    };
+
+    /**
      * ### Widget.enabled
      *
      * Enables the widget
@@ -270,7 +315,7 @@
      * @see GameWindow.add
      */
     Widget.prototype.setTitle = function(title, options) {
-        var that, tmp;
+        var tmp;
         if (!this.panelDiv) {
             throw new Error('Widget.setTitle: panelDiv is missing.');
         }
@@ -283,7 +328,7 @@
             }
         }
         else {
-            if (!this.headingDiv) {   
+            if (!this.headingDiv) {
                 // Add heading.
                 if (!options) {
                     options = { className: 'panel-heading' };
@@ -314,23 +359,20 @@
                                     'HTML element or falsy. Found: ' + title);
             }
             if (this.collapsible) {
-                that = this;
-                tmp = document.createElement('a');
-                tmp.innerHTML = 'Minimize';
-                tmp.style['float'] = 'right';
-                tmp.onclick = function() {
-                    
-                    if (that.bodyDiv.style.display === 'none') {
-                        that.bodyDiv.style.display = '';
-                        tmp.innerHTML = 'Maximize';
-                    }
-                    else {
-                        that.bodyDiv.style.display = 'none';
-                        tmp.innerHTML = 'Minimize';
-                    }
-                    
-                };
-                this.headingDiv.appendChild(tmp);
+                // Generates a button that hides the body of the panel.
+                (function(that) {
+                    var link, img;
+                    link = document.createElement('span');
+                    link.className = 'panel-collapse-link';
+                    img = document.createElement('img');
+                    img.src = '/images/minimize_small.png';
+                    link.appendChild(img);
+                    link.onclick = function() {
+                        if (that.isCollapsed()) that.uncollapse();
+                        else that.collapse();
+                    };
+                    that.headingDiv.appendChild(link);
+                })(this);
             }
         }
     };
@@ -964,6 +1006,9 @@
      *   - disabled: boolean flag indicating the widget state, set to FALSE
      *   - highlighted: boolean flag indicating whether the panelDiv is
      *        highlighted, set to FALSE
+     *   - collapsible: boolean flag, TRUE if the widget can be collapsed
+     *        and a button to hide body is added to the header
+     *   - collapsed: boolan flag, TRUE if widget is collapsed (body hidden)
      *
      * Calls the `listeners` method of the widget. Any event listener
      * registered here will be automatically removed when the widget
@@ -1073,6 +1118,8 @@
         widget.disabled = null;
         // Add highlighted.
         widget.highlighted = null;
+        // Add collapsed.
+        widget.collapsed = null;
 
         // Call init.
         widget.init(options);
@@ -1478,20 +1525,13 @@
          * @see Chat.modes
          */
         this.mode = null;
-        
+
         /**
          * ### Chat.textarea
          *
          * The textarea wherein to write and read
          */
         this.textarea = null;
-
-        /**
-         * ### Chat.textareaId
-         *
-         * The id of the textarea
-         */
-        this.textareaId = null;
 
         /**
          * ### Chat.chat
@@ -1501,26 +1541,11 @@
         this.chat = null;
 
         /**
-         * ### Chat.chatId
-         *
-         * The id of the chat DIV
-         */
-        this.chatId = null;
-
-
-        /**
          * ### Chat.submit
          *
          * The submit button
          */
         this.submit = null;
-
-        /**
-         * ### Chat.submitId
-         *
-         * The id of the submit butten
-         */
-        this.submitId = null;
 
         /**
          * ### Chat.submitText
@@ -1562,9 +1587,6 @@
      *
      * The  options object can have the following attributes:
      *   - `mode`: Determines to mode of communication
-     *   - `textareaId`: The id of the textarea
-     *   - `chatId`: The id of the chat DIV
-     *   - `submitId`: The id of the submit butten
      *   - `submitText`: The text on the submit button
      *   - `chatEvent`: The event to fire when sending a message
      *   - `displayName`: Function which displays the sender's name
@@ -1615,11 +1637,6 @@
         }
 
         this.mode = options.mode;
-
-        this.textareaId = options.textareaId || 'chat_textarea';
-        this.chatId = options.chatId || 'chat_chat';
-        this.submitId = options.submitId || 'chat_submit';
-
         this.chatEvent = options.chatEvent || 'CHAT';
         this.submitText = options.submitText || 'chat';
 
@@ -1637,17 +1654,16 @@
 
     Chat.prototype.append = function() {
 
-        this.chat = W.get('div', this.chatId);
+        this.chat = W.get('div', { className: 'chat_chat' });
         this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
 
             // Create buttons to send messages, if allowed.
             this.submit = W.getEventButton(this.chatEvent,
-                                           this.submitText,
-                                           this.submitId);
+                                           this.submitText);
             this.submit.className = 'btn btn-sm btn-secondary';
-            this.textarea = W.get('textarea', this.textareaId);
+            this.textarea = W.get('textarea', { className: 'chat_textarea' });
             // Append them.
             W.writeln('', this.bodyDiv);
             this.bodyDiv.appendChild(this.textarea);
@@ -1660,8 +1676,6 @@
                 this.bodyDiv.appendChild(this.recipient);
             }
         }
-
-        
     };
 
     Chat.prototype.readTA = function() {
