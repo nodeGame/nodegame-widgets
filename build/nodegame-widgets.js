@@ -17,6 +17,7 @@
     "use strict";
 
     var J = node.JSUS;
+    var NDDB = node.NDDB;
 
     node.Widget = Widget;
 
@@ -157,7 +158,7 @@
     /**
      * ### Widget.collapse
      *
-     * Collapses the widget (hides the body)
+     * Collapses the widget (hides the body and footer)
      *
      * @see Widget.uncollapse
      * @see Widget.isCollapsed
@@ -169,12 +170,14 @@
             this.collapseButton.src = '/images/maximize_small2.png';
             this.collapseButton.title = 'Maximize';
         }
+        if (this.footer) this.footer.style.display = 'none';
+        this.emit('collapsed');
     };
 
     /**
      * ### Widget.uncollapse
      *
-     * Uncollapses the widget (shows the body)
+     * Uncollapses the widget (shows the body and footer)
      *
      * @see Widget.collapse
      * @see Widget.isCollapsed
@@ -186,6 +189,8 @@
             this.collapseButton.src = '/images/maximize_small.png';
             this.collapseButton.title = 'Minimize';
         }
+        if (this.footer) this.footer.style.display = '';
+        this.emit('uncollapsed');
     };
 
     /**
@@ -370,6 +375,21 @@
                     link.onclick = function() {
                         if (that.isCollapsed()) that.uncollapse();
                         else that.collapse();
+                    };
+                    that.headingDiv.appendChild(link);
+                })(this);
+            }
+            if (this.closable) {
+                (function(that) {
+                    var link, img;
+                    link = document.createElement('span');
+                    link.className = 'panel-collapse-link';
+                    link.style['margin-right'] = '8px';
+                    img = document.createElement('img');
+                    img.src = '/images/close_small.png';
+                    link.appendChild(img);
+                    link.onclick = function() {
+                        that.destroy();
                     };
                     that.headingDiv.appendChild(link);
                 })(this);
@@ -703,6 +723,64 @@
                               + '.getAllTexts', undefined, param);
     };
 
+    // ## Event-Emitter methods borrowed from NDDB
+
+    /**
+     * ### Widget.on
+     *
+     * Registers an event listener for the widget
+     *
+     * @see NDDB.off
+     */
+    Widget.prototype.on = function() {
+        NDDB.prototype.on.apply(this, arguments);
+    };
+
+    /**
+     * ### Widget.off
+     *
+     * Removes and event listener for the widget
+     *
+     * @see NDDB.off
+     */
+    Widget.prototype.off = function() {
+        NDDB.prototype.off.apply(this, arguments);
+    };
+
+    /**
+     * ### Widget.emit
+     *
+     * Emits an event within the widget
+     *
+     * @see NDDB.emit
+     */
+    Widget.prototype.emit = function() {
+        NDDB.prototype.emit.apply(this, arguments);
+    };
+    
+    /**
+     * ### Widget.throwErr
+     *
+     * Get the name of the actual widget and throws the error
+     *
+     * It does **not** perform type checking on itw own input parameters.
+     *
+     * @param {string} type Optional. The error type, e.g. 'TypeError'.
+     *   Default, 'Error'
+     * @param {string} method Optional. The name of the method
+     * @param {string|object} err Optional. The error. Default, 'generic error'
+     *
+     * @see NDDB.throwErr
+     */
+    Widget.prototype.throwErr = function(type, method, err) {
+        var errMsg;
+        errMsg = J.funcName(this.constructor) + '.' + method + ': ';
+        if ('object' === typeof err) errMsg += err.stack || err;
+        else if ('string' === typeof err) errMsg += err;
+        if (type === 'TypeError') throw new TypeError(errMsg);
+        throw new Error(errMsg);
+    };
+    
     // ## Helper methods.
 
     /**
@@ -862,6 +940,8 @@
 
     "use strict";
 
+    var NDDB = window.NDDB;
+    
     // ## Widgets constructor
 
     function Widgets() {
@@ -894,7 +974,6 @@
          * @see Widgets.append
          */
         this.lastAppended = null;
-
 
         that = this;
         node.registerSetup('widgets', function(conf) {
@@ -1003,12 +1082,15 @@
      *   - className: as specified by the user or as found in the prototype
      *   - id: user-defined id, if specified in options
      *   - wid: random unique widget id
+     *   - hooks: object containing event listeners
+     *   - emit:
      *   - disabled: boolean flag indicating the widget state, set to FALSE
      *   - highlighted: boolean flag indicating whether the panelDiv is
      *        highlighted, set to FALSE
      *   - collapsible: boolean flag, TRUE if the widget can be collapsed
      *        and a button to hide body is added to the header
      *   - collapsed: boolan flag, TRUE if widget is collapsed (body hidden)
+     *   - closable: boolean flag, TRUE if the widget can be closed (destroyed)
      *
      * Calls the `listeners` method of the widget. Any event listener
      * registered here will be automatically removed when the widget
@@ -1107,7 +1189,15 @@
         widget.texts = 'undefined' === typeof options.texts ?
             WidgetPrototype.texts : options.texts;
         widget.collapsible = options.collapsible || false;
-
+        widget.closable = options.closable || false;
+        widget.hooks = {
+            collapsed: [],
+            uncollapsed: [],
+            disabled: [],
+            undisabled: [],
+            destroyed: []
+        };
+        
         // Fixed properties.
 
         // Widget Name.
@@ -1764,10 +1854,11 @@
                     that.uncollapse();
                 }
                 else {
+                    // TODO: highlight better. Play sound?
                     that.setTitle('<strong>' + that.title + '</strong>');
                 }
             }
-            
+
             that.writeTA(msg.data, msg.from, false);
         });
 

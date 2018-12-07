@@ -5,6 +5,11 @@
  *
  * Creates a simple configurable chat
  *
+ * // TODO: add is...typing
+ * // TODO: add bootstrap badge to count msg when collapsed
+ * // TODO: chat button inline with textarea
+ * // TODO: fix the recipient
+ *
  * www.nodegame.org
  */
 (function(node) {
