@@ -7,8 +7,9 @@
  *
  * // TODO: add is...typing
  * // TODO: add bootstrap badge to count msg when collapsed
- * // TODO: fix the recipient
  * // TODO: check on data if message comes back
+ * // TODO: fix no names and map
+ * // TODO: check if removing privateData works (battery ended here).
  *
  * www.nodegame.org
  */
@@ -25,19 +26,16 @@
     Chat.texts = {
         me: 'Me',
         outgoing: function(w, data) {
-            // Id might be defined as a specific to (not used now).
-            return '<span class="chat_me">' +
-                w.getText('me') +
+            // Id could be defined as a specific to (not used now).
+            return '<span class="chat_me">' + w.getText('me') +
                 '</span>: </span class="chat_msg">' + data.msg + '</span>';
         },
         incoming: function(w, data) {
-            return '<span class="chat_others">' +
-                privateData[w.wid].recipientsMap[data.id] +
+            return '<span class="chat_others">' + w.recipientsMap[data.id] +
                 '</span>: </span class="chat_msg">' + data.msg + '</span>';
         },
         quit: function(w, data) {
-            return privateData[w.wid].recipientsMap[data.id] +
-                ' quit the chat';
+            return w.recipientsMap[data.id] + ' quit the chat';
         }
     };
 
@@ -55,9 +53,6 @@
     Chat.dependencies = {
         JSUS: {}
     };
-
-    // Keep the ids of the recipients secret.
-    var privateData = {};
 
     /**
      * ## Chat constructor
@@ -143,12 +138,26 @@
          */
         this.chatEvent = null;
 
-       // /**
-       //  * ### Chat.recipientsNames
-       //  *
-       //  * Array containing names of the recipient/s of the message
-       //  */
-       // this.recipientsNames = [];
+        /**
+         * ### Chat.recipientsNames
+         *
+         * Array containing names of the recipient/s of the message
+         */
+        this.recipientsNames = [];
+
+        /**
+         * ### Chat.recipientsIds
+         *
+         * Array containing ids of the recipient/s of the message
+         */
+        this.recipientsIds = [];
+
+        /**
+         * ### Chat.recipientsMap
+         *
+         * Map recipients ids to names
+         */
+        this.recipientsMap = {};
     }
 
     // ## Chat methods
@@ -167,13 +176,8 @@
      *   - `displayName`: Function which displays the sender's name
      */
     Chat.prototype.init = function(options) {
-        var tmp, i, pd;
+        var tmp, i;
         options = options || {};
-
-        pd = privateData[this.wid] = {
-            recipientsIds: [],
-            recipientsMap: {}
-        };
 
         // Store.
         this.storeMsgs = !!options.storeMsgs;
@@ -189,7 +193,7 @@
         }
 
         // Set private variable.
-        pd.recipientsIds = tmp;
+        this.recipientsIds = tmp;
         if (options.recipientsNames) {
             tmp = options.recipientsNames;
             if (!J.isArray(tmp)) {
@@ -198,18 +202,19 @@
                                 'array or undefined. Found: ' + tmp);
 
             }
-            if (tmp.length !== pd.recipientsIds.length) {
+            if (tmp.length !== this.recipientsIds.length) {
                 throw new TypeError('Chat.init: recipientsNames size must ' +
                                     'equal the number of ids');
             }
             this.recipientsNames = tmp;
         }
         else {
-            this.recipientsNames = pd.recipientsIds;
+            this.recipientsNames = this.recipientsIds;
         }
+        // TODO: does not work without names.
         // Build map.
         for (i = 0; i < tmp.length; i++) {
-            pd.recipientsMap[pd.recipientsIds[i]] = this.recipientsNames[i];
+            this.recipientsMap[this.recipientsIds[i]] = this.recipientsNames[i];
         }
 
 
@@ -248,7 +253,7 @@
                 className: 'btn btn-default chat_submit'
             });
 
-            ids = privateData[this.wid].recipientsIds;
+            ids = this.recipientsIds;
             this.submit.onclick = function() {
                 var msg, to;
                 msg = that.readTextarea();
@@ -326,9 +331,7 @@
     };
 
     Chat.prototype.destroy = function() {
-        node.say(this.chatEvent + '_QUIT', privateData[this.wid].recipientsIds);
-        // Remove private data.
-        privateData[this.wid] = null;
+        node.say(this.chatEvent + '_QUIT', this.recipientsIds);
     };
 
     Chat.prototype.getValues = function() {
