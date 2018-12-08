@@ -1556,8 +1556,8 @@
  *
  * // TODO: add is...typing
  * // TODO: add bootstrap badge to count msg when collapsed
- * // TODO: chat button inline with textarea
  * // TODO: fix the recipient
+ * // TODO: check on data if message comes back
  *
  * www.nodegame.org
  */
@@ -1565,43 +1565,48 @@
 
     "use strict";
 
+    var NDDB =  node.NDDB;
+
     node.widgets.register('Chat', Chat);
+
+    // ## Texts.
+
+    Chat.texts = {
+        me: 'Me',
+        outgoing: function(w, data) {
+            // Id might be defined as a specific to (not used now).
+            return '<span class="chat_me">' +
+                w.getText('me') +
+                '</span>:</span class="chat_msg">' + data.msg + '</span>';
+        },
+        incoming: function(w, data) {
+            return '<span class="chat_others">' +
+                privateData[w.wid].recipientsMap[data.id] +
+                '</span>:</span class="chat_msg">' + data.msg + '</span>';
+        },
+        quit: function(w, data) {
+            return privateData[w.wid].recipientsMap[data.id] +
+                ' quit the chat';
+        }
+    };
 
     // ## Meta-data
 
     Chat.version = '1.0.0';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
-        'between players, or between players and the experimenter.';
+        'between players, or between players and the server.';
 
     Chat.title = 'Chat';
     Chat.className = 'chat';
-
-    // ### Chat.modes
-    //
-    // - MANY_TO_MANY: everybody can see all the messages, and it possible
-    //   to send private messages.
-    //
-    // - MANY_TO_ONE: everybody can see all the messages, private messages can
-    //   be received, but not sent.
-    //
-    // - ONE_TO_ONE: everybody sees only personal messages, private messages can
-    //   be received, but not sent. All messages are sent to the SERVER.
-    //
-    // - RECEIVER_ONLY: messages can only be received, but not sent.
-    //
-    Chat.modes = {
-        MANY_TO_MANY: 'MANY_TO_MANY',
-        MANY_TO_ONE: 'MANY_TO_ONE',
-        ONE_TO_ONE: 'ONE_TO_ONE',
-        RECEIVER_ONLY: 'RECEIVER_ONLY'
-    };
-
 
     // ## Dependencies
 
     Chat.dependencies = {
         JSUS: {}
     };
+
+    // Keep the ids of the recipients secret.
+    var privateData = {};
 
     /**
      * ## Chat constructor
@@ -1613,13 +1618,51 @@
     function Chat() {
 
         /**
-         * ### Chat.mode
+         * ### Chat.stats
          *
-         * Determines to mode of communication
+         * Some basic statistics about message counts
          *
-         * @see Chat.modes
+         * @see Chat.submit
          */
-        this.mode = null;
+        this.stats = {
+            received: 0,
+            sent: 0,
+            unread: 0
+        };
+
+        /**
+         * ### Chat.receiverOnly
+         *
+         * If TRUE, users cannot send messages (no submit and textarea)
+         *
+         * @see Chat.submit
+         */
+        this.receiverOnly = false;
+
+        /**
+         * ### Chat.storeMsgs
+         *
+         * If TRUE, a copy of sent and received messages is stored in db
+         *
+         * @see Chat.db
+         */
+        this.storeMsgs = false;
+
+        /**
+         * ### Chat.db
+         *
+         * An NDDB database for storing incoming and outgoing messages
+         *
+         * @see Chat.storeMsgs
+         */
+        this.db = null;
+
+        /**
+         * ### Chat.chatDiv
+         *
+         * The DIV wherein to display the chat
+         */
+        this.chatDiv = null;
 
         /**
          * ### Chat.textarea
@@ -1627,13 +1670,6 @@
          * The textarea wherein to write and read
          */
         this.textarea = null;
-
-        /**
-         * ### Chat.chat
-         *
-         * The DIV wherein to display the chat
-         */
-        this.chat = null;
 
         /**
          * ### Chat.submit
@@ -1656,19 +1692,12 @@
          */
         this.chatEvent = null;
 
-        /**
-         * ### Chat.displayName
-         *
-         * Function which displays the sender's name
-         */
-        this.displayName = null;
-
-        /**
-         * ### Chat.recipient
-         *
-         * Object containing the value of the recipient of the message
-         */
-        this.recipient = { value: null };
+       // /**
+       //  * ### Chat.recipientsNames
+       //  *
+       //  * Array containing names of the recipient/s of the message
+       //  */
+       // this.recipientsNames = [];
     }
 
     // ## Chat methods
@@ -1681,80 +1710,73 @@
      * @param {object} options Optional. Configuration options.
      *
      * The  options object can have the following attributes:
-     *   - `mode`: Determines to mode of communication
-     *   - `submitText`: The text on the submit button
+     *   - `receiverOnly`: If TRUE, no message can be sent
+     *   - `submitText`: The text of the submit button
      *   - `chatEvent`: The event to fire when sending a message
      *   - `displayName`: Function which displays the sender's name
      */
     Chat.prototype.init = function(options) {
-        var tmp, that;
+        var tmp, i, pd;
         options = options || {};
 
-        if ('undefined' === typeof options.mode) {
-            // Will be setup later.
-            options.mode = 'MANY_TO_MANY';
+        pd = privateData[this.wid] = {
+            recipientsIds: [],
+            recipientsMap: {}
+        };
+
+        // Store.
+        this.storeMsgs = !!options.storeMsgs;
+        if (this.storeMsgs) {
+            if (!this.db) this.db = new NDDB();
         }
-        else if ('string' === typeof options.mode) {
-            switch(options.mode) {
-            case Chat.modes.RECEIVER_ONLY:
-                tmp = 'SERVER';
-                break;
-            case Chat.modes.MANY_TO_ONE:
-                tmp = 'ROOM';
-                break;
-            case Chat.modes.ONE_TO_ONE:
-                tmp = options.recipient;
-                if ('string' !== typeof tmp) {
-                    throw new TypeError('Chat.init: mode=ONE_TO_ONE, but ' +
-                                        'recipient is not string. Found: ' +
-                                        tmp);
-                }
-                if (options.recipientName) {
-                    if ('string' !== typeof options.recipientName) {
-                        throw new TypeError('Chat.init: recipientName must ' +
-                                            'be string or undefined. Found: ' +
-                                            tmp);
-                    }
-                    this.recipient.name = options.recipientName;
-                }
-                break;
-            case Chat.modes.MANY_TO_MANY:
-                break;
-            default:
-                throw new Error('Chat.init: options.mode is invalid: ' +
-                                options.mode);
+
+        // Recipients.
+        tmp = options.recipients;
+        if (!J.isArray(tmp) || !tmp.length) {
+            throw new TypeError('Chat.init: recipients must be ' +
+                                'a non-empty array. Found: ' + tmp);
+        }
+
+        // Set private variable.
+        pd.recipientsIds = tmp;
+        if (options.recipientsNames) {
+            tmp = options.recipientsNames;
+            if (!J.isArray(tmp)) {
+
+                throw new TypeError('Chat.init: recipientsNames must be ' +
+                                'array or undefined. Found: ' + tmp);
+
             }
-            this.recipient.value = tmp;
+            if (tmp.length !== pd.recipientsIds.length) {
+                throw new TypeError('Chat.init: recipientsNames size must ' +
+                                    'equal the number of ids');
+            }
+            this.recipientsNames = tmp;
         }
         else {
-            throw new Error('Chat.init: options.mode must be string or ' +
-                            'undefined. Found: ' + options.mode);
+            this.recipientsNames = pd.recipientsIds;
+        }
+        // Build map.
+        for (i = 0; i < tmp.length; i++) {
+            pd.recipientsMap[pd.recipientsIds[i]] = this.recipientsNames[i];
         }
 
-        this.mode = options.mode;
+
+        // Other.
+        this.uncollapseOnMsg = options.uncollapseOnMsg || false;
         this.chatEvent = options.chatEvent || 'CHAT';
         this.submitText = options.submitText || 'chat';
-
-        that = this;
-        this.displayName = options.displayName || function(from) {
-            if (that.mode = Chat.modes.ONE_TO_ONE && that.recipient.name) {
-                return that.recipient.name;
-            }
-            else {
-                return from;
-            }
-        };
     };
 
 
     Chat.prototype.append = function() {
         var that;
-        var inputGroup, span;
+        var inputGroup, span, ids;
 
-        this.chat = W.get('div', { className: 'chat_chat' });
-        this.bodyDiv.appendChild(this.chat);
+        this.chatDiv = W.get('div', { className: 'chat_chat' });
+        this.bodyDiv.appendChild(this.chatDiv);
 
-        if (this.mode !== Chat.modes.RECEIVER_ONLY) {
+        if (!this.receiverOnly) {
             that = this;
 
             // Input group.
@@ -1768,13 +1790,6 @@
                 className: 'chat_textarea form-control'
             });
 
-            // Append them.
-            //W.writeln('', this.bodyDiv);
-            //this.bodyDiv.appendChild(this.textarea);
-            //W.writeln('', this.bodyDiv);
-            //this.bodyDiv.appendChild(this.submit);
-
-            
             // Create buttons to send messages, if allowed.
             this.submit = W.get('button', {
                 innerHTML: this.submitText,
@@ -1782,15 +1797,17 @@
                 className: 'btn btn-default chat_submit'
             });
 
+            ids = privateData[this.wid].recipientsIds;
             this.submit.onclick = function() {
                 var msg, to;
-                msg = that.readTA();
+                msg = that.readTextarea();
                 if (msg === '') {
                     node.warn('no text, no chat message sent.');
                     return;
-                }
-                to = that.recipient.value;
-                that.writeTA(msg, to, true);
+                };
+                // Simplify things, if there is only one recipient.
+                to = ids.length === 1 ? ids[0] : ids;
+                that.writeMsg('outgoing', { msg: msg }); // to not used now.
                 node.say(that.chatEvent, to, msg);
             };
 
@@ -1798,96 +1815,82 @@
             span.appendChild(this.submit);
             inputGroup.appendChild(span);
             this.bodyDiv.appendChild(inputGroup);
-            
-            // Add recipient selector, if requested.
-            // if (this.mode === Chat.modes.MANY_TO_MANY) {
-            //    this.recipient = W.getRecipientSelector();
-            //    this.bodyDiv.appendChild(this.recipient);
-            // }
         }
     };
 
-    Chat.prototype.readTA = function() {
+    Chat.prototype.readTextarea = function() {
         var txt;
         txt = this.textarea.value;
         this.textarea.value = '';
         return txt.trim();
     };
 
-    Chat.prototype.writeTA = function(msg, toFrom, outgoing) {
-        var string, args;
-        if (outgoing) {
-            args = {
-                '%s': {
-                    'class': 'chat_me'
-                },
-                '%msg': {
-                    'class': 'chat_msg'
-                },
-                '!txt': msg,
-                '!to': toFrom
-            };
-            if (this.mode === Chat.modes.ONE_TO_ONE || toFrom === 'ALL') {
-                string = '%sMe%s: %msg!txt%msg';
-            }
-            else {
-                string = '%sMe to !to%s: %msg!txt%msg';
-            }
-        }
-        else {
-            toFrom = this.displayName(toFrom);
-            args = {
-                '%s': {
-                    'class': 'chat_others'
-                },
-                '%msg': {
-                    'class': 'chat_msg'
-                },
-                '!txt': msg,
-                '!from': toFrom
-            };
-            string = '%s!from%s: %msg!txt%msg';
-        }
-        J.sprintf(string, args, this.chat);
-        W.writeln('', this.chat);
-        this.chat.scrollTop = this.chat.scrollHeight;
+    Chat.prototype.writeMsg = function(code, data) {
+        W.add('span', this.chatDiv, { innerHTML: this.getText(code, data) });
+        W.writeln('', this.chatDiv);
+        this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     };
 
     Chat.prototype.listeners = function() {
         var that = this;
 
-        if (this.mode === Chat.modes.MANY_TO_MANY) {
-            node.on('UPDATED_PLIST', function() {
-                W.populateRecipientSelector(that.recipient,
-                    node.game.pl.fetch());
-            });
-        }
-
         node.on.data(this.chatEvent, function(msg) {
-            var from, args;
-            if (msg.from === node.player.id || msg.from === node.player.sid) {
-                return;
+            debugger
+            if (!that.handleMsg(msg)) return;
+            that.stats.received++;
+            // Store message if so requested.
+            if (that.storeMsgs) {
+                that.db.insert({
+                    from: msg.from,
+                    text: msg.data,
+                    time: node.timer.getTimeSince('step'),
+                    timestamp: J.now()
+                });
             }
-
-            if (that.mode === Chat.modes.ONE_TO_ONE) {
-                if (msg.from === that.recipient.value) {
-                    return;
-                }
-            }
-
-            if (that.isCollapsed()) {
-                if (that.uncollapseOnMsg) {
-                    that.uncollapse();
-                }
-                else {
-                    // TODO: highlight better. Play sound?
-                    that.setTitle('<strong>' + that.title + '</strong>');
-                }
-            }
-
-            that.writeTA(msg.data, msg.from, false);
+            that.writeMsg('incoming', { msg: msg.data, id: msg.from });
         });
 
+        node.on.data(this.chatEvent + '_QUIT', function(msg) {
+            if (!that.handleMsg(msg)) return;
+            that.writeMsg('quit', { id: msg.from });
+        });
+    };
+
+    Chat.prototype.handleMsg = function(msg) {
+        var from, args;
+        if (msg.from === node.player.id || msg.from === node.player.sid) {
+            node.warn('Chat: your own message came back: ' + msg.id);
+            return false;
+        }
+        if (this.isCollapsed()) {
+            if (this.uncollapseOnMsg) {
+                this.uncollapse();
+            }
+            else {
+                // TODO: highlight better. Play sound?
+                this.setTitle('<strong>' + this.title + '</strong>');
+                this.stats.unread++;
+            }
+        }
+        return true;
+    };
+
+    Chat.prototype.destroy = function() {
+        node.say(this.chatEvent + '_QUIT', privateData[this.wid].recipientsIds);
+        // Remove private data.
+        privateData[this.wid] = null;
+    };
+
+    Chat.prototype.getValues = function() {
+        var out;
+        out = {
+            names: this.recipientsNames,
+            totSent: this.stats.sent,
+            totReceived: this.stats.received,
+            totUnread: this.stats.unread
+        };
+        if (this.db) out.msgs = db.fetch();
+        return out;
     };
 
 })(node);
