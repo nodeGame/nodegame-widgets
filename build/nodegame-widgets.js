@@ -757,7 +757,7 @@
     Widget.prototype.emit = function() {
         NDDB.prototype.emit.apply(this, arguments);
     };
-    
+
     /**
      * ### Widget.throwErr
      *
@@ -780,7 +780,7 @@
         if (type === 'TypeError') throw new TypeError(errMsg);
         throw new Error(errMsg);
     };
-    
+
     // ## Helper methods.
 
     /**
@@ -941,7 +941,7 @@
     "use strict";
 
     var NDDB = window.NDDB;
-    
+
     // ## Widgets constructor
 
     function Widgets() {
@@ -1197,7 +1197,7 @@
             undisabled: [],
             destroyed: []
         };
-        
+
         // Fixed properties.
 
         // Widget Name.
@@ -1554,6 +1554,11 @@
  *
  * Creates a simple configurable chat
  *
+ * // TODO: add is...typing
+ * // TODO: add bootstrap badge to count msg when collapsed
+ * // TODO: chat button inline with textarea
+ * // TODO: fix the recipient
+ *
  * www.nodegame.org
  */
 (function(node) {
@@ -1744,40 +1749,61 @@
 
     Chat.prototype.append = function() {
         var that;
+        var inputGroup, span;
 
         this.chat = W.get('div', { className: 'chat_chat' });
         this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
             that = this;
+
+            // Input group.
+            inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group';
+            // Span group.
+            span = document.createElement('span');
+            span.className = 'input-group-btn';
+
+            this.textarea = W.get('textarea', {
+                className: 'chat_textarea form-control'
+            });
+
+            // Append them.
+            //W.writeln('', this.bodyDiv);
+            //this.bodyDiv.appendChild(this.textarea);
+            //W.writeln('', this.bodyDiv);
+            //this.bodyDiv.appendChild(this.submit);
+
+            
             // Create buttons to send messages, if allowed.
             this.submit = W.get('button', {
                 innerHTML: this.submitText,
-                className: 'btn btn-sm btn-secondary'
+                // className: 'btn btn-sm btn-secondary'
+                className: 'btn btn-default chat_submit'
             });
 
             this.submit.onclick = function() {
                 var msg, to;
                 msg = that.readTA();
-                if (!msg) return;
+                if (msg === '') {
+                    node.warn('no text, no chat message sent.');
+                    return;
+                }
                 to = that.recipient.value;
                 that.writeTA(msg, to, true);
                 node.say(that.chatEvent, to, msg);
             };
 
-            this.textarea = W.get('textarea', { className: 'chat_textarea' });
-
-            // Append them.
-            W.writeln('', this.bodyDiv);
-            this.bodyDiv.appendChild(this.textarea);
-            W.writeln('', this.bodyDiv);
-            this.bodyDiv.appendChild(this.submit);
-
+            inputGroup.appendChild(this.textarea);
+            span.appendChild(this.submit);
+            inputGroup.appendChild(span);
+            this.bodyDiv.appendChild(inputGroup);
+            
             // Add recipient selector, if requested.
-            if (this.mode === Chat.modes.MANY_TO_MANY) {
-                this.recipient = W.getRecipientSelector();
-                this.bodyDiv.appendChild(this.recipient);
-            }
+            // if (this.mode === Chat.modes.MANY_TO_MANY) {
+            //    this.recipient = W.getRecipientSelector();
+            //    this.bodyDiv.appendChild(this.recipient);
+            // }
         }
     };
 
