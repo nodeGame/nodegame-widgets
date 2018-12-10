@@ -10,6 +10,7 @@
  * // TODO: check on data if message comes back
  * // TODO: fix no names and map
  * // TODO: check if removing privateData works (battery ended here).
+ * // TODO: add proper inline doc
  *
  * www.nodegame.org
  */
@@ -31,11 +32,12 @@
                 '</span>: </span class="chat_msg">' + data.msg + '</span>';
         },
         incoming: function(w, data) {
-            return '<span class="chat_others">' + w.recipientsMap[data.id] +
+            return '<span class="chat_others">' +
+                w.senderToNameMap[data.id] +
                 '</span>: </span class="chat_msg">' + data.msg + '</span>';
         },
         quit: function(w, data) {
-            return w.recipientsMap[data.id] + ' quit the chat';
+            return w.senderToNameMap[data.id] + ' quit the chat';
         }
     };
 
@@ -62,6 +64,15 @@
      * @see Chat.init
      */
     function Chat() {
+
+        /**
+         * ### Chat.chatEvent
+         *
+         * The suffix used to fire chat events
+         *
+         * Default: 'CHAT'
+         */
+        this.chatEvent = null;
 
         /**
          * ### Chat.stats
@@ -132,32 +143,42 @@
         this.submitText = null;
 
         /**
-         * ### Chat.chatEvent
+         * ### Chat.displayNames
          *
-         * The event fired a chat message is received
+         * Array of names of the recipient/s of the message
          */
-        this.chatEvent = null;
-
-        /**
-         * ### Chat.recipientsNames
-         *
-         * Array containing names of the recipient/s of the message
-         */
-        this.recipientsNames = [];
+        this.displayNames = null;
 
         /**
          * ### Chat.recipientsIds
          *
-         * Array containing ids of the recipient/s of the message
+         * Array of ids of the recipient/s of the message
          */
-        this.recipientsIds = [];
+        this.recipientsIds = null;
 
         /**
-         * ### Chat.recipientsMap
+         * ### Chat.recipientToNameMap
          *
          * Map recipients ids to names
          */
-        this.recipientsMap = {};
+        this.recipientToNameMap = null;
+
+        /**
+         * ### Chat.recipientToSenderMap
+         *
+         * Map recipients ids to names
+         */
+        this.recipientToSenderMap = null;
+
+        /**
+         * ### Chat.senderToNameMap
+         *
+         * Map recipients ids to sender ids
+         *
+         * Note: The 'from' field of a message can be different
+         * from the 'to' field of its reply (e.g., for MONITOR)
+         */
+        this.senderToNameMap = null;
     }
 
     // ## Chat methods
@@ -172,12 +193,26 @@
      * The  options object can have the following attributes:
      *   - `receiverOnly`: If TRUE, no message can be sent
      *   - `submitText`: The text of the submit button
-     *   - `chatEvent`: The event to fire when sending a message
+     *   - `chatEvent`: The event to fire when sending/receiving a message
      *   - `displayName`: Function which displays the sender's name
      */
     Chat.prototype.init = function(options) {
-        var tmp, i;
+        var tmp, i, rec;
         options = options || {};
+
+
+        // Chat id.
+        tmp = options.chatEvent;
+        if (tmp) {
+            if ('string' !== typeof tmp) {
+                throw new TypeError('Chat.init: chatEvent must be a non-' +
+                                    'empty string or undefined. Found: ' + tmp);
+            }
+            this.chatEvent = options.chatEvent;
+        }
+        else {
+            this.chatEvent = 'CHAT';
+        }
 
         // Store.
         this.storeMsgs = !!options.storeMsgs;
@@ -185,43 +220,55 @@
             if (!this.db) this.db = new NDDB();
         }
 
-        // Recipients.
-        tmp = options.recipients;
+        // Participants.
+        tmp = options.participants;
         if (!J.isArray(tmp) || !tmp.length) {
-            throw new TypeError('Chat.init: recipients must be ' +
+            throw new TypeError('Chat.init: participants must be ' +
                                 'a non-empty array. Found: ' + tmp);
         }
 
-        // Set private variable.
-        this.recipientsIds = tmp;
-        if (options.recipientsNames) {
-            tmp = options.recipientsNames;
-            if (!J.isArray(tmp)) {
-
-                throw new TypeError('Chat.init: recipientsNames must be ' +
-                                'array or undefined. Found: ' + tmp);
-
+        // Build maps.
+        this.recipientsIds = new Array(tmp.length);
+        this.recipientToSenderMap = {};
+        this.recipientToNameMap = {};
+        this.senderToNameMap = {};
+        for (i = 0; i < tmp.length; i++) {
+            if ('string' === typeof tmp[i]) {
+                this.recipientsIds[i] = tmp[i];
+                this.recipientToNameMap[tmp[i]] = tmp[i];
+                this.recipientToSenderMap[tmp[i]] = tmp[i];
+                this.senderToNameMap[tmp[i]] = tmp[i];
             }
-            if (tmp.length !== this.recipientsIds.length) {
-                throw new TypeError('Chat.init: recipientsNames size must ' +
-                                    'equal the number of ids');
+            else if ('object' === typeof tmp[i]) {
+                rec = tmp[i].recipient;
+                this.recipientsIds[i] = rec;
+                this.recipientToSenderMap[rec] = tmp[i].sender || rec;
+                this.recipientToNameMap[rec] = tmp[i].name || rec;
+                this.senderToNameMap[tmp[i].sender || rec] =
+                    this.recipientToNameMap[rec];
             }
-            this.recipientsNames = tmp;
+            else {
+                throw new TypeError('Chat.init: particpants array must ' +
+                                    'contain string or object. Found: ' +
+                                    tmp[i]);
+            }
+        }
+
+        // Chat button text.
+        tmp = options.submitText;
+        if (tmp) {
+            if ('string' === typeof tmp) {
+                throw new TypeError('Chat.init: submitText must be a non-' +
+                                    'empty string or undefined. Found: ' + tmp);
+            }
+            this.submitText = options.submitText;
         }
         else {
-            this.recipientsNames = this.recipientsIds;
+            this.submitText = 'Chat';
         }
-        // TODO: does not work without names.
-        // Build map.
-        for (i = 0; i < tmp.length; i++) {
-            this.recipientsMap[this.recipientsIds[i]] = this.recipientsNames[i];
-        }
-
 
         // Other.
         this.uncollapseOnMsg = options.uncollapseOnMsg || false;
-        this.chatEvent = options.chatEvent || 'CHAT';
-        this.submitText = options.submitText || 'chat';
     };
 
 
@@ -260,7 +307,7 @@
                 if (msg === '') {
                     node.warn('no text, no chat message sent.');
                     return;
-                };
+                }
                 // Simplify things, if there is only one recipient.
                 to = ids.length === 1 ? ids[0] : ids;
                 that.writeMsg('outgoing', { msg: msg }); // to not used now.
@@ -313,7 +360,8 @@
 
     Chat.prototype.handleMsg = function(msg) {
         var from, args;
-        if (msg.from === node.player.id || msg.from === node.player.sid) {
+        from = msg.from;
+        if (from === node.player.id || from === node.player.sid) {
             node.warn('Chat: your own message came back: ' + msg.id);
             return false;
         }
@@ -337,7 +385,8 @@
     Chat.prototype.getValues = function() {
         var out;
         out = {
-            names: this.recipientsNames,
+            names: this.displayNames,
+            participants: this.participants,
             totSent: this.stats.sent,
             totReceived: this.stats.received,
             totUnread: this.stats.unread
