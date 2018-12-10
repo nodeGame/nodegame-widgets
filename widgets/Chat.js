@@ -8,8 +8,6 @@
  * // TODO: add is...typing
  * // TODO: add bootstrap badge to count msg when collapsed
  * // TODO: check on data if message comes back
- * // TODO: fix no names and map
- * // TODO: check if removing privateData works (battery ended here).
  * // TODO: add proper inline doc
  *
  * www.nodegame.org
