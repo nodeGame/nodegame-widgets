@@ -158,12 +158,15 @@
     /**
      * ### Widget.collapse
      *
-     * Collapses the widget (hides the body and footer)
+     * Collapses the widget,  (hides the body and footer)
+     *
+     * Only, if it was previously appended to DOM
      *
      * @see Widget.uncollapse
      * @see Widget.isCollapsed
      */
-    Widget.prototype.collapse = function() {
+    Widget.prototype.collapse = function() {        
+        if (!this.panelDiv) return;
         this.bodyDiv.style.display = 'none';
         this.collapsed = true;
         if (this.collapseButton) {
@@ -179,10 +182,13 @@
      *
      * Uncollapses the widget (shows the body and footer)
      *
+     * Only, if it was previously appended to DOM
+     *
      * @see Widget.collapse
      * @see Widget.isCollapsed
      */
-    Widget.prototype.uncollapse = function() {
+    Widget.prototype.uncollapse = function() {        
+        if (!this.panelDiv) return;
         this.bodyDiv.style.display = '';
         this.collapsed = false;
         if (this.collapseButton) {
@@ -248,16 +254,18 @@
      * Sets the 'display' property of `panelDiv` to 'none'
      *
      * @see Widget.show
+     * @see Widget.toggle
      */
     Widget.prototype.hide = function() {
         if (!this.panelDiv) return;
         this.panelDiv.style.display = 'none';
+        this.hidden = true;        
     };
 
     /**
      * ### Widget.show
      *
-     * Show the widget, if it was previously appended and hidden
+     * Shows the widget, if it was previously appended and hidden
      *
      * Sets the 'display' property of `panelDiv` to ''
      *
@@ -265,10 +273,12 @@
      *    property. Default: ''
      *
      * @see Widget.hide
+     * @see Widget.toggle
      */
     Widget.prototype.show = function(display) {
         if (this.panelDiv && this.panelDiv.style.display === 'none') {
-            this.panelDiv.style.display = display || '';
+            this.panelDiv.style.display = display || '';            
+            this.hidden = false;
         }
     };
 
@@ -284,12 +294,20 @@
      */
     Widget.prototype.toggle = function(display) {
         if (!this.panelDiv) return;
-        if (this.panelDiv.style.display === 'none') {
-            this.panelDiv.style.display = display || '';
-        }
-        else {
-            this.panelDiv.style.display = 'none';
-        }
+        if (this.hidden()) this.show();
+        else this.hide();
+    };
+
+    /**
+     * ### Widget.isHidden
+     *
+     * TRUE if widget is hidden or not yet appended
+     *
+     * @return {boolean} TRUE if widget is hidden, or if it was not
+     *   appended to the DOM yet
+     */
+    Widget.prototype.isHidden = function() {
+        return !!this.hidden;
     };
 
     /**
@@ -1191,6 +1209,8 @@
         widget.collapsible = options.collapsible || false;
         widget.closable = options.closable || false;
         widget.hooks = {
+            hidden: [],
+            shown: [],
             collapsed: [],
             uncollapsed: [],
             disabled: [],
@@ -1210,6 +1230,8 @@
         widget.highlighted = null;
         // Add collapsed.
         widget.collapsed = null;
+        // Add hidden.
+        widget.hidden = null;
 
         // Call init.
         widget.init(options);
@@ -1343,11 +1365,14 @@
         if ('string' === typeof w) w = this.get(w, options);
 
         // Add panelDiv (with or without panel).
-        tmp = options.panel === false ?
-            [ 'ng_widget',  'no-panel', w.className ] :
-            [ 'ng_widget', 'panel', 'panel-default', w.className ];
+        tmp = {
+            className: options.panel === false ?
+                [ 'ng_widget',  'no-panel', w.className ] :
+                [ 'ng_widget', 'panel', 'panel-default', w.className ]
+        };
 
-        w.panelDiv = W.append('div', root, { className: tmp });
+        // Add div inside widget.
+        w.panelDiv = W.get('div', tmp);
 
         // Optionally add title (and div).
         if (options.title !== false && w.title) {
@@ -1373,6 +1398,10 @@
         // User listeners.
         // attachListeners(w);
 
+        // Be hidden, if requested.
+        if (options.hidden) w.hide();
+   
+        root.appendChild(w.panelDiv);        
         w.append();
 
         // Store reference of last appended widget.
@@ -1534,7 +1563,7 @@
 //     }
 
     function checkDepErrMsg(w, d) {
-        var name = w.name || w.id;// || w.toString();
+        var name = w.name || w.id; // || w.toString();
         node.err(d + ' not found. ' + name + ' cannot be loaded.');
     }
 
@@ -1557,8 +1586,6 @@
  * // TODO: add is...typing
  * // TODO: add bootstrap badge to count msg when collapsed
  * // TODO: check on data if message comes back
- * // TODO: fix no names and map
- * // TODO: check if removing privateData works (battery ended here).
  * // TODO: add proper inline doc
  *
  * www.nodegame.org
@@ -1724,7 +1751,7 @@
          *
          * Map recipients ids to sender ids
          *
-         * Note: The 'from' field of a message can be different 
+         * Note: The 'from' field of a message can be different
          * from the 'to' field of its reply (e.g., for MONITOR)
          */
         this.senderToNameMap = null;
@@ -1749,7 +1776,7 @@
         var tmp, i, rec;
         options = options || {};
 
-        
+
         // Chat id.
         tmp = options.chatEvent;
         if (tmp) {
@@ -1758,11 +1785,11 @@
                                     'empty string or undefined. Found: ' + tmp);
             }
             this.chatEvent = options.chatEvent;
-        }        
+        }
         else {
             this.chatEvent = 'CHAT';
         }
-        
+
         // Store.
         this.storeMsgs = !!options.storeMsgs;
         if (this.storeMsgs) {
@@ -1811,11 +1838,11 @@
                                     'empty string or undefined. Found: ' + tmp);
             }
             this.submitText = options.submitText;
-        }        
+        }
         else {
             this.submitText = 'Chat';
         }
-        
+
         // Other.
         this.uncollapseOnMsg = options.uncollapseOnMsg || false;
     };
@@ -1869,7 +1896,7 @@
             this.bodyDiv.appendChild(inputGroup);
         }
     };
-    
+
     Chat.prototype.readTextarea = function() {
         var txt;
         txt = this.textarea.value;
