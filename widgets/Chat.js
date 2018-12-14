@@ -31,11 +31,11 @@
         },
         incoming: function(w, data) {
             return '<span class="chat_others">' +
-                w.senderToNameMap[data.id] +
+                (w.senderToNameMap[data.id] || data.id) +
                 '</span>: </span class="chat_msg">' + data.msg + '</span>';
         },
         quit: function(w, data) {
-            return w.senderToNameMap[data.id] + ' quit the chat';
+            return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
         }
     };
 

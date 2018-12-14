@@ -402,7 +402,7 @@
                     var link, img;
                     link = document.createElement('span');
                     link.className = 'panel-collapse-link';
-                    link.style['margin-right'] = '8px';
+                    // link.style['margin-right'] = '8px';
                     img = document.createElement('img');
                     img.src = '/images/close_small.png';
                     link.appendChild(img);
@@ -1609,11 +1609,11 @@
         },
         incoming: function(w, data) {
             return '<span class="chat_others">' +
-                w.senderToNameMap[data.id] +
+                (w.senderToNameMap[data.id] || data.id) +
                 '</span>: </span class="chat_msg">' + data.msg + '</span>';
         },
         quit: function(w, data) {
-            return w.senderToNameMap[data.id] + ' quit the chat';
+            return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
         }
     };
 
