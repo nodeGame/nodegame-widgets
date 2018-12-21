@@ -1707,6 +1707,13 @@
         this.textarea = null;
 
         /**
+         * ### Chat.textarea
+         *
+         * An initialMsg to display when the chat is open
+         */
+        this.initialMsg = null;
+
+        /**
          * ### Chat.displayNames
          *
          * Array of names of the recipient/s of the message
@@ -1811,7 +1818,7 @@
                     this.recipientToNameMap[rec];
             }
             else {
-                throw new TypeError('Chat.init: particpants array must ' +
+                throw new TypeError('Chat.init: participants array must ' +
                                     'contain string or object. Found: ' +
                                     tmp[i]);
             }
@@ -1819,6 +1826,15 @@
 
         // Other.
         this.uncollapseOnMsg = options.uncollapseOnMsg || false;
+
+        if (options.initialMsg) {
+            if ('object' !== typeof options.initialMsg) {                
+                throw new TypeError('Chat.init: initialMsg must be ' +
+                                    'object or undefined. Found: ' +
+                                    options.initialMsg);
+            }
+            this.initialMsg = options.initialMsg;
+        }
     };
 
 
@@ -1834,10 +1850,6 @@
 
             // Input group.
             inputGroup = document.createElement('div');
-            // inputGroup.className = 'input-group';
-            // Span group.
-            // span = document.createElement('span');
-            // span.className = 'input-group-btn';
 
             this.textarea = W.get('textarea', {
                 className: 'chat_textarea form-control'
@@ -1861,13 +1873,13 @@
                     node.say(that.chatEvent, to, msg);
                 }
             };
-       
-        
         
             inputGroup.appendChild(this.textarea);
             // inputGroup.appendChild(span);
             this.bodyDiv.appendChild(inputGroup);
         }
+
+        if (this.initialMsg) this.writeMsg('incoming', this.initialMsg);
     };
 
     Chat.prototype.readTextarea = function() {
@@ -1938,7 +1950,8 @@
             participants: this.participants,
             totSent: this.stats.sent,
             totReceived: this.stats.received,
-            totUnread: this.stats.unread
+            totUnread: this.stats.unread,
+            initialMsg: this.initialMsg
         };
         if (this.db) out.msgs = db.fetch();
         return out;
