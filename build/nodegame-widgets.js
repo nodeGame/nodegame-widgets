@@ -1371,6 +1371,10 @@
                 [ 'ng_widget', 'panel', 'panel-default', w.className ]
         };
 
+        // Dock it.
+        // TODO: handle multiple dockedd widgets.
+        if (options.docked) tmp.className.push('docked');
+        
         // Add div inside widget.
         w.panelDiv = W.get('div', tmp);
 
@@ -1654,8 +1658,6 @@
          * ### Chat.stats
          *
          * Some basic statistics about message counts
-         *
-         * @see Chat.submit
          */
         this.stats = {
             received: 0,
@@ -1666,9 +1668,9 @@
         /**
          * ### Chat.receiverOnly
          *
-         * If TRUE, users cannot send messages (no submit and textarea)
+         * If TRUE, users cannot send messages (no textarea)
          *
-         * @see Chat.submit
+         * @see Chat.textarea
          */
         this.receiverOnly = false;
 
@@ -1703,20 +1705,6 @@
          * The textarea wherein to write and read
          */
         this.textarea = null;
-
-        /**
-         * ### Chat.submit
-         *
-         * The submit button
-         */
-        this.submit = null;
-
-        /**
-         * ### Chat.submitText
-         *
-         * The text on the submit button
-         */
-        this.submitText = null;
 
         /**
          * ### Chat.displayNames
@@ -1768,7 +1756,6 @@
      *
      * The  options object can have the following attributes:
      *   - `receiverOnly`: If TRUE, no message can be sent
-     *   - `submitText`: The text of the submit button
      *   - `chatEvent`: The event to fire when sending/receiving a message
      *   - `displayName`: Function which displays the sender's name
      */
@@ -1830,19 +1817,6 @@
             }
         }
 
-        // Chat button text.
-        tmp = options.submitText;
-        if (tmp) {
-            if ('string' === typeof tmp) {
-                throw new TypeError('Chat.init: submitText must be a non-' +
-                                    'empty string or undefined. Found: ' + tmp);
-            }
-            this.submitText = options.submitText;
-        }
-        else {
-            this.submitText = 'Chat';
-        }
-
         // Other.
         this.uncollapseOnMsg = options.uncollapseOnMsg || false;
     };
@@ -1860,39 +1834,38 @@
 
             // Input group.
             inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group';
+            // inputGroup.className = 'input-group';
             // Span group.
-            span = document.createElement('span');
-            span.className = 'input-group-btn';
+            // span = document.createElement('span');
+            // span.className = 'input-group-btn';
 
             this.textarea = W.get('textarea', {
                 className: 'chat_textarea form-control'
             });
 
-            // Create buttons to send messages, if allowed.
-            this.submit = W.get('button', {
-                innerHTML: this.submitText,
-                // className: 'btn btn-sm btn-secondary'
-                className: 'btn btn-default chat_submit'
-            });
-
             ids = this.recipientsIds;
-            this.submit.onclick = function() {
+            this.textarea.onkeydown = function(e) {
                 var msg, to;
-                msg = that.readTextarea();
-                if (msg === '') {
-                    node.warn('no text, no chat message sent.');
-                    return;
+                var keyCode; 
+                e = e || window.event;
+                keyCode = e.keyCode || e.which;
+                if (keyCode==13) {
+                    msg = that.readTextarea();
+                    if (msg === '') {
+                        node.warn('no text, no chat message sent.');
+                        return;
+                    }
+                    // Simplify things, if there is only one recipient.
+                    to = ids.length === 1 ? ids[0] : ids;
+                    that.writeMsg('outgoing', { msg: msg }); // to not used now.
+                    node.say(that.chatEvent, to, msg);
                 }
-                // Simplify things, if there is only one recipient.
-                to = ids.length === 1 ? ids[0] : ids;
-                that.writeMsg('outgoing', { msg: msg }); // to not used now.
-                node.say(that.chatEvent, to, msg);
             };
-
+       
+        
+        
             inputGroup.appendChild(this.textarea);
-            span.appendChild(this.submit);
-            inputGroup.appendChild(span);
+            // inputGroup.appendChild(span);
             this.bodyDiv.appendChild(inputGroup);
         }
     };
