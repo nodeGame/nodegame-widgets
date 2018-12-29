@@ -1,6 +1,6 @@
 /**
  * # VisualTimer
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.9.1';
+    VisualTimer.version = '0.9.2';
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
@@ -135,12 +135,6 @@
      */
     VisualTimer.prototype.init = function(options) {
         var t, gameTimerOptions;
-
-        options = options || {};
-        if ('object' !== typeof options) {
-            throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined. Found: ' + options);
-        }
 
         // Important! Do not modify directly options, because it might
         // modify a step-property. Will manual clone later.

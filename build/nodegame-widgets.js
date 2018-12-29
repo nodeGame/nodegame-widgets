@@ -165,7 +165,7 @@
      * @see Widget.uncollapse
      * @see Widget.isCollapsed
      */
-    Widget.prototype.collapse = function() {        
+    Widget.prototype.collapse = function() {
         if (!this.panelDiv) return;
         this.bodyDiv.style.display = 'none';
         this.collapsed = true;
@@ -187,7 +187,7 @@
      * @see Widget.collapse
      * @see Widget.isCollapsed
      */
-    Widget.prototype.uncollapse = function() {        
+    Widget.prototype.uncollapse = function() {
         if (!this.panelDiv) return;
         this.bodyDiv.style.display = '';
         this.collapsed = false;
@@ -259,7 +259,7 @@
     Widget.prototype.hide = function() {
         if (!this.panelDiv) return;
         this.panelDiv.style.display = 'none';
-        this.hidden = true;        
+        this.hidden = true;
     };
 
     /**
@@ -277,7 +277,7 @@
      */
     Widget.prototype.show = function(display) {
         if (this.panelDiv && this.panelDiv.style.display === 'none') {
-            this.panelDiv.style.display = display || '';            
+            this.panelDiv.style.display = display || '';
             this.hidden = false;
         }
     };
@@ -535,6 +535,18 @@
     Widget.prototype.removeFrame = function() {
         if (this.panelDiv) W.removeClass(this.panelDiv, 'panel-[a-z]*');
         if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
+    };
+
+
+    /**
+     * ### Widget.isAppended
+     *
+     * Returns TRUE if widget was appended to DOM (using Widget API)
+     *
+     * @return {boolean} TRUE, if node.widgets.append was called
+     */
+    Widget.prototype.isAppended = function() {
+        return this.appended;
     };
 
     /**
@@ -1224,6 +1236,8 @@
         widget.widgetName = widgetName;
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
+        // Add appended.
+        widget.appended = false;
         // Add enabled.
         widget.disabled = null;
         // Add highlighted.
@@ -1374,7 +1388,7 @@
         // Dock it.
         // TODO: handle multiple dockedd widgets.
         if (options.docked) tmp.className.push('docked');
-        
+
         // Add div inside widget.
         w.panelDiv = W.get('div', tmp);
 
@@ -1404,9 +1418,10 @@
 
         // Be hidden, if requested.
         if (options.hidden) w.hide();
-   
-        root.appendChild(w.panelDiv);        
+
+        root.appendChild(w.panelDiv);
         w.append();
+        w.appended = true;
 
         // Store reference of last appended widget.
         this.lastAppended = w;
@@ -13227,7 +13242,7 @@
 
 /**
  * # VisualTimer
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -13244,7 +13259,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.9.1';
+    VisualTimer.version = '0.9.2';
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
@@ -13362,12 +13377,6 @@
      */
     VisualTimer.prototype.init = function(options) {
         var t, gameTimerOptions;
-
-        options = options || {};
-        if ('object' !== typeof options) {
-            throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined. Found: ' + options);
-        }
 
         // Important! Do not modify directly options, because it might
         // modify a step-property. Will manual clone later.
@@ -14840,10 +14849,10 @@
 
 /**
  * # Wall
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2018 Stefano Balietti
  * MIT Licensed
  *
- * Creates a wall where logs and other info is added with number and timestamp
+ * Creates a wall where all incoming and outgoing messages are printed
  *
  * www.nodegame.org
  */
@@ -14855,9 +14864,11 @@
 
     // ## Meta-data
 
-    Wall.version = '0.3.1';
-    Wall.description = 'Intercepts all LOG events and prints them into a PRE ' +
-                       'element with an ordinal number and a timestamp.';
+    Wall.version = '1.0.0';
+    Wall.description = 'Intercepts incoming and outgoing messages, and logs ' +
+        'and prints them numbered and timestamped. Warning! Modifies ' +
+        'core functions, therefore its usage in production is ' +
+        'not recommended.';
 
     Wall.title = 'Wall';
     Wall.className = 'wall';
@@ -14871,39 +14882,79 @@
     /**
      * ## Wall constructor
      *
-     * `Wall` prints all LOG events into a PRE.
-     *
-     * @param {object} options Optional. Configuration options
+     * Creates a new Wall oject
      */
-    function Wall(options) {
+    function Wall() {
 
         /**
-         * ### Wall.name
+         * ### Wall.bufferIn
          *
-         * The name of this Wall
+         * Keeps incoming messages if they cannot be printed immediately
          */
-        this.name = options.name || this.name;
+        this.bufferIn = [];
 
         /**
-         * ### Wall.buffer
+         * ### Wall.bufferOut
          *
-         * Buffer for logs which are to be logged before the document is ready
+         * Keeps outgoing messages if they cannot be printed immediately
          */
-        this.buffer = [];
+        this.bufferOut = [];
 
         /**
-         * ### Wall.counter
+         * ### Wall.bufferLog
          *
-         * Counts number of entries on wall
+         * Keeps logs if they cannot be printed immediately
          */
-        this.counter = 0;
+        this.bufferLog = [];
 
+        /**
+         * ### Wall.counterIn
+         *
+         * Counts number of incoming message printed on wall
+         */
+        this.counterIn = 0;
+
+        /**
+         * ### Wall.counterOut
+         *
+         * Counts number of outgoing message printed on wall
+         */
+        this.counterOut = 0;
+
+        /**
+         * ### Wall.counterLog
+         *
+         * Counts number of log entries printed on wall
+         */
+        this.counterLog = 0;
+        
         /**
          * ### Wall.wall
          *
-         * The PRE in which to write
+         * The element in which to write
          */
-        this.wall = W.get('pre', this.id);
+        this.wall = null;
+
+        /**
+         * ### Wall.origMsgInCb
+         *
+         * The original function that receives incoming msgs
+         */
+        this.origMsgInCb = null;
+
+        /**
+         * ### Wall.origMsgOutCb
+         *
+         * The original function that sends msgs 
+         */        
+        this.origMsgOutCb = null;
+
+        /**
+         * ### Wall.origLogCb
+         *
+         * The original log callback
+         */        
+        this.origLogCb = null;
     }
 
     // ## Wall methods
@@ -14912,64 +14963,120 @@
      * ### Wall.init
      *
      * Initializes the instance
-     *
-     * If options are provided, the counter is set to `options.counter`
-     * otherwise nothing happens.
+     * 
+     * @param {object} options Optional. Configuration options
      */
     Wall.prototype.init = function(options) {
-        options = options || {};
-        this.counter = options.counter || this.counter;
+        var that;
+        that = this;
+        if (options.msgIn !== false) {
+            this.origMsgInCb = node.socket.onMessage;
+            node.socket.onMessage = function(msg) {
+                that.debuffer();
+                that.write('in', that.makeTextIn(msg));
+                that.origMsgInCb.call(node.socket, msg);
+            };
+        }
+        if (options.msgOut !== false) {
+            this.origMsgOutCb = node.socket.send;
+            node.socket.send = function(msg) {
+                that.debuffer();
+                that.write('out', that.makeTextOut(msg));
+                that.origMsgOutCb.call(node.socket, msg);
+            };
+        }
+        if (options.log !== false) {
+            this.origLogCb = node.log
+            node.log = function(txt, level, prefix) {
+                that.debuffer();
+                that.write('log', that.makeTextLog(txt, level, prefix));
+                that.origLogCb.call(node, txt, level, prefix);
+            };
+        }
     };
 
+    Wall.prototype.destroy = function() {
+        if (this.origLogCb) node.log = this.origLogCb;
+        if (this.origMsgOutCb) node.socket.send = this.origMsgOutCb;
+        if (this.origMsgInCb) node.socket.onMessage = this.origMsgInCb;
+    };
+    
     Wall.prototype.append = function() {
-        return this.bodyDiv.appendChild(this.wall);
+        this.wall = W.get('div', { className: 'walldiv' });
+        this.bodyDiv.appendChild(this.wall);
     };
 
     /**
-     * ### Wall.listeners
-     *
-     * Wall has a listener to the `LOG` event
-     */
-    Wall.prototype.listeners = function() {
-        var that = this;
-        node.on('LOG', function(msg) {
-            that.debuffer();
-            that.write(msg);
-        });
-    };
-
-
-    /**
-     *  ### Wall.write
+     * ### Wall.write
      *
      * Writes argument as first entry of this.wall if document is fully loaded
      *
-     * Writes into this.buffer if document is not ready yet.
+     * Writes into this.buffer if wall was not appended yet
+     *
+     * @param {string} type 'in', 'out', or 'log'
+     * @param {string} text The text to write
+     * @param {number} level Optional. The level of the log
+     * @param {string} prefix Optional. The prefix of the log
      */
-    Wall.prototype.write = function(text) {
-        var mark;
-        if (document.readyState !== 'complete') {
-            this.buffer.push(text);
+    Wall.prototype.write = function(type, text) { 
+        if (this.isAppended()) {
+            text = type + ' - ' +
+                (type === 'in' ? ++this.counterIn :
+                 (type === 'out' ? ++this.counterOut : ++this.counterLog)) +
+                ') ' + J.getTime() + ' - ' + text;
+            
+            W.add('span', this.wall, {
+                className: 'wall_' + type,
+                innerHTML: text
+            });
+            W.add('br', this.wall);
+            this.wall.scrollTop = this.wall.scrollHeight;
         }
         else {
-            mark = this.counter++ + ') ' + J.getTime() + ' ';
-            this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
+            if (type === 'in') this.bufferIn.push(text);
+            else if (type === 'out') this.bufferOut.push(text);
+            else this.bufferLog.push(text);
         }
     };
 
+    Wall.prototype.makeTextIn = function(msg) {
+        var text;
+        text = msg.to + ' | ' + msg.target + ' | ' + msg.action + ' | ' +
+            msg.text + ' | ' + msg.data;
+        return text;
+    };
+
+    
+    Wall.prototype.makeTextOut = function(msg) {
+        var text;
+        text = msg.from + ' | ' + msg.target + ' | ' + msg.action + ' | ' +
+            msg.text + ' | ' + msg.data;
+        return text;
+    };
+    
+    Wall.prototype.makeTextLog = function(text, level, prefix) {
+        return level + ' | ' + text;
+    };
+    
     /**
      * ### Wall.debuffer
      *
-     * If the document is ready, the buffer content is written into this.wall
+     * Erases the buffers and writes its contents
      */
     Wall.prototype.debuffer = function() {
         var i;
-        if (document.readyState === 'complete' && this.buffer.length > 0) {
-            for (i=0; i < this.buffer.length; i++) {
-                this.write(this.buffer[i]);
-            }
-            this.buffer = [];
+        for (i = 0; i < this.bufferIn.length; i++) {
+            this.write('in', this.bufferIn[i]);
         }
+        this.bufferIn = [];
+        for (i = 0; i < this.bufferOut.length; i++) {
+            this.write('out', this.bufferOut[i]);
+        }
+        this.bufferOut = [];
+        for (i = 0; i < this.bufferLog.length; i++) {
+            this.write('log', this.bufferLog[i]);
+        }
+        this.bufferLog = [];
     };
 
 })(node);
