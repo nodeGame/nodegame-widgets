@@ -7744,7 +7744,6 @@
      * Creates a new DebugWall oject
      */
     function DebugWall() {
-
         
         /**
          * ### DebugWall.buttonsDiv
@@ -7752,28 +7751,14 @@
          * Div contains controls for the display info inside the wall.
          */
         this.buttonsDiv = null;
+
+        /**
+         * ### DebugWall.hidden
+         *
+         * Keep tracks of what is hidden in the wall
+         */
+        this.hiddenTypes = {};
         
-        /**
-         * ### DebugWall.bufferIn
-         *
-         * Keeps incoming messages if they cannot be printed immediately
-         */
-        this.bufferIn = [];
-
-        /**
-         * ### DebugWall.bufferOut
-         *
-         * Keeps outgoing messages if they cannot be printed immediately
-         */
-        this.bufferOut = [];
-
-        /**
-         * ### DebugWall.bufferLog
-         *
-         * Keeps logs if they cannot be printed immediately
-         */
-        this.bufferLog = [];
-
         /**
          * ### DebugWall.counterIn
          *
@@ -7839,7 +7824,6 @@
         if (options.msgIn !== false) {
             this.origMsgInCb = node.socket.onMessage;
             node.socket.onMessage = function(msg) {
-                that.debuffer();
                 that.write('in', that.makeTextIn(msg));
                 that.origMsgInCb.call(node.socket, msg);
             };
@@ -7847,18 +7831,25 @@
         if (options.msgOut !== false) {
             this.origMsgOutCb = node.socket.send;
             node.socket.send = function(msg) {
-                that.debuffer();
                 that.write('out', that.makeTextOut(msg));
                 that.origMsgOutCb.call(node.socket, msg);
             };
         }
         if (options.log !== false) {
-            this.origLogCb = node.log
+            this.origLogCb = node.log;
             node.log = function(txt, level, prefix) {
-                that.debuffer();
-                that.write('log', that.makeTextLog(txt, level, prefix));
+                that.write(level || 'info',
+                           that.makeTextLog(txt, level, prefix));
                 that.origLogCb.call(node, txt, level, prefix);
             };
+        }
+
+        if (options.hiddenTypes) {
+            if ('object' !== typeof hiddenTypes) {
+                throw new TypeError('DebugWall.init: hiddenTypes must be ' +
+                                    'object. Found: ' + hiddenTypes);
+            }
+            this.hiddenTypes = hiddenTypes;
         }
     };
 
@@ -7875,7 +7866,7 @@
             className: 'wallbuttonsdiv'
         });
         
-        var btnGroup = document.createElement('div');
+        btnGroup = document.createElement('div');
         btnGroup.role = 'group';
         btnGroup['aria-label'] = 'Toggle visibility';
         btnGroup.className = 'btn-group';
@@ -7897,20 +7888,22 @@
         
         that = this;
        
-        cb = function(className) {
-            var items, i, vis;
+        cb = function(type) {
+            var items, i, vis, className;
+            className = 'wall_' + type;
             items = that.wall.getElementsByClassName(className);
             vis = items[0].style.display === '' ? 'none' : ''; 
             for (i = 0; i < items.length; i++) {
                 items[i].style.display = vis;
             }
+            that.hiddenTypes[type] = !!vis;
         };
         
-        displayIn.onclick = function() { cb('wall_in'); };
-        displayOut.onclick = function() { cb('wall_out'); };
-        displayLog.onclick = function() { cb('wall_log'); };
+        displayIn.onclick = function() { cb('in'); };
+        displayOut.onclick = function() { cb('out'); };
+        displayLog.onclick = function() { cb('log'); };
         
-        this.wall = W.get('div', { className: 'walldiv' });
+        this.wall = W.get('table', { className: 'walldiv' });
         this.bodyDiv.appendChild(this.wall);
     };
 
@@ -7919,29 +7912,44 @@
      *
      * Writes argument as first entry of this.wall if document is fully loaded
      *
-     * Writes into this.buffer if wall was not appended yet
-     *
-     * @param {string} type 'in', 'out', or 'log'
+     * @param {string} type 'in', 'out', or 'log' (different levels)
      * @param {string} text The text to write
-     * @param {number} level Optional. The level of the log
-     * @param {string} prefix Optional. The prefix of the log
+     */
+    DebugWall.prototype.shouldHide = function(type, text) {
+        return this.hiddenTypes[type];
+    };
+    /**
+     * ### DebugWall.write
+     *
+     * Writes argument as first entry of this.wall if document is fully loaded
+     *
+     * @param {string} type 'in', 'out', or 'log' (different levels)
+     * @param {string} text The text to write
      */
     DebugWall.prototype.write = function(type, text) {
         var spanContainer, spanDots, spanExtra, counter, className;
-        var limit, sep;
+        var limit;
+        var TR, TDtext;
         if (this.isAppended()) {
 
             counter = type === 'in' ? ++this.counterIn :
                 (type === 'out' ? ++this.counterOut : ++this.counterLog);
 
-            sep = '&nbsp;&nbsp;&nbsp;&nbsp;';
-            text = counter + sep + type + sep  + text;
-
             limit = 200;
             className = 'wall_' + type;
+            TR = W.add('tr', this.wall, { className: className }); 
+            if (type !== 'in' && type !== 'out') TR.className += ' wall_log';
+           
+            if (this.shouldHide(type, text)) TR.style.display = 'none';
+            
+            W.add('td', TR, { innerHTML: counter });
+            W.add('td', TR, { innerHTML: type });
+            W.add('td', TR, { innerHTML: J.getTimeM()});
+            TDtext = W.add('td', TR);
+            
             if (text.length > limit) {
-                spanContainer = W.add('span', this.wall, {
-                    className: [ className, className + '_click' ],
+                spanContainer = W.add('span', TDtext, {
+                    className: className + '_click' ,
                     innerHTML: text.substr(0, limit)
                 });
                 spanExtra = W.add('span', spanContainer, {
@@ -7969,18 +7977,14 @@
                 };
             }
             else {
-                spanContainer = W.add('span', this.wall, {
-                    className: className,
+                spanContainer = W.add('span', TDtext, {
                     innerHTML: text
                 });
             }
-            W.add('br', spanContainer);
             this.wall.scrollTop = this.wall.scrollHeight;
         }
         else {
-            if (type === 'in') this.bufferIn.push(text);
-            else if (type === 'out') this.bufferOut.push(text);
-            else this.bufferLog.push(text);
+            node.warn('Wall not appended, cannot write.');
         }
     };
 
@@ -8003,28 +8007,7 @@
     };
 
     DebugWall.prototype.makeTextLog = function(text, level, prefix) {
-        return level + ' | ' + text;
-    };
-
-    /**
-     * ### DebugWall.debuffer
-     *
-     * Erases the buffers and writes its contents
-     */
-    DebugWall.prototype.debuffer = function() {
-        var i;
-        for (i = 0; i < this.bufferIn.length; i++) {
-            this.write('in', this.bufferIn[i]);
-        }
-        this.bufferIn = [];
-        for (i = 0; i < this.bufferOut.length; i++) {
-            this.write('out', this.bufferOut[i]);
-        }
-        this.bufferOut = [];
-        for (i = 0; i < this.bufferLog.length; i++) {
-            this.write('log', this.bufferLog[i]);
-        }
-        this.bufferLog = [];
+        return text;
     };
 
 })(node);
