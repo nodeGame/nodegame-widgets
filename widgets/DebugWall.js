@@ -1,5 +1,5 @@
 /**
- * # Wall
+ * # DebugWall
  * Copyright(c) 2018 Stefano Balietti
  * MIT Licensed
  *
@@ -11,113 +11,121 @@
 
     "use strict";
 
-    node.widgets.register('Wall', Wall);
+    node.widgets.register('DebugWall', DebugWall);
 
     // ## Meta-data
 
-    Wall.version = '1.0.0';
-    Wall.description = 'Intercepts incoming and outgoing messages, and logs ' +
+    DebugWall.version = '1.0.0';
+    DebugWall.description = 'Intercepts incoming and outgoing messages, and logs ' +
         'and prints them numbered and timestamped. Warning! Modifies ' +
         'core functions, therefore its usage in production is ' +
         'not recommended.';
 
-    Wall.title = 'Wall';
-    Wall.className = 'wall';
+    DebugWall.title = 'Debug Wall';
+    DebugWall.className = 'debugwall';
 
     // ## Dependencies
 
-    Wall.dependencies = {
+    DebugWall.dependencies = {
         JSUS: {}
     };
 
     /**
-     * ## Wall constructor
+     * ## DebugWall constructor
      *
-     * Creates a new Wall oject
+     * Creates a new DebugWall oject
      */
-    function Wall() {
+    function DebugWall() {
 
+        
         /**
-         * ### Wall.bufferIn
+         * ### DebugWall.buttonsDiv
+         *
+         * Div contains controls for the display info inside the wall.
+         */
+        this.buttonsDiv = null;
+        
+        /**
+         * ### DebugWall.bufferIn
          *
          * Keeps incoming messages if they cannot be printed immediately
          */
         this.bufferIn = [];
 
         /**
-         * ### Wall.bufferOut
+         * ### DebugWall.bufferOut
          *
          * Keeps outgoing messages if they cannot be printed immediately
          */
         this.bufferOut = [];
 
         /**
-         * ### Wall.bufferLog
+         * ### DebugWall.bufferLog
          *
          * Keeps logs if they cannot be printed immediately
          */
         this.bufferLog = [];
 
         /**
-         * ### Wall.counterIn
+         * ### DebugWall.counterIn
          *
          * Counts number of incoming message printed on wall
          */
         this.counterIn = 0;
 
         /**
-         * ### Wall.counterOut
+         * ### DebugWall.counterOut
          *
          * Counts number of outgoing message printed on wall
          */
         this.counterOut = 0;
 
         /**
-         * ### Wall.counterLog
+         * ### DebugWall.counterLog
          *
          * Counts number of log entries printed on wall
          */
         this.counterLog = 0;
 
         /**
-         * ### Wall.wall
+         * ### DebugWall.wall
          *
          * The element in which to write
          */
         this.wall = null;
 
         /**
-         * ### Wall.origMsgInCb
+         * ### DebugWall.origMsgInCb
          *
          * The original function that receives incoming msgs
          */
         this.origMsgInCb = null;
 
         /**
-         * ### Wall.origMsgOutCb
+         * ### DebugWall.origMsgOutCb
          *
          * The original function that sends msgs
          */
         this.origMsgOutCb = null;
 
         /**
-         * ### Wall.origLogCb
+         * ### DebugWall.origLogCb
          *
          * The original log callback
          */
         this.origLogCb = null;
     }
 
-    // ## Wall methods
+    // ## DebugWall methods
 
     /**
-     * ### Wall.init
+     * ### DebugWall.init
      *
      * Initializes the instance
      *
      * @param {object} options Optional. Configuration options
      */
-    Wall.prototype.init = function(options) {
+    DebugWall.prototype.init = function(options) {
         var that;
         that = this;
         if (options.msgIn !== false) {
@@ -146,19 +154,60 @@
         }
     };
 
-    Wall.prototype.destroy = function() {
+    DebugWall.prototype.destroy = function() {
         if (this.origLogCb) node.log = this.origLogCb;
         if (this.origMsgOutCb) node.socket.send = this.origMsgOutCb;
         if (this.origMsgInCb) node.socket.onMessage = this.origMsgInCb;
     };
 
-    Wall.prototype.append = function() {
+    DebugWall.prototype.append = function() {
+        var displayIn, displayOut, displayLog, that;
+        var btnGroup, cb;
+        this.buttonsDiv = W.add('div', this.bodyDiv, {
+            className: 'wallbuttonsdiv'
+        });
+        
+        var btnGroup = document.createElement('div');
+        btnGroup.role = 'group';
+        btnGroup['aria-label'] = 'Toggle visibility';
+        btnGroup.className = 'btn-group';
+        
+        displayIn = W.add('button', btnGroup, {
+            innerHTML: 'Incoming',
+            className: 'btn btn-secondary'
+        });
+        displayOut = W.add('button', btnGroup, {
+            innerHTML: 'Outgoing',
+            className: 'btn btn-secondary'
+        });
+        displayLog = W.add('button', btnGroup, {
+            innerHTML: 'Log',
+            className: 'btn btn-secondary'
+        });
+
+        this.buttonsDiv.appendChild(btnGroup);
+        
+        that = this;
+       
+        cb = function(className) {
+            var items, i, vis;
+            items = that.wall.getElementsByClassName(className);
+            vis = items[0].style.display === '' ? 'none' : ''; 
+            for (i = 0; i < items.length; i++) {
+                items[i].style.display = vis;
+            }
+        };
+        
+        displayIn.onclick = function() { cb('wall_in'); };
+        displayOut.onclick = function() { cb('wall_out'); };
+        displayLog.onclick = function() { cb('wall_log'); };
+        
         this.wall = W.get('div', { className: 'walldiv' });
         this.bodyDiv.appendChild(this.wall);
     };
 
     /**
-     * ### Wall.write
+     * ### DebugWall.write
      *
      * Writes argument as first entry of this.wall if document is fully loaded
      *
@@ -169,21 +218,22 @@
      * @param {number} level Optional. The level of the log
      * @param {string} prefix Optional. The prefix of the log
      */
-    Wall.prototype.write = function(type, text) {
+    DebugWall.prototype.write = function(type, text) {
         var spanContainer, spanDots, spanExtra, counter, className;
-        var limit;
+        var limit, sep;
         if (this.isAppended()) {
 
             counter = type === 'in' ? ++this.counterIn :
                 (type === 'out' ? ++this.counterOut : ++this.counterLog);
 
-            text = counter + ' - ' + type + ' - ' + J.getTime() + ' - ' + text;
+            sep = '&nbsp;&nbsp;&nbsp;&nbsp;';
+            text = counter + sep + type + sep  + text;
 
-            limit = 100;
+            limit = 200;
             className = 'wall_' + type;
             if (text.length > limit) {
                 spanContainer = W.add('span', this.wall, {
-                    className: className + '_click',
+                    className: [ className, className + '_click' ],
                     innerHTML: text.substr(0, limit)
                 });
                 spanExtra = W.add('span', spanContainer, {
@@ -211,12 +261,12 @@
                 };
             }
             else {
-                W.add('span', this.wall, {
+                spanContainer = W.add('span', this.wall, {
                     className: className,
                     innerHTML: text
                 });
             }
-            W.add('br', this.wall);
+            W.add('br', spanContainer);
             this.wall.scrollTop = this.wall.scrollHeight;
         }
         else {
@@ -226,31 +276,34 @@
         }
     };
 
-    Wall.prototype.makeTextIn = function(msg) {
-        var text;
-        text = msg.to + ' | ' + msg.target + ' | ' + msg.action + ' | ' +
-            msg.text + ' | ' + msg.data;
+    DebugWall.prototype.makeTextIn = function(msg) {
+        var text, d;
+        d = new Date(msg.created);
+        text = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() +
+            ':' + d.getMilliseconds();
+        text += ' | ' + msg.to + ' | ' + msg.target +
+            ' | ' + msg.action + ' | ' + msg.text + ' | ' + msg.data;
         return text;
     };
 
 
-    Wall.prototype.makeTextOut = function(msg) {
+    DebugWall.prototype.makeTextOut = function(msg) {
         var text;
         text = msg.from + ' | ' + msg.target + ' | ' + msg.action + ' | ' +
             msg.text + ' | ' + msg.data;
         return text;
     };
 
-    Wall.prototype.makeTextLog = function(text, level, prefix) {
+    DebugWall.prototype.makeTextLog = function(text, level, prefix) {
         return level + ' | ' + text;
     };
 
     /**
-     * ### Wall.debuffer
+     * ### DebugWall.debuffer
      *
      * Erases the buffers and writes its contents
      */
-    Wall.prototype.debuffer = function() {
+    DebugWall.prototype.debuffer = function() {
         var i;
         for (i = 0; i < this.bufferIn.length; i++) {
             this.write('in', this.bufferIn[i]);
