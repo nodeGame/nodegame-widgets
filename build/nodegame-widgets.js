@@ -14927,7 +14927,7 @@
          * Counts number of log entries printed on wall
          */
         this.counterLog = 0;
-        
+
         /**
          * ### Wall.wall
          *
@@ -14945,15 +14945,15 @@
         /**
          * ### Wall.origMsgOutCb
          *
-         * The original function that sends msgs 
-         */        
+         * The original function that sends msgs
+         */
         this.origMsgOutCb = null;
 
         /**
          * ### Wall.origLogCb
          *
          * The original log callback
-         */        
+         */
         this.origLogCb = null;
     }
 
@@ -14963,7 +14963,7 @@
      * ### Wall.init
      *
      * Initializes the instance
-     * 
+     *
      * @param {object} options Optional. Configuration options
      */
     Wall.prototype.init = function(options) {
@@ -15000,7 +15000,7 @@
         if (this.origMsgOutCb) node.socket.send = this.origMsgOutCb;
         if (this.origMsgInCb) node.socket.onMessage = this.origMsgInCb;
     };
-    
+
     Wall.prototype.append = function() {
         this.wall = W.get('div', { className: 'walldiv' });
         this.bodyDiv.appendChild(this.wall);
@@ -15018,17 +15018,53 @@
      * @param {number} level Optional. The level of the log
      * @param {string} prefix Optional. The prefix of the log
      */
-    Wall.prototype.write = function(type, text) { 
+    Wall.prototype.write = function(type, text) {
+        var spanContainer, spanDots, spanExtra, counter, className;
+        var limit;
         if (this.isAppended()) {
-            text = type + ' - ' +
-                (type === 'in' ? ++this.counterIn :
-                 (type === 'out' ? ++this.counterOut : ++this.counterLog)) +
-                ') ' + J.getTime() + ' - ' + text;
             
-            W.add('span', this.wall, {
-                className: 'wall_' + type,
-                innerHTML: text
-            });
+            counter = type === 'in' ? ++this.counterIn :
+                (type === 'out' ? ++this.counterOut : ++this.counterLog);
+
+            text = counter + ' - ' + type + ' - ' + J.getTime() + ' - ' + text;
+
+            className = 'wall_' + type;
+            limit = 100;
+            if (text.length > limit) {
+                spanContainer = W.add('span', this.wall, {
+                    className: className + '_click',
+                    innerHTML: text.substr(0, limit)
+                });
+                spanExtra = W.add('span', spanContainer, {
+                    className: className + '_extra',
+                    innerHTML: text.substr(limit, text.length),
+                    id: 'wall_' + type + '_' + counter,
+                    style: { display: 'none' }
+                    
+                });
+                spanDots = W.add('span', spanContainer, {
+                    className: className + '_dots',
+                    innerHTML: ' ...',
+                    id: 'wall_' + type + '_' + counter
+                });
+
+                spanContainer.onclick = function() {
+                    if (spanDots.style.display === 'none') {
+                        spanDots.style.display = '';
+                        spanExtra.style.display = 'none';
+                    }
+                    else {
+                        spanDots.style.display = 'none';
+                        spanExtra.style.display = '';
+                    }
+                };
+            }
+            else {
+                W.add('span', this.wall, {
+                    className: className,
+                    innerHTML: text
+                });
+            }
             W.add('br', this.wall);
             this.wall.scrollTop = this.wall.scrollHeight;
         }
@@ -15046,18 +15082,18 @@
         return text;
     };
 
-    
+
     Wall.prototype.makeTextOut = function(msg) {
         var text;
         text = msg.from + ' | ' + msg.target + ' | ' + msg.action + ' | ' +
             msg.text + ' | ' + msg.data;
         return text;
     };
-    
+
     Wall.prototype.makeTextLog = function(text, level, prefix) {
         return level + ' | ' + text;
     };
-    
+
     /**
      * ### Wall.debuffer
      *

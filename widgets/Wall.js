@@ -170,37 +170,52 @@
      * @param {string} prefix Optional. The prefix of the log
      */
     Wall.prototype.write = function(type, text) {
-        var span, span2, counter;
+        var spanContainer, spanDots, spanExtra, counter, className;
+        var limit;
         if (this.isAppended()) {
+
             counter = type === 'in' ? ++this.counterIn :
                 (type === 'out' ? ++this.counterOut : ++this.counterLog);
 
-            text = type + ' - ' + counter + ') ' + J.getTime() + ' - ' + text;
+            text = counter + ' - ' + type + ' - ' + J.getTime() + ' - ' + text;
 
-
-            if (text.length > 100) {
-                W.add('span', this.wall, {
-                    className: 'wall_' + type,
-                    innerHTML: text.substr(0, 100)
+            limit = 100;
+            className = 'wall_' + type;
+            if (text.length > limit) {
+                spanContainer = W.add('span', this.wall, {
+                    className: className + '_click',
+                    innerHTML: text.substr(0, limit)
                 });
-                // TODO here.
-                W.add('span', this.wall, {
-                    className: 'wall_' + type + '_dots',
+                spanExtra = W.add('span', spanContainer, {
+                    className: className + '_extra',
+                    innerHTML: text.substr(limit, text.length),
+                    id: 'wall_' + type + '_' + counter,
+                    style: { display: 'none' }
+
+                });
+                spanDots = W.add('span', spanContainer, {
+                    className: className + '_dots',
                     innerHTML: ' ...',
                     id: 'wall_' + type + '_' + counter
                 });
 
+                spanContainer.onclick = function() {
+                    if (spanDots.style.display === 'none') {
+                        spanDots.style.display = '';
+                        spanExtra.style.display = 'none';
+                    }
+                    else {
+                        spanDots.style.display = 'none';
+                        spanExtra.style.display = '';
+                    }
+                };
+            }
+            else {
                 W.add('span', this.wall, {
-                    className: 'wall_' + type,
-                    innerHTML: text.substr(101, text.length),
-                    id: 'wall_' + type + '_' + counter
+                    className: className,
+                    innerHTML: text
                 });
             }
-
-            W.add('span', this.wall, {
-                className: 'wall_' + type,
-                innerHTML: text
-            });
             W.add('br', this.wall);
             this.wall.scrollTop = this.wall.scrollHeight;
         }
