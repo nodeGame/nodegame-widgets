@@ -75,7 +75,14 @@
         /**
          * ### DebugWall.wall
          *
-         * The element in which to write
+         * The table element in which to write
+         */
+        this.wall = null;
+
+        /**
+         * ### DebugWall.wallDiv
+         *
+         * The div element containing the wall (for scrolling)
          */
         this.wall = null;
 
@@ -153,7 +160,7 @@
 
     DebugWall.prototype.append = function() {
         var displayIn, displayOut, displayLog, that;
-        var btnGroup, cb;
+        var btnGroup, cb, div;
         this.buttonsDiv = W.add('div', this.bodyDiv, {
             className: 'wallbuttonsdiv'
         });
@@ -195,8 +202,8 @@
         displayOut.onclick = function() { cb('out'); };
         displayLog.onclick = function() { cb('log'); };
 
-        this.wall = W.get('table', { className: 'walldiv' });
-        this.bodyDiv.appendChild(this.wall);
+        this.wallDiv = W.add('div', this.bodyDiv, { className: 'walldiv' });
+        this.wall = W.add('table', this.wallDiv);
     };
 
     /**
@@ -273,7 +280,7 @@
                     innerHTML: text
                 });
             }
-            this.wall.scrollTop = this.wall.scrollHeight;
+            this.wallDiv.scrollTop = this.wallDiv.scrollHeight;
         }
         else {
             node.warn('Wall not appended, cannot write.');
