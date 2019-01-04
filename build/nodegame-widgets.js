@@ -174,6 +174,8 @@
             this.collapseButton.title = 'Maximize';
         }
         if (this.footer) this.footer.style.display = 'none';
+        // Move into collapse target, if one is specified.
+        if (this.collapseTarget) this.collapseTarget.appendChild(this.panelDiv);
         this.emit('collapsed');
     };
 
@@ -189,6 +191,9 @@
      */
     Widget.prototype.uncollapse = function() {
         if (!this.panelDiv) return;
+        if (this.collapseTarget) {
+            this.originalRoot.appendChild(this.panelDiv);
+        }
         this.bodyDiv.style.display = '';
         this.collapsed = false;
         if (this.collapseButton) {
@@ -1005,9 +1010,16 @@
          */
         this.lastAppended = null;
 
+        /**
+         * ### Widgets.collapseTarget
+         *
+         * Collapsed widgets are by default moved inside element
+         */
+        this.collapseTarget = null;
+
         that = this;
         node.registerSetup('widgets', function(conf) {
-            var name, root;
+            var name, root, collapseTarget;
             if (!conf) return;
 
             // Add new widgets.
@@ -1047,6 +1059,24 @@
                             that.append(name, root, conf.append[name]);
                         }
                     }
+                }
+            }
+
+            if (conf.collapseTarget) {
+                if ('function' === typeof conf.collapseTarget) {
+                    collapseTarget = conf.collapseTarget();
+                }
+                else if ('string' === typeof conf.collapseTarget) {
+                    collapseTarget = W.getElementById(conf.collapseTarget);
+                }
+                else if (J.isElement(conf.collapseTarget)) {
+                    collapseTarget = conf.collapseTarget;
+                }
+                if (!collapseTarget) {
+                    node.warn('setup widgets: could not find collapse target.');
+                }
+                else {
+                    that.collapseTarget = collapseTarget;
                 }
             }
 
@@ -1220,6 +1250,8 @@
             WidgetPrototype.texts : options.texts;
         widget.collapsible = options.collapsible || false;
         widget.closable = options.closable || false;
+        widget.collapseTarget =
+            options.collapseTarget || this.collapseTarget || null;
         widget.hooks = {
             hidden: [],
             shown: [],
@@ -1420,6 +1452,9 @@
         if (options.hidden) w.hide();
 
         root.appendChild(w.panelDiv);
+
+        w.originalRoot = root;
+
         w.append();
         w.appended = true;
 
@@ -7724,8 +7759,8 @@
     // ## Meta-data
 
     DebugWall.version = '1.0.0';
-    DebugWall.description = 'Intercepts incoming and outgoing messages, and logs ' +
-        'and prints them numbered and timestamped. Warning! Modifies ' +
+    DebugWall.description = 'Intercepts incoming and outgoing messages, and ' +
+        'logs and prints them numbered and timestamped. Warning! Modifies ' +
         'core functions, therefore its usage in production is ' +
         'not recommended.';
 
@@ -7744,7 +7779,7 @@
      * Creates a new DebugWall oject
      */
     function DebugWall() {
-        
+
         /**
          * ### DebugWall.buttonsDiv
          *
@@ -7758,7 +7793,7 @@
          * Keep tracks of what is hidden in the wall
          */
         this.hiddenTypes = {};
-        
+
         /**
          * ### DebugWall.counterIn
          *
@@ -7783,7 +7818,14 @@
         /**
          * ### DebugWall.wall
          *
-         * The element in which to write
+         * The table element in which to write
+         */
+        this.wall = null;
+        
+        /**
+         * ### DebugWall.wallDiv
+         *
+         * The div element containing the wall (for scrolling)
          */
         this.wall = null;
 
@@ -7861,16 +7903,16 @@
 
     DebugWall.prototype.append = function() {
         var displayIn, displayOut, displayLog, that;
-        var btnGroup, cb;
+        var btnGroup, cb, div;
         this.buttonsDiv = W.add('div', this.bodyDiv, {
             className: 'wallbuttonsdiv'
         });
-        
+
         btnGroup = document.createElement('div');
         btnGroup.role = 'group';
         btnGroup['aria-label'] = 'Toggle visibility';
         btnGroup.className = 'btn-group';
-        
+
         displayIn = W.add('button', btnGroup, {
             innerHTML: 'Incoming',
             className: 'btn btn-secondary'
@@ -7885,26 +7927,26 @@
         });
 
         this.buttonsDiv.appendChild(btnGroup);
-        
+
         that = this;
-       
+
         cb = function(type) {
             var items, i, vis, className;
             className = 'wall_' + type;
             items = that.wall.getElementsByClassName(className);
-            vis = items[0].style.display === '' ? 'none' : ''; 
+            vis = items[0].style.display === '' ? 'none' : '';
             for (i = 0; i < items.length; i++) {
                 items[i].style.display = vis;
             }
             that.hiddenTypes[type] = !!vis;
         };
-        
+
         displayIn.onclick = function() { cb('in'); };
         displayOut.onclick = function() { cb('out'); };
         displayLog.onclick = function() { cb('log'); };
-        
-        this.wall = W.get('table', { className: 'walldiv' });
-        this.bodyDiv.appendChild(this.wall);
+
+        this.wallDiv = W.add('div', this.bodyDiv, { className: 'walldiv' });
+        this.wall = W.add('table', this.wallDiv);
     };
 
     /**
@@ -7937,16 +7979,16 @@
 
             limit = 200;
             className = 'wall_' + type;
-            TR = W.add('tr', this.wall, { className: className }); 
+            TR = W.add('tr', this.wall, { className: className });
             if (type !== 'in' && type !== 'out') TR.className += ' wall_log';
-           
+
             if (this.shouldHide(type, text)) TR.style.display = 'none';
-            
+
             W.add('td', TR, { innerHTML: counter });
             W.add('td', TR, { innerHTML: type });
             W.add('td', TR, { innerHTML: J.getTimeM()});
             TDtext = W.add('td', TR);
-            
+
             if (text.length > limit) {
                 spanContainer = W.add('span', TDtext, {
                     className: className + '_click' ,
@@ -7981,7 +8023,7 @@
                     innerHTML: text
                 });
             }
-            this.wall.scrollTop = this.wall.scrollHeight;
+            this.wallDiv.scrollTop = this.wallDiv.scrollHeight;
         }
         else {
             node.warn('Wall not appended, cannot write.');
