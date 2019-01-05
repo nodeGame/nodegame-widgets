@@ -1240,7 +1240,7 @@
             WidgetPrototype.title : options.title;
         widget.footer = 'undefined' === typeof options.footer ?
             WidgetPrototype.footer : options.footer;
-        widget.className = WidgetPrototype.className; 
+        widget.className = WidgetPrototype.className;
         if (J.isArray(options.className)) {
             widget.className += options.className.join(' ');
         }
@@ -1252,7 +1252,7 @@
                                 'string, or undefined. Found: ' +
                                 options.className);
         }
-       
+
         widget.context = 'undefined' === typeof options.context ?
             WidgetPrototype.context : options.context;
         widget.sounds = 'undefined' === typeof options.sounds ?
@@ -14336,7 +14336,7 @@
 
 /**
  * # WaitingRoom
- * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays the number of connected/required players to start a game
@@ -14811,7 +14811,7 @@
 
                     var ul = document.createElement('ul');
                     ul.className = 'dropdown-menu';
-                    ul.style = 'text-align: left';
+                    ul.style['text-align'] = 'left';
 
                     var li, a, t, liT1, liT2;
                     if (conf.availableTreatments) {
@@ -14850,32 +14850,31 @@
 
                     btnGroup.appendChild(btnGroupTreatments);
 
-                    // Variable toggled controls if the dropdown menu
-                    // is displayed (we are not using bootstrap js files)
+                    // We are not using bootstrap js files
                     // and we redo the job manually here.
-                    var toggled = false;
                     btnTreatment.onclick = function() {
-                        if (toggled) {
-                            ul.style = 'display: none';
-                            toggled = false;
+                        // When '' is hidden by bootstrap class.
+                        if (ul.style.display === '') {
+                            ul.style.display = 'block';
                         }
                         else {
-                            ul.style = 'display: block; text-align: left';
-                            toggled = true;
+                            ul.style.display = '';
                         }
                     };
 
                     ul.onclick = function(eventData) {
                         var t;
-                        ul.style = 'display: none';
-                        t = eventData.target.parentNode.id;
+                        t = eventData.target;
+                        // When '' is hidden by bootstrap class.
+                        ul.style.display = '';
+                        t = t.parentNode.id;
+                        // Clicked on description?
                         if (!t) t = eventData.target.parentNode.parentNode.id;
-                        console.log(eventData.target.parentNode);
-                        console.log(t);
+                        // Nothing relevant clicked (e.g., header).
+                        if (!t) return;
                         btnTreatment.innerHTML = t + ' ';
                         btnTreatment.appendChild(span);
                         w.selectedTreatment = t;
-                        toggled = false;
                     };
 
                     // Store Reference in widget.
