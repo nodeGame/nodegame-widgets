@@ -1643,7 +1643,7 @@
 
 /**
  * # Chat
- * Copyright(c) 2018 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -1679,7 +1679,9 @@
         },
         quit: function(w, data) {
             return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
-        }
+        },
+        textareaPlaceholder: 'Type something and press enter ' +
+            'to send the message'
     };
 
     // ## Meta-data
@@ -1913,7 +1915,8 @@
             inputGroup = document.createElement('div');
 
             this.textarea = W.get('textarea', {
-                className: 'chat_textarea form-control'
+                className: 'chat_textarea form-control',
+                placeholder: this.getText('textareaPlaceholder')
             });
 
             ids = this.recipientsIds;
@@ -1922,8 +1925,10 @@
                 var keyCode; 
                 e = e || window.event;
                 keyCode = e.keyCode || e.which;
-                if (keyCode==13) {
+                if (keyCode === 13) {
                     msg = that.readTextarea();
+                    
+                    // Move cursor at the beginning.
                     if (msg === '') {
                         node.warn('no text, no chat message sent.');
                         return;
@@ -1932,6 +1937,8 @@
                     to = ids.length === 1 ? ids[0] : ids;
                     that.writeMsg('outgoing', { msg: msg }); // to not used now.
                     node.say(that.chatEvent, to, msg);
+                    // Make sure the cursor goes back to top.
+                    setTimeout(function() { that.textarea.value = ''; });
                 }
             };
         
@@ -2017,7 +2024,7 @@
         if (this.db) out.msgs = db.fetch();
         return out;
     };
-
+    
 })(node);
 
 /**

@@ -1,6 +1,6 @@
 /**
  * # Chat
- * Copyright(c) 2018 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -36,7 +36,9 @@
         },
         quit: function(w, data) {
             return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
-        }
+        },
+        textareaPlaceholder: 'Type something and press enter ' +
+            'to send the message'
     };
 
     // ## Meta-data
@@ -246,7 +248,7 @@
         this.uncollapseOnMsg = options.uncollapseOnMsg || false;
 
         if (options.initialMsg) {
-            if ('object' !== typeof options.initialMsg) {                
+            if ('object' !== typeof options.initialMsg) {
                 throw new TypeError('Chat.init: initialMsg must be ' +
                                     'object or undefined. Found: ' +
                                     options.initialMsg);
@@ -270,17 +272,20 @@
             inputGroup = document.createElement('div');
 
             this.textarea = W.get('textarea', {
-                className: 'chat_textarea form-control'
+                className: 'chat_textarea form-control',
+                placeholder: this.getText('textareaPlaceholder')
             });
 
             ids = this.recipientsIds;
             this.textarea.onkeydown = function(e) {
                 var msg, to;
-                var keyCode; 
+                var keyCode;
                 e = e || window.event;
                 keyCode = e.keyCode || e.which;
-                if (keyCode==13) {
+                if (keyCode === 13) {
                     msg = that.readTextarea();
+
+                    // Move cursor at the beginning.
                     if (msg === '') {
                         node.warn('no text, no chat message sent.');
                         return;
@@ -289,9 +294,11 @@
                     to = ids.length === 1 ? ids[0] : ids;
                     that.writeMsg('outgoing', { msg: msg }); // to not used now.
                     node.say(that.chatEvent, to, msg);
+                    // Make sure the cursor goes back to top.
+                    setTimeout(function() { that.textarea.value = ''; });
                 }
             };
-        
+
             inputGroup.appendChild(this.textarea);
             // inputGroup.appendChild(span);
             this.bodyDiv.appendChild(inputGroup);
