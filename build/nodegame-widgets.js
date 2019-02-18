@@ -1891,7 +1891,7 @@
         this.uncollapseOnMsg = options.uncollapseOnMsg || false;
 
         if (options.initialMsg) {
-            if ('object' !== typeof options.initialMsg) {                
+            if ('object' !== typeof options.initialMsg) {
                 throw new TypeError('Chat.init: initialMsg must be ' +
                                     'object or undefined. Found: ' +
                                     options.initialMsg);
@@ -1922,12 +1922,12 @@
             ids = this.recipientsIds;
             this.textarea.onkeydown = function(e) {
                 var msg, to;
-                var keyCode; 
+                var keyCode;
                 e = e || window.event;
                 keyCode = e.keyCode || e.which;
                 if (keyCode === 13) {
                     msg = that.readTextarea();
-                    
+
                     // Move cursor at the beginning.
                     if (msg === '') {
                         node.warn('no text, no chat message sent.');
@@ -1941,7 +1941,7 @@
                     setTimeout(function() { that.textarea.value = ''; });
                 }
             };
-        
+
             inputGroup.appendChild(this.textarea);
             // inputGroup.appendChild(span);
             this.bodyDiv.appendChild(inputGroup);
@@ -2024,7 +2024,7 @@
         if (this.db) out.msgs = db.fetch();
         return out;
     };
-    
+
 })(node);
 
 /**
