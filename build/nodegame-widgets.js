@@ -1751,7 +1751,7 @@
          * @see Chat.receiverOnly
          */
         this.useSubmitButton = null;
-        
+
         /**
          * ### Chat.receiverOnly
          *
@@ -1884,7 +1884,7 @@
                                 'a non-empty array. Found: ' + tmp);
         }
 
-        // Button or send on Enter?.        
+        // Button or send on Enter?.
         this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
             !J.isMobileAgent() : !!options.useSubmitButton;
 
@@ -1941,6 +1941,7 @@
 
             // Input group.
             inputGroup = document.createElement('div');
+            inputGroup.className = 'chat_inputgroup';
 
             this.textarea = W.get('textarea', {
                 className: 'chat_textarea form-control',
@@ -1950,8 +1951,7 @@
 
             if (this.useSubmitButton) {
                 // Make sure the button displays next to textarea.
-                inputGroup.style.display = 'inline-flex';
-                this.textarea.className += ' chat_textarea_btn'; 
+                // this.textarea.className += ' chat_textarea_btn';
                 this.submitButton = W.get('button', {
                     className: 'btn-sm btn-info form-control chat_submit',
                     innerHTML: this.getText('submitButton')
@@ -1963,7 +1963,7 @@
             }
             else {
                 this.textarea.onkeydown = function(e) {
-                    e = e || window.event;                    
+                    e = e || window.event;
                     if ((e.keyCode || e.which) === 13) sendMsg(that);
                 };
             }
@@ -1985,8 +1985,8 @@
         W.add('span', this.chatDiv, { innerHTML: this.getText(code, data) });
         W.writeln('', this.chatDiv);
         this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
-    };          
-    
+    };
+
     Chat.prototype.listeners = function() {
         var that = this;
 
@@ -2055,7 +2055,7 @@
     // Reads the textarea and delivers the msg to the server.
     function sendMsg(that) {
         var msg, to, ids;
-        
+
         msg = that.readTextarea();
 
         // Move cursor at the beginning.
@@ -2071,7 +2071,7 @@
         // Make sure the cursor goes back to top.
         setTimeout(function() { that.textarea.value = ''; });
     }
-    
+
 })(node);
 
 /**
@@ -14824,7 +14824,7 @@
                 btnGroup.className = 'btn-group';
 
                 var playBotBtn = document.createElement('input');
-                playBotBtn.className = 'btn btn-secondary btn-lg';
+                playBotBtn.className = 'btn btn-primary btn-lg';
                 playBotBtn.value = w.getText('playBot');
                 playBotBtn.id = 'bot_btn';
                 playBotBtn.type = 'button';

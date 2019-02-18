@@ -298,6 +298,7 @@
 
             // Input group.
             inputGroup = document.createElement('div');
+            inputGroup.className = 'chat_inputgroup';
 
             this.textarea = W.get('textarea', {
                 className: 'chat_textarea form-control',
@@ -306,9 +307,6 @@
             inputGroup.appendChild(this.textarea);
 
             if (this.useSubmitButton) {
-                // Make sure the button displays next to textarea.
-                inputGroup.style.display = 'inline-flex';
-                this.textarea.className += ' chat_textarea_btn';
                 this.submitButton = W.get('button', {
                     className: 'btn-sm btn-info form-control chat_submit',
                     innerHTML: this.getText('submitButton')
