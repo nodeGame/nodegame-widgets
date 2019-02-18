@@ -38,7 +38,8 @@
             return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
         },
         textareaPlaceholder: 'Type something and press enter ' +
-            'to send the message'
+            'to send the message',
+        submitButton: 'Send'
     };
 
     // ## Meta-data
@@ -64,6 +65,13 @@
      * @see Chat.init
      */
     function Chat() {
+
+        /**
+         * ### Chat.submitButton
+         *
+         * Button to send a text to server
+         */
+        this.submitButton = null;
 
         /**
          * ### Chat.chatEvent
@@ -270,6 +278,13 @@
 
             // Input group.
             inputGroup = document.createElement('div');
+
+            if (this.addSubmitButton) {
+                this.submitButton = W.get('button', {
+                    className: 'chat_textarea form-control',
+                    placeholder: this.getText('textareaPlaceholder')
+                });
+            }
 
             this.textarea = W.get('textarea', {
                 className: 'chat_textarea form-control',
