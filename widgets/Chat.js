@@ -37,8 +37,10 @@
         quit: function(w, data) {
             return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
         },
-        textareaPlaceholder: 'Type something and press enter ' +
-            'to send the message',
+        textareaPlaceholder: function(w) {
+            return w.useSubmitButton ? 'Type something' :
+                'Type something and press enter to send';
+        },
         submitButton: 'Send'
     };
 
@@ -67,13 +69,6 @@
     function Chat() {
 
         /**
-         * ### Chat.submitButton
-         *
-         * Button to send a text to server
-         */
-        this.submitButton = null;
-
-        /**
          * ### Chat.chatEvent
          *
          * The suffix used to fire chat events
@@ -94,9 +89,30 @@
         };
 
         /**
+         * ### Chat.submitButton
+         *
+         * Button to send a text to server
+         *
+         * @see Chat.useSubmitButton
+         */
+        this.submitButton = null;
+
+        /**
+         * ### Chat.useSubmitButton
+         *
+         * If TRUE, a button is added to send messages else ENTER sends msgs
+         *
+         * By default, this is TRUE on mobile devices.
+         *
+         * @see Chat.submitButton
+         * @see Chat.receiverOnly
+         */
+        this.useSubmitButton = null;
+
+        /**
          * ### Chat.receiverOnly
          *
-         * If TRUE, users cannot send messages (no textarea)
+         * If TRUE, users cannot send messages (no textarea and submit button)
          *
          * @see Chat.textarea
          */
@@ -225,6 +241,10 @@
                                 'a non-empty array. Found: ' + tmp);
         }
 
+        // Button or send on Enter?.
+        this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
+            !J.isMobileAgent() : !!options.useSubmitButton;
+
         // Build maps.
         this.recipientsIds = new Array(tmp.length);
         this.recipientToSenderMap = {};
@@ -268,7 +288,7 @@
 
     Chat.prototype.append = function() {
         var that;
-        var inputGroup, span, ids;
+        var inputGroup;
 
         this.chatDiv = W.get('div', { className: 'chat_chat' });
         this.bodyDiv.appendChild(this.chatDiv);
@@ -279,43 +299,32 @@
             // Input group.
             inputGroup = document.createElement('div');
 
-            if (this.addSubmitButton) {
-                this.submitButton = W.get('button', {
-                    className: 'chat_textarea form-control',
-                    placeholder: this.getText('textareaPlaceholder')
-                });
-            }
-
             this.textarea = W.get('textarea', {
                 className: 'chat_textarea form-control',
                 placeholder: this.getText('textareaPlaceholder')
             });
-
-            ids = this.recipientsIds;
-            this.textarea.onkeydown = function(e) {
-                var msg, to;
-                var keyCode;
-                e = e || window.event;
-                keyCode = e.keyCode || e.which;
-                if (keyCode === 13) {
-                    msg = that.readTextarea();
-
-                    // Move cursor at the beginning.
-                    if (msg === '') {
-                        node.warn('no text, no chat message sent.');
-                        return;
-                    }
-                    // Simplify things, if there is only one recipient.
-                    to = ids.length === 1 ? ids[0] : ids;
-                    that.writeMsg('outgoing', { msg: msg }); // to not used now.
-                    node.say(that.chatEvent, to, msg);
-                    // Make sure the cursor goes back to top.
-                    setTimeout(function() { that.textarea.value = ''; });
-                }
-            };
-
             inputGroup.appendChild(this.textarea);
-            // inputGroup.appendChild(span);
+
+            if (this.useSubmitButton) {
+                // Make sure the button displays next to textarea.
+                inputGroup.style.display = 'inline-flex';
+                this.textarea.className += ' chat_textarea_btn';
+                this.submitButton = W.get('button', {
+                    className: 'btn-sm btn-info form-control chat_submit',
+                    innerHTML: this.getText('submitButton')
+                });
+                this.submitButton.onclick = function() {
+                    sendMsg(that);
+                };
+                inputGroup.appendChild(this.submitButton);
+            }
+            else {
+                this.textarea.onkeydown = function(e) {
+                    e = e || window.event;
+                    if ((e.keyCode || e.which) === 13) sendMsg(that);
+                };
+            }
+
             this.bodyDiv.appendChild(inputGroup);
         }
 
@@ -396,5 +405,28 @@
         if (this.db) out.msgs = db.fetch();
         return out;
     };
+
+    // ## Helper functions.
+
+    // ### sendMsg
+    // Reads the textarea and delivers the msg to the server.
+    function sendMsg(that) {
+        var msg, to, ids;
+
+        msg = that.readTextarea();
+
+        // Move cursor at the beginning.
+        if (msg === '') {
+            node.warn('no text, no chat message sent.');
+            return;
+        }
+        // Simplify things, if there is only one recipient.
+        ids = that.recipientsIds;
+        to = ids.length === 1 ? ids[0] : ids;
+        that.writeMsg('outgoing', { msg: msg }); // to not used now.
+        node.say(that.chatEvent, to, msg);
+        // Make sure the cursor goes back to top.
+        setTimeout(function() { that.textarea.value = ''; });
+    }
 
 })(node);
