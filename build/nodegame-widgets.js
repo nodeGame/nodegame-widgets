@@ -14618,13 +14618,13 @@
         this.timeoutId = null;
 
         /**
-         * ### WaitingRoom.playerCountDiv
+         * ### WaitingRoom.execModeDiv
          *
          * Div containing the span for displaying the number of players
          *
          * @see WaitingRoom.playerCount
          */
-        this.playerCountDiv = null;
+        this.execModeDiv = null;
 
         /**
          * ### WaitingRoom.playerCount
@@ -14759,11 +14759,11 @@
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
                                 'Found: ' + conf);
-        }        
+        }
 
         if (!conf.executionMode) return;
-        
-        // TODO: check types and conditions?        
+
+        // TODO: check types and conditions?
         this.executionMode = conf.executionMode;
 
         if (conf.onTimeout) {
@@ -14837,7 +14837,7 @@
             this.disconnectIfNotSelected = false;
         }
 
-    
+
         if (conf.playWithBotOption) this.playWithBotOption = true;
         else this.playWithBotOption = false;
         if (conf.selectTreatmentOption) this.selectTreatmentOption = true;
@@ -14847,9 +14847,9 @@
         // Display Exec Mode.
         debugger
         this.displayExecMode();
-        
+
         // Button for bots and treatments.
-        
+
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
             // Closure to create button group.
             (function(w) {
@@ -15084,29 +15084,29 @@
      */
     WaitingRoom.prototype.displayExecMode = function() {
         this.bodyDiv.innerHTML = '';
-        
-        this.playerCountDiv = document.createElement('div');
-        this.playerCountDiv.id = 'player-count-div';
 
-        this.playerCountDiv.innerHTML = this.getText('executionMode');
+        this.execModeDiv = document.createElement('div');
+        this.execModeDiv.id = 'exec-mode-div';
+
+        this.execModeDiv.innerHTML = this.getText('executionMode');
 
         // TODO: add only on some modes? Depending on settings?
         this.playerCount = document.createElement('p');
         this.playerCount.id = 'player-count';
-        this.playerCountDiv.appendChild(this.playerCount);
+        this.execModeDiv.appendChild(this.playerCount);
 
         this.playerCountTooHigh = document.createElement('div');
         this.playerCountTooHigh.style.display = 'none';
-        this.playerCountDiv.appendChild(this.playerCountTooHigh);
+        this.execModeDiv.appendChild(this.playerCountTooHigh);
 
         this.startDateDiv = document.createElement('div');
         this.startDateDiv.style.display= 'none';
-        this.playerCountDiv.appendChild(this.startDateDiv);
+        this.execModeDiv.appendChild(this.startDateDiv);
 
         this.dots = W.getLoadingDots();
-        this.playerCountDiv.appendChild(this.dots.span);
+        this.execModeDiv.appendChild(this.dots.span);
 
-        this.bodyDiv.appendChild(this.playerCountDiv);
+        this.bodyDiv.appendChild(this.execModeDiv);
 
         this.msgDiv = document.createElement('div');
         this.bodyDiv.appendChild(this.msgDiv);
@@ -15114,12 +15114,12 @@
 
         // if (this.startDate) this.setStartDate(this.startDate);
         if (this.waitTime) this.startTimer();
-        
+
     };
 
     WaitingRoom.prototype.append = function() {
         // Configuration will arrive soon.
-        this.bodyDiv.innerHTML = this.getText('waitingForConf');        
+        this.bodyDiv.innerHTML = this.getText('waitingForConf');
     };
 
     WaitingRoom.prototype.listeners = function() {
@@ -15230,13 +15230,6 @@
         node.on.data('ROOM_CLOSED', function() {
             that.disconnect(that.getText('roomClosed'));
         });
-    };
-
-    WaitingRoom.prototype.setStartDate = function(startDate) {
-        this.startDate = new Date(startDate).toString();
-        //this.startDateDiv.innerHTML = 'Game starts at: <br>' + this.startDate;
-        this.startDateDiv.innerHTML = this.startDate;
-        this.startDateDiv.style.display = '';
     };
 
     WaitingRoom.prototype.stopTimer = function() {

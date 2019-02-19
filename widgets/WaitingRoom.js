@@ -230,13 +230,13 @@
         this.timeoutId = null;
 
         /**
-         * ### WaitingRoom.playerCountDiv
+         * ### WaitingRoom.execModeDiv
          *
          * Div containing the span for displaying the number of players
          *
          * @see WaitingRoom.playerCount
          */
-        this.playerCountDiv = null;
+        this.execModeDiv = null;
 
         /**
          * ### WaitingRoom.playerCount
@@ -697,28 +697,28 @@
     WaitingRoom.prototype.displayExecMode = function() {
         this.bodyDiv.innerHTML = '';
 
-        this.playerCountDiv = document.createElement('div');
-        this.playerCountDiv.id = 'player-count-div';
+        this.execModeDiv = document.createElement('div');
+        this.execModeDiv.id = 'exec-mode-div';
 
-        this.playerCountDiv.innerHTML = this.getText('executionMode');
+        this.execModeDiv.innerHTML = this.getText('executionMode');
 
         // TODO: add only on some modes? Depending on settings?
         this.playerCount = document.createElement('p');
         this.playerCount.id = 'player-count';
-        this.playerCountDiv.appendChild(this.playerCount);
+        this.execModeDiv.appendChild(this.playerCount);
 
         this.playerCountTooHigh = document.createElement('div');
         this.playerCountTooHigh.style.display = 'none';
-        this.playerCountDiv.appendChild(this.playerCountTooHigh);
+        this.execModeDiv.appendChild(this.playerCountTooHigh);
 
         this.startDateDiv = document.createElement('div');
         this.startDateDiv.style.display= 'none';
-        this.playerCountDiv.appendChild(this.startDateDiv);
+        this.execModeDiv.appendChild(this.startDateDiv);
 
         this.dots = W.getLoadingDots();
-        this.playerCountDiv.appendChild(this.dots.span);
+        this.execModeDiv.appendChild(this.dots.span);
 
-        this.bodyDiv.appendChild(this.playerCountDiv);
+        this.bodyDiv.appendChild(this.execModeDiv);
 
         this.msgDiv = document.createElement('div');
         this.bodyDiv.appendChild(this.msgDiv);
@@ -842,13 +842,6 @@
         node.on.data('ROOM_CLOSED', function() {
             that.disconnect(that.getText('roomClosed'));
         });
-    };
-
-    WaitingRoom.prototype.setStartDate = function(startDate) {
-        this.startDate = new Date(startDate).toString();
-        //this.startDateDiv.innerHTML = 'Game starts at: <br>' + this.startDate;
-        this.startDateDiv.innerHTML = this.startDate;
-        this.startDateDiv.style.display = '';
     };
 
     WaitingRoom.prototype.stopTimer = function() {
