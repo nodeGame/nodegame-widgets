@@ -1950,8 +1950,6 @@
             inputGroup.appendChild(this.textarea);
 
             if (this.useSubmitButton) {
-                // Make sure the button displays next to textarea.
-                // this.textarea.className += ' chat_textarea_btn';
                 this.submitButton = W.get('button', {
                     className: 'btn-sm btn-info form-control chat_submit',
                     innerHTML: this.getText('submitButton')
@@ -14438,6 +14436,23 @@
         // #### blinkTitle
         blinkTitle: 'GAME STARTS!',
 
+        // #### waitingForConf
+        waitingForConf: 'Waiting to receive data',
+
+        // #### executionMode
+        executionMode: function(w) {
+            var startDate;
+            if (w.executionMode === 'WAIT_FOR_N_PLAYERS') {
+                return 'Waiting for All Players to Connect: ';
+            }
+            debugger
+            if (w.executionMode === 'WAIT_FOR_DISPATCH') {
+                return 'Task will start soon. Please be patient.';
+            }
+            // TIMEOUT.
+            return 'Task will start at: <br>' + w.startDate;
+        },
+
         // #### disconnect
         disconnect: '<span style="color: red">You have been ' +
             '<strong>disconnected</strong>. Please try again later.' +
@@ -14580,6 +14595,13 @@
          * The time in milliseconds for the timeout to expire
          */
         this.waitTime = null;
+
+        /**
+         * ### WaitingRoom.executionMode
+         *
+         * The execution mode.
+         */
+        this.executionMode = null;
 
         /**
          * ### WaitingRoom.startDate
@@ -14737,7 +14759,13 @@
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
                                 'Found: ' + conf);
-        }
+        }        
+
+        if (!conf.executionMode) return;
+        
+        // TODO: check types and conditions?        
+        this.executionMode = conf.executionMode;
+
         if (conf.onTimeout) {
             if ('function' !== typeof conf.onTimeout) {
                 throw new TypeError('WaitingRoom.init: conf.onTimeout must ' +
@@ -14756,11 +14784,10 @@
                                     'Found: ' + conf.waitTime);
             }
             this.waitTime = conf.waitTime;
-            this.startTimer();
         }
-        // TODO: check conditions?
+
         if (conf.startDate) {
-            this.setStartDate(conf.startDate);
+            this.startDate = new Date(conf.startDate).toString();
         }
 
         if (conf.poolSize) {
@@ -14810,11 +14837,19 @@
             this.disconnectIfNotSelected = false;
         }
 
+    
         if (conf.playWithBotOption) this.playWithBotOption = true;
         else this.playWithBotOption = false;
         if (conf.selectTreatmentOption) this.selectTreatmentOption = true;
         else this.selectTreatmentOption = false;
 
+
+        // Display Exec Mode.
+        debugger
+        this.displayExecMode();
+        
+        // Button for bots and treatments.
+        
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
             // Closure to create button group.
             (function(w) {
@@ -15012,7 +15047,7 @@
     /**
      * ### WaitingRoom.updateDisplay
      *
-     * Displays the state of the waiting room on screen
+     * Displays the state of the waiting room on screen (player count)
      *
      * @see WaitingRoom.updateState
      */
@@ -15040,13 +15075,22 @@
         }
     };
 
-    WaitingRoom.prototype.append = function() {
+    /**
+     * ### WaitingRoom.displayExecMode
+     *
+     * Builds the basic layout of the execution mode
+     *
+     * @see WaitingRoom.executionMode
+     */
+    WaitingRoom.prototype.displayExecMode = function() {
+        this.bodyDiv.innerHTML = '';
+        
         this.playerCountDiv = document.createElement('div');
         this.playerCountDiv.id = 'player-count-div';
 
-        this.playerCountDiv.appendChild(
-            document.createTextNode('Waiting for All Players to Connect: '));
+        this.playerCountDiv.innerHTML = this.getText('executionMode');
 
+        // TODO: add only on some modes? Depending on settings?
         this.playerCount = document.createElement('p');
         this.playerCount.id = 'player-count';
         this.playerCountDiv.appendChild(this.playerCount);
@@ -15055,24 +15099,27 @@
         this.playerCountTooHigh.style.display = 'none';
         this.playerCountDiv.appendChild(this.playerCountTooHigh);
 
+        this.startDateDiv = document.createElement('div');
+        this.startDateDiv.style.display= 'none';
+        this.playerCountDiv.appendChild(this.startDateDiv);
+
         this.dots = W.getLoadingDots();
         this.playerCountDiv.appendChild(this.dots.span);
 
         this.bodyDiv.appendChild(this.playerCountDiv);
 
-        this.startDateDiv = document.createElement('div');
-        this.bodyDiv.appendChild(this.startDateDiv);
-        this.startDateDiv.style.display= 'none';
-
         this.msgDiv = document.createElement('div');
         this.bodyDiv.appendChild(this.msgDiv);
 
-        if (this.startDate) {
-            this.setStartDate(this.startDate);
-        }
-        if (this.waitTime) {
-            this.startTimer();
-        }
+
+        // if (this.startDate) this.setStartDate(this.startDate);
+        if (this.waitTime) this.startTimer();
+        
+    };
+
+    WaitingRoom.prototype.append = function() {
+        // Configuration will arrive soon.
+        this.bodyDiv.innerHTML = this.getText('waitingForConf');        
     };
 
     WaitingRoom.prototype.listeners = function() {
@@ -15086,14 +15133,17 @@
                 return;
             }
 
-            // Sounds.
-            that.setSounds(conf.sounds);
-
-            // Texts.
-            that.setTexts(conf.texts);
-
-            // Configure all requirements.
-            that.init(conf);
+            // It receives 2 conf messages.
+            if (!conf.executionMode) {
+                // Sounds.
+                that.setSounds(conf.sounds);
+                // Texts.
+                that.setTexts(conf.texts);
+            }
+            else {
+                // Configure all requirements.
+                that.init(conf);
+            }
 
             return conf;
         });
@@ -15184,7 +15234,8 @@
 
     WaitingRoom.prototype.setStartDate = function(startDate) {
         this.startDate = new Date(startDate).toString();
-        this.startDateDiv.innerHTML = 'Game starts at: <br>' + this.startDate;
+        //this.startDateDiv.innerHTML = 'Game starts at: <br>' + this.startDate;
+        this.startDateDiv.innerHTML = this.startDate;
         this.startDateDiv.style.display = '';
     };
 
