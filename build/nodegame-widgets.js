@@ -14445,7 +14445,6 @@
             if (w.executionMode === 'WAIT_FOR_N_PLAYERS') {
                 return 'Waiting for All Players to Connect: ';
             }
-            debugger
             if (w.executionMode === 'WAIT_FOR_DISPATCH') {
                 return 'Task will start soon. Please be patient.';
             }
@@ -14761,6 +14760,7 @@
                                 'Found: ' + conf);
         }
 
+        // It receives the TEXTS AND SOUNDS only first.
         if (!conf.executionMode) return;
 
         // TODO: check types and conditions?
@@ -14845,7 +14845,6 @@
 
 
         // Display Exec Mode.
-        debugger
         this.displayExecMode();
 
         // Button for bots and treatments.
