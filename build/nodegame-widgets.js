@@ -1854,9 +1854,9 @@
      *   - `displayName`: Function which displays the sender's name
      */
     Chat.prototype.init = function(options) {
-        var tmp, i, rec;
+        var tmp, i, rec, that;
         options = options || {};
-
+        that = this;
 
         // Chat id.
         tmp = options.chatEvent;
@@ -1886,7 +1886,7 @@
 
         // Button or send on Enter?.
         this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
-            !J.isMobileAgent() : !!options.useSubmitButton;
+            J.isMobileAgent() : !!options.useSubmitButton;
 
         // Build maps.
         this.recipientsIds = new Array(tmp.length);
@@ -1926,6 +1926,11 @@
             }
             this.initialMsg = options.initialMsg;
         }
+
+        this.on('uncollapsed', function() {
+            // Make sure that we do not have the title highlighted any more.
+            that.setTitle(that.title);
+        });
     };
 
 
