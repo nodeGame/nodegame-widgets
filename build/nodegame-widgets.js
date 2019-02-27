@@ -1680,6 +1680,11 @@
         quit: function(w, data) {
             return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
         },
+        // For both collapse and uncollapse.
+        collapse: function(w, data) {
+            return (w.senderToNameMap[data.id] || data.id) + ' ' +
+                (data.collapsed ? 'mini' : 'maxi') + 'mized the chat';
+        },
         textareaPlaceholder: function(w) {
             return w.useSubmitButton ? 'Type something' :
                 'Type something and press enter to send';
@@ -1930,6 +1935,11 @@
         this.on('uncollapsed', function() {
             // Make sure that we do not have the title highlighted any more.
             that.setTitle(that.title);
+            node.say(that.chatEvent + '_COLLAPSE', that.recipientsIds, false);
+        });
+
+        this.on('collapsed', function() {
+            node.say(that.chatEvent + '_COLLAPSE', that.recipientsIds, true);
         });
     };
 
@@ -2011,6 +2021,11 @@
         node.on.data(this.chatEvent + '_QUIT', function(msg) {
             if (!that.handleMsg(msg)) return;
             that.writeMsg('quit', { id: msg.from });
+        });
+        
+        node.on.data(this.chatEvent + '_COLLAPSE', function(msg) {
+            if (!that.handleMsg(msg)) return;
+            that.writeMsg('collapse', { id: msg.from, collapsed: msg.data});
         });
     };
 
