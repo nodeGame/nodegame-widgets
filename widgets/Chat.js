@@ -297,7 +297,7 @@
 
         this.on('uncollapsed', function() {
             // Make sure that we do not have the title highlighted any more.
-            that.setTitle(that.title);
+            that.setTitle(that.title);       
             node.say(that.chatEvent + '_COLLAPSE', that.recipientsIds, false);
         });
 
