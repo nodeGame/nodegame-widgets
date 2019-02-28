@@ -1351,6 +1351,8 @@
                     break;
                 }
             }
+
+            this.emit('destroyed');
         };
 
         // Store widget instance (e.g. used for destruction).
@@ -2022,7 +2024,7 @@
             if (!that.handleMsg(msg)) return;
             that.writeMsg('quit', { id: msg.from });
         });
-        
+
         node.on.data(this.chatEvent + '_COLLAPSE', function(msg) {
             if (!that.handleMsg(msg)) return;
             that.writeMsg('collapse', { id: msg.from, collapsed: msg.data});
