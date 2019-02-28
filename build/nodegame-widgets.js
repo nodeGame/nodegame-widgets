@@ -850,7 +850,7 @@
             res = res(that, param);
             if ('string' !== typeof res) {
                 throw new TypeError(method + ': cb "' + name +
-                                    'did not return a string. Found: ' + res);
+                                    ' did not return a string. Found: ' + res);
             }
         }
         return res;
@@ -1670,8 +1670,7 @@
     Chat.texts = {
         outgoing: function(w, data) {
             return data.msg;
-            // Id could be defined as a specific to (not used now).
-            return '<span class="chat_msg_me">' + data.msg + '</span>';
+            // return '<span class="chat_msg_me">' + data.msg + '</span>';
         },
         incoming: function(w, data) {
             return '<span><span class="chat_id_other">' +
@@ -1800,9 +1799,17 @@
         this.textarea = null;
 
         /**
-         * ### Chat.textarea
+         * ### Chat.initialMsg
          *
-         * An initialMsg to display when the chat is open
+         * An object with an initial msg and the id of sender (if not self)
+         *
+         * Example:
+         *
+         * ```
+         * {
+         *   id: '1234', // Optional, add only this is an 'incoming' msg.
+         *   msg: 'the text'
+         * }
          */
         this.initialMsg = null;
 
@@ -1985,7 +1992,16 @@
             this.bodyDiv.appendChild(inputGroup);
         }
 
-        if (this.initialMsg) this.writeMsg('incoming', this.initialMsg);
+
+        W.add('div', this.chatDiv, {
+            innerHTML: Date(J.getDate()),
+            className: 'chat_time'
+        });
+        
+        if (this.initialMsg) {
+            this.writeMsg(this.initialMsg.id ? 'incoming' : 'outgoing',
+                          this.initialMsg);
+        }
     };
 
     Chat.prototype.readTextarea = function() {
