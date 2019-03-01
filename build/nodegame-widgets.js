@@ -1036,6 +1036,13 @@
         this.dockedHidden = [];
 
         /**
+         * ### Widgets.boxSelector
+         *
+         * A box selector widget containing hidden docked widgets
+         */
+        this.boxSelector = null
+
+        /**
          * ### Widgets.collapseTarget
          *
          * Collapsed widgets are by default moved inside element
@@ -1266,10 +1273,10 @@
             WidgetPrototype.footer : options.footer;
         widget.className = WidgetPrototype.className;
         if (J.isArray(options.className)) {
-            widget.className += options.className.join(' ');
+            widget.className += ' ' + options.className.join(' ');
         }
         else if ('string' === typeof options.className) {
-            widget.className += options.className;
+            widget.className += ' ' + options.className;
         }
         else if ('undefined' !== typeof options.className) {
             throw new TypeError('widgets.append: className must be array, ' +
@@ -1277,6 +1284,9 @@
                                 options.className);
         }
 
+        widget.panel = 'undefined' === typeof options.panel ?
+            WidgetPrototype.panel : options.panel;
+        
         widget.context = 'undefined' === typeof options.context ?
             WidgetPrototype.context : options.context;
         widget.sounds = 'undefined' === typeof options.sounds ?
@@ -1449,7 +1459,7 @@
         else if (root === W.getHeader() &&
                  'undefined' === typeof options.panel) {
 
-            options.panel = false;
+            options.panel = w.panel || false;
         }
 
         // Check if it is a object (new widget).
@@ -1465,18 +1475,10 @@
         };
 
         // Dock it.
-        if (options.docked) {
-            dockedMargin = 20;
+        if (options.docked) {            
             tmp.className.push('docked');
-            w.docked = true;
-            right = 0;
-            if (this.docked.length) {
-                lastDocked = this.docked[(this.docked.length-1)];
-                right = getPxNum(lastDocked.panelDiv.style.right);
-                right += lastDocked.panelDiv.offsetWidth;
-            }
-            right += dockedMargin;
             this.docked.push(w);
+            w.docked = true;
         }
 
         // Add div inside widget.
@@ -1516,23 +1518,8 @@
         w.append();
         w.appended = true;
 
-        if (right) {
-            w.panelDiv.style.right = (right + "px");
-
-            // Check if there is enough space on page?
-            tmp = 0;
-            while (this.docked.length > 1 &&
-                   (right + w.panelDiv.offsetWidth) > window.innerWidth &&
-                   tmp < (this.docked.length - 1)) {
-
-                // Make some space...
-                right -= this.docked[tmp].dockedOffsetWidth;
-                closeDocked(this.docked[tmp].wid, true);
-                tmp++;
-            }
-            w.dockedOffsetWidth = w.panelDiv.offsetWidth + dockedMargin;
-
-        }
+        // Make sure the distance from the right side is correct.
+        if (w.docked) setRightStyle(w);
 
         // Store reference of last appended widget.
         this.lastAppended = w;
@@ -1722,6 +1709,29 @@
                 if (hide) {
                     node.widgets.dockedHidden.push(closed);
                     closed.hide();
+
+                    if (!node.widgets.boxSelector) {
+                        node.widgets.boxSelector =
+                            node.widgets.append('BoxSelector', document.body, {
+                                className: 'docked-left',
+                                getId: function(i) { return i.wid; },
+                                getText: function(i) { return i.title; },
+                                onclick: function(i, id) {
+                                    i.show();
+                                    // First add back to docked list,
+                                    // then set right style.
+                                    node.widgets.docked.push(i);
+                                    setRightStyle(i, true);
+                                    this.removeItem(id);
+                                    if (this.items.length === 0) {
+                                        this.destroy();
+                                        node.widgets.boxSelector = null;
+                                    }
+                                },
+                            });
+                        
+                    }
+                    node.widgets.boxSelector.addItem(closed);
                 }
                 // Decrement len and i.
                 len--;
@@ -1729,6 +1739,43 @@
             }
         }
         return !!width;
+    }
+
+    function setRightStyle(w) {
+        var dockedMargin, safeMargin;
+        var lastDocked, right, ws, tmp;
+        
+        safeMargin = 200;
+        dockedMargin = 20;
+        
+        ws = node.widgets;
+        
+        right = 0;
+        // The widget w has been already added to the docked list.
+        if (ws.docked.length > 1) {
+            lastDocked = ws.docked[(ws.docked.length - 2)];
+            right = getPxNum(lastDocked.panelDiv.style.right);
+            right += lastDocked.panelDiv.offsetWidth;
+        }
+        right += dockedMargin;
+
+        w.panelDiv.style.right = (right + "px");
+
+        // Check if there is enough space on page?
+        tmp = 0;
+        right += w.panelDiv.offsetWidth + safeMargin;
+        while (ws.docked.length > 1 &&
+               right > window.innerWidth &&
+               tmp < (ws.docked.length - 1)) {
+
+            // Make some space...
+            // right -= ws.docked[tmp].dockedOffsetWidth;
+            closeDocked(ws.docked[tmp].wid, true);
+            tmp++;
+        }
+        // Store final offsetWidth in widget, because we need it after
+        // it is destroyed.
+        w.dockedOffsetWidth = w.panelDiv.offsetWidth + dockedMargin;
     }
 
     // Returns the numeric value of string containg 'px' at the end, e.g. 20px.
@@ -1813,13 +1860,17 @@
         this.items = [];
 
         /**
-         * ### BoxSelector.clickCb
+         * ### BoxSelector.onclick
          *
          * A callback to call when an item from the list is clicked
          *
+         * Callback is executed with the BoxSelector instance as context.
+         *
+         * Optional. If not specified, items won't be clickable.
+         *
          * @see BoxSelector.items
          */
-        this.clickCb = null;
+        this.onclick = null;
 
         /**
          * ### BoxSelector.getText
@@ -1832,8 +1883,10 @@
          * ### BoxSelector.getId
          *
          * A callback that returns the id of an item
+         *
+         * Default: returns item.id.
          */
-        this.getId = null;
+        this.getId = function(item) { return item.id; };
 
         /**
          * ### BoxSelector.ul
@@ -1855,27 +1908,28 @@
      * @param {object} options Configuration options.
      */
     BoxSelector.prototype.init = function(options) {
+        if (options.onclick) {
+            if ('function' !== typeof options.onclick) {
+                throw new Error('BoxSelector.init: options.getId must be ' +
+                                'function or undefined. Found: ' +
+                                options.getId);
+            }    
+            this.onclick = options.onclick;
+        }
+        
         if ('function' !== typeof options.getText) {
             throw new Error('BoxSelector.init: options.getText must be ' +
                             'function. Found: ' + options.getText);
         }
         this.getText = options.getText;
 
-        if ('function' !== typeof options.getId) {
+        if (options.getId && 'function' !== typeof options.getId) {
             throw new Error('BoxSelector.init: options.getId must be ' +
-                            'function. Found: ' + options.getId);
+                            'function or undefined. Found: ' + options.getId);
         }
         this.getId = options.getId;
 
-
-        if (options.clickCb) {
-            if ('function' !== typeof options.clickCb) {
-                throw new Error('BoxSelector.init: options.getId must be ' +
-                                'function or undefined. Found: ' +
-                                options.getId);
-            }    
-            this.clickCb = options.clickCb;
-        }        
+    
     };
 
 
@@ -1917,28 +1971,30 @@
                 toggled = true;
             }
         };
-
-        that = this;
-        ul.onclick = function(eventData) {
-            var id, i, len;
-            id = eventData.target;
-            // When '' is hidden by bootstrap class.
-            ul.style.display = '';
-            toggled = false;
-            id = id.parentNode.id;
-            // Clicked on description?
-            if (!id) id = eventData.target.parentNode.parentNode.id;
-            // Nothing relevant clicked (e.g., header).
-            if (!id) return;
-            len = that.items.length;
-            // Call the clickCb.
-            for ( i = 0 ; i < len ; i++) {
-                if (that.getId(that.items[i]) === id) {
-                    that.clickCb(that.items[i], id);
-                    break;
+        
+        if (this.onclick) {
+            that = this;
+            ul.onclick = function(eventData) {
+                var id, i, len;
+                id = eventData.target;
+                // When '' is hidden by bootstrap class.
+                ul.style.display = '';
+                toggled = false;
+                id = id.parentNode.id;
+                // Clicked on description?
+                if (!id) id = eventData.target.parentNode.parentNode.id;
+                // Nothing relevant clicked (e.g., header).
+                if (!id) return;
+                len = that.items.length;
+                // Call the onclick.
+                for ( i = 0 ; i < len ; i++) {
+                    if (that.getId(that.items[i]) === id) {
+                        that.onclick.call(that, that.items[i], id);
+                        break;
+                    }
                 }
-            }
-        };
+            };
+        }
     };
 
     BoxSelector.prototype.addItem = function(item) {
@@ -1951,7 +2007,7 @@
             throw new Error('BoxSelector.addItem: getText did not return a ' +
                             'string. Found: ' + tmp + '. Item: ' + item);
         }
-        if (this.clickCb) {
+        if (this.onclick) {
             a = document.createElement('a');
             a.href = '#';
             a.innerHTML = tmp;        
@@ -1970,6 +2026,19 @@
         li.className = 'dropdown-header';
         ul.appendChild(li);
         this.items.push(item);
+    };
+
+    BoxSelector.prototype.removeItem = function(id) {
+        var i, len, elem;
+        len = this.items.length;
+        for ( i = 0 ; i < len ; i++) {
+            if (this.getId(this.items[i]) === id) {
+                elem = W.gid(id);
+                this.ul.removeChild(elem);
+                return this.items.splice(i, 1);
+            }
+        }
+        return false;
     };
 
     BoxSelector.prototype.getValues = function() {
