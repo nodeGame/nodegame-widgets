@@ -28,9 +28,14 @@
             // return '<span class="chat_msg_me">' + data.msg + '</span>';
         },
         incoming: function(w, data) {
-            return '<span><span class="chat_id_other">' +
-                (w.senderToNameMap[data.id] || data.id) +
-                '</span>: ' + data.msg + '</span>';
+            var str;
+            str = '<span>';
+            if (w.recipientsIds.length > 1) {
+                str += '<span class="chat_id_other">' +
+                    (w.senderToNameMap[data.id] || data.id) + '</span>: ';
+            }
+            str += data.msg + '</span>';
+            return str;
         },
         quit: function(w, data) {
             return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
