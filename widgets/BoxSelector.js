@@ -70,6 +70,8 @@
          *
          * A callback to call when an item from the list is clicked
          *
+         * Optional. If not specified, items won't be clickable.
+         *
          * @see BoxSelector.items
          */
         this.clickCb = null;
@@ -85,8 +87,10 @@
          * ### BoxSelector.getId
          *
          * A callback that returns the id of an item
+         *
+         * Default: returns item.id.
          */
-        this.getId = null;
+        this.getId = function(item) { return item.id; };
 
         /**
          * ### BoxSelector.ul
@@ -108,19 +112,6 @@
      * @param {object} options Configuration options.
      */
     BoxSelector.prototype.init = function(options) {
-        if ('function' !== typeof options.getText) {
-            throw new Error('BoxSelector.init: options.getText must be ' +
-                            'function. Found: ' + options.getText);
-        }
-        this.getText = options.getText;
-
-        if ('function' !== typeof options.getId) {
-            throw new Error('BoxSelector.init: options.getId must be ' +
-                            'function. Found: ' + options.getId);
-        }
-        this.getId = options.getId;
-
-
         if (options.clickCb) {
             if ('function' !== typeof options.clickCb) {
                 throw new Error('BoxSelector.init: options.getId must be ' +
@@ -128,7 +119,21 @@
                                 options.getId);
             }    
             this.clickCb = options.clickCb;
-        }        
+        }
+        
+        if ('function' !== typeof options.getText) {
+            throw new Error('BoxSelector.init: options.getText must be ' +
+                            'function. Found: ' + options.getText);
+        }
+        this.getText = options.getText;
+
+        if (options.getId && 'function' !== typeof options.getId) {
+            throw new Error('BoxSelector.init: options.getId must be ' +
+                            'function or undefined. Found: ' + options.getId);
+        }
+        this.getId = options.getId;
+
+    
     };
 
 
@@ -170,28 +175,30 @@
                 toggled = true;
             }
         };
-
-        that = this;
-        ul.onclick = function(eventData) {
-            var id, i, len;
-            id = eventData.target;
-            // When '' is hidden by bootstrap class.
-            ul.style.display = '';
-            toggled = false;
-            id = id.parentNode.id;
-            // Clicked on description?
-            if (!id) id = eventData.target.parentNode.parentNode.id;
-            // Nothing relevant clicked (e.g., header).
-            if (!id) return;
-            len = that.items.length;
-            // Call the clickCb.
-            for ( i = 0 ; i < len ; i++) {
-                if (that.getId(that.items[i]) === id) {
-                    that.clickCb(that.items[i], id);
-                    break;
+        
+        if (this.clickCb) {
+            that = this;
+            ul.onclick = function(eventData) {
+                var id, i, len;
+                id = eventData.target;
+                // When '' is hidden by bootstrap class.
+                ul.style.display = '';
+                toggled = false;
+                id = id.parentNode.id;
+                // Clicked on description?
+                if (!id) id = eventData.target.parentNode.parentNode.id;
+                // Nothing relevant clicked (e.g., header).
+                if (!id) return;
+                len = that.items.length;
+                // Call the clickCb.
+                for ( i = 0 ; i < len ; i++) {
+                    if (that.getId(that.items[i]) === id) {
+                        that.clickCb(that.items[i], id);
+                        break;
+                    }
                 }
-            }
-        };
+            };
+        }
     };
 
     BoxSelector.prototype.addItem = function(item) {
