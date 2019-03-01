@@ -66,15 +66,17 @@
         this.items = [];
 
         /**
-         * ### BoxSelector.clickCb
+         * ### BoxSelector.onclick
          *
          * A callback to call when an item from the list is clicked
+         *
+         * Callback is executed with the BoxSelector instance as context.
          *
          * Optional. If not specified, items won't be clickable.
          *
          * @see BoxSelector.items
          */
-        this.clickCb = null;
+        this.onclick = null;
 
         /**
          * ### BoxSelector.getText
@@ -112,13 +114,13 @@
      * @param {object} options Configuration options.
      */
     BoxSelector.prototype.init = function(options) {
-        if (options.clickCb) {
-            if ('function' !== typeof options.clickCb) {
+        if (options.onclick) {
+            if ('function' !== typeof options.onclick) {
                 throw new Error('BoxSelector.init: options.getId must be ' +
                                 'function or undefined. Found: ' +
                                 options.getId);
             }    
-            this.clickCb = options.clickCb;
+            this.onclick = options.onclick;
         }
         
         if ('function' !== typeof options.getText) {
@@ -176,7 +178,7 @@
             }
         };
         
-        if (this.clickCb) {
+        if (this.onclick) {
             that = this;
             ul.onclick = function(eventData) {
                 var id, i, len;
@@ -190,10 +192,10 @@
                 // Nothing relevant clicked (e.g., header).
                 if (!id) return;
                 len = that.items.length;
-                // Call the clickCb.
+                // Call the onclick.
                 for ( i = 0 ; i < len ; i++) {
                     if (that.getId(that.items[i]) === id) {
-                        that.clickCb(that.items[i], id);
+                        that.onclick.call(that, that.items[i], id);
                         break;
                     }
                 }
@@ -211,7 +213,7 @@
             throw new Error('BoxSelector.addItem: getText did not return a ' +
                             'string. Found: ' + tmp + '. Item: ' + item);
         }
-        if (this.clickCb) {
+        if (this.onclick) {
             a = document.createElement('a');
             a.href = '#';
             a.innerHTML = tmp;        
@@ -230,6 +232,19 @@
         li.className = 'dropdown-header';
         ul.appendChild(li);
         this.items.push(item);
+    };
+
+    BoxSelector.prototype.removeItem = function(id) {
+        var i, len, elem;
+        len = this.items.length;
+        for ( i = 0 ; i < len ; i++) {
+            if (this.getId(this.items[i]) === id) {
+                elem = W.gid(id);
+                this.ul.removeChild(elem);
+                return this.items.splice(i, 1);
+            }
+        }
+        return false;
     };
 
     BoxSelector.prototype.getValues = function() {
