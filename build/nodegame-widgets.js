@@ -1024,10 +1024,17 @@
         /**
          * ### Widgets.docked
          *
-         * List of widget currently docked
+         * List of docked widgets
          */
         this.docked = [];
-        
+
+        /**
+         * ### Widgets.dockedHidden
+         *
+         * List of hidden docked widgets (cause not enough space on page)
+         */
+        this.dockedHidden = [];
+
         /**
          * ### Widgets.collapseTarget
          *
@@ -1050,9 +1057,7 @@
             }
 
             // Destroy all existing widgets.
-            if (conf.destroyAll) {
-                that.destroyAll();
-            }
+            if (conf.destroyAll) that.destroyAll();            
 
             // Append existing widgets.
             if (conf.append) {
@@ -1370,6 +1375,15 @@
                 }
             }
 
+            // Remove from lastAppended.
+            if (this.lastAppended.wid === widget.wid) {
+                node.warn('node.widgets.lastAppended destroyed.');
+                this.lastAppended = null;
+            }
+
+            // Remove from docked.
+            if (this.docked) closeDocked(widget.wid, false);
+            
             this.emit('destroyed');
         };
 
@@ -1406,6 +1420,7 @@
      */
     Widgets.prototype.append = function(w, root, options) {
         var tmp, lastDocked, right;
+        var dockedMargin;
 
         if ('string' !== typeof w && 'object' !== typeof w) {
             throw new TypeError('Widgets.append: w must be string or object. ' +
@@ -1450,18 +1465,17 @@
 
         // Dock it.
         if (options.docked) {
+            dockedMargin = 20;
             tmp.className.push('docked');
             w.docked = true;
             right = 0;
             if (this.docked.length) {
                 lastDocked = this.docked[(this.docked.length-1)];
                 right = getPxNum(lastDocked.panelDiv.style.right);
-                right += lastDocked.panelDiv.offsetWidth;                
+                right += lastDocked.panelDiv.offsetWidth;
             }
-            right += 20;
+            right += dockedMargin;
             this.docked.push(w);
-            // If destroyed, we need to move all the others docked widgets.
-            w.on('destroyed', function() { removeDocked(w.wid); });
         }
 
         // Add div inside widget.
@@ -1502,13 +1516,23 @@
         w.appended = true;
 
         if (right) {
-            if (right + w.panelDiv.offsetWidth > window.offsetWidth) {
-                // TODO.
-            }
-            w.dockedOffsetWidth = w.panelDiv.offsetWidth + 20; // TODO 20.
             w.panelDiv.style.right = (right + "px");
+
+            // Check if there is enough space on page?
+            tmp = 0;
+            while (this.docked.length > 1 &&
+                   (right + w.panelDiv.offsetWidth) > window.innerWidth &&
+                   tmp < (this.docked.length - 1)) {
+
+                // Make some space...
+                right -= this.docked[tmp].dockedOffsetWidth;
+                closeDocked(this.docked[tmp].wid, true);
+                tmp++;
+            }
+            w.dockedOffsetWidth = w.panelDiv.offsetWidth + dockedMargin;
+
         }
-        
+
         // Store reference of last appended widget.
         this.lastAppended = w;
 
@@ -1672,12 +1696,19 @@
         node.err(d + ' not found. ' + name + ' cannot be loaded.');
     }
 
-    // Remove a widget from the docked list and shifts others on page.
-    function removeDocked(wid) {
-        var d, i, len, width;
+    // ### closeDocked
+    //
+    // Shifts docked widgets on page and remove a widget from the docked list
+    //
+    // @param {string} wid The widget id
+    // @param {boolean} remove TRUE, if widget should be removed from
+    //    docked list. Default: FALSE.
+    //
+    // @return {boolean} TRUE if a widget with given wid was found
+    function closeDocked(wid, hide) {
+        var d, i, len, width, closed;
         d = node.widgets.docked;
         len = d.length;
-        debugger
         for (i = 0; i < len; i++) {
             if (width) {
                 d[i].panelDiv.style.right =
@@ -1686,20 +1717,24 @@
             else if (d[i].wid === wid) {
                 width = d[i].dockedOffsetWidth;
                 // Remove from docked list.
-                node.widgets.docked.splice(i, 1);
+                closed = node.widgets.docked.splice(i, 1)[0];
+                if (hide) {
+                    node.widgets.dockedHidden.push(closed);
+                    closed.hide();
+                }
                 // Decrement len and i.
                 len--;
-                i--;
+                i--;                
             }
         }
         return !!width;
     }
 
     // Returns the numeric value of string containg 'px' at the end, e.g. 20px.
-    function getPxNum(str) {        
+    function getPxNum(str) {
         return parseInt(str.substring(0, str.length - 2), 10);
     }
-    
+
     // Expose Widgets to the global object.
     node.widgets = new Widgets();
 
