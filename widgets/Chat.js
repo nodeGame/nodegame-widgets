@@ -169,13 +169,6 @@
         this.initialMsg = null;
 
         /**
-         * ### Chat.displayNames
-         *
-         * Array of names of the recipient/s of the message
-         */
-        this.displayNames = null;
-
-        /**
          * ### Chat.recipientsIds
          *
          * Array of ids of the recipient/s of the message
@@ -219,7 +212,6 @@
      * The  options object can have the following attributes:
      *   - `receiverOnly`: If TRUE, no message can be sent
      *   - `chatEvent`: The event to fire when sending/receiving a message
-     *   - `displayName`: Function which displays the sender's name
      */
     Chat.prototype.init = function(options) {
         var tmp, i, rec, that;
@@ -245,16 +237,16 @@
             if (!this.db) this.db = new NDDB();
         }
 
+        // Button or send on Enter?.
+        this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
+            J.isMobileAgent() : !!options.useSubmitButton;
+        
         // Participants.
         tmp = options.participants;
         if (!J.isArray(tmp) || !tmp.length) {
             throw new TypeError('Chat.init: participants must be ' +
                                 'a non-empty array. Found: ' + tmp);
         }
-
-        // Button or send on Enter?.
-        this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
-            J.isMobileAgent() : !!options.useSubmitButton;
 
         // Build maps.
         this.recipientsIds = new Array(tmp.length);
@@ -286,6 +278,9 @@
         // Other.
         this.uncollapseOnMsg = options.uncollapseOnMsg || false;
 
+        this.printStartTime = options.printStartTime || false;
+        this.printNames = options.printNames || false;
+        
         if (options.initialMsg) {
             if ('object' !== typeof options.initialMsg) {
                 throw new TypeError('Chat.init: initialMsg must be ' +
@@ -308,8 +303,7 @@
 
 
     Chat.prototype.append = function() {
-        var that;
-        var inputGroup;
+        var that, inputGroup, initialText;
 
         this.chatDiv = W.get('div', { className: 'chat_chat' });
         this.bodyDiv.appendChild(this.chatDiv);
@@ -347,11 +341,29 @@
             this.bodyDiv.appendChild(inputGroup);
         }
 
+        if (this.printStartTime) {
+            W.add('div', this.chatDiv, {
+                innerHTML: Date(J.getDate()),
+                className: 'chat_event'
+            });
+            initialText = true;
+        }
+        
+        if (this.printNames) {
+            W.add('div', this.chatDiv, {
+                className: 'chat_event',
+                innerHTML: 'Participants: ' +
+                    J.keys(this.senderToNameMap).join(', ')
+            });
+            initialText = true;
+        }
 
-        W.add('div', this.chatDiv, {
-            innerHTML: Date(J.getDate()),
-            className: 'chat_time'
-        });
+        if (initialText) {
+            W.add('div', this.chatDiv, {
+                className: 'chat_event',
+                innerHTML: '&nbsp;'
+            });
+        }
         
         if (this.initialMsg) {
             this.writeMsg(this.initialMsg.id ? 'incoming' : 'outgoing',
@@ -432,7 +444,6 @@
     Chat.prototype.getValues = function() {
         var out;
         out = {
-            names: this.displayNames,
             participants: this.participants,
             totSent: this.stats.sent,
             totReceived: this.stats.received,
