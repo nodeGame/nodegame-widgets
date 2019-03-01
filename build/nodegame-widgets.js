@@ -1452,16 +1452,16 @@
         if (options.docked) {
             tmp.className.push('docked');
             w.docked = true;
-            debugger
             right = 0;
             if (this.docked.length) {
                 lastDocked = this.docked[(this.docked.length-1)];
-                right = lastDocked.panelDiv.style.right;
-                right = parseInt(right.substring(0, right.length - 2), 10);
+                right = getPxNum(lastDocked.panelDiv.style.right);
                 right += lastDocked.panelDiv.offsetWidth;                
             }
             right += 20;
             this.docked.push(w);
+            // If destroyed, we need to move all the others docked widgets.
+            w.on('destroyed', function() { removeDocked(w.wid); });
         }
 
         // Add div inside widget.
@@ -1502,6 +1502,10 @@
         w.appended = true;
 
         if (right) {
+            if (right + w.panelDiv.offsetWidth > window.offsetWidth) {
+                // TODO.
+            }
+            w.dockedOffsetWidth = w.panelDiv.offsetWidth + 20; // TODO 20.
             w.panelDiv.style.right = (right + "px");
         }
         
@@ -1668,7 +1672,35 @@
         node.err(d + ' not found. ' + name + ' cannot be loaded.');
     }
 
-    //Expose Widgets to the global object.
+    // Remove a widget from the docked list and shifts others on page.
+    function removeDocked(wid) {
+        var d, i, len, width;
+        d = node.widgets.docked;
+        len = d.length;
+        debugger
+        for (i = 0; i < len; i++) {
+            if (width) {
+                d[i].panelDiv.style.right =
+                    (getPxNum(d[i].panelDiv.style.right) - width) + 'px';
+            }
+            else if (d[i].wid === wid) {
+                width = d[i].dockedOffsetWidth;
+                // Remove from docked list.
+                node.widgets.docked.splice(i, 1);
+                // Decrement len and i.
+                len--;
+                i--;
+            }
+        }
+        return !!width;
+    }
+
+    // Returns the numeric value of string containg 'px' at the end, e.g. 20px.
+    function getPxNum(str) {        
+        return parseInt(str.substring(0, str.length - 2), 10);
+    }
+    
+    // Expose Widgets to the global object.
     node.widgets = new Widgets();
 
 })(
@@ -2046,9 +2078,11 @@
     };
 
     Chat.prototype.writeMsg = function(code, data) {
+        var c;
+        c = (code === 'incoming' || code === 'outgoing') ? code : 'event';
         W.add('div', this.chatDiv, {
             innerHTML: this.getText(code, data),
-            className: 'chat_msg chat_msg_' + code
+            className: 'chat_msg chat_msg_' + c 
         });
         this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     };

@@ -367,9 +367,11 @@
     };
 
     Chat.prototype.writeMsg = function(code, data) {
+        var c;
+        c = (code === 'incoming' || code === 'outgoing') ? code : 'event';
         W.add('div', this.chatDiv, {
             innerHTML: this.getText(code, data),
-            className: 'chat_msg chat_msg_' + code
+            className: 'chat_msg chat_msg_' + c 
         });
         this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     };
