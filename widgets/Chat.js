@@ -322,15 +322,23 @@
         this.on('uncollapsed', function() {
             // Make sure that we do not have the title highlighted any more.
             that.setTitle(that.title);
-            node.say(that.chatEvent + '_COLLAPSE', that.recipientsIds, false);
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_COLLAPSE',
+                         that.recipientsIds, false);
+            }
         });
 
         this.on('collapsed', function() {
-            node.say(that.chatEvent + '_COLLAPSE', that.recipientsIds, true);
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_COLLAPSE',
+                         that.recipientsIds, true);
+            }
         });
 
         this.on('destroyed', function() {
-            node.say(that.chatEvent + '_QUIT', that.recipientsIds);
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_QUIT', that.recipientsIds);
+            }
         });
     };
 
