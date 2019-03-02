@@ -233,7 +233,9 @@
      *
      * An enabled widget allows the user to interact with it
      */
-    Widget.prototype.enable = function() {};
+    Widget.prototype.enable = function() {
+        this.disabled = false;
+    };
 
     /**
      * ### Widget.disable
@@ -242,7 +244,9 @@
      *
      * A disabled widget is still visible, but user cannot interact with it
      */
-    Widget.prototype.disable = function() {};
+    Widget.prototype.disable = function() {
+        this.disabled = true;
+    };
 
     /**
      * ### Widget.isDisabled
@@ -2090,7 +2094,10 @@
             return str;
         },
         quit: function(w, data) {
-            return (w.senderToNameMap[data.id] || data.id) + ' quit the chat';
+            return (w.senderToNameMap[data.id] || data.id) + ' left the chat';
+        },
+        noMoreParticipants: function(w, data) {
+            return 'No active participant left. Chat disabled.';
         },
         // For both collapse and uncollapse.
         collapse: function(w, data) {
@@ -2228,33 +2235,47 @@
         /**
          * ### Chat.recipientsIds
          *
-         * Array of ids of the recipient/s of the message
+         * Array of ids of current recipients of messages
          */
         this.recipientsIds = null;
 
         /**
-         * ### Chat.recipientToNameMap
+         * ### Chat.recipientsIdsQuitted
          *
-         * Map recipients ids to names
+         * Array of ids of  recipients that have previously quitted the chat
          */
-        this.recipientToNameMap = null;
-
-        /**
-         * ### Chat.recipientToSenderMap
-         *
-         * Map recipients ids to names
-         */
-        this.recipientToSenderMap = null;
-
+        this.recipientsIdsQuitted = null;
+        
         /**
          * ### Chat.senderToNameMap
          *
-         * Map recipients ids to sender ids
+         * Map sender id (msg.from) to display name
          *
          * Note: The 'from' field of a message can be different
          * from the 'to' field of its reply (e.g., for MONITOR)
          */
         this.senderToNameMap = null;
+
+        /**
+         * ### Chat.recipientToNameMap
+         *
+         * Map recipient id (msg.to) to display name
+         */
+        this.recipientToNameMap = null;
+
+        /**
+         * ### Chat.senderToRecipientMap
+         *
+         * Map sender id (msg.from) to recipient id (msg.to)
+         */
+        this.senderToRecipientMap = null;
+
+        /**
+         * ### Chat.recipientToSenderMap
+         *
+         * Map recipient id (msg.to) to sender id (msg.from)
+         */
+        this.recipientToSenderMap = null;
     }
 
     // ## Chat methods
@@ -2271,7 +2292,7 @@
      *   - `chatEvent`: The event to fire when sending/receiving a message
      */
     Chat.prototype.init = function(options) {
-        var tmp, i, rec, that;
+        var tmp, i, rec, sender, that;
         options = options || {};
         that = this;
 
@@ -2295,8 +2316,10 @@
         }
 
         // Button or send on Enter?.
-        this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
-            J.isMobileAgent() : !!options.useSubmitButton;
+        this.useSubmitButton = true;
+
+        //'undefined' === typeof options.useSubmitButton ?
+        //    J.isMobileAgent() : !!options.useSubmitButton;
         
         // Participants.
         tmp = options.participants;
@@ -2307,23 +2330,30 @@
 
         // Build maps.
         this.recipientsIds = new Array(tmp.length);
+        this.recipientsIdsQuitted = [];
         this.recipientToSenderMap = {};
         this.recipientToNameMap = {};
         this.senderToNameMap = {};
+        this.senderToRecipientMap = {};
+
         for (i = 0; i < tmp.length; i++) {
+            // Everything i the same if string.
             if ('string' === typeof tmp[i]) {
                 this.recipientsIds[i] = tmp[i];
                 this.recipientToNameMap[tmp[i]] = tmp[i];
                 this.recipientToSenderMap[tmp[i]] = tmp[i];
+                this.senderToRecipientMap[tmp[i]] = tmp[i];
                 this.senderToNameMap[tmp[i]] = tmp[i];
             }
+            // Sender may be different from receiver if object.
             else if ('object' === typeof tmp[i]) {
                 rec = tmp[i].recipient;
+                sender = tmp[i].sender;
                 this.recipientsIds[i] = rec;
-                this.recipientToSenderMap[rec] = tmp[i].sender || rec;
+                this.recipientToSenderMap[rec] = sender || rec;
                 this.recipientToNameMap[rec] = tmp[i].name || rec;
-                this.senderToNameMap[tmp[i].sender || rec] =
-                    this.recipientToNameMap[rec];
+                this.senderToRecipientMap[sender] = rec;
+                this.senderToNameMap[sender] = this.recipientToNameMap[rec];
             }
             else {
                 throw new TypeError('Chat.init: participants array must ' +
@@ -2355,6 +2385,10 @@
 
         this.on('collapsed', function() {
             node.say(that.chatEvent + '_COLLAPSE', that.recipientsIds, true);
+        });
+
+        this.on('destroyed', function() {
+            node.say(that.chatEvent + '_QUIT', that.recipientsIds);
         });
     };
 
@@ -2464,8 +2498,25 @@
         });
 
         node.on.data(this.chatEvent + '_QUIT', function(msg) {
+            var i, len, rec;
             if (!that.handleMsg(msg)) return;
             that.writeMsg('quit', { id: msg.from });
+            len = that.recipientsIds.length;
+            for ( i = 0 ; i < len ; i++) {
+                if (that.recipientsIds[i] ===
+                    that.senderToRecipientMap[msg.from]) {
+
+                    rec = that.recipientsIds.splice(i, 1);
+                    that.recipientsIdsQuitted.push(rec);
+                    
+                    if (that.recipientsIds.length === 0) {
+                        that.writeMsg('noMoreParticipants'); 
+                        that.disable();
+                    }
+                    break;
+                }
+            }
+            node.warn('Chat: participant quitted not found: ' + msg.from);
         });
 
         node.on.data(this.chatEvent + '_COLLAPSE', function(msg) {
@@ -2474,6 +2525,7 @@
         });
     };
 
+    
     Chat.prototype.handleMsg = function(msg) {
         var from, args;
         from = msg.from;
@@ -2494,10 +2546,18 @@
         return true;
     };
 
-    Chat.prototype.destroy = function() {
-        node.say(this.chatEvent + '_QUIT', this.recipientsIds);
+    Chat.prototype.disable = function() {
+        if (this.submitButton) this.submitButton.disabled = true;
+        this.textarea.disabled = true;
+        this.disabled = true;
     };
 
+    Chat.prototype.enable = function() {
+        if (this.submitButton) this.submitButton.disabled = false;
+        this.textarea.disabled = false;
+        this.disabled = false;
+    };
+    
     Chat.prototype.getValues = function() {
         var out;
         out = {
@@ -2518,15 +2578,22 @@
     function sendMsg(that) {
         var msg, to, ids;
 
+        // No msg sent.
+        if (that.isDisabled()) return;
+        
         msg = that.readTextarea();
 
         // Move cursor at the beginning.
         if (msg === '') {
-            node.warn('no text, no chat message sent.');
+            node.warn('Chat: message has no text, not sent.');
             return;
         }
         // Simplify things, if there is only one recipient.
         ids = that.recipientsIds;
+        if (ids.length === 0) {
+            node.warn('Chat: empty recipient list, message not sent.');
+            return;
+        }
         to = ids.length === 1 ? ids[0] : ids;
         that.writeMsg('outgoing', { msg: msg }); // to not used now.
         node.say(that.chatEvent, to, msg);
