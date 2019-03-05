@@ -1,6 +1,6 @@
 /**
  * # DebugWall
- * Copyright(c) 2018 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where all incoming and outgoing messages are printed
@@ -150,12 +150,13 @@
             }
             this.hiddenTypes = hiddenTypes;
         }
-    };
 
-    DebugWall.prototype.destroy = function() {
-        if (this.origLogCb) node.log = this.origLogCb;
-        if (this.origMsgOutCb) node.socket.send = this.origMsgOutCb;
-        if (this.origMsgInCb) node.socket.onMessage = this.origMsgInCb;
+        this.on('destroyed', function() {
+            if (that.origLogCb) node.log = that.origLogCb;
+            if (that.origMsgOutCb) node.socket.send = that.origMsgOutCb;
+            if (that.origMsgInCb) node.socket.onMessage = that.origMsgInCb;
+        });
+
     };
 
     DebugWall.prototype.append = function() {

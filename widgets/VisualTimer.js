@@ -1,6 +1,6 @@
 /**
  * # VisualTimer
- * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -542,19 +542,20 @@
                     that.stop();
                 }
             }
-       });
-    };
+        });
 
-    VisualTimer.prototype.destroy = function() {
-        if (this.internalTimer) {
-            node.timer.destroyTimer(this.gameTimer);
-            this.internalTimer = null;
-        }
-        else {
-            this.gameTimer.removeHook('VisualTimer_' + this.wid);
-        }
-        this.bodyDiv.removeChild(this.mainBox.boxDiv);
-        this.bodyDiv.removeChild(this.waitBox.boxDiv);
+        // Handle destroy.
+        this.on('destroyed', function() {
+            if (that.internalTimer) {
+                node.timer.destroyTimer(that.gameTimer);
+                that.internalTimer = null;
+            }
+            else {
+                that.gameTimer.removeHook('VisualTimer_' + that.wid);
+            }
+            that.bodyDiv.removeChild(that.mainBox.boxDiv);
+            that.bodyDiv.removeChild(that.waitBox.boxDiv);
+        });
     };
 
    /**

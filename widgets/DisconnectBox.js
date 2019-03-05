@@ -1,6 +1,6 @@
 /**
  * # DisconnectBox
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Shows a disconnect button
@@ -15,13 +15,16 @@
 
     // ## Meta-data
 
-    DisconnectBox.version = '0.2.2';
+    DisconnectBox.version = '0.2.3';
     DisconnectBox.description =
         'Visually display current, previous and next stage of the game.';
 
     DisconnectBox.title = 'Disconnect';
     DisconnectBox.className = 'disconnectbox';
-    DisconnectBox.texts.leave = "Leave Experiment";
+
+    DisconnectBox.texts = {
+        leave: 'Leave Experiment'
+    };
 
     // ## Dependencies
 
@@ -72,11 +75,11 @@
         this.ee.on('SOCKET_CONNECT', function DBcon() {
             console.log('DB got socket_connect');
         });
-    };
 
-    DisconnectBox.prototype.destroy = function() {
-        this.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
-        this.ee.off('SOCKET_CONNECT', 'DBcon');
+        this.on('destroyed', function() {
+            that.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
+            that.ee.off('SOCKET_CONNECT', 'DBcon');
+        });
     };
 
 

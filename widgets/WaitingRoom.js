@@ -586,6 +586,12 @@
 
             })(this);
         }
+
+        // Handle destroy.
+        this.on('destroyed', function() {
+            if (that.dots) that.dots.stop();
+            node.deregisterSetup('waitroom');
+        });
     };
 
     /**
@@ -905,11 +911,6 @@
                 frame.addEventListener('mouseover', onFrame, false);
             });
         }
-    };
-
-    WaitingRoom.prototype.destroy = function() {
-        if (this.dots) this.dots.stop();
-        node.deregisterSetup('waitroom');
     };
 
 })(node);
