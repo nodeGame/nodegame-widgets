@@ -109,7 +109,6 @@
          * Internal timers are destroyed when widget is destroyed or cleared
          *
          * @see VisualTimer.gameTimer
-         * @see VisualTimer.destroy
          * @see VisualTimer.clear
          */
         this.internalTimer = null;

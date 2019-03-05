@@ -2245,7 +2245,7 @@
          * Array of ids of  recipients that have previously quitted the chat
          */
         this.recipientsIdsQuitted = null;
-        
+
         /**
          * ### Chat.senderToNameMap
          *
@@ -2316,11 +2316,9 @@
         }
 
         // Button or send on Enter?.
-        this.useSubmitButton = true;
+        this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
+            J.isMobileAgent() : !!options.useSubmitButton;
 
-        //'undefined' === typeof options.useSubmitButton ?
-        //    J.isMobileAgent() : !!options.useSubmitButton;
-        
         // Participants.
         tmp = options.participants;
         if (!J.isArray(tmp) || !tmp.length) {
@@ -2367,7 +2365,7 @@
 
         this.printStartTime = options.printStartTime || false;
         this.printNames = options.printNames || false;
-        
+
         if (options.initialMsg) {
             if ('object' !== typeof options.initialMsg) {
                 throw new TypeError('Chat.init: initialMsg must be ' +
@@ -2379,16 +2377,24 @@
 
         this.on('uncollapsed', function() {
             // Make sure that we do not have the title highlighted any more.
-            that.setTitle(that.title);       
-            node.say(that.chatEvent + '_COLLAPSE', that.recipientsIds, false);
+            that.setTitle(that.title);
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_COLLAPSE',
+                         that.recipientsIds, false);
+            }
         });
 
         this.on('collapsed', function() {
-            node.say(that.chatEvent + '_COLLAPSE', that.recipientsIds, true);
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_COLLAPSE',
+                         that.recipientsIds, true);
+            }
         });
 
         this.on('destroyed', function() {
-            node.say(that.chatEvent + '_QUIT', that.recipientsIds);
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_QUIT', that.recipientsIds);
+            }
         });
     };
 
@@ -2439,7 +2445,7 @@
             });
             initialText = true;
         }
-        
+
         if (this.printNames) {
             W.add('div', this.chatDiv, {
                 className: 'chat_event',
@@ -2455,7 +2461,7 @@
                 innerHTML: '&nbsp;'
             });
         }
-        
+
         if (this.initialMsg) {
             this.writeMsg(this.initialMsg.id ? 'incoming' : 'outgoing',
                           this.initialMsg);
@@ -2474,7 +2480,7 @@
         c = (code === 'incoming' || code === 'outgoing') ? code : 'event';
         W.add('div', this.chatDiv, {
             innerHTML: this.getText(code, data),
-            className: 'chat_msg chat_msg_' + c 
+            className: 'chat_msg chat_msg_' + c
         });
         this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     };
@@ -2508,9 +2514,9 @@
 
                     rec = that.recipientsIds.splice(i, 1);
                     that.recipientsIdsQuitted.push(rec);
-                    
+
                     if (that.recipientsIds.length === 0) {
-                        that.writeMsg('noMoreParticipants'); 
+                        that.writeMsg('noMoreParticipants');
                         that.disable();
                     }
                     break;
@@ -2525,7 +2531,7 @@
         });
     };
 
-    
+
     Chat.prototype.handleMsg = function(msg) {
         var from, args;
         from = msg.from;
@@ -2557,7 +2563,7 @@
         this.textarea.disabled = false;
         this.disabled = false;
     };
-    
+
     Chat.prototype.getValues = function() {
         var out;
         out = {
@@ -2580,7 +2586,7 @@
 
         // No msg sent.
         if (that.isDisabled()) return;
-        
+
         msg = that.readTextarea();
 
         // Move cursor at the beginning.
