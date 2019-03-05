@@ -8,7 +8,7 @@
  * // TODO: add is...typing
  * // TODO: add bootstrap badge to count msg when collapsed
  * // TODO: check on data if message comes back
- * // TODO: add proper inline doc
+ * // TODO: highlight better incoming msg. Play sound?
  *
  * www.nodegame.org
  */
@@ -234,10 +234,24 @@
      * The  options object can have the following attributes:
      *   - `receiverOnly`: If TRUE, no message can be sent
      *   - `chatEvent`: The event to fire when sending/receiving a message
+     *   - `useSubmitButton`: If TRUE, a submit button is added, otherwise
+     *        messages are sent by pressing ENTER. Default: TRUE on mobiles
+     *   - `storeMsgs`: If TRUE, a copy of every message is stored in a db
+     *        a local db
+     *   - `participants`: An array containing the ids of participants,
+     *        cannot be empty
+     *   - `initialMsg`: Initial message to be displayed as soon as the chat
+     *        is opened.
+     *   - `uncollapseOnMsg`: If TRUE, a minimized chat will automatically
+     *        open when receiving a msg. Default: FALSE.
+     *   - `printStartTime`: If TRUE, the initial time of the chat is
+     *        printed at the beginning of the chat. Default: FALSE.
+     *   - `printNames`: If TRUE, the names of the participants of the chat
+     *        is printed at the beginning of the chat. Default: FALSE.
      */
     Chat.prototype.init = function(options) {
         var tmp, i, rec, sender, that;
-        options = options || {};
+
         that = this;
 
         // Chat id.
@@ -342,7 +356,6 @@
         });
     };
 
-
     Chat.prototype.append = function() {
         var that, inputGroup, initialText;
 
@@ -412,6 +425,13 @@
         }
     };
 
+    /**
+     * ### Chat.readTextarea
+     *
+     * Reads the value of the textarea, trims it, and removes it from textarea
+     *
+     * @return {string} The current value in the textarea
+     */
     Chat.prototype.readTextarea = function() {
         var txt;
         txt = this.textarea.value;
@@ -419,6 +439,21 @@
         return txt.trim();
     };
 
+    /**
+     * ### Chat.writeMsg
+     *
+     * Writes (and formats) a message (or an event) in the message area
+     *
+     * Chat is scrolled up so that the message is last always on focus.
+     *
+     * @param {string} code A value indicating the the type of msg. Available:
+     *   'incoming', 'outgoing', and anything else.
+     * @param {string} data The content of the message
+     *
+     * @return {string} The current value in the textarea
+     *
+     * @see Chat.chatDiv
+     */
     Chat.prototype.writeMsg = function(code, data) {
         var c;
         c = (code === 'incoming' || code === 'outgoing') ? code : 'event';
@@ -475,7 +510,20 @@
         });
     };
 
-
+    /**
+     * ### Chat.handleMsg
+     *
+     * Checks a (incoming) message and takes some actions
+     *
+     * If chat is minimized, it maximizes it if option `uncollapseOnMsg`
+     * it TRUE; otherwise, it increments the stats for unread messages.
+     *
+     * @param {string} msg The content of the message
+     *
+     * @return {boolean} TRUE if the message is valid
+     *
+     * @see Chat.chatDiv
+     */
     Chat.prototype.handleMsg = function(msg) {
         var from, args;
         from = msg.from;
@@ -486,9 +534,9 @@
         if (this.isCollapsed()) {
             if (this.uncollapseOnMsg) {
                 this.uncollapse();
+                this.stats.unread = 0;
             }
             else {
-                // TODO: highlight better. Play sound?
                 this.setTitle('<strong>' + this.title + '</strong>');
                 this.stats.unread++;
             }
