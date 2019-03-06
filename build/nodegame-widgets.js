@@ -1274,6 +1274,8 @@
         // Set prototype values or options values.
         widget.title = 'undefined' === typeof options.title ?
             WidgetPrototype.title : options.title;
+        widget.panel = 'undefined' === typeof options.panel ?
+            WidgetPrototype.panel : options.panel;
         widget.footer = 'undefined' === typeof options.footer ?
             WidgetPrototype.footer : options.footer;
         widget.className = WidgetPrototype.className;
@@ -1288,10 +1290,6 @@
                                 'string, or undefined. Found: ' +
                                 options.className);
         }
-
-        widget.panel = 'undefined' === typeof options.panel ?
-            WidgetPrototype.panel : options.panel;
-
         widget.context = 'undefined' === typeof options.context ?
             WidgetPrototype.context : options.context;
         widget.sounds = 'undefined' === typeof options.sounds ?
@@ -1459,10 +1457,11 @@
             if (root) root = root.body;
             if (!root) root = document.body;
         }
-        else if (root === W.getHeader() &&
-                 'undefined' === typeof options.panel) {
 
-            options.panel = w.panel || false;
+        if ('undefined' === typeof options.panel) {
+            if (root === W.getHeader()) options.panel = false;
+            else options.panel = false;
+            // TODO FIX options.panel | w.title
         }
 
         // Check if it is a object (new widget).
@@ -2063,7 +2062,7 @@
  * // TODO: add is...typing
  * // TODO: add bootstrap badge to count msg when collapsed
  * // TODO: check on data if message comes back
- * // TODO: add proper inline doc
+ * // TODO: highlight better incoming msg. Play sound?
  *
  * www.nodegame.org
  */
@@ -2118,6 +2117,8 @@
 
     Chat.title = 'Chat';
     Chat.className = 'chat';
+
+    Chat.panel = false;
 
     // ## Dependencies
 
@@ -2289,10 +2290,24 @@
      * The  options object can have the following attributes:
      *   - `receiverOnly`: If TRUE, no message can be sent
      *   - `chatEvent`: The event to fire when sending/receiving a message
+     *   - `useSubmitButton`: If TRUE, a submit button is added, otherwise
+     *        messages are sent by pressing ENTER. Default: TRUE on mobiles
+     *   - `storeMsgs`: If TRUE, a copy of every message is stored in a db
+     *        a local db
+     *   - `participants`: An array containing the ids of participants,
+     *        cannot be empty
+     *   - `initialMsg`: Initial message to be displayed as soon as the chat
+     *        is opened.
+     *   - `uncollapseOnMsg`: If TRUE, a minimized chat will automatically
+     *        open when receiving a msg. Default: FALSE.
+     *   - `printStartTime`: If TRUE, the initial time of the chat is
+     *        printed at the beginning of the chat. Default: FALSE.
+     *   - `printNames`: If TRUE, the names of the participants of the chat
+     *        is printed at the beginning of the chat. Default: FALSE.
      */
     Chat.prototype.init = function(options) {
         var tmp, i, rec, sender, that;
-        options = options || {};
+
         that = this;
 
         // Chat id.
@@ -2397,7 +2412,6 @@
         });
     };
 
-
     Chat.prototype.append = function() {
         var that, inputGroup, initialText;
 
@@ -2467,6 +2481,13 @@
         }
     };
 
+    /**
+     * ### Chat.readTextarea
+     *
+     * Reads the value of the textarea, trims it, and removes it from textarea
+     *
+     * @return {string} The current value in the textarea
+     */
     Chat.prototype.readTextarea = function() {
         var txt;
         txt = this.textarea.value;
@@ -2474,6 +2495,21 @@
         return txt.trim();
     };
 
+    /**
+     * ### Chat.writeMsg
+     *
+     * Writes (and formats) a message (or an event) in the message area
+     *
+     * Chat is scrolled up so that the message is last always on focus.
+     *
+     * @param {string} code A value indicating the the type of msg. Available:
+     *   'incoming', 'outgoing', and anything else.
+     * @param {string} data The content of the message
+     *
+     * @return {string} The current value in the textarea
+     *
+     * @see Chat.chatDiv
+     */
     Chat.prototype.writeMsg = function(code, data) {
         var c;
         c = (code === 'incoming' || code === 'outgoing') ? code : 'event';
@@ -2530,7 +2566,20 @@
         });
     };
 
-
+    /**
+     * ### Chat.handleMsg
+     *
+     * Checks a (incoming) message and takes some actions
+     *
+     * If chat is minimized, it maximizes it if option `uncollapseOnMsg`
+     * it TRUE; otherwise, it increments the stats for unread messages.
+     *
+     * @param {string} msg The content of the message
+     *
+     * @return {boolean} TRUE if the message is valid
+     *
+     * @see Chat.chatDiv
+     */
     Chat.prototype.handleMsg = function(msg) {
         var from, args;
         from = msg.from;
@@ -2541,9 +2590,9 @@
         if (this.isCollapsed()) {
             if (this.uncollapseOnMsg) {
                 this.uncollapse();
+                this.stats.unread = 0;
             }
             else {
-                // TODO: highlight better. Play sound?
                 this.setTitle('<strong>' + this.title + '</strong>');
                 this.stats.unread++;
             }
@@ -4834,10 +4883,12 @@
 
 /**
  * # ChoiceTable
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
+ *
+ * // TODO: register time for each current choice if selectMultiple is on?
  *
  * www.nodegame.org
  */
@@ -4849,7 +4900,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.3.0';
+    ChoiceTable.version = '1.3.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -4902,8 +4953,7 @@
          * The listener function
          */
         this.listener = function(e) {
-            var name, value, td, oldSelected;
-
+            var name, value, td;
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -4932,22 +4982,27 @@
             // One more click.
             that.numberOfClicks++;
 
-            // If only 1 selection allowed, remove selection from oldSelected.
-            if (!that.selectMultiple) {
-                oldSelected = that.selected;
-                if (oldSelected) J.removeClass(oldSelected, 'selected');
-
-                if (that.isChoiceCurrent(value)) {
-                    that.unsetCurrentChoice(value);
+            // Click on an already selected choice.
+            if (that.isChoiceCurrent(value)) {
+                that.unsetCurrentChoice(value);
+                J.removeClass(td, 'selected');
+            }
+            // Click on a new choice.
+            else {
+                that.setCurrentChoice(value);
+                J.addClass(td, 'selected');
+                
+                if (that.selectMultiple) {
+                    that.selected.push(td);
                 }
                 else {
-                    that.currentChoice = value;
-                    J.addClass(td, 'selected');
+                    // If only 1 selection allowed, remove old selection.
+                    if (that.selected) J.removeClass(that.selected, 'selected');
                     that.selected = td;
                 }
             }
 
-            // Remove any warning/error from form on click.
+            // Remove any warning/errors on click.
             if (that.isHighlighted()) that.unhighlight();
         };
 
@@ -5114,7 +5169,7 @@
         /**
          * ### ChoiceTable.selected
          *
-         * Currently selected cell/s
+         * Currently selected TD elements
          *
          * @see ChoiceTable.currentChoice
          */
@@ -5293,7 +5348,12 @@
         if ('undefined' === typeof options.selectMultiple) tmp = false;
         else tmp = !!options.selectMultiple;
         this.selectMultiple = tmp;
-
+        // Make an array for currentChoice and selected.
+        if (tmp) {
+            this.selected = [];
+            this.currentChoice = [];
+        }
+        
         // Option requiredChoice, if any.
         if ('number' === typeof options.requiredChoice) {
             this.requiredChoice = options.requiredChoice;
@@ -5775,8 +5835,9 @@
                 }
             }
             else {
-                throw new TypeError('ChoiceTable.setCorrectChoice: choices ' +
-                                    'must be non-empty array.');
+                throw new TypeError('ChoiceTable.setCorrectChoice: choice ' +
+                                    'must be non-empty array. Found: ' +
+                                    choice);
             }
         }
         this.correctChoice = choice;
@@ -6001,7 +6062,8 @@
         else {
             if ('string' !== typeof choice && 'number' !== typeof choice) {
                 throw new TypeError('ChoiceTable.unsetCurrentChoice: choice ' +
-                                    'must be string, number or undefined.');
+                                    'must be string, number or ' +
+                                    'undefined. Found: ' + choice);
             }
             i = -1, len = this.currentChoice.length;
             for ( ; ++i < len ; ) {
@@ -6029,7 +6091,7 @@
         }
         else if ('string' !== typeof choice) {
             throw new TypeError('ChoiceTable.isChoiceCurrent: choice ' +
-                                'must be string or number.');
+                                'must be string or number. Found: ' + choice);
         }
         if (!this.selectMultiple) {
             return this.currentChoice === choice;
@@ -6041,8 +6103,8 @@
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     };
 
     /**
@@ -8677,11 +8739,13 @@
     DisconnectBox.description =
         'Visually display current, previous and next stage of the game.';
 
-    DisconnectBox.title = 'Disconnect';
+    DisconnectBox.title = false;
+    DisconnectBox.panel = false;
     DisconnectBox.className = 'disconnectbox';
 
     DisconnectBox.texts = {
-        leave: 'Leave Experiment'
+        leave: 'Leave Experiment',
+        left: 'You Left'
     };
 
     // ## Dependencies
@@ -8712,12 +8776,16 @@
      * @see DisconnectBox.writeStage
      */
     DisconnectBox.prototype.append = function() {
-        this.disconnectButton = W.get('button', this.getText('leave'));
-        this.disconnectButton.className = 'btn btn-lg';
-        this.bodyDiv.appendChild(this.disconnectButton);
+        var that = this;
+        this.disconnectButton = W.add('button', this.bodyDiv, {
+            innerHTML: this.getText('leave'),
+            className: 'btn btn-lg'
+        });
 
         this.disconnectButton.onclick = function() {
+            that.disconnectButton.disabled = true;
             node.socket.disconnect();
+            that.disconnectButton.innerHTML = that.getText('left');
         };
     };
 
@@ -8726,12 +8794,15 @@
 
         this.ee = node.getCurrentEventEmitter();
         this.ee.on('SOCKET_DISCONNECT', function DBdiscon() {
-            console.log('DB got socket_diconnect');
-            that.disconnectButton.disabled = true;
+            // console.log('DB got socket_diconnect');
         });
 
         this.ee.on('SOCKET_CONNECT', function DBcon() {
-            console.log('DB got socket_connect');
+            // console.log('DB got socket_connect');
+            if (that.disconnectButton.disabled) {
+                that.disconnectButton.disabled = false;
+                that.disconnectButton.innerHTML = that.getText('leave');
+            }
         });
 
         this.on('destroyed', function() {

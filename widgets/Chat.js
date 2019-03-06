@@ -64,6 +64,8 @@
     Chat.title = 'Chat';
     Chat.className = 'chat';
 
+    Chat.panel = false;
+
     // ## Dependencies
 
     Chat.dependencies = {
