@@ -1,9 +1,11 @@
 /**
  * # ChoiceTable
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
+ *
+ * // TODO: register time for each current choice if selectMultiple is on?
  *
  * www.nodegame.org
  */
@@ -15,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.3.0';
+    ChoiceTable.version = '1.3.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -68,8 +70,7 @@
          * The listener function
          */
         this.listener = function(e) {
-            var name, value, td, oldSelected;
-
+            var name, value, td;
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -98,22 +99,27 @@
             // One more click.
             that.numberOfClicks++;
 
-            // If only 1 selection allowed, remove selection from oldSelected.
-            if (!that.selectMultiple) {
-                oldSelected = that.selected;
-                if (oldSelected) J.removeClass(oldSelected, 'selected');
+            // Click on an already selected choice.
+            if (that.isChoiceCurrent(value)) {
+                that.unsetCurrentChoice(value);
+                J.removeClass(td, 'selected');
+            }
+            // Click on a new choice.
+            else {
+                that.setCurrentChoice(value);
+                J.addClass(td, 'selected');
 
-                if (that.isChoiceCurrent(value)) {
-                    that.unsetCurrentChoice(value);
+                if (that.selectMultiple) {
+                    that.selected.push(td);
                 }
                 else {
-                    that.currentChoice = value;
-                    J.addClass(td, 'selected');
+                    // If only 1 selection allowed, remove old selection.
+                    if (that.selected) J.removeClass(that.selected, 'selected');
                     that.selected = td;
                 }
             }
 
-            // Remove any warning/error from form on click.
+            // Remove any warning/errors on click.
             if (that.isHighlighted()) that.unhighlight();
         };
 
@@ -280,7 +286,7 @@
         /**
          * ### ChoiceTable.selected
          *
-         * Currently selected cell/s
+         * Currently selected TD elements
          *
          * @see ChoiceTable.currentChoice
          */
@@ -459,6 +465,11 @@
         if ('undefined' === typeof options.selectMultiple) tmp = false;
         else tmp = !!options.selectMultiple;
         this.selectMultiple = tmp;
+        // Make an array for currentChoice and selected.
+        if (tmp) {
+            this.selected = [];
+            this.currentChoice = [];
+        }
 
         // Option requiredChoice, if any.
         if ('number' === typeof options.requiredChoice) {
@@ -941,8 +952,9 @@
                 }
             }
             else {
-                throw new TypeError('ChoiceTable.setCorrectChoice: choices ' +
-                                    'must be non-empty array.');
+                throw new TypeError('ChoiceTable.setCorrectChoice: choice ' +
+                                    'must be non-empty array. Found: ' +
+                                    choice);
             }
         }
         this.correctChoice = choice;
@@ -1167,7 +1179,8 @@
         else {
             if ('string' !== typeof choice && 'number' !== typeof choice) {
                 throw new TypeError('ChoiceTable.unsetCurrentChoice: choice ' +
-                                    'must be string, number or undefined.');
+                                    'must be string, number or ' +
+                                    'undefined. Found: ' + choice);
             }
             i = -1, len = this.currentChoice.length;
             for ( ; ++i < len ; ) {
@@ -1195,7 +1208,7 @@
         }
         else if ('string' !== typeof choice) {
             throw new TypeError('ChoiceTable.isChoiceCurrent: choice ' +
-                                'must be string or number.');
+                                'must be string or number. Found: ' + choice);
         }
         if (!this.selectMultiple) {
             return this.currentChoice === choice;
@@ -1207,8 +1220,8 @@
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     };
 
     /**
