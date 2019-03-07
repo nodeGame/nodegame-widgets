@@ -511,7 +511,9 @@
         for ( ; ++i < len ; ) {
             form = this.forms[i];
             obj.forms[form.id] = form.getValues(opts);
-            if (obj.forms[form.id].choice === null) {
+            if (obj.forms[form.id].choice === null ||
+                (form.selectMultiple && !obj.forms[form.id].choice.length)) {
+
                 obj.missValues.push(form.id);
             }
             if (opts.markAttempt && !obj.forms[form.id].isCorrect) {

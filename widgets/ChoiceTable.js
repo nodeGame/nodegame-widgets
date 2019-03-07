@@ -1406,20 +1406,23 @@
 
         this.attempts = [];
         this.numberOfClicks = 0;
-        this.currentChoice = null;
         this.timeCurrentChoice = null;
 
-        if (this.selected) {
-            if (!this.selectMultiple) {
+        if (this.selectMultiple) {
+            i = -1, len = this.selected.length;
+            for ( ; ++i < len ; ) {
+                J.removeClass(this.selected[i], 'selected');
+            }
+            this.selected = [];
+            this.currentChoice = [];
+
+        }
+        else {
+            if (this.selected) {
                 J.removeClass(this.selected, 'selected');
+                this.selected = null;
+                this.currentChoice = null;
             }
-            else {
-                i = -1, len = this.selected.length;
-                for ( ; ++i < len ; ) {
-                    J.removeClass(this.selected[i], 'selected');
-                }
-            }
-            this.selected = null;
         }
 
         if (this.textArea) this.textArea.value = '';
