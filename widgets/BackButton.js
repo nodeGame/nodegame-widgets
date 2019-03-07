@@ -5,6 +5,8 @@
  *
  * Creates a button that if pressed goes to the previous step
  *
+ * // TODO: check the changes to node.game.getProperty
+ *
  * www.nodegame.org
  */
 (function(node) {
@@ -170,19 +172,16 @@
         // Locks the back button in case of a timeout.
         node.on('PLAYING', function() {
             var prop, step;
-            // THIS DOES NOT GET CALLED!
             step = getPreviousStep(that);
-            prop = node.game.plot.getProperty(step, 'backbutton');
-            if (!step) {
-                that.disable();
-            }
-            if (prop === false || (prop && prop.enableOnPlaying === false)) {
+            // It might be enabled already, but we do it again.
+            if (step) that.enable();
+            // Check options.
+            prop = node.game.getProperty('backbutton');
+            if (!step || prop === false ||
+                (prop && prop.enableOnPlaying === false)) {
+
                 // It might be disabled already, but we do it again.
                 that.disable();
-            }
-            else {
-                // It might be enabled already, but we do it again.
-                that.enable();
             }
             if ('string' === typeof prop) that.button.value = prop;
             else if (prop && prop.text) that.button.value = prop.text;
