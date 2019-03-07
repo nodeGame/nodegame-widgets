@@ -1,6 +1,6 @@
 /**
  * # DoneButton
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed emits node.done()
@@ -15,11 +15,11 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.2';
+    DoneButton.version = '1.0.0';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
-    DoneButton.title = 'Done Button';
+    DoneButton.title = false;
     DoneButton.className = 'donebutton';
     DoneButton.texts.done = 'Done';
 
@@ -127,18 +127,9 @@
         }
         this.button.className = tmp;
 
-        this._setText = this.setText;
-        this.setText = function(text, value) {
-            this._setText(text, value);
-            this.button.value = value;
-        };
         // Button text.
-        if ('undefined' !== typeof options.text) {
-            this.setText('done', options.text);
-        }
-        else {
-            this.button.value = this.getText('done');
-        }
+        this.button.value = 'string' === typeof options.text ?
+            options.text : this.getText('done');
     };
 
     DoneButton.prototype.append = function() {
@@ -165,9 +156,8 @@
                 // It might be enabled already, but we do it again.
                 that.enable();
             }
-            if (prop && prop.text) {
-                that.button.value = prop.text;
-            }
+            if ('string' === typeof prop) that.button.value = prop;
+            else if (prop && prop.text) that.button.value = prop.text;
         });
     };
 
@@ -187,26 +177,6 @@
      */
     DoneButton.prototype.enable = function() {
         this.button.disabled = false;
-    };
-
-    /**
-     * ### DoneButton.setText
-     *
-     * Set the text for the done button
-     *
-     * @param {string} text Optional. The text of the button.
-     *   Default: DoneButton.text
-     */
-    DoneButton.prototype.setText = function(text) {
-        if ('undefined' === typeof text) {
-            text = DoneButton.text;
-        }
-        else if ('string' !== typeof text) {
-            throw new TypeError('DoneButton.setText: text must ' +
-                                'be string or undefined. Found: ' +
-                                typeof text);
-        }
-        this.button.value = text;
     };
 
 })(node);
