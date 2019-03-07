@@ -1,6 +1,6 @@
 /**
  * # WaitingRoom
- * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays the number of connected/required players to start a game
@@ -47,6 +47,22 @@
 
         // #### blinkTitle
         blinkTitle: 'GAME STARTS!',
+
+        // #### waitingForConf
+        waitingForConf: 'Waiting to receive data',
+
+        // #### executionMode
+        executionMode: function(w) {
+            var startDate;
+            if (w.executionMode === 'WAIT_FOR_N_PLAYERS') {
+                return 'Waiting for All Players to Connect: ';
+            }
+            if (w.executionMode === 'WAIT_FOR_DISPATCH') {
+                return 'Task will start soon. Please be patient.';
+            }
+            // TIMEOUT.
+            return 'Task will start at: <br>' + w.startDate;
+        },
 
         // #### disconnect
         disconnect: '<span style="color: red">You have been ' +
@@ -192,6 +208,13 @@
         this.waitTime = null;
 
         /**
+         * ### WaitingRoom.executionMode
+         *
+         * The execution mode.
+         */
+        this.executionMode = null;
+
+        /**
          * ### WaitingRoom.startDate
          *
          * The exact date and time when the game starts
@@ -206,13 +229,13 @@
         this.timeoutId = null;
 
         /**
-         * ### WaitingRoom.playerCountDiv
+         * ### WaitingRoom.execModeDiv
          *
          * Div containing the span for displaying the number of players
          *
          * @see WaitingRoom.playerCount
          */
-        this.playerCountDiv = null;
+        this.execModeDiv = null;
 
         /**
          * ### WaitingRoom.playerCount
@@ -348,6 +371,13 @@
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
                                 'Found: ' + conf);
         }
+
+        // It receives the TEXTS AND SOUNDS only first.
+        if (!conf.executionMode) return;
+
+        // TODO: check types and conditions?
+        this.executionMode = conf.executionMode;
+
         if (conf.onTimeout) {
             if ('function' !== typeof conf.onTimeout) {
                 throw new TypeError('WaitingRoom.init: conf.onTimeout must ' +
@@ -366,11 +396,10 @@
                                     'Found: ' + conf.waitTime);
             }
             this.waitTime = conf.waitTime;
-            this.startTimer();
         }
-        // TODO: check conditions?
+
         if (conf.startDate) {
-            this.setStartDate(conf.startDate);
+            this.startDate = new Date(conf.startDate).toString();
         }
 
         if (conf.poolSize) {
@@ -420,10 +449,17 @@
             this.disconnectIfNotSelected = false;
         }
 
+
         if (conf.playWithBotOption) this.playWithBotOption = true;
         else this.playWithBotOption = false;
         if (conf.selectTreatmentOption) this.selectTreatmentOption = true;
         else this.selectTreatmentOption = false;
+
+
+        // Display Exec Mode.
+        this.displayExecMode();
+
+        // Button for bots and treatments.
 
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
             // Closure to create button group.
@@ -434,7 +470,7 @@
                 btnGroup.className = 'btn-group';
 
                 var playBotBtn = document.createElement('input');
-                playBotBtn.className = 'btn btn-secondary btn-lg';
+                playBotBtn.className = 'btn btn-primary btn-lg';
                 playBotBtn.value = w.getText('playBot');
                 playBotBtn.id = 'bot_btn';
                 playBotBtn.type = 'button';
@@ -475,7 +511,7 @@
 
                     var ul = document.createElement('ul');
                     ul.className = 'dropdown-menu';
-                    ul.style = 'text-align: left';
+                    ul.style['text-align'] = 'left';
 
                     var li, a, t, liT1, liT2;
                     if (conf.availableTreatments) {
@@ -514,32 +550,31 @@
 
                     btnGroup.appendChild(btnGroupTreatments);
 
-                    // Variable toggled controls if the dropdown menu
-                    // is displayed (we are not using bootstrap js files)
+                    // We are not using bootstrap js files
                     // and we redo the job manually here.
-                    var toggled = false;
                     btnTreatment.onclick = function() {
-                        if (toggled) {
-                            ul.style = 'display: none';
-                            toggled = false;
+                        // When '' is hidden by bootstrap class.
+                        if (ul.style.display === '') {
+                            ul.style.display = 'block';
                         }
                         else {
-                            ul.style = 'display: block; text-align: left';
-                            toggled = true;
+                            ul.style.display = '';
                         }
                     };
 
                     ul.onclick = function(eventData) {
                         var t;
-                        ul.style = 'display: none';
-                        t = eventData.target.parentNode.id;
+                        t = eventData.target;
+                        // When '' is hidden by bootstrap class.
+                        ul.style.display = '';
+                        t = t.parentNode.id;
+                        // Clicked on description?
                         if (!t) t = eventData.target.parentNode.parentNode.id;
-                        console.log(eventData.target.parentNode);
-                        console.log(t);
+                        // Nothing relevant clicked (e.g., header).
+                        if (!t) return;
                         btnTreatment.innerHTML = t + ' ';
                         btnTreatment.appendChild(span);
                         w.selectedTreatment = t;
-                        toggled = false;
                     };
 
                     // Store Reference in widget.
@@ -551,6 +586,12 @@
 
             })(this);
         }
+
+        // Handle destroy.
+        this.on('destroyed', function() {
+            if (that.dots) that.dots.stop();
+            node.deregisterSetup('waitroom');
+        });
     };
 
     /**
@@ -623,7 +664,7 @@
     /**
      * ### WaitingRoom.updateDisplay
      *
-     * Displays the state of the waiting room on screen
+     * Displays the state of the waiting room on screen (player count)
      *
      * @see WaitingRoom.updateState
      */
@@ -651,39 +692,51 @@
         }
     };
 
-    WaitingRoom.prototype.append = function() {
-        this.playerCountDiv = document.createElement('div');
-        this.playerCountDiv.id = 'player-count-div';
+    /**
+     * ### WaitingRoom.displayExecMode
+     *
+     * Builds the basic layout of the execution mode
+     *
+     * @see WaitingRoom.executionMode
+     */
+    WaitingRoom.prototype.displayExecMode = function() {
+        this.bodyDiv.innerHTML = '';
 
-        this.playerCountDiv.appendChild(
-            document.createTextNode('Waiting for All Players to Connect: '));
+        this.execModeDiv = document.createElement('div');
+        this.execModeDiv.id = 'exec-mode-div';
 
+        this.execModeDiv.innerHTML = this.getText('executionMode');
+
+        // TODO: add only on some modes? Depending on settings?
         this.playerCount = document.createElement('p');
         this.playerCount.id = 'player-count';
-        this.playerCountDiv.appendChild(this.playerCount);
+        this.execModeDiv.appendChild(this.playerCount);
 
         this.playerCountTooHigh = document.createElement('div');
         this.playerCountTooHigh.style.display = 'none';
-        this.playerCountDiv.appendChild(this.playerCountTooHigh);
-
-        this.dots = W.getLoadingDots();
-        this.playerCountDiv.appendChild(this.dots.span);
-
-        this.bodyDiv.appendChild(this.playerCountDiv);
+        this.execModeDiv.appendChild(this.playerCountTooHigh);
 
         this.startDateDiv = document.createElement('div');
-        this.bodyDiv.appendChild(this.startDateDiv);
         this.startDateDiv.style.display= 'none';
+        this.execModeDiv.appendChild(this.startDateDiv);
+
+        this.dots = W.getLoadingDots();
+        this.execModeDiv.appendChild(this.dots.span);
+
+        this.bodyDiv.appendChild(this.execModeDiv);
 
         this.msgDiv = document.createElement('div');
         this.bodyDiv.appendChild(this.msgDiv);
 
-        if (this.startDate) {
-            this.setStartDate(this.startDate);
-        }
-        if (this.waitTime) {
-            this.startTimer();
-        }
+
+        // if (this.startDate) this.setStartDate(this.startDate);
+        if (this.waitTime) this.startTimer();
+
+    };
+
+    WaitingRoom.prototype.append = function() {
+        // Configuration will arrive soon.
+        this.bodyDiv.innerHTML = this.getText('waitingForConf');
     };
 
     WaitingRoom.prototype.listeners = function() {
@@ -697,14 +750,17 @@
                 return;
             }
 
-            // Sounds.
-            that.setSounds(conf.sounds);
-
-            // Texts.
-            that.setTexts(conf.texts);
-
-            // Configure all requirements.
-            that.init(conf);
+            // It receives 2 conf messages.
+            if (!conf.executionMode) {
+                // Sounds.
+                that.setSounds(conf.sounds);
+                // Texts.
+                that.setTexts(conf.texts);
+            }
+            else {
+                // Configure all requirements.
+                that.init(conf);
+            }
 
             return conf;
         });
@@ -793,12 +849,6 @@
         });
     };
 
-    WaitingRoom.prototype.setStartDate = function(startDate) {
-        this.startDate = new Date(startDate).toString();
-        this.startDateDiv.innerHTML = 'Game starts at: <br>' + this.startDate;
-        this.startDateDiv.style.display = '';
-    };
-
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
             node.info('waiting room: STOPPING TIMER');
@@ -861,11 +911,6 @@
                 frame.addEventListener('mouseover', onFrame, false);
             });
         }
-    };
-
-    WaitingRoom.prototype.destroy = function() {
-        if (this.dots) this.dots.stop();
-        node.deregisterSetup('waitroom');
     };
 
 })(node);

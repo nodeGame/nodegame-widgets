@@ -1,9 +1,14 @@
 /**
  * # Chat
- * Copyright(c) 2018 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
+ *
+ * // TODO: add is...typing
+ * // TODO: add bootstrap badge to count msg when collapsed
+ * // TODO: check on data if message comes back
+ * // TODO: highlight better incoming msg. Play sound?
  *
  * www.nodegame.org
  */
@@ -11,37 +16,55 @@
 
     "use strict";
 
+    var NDDB =  node.NDDB;
+
     node.widgets.register('Chat', Chat);
+
+    // ## Texts.
+
+    Chat.texts = {
+        outgoing: function(w, data) {
+            return data.msg;
+            // return '<span class="chat_msg_me">' + data.msg + '</span>';
+        },
+        incoming: function(w, data) {
+            var str;
+            str = '<span>';
+            if (w.recipientsIds.length > 1) {
+                str += '<span class="chat_id_other">' +
+                    (w.senderToNameMap[data.id] || data.id) + '</span>: ';
+            }
+            str += data.msg + '</span>';
+            return str;
+        },
+        quit: function(w, data) {
+            return (w.senderToNameMap[data.id] || data.id) + ' left the chat';
+        },
+        noMoreParticipants: function(w, data) {
+            return 'No active participant left. Chat disabled.';
+        },
+        // For both collapse and uncollapse.
+        collapse: function(w, data) {
+            return (w.senderToNameMap[data.id] || data.id) + ' ' +
+                (data.collapsed ? 'mini' : 'maxi') + 'mized the chat';
+        },
+        textareaPlaceholder: function(w) {
+            return w.useSubmitButton ? 'Type something' :
+                'Type something and press enter to send';
+        },
+        submitButton: 'Send'
+    };
 
     // ## Meta-data
 
     Chat.version = '1.0.0';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
-        'between players, or between players and the experimenter.';
+        'between players, or between players and the server.';
 
     Chat.title = 'Chat';
     Chat.className = 'chat';
 
-    // ### Chat.modes
-    //
-    // - MANY_TO_MANY: everybody can see all the messages, and it possible
-    //   to send private messages.
-    //
-    // - MANY_TO_ONE: everybody can see all the messages, private messages can
-    //   be received, but not sent.
-    //
-    // - ONE_TO_ONE: everybody sees only personal messages, private messages can
-    //   be received, but not sent. All messages are sent to the SERVER.
-    //
-    // - RECEIVER_ONLY: messages can only be received, but not sent.
-    //
-    Chat.modes = {
-        MANY_TO_MANY: 'MANY_TO_MANY',
-        MANY_TO_ONE: 'MANY_TO_ONE',
-        ONE_TO_ONE: 'ONE_TO_ONE',
-        RECEIVER_ONLY: 'RECEIVER_ONLY'
-    };
-
+    Chat.panel = false;
 
     // ## Dependencies
 
@@ -59,13 +82,79 @@
     function Chat() {
 
         /**
-         * ### Chat.mode
+         * ### Chat.chatEvent
          *
-         * Determines to mode of communication
+         * The suffix used to fire chat events
          *
-         * @see Chat.modes
+         * Default: 'CHAT'
          */
-        this.mode = null;
+        this.chatEvent = null;
+
+        /**
+         * ### Chat.stats
+         *
+         * Some basic statistics about message counts
+         */
+        this.stats = {
+            received: 0,
+            sent: 0,
+            unread: 0
+        };
+
+        /**
+         * ### Chat.submitButton
+         *
+         * Button to send a text to server
+         *
+         * @see Chat.useSubmitButton
+         */
+        this.submitButton = null;
+
+        /**
+         * ### Chat.useSubmitButton
+         *
+         * If TRUE, a button is added to send messages else ENTER sends msgs
+         *
+         * By default, this is TRUE on mobile devices.
+         *
+         * @see Chat.submitButton
+         * @see Chat.receiverOnly
+         */
+        this.useSubmitButton = null;
+
+        /**
+         * ### Chat.receiverOnly
+         *
+         * If TRUE, users cannot send messages (no textarea and submit button)
+         *
+         * @see Chat.textarea
+         */
+        this.receiverOnly = false;
+
+        /**
+         * ### Chat.storeMsgs
+         *
+         * If TRUE, a copy of sent and received messages is stored in db
+         *
+         * @see Chat.db
+         */
+        this.storeMsgs = false;
+
+        /**
+         * ### Chat.db
+         *
+         * An NDDB database for storing incoming and outgoing messages
+         *
+         * @see Chat.storeMsgs
+         */
+        this.db = null;
+
+        /**
+         * ### Chat.chatDiv
+         *
+         * The DIV wherein to display the chat
+         */
+        this.chatDiv = null;
 
         /**
          * ### Chat.textarea
@@ -75,69 +164,64 @@
         this.textarea = null;
 
         /**
-         * ### Chat.textareaId
+         * ### Chat.initialMsg
          *
-         * The id of the textarea
+         * An object with an initial msg and the id of sender (if not self)
+         *
+         * Example:
+         *
+         * ```
+         * {
+         *   id: '1234', // Optional, add only this is an 'incoming' msg.
+         *   msg: 'the text'
+         * }
          */
-        this.textareaId = null;
-
+        this.initialMsg = null;
 
         /**
-         * ### Chat.chat
+         * ### Chat.recipientsIds
          *
-         * The DIV wherein to display the chat
+         * Array of ids of current recipients of messages
          */
-        this.chat = null;
+        this.recipientsIds = null;
 
         /**
-         * ### Chat.chatId
+         * ### Chat.recipientsIdsQuitted
          *
-         * The id of the chat DIV
+         * Array of ids of  recipients that have previously quitted the chat
          */
-        this.chatId = null;
-
-
-        /**
-         * ### Chat.submit
-         *
-         * The submit button
-         */
-        this.submit = null;
+        this.recipientsIdsQuitted = null;
 
         /**
-         * ### Chat.submitId
+         * ### Chat.senderToNameMap
          *
-         * The id of the submit butten
+         * Map sender id (msg.from) to display name
+         *
+         * Note: The 'from' field of a message can be different
+         * from the 'to' field of its reply (e.g., for MONITOR)
          */
-        this.submitId = null;
+        this.senderToNameMap = null;
 
         /**
-         * ### Chat.submitText
+         * ### Chat.recipientToNameMap
          *
-         * The text on the submit button
+         * Map recipient id (msg.to) to display name
          */
-        this.submitText = null;
+        this.recipientToNameMap = null;
 
         /**
-         * ### Chat.chatEvent
+         * ### Chat.senderToRecipientMap
          *
-         * The event to fire when sending a message
+         * Map sender id (msg.from) to recipient id (msg.to)
          */
-        this.chatEvent = null;
+        this.senderToRecipientMap = null;
 
         /**
-         * ### Chat.displayName
+         * ### Chat.recipientToSenderMap
          *
-         * Function which displays the sender's name
+         * Map recipient id (msg.to) to sender id (msg.from)
          */
-        this.displayName = null;
-
-        /**
-         * ### Chat.recipient
-         *
-         * Object containing the value of the recipient of the message
-         */
-        this.recipient = { value: null };
+        this.recipientToSenderMap = null;
     }
 
     // ## Chat methods
@@ -150,177 +234,371 @@
      * @param {object} options Optional. Configuration options.
      *
      * The  options object can have the following attributes:
-     *   - `mode`: Determines to mode of communication
-     *   - `textareaId`: The id of the textarea
-     *   - `chatId`: The id of the chat DIV
-     *   - `submitId`: The id of the submit butten
-     *   - `submitText`: The text on the submit button
-     *   - `chatEvent`: The event to fire when sending a message
-     *   - `displayName`: Function which displays the sender's name
+     *   - `receiverOnly`: If TRUE, no message can be sent
+     *   - `chatEvent`: The event to fire when sending/receiving a message
+     *   - `useSubmitButton`: If TRUE, a submit button is added, otherwise
+     *        messages are sent by pressing ENTER. Default: TRUE on mobiles
+     *   - `storeMsgs`: If TRUE, a copy of every message is stored in a db
+     *        a local db
+     *   - `participants`: An array containing the ids of participants,
+     *        cannot be empty
+     *   - `initialMsg`: Initial message to be displayed as soon as the chat
+     *        is opened.
+     *   - `uncollapseOnMsg`: If TRUE, a minimized chat will automatically
+     *        open when receiving a msg. Default: FALSE.
+     *   - `printStartTime`: If TRUE, the initial time of the chat is
+     *        printed at the beginning of the chat. Default: FALSE.
+     *   - `printNames`: If TRUE, the names of the participants of the chat
+     *        is printed at the beginning of the chat. Default: FALSE.
      */
     Chat.prototype.init = function(options) {
-        var tmp, that;
-        options = options || {};
-
-        if ('undefined' === typeof options.mode) {
-            // Will be setup later.
-            options.mode = 'MANY_TO_MANY';
-        }
-        else if ('string' === typeof options.mode) {
-            switch(options.mode) {
-            case Chat.modes.RECEIVER_ONLY:
-                tmp = 'SERVER';
-                break;
-            case Chat.modes.MANY_TO_ONE:
-                tmp = 'ROOM';
-                break;
-            case Chat.modes.ONE_TO_ONE:
-                tmp = options.recipient;
-                if ('string' !== typeof tmp) {
-                    throw new TypeError('Chat.init: mode=ONE_TO_ONE, but ' +
-                                        'recipient is not string. Found: ' +
-                                        tmp);
-                }
-                if (options.recipientName) {
-                    if ('string' !== typeof options.recipientName) {
-                        throw new TypeError('Chat.init: recipientName must ' +
-                                            'be string or undefined. Found: ' +
-                                            tmp);
-                    }
-                    this.recipient.name = options.recipientName;
-                }
-                break;
-            case Chat.modes.MANY_TO_MANY:
-                break;
-            default:
-                throw new Error('Chat.init: options.mode is invalid: ' +
-                                options.mode);
-            }
-            this.recipient.value = tmp;
-        }
-        else {
-            throw new Error('Chat.init: options.mode must be string or ' +
-                            'undefined. Found: ' + options.mode);
-        }
-
-        this.mode = options.mode;
-
-        this.textareaId = options.textareaId || 'chat_textarea';
-        this.chatId = options.chatId || 'chat_chat';
-        this.submitId = options.submitId || 'chat_submit';
-
-        this.chatEvent = options.chatEvent || 'CHAT';
-        this.submitText = options.submitText || 'chat';
+        var tmp, i, rec, sender, that;
 
         that = this;
-        this.displayName = options.displayName || function(from) {
-            if (that.mode = Chat.modes.ONE_TO_ONE && that.recipient.name) {
-                return that.recipient.name;
+
+        // Chat id.
+        tmp = options.chatEvent;
+        if (tmp) {
+            if ('string' !== typeof tmp) {
+                throw new TypeError('Chat.init: chatEvent must be a non-' +
+                                    'empty string or undefined. Found: ' + tmp);
+            }
+            this.chatEvent = options.chatEvent;
+        }
+        else {
+            this.chatEvent = 'CHAT';
+        }
+
+        // Store.
+        this.storeMsgs = !!options.storeMsgs;
+        if (this.storeMsgs) {
+            if (!this.db) this.db = new NDDB();
+        }
+
+        // Button or send on Enter?.
+        this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
+            J.isMobileAgent() : !!options.useSubmitButton;
+
+        // Participants.
+        tmp = options.participants;
+        if (!J.isArray(tmp) || !tmp.length) {
+            throw new TypeError('Chat.init: participants must be ' +
+                                'a non-empty array. Found: ' + tmp);
+        }
+
+        // Build maps.
+        this.recipientsIds = new Array(tmp.length);
+        this.recipientsIdsQuitted = [];
+        this.recipientToSenderMap = {};
+        this.recipientToNameMap = {};
+        this.senderToNameMap = {};
+        this.senderToRecipientMap = {};
+
+        for (i = 0; i < tmp.length; i++) {
+            // Everything i the same if string.
+            if ('string' === typeof tmp[i]) {
+                this.recipientsIds[i] = tmp[i];
+                this.recipientToNameMap[tmp[i]] = tmp[i];
+                this.recipientToSenderMap[tmp[i]] = tmp[i];
+                this.senderToRecipientMap[tmp[i]] = tmp[i];
+                this.senderToNameMap[tmp[i]] = tmp[i];
+            }
+            // Sender may be different from receiver if object.
+            else if ('object' === typeof tmp[i]) {
+                rec = tmp[i].recipient;
+                sender = tmp[i].sender;
+                this.recipientsIds[i] = rec;
+                this.recipientToSenderMap[rec] = sender || rec;
+                this.recipientToNameMap[rec] = tmp[i].name || rec;
+                this.senderToRecipientMap[sender] = rec;
+                this.senderToNameMap[sender] = this.recipientToNameMap[rec];
             }
             else {
-                return from;
+                throw new TypeError('Chat.init: participants array must ' +
+                                    'contain string or object. Found: ' +
+                                    tmp[i]);
             }
-        };
+        }
+
+        // Other.
+        this.uncollapseOnMsg = options.uncollapseOnMsg || false;
+
+        this.printStartTime = options.printStartTime || false;
+        this.printNames = options.printNames || false;
+
+        if (options.initialMsg) {
+            if ('object' !== typeof options.initialMsg) {
+                throw new TypeError('Chat.init: initialMsg must be ' +
+                                    'object or undefined. Found: ' +
+                                    options.initialMsg);
+            }
+            this.initialMsg = options.initialMsg;
+        }
+
+        this.on('uncollapsed', function() {
+            // Make sure that we do not have the title highlighted any more.
+            that.setTitle(that.title);
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_COLLAPSE',
+                         that.recipientsIds, false);
+            }
+        });
+
+        this.on('collapsed', function() {
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_COLLAPSE',
+                         that.recipientsIds, true);
+            }
+        });
+
+        this.on('destroyed', function() {
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_QUIT', that.recipientsIds);
+            }
+        });
     };
 
-
     Chat.prototype.append = function() {
+        var that, inputGroup, initialText;
 
-        this.chat = W.get('div', this.chatId);
-        this.bodyDiv.appendChild(this.chat);
+        this.chatDiv = W.get('div', { className: 'chat_chat' });
+        this.bodyDiv.appendChild(this.chatDiv);
 
-        if (this.mode !== Chat.modes.RECEIVER_ONLY) {
+        if (!this.receiverOnly) {
+            that = this;
 
-            // Create buttons to send messages, if allowed.
-            this.submit = W.getEventButton(this.chatEvent,
-                                           this.submitText,
-                                           this.submitId);
-            this.submit.className = 'btn btn-sm btn-secondary';
-            this.textarea = W.get('textarea', this.textareaId);
-            // Append them.
-            W.writeln('', this.bodyDiv);
-            this.bodyDiv.appendChild(this.textarea);
-            W.writeln('', this.bodyDiv);
-            this.bodyDiv.appendChild(this.submit);
+            // Input group.
+            inputGroup = document.createElement('div');
+            inputGroup.className = 'chat_inputgroup';
 
-            // Add recipient selector, if requested.
-            if (this.mode === Chat.modes.MANY_TO_MANY) {
-                this.recipient = W.getRecipientSelector();
-                this.bodyDiv.appendChild(this.recipient);
+            this.textarea = W.get('textarea', {
+                className: 'chat_textarea form-control',
+                placeholder: this.getText('textareaPlaceholder')
+            });
+            inputGroup.appendChild(this.textarea);
+
+            if (this.useSubmitButton) {
+                this.submitButton = W.get('button', {
+                    className: 'btn-sm btn-info form-control chat_submit',
+                    innerHTML: this.getText('submitButton')
+                });
+                this.submitButton.onclick = function() {
+                    sendMsg(that);
+                };
+                inputGroup.appendChild(this.submitButton);
             }
+            else {
+                this.textarea.onkeydown = function(e) {
+                    e = e || window.event;
+                    if ((e.keyCode || e.which) === 13) sendMsg(that);
+                };
+            }
+
+            this.bodyDiv.appendChild(inputGroup);
+        }
+
+        if (this.printStartTime) {
+            W.add('div', this.chatDiv, {
+                innerHTML: Date(J.getDate()),
+                className: 'chat_event'
+            });
+            initialText = true;
+        }
+
+        if (this.printNames) {
+            W.add('div', this.chatDiv, {
+                className: 'chat_event',
+                innerHTML: 'Participants: ' +
+                    J.keys(this.senderToNameMap).join(', ')
+            });
+            initialText = true;
+        }
+
+        if (initialText) {
+            W.add('div', this.chatDiv, {
+                className: 'chat_event',
+                innerHTML: '&nbsp;'
+            });
+        }
+
+        if (this.initialMsg) {
+            this.writeMsg(this.initialMsg.id ? 'incoming' : 'outgoing',
+                          this.initialMsg);
         }
     };
 
-    Chat.prototype.readTA = function() {
+    /**
+     * ### Chat.readTextarea
+     *
+     * Reads the value of the textarea, trims it, and removes it from textarea
+     *
+     * @return {string} The current value in the textarea
+     */
+    Chat.prototype.readTextarea = function() {
         var txt;
         txt = this.textarea.value;
         this.textarea.value = '';
-        return txt;
+        return txt.trim();
     };
 
-    Chat.prototype.writeTA = function(string, args) {
-        J.sprintf(string, args, this.chat);
-        W.writeln('', this.chat);
-        this.chat.scrollTop = this.chat.scrollHeight;
+    /**
+     * ### Chat.writeMsg
+     *
+     * Writes (and formats) a message (or an event) in the message area
+     *
+     * Chat is scrolled up so that the message is last always on focus.
+     *
+     * @param {string} code A value indicating the the type of msg. Available:
+     *   'incoming', 'outgoing', and anything else.
+     * @param {string} data The content of the message
+     *
+     * @return {string} The current value in the textarea
+     *
+     * @see Chat.chatDiv
+     */
+    Chat.prototype.writeMsg = function(code, data) {
+        var c;
+        c = (code === 'incoming' || code === 'outgoing') ? code : 'event';
+        W.add('div', this.chatDiv, {
+            innerHTML: this.getText(code, data),
+            className: 'chat_msg chat_msg_' + c
+        });
+        this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     };
 
     Chat.prototype.listeners = function() {
         var that = this;
 
-        node.on(this.chatEvent, function() {
-            var msg, to, args;
-
-            msg = that.readTA();
-            if (!msg) return;
-
-            to = that.recipient.value;
-            args = {
-                '%s': {
-                    'class': 'chat_me'
-                },
-                '%msg': {
-                    'class': 'chat_msg'
-                },
-                '!txt': msg,
-                '!to': to
-            };
-            that.writeTA('%sMe -> !to%s: %msg!txt%msg', args);
-            node.say(that.chatEvent, to, msg.trim());
+        node.on.data(this.chatEvent, function(msg) {
+            if (!that.handleMsg(msg)) return;
+            that.stats.received++;
+            // Store message if so requested.
+            if (that.storeMsgs) {
+                that.db.insert({
+                    from: msg.from,
+                    text: msg.data,
+                    time: node.timer.getTimeSince('step'),
+                    timestamp: J.now()
+                });
+            }
+            that.writeMsg('incoming', { msg: msg.data, id: msg.from });
         });
 
-        if (this.mode === Chat.modes.MANY_TO_MANY) {
-            node.on('UPDATED_PLIST', function() {
-                W.populateRecipientSelector(that.recipient,
-                    node.game.pl.fetch());
-            });
-        }
+        node.on.data(this.chatEvent + '_QUIT', function(msg) {
+            var i, len, rec;
+            if (!that.handleMsg(msg)) return;
+            that.writeMsg('quit', { id: msg.from });
+            len = that.recipientsIds.length;
+            for ( i = 0 ; i < len ; i++) {
+                if (that.recipientsIds[i] ===
+                    that.senderToRecipientMap[msg.from]) {
 
-        node.on.data(this.chatEvent, function(msg) {
-            var from, args;
-            if (msg.from === node.player.id || msg.from === node.player.sid) {
-                return;
-            }
+                    rec = that.recipientsIds.splice(i, 1);
+                    that.recipientsIdsQuitted.push(rec);
 
-            if (this.mode === Chat.modes.ONE_TO_ONE) {
-                if (msg.from === this.recipient.value) {
-                    return;
+                    if (that.recipientsIds.length === 0) {
+                        that.writeMsg('noMoreParticipants');
+                        that.disable();
+                    }
+                    break;
                 }
             }
+            node.warn('Chat: participant quitted not found: ' + msg.from);
+        });
 
-            from = that.displayName(msg.from);
-            args = {
-                '%s': {
-                    'class': 'chat_others'
-                },
-                '%msg': {
-                    'class': 'chat_msg'
-                },
-                '!txt': msg.data,
-                '!from': from
-            };
-
-            that.writeTA('%s!from%s: %msg!txt%msg', args);
+        node.on.data(this.chatEvent + '_COLLAPSE', function(msg) {
+            if (!that.handleMsg(msg)) return;
+            that.writeMsg('collapse', { id: msg.from, collapsed: msg.data});
         });
     };
+
+    /**
+     * ### Chat.handleMsg
+     *
+     * Checks a (incoming) message and takes some actions
+     *
+     * If chat is minimized, it maximizes it if option `uncollapseOnMsg`
+     * it TRUE; otherwise, it increments the stats for unread messages.
+     *
+     * @param {string} msg The content of the message
+     *
+     * @return {boolean} TRUE if the message is valid
+     *
+     * @see Chat.chatDiv
+     */
+    Chat.prototype.handleMsg = function(msg) {
+        var from, args;
+        from = msg.from;
+        if (from === node.player.id || from === node.player.sid) {
+            node.warn('Chat: your own message came back: ' + msg.id);
+            return false;
+        }
+        if (this.isCollapsed()) {
+            if (this.uncollapseOnMsg) {
+                this.uncollapse();
+                this.stats.unread = 0;
+            }
+            else {
+                this.setTitle('<strong>' + this.title + '</strong>');
+                this.stats.unread++;
+            }
+        }
+        return true;
+    };
+
+    Chat.prototype.disable = function() {
+        if (this.submitButton) this.submitButton.disabled = true;
+        this.textarea.disabled = true;
+        this.disabled = true;
+    };
+
+    Chat.prototype.enable = function() {
+        if (this.submitButton) this.submitButton.disabled = false;
+        this.textarea.disabled = false;
+        this.disabled = false;
+    };
+
+    Chat.prototype.getValues = function() {
+        var out;
+        out = {
+            participants: this.participants,
+            totSent: this.stats.sent,
+            totReceived: this.stats.received,
+            totUnread: this.stats.unread,
+            initialMsg: this.initialMsg
+        };
+        if (this.db) out.msgs = db.fetch();
+        return out;
+    };
+
+    // ## Helper functions.
+
+    // ### sendMsg
+    // Reads the textarea and delivers the msg to the server.
+    function sendMsg(that) {
+        var msg, to, ids;
+
+        // No msg sent.
+        if (that.isDisabled()) return;
+
+        msg = that.readTextarea();
+
+        // Move cursor at the beginning.
+        if (msg === '') {
+            node.warn('Chat: message has no text, not sent.');
+            return;
+        }
+        // Simplify things, if there is only one recipient.
+        ids = that.recipientsIds;
+        if (ids.length === 0) {
+            node.warn('Chat: empty recipient list, message not sent.');
+            return;
+        }
+        to = ids.length === 1 ? ids[0] : ids;
+        that.writeMsg('outgoing', { msg: msg }); // to not used now.
+        node.say(that.chatEvent, to, msg);
+        // Make sure the cursor goes back to top.
+        setTimeout(function() { that.textarea.value = ''; });
+    }
 
 })(node);

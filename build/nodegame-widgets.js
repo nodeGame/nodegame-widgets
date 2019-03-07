@@ -1,6 +1,6 @@
 /**
  * # Widget
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Prototype of a widget class
@@ -17,6 +17,7 @@
     "use strict";
 
     var J = node.JSUS;
+    var NDDB = node.NDDB;
 
     node.Widget = Widget;
 
@@ -155,13 +156,86 @@
     };
 
     /**
+     * ### Widget.isHighlighted
+     *
+     * Returns TRUE if widget is currently docked
+     *
+     * @return {boolean} TRUE, if widget is currently docked
+     */
+    Widget.prototype.isDocked = function() {
+        return !!this.docked;
+    };
+
+    /**
+     * ### Widget.collapse
+     *
+     * Collapses the widget,  (hides the body and footer)
+     *
+     * Only, if it was previously appended to DOM
+     *
+     * @see Widget.uncollapse
+     * @see Widget.isCollapsed
+     */
+    Widget.prototype.collapse = function() {
+        if (!this.panelDiv) return;
+        this.bodyDiv.style.display = 'none';
+        this.collapsed = true;
+        if (this.collapseButton) {
+            this.collapseButton.src = '/images/maximize_small2.png';
+            this.collapseButton.title = 'Maximize';
+        }
+        if (this.footer) this.footer.style.display = 'none';
+        // Move into collapse target, if one is specified.
+        if (this.collapseTarget) this.collapseTarget.appendChild(this.panelDiv);
+        this.emit('collapsed');
+    };
+
+    /**
+     * ### Widget.uncollapse
+     *
+     * Uncollapses the widget (shows the body and footer)
+     *
+     * Only, if it was previously appended to DOM
+     *
+     * @see Widget.collapse
+     * @see Widget.isCollapsed
+     */
+    Widget.prototype.uncollapse = function() {
+        if (!this.panelDiv) return;
+        if (this.collapseTarget) {
+            this.originalRoot.appendChild(this.panelDiv);
+        }
+        this.bodyDiv.style.display = '';
+        this.collapsed = false;
+        if (this.collapseButton) {
+            this.collapseButton.src = '/images/maximize_small.png';
+            this.collapseButton.title = 'Minimize';
+        }
+        if (this.footer) this.footer.style.display = '';
+        this.emit('uncollapsed');
+    };
+
+    /**
+     * ### Widget.isCollapsed
+     *
+     * Returns TRUE if widget is currently collapsed
+     *
+     * @return {boolean} TRUE, if widget is currently collapsed
+     */
+    Widget.prototype.isCollapsed = function() {
+        return !!this.collapsed;
+    };
+
+    /**
      * ### Widget.enabled
      *
      * Enables the widget
      *
      * An enabled widget allows the user to interact with it
      */
-    Widget.prototype.enable = function() {};
+    Widget.prototype.enable = function() {
+        this.disabled = false;
+    };
 
     /**
      * ### Widget.disable
@@ -170,7 +244,9 @@
      *
      * A disabled widget is still visible, but user cannot interact with it
      */
-    Widget.prototype.disable = function() {};
+    Widget.prototype.disable = function() {
+        this.disabled = true;
+    };
 
     /**
      * ### Widget.isDisabled
@@ -198,16 +274,18 @@
      * Sets the 'display' property of `panelDiv` to 'none'
      *
      * @see Widget.show
+     * @see Widget.toggle
      */
     Widget.prototype.hide = function() {
         if (!this.panelDiv) return;
         this.panelDiv.style.display = 'none';
+        this.hidden = true;
     };
 
     /**
      * ### Widget.show
      *
-     * Show the widget, if it was previously appended and hidden
+     * Shows the widget, if it was previously appended and hidden
      *
      * Sets the 'display' property of `panelDiv` to ''
      *
@@ -215,10 +293,12 @@
      *    property. Default: ''
      *
      * @see Widget.hide
+     * @see Widget.toggle
      */
     Widget.prototype.show = function(display) {
         if (this.panelDiv && this.panelDiv.style.display === 'none') {
             this.panelDiv.style.display = display || '';
+            this.hidden = false;
         }
     };
 
@@ -234,12 +314,20 @@
      */
     Widget.prototype.toggle = function(display) {
         if (!this.panelDiv) return;
-        if (this.panelDiv.style.display === 'none') {
-            this.panelDiv.style.display = display || '';
-        }
-        else {
-            this.panelDiv.style.display = 'none';
-        }
+        if (this.hidden()) this.show();
+        else this.hide();
+    };
+
+    /**
+     * ### Widget.isHidden
+     *
+     * TRUE if widget is hidden or not yet appended
+     *
+     * @return {boolean} TRUE if widget is hidden, or if it was not
+     *   appended to the DOM yet
+     */
+    Widget.prototype.isHidden = function() {
+        return !!this.hidden;
     };
 
     /**
@@ -312,6 +400,37 @@
                 throw new TypeError(J.funcName(this.constructor) +
                                     '.setTitle: title must be string, ' +
                                     'HTML element or falsy. Found: ' + title);
+            }
+            if (this.collapsible) {
+                // Generates a button that hides the body of the panel.
+                (function(that) {
+                    var link, img;
+                    link = document.createElement('span');
+                    link.className = 'panel-collapse-link';
+                    img = document.createElement('img');
+                    img.src = '/images/minimize_small.png';
+                    link.appendChild(img);
+                    link.onclick = function() {
+                        if (that.isCollapsed()) that.uncollapse();
+                        else that.collapse();
+                    };
+                    that.headingDiv.appendChild(link);
+                })(this);
+            }
+            if (this.closable) {
+                (function(that) {
+                    var link, img;
+                    link = document.createElement('span');
+                    link.className = 'panel-collapse-link';
+                    // link.style['margin-right'] = '8px';
+                    img = document.createElement('img');
+                    img.src = '/images/close_small.png';
+                    link.appendChild(img);
+                    link.onclick = function() {
+                        that.destroy();
+                    };
+                    that.headingDiv.appendChild(link);
+                })(this);
             }
         }
     };
@@ -436,6 +555,18 @@
     Widget.prototype.removeFrame = function() {
         if (this.panelDiv) W.removeClass(this.panelDiv, 'panel-[a-z]*');
         if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
+    };
+
+
+    /**
+     * ### Widget.isAppended
+     *
+     * Returns TRUE if widget was appended to DOM (using Widget API)
+     *
+     * @return {boolean} TRUE, if node.widgets.append was called
+     */
+    Widget.prototype.isAppended = function() {
+        return this.appended;
     };
 
     /**
@@ -642,6 +773,64 @@
                               + '.getAllTexts', undefined, param);
     };
 
+    // ## Event-Emitter methods borrowed from NDDB
+
+    /**
+     * ### Widget.on
+     *
+     * Registers an event listener for the widget
+     *
+     * @see NDDB.off
+     */
+    Widget.prototype.on = function() {
+        NDDB.prototype.on.apply(this, arguments);
+    };
+
+    /**
+     * ### Widget.off
+     *
+     * Removes and event listener for the widget
+     *
+     * @see NDDB.off
+     */
+    Widget.prototype.off = function() {
+        NDDB.prototype.off.apply(this, arguments);
+    };
+
+    /**
+     * ### Widget.emit
+     *
+     * Emits an event within the widget
+     *
+     * @see NDDB.emit
+     */
+    Widget.prototype.emit = function() {
+        NDDB.prototype.emit.apply(this, arguments);
+    };
+
+    /**
+     * ### Widget.throwErr
+     *
+     * Get the name of the actual widget and throws the error
+     *
+     * It does **not** perform type checking on itw own input parameters.
+     *
+     * @param {string} type Optional. The error type, e.g. 'TypeError'.
+     *   Default, 'Error'
+     * @param {string} method Optional. The name of the method
+     * @param {string|object} err Optional. The error. Default, 'generic error'
+     *
+     * @see NDDB.throwErr
+     */
+    Widget.prototype.throwErr = function(type, method, err) {
+        var errMsg;
+        errMsg = J.funcName(this.constructor) + '.' + method + ': ';
+        if ('object' === typeof err) errMsg += err.stack || err;
+        else if ('string' === typeof err) errMsg += err;
+        if (type === 'TypeError') throw new TypeError(errMsg);
+        throw new Error(errMsg);
+    };
+
     // ## Helper methods.
 
     /**
@@ -676,7 +865,7 @@
             res = res(that, param);
             if ('string' !== typeof res) {
                 throw new TypeError(method + ': cb "' + name +
-                                    'did not return a string. Found: ' + res);
+                                    ' did not return a string. Found: ' + res);
             }
         }
         return res;
@@ -790,7 +979,7 @@
 
 /**
  * # Widgets
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Helper class to interact with nodeGame widgets
@@ -800,6 +989,8 @@
 (function(window, node) {
 
     "use strict";
+
+    var NDDB = window.NDDB;
 
     // ## Widgets constructor
 
@@ -834,10 +1025,37 @@
          */
         this.lastAppended = null;
 
+        /**
+         * ### Widgets.docked
+         *
+         * List of docked widgets
+         */
+        this.docked = [];
+
+        /**
+         * ### Widgets.dockedHidden
+         *
+         * List of hidden docked widgets (cause not enough space on page)
+         */
+        this.dockedHidden = [];
+
+        /**
+         * ### Widgets.boxSelector
+         *
+         * A box selector widget containing hidden docked widgets
+         */
+        this.boxSelector = null
+
+        /**
+         * ### Widgets.collapseTarget
+         *
+         * Collapsed widgets are by default moved inside element
+         */
+        this.collapseTarget = null;
 
         that = this;
         node.registerSetup('widgets', function(conf) {
-            var name, root;
+            var name, root, collapseTarget;
             if (!conf) return;
 
             // Add new widgets.
@@ -850,9 +1068,7 @@
             }
 
             // Destroy all existing widgets.
-            if (conf.destroyAll) {
-                that.destroyAll();
-            }
+            if (conf.destroyAll) that.destroyAll();
 
             // Append existing widgets.
             if (conf.append) {
@@ -867,7 +1083,7 @@
                             root = W.getElementById(root);
                         }
                         if (!root) root = W.getScreen();
-                        
+
                         if (!root) {
                             node.warn('setup widgets: could not find a root ' +
                                       'for widget ' + name + '. Requested: ' +
@@ -877,6 +1093,24 @@
                             that.append(name, root, conf.append[name]);
                         }
                     }
+                }
+            }
+
+            if (conf.collapseTarget) {
+                if ('function' === typeof conf.collapseTarget) {
+                    collapseTarget = conf.collapseTarget();
+                }
+                else if ('string' === typeof conf.collapseTarget) {
+                    collapseTarget = W.getElementById(conf.collapseTarget);
+                }
+                else if (J.isElement(conf.collapseTarget)) {
+                    collapseTarget = conf.collapseTarget;
+                }
+                if (!collapseTarget) {
+                    node.warn('setup widgets: could not find collapse target.');
+                }
+                else {
+                    that.collapseTarget = collapseTarget;
                 }
             }
 
@@ -942,9 +1176,15 @@
      *   - className: as specified by the user or as found in the prototype
      *   - id: user-defined id, if specified in options
      *   - wid: random unique widget id
+     *   - hooks: object containing event listeners
+     *   - emit:
      *   - disabled: boolean flag indicating the widget state, set to FALSE
      *   - highlighted: boolean flag indicating whether the panelDiv is
      *        highlighted, set to FALSE
+     *   - collapsible: boolean flag, TRUE if the widget can be collapsed
+     *        and a button to hide body is added to the header
+     *   - collapsed: boolan flag, TRUE if widget is collapsed (body hidden)
+     *   - closable: boolean flag, TRUE if the widget can be closed (destroyed)
      *
      * Calls the `listeners` method of the widget. Any event listener
      * registered here will be automatically removed when the widget
@@ -955,10 +1195,11 @@
      * A `.destroy` method is added to the widget that perform the
      * following operations:
      *
-     *   - calls original widget.destroy method, if defined,
      *   - removes the widget from DOM (if it was appended),
      *   - removes listeners defined during the creation,
-     *   - and remove the widget from Widget.instances
+     *   - and remove the widget from Widget.instances,
+     *   - invoke the event 'destroyed'.
+     *
      *
      * Finally a reference to the widget is kept in `Widgets.instances`.
      *
@@ -974,7 +1215,7 @@
      */
     Widgets.prototype.get = function(widgetName, options) {
         var WidgetPrototype, widget;
-        var changes, origDestroy;
+        var changes;
         var that;
         if ('string' !== typeof widgetName) {
             throw new TypeError('Widgets.get: widgetName must be string.' +
@@ -993,7 +1234,7 @@
         WidgetPrototype = J.getNestedValue(widgetName, this.widgets);
 
         if (!WidgetPrototype) {
-            throw new Error('Widgets.get: ' + widgetName + ' not found.');
+            throw new Error('Widgets.get: ' + widgetName + ' not found');
         }
 
         node.info('creating widget ' + widgetName  +
@@ -1001,20 +1242,11 @@
 
         if (!this.checkDependencies(WidgetPrototype)) {
             throw new Error('Widgets.get: ' + widgetName + ' has unmet ' +
-                            'dependencies.');
-        }
-
-        // Add default properties to the user options.
-        if (WidgetPrototype.defaults) {
-            J.mixout(options, J.clone(WidgetPrototype.defaults));
+                            'dependencies');
         }
 
         // Create widget.
         widget = new WidgetPrototype(options);
-
-        // TODO: check do we need this?
-        // Re-inject defaults.
-        // widget.defaults = options;
 
         // Set ID.
         if ('undefined' !== typeof options.id) {
@@ -1032,17 +1264,41 @@
         // Set prototype values or options values.
         widget.title = 'undefined' === typeof options.title ?
             WidgetPrototype.title : options.title;
+        widget.panel = 'undefined' === typeof options.panel ?
+            WidgetPrototype.panel : options.panel;
         widget.footer = 'undefined' === typeof options.footer ?
             WidgetPrototype.footer : options.footer;
-        widget.className = 'undefined' === typeof options.className ?
-            WidgetPrototype.className : options.className;
+        widget.className = WidgetPrototype.className;
+        if (J.isArray(options.className)) {
+            widget.className += ' ' + options.className.join(' ');
+        }
+        else if ('string' === typeof options.className) {
+            widget.className += ' ' + options.className;
+        }
+        else if ('undefined' !== typeof options.className) {
+            throw new TypeError('widgets.append: className must be array, ' +
+                                'string, or undefined. Found: ' +
+                                options.className);
+        }
         widget.context = 'undefined' === typeof options.context ?
             WidgetPrototype.context : options.context;
         widget.sounds = 'undefined' === typeof options.sounds ?
             WidgetPrototype.sounds : options.sounds;
         widget.texts = 'undefined' === typeof options.texts ?
             WidgetPrototype.texts : options.texts;
-
+        widget.collapsible = options.collapsible || false;
+        widget.closable = options.closable || false;
+        widget.collapseTarget =
+            options.collapseTarget || this.collapseTarget || null;
+        widget.hooks = {
+            hidden: [],
+            shown: [],
+            collapsed: [],
+            uncollapsed: [],
+            disabled: [],
+            undisabled: [],
+            destroyed: []
+        };
 
         // Fixed properties.
 
@@ -1050,10 +1306,16 @@
         widget.widgetName = widgetName;
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
+        // Add appended.
+        widget.appended = false;
         // Add enabled.
         widget.disabled = null;
         // Add highlighted.
         widget.highlighted = null;
+        // Add collapsed.
+        widget.collapsed = null;
+        // Add hidden.
+        widget.hidden = null;
 
         // Call init.
         widget.init(options);
@@ -1070,25 +1332,23 @@
             node.events.setRecordChanges(false);
         }
 
-        origDestroy = widget.destroy;
-
         // If any listener was added or removed, the original situation will
         // be restored when the widget is destroyed.
         // The widget is also automatically removed from parent.
         widget.destroy = function() {
             var i, len, ee, eeName;
 
-            try {
-                // Call original function.
-                if ('function' === typeof origDestroy) origDestroy.call(widget);
-                // Remove the widget's div from its parent.
-                if (widget.panelDiv && widget.panelDiv.parentNode) {
-                    widget.panelDiv.parentNode.removeChild(widget.panelDiv);
+            (function() {
+                try {
+                    // Remove the widget's div from its parent.
+                    if (widget.panelDiv && widget.panelDiv.parentNode) {
+                        widget.panelDiv.parentNode.removeChild(widget.panelDiv);
+                    }
                 }
-            }
-            catch(e) {
-                node.warn(widgetName + '.destroy: error caught. ' + e + '.');
-            }
+                catch(e) {
+                    node.warn(widgetName + '.destroy: error caught: ' + e);
+                }
+            })();
 
             if (changes) {
                 for (eeName in changes) {
@@ -1116,6 +1376,17 @@
                     break;
                 }
             }
+
+            // Remove from lastAppended.
+            if (this.lastAppended && this.lastAppended.wid === widget.wid) {
+                node.warn('node.widgets.lastAppended destroyed.');
+                this.lastAppended = null;
+            }
+
+            // Remove from docked.
+            if (this.docked) closeDocked(widget.wid, false);
+
+            this.emit('destroyed');
         };
 
         // Store widget instance (e.g. used for destruction).
@@ -1150,7 +1421,8 @@
      * @see Widgets.get
      */
     Widgets.prototype.append = function(w, root, options) {
-        var tmp;
+        var tmp, lastDocked, right;
+        var dockedMargin;
 
         if ('string' !== typeof w && 'object' !== typeof w) {
             throw new TypeError('Widgets.append: w must be string or object. ' +
@@ -1175,10 +1447,9 @@
             if (root) root = root.body;
             if (!root) root = document.body;
         }
-        else if (root === W.getHeader() &&
-                 'undefined' === typeof options.panel) {
 
-            options.panel = false;
+        if ('undefined' === typeof options.panel) {
+            if (root === W.getHeader()) options.panel = false;
         }
 
         // Check if it is a object (new widget).
@@ -1187,11 +1458,21 @@
         if ('string' === typeof w) w = this.get(w, options);
 
         // Add panelDiv (with or without panel).
-        tmp = options.panel === false ?
-            [ 'ng_widget',  'no-panel', w.className ] :
-            [ 'ng_widget', 'panel', 'panel-default', w.className ];
+        tmp = {
+            className: options.panel === false ?
+                [ 'ng_widget',  'no-panel', w.className ] :
+                [ 'ng_widget', 'panel', 'panel-default', w.className ]
+        };
 
-        w.panelDiv = W.append('div', root, { className: tmp });
+        // Dock it.
+        if (options.docked) {
+            tmp.className.push('docked');
+            this.docked.push(w);
+            w.docked = true;
+        }
+
+        // Add div inside widget.
+        w.panelDiv = W.get('div', tmp);
 
         // Optionally add title (and div).
         if (options.title !== false && w.title) {
@@ -1217,7 +1498,18 @@
         // User listeners.
         // attachListeners(w);
 
+        // Be hidden, if requested.
+        if (options.hidden) w.hide();
+
+        root.appendChild(w.panelDiv);
+
+        w.originalRoot = root;
+
         w.append();
+        w.appended = true;
+
+        // Make sure the distance from the right side is correct.
+        if (w.docked) setRightStyle(w);
 
         // Store reference of last appended widget.
         this.lastAppended = w;
@@ -1378,11 +1670,110 @@
 //     }
 
     function checkDepErrMsg(w, d) {
-        var name = w.name || w.id;// || w.toString();
+        var name = w.name || w.id; // || w.toString();
         node.err(d + ' not found. ' + name + ' cannot be loaded.');
     }
 
-    //Expose Widgets to the global object.
+    // ### closeDocked
+    //
+    // Shifts docked widgets on page and remove a widget from the docked list
+    //
+    // @param {string} wid The widget id
+    // @param {boolean} remove TRUE, if widget should be removed from
+    //    docked list. Default: FALSE.
+    //
+    // @return {boolean} TRUE if a widget with given wid was found
+    function closeDocked(wid, hide) {
+        var d, i, len, width, closed;
+        d = node.widgets.docked;
+        len = d.length;
+        for (i = 0; i < len; i++) {
+            if (width) {
+                d[i].panelDiv.style.right =
+                    (getPxNum(d[i].panelDiv.style.right) - width) + 'px';
+            }
+            else if (d[i].wid === wid) {
+                width = d[i].dockedOffsetWidth;
+                // Remove from docked list.
+                closed = node.widgets.docked.splice(i, 1)[0];
+                if (hide) {
+                    node.widgets.dockedHidden.push(closed);
+                    closed.hide();
+
+                    if (!node.widgets.boxSelector) {
+                        node.widgets.boxSelector =
+                            node.widgets.append('BoxSelector', document.body, {
+                                className: 'docked-left',
+                                getId: function(i) { return i.wid; },
+                                getText: function(i) { return i.title; },
+                                onclick: function(i, id) {
+                                    i.show();
+                                    // First add back to docked list,
+                                    // then set right style.
+                                    node.widgets.docked.push(i);
+                                    setRightStyle(i);
+                                    this.removeItem(id);
+                                    if (this.items.length === 0) {
+                                        this.destroy();
+                                        node.widgets.boxSelector = null;
+                                    }
+                                },
+                            });
+
+                    }
+                    node.widgets.boxSelector.addItem(closed);
+                }
+                // Decrement len and i.
+                len--;
+                i--;
+            }
+        }
+        return !!width;
+    }
+
+    function setRightStyle(w) {
+        var dockedMargin, safeMargin;
+        var lastDocked, right, ws, tmp;
+
+        safeMargin = 200;
+        dockedMargin = 20;
+
+        ws = node.widgets;
+
+        right = 0;
+        // The widget w has been already added to the docked list.
+        if (ws.docked.length > 1) {
+            lastDocked = ws.docked[(ws.docked.length - 2)];
+            right = getPxNum(lastDocked.panelDiv.style.right);
+            right += lastDocked.panelDiv.offsetWidth;
+        }
+        right += dockedMargin;
+
+        w.panelDiv.style.right = (right + "px");
+
+        // Check if there is enough space on page?
+        tmp = 0;
+        right += w.panelDiv.offsetWidth + safeMargin;
+        while (ws.docked.length > 1 &&
+               right > window.innerWidth &&
+               tmp < (ws.docked.length - 1)) {
+
+            // Make some space...
+            // right -= ws.docked[tmp].dockedOffsetWidth;
+            closeDocked(ws.docked[tmp].wid, true);
+            tmp++;
+        }
+        // Store final offsetWidth in widget, because we need it after
+        // it is destroyed.
+        w.dockedOffsetWidth = w.panelDiv.offsetWidth + dockedMargin;
+    }
+
+    // Returns the numeric value of string containg 'px' at the end, e.g. 20px.
+    function getPxNum(str) {
+        return parseInt(str.substring(0, str.length - 2), 10);
+    }
+
+    // Expose Widgets to the global object.
     node.widgets = new Widgets();
 
 })(
@@ -1392,11 +1783,13 @@
 );
 
 /**
- * # Chat
- * Copyright(c) 2018 Stefano Balietti
+ * # BackButton
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
- * Creates a simple configurable chat
+ * Creates a button that if pressed goes to the previous step
+ *
+ * // TODO: check the changes to node.game.getProperty
  *
  * www.nodegame.org
  */
@@ -1404,37 +1797,552 @@
 
     "use strict";
 
+    node.widgets.register('BackButton', BackButton);
+
+    // ## Meta-data
+
+    BackButton.version = '0.1.0';
+    BackButton.description = 'Creates a button that if ' +
+        'pressed goes to the previous step.';
+
+    BackButton.title = false;
+    BackButton.className = 'backbutton';
+    BackButton.texts.back = 'Back';
+
+    // ## Dependencies
+
+    BackButton.dependencies = {
+        JSUS: {}
+    };
+
+    /**
+     * ## BackButton constructor
+     *
+     * Creates a new instance of BackButton
+     *
+     * @param {object} options Optional. Configuration options.
+     *   If a `button` option is specified, it sets it as the clickable
+     *   button. All other options are passed to the init method.
+     *
+     * @see BackButton.init
+     */
+    function BackButton(options) {
+        var that;
+        that = this;
+
+        /**
+         * ### BackButton.button
+         *
+         * The HTML element.
+         */
+        if ('object' === typeof options.button) {
+            this.button = options.button;
+        }
+        else if ('undefined' === typeof options.button) {
+            this.button = document.createElement('input');
+            this.button.type = 'button';
+        }
+        else {
+            throw new TypeError('BackButton constructor: options.button must ' +
+                                'be object or undefined. Found: ' +
+                                options.button);
+        }
+
+        /**
+         * ### BackButton.acrossStages
+         *
+         * If TRUE, the Back button allows to go back within the same stage only
+         *
+         * Default: FALSE
+         */
+        this.acrossStages = null;
+
+        /**
+         * ### BackButton.acrossRounds
+         *
+         * If TRUE, the Back button allows to go back within the same stage only
+         *
+         * Default: TRUE
+         */
+        this.acrossRounds = null;
+
+        this.button.onclick = function() {
+            var res;
+            res = getPreviousStep(that);
+            if (!res) return;
+            res = node.game.gotoStep(res);
+            if (res) that.disable();
+        };
+    }
+
+    // ## BackButton methods
+
+    /**
+     * ### BackButton.init
+     *
+     * Initializes the instance
+     *
+     * Available options are:
+     *
+     * - id: id of the HTML button, or false to have none. Default:
+     *     BackButton.className
+     * - className: the className of the button (string, array), or false
+     *     to have none. Default bootstrap classes: 'btn btn-lg btn-primary'
+     * - text: the text on the button. Default: BackButton.text
+     * - acrossStages: if TRUE, allows going back to previous stages.
+     *     Default: FALSE
+     * - acrossRounds: if TRUE, allows going back to previous rounds in
+     *     the same stage. Default: TRUE
+     *
+     * @param {object} options Optional. Configuration options
+     */
+    BackButton.prototype.init = function(options) {
+        var tmp;
+        options = options || {};
+
+        //Button
+        if ('undefined' === typeof options.id) {
+            tmp = BackButton.className;
+        }
+        else if ('string' === typeof options.id) {
+            tmp = options.id;
+        }
+        else if (false === options.id) {
+            tmp = '';
+        }
+        else {
+            throw new TypeError('BackButton.init: options.id must ' +
+                                'be string, false, or undefined. Found: ' +
+                                options.id);
+        }
+        this.button.id = tmp;
+
+        if ('undefined' === typeof options.className) {
+            tmp  = 'btn btn-lg btn-secondary';
+        }
+        else if (options.className === false) {
+            tmp = '';
+        }
+        else if ('string' === typeof options.className) {
+            tmp = options.className;
+        }
+        else if (J.isArray(options.className)) {
+            tmp = options.className.join(' ');
+        }
+        else  {
+            throw new TypeError('BackButton.init: options.className must ' +
+                                'be string, array, or undefined. Found: ' +
+                                options.className);
+        }
+        this.button.className = tmp;
+
+        // Button text.
+        this.button.value = 'string' === typeof options.text ?
+            options.text : this.getText('back');
+
+        this.acrossStages = 'undefined' === typeof options.acrossStages ?
+            false : !!options.acrossStages;
+        this.acrossRounds = 'undefined' === typeof options.acrossRounds ?
+            true : !!options.acrossRounds;
+    };
+
+    BackButton.prototype.append = function() {
+        this.bodyDiv.appendChild(this.button);
+    };
+
+    BackButton.prototype.listeners = function() {
+        var that = this;
+
+        // Locks the back button in case of a timeout.
+        node.on('PLAYING', function() {
+            var prop, step;
+            step = getPreviousStep(that);
+            // It might be enabled already, but we do it again.
+            if (step) that.enable();
+            // Check options.
+            prop = node.game.getProperty('backbutton');
+            if (!step || prop === false ||
+                (prop && prop.enableOnPlaying === false)) {
+
+                // It might be disabled already, but we do it again.
+                that.disable();
+            }
+            if ('string' === typeof prop) that.button.value = prop;
+            else if (prop && prop.text) that.button.value = prop.text;
+        });
+    };
+
+    /**
+     * ### BackButton.disable
+     *
+     * Disables the back button
+     */
+    BackButton.prototype.disable = function() {
+        this.button.disabled = 'disabled';
+    };
+
+    /**
+     * ### BackButton.enable
+     *
+     * Enables the back button
+     */
+    BackButton.prototype.enable = function() {
+        this.button.disabled = false;
+    };
+
+    // ## Helper functions.
+
+    /**
+     * ### getPreviousStage
+     *
+     * Returns the previous step accordingly with widget's settings
+     *
+     * @param {BackButton} that The current instance
+     *
+     * @return {GameStage|Boolean} The previous step or FALSE if none is found
+     */
+    function getPreviousStep(that) {
+        var curStage,  prevStage;
+        curStage = node.game.getCurrentGameStage();
+        if (curStage.stage === 0) return;
+        prevStage = node.game.getPreviousStep();
+        if (prevStage.stage === 0) return;
+        if ((curStage.stage > prevStage.stage) && !that.acrossStages) {
+            return false;
+        }
+        if ((curStage.round > prevStage.round) && !that.acrossRounds) {
+            return false;
+        }
+        return prevStage;
+    }
+
+})(node);
+
+/**
+ * # BoxSelector
+ * Copyright(c) 2019 Stefano Balietti
+ * MIT Licensed
+ *
+ * Creates a simple box that opens a menu of items to choose from
+ *
+ * www.nodegame.org
+ */
+(function(node) {
+
+    "use strict";
+
+    var NDDB =  node.NDDB;
+
+    node.widgets.register('BoxSelector', BoxSelector);
+
+    // ## Meta-data
+
+    BoxSelector.version = '1.0.0';
+    BoxSelector.description = 'Creates a simple box that opens a menu ' +
+        'of items to choose from.';
+
+    BoxSelector.panel = false;
+    BoxSelector.title = false;
+    BoxSelector.className = 'boxselector';
+
+    // ## Dependencies
+
+    BoxSelector.dependencies = {
+        JSUS: {}
+    };
+
+    /**
+     * ## BoxSelector constructor
+     *
+     * `BoxSelector` is a simple configurable chat
+     *
+     * @see BoxSelector.init
+     */
+    function BoxSelector() {
+
+        /**
+         * ### BoxSelector.button
+         *
+         * The button that if pressed shows the items
+         *
+         * @see BoxSelector.ul
+         */
+        this.button = null;
+        
+        /**
+         * ### BoxSelector.buttonText
+         *
+         * The text on the button
+         *
+         * @see BoxSelector.button
+         */
+        this.buttonText = '';
+
+        /**
+         * ### BoxSelector.items
+         *
+         * List of items to choose from
+         */
+        this.items = [];
+
+        /**
+         * ### BoxSelector.onclick
+         *
+         * A callback to call when an item from the list is clicked
+         *
+         * Callback is executed with the BoxSelector instance as context.
+         *
+         * Optional. If not specified, items won't be clickable.
+         *
+         * @see BoxSelector.items
+         */
+        this.onclick = null;
+
+        /**
+         * ### BoxSelector.getText
+         *
+         * A callback that renders an element into a text
+         */
+        this.getText = null;
+
+        /**
+         * ### BoxSelector.getId
+         *
+         * A callback that returns the id of an item
+         *
+         * Default: returns item.id.
+         */
+        this.getId = function(item) { return item.id; };
+
+        /**
+         * ### BoxSelector.ul
+         *
+         * The HTML UL element displaying the list of items
+         *
+         * @see BoxSelector.items
+         */
+        this.ul = null;
+    }
+
+    // ## BoxSelector methods
+
+    /**
+     * ### BoxSelector.init
+     *
+     * Initializes the widget
+     *
+     * @param {object} options Configuration options.
+     */
+    BoxSelector.prototype.init = function(options) {
+        if (options.onclick) {
+            if ('function' !== typeof options.onclick) {
+                throw new Error('BoxSelector.init: options.getId must be ' +
+                                'function or undefined. Found: ' +
+                                options.getId);
+            }    
+            this.onclick = options.onclick;
+        }
+        
+        if ('function' !== typeof options.getText) {
+            throw new Error('BoxSelector.init: options.getText must be ' +
+                            'function. Found: ' + options.getText);
+        }
+        this.getText = options.getText;
+
+        if (options.getId && 'function' !== typeof options.getId) {
+            throw new Error('BoxSelector.init: options.getId must be ' +
+                            'function or undefined. Found: ' + options.getId);
+        }
+        this.getId = options.getId;
+
+    
+    };
+
+
+    BoxSelector.prototype.append = function() {
+        var that, ul, btn, btnGroup, toggled;
+        
+        btnGroup = W.add('div', this.bodyDiv);
+        btnGroup.role = 'group';
+        btnGroup['aria-label'] = 'Select Items';
+        btnGroup.className = 'btn-group dropup';
+        
+        // Here we create the Button holding the treatment.
+        btn = this.button = W.add('button', btnGroup);
+        btn.className = 'btn btn-default btn dropdown-toggle';
+        btn['data-toggle'] = 'dropdown';
+        btn['aria-haspopup'] = 'true';
+        btn['aria-expanded'] = 'false';
+        btn.innerHTML = this.buttonText + '&nbsp;';
+
+        W.add('span', btn, { className: 'caret' });
+        
+        // Here the create the UL of treatments.
+        // It will be populated later.
+        ul = this.ul = W.add('ul', btnGroup);
+        ul.className = 'dropdown-menu';
+        ul.style.display = 'none';
+
+        // Variable toggled controls if the dropdown menu
+        // is displayed (we are not using bootstrap js files)
+        // and we redo the job manually here.
+        toggled = false;
+        btn.onclick = function() {
+            if (toggled) {
+                ul.style.display = 'none';
+                toggled = false;
+            }
+            else {
+                ul.style.display = 'block';
+                toggled = true;
+            }
+        };
+        
+        if (this.onclick) {
+            that = this;
+            ul.onclick = function(eventData) {
+                var id, i, len;
+                id = eventData.target;
+                // When '' is hidden by bootstrap class.
+                ul.style.display = '';
+                toggled = false;
+                id = id.parentNode.id;
+                // Clicked on description?
+                if (!id) id = eventData.target.parentNode.parentNode.id;
+                // Nothing relevant clicked (e.g., header).
+                if (!id) return;
+                len = that.items.length;
+                // Call the onclick.
+                for ( i = 0 ; i < len ; i++) {
+                    if (that.getId(that.items[i]) === id) {
+                        that.onclick.call(that, that.items[i], id);
+                        break;
+                    }
+                }
+            };
+        }
+    };
+
+    BoxSelector.prototype.addItem = function(item) {
+        var ul, li, a, tmp;
+        ul = this.ul;
+        li = document.createElement('li');
+        // Text.
+        tmp = this.getText(item);
+        if (!tmp || 'string' !== typeof tmp) {
+            throw new Error('BoxSelector.addItem: getText did not return a ' +
+                            'string. Found: ' + tmp + '. Item: ' + item);
+        }
+        if (this.onclick) {
+            a = document.createElement('a');
+            a.href = '#';
+            a.innerHTML = tmp;        
+            li.appendChild(a);
+        }
+        else {
+            li.innerHTML = tmp;        
+        }
+        // Id.
+        tmp = this.getId(item);
+        if (!tmp || 'string' !== typeof tmp) {
+            throw new Error('BoxSelector.addItem: getId did not return a ' +
+                            'string. Found: ' + tmp + '. Item: ' + item);
+        }
+        li.id = tmp;
+        li.className = 'dropdown-header';
+        ul.appendChild(li);
+        this.items.push(item);
+    };
+
+    BoxSelector.prototype.removeItem = function(id) {
+        var i, len, elem;
+        len = this.items.length;
+        for ( i = 0 ; i < len ; i++) {
+            if (this.getId(this.items[i]) === id) {
+                elem = W.gid(id);
+                this.ul.removeChild(elem);
+                return this.items.splice(i, 1);
+            }
+        }
+        return false;
+    };
+
+    BoxSelector.prototype.getValues = function() {
+        return this.items;
+    };
+
+    // ## Helper functions.
+
+
+})(node);
+
+/**
+ * # Chat
+ * Copyright(c) 2019 Stefano Balietti
+ * MIT Licensed
+ *
+ * Creates a simple configurable chat
+ *
+ * // TODO: add is...typing
+ * // TODO: add bootstrap badge to count msg when collapsed
+ * // TODO: check on data if message comes back
+ * // TODO: highlight better incoming msg. Play sound?
+ *
+ * www.nodegame.org
+ */
+(function(node) {
+
+    "use strict";
+
+    var NDDB =  node.NDDB;
+
     node.widgets.register('Chat', Chat);
+
+    // ## Texts.
+
+    Chat.texts = {
+        outgoing: function(w, data) {
+            return data.msg;
+            // return '<span class="chat_msg_me">' + data.msg + '</span>';
+        },
+        incoming: function(w, data) {
+            var str;
+            str = '<span>';
+            if (w.recipientsIds.length > 1) {
+                str += '<span class="chat_id_other">' +
+                    (w.senderToNameMap[data.id] || data.id) + '</span>: ';
+            }
+            str += data.msg + '</span>';
+            return str;
+        },
+        quit: function(w, data) {
+            return (w.senderToNameMap[data.id] || data.id) + ' left the chat';
+        },
+        noMoreParticipants: function(w, data) {
+            return 'No active participant left. Chat disabled.';
+        },
+        // For both collapse and uncollapse.
+        collapse: function(w, data) {
+            return (w.senderToNameMap[data.id] || data.id) + ' ' +
+                (data.collapsed ? 'mini' : 'maxi') + 'mized the chat';
+        },
+        textareaPlaceholder: function(w) {
+            return w.useSubmitButton ? 'Type something' :
+                'Type something and press enter to send';
+        },
+        submitButton: 'Send'
+    };
 
     // ## Meta-data
 
     Chat.version = '1.0.0';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
-        'between players, or between players and the experimenter.';
+        'between players, or between players and the server.';
 
     Chat.title = 'Chat';
     Chat.className = 'chat';
 
-    // ### Chat.modes
-    //
-    // - MANY_TO_MANY: everybody can see all the messages, and it possible
-    //   to send private messages.
-    //
-    // - MANY_TO_ONE: everybody can see all the messages, private messages can
-    //   be received, but not sent.
-    //
-    // - ONE_TO_ONE: everybody sees only personal messages, private messages can
-    //   be received, but not sent. All messages are sent to the SERVER.
-    //
-    // - RECEIVER_ONLY: messages can only be received, but not sent.
-    //
-    Chat.modes = {
-        MANY_TO_MANY: 'MANY_TO_MANY',
-        MANY_TO_ONE: 'MANY_TO_ONE',
-        ONE_TO_ONE: 'ONE_TO_ONE',
-        RECEIVER_ONLY: 'RECEIVER_ONLY'
-    };
-
+    Chat.panel = false;
 
     // ## Dependencies
 
@@ -1452,13 +2360,79 @@
     function Chat() {
 
         /**
-         * ### Chat.mode
+         * ### Chat.chatEvent
          *
-         * Determines to mode of communication
+         * The suffix used to fire chat events
          *
-         * @see Chat.modes
+         * Default: 'CHAT'
          */
-        this.mode = null;
+        this.chatEvent = null;
+
+        /**
+         * ### Chat.stats
+         *
+         * Some basic statistics about message counts
+         */
+        this.stats = {
+            received: 0,
+            sent: 0,
+            unread: 0
+        };
+
+        /**
+         * ### Chat.submitButton
+         *
+         * Button to send a text to server
+         *
+         * @see Chat.useSubmitButton
+         */
+        this.submitButton = null;
+
+        /**
+         * ### Chat.useSubmitButton
+         *
+         * If TRUE, a button is added to send messages else ENTER sends msgs
+         *
+         * By default, this is TRUE on mobile devices.
+         *
+         * @see Chat.submitButton
+         * @see Chat.receiverOnly
+         */
+        this.useSubmitButton = null;
+
+        /**
+         * ### Chat.receiverOnly
+         *
+         * If TRUE, users cannot send messages (no textarea and submit button)
+         *
+         * @see Chat.textarea
+         */
+        this.receiverOnly = false;
+
+        /**
+         * ### Chat.storeMsgs
+         *
+         * If TRUE, a copy of sent and received messages is stored in db
+         *
+         * @see Chat.db
+         */
+        this.storeMsgs = false;
+
+        /**
+         * ### Chat.db
+         *
+         * An NDDB database for storing incoming and outgoing messages
+         *
+         * @see Chat.storeMsgs
+         */
+        this.db = null;
+
+        /**
+         * ### Chat.chatDiv
+         *
+         * The DIV wherein to display the chat
+         */
+        this.chatDiv = null;
 
         /**
          * ### Chat.textarea
@@ -1468,69 +2442,64 @@
         this.textarea = null;
 
         /**
-         * ### Chat.textareaId
+         * ### Chat.initialMsg
          *
-         * The id of the textarea
+         * An object with an initial msg and the id of sender (if not self)
+         *
+         * Example:
+         *
+         * ```
+         * {
+         *   id: '1234', // Optional, add only this is an 'incoming' msg.
+         *   msg: 'the text'
+         * }
          */
-        this.textareaId = null;
-
+        this.initialMsg = null;
 
         /**
-         * ### Chat.chat
+         * ### Chat.recipientsIds
          *
-         * The DIV wherein to display the chat
+         * Array of ids of current recipients of messages
          */
-        this.chat = null;
+        this.recipientsIds = null;
 
         /**
-         * ### Chat.chatId
+         * ### Chat.recipientsIdsQuitted
          *
-         * The id of the chat DIV
+         * Array of ids of  recipients that have previously quitted the chat
          */
-        this.chatId = null;
-
-
-        /**
-         * ### Chat.submit
-         *
-         * The submit button
-         */
-        this.submit = null;
+        this.recipientsIdsQuitted = null;
 
         /**
-         * ### Chat.submitId
+         * ### Chat.senderToNameMap
          *
-         * The id of the submit butten
+         * Map sender id (msg.from) to display name
+         *
+         * Note: The 'from' field of a message can be different
+         * from the 'to' field of its reply (e.g., for MONITOR)
          */
-        this.submitId = null;
+        this.senderToNameMap = null;
 
         /**
-         * ### Chat.submitText
+         * ### Chat.recipientToNameMap
          *
-         * The text on the submit button
+         * Map recipient id (msg.to) to display name
          */
-        this.submitText = null;
+        this.recipientToNameMap = null;
 
         /**
-         * ### Chat.chatEvent
+         * ### Chat.senderToRecipientMap
          *
-         * The event to fire when sending a message
+         * Map sender id (msg.from) to recipient id (msg.to)
          */
-        this.chatEvent = null;
+        this.senderToRecipientMap = null;
 
         /**
-         * ### Chat.displayName
+         * ### Chat.recipientToSenderMap
          *
-         * Function which displays the sender's name
+         * Map recipient id (msg.to) to sender id (msg.from)
          */
-        this.displayName = null;
-
-        /**
-         * ### Chat.recipient
-         *
-         * Object containing the value of the recipient of the message
-         */
-        this.recipient = { value: null };
+        this.recipientToSenderMap = null;
     }
 
     // ## Chat methods
@@ -1543,178 +2512,372 @@
      * @param {object} options Optional. Configuration options.
      *
      * The  options object can have the following attributes:
-     *   - `mode`: Determines to mode of communication
-     *   - `textareaId`: The id of the textarea
-     *   - `chatId`: The id of the chat DIV
-     *   - `submitId`: The id of the submit butten
-     *   - `submitText`: The text on the submit button
-     *   - `chatEvent`: The event to fire when sending a message
-     *   - `displayName`: Function which displays the sender's name
+     *   - `receiverOnly`: If TRUE, no message can be sent
+     *   - `chatEvent`: The event to fire when sending/receiving a message
+     *   - `useSubmitButton`: If TRUE, a submit button is added, otherwise
+     *        messages are sent by pressing ENTER. Default: TRUE on mobiles
+     *   - `storeMsgs`: If TRUE, a copy of every message is stored in a db
+     *        a local db
+     *   - `participants`: An array containing the ids of participants,
+     *        cannot be empty
+     *   - `initialMsg`: Initial message to be displayed as soon as the chat
+     *        is opened.
+     *   - `uncollapseOnMsg`: If TRUE, a minimized chat will automatically
+     *        open when receiving a msg. Default: FALSE.
+     *   - `printStartTime`: If TRUE, the initial time of the chat is
+     *        printed at the beginning of the chat. Default: FALSE.
+     *   - `printNames`: If TRUE, the names of the participants of the chat
+     *        is printed at the beginning of the chat. Default: FALSE.
      */
     Chat.prototype.init = function(options) {
-        var tmp, that;
-        options = options || {};
-
-        if ('undefined' === typeof options.mode) {
-            // Will be setup later.
-            options.mode = 'MANY_TO_MANY';
-        }
-        else if ('string' === typeof options.mode) {
-            switch(options.mode) {
-            case Chat.modes.RECEIVER_ONLY:
-                tmp = 'SERVER';
-                break;
-            case Chat.modes.MANY_TO_ONE:
-                tmp = 'ROOM';
-                break;
-            case Chat.modes.ONE_TO_ONE:
-                tmp = options.recipient;
-                if ('string' !== typeof tmp) {
-                    throw new TypeError('Chat.init: mode=ONE_TO_ONE, but ' +
-                                        'recipient is not string. Found: ' +
-                                        tmp);
-                }
-                if (options.recipientName) {
-                    if ('string' !== typeof options.recipientName) {
-                        throw new TypeError('Chat.init: recipientName must ' +
-                                            'be string or undefined. Found: ' +
-                                            tmp);
-                    }
-                    this.recipient.name = options.recipientName;
-                }
-                break;
-            case Chat.modes.MANY_TO_MANY:
-                break;
-            default:
-                throw new Error('Chat.init: options.mode is invalid: ' +
-                                options.mode);
-            }
-            this.recipient.value = tmp;
-        }
-        else {
-            throw new Error('Chat.init: options.mode must be string or ' +
-                            'undefined. Found: ' + options.mode);
-        }
-
-        this.mode = options.mode;
-
-        this.textareaId = options.textareaId || 'chat_textarea';
-        this.chatId = options.chatId || 'chat_chat';
-        this.submitId = options.submitId || 'chat_submit';
-
-        this.chatEvent = options.chatEvent || 'CHAT';
-        this.submitText = options.submitText || 'chat';
+        var tmp, i, rec, sender, that;
 
         that = this;
-        this.displayName = options.displayName || function(from) {
-            if (that.mode = Chat.modes.ONE_TO_ONE && that.recipient.name) {
-                return that.recipient.name;
+
+        // Chat id.
+        tmp = options.chatEvent;
+        if (tmp) {
+            if ('string' !== typeof tmp) {
+                throw new TypeError('Chat.init: chatEvent must be a non-' +
+                                    'empty string or undefined. Found: ' + tmp);
+            }
+            this.chatEvent = options.chatEvent;
+        }
+        else {
+            this.chatEvent = 'CHAT';
+        }
+
+        // Store.
+        this.storeMsgs = !!options.storeMsgs;
+        if (this.storeMsgs) {
+            if (!this.db) this.db = new NDDB();
+        }
+
+        // Button or send on Enter?.
+        this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
+            J.isMobileAgent() : !!options.useSubmitButton;
+
+        // Participants.
+        tmp = options.participants;
+        if (!J.isArray(tmp) || !tmp.length) {
+            throw new TypeError('Chat.init: participants must be ' +
+                                'a non-empty array. Found: ' + tmp);
+        }
+
+        // Build maps.
+        this.recipientsIds = new Array(tmp.length);
+        this.recipientsIdsQuitted = [];
+        this.recipientToSenderMap = {};
+        this.recipientToNameMap = {};
+        this.senderToNameMap = {};
+        this.senderToRecipientMap = {};
+
+        for (i = 0; i < tmp.length; i++) {
+            // Everything i the same if string.
+            if ('string' === typeof tmp[i]) {
+                this.recipientsIds[i] = tmp[i];
+                this.recipientToNameMap[tmp[i]] = tmp[i];
+                this.recipientToSenderMap[tmp[i]] = tmp[i];
+                this.senderToRecipientMap[tmp[i]] = tmp[i];
+                this.senderToNameMap[tmp[i]] = tmp[i];
+            }
+            // Sender may be different from receiver if object.
+            else if ('object' === typeof tmp[i]) {
+                rec = tmp[i].recipient;
+                sender = tmp[i].sender;
+                this.recipientsIds[i] = rec;
+                this.recipientToSenderMap[rec] = sender || rec;
+                this.recipientToNameMap[rec] = tmp[i].name || rec;
+                this.senderToRecipientMap[sender] = rec;
+                this.senderToNameMap[sender] = this.recipientToNameMap[rec];
             }
             else {
-                return from;
+                throw new TypeError('Chat.init: participants array must ' +
+                                    'contain string or object. Found: ' +
+                                    tmp[i]);
             }
-        };
+        }
+
+        // Other.
+        this.uncollapseOnMsg = options.uncollapseOnMsg || false;
+
+        this.printStartTime = options.printStartTime || false;
+        this.printNames = options.printNames || false;
+
+        if (options.initialMsg) {
+            if ('object' !== typeof options.initialMsg) {
+                throw new TypeError('Chat.init: initialMsg must be ' +
+                                    'object or undefined. Found: ' +
+                                    options.initialMsg);
+            }
+            this.initialMsg = options.initialMsg;
+        }
+
+        this.on('uncollapsed', function() {
+            // Make sure that we do not have the title highlighted any more.
+            that.setTitle(that.title);
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_COLLAPSE',
+                         that.recipientsIds, false);
+            }
+        });
+
+        this.on('collapsed', function() {
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_COLLAPSE',
+                         that.recipientsIds, true);
+            }
+        });
+
+        this.on('destroyed', function() {
+            if (that.recipientsIds.length) {
+                node.say(that.chatEvent + '_QUIT', that.recipientsIds);
+            }
+        });
     };
 
-
     Chat.prototype.append = function() {
+        var that, inputGroup, initialText;
 
-        this.chat = W.get('div', this.chatId);
-        this.bodyDiv.appendChild(this.chat);
+        this.chatDiv = W.get('div', { className: 'chat_chat' });
+        this.bodyDiv.appendChild(this.chatDiv);
 
-        if (this.mode !== Chat.modes.RECEIVER_ONLY) {
+        if (!this.receiverOnly) {
+            that = this;
 
-            // Create buttons to send messages, if allowed.
-            this.submit = W.getEventButton(this.chatEvent,
-                                           this.submitText,
-                                           this.submitId);
-            this.submit.className = 'btn btn-sm btn-secondary';
-            this.textarea = W.get('textarea', this.textareaId);
-            // Append them.
-            W.writeln('', this.bodyDiv);
-            this.bodyDiv.appendChild(this.textarea);
-            W.writeln('', this.bodyDiv);
-            this.bodyDiv.appendChild(this.submit);
+            // Input group.
+            inputGroup = document.createElement('div');
+            inputGroup.className = 'chat_inputgroup';
 
-            // Add recipient selector, if requested.
-            if (this.mode === Chat.modes.MANY_TO_MANY) {
-                this.recipient = W.getRecipientSelector();
-                this.bodyDiv.appendChild(this.recipient);
+            this.textarea = W.get('textarea', {
+                className: 'chat_textarea form-control',
+                placeholder: this.getText('textareaPlaceholder')
+            });
+            inputGroup.appendChild(this.textarea);
+
+            if (this.useSubmitButton) {
+                this.submitButton = W.get('button', {
+                    className: 'btn-sm btn-info form-control chat_submit',
+                    innerHTML: this.getText('submitButton')
+                });
+                this.submitButton.onclick = function() {
+                    sendMsg(that);
+                };
+                inputGroup.appendChild(this.submitButton);
             }
+            else {
+                this.textarea.onkeydown = function(e) {
+                    e = e || window.event;
+                    if ((e.keyCode || e.which) === 13) sendMsg(that);
+                };
+            }
+
+            this.bodyDiv.appendChild(inputGroup);
+        }
+
+        if (this.printStartTime) {
+            W.add('div', this.chatDiv, {
+                innerHTML: Date(J.getDate()),
+                className: 'chat_event'
+            });
+            initialText = true;
+        }
+
+        if (this.printNames) {
+            W.add('div', this.chatDiv, {
+                className: 'chat_event',
+                innerHTML: 'Participants: ' +
+                    J.keys(this.senderToNameMap).join(', ')
+            });
+            initialText = true;
+        }
+
+        if (initialText) {
+            W.add('div', this.chatDiv, {
+                className: 'chat_event',
+                innerHTML: '&nbsp;'
+            });
+        }
+
+        if (this.initialMsg) {
+            this.writeMsg(this.initialMsg.id ? 'incoming' : 'outgoing',
+                          this.initialMsg);
         }
     };
 
-    Chat.prototype.readTA = function() {
+    /**
+     * ### Chat.readTextarea
+     *
+     * Reads the value of the textarea, trims it, and removes it from textarea
+     *
+     * @return {string} The current value in the textarea
+     */
+    Chat.prototype.readTextarea = function() {
         var txt;
         txt = this.textarea.value;
         this.textarea.value = '';
-        return txt;
+        return txt.trim();
     };
 
-    Chat.prototype.writeTA = function(string, args) {
-        J.sprintf(string, args, this.chat);
-        W.writeln('', this.chat);
-        this.chat.scrollTop = this.chat.scrollHeight;
+    /**
+     * ### Chat.writeMsg
+     *
+     * Writes (and formats) a message (or an event) in the message area
+     *
+     * Chat is scrolled up so that the message is last always on focus.
+     *
+     * @param {string} code A value indicating the the type of msg. Available:
+     *   'incoming', 'outgoing', and anything else.
+     * @param {string} data The content of the message
+     *
+     * @return {string} The current value in the textarea
+     *
+     * @see Chat.chatDiv
+     */
+    Chat.prototype.writeMsg = function(code, data) {
+        var c;
+        c = (code === 'incoming' || code === 'outgoing') ? code : 'event';
+        W.add('div', this.chatDiv, {
+            innerHTML: this.getText(code, data),
+            className: 'chat_msg chat_msg_' + c
+        });
+        this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     };
 
     Chat.prototype.listeners = function() {
         var that = this;
 
-        node.on(this.chatEvent, function() {
-            var msg, to, args;
-
-            msg = that.readTA();
-            if (!msg) return;
-
-            to = that.recipient.value;
-            args = {
-                '%s': {
-                    'class': 'chat_me'
-                },
-                '%msg': {
-                    'class': 'chat_msg'
-                },
-                '!txt': msg,
-                '!to': to
-            };
-            that.writeTA('%sMe -> !to%s: %msg!txt%msg', args);
-            node.say(that.chatEvent, to, msg.trim());
+        node.on.data(this.chatEvent, function(msg) {
+            if (!that.handleMsg(msg)) return;
+            that.stats.received++;
+            // Store message if so requested.
+            if (that.storeMsgs) {
+                that.db.insert({
+                    from: msg.from,
+                    text: msg.data,
+                    time: node.timer.getTimeSince('step'),
+                    timestamp: J.now()
+                });
+            }
+            that.writeMsg('incoming', { msg: msg.data, id: msg.from });
         });
 
-        if (this.mode === Chat.modes.MANY_TO_MANY) {
-            node.on('UPDATED_PLIST', function() {
-                W.populateRecipientSelector(that.recipient,
-                    node.game.pl.fetch());
-            });
-        }
+        node.on.data(this.chatEvent + '_QUIT', function(msg) {
+            var i, len, rec;
+            if (!that.handleMsg(msg)) return;
+            that.writeMsg('quit', { id: msg.from });
+            len = that.recipientsIds.length;
+            for ( i = 0 ; i < len ; i++) {
+                if (that.recipientsIds[i] ===
+                    that.senderToRecipientMap[msg.from]) {
 
-        node.on.data(this.chatEvent, function(msg) {
-            var from, args;
-            if (msg.from === node.player.id || msg.from === node.player.sid) {
-                return;
-            }
+                    rec = that.recipientsIds.splice(i, 1);
+                    that.recipientsIdsQuitted.push(rec);
 
-            if (this.mode === Chat.modes.ONE_TO_ONE) {
-                if (msg.from === this.recipient.value) {
-                    return;
+                    if (that.recipientsIds.length === 0) {
+                        that.writeMsg('noMoreParticipants');
+                        that.disable();
+                    }
+                    break;
                 }
             }
+            node.warn('Chat: participant quitted not found: ' + msg.from);
+        });
 
-            from = that.displayName(msg.from);
-            args = {
-                '%s': {
-                    'class': 'chat_others'
-                },
-                '%msg': {
-                    'class': 'chat_msg'
-                },
-                '!txt': msg.data,
-                '!from': from
-            };
-
-            that.writeTA('%s!from%s: %msg!txt%msg', args);
+        node.on.data(this.chatEvent + '_COLLAPSE', function(msg) {
+            if (!that.handleMsg(msg)) return;
+            that.writeMsg('collapse', { id: msg.from, collapsed: msg.data});
         });
     };
+
+    /**
+     * ### Chat.handleMsg
+     *
+     * Checks a (incoming) message and takes some actions
+     *
+     * If chat is minimized, it maximizes it if option `uncollapseOnMsg`
+     * it TRUE; otherwise, it increments the stats for unread messages.
+     *
+     * @param {string} msg The content of the message
+     *
+     * @return {boolean} TRUE if the message is valid
+     *
+     * @see Chat.chatDiv
+     */
+    Chat.prototype.handleMsg = function(msg) {
+        var from, args;
+        from = msg.from;
+        if (from === node.player.id || from === node.player.sid) {
+            node.warn('Chat: your own message came back: ' + msg.id);
+            return false;
+        }
+        if (this.isCollapsed()) {
+            if (this.uncollapseOnMsg) {
+                this.uncollapse();
+                this.stats.unread = 0;
+            }
+            else {
+                this.setTitle('<strong>' + this.title + '</strong>');
+                this.stats.unread++;
+            }
+        }
+        return true;
+    };
+
+    Chat.prototype.disable = function() {
+        if (this.submitButton) this.submitButton.disabled = true;
+        this.textarea.disabled = true;
+        this.disabled = true;
+    };
+
+    Chat.prototype.enable = function() {
+        if (this.submitButton) this.submitButton.disabled = false;
+        this.textarea.disabled = false;
+        this.disabled = false;
+    };
+
+    Chat.prototype.getValues = function() {
+        var out;
+        out = {
+            participants: this.participants,
+            totSent: this.stats.sent,
+            totReceived: this.stats.received,
+            totUnread: this.stats.unread,
+            initialMsg: this.initialMsg
+        };
+        if (this.db) out.msgs = db.fetch();
+        return out;
+    };
+
+    // ## Helper functions.
+
+    // ### sendMsg
+    // Reads the textarea and delivers the msg to the server.
+    function sendMsg(that) {
+        var msg, to, ids;
+
+        // No msg sent.
+        if (that.isDisabled()) return;
+
+        msg = that.readTextarea();
+
+        // Move cursor at the beginning.
+        if (msg === '') {
+            node.warn('Chat: message has no text, not sent.');
+            return;
+        }
+        // Simplify things, if there is only one recipient.
+        ids = that.recipientsIds;
+        if (ids.length === 0) {
+            node.warn('Chat: empty recipient list, message not sent.');
+            return;
+        }
+        to = ids.length === 1 ? ids[0] : ids;
+        that.writeMsg('outgoing', { msg: msg }); // to not used now.
+        node.say(that.chatEvent, to, msg);
+        // Make sure the cursor goes back to top.
+        setTimeout(function() { that.textarea.value = ''; });
+    }
 
 })(node);
 
@@ -3903,7 +5066,9 @@
         for ( ; ++i < len ; ) {
             form = this.forms[i];
             obj.forms[form.id] = form.getValues(opts);
-            if (obj.forms[form.id].choice === null) {
+            if (obj.forms[form.id].choice === null ||
+                (form.selectMultiple && !obj.forms[form.id].choice.length)) {
+
                 obj.missValues.push(form.id);
             }
             if (opts.markAttempt && !obj.forms[form.id].isCorrect) {
@@ -3944,10 +5109,12 @@
 
 /**
  * # ChoiceTable
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
+ *
+ * // TODO: register time for each current choice if selectMultiple is on?
  *
  * www.nodegame.org
  */
@@ -3959,7 +5126,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.3.0';
+    ChoiceTable.version = '1.3.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -4012,8 +5179,7 @@
          * The listener function
          */
         this.listener = function(e) {
-            var name, value, td, oldSelected;
-
+            var name, value, td;
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -4042,22 +5208,27 @@
             // One more click.
             that.numberOfClicks++;
 
-            // If only 1 selection allowed, remove selection from oldSelected.
-            if (!that.selectMultiple) {
-                oldSelected = that.selected;
-                if (oldSelected) J.removeClass(oldSelected, 'selected');
+            // Click on an already selected choice.
+            if (that.isChoiceCurrent(value)) {
+                that.unsetCurrentChoice(value);
+                J.removeClass(td, 'selected');
+            }
+            // Click on a new choice.
+            else {
+                that.setCurrentChoice(value);
+                J.addClass(td, 'selected');
 
-                if (that.isChoiceCurrent(value)) {
-                    that.unsetCurrentChoice(value);
+                if (that.selectMultiple) {
+                    that.selected.push(td);
                 }
                 else {
-                    that.currentChoice = value;
-                    J.addClass(td, 'selected');
+                    // If only 1 selection allowed, remove old selection.
+                    if (that.selected) J.removeClass(that.selected, 'selected');
                     that.selected = td;
                 }
             }
 
-            // Remove any warning/error from form on click.
+            // Remove any warning/errors on click.
             if (that.isHighlighted()) that.unhighlight();
         };
 
@@ -4224,7 +5395,7 @@
         /**
          * ### ChoiceTable.selected
          *
-         * Currently selected cell/s
+         * Currently selected TD elements
          *
          * @see ChoiceTable.currentChoice
          */
@@ -4403,6 +5574,11 @@
         if ('undefined' === typeof options.selectMultiple) tmp = false;
         else tmp = !!options.selectMultiple;
         this.selectMultiple = tmp;
+        // Make an array for currentChoice and selected.
+        if (tmp) {
+            this.selected = [];
+            this.currentChoice = [];
+        }
 
         // Option requiredChoice, if any.
         if ('number' === typeof options.requiredChoice) {
@@ -4885,8 +6061,9 @@
                 }
             }
             else {
-                throw new TypeError('ChoiceTable.setCorrectChoice: choices ' +
-                                    'must be non-empty array.');
+                throw new TypeError('ChoiceTable.setCorrectChoice: choice ' +
+                                    'must be non-empty array. Found: ' +
+                                    choice);
             }
         }
         this.correctChoice = choice;
@@ -5111,7 +6288,8 @@
         else {
             if ('string' !== typeof choice && 'number' !== typeof choice) {
                 throw new TypeError('ChoiceTable.unsetCurrentChoice: choice ' +
-                                    'must be string, number or undefined.');
+                                    'must be string, number or ' +
+                                    'undefined. Found: ' + choice);
             }
             i = -1, len = this.currentChoice.length;
             for ( ; ++i < len ; ) {
@@ -5139,7 +6317,7 @@
         }
         else if ('string' !== typeof choice) {
             throw new TypeError('ChoiceTable.isChoiceCurrent: choice ' +
-                                'must be string or number.');
+                                'must be string or number. Found: ' + choice);
         }
         if (!this.selectMultiple) {
             return this.currentChoice === choice;
@@ -5151,8 +6329,8 @@
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     };
 
     /**
@@ -5337,20 +6515,23 @@
 
         this.attempts = [];
         this.numberOfClicks = 0;
-        this.currentChoice = null;
         this.timeCurrentChoice = null;
 
-        if (this.selected) {
-            if (!this.selectMultiple) {
+        if (this.selectMultiple) {
+            i = -1, len = this.selected.length;
+            for ( ; ++i < len ; ) {
+                J.removeClass(this.selected[i], 'selected');
+            }
+            this.selected = [];
+            this.currentChoice = [];
+       
+        }
+        else {
+            if (this.selected) {
                 J.removeClass(this.selected, 'selected');
+                this.selected = null;
+                this.currentChoice = null;
             }
-            else {
-                i = -1, len = this.selected.length;
-                for ( ; ++i < len ; ) {
-                    J.removeClass(this.selected[i], 'selected');
-                }
-            }
-            this.selected = null;
         }
 
         if (this.textArea) this.textArea.value = '';
@@ -7283,7 +8464,7 @@
 
 /**
  * # DebugInfo
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player
@@ -7300,7 +8481,7 @@
 
     // ## Meta-data
 
-    DebugInfo.version = '0.6.1';
+    DebugInfo.version = '0.6.2';
     DebugInfo.description = 'Display basic info a client\'s status.';
 
     DebugInfo.title = 'Debug Info';
@@ -7353,9 +8534,17 @@
      * @see DebugInfo.updateAll
      */
     DebugInfo.prototype.init = function(options) {
+        var that;
         if ('number' === typeof options.intervalTime) {
             this.intervalTime = options.intervalTime;
         }
+
+        that = this;
+        this.on('destroyed', function() {
+            clearInterval(that.interval);
+            that.interval = null;
+            node.silly('DebugInfo destroyed.');
+        });
     };
 
     /**
@@ -7442,17 +8631,325 @@
 
     };
 
-    DebugInfo.prototype.destroy = function() {
-        clearInterval(this.interval);
-        this.interval = null;
-        node.silly('DebugInfo destroyed.');
+})(node);
+
+/**
+ * # DebugWall
+ * Copyright(c) 2019 Stefano Balietti
+ * MIT Licensed
+ *
+ * Creates a wall where all incoming and outgoing messages are printed
+ *
+ * www.nodegame.org
+ */
+(function(node) {
+
+    "use strict";
+
+    node.widgets.register('DebugWall', DebugWall);
+
+    // ## Meta-data
+
+    DebugWall.version = '1.0.0';
+    DebugWall.description = 'Intercepts incoming and outgoing messages, and ' +
+        'logs and prints them numbered and timestamped. Warning! Modifies ' +
+        'core functions, therefore its usage in production is ' +
+        'not recommended.';
+
+    DebugWall.title = 'Debug Wall';
+    DebugWall.className = 'debugwall';
+
+    // ## Dependencies
+
+    DebugWall.dependencies = {
+        JSUS: {}
+    };
+
+    /**
+     * ## DebugWall constructor
+     *
+     * Creates a new DebugWall oject
+     */
+    function DebugWall() {
+
+        /**
+         * ### DebugWall.buttonsDiv
+         *
+         * Div contains controls for the display info inside the wall.
+         */
+        this.buttonsDiv = null;
+
+        /**
+         * ### DebugWall.hidden
+         *
+         * Keep tracks of what is hidden in the wall
+         */
+        this.hiddenTypes = {};
+
+        /**
+         * ### DebugWall.counterIn
+         *
+         * Counts number of incoming message printed on wall
+         */
+        this.counterIn = 0;
+
+        /**
+         * ### DebugWall.counterOut
+         *
+         * Counts number of outgoing message printed on wall
+         */
+        this.counterOut = 0;
+
+        /**
+         * ### DebugWall.counterLog
+         *
+         * Counts number of log entries printed on wall
+         */
+        this.counterLog = 0;
+
+        /**
+         * ### DebugWall.wall
+         *
+         * The table element in which to write
+         */
+        this.wall = null;
+
+        /**
+         * ### DebugWall.wallDiv
+         *
+         * The div element containing the wall (for scrolling)
+         */
+        this.wall = null;
+
+        /**
+         * ### DebugWall.origMsgInCb
+         *
+         * The original function that receives incoming msgs
+         */
+        this.origMsgInCb = null;
+
+        /**
+         * ### DebugWall.origMsgOutCb
+         *
+         * The original function that sends msgs
+         */
+        this.origMsgOutCb = null;
+
+        /**
+         * ### DebugWall.origLogCb
+         *
+         * The original log callback
+         */
+        this.origLogCb = null;
+    }
+
+    // ## DebugWall methods
+
+    /**
+     * ### DebugWall.init
+     *
+     * Initializes the instance
+     *
+     * @param {object} options Optional. Configuration options
+     */
+    DebugWall.prototype.init = function(options) {
+        var that;
+        that = this;
+        if (options.msgIn !== false) {
+            this.origMsgInCb = node.socket.onMessage;
+            node.socket.onMessage = function(msg) {
+                that.write('in', that.makeTextIn(msg));
+                that.origMsgInCb.call(node.socket, msg);
+            };
+        }
+        if (options.msgOut !== false) {
+            this.origMsgOutCb = node.socket.send;
+            node.socket.send = function(msg) {
+                that.write('out', that.makeTextOut(msg));
+                that.origMsgOutCb.call(node.socket, msg);
+            };
+        }
+        if (options.log !== false) {
+            this.origLogCb = node.log;
+            node.log = function(txt, level, prefix) {
+                that.write(level || 'info',
+                           that.makeTextLog(txt, level, prefix));
+                that.origLogCb.call(node, txt, level, prefix);
+            };
+        }
+
+        if (options.hiddenTypes) {
+            if ('object' !== typeof hiddenTypes) {
+                throw new TypeError('DebugWall.init: hiddenTypes must be ' +
+                                    'object. Found: ' + hiddenTypes);
+            }
+            this.hiddenTypes = hiddenTypes;
+        }
+
+        this.on('destroyed', function() {
+            if (that.origLogCb) node.log = that.origLogCb;
+            if (that.origMsgOutCb) node.socket.send = that.origMsgOutCb;
+            if (that.origMsgInCb) node.socket.onMessage = that.origMsgInCb;
+        });
+
+    };
+
+    DebugWall.prototype.append = function() {
+        var displayIn, displayOut, displayLog, that;
+        var btnGroup, cb, div;
+        this.buttonsDiv = W.add('div', this.bodyDiv, {
+            className: 'wallbuttonsdiv'
+        });
+
+        btnGroup = document.createElement('div');
+        btnGroup.role = 'group';
+        btnGroup['aria-label'] = 'Toggle visibility';
+        btnGroup.className = 'btn-group';
+
+        displayIn = W.add('button', btnGroup, {
+            innerHTML: 'Incoming',
+            className: 'btn btn-secondary'
+        });
+        displayOut = W.add('button', btnGroup, {
+            innerHTML: 'Outgoing',
+            className: 'btn btn-secondary'
+        });
+        displayLog = W.add('button', btnGroup, {
+            innerHTML: 'Log',
+            className: 'btn btn-secondary'
+        });
+
+        this.buttonsDiv.appendChild(btnGroup);
+
+        that = this;
+
+        cb = function(type) {
+            var items, i, vis, className;
+            className = 'wall_' + type;
+            items = that.wall.getElementsByClassName(className);
+            vis = items[0].style.display === '' ? 'none' : '';
+            for (i = 0; i < items.length; i++) {
+                items[i].style.display = vis;
+            }
+            that.hiddenTypes[type] = !!vis;
+        };
+
+        displayIn.onclick = function() { cb('in'); };
+        displayOut.onclick = function() { cb('out'); };
+        displayLog.onclick = function() { cb('log'); };
+
+        this.wallDiv = W.add('div', this.bodyDiv, { className: 'walldiv' });
+        this.wall = W.add('table', this.wallDiv);
+    };
+
+    /**
+     * ### DebugWall.write
+     *
+     * Writes argument as first entry of this.wall if document is fully loaded
+     *
+     * @param {string} type 'in', 'out', or 'log' (different levels)
+     * @param {string} text The text to write
+     */
+    DebugWall.prototype.shouldHide = function(type, text) {
+        return this.hiddenTypes[type];
+    };
+    /**
+     * ### DebugWall.write
+     *
+     * Writes argument as first entry of this.wall if document is fully loaded
+     *
+     * @param {string} type 'in', 'out', or 'log' (different levels)
+     * @param {string} text The text to write
+     */
+    DebugWall.prototype.write = function(type, text) {
+        var spanContainer, spanDots, spanExtra, counter, className;
+        var limit;
+        var TR, TDtext;
+        if (this.isAppended()) {
+
+            counter = type === 'in' ? ++this.counterIn :
+                (type === 'out' ? ++this.counterOut : ++this.counterLog);
+
+            limit = 200;
+            className = 'wall_' + type;
+            TR = W.add('tr', this.wall, { className: className });
+            if (type !== 'in' && type !== 'out') TR.className += ' wall_log';
+
+            if (this.shouldHide(type, text)) TR.style.display = 'none';
+
+            W.add('td', TR, { innerHTML: counter });
+            W.add('td', TR, { innerHTML: type });
+            W.add('td', TR, { innerHTML: J.getTimeM()});
+            TDtext = W.add('td', TR);
+
+            if (text.length > limit) {
+                spanContainer = W.add('span', TDtext, {
+                    className: className + '_click' ,
+                    innerHTML: text.substr(0, limit)
+                });
+                spanExtra = W.add('span', spanContainer, {
+                    className: className + '_extra',
+                    innerHTML: text.substr(limit, text.length),
+                    id: 'wall_' + type + '_' + counter,
+                    style: { display: 'none' }
+
+                });
+                spanDots = W.add('span', spanContainer, {
+                    className: className + '_dots',
+                    innerHTML: ' ...',
+                    id: 'wall_' + type + '_' + counter
+                });
+
+                spanContainer.onclick = function() {
+                    if (spanDots.style.display === 'none') {
+                        spanDots.style.display = '';
+                        spanExtra.style.display = 'none';
+                    }
+                    else {
+                        spanDots.style.display = 'none';
+                        spanExtra.style.display = '';
+                    }
+                };
+            }
+            else {
+                spanContainer = W.add('span', TDtext, {
+                    innerHTML: text
+                });
+            }
+            this.wallDiv.scrollTop = this.wallDiv.scrollHeight;
+        }
+        else {
+            node.warn('Wall not appended, cannot write.');
+        }
+    };
+
+    DebugWall.prototype.makeTextIn = function(msg) {
+        var text, d;
+        d = new Date(msg.created);
+        text = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() +
+            ':' + d.getMilliseconds();
+        text += ' | ' + msg.to + ' | ' + msg.target +
+            ' | ' + msg.action + ' | ' + msg.text + ' | ' + msg.data;
+        return text;
+    };
+
+
+    DebugWall.prototype.makeTextOut = function(msg) {
+        var text;
+        text = msg.from + ' | ' + msg.target + ' | ' + msg.action + ' | ' +
+            msg.text + ' | ' + msg.data;
+        return text;
+    };
+
+    DebugWall.prototype.makeTextLog = function(text, level, prefix) {
+        return text;
     };
 
 })(node);
 
 /**
  * # DisconnectBox
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Shows a disconnect button
@@ -7467,13 +8964,18 @@
 
     // ## Meta-data
 
-    DisconnectBox.version = '0.2.2';
+    DisconnectBox.version = '0.2.3';
     DisconnectBox.description =
         'Visually display current, previous and next stage of the game.';
 
-    DisconnectBox.title = 'Disconnect';
+    DisconnectBox.title = false;
+    DisconnectBox.panel = false;
     DisconnectBox.className = 'disconnectbox';
-    DisconnectBox.texts.leave = "Leave Experiment";
+
+    DisconnectBox.texts = {
+        leave: 'Leave Experiment',
+        left: 'You Left'
+    };
 
     // ## Dependencies
 
@@ -7503,12 +9005,16 @@
      * @see DisconnectBox.writeStage
      */
     DisconnectBox.prototype.append = function() {
-        this.disconnectButton = W.get('button', this.getText('leave'));
-        this.disconnectButton.className = 'btn btn-lg';
-        this.bodyDiv.appendChild(this.disconnectButton);
+        var that = this;
+        this.disconnectButton = W.add('button', this.bodyDiv, {
+            innerHTML: this.getText('leave'),
+            className: 'btn btn-lg'
+        });
 
         this.disconnectButton.onclick = function() {
+            that.disconnectButton.disabled = true;
             node.socket.disconnect();
+            that.disconnectButton.innerHTML = that.getText('left');
         };
     };
 
@@ -7517,18 +9023,21 @@
 
         this.ee = node.getCurrentEventEmitter();
         this.ee.on('SOCKET_DISCONNECT', function DBdiscon() {
-            console.log('DB got socket_diconnect');
-            that.disconnectButton.disabled = true;
+            // console.log('DB got socket_diconnect');
         });
 
         this.ee.on('SOCKET_CONNECT', function DBcon() {
-            console.log('DB got socket_connect');
+            // console.log('DB got socket_connect');
+            if (that.disconnectButton.disabled) {
+                that.disconnectButton.disabled = false;
+                that.disconnectButton.innerHTML = that.getText('leave');
+            }
         });
-    };
 
-    DisconnectBox.prototype.destroy = function() {
-        this.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
-        this.ee.off('SOCKET_CONNECT', 'DBcon');
+        this.on('destroyed', function() {
+            that.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
+            that.ee.off('SOCKET_CONNECT', 'DBcon');
+        });
     };
 
 
@@ -7536,7 +9045,7 @@
 
 /**
  * # DoneButton
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed emits node.done()
@@ -7551,11 +9060,11 @@
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.2';
+    DoneButton.version = '1.0.0';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
-    DoneButton.title = 'Done Button';
+    DoneButton.title = false;
     DoneButton.className = 'donebutton';
     DoneButton.texts.done = 'Done';
 
@@ -7663,18 +9172,9 @@
         }
         this.button.className = tmp;
 
-        this._setText = this.setText;
-        this.setText = function(text, value) {
-            this._setText(text, value);
-            this.button.value = value;
-        };
         // Button text.
-        if ('undefined' !== typeof options.text) {
-            this.setText('done', options.text);
-        }
-        else {
-            this.button.value = this.getText('done');
-        }
+        this.button.value = 'string' === typeof options.text ?
+            options.text : this.getText('done');
     };
 
     DoneButton.prototype.append = function() {
@@ -7701,9 +9201,8 @@
                 // It might be enabled already, but we do it again.
                 that.enable();
             }
-            if (prop && prop.text) {
-                that.button.value = prop.text;
-            }
+            if ('string' === typeof prop) that.button.value = prop;
+            else if (prop && prop.text) that.button.value = prop.text;
         });
     };
 
@@ -7723,26 +9222,6 @@
      */
     DoneButton.prototype.enable = function() {
         this.button.disabled = false;
-    };
-
-    /**
-     * ### DoneButton.setText
-     *
-     * Set the text for the done button
-     *
-     * @param {string} text Optional. The text of the button.
-     *   Default: DoneButton.text
-     */
-    DoneButton.prototype.setText = function(text) {
-        if ('undefined' === typeof text) {
-            text = DoneButton.text;
-        }
-        else if ('string' !== typeof text) {
-            throw new TypeError('DoneButton.setText: text must ' +
-                                'be string or undefined. Found: ' +
-                                typeof text);
-        }
-        this.button.value = text;
     };
 
 })(node);
@@ -11401,10 +12880,10 @@
 
             return conf;
         });
-    };
 
-    Requirements.prototype.destroy = function() {
-        node.deregisterSetup('requirements');
+        this.on('destroyed', function() {
+            node.deregisterSetup('requirements');
+        });
     };
 
     // ## Helper methods.
@@ -12986,7 +14465,7 @@
 
 /**
  * # VisualTimer
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -13003,7 +14482,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.9.1';
+    VisualTimer.version = '0.9.2';
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
@@ -13095,7 +14574,6 @@
          * Internal timers are destroyed when widget is destroyed or cleared
          *
          * @see VisualTimer.gameTimer
-         * @see VisualTimer.destroy
          * @see VisualTimer.clear
          */
         this.internalTimer = null;
@@ -13121,12 +14599,6 @@
      */
     VisualTimer.prototype.init = function(options) {
         var t, gameTimerOptions;
-
-        options = options || {};
-        if ('object' !== typeof options) {
-            throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined. Found: ' + options);
-        }
 
         // Important! Do not modify directly options, because it might
         // modify a step-property. Will manual clone later.
@@ -13534,19 +15006,20 @@
                     that.stop();
                 }
             }
-       });
-    };
+        });
 
-    VisualTimer.prototype.destroy = function() {
-        if (this.internalTimer) {
-            node.timer.destroyTimer(this.gameTimer);
-            this.internalTimer = null;
-        }
-        else {
-            this.gameTimer.removeHook('VisualTimer_' + this.wid);
-        }
-        this.bodyDiv.removeChild(this.mainBox.boxDiv);
-        this.bodyDiv.removeChild(this.waitBox.boxDiv);
+        // Handle destroy.
+        this.on('destroyed', function() {
+            if (that.internalTimer) {
+                node.timer.destroyTimer(that.gameTimer);
+                that.internalTimer = null;
+            }
+            else {
+                that.gameTimer.removeHook('VisualTimer_' + that.wid);
+            }
+            that.bodyDiv.removeChild(that.mainBox.boxDiv);
+            that.bodyDiv.removeChild(that.waitBox.boxDiv);
+        });
     };
 
    /**
@@ -13727,7 +15200,7 @@
 
 /**
  * # WaitingRoom
- * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays the number of connected/required players to start a game
@@ -13774,6 +15247,22 @@
 
         // #### blinkTitle
         blinkTitle: 'GAME STARTS!',
+
+        // #### waitingForConf
+        waitingForConf: 'Waiting to receive data',
+
+        // #### executionMode
+        executionMode: function(w) {
+            var startDate;
+            if (w.executionMode === 'WAIT_FOR_N_PLAYERS') {
+                return 'Waiting for All Players to Connect: ';
+            }
+            if (w.executionMode === 'WAIT_FOR_DISPATCH') {
+                return 'Task will start soon. Please be patient.';
+            }
+            // TIMEOUT.
+            return 'Task will start at: <br>' + w.startDate;
+        },
 
         // #### disconnect
         disconnect: '<span style="color: red">You have been ' +
@@ -13919,6 +15408,13 @@
         this.waitTime = null;
 
         /**
+         * ### WaitingRoom.executionMode
+         *
+         * The execution mode.
+         */
+        this.executionMode = null;
+
+        /**
          * ### WaitingRoom.startDate
          *
          * The exact date and time when the game starts
@@ -13933,13 +15429,13 @@
         this.timeoutId = null;
 
         /**
-         * ### WaitingRoom.playerCountDiv
+         * ### WaitingRoom.execModeDiv
          *
          * Div containing the span for displaying the number of players
          *
          * @see WaitingRoom.playerCount
          */
-        this.playerCountDiv = null;
+        this.execModeDiv = null;
 
         /**
          * ### WaitingRoom.playerCount
@@ -14075,6 +15571,13 @@
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
                                 'Found: ' + conf);
         }
+
+        // It receives the TEXTS AND SOUNDS only first.
+        if (!conf.executionMode) return;
+
+        // TODO: check types and conditions?
+        this.executionMode = conf.executionMode;
+
         if (conf.onTimeout) {
             if ('function' !== typeof conf.onTimeout) {
                 throw new TypeError('WaitingRoom.init: conf.onTimeout must ' +
@@ -14093,11 +15596,10 @@
                                     'Found: ' + conf.waitTime);
             }
             this.waitTime = conf.waitTime;
-            this.startTimer();
         }
-        // TODO: check conditions?
+
         if (conf.startDate) {
-            this.setStartDate(conf.startDate);
+            this.startDate = new Date(conf.startDate).toString();
         }
 
         if (conf.poolSize) {
@@ -14147,10 +15649,17 @@
             this.disconnectIfNotSelected = false;
         }
 
+
         if (conf.playWithBotOption) this.playWithBotOption = true;
         else this.playWithBotOption = false;
         if (conf.selectTreatmentOption) this.selectTreatmentOption = true;
         else this.selectTreatmentOption = false;
+
+
+        // Display Exec Mode.
+        this.displayExecMode();
+
+        // Button for bots and treatments.
 
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
             // Closure to create button group.
@@ -14161,7 +15670,7 @@
                 btnGroup.className = 'btn-group';
 
                 var playBotBtn = document.createElement('input');
-                playBotBtn.className = 'btn btn-secondary btn-lg';
+                playBotBtn.className = 'btn btn-primary btn-lg';
                 playBotBtn.value = w.getText('playBot');
                 playBotBtn.id = 'bot_btn';
                 playBotBtn.type = 'button';
@@ -14202,7 +15711,7 @@
 
                     var ul = document.createElement('ul');
                     ul.className = 'dropdown-menu';
-                    ul.style = 'text-align: left';
+                    ul.style['text-align'] = 'left';
 
                     var li, a, t, liT1, liT2;
                     if (conf.availableTreatments) {
@@ -14241,32 +15750,31 @@
 
                     btnGroup.appendChild(btnGroupTreatments);
 
-                    // Variable toggled controls if the dropdown menu
-                    // is displayed (we are not using bootstrap js files)
+                    // We are not using bootstrap js files
                     // and we redo the job manually here.
-                    var toggled = false;
                     btnTreatment.onclick = function() {
-                        if (toggled) {
-                            ul.style = 'display: none';
-                            toggled = false;
+                        // When '' is hidden by bootstrap class.
+                        if (ul.style.display === '') {
+                            ul.style.display = 'block';
                         }
                         else {
-                            ul.style = 'display: block; text-align: left';
-                            toggled = true;
+                            ul.style.display = '';
                         }
                     };
 
                     ul.onclick = function(eventData) {
                         var t;
-                        ul.style = 'display: none';
-                        t = eventData.target.parentNode.id;
+                        t = eventData.target;
+                        // When '' is hidden by bootstrap class.
+                        ul.style.display = '';
+                        t = t.parentNode.id;
+                        // Clicked on description?
                         if (!t) t = eventData.target.parentNode.parentNode.id;
-                        console.log(eventData.target.parentNode);
-                        console.log(t);
+                        // Nothing relevant clicked (e.g., header).
+                        if (!t) return;
                         btnTreatment.innerHTML = t + ' ';
                         btnTreatment.appendChild(span);
                         w.selectedTreatment = t;
-                        toggled = false;
                     };
 
                     // Store Reference in widget.
@@ -14278,6 +15786,12 @@
 
             })(this);
         }
+
+        // Handle destroy.
+        this.on('destroyed', function() {
+            if (that.dots) that.dots.stop();
+            node.deregisterSetup('waitroom');
+        });
     };
 
     /**
@@ -14350,7 +15864,7 @@
     /**
      * ### WaitingRoom.updateDisplay
      *
-     * Displays the state of the waiting room on screen
+     * Displays the state of the waiting room on screen (player count)
      *
      * @see WaitingRoom.updateState
      */
@@ -14378,39 +15892,51 @@
         }
     };
 
-    WaitingRoom.prototype.append = function() {
-        this.playerCountDiv = document.createElement('div');
-        this.playerCountDiv.id = 'player-count-div';
+    /**
+     * ### WaitingRoom.displayExecMode
+     *
+     * Builds the basic layout of the execution mode
+     *
+     * @see WaitingRoom.executionMode
+     */
+    WaitingRoom.prototype.displayExecMode = function() {
+        this.bodyDiv.innerHTML = '';
 
-        this.playerCountDiv.appendChild(
-            document.createTextNode('Waiting for All Players to Connect: '));
+        this.execModeDiv = document.createElement('div');
+        this.execModeDiv.id = 'exec-mode-div';
 
+        this.execModeDiv.innerHTML = this.getText('executionMode');
+
+        // TODO: add only on some modes? Depending on settings?
         this.playerCount = document.createElement('p');
         this.playerCount.id = 'player-count';
-        this.playerCountDiv.appendChild(this.playerCount);
+        this.execModeDiv.appendChild(this.playerCount);
 
         this.playerCountTooHigh = document.createElement('div');
         this.playerCountTooHigh.style.display = 'none';
-        this.playerCountDiv.appendChild(this.playerCountTooHigh);
-
-        this.dots = W.getLoadingDots();
-        this.playerCountDiv.appendChild(this.dots.span);
-
-        this.bodyDiv.appendChild(this.playerCountDiv);
+        this.execModeDiv.appendChild(this.playerCountTooHigh);
 
         this.startDateDiv = document.createElement('div');
-        this.bodyDiv.appendChild(this.startDateDiv);
         this.startDateDiv.style.display= 'none';
+        this.execModeDiv.appendChild(this.startDateDiv);
+
+        this.dots = W.getLoadingDots();
+        this.execModeDiv.appendChild(this.dots.span);
+
+        this.bodyDiv.appendChild(this.execModeDiv);
 
         this.msgDiv = document.createElement('div');
         this.bodyDiv.appendChild(this.msgDiv);
 
-        if (this.startDate) {
-            this.setStartDate(this.startDate);
-        }
-        if (this.waitTime) {
-            this.startTimer();
-        }
+
+        // if (this.startDate) this.setStartDate(this.startDate);
+        if (this.waitTime) this.startTimer();
+
+    };
+
+    WaitingRoom.prototype.append = function() {
+        // Configuration will arrive soon.
+        this.bodyDiv.innerHTML = this.getText('waitingForConf');
     };
 
     WaitingRoom.prototype.listeners = function() {
@@ -14424,14 +15950,17 @@
                 return;
             }
 
-            // Sounds.
-            that.setSounds(conf.sounds);
-
-            // Texts.
-            that.setTexts(conf.texts);
-
-            // Configure all requirements.
-            that.init(conf);
+            // It receives 2 conf messages.
+            if (!conf.executionMode) {
+                // Sounds.
+                that.setSounds(conf.sounds);
+                // Texts.
+                that.setTexts(conf.texts);
+            }
+            else {
+                // Configure all requirements.
+                that.init(conf);
+            }
 
             return conf;
         });
@@ -14520,12 +16049,6 @@
         });
     };
 
-    WaitingRoom.prototype.setStartDate = function(startDate) {
-        this.startDate = new Date(startDate).toString();
-        this.startDateDiv.innerHTML = 'Game starts at: <br>' + this.startDate;
-        this.startDateDiv.style.display = '';
-    };
-
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
             node.info('waiting room: STOPPING TIMER');
@@ -14587,147 +16110,6 @@
             node.events.ng.once('FRAME_GENERATED', function(frame) {
                 frame.addEventListener('mouseover', onFrame, false);
             });
-        }
-    };
-
-    WaitingRoom.prototype.destroy = function() {
-        if (this.dots) this.dots.stop();
-        node.deregisterSetup('waitroom');
-    };
-
-})(node);
-
-/**
- * # Wall
- * Copyright(c) 2017 Stefano Balietti
- * MIT Licensed
- *
- * Creates a wall where logs and other info is added with number and timestamp
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    node.widgets.register('Wall', Wall);
-
-    // ## Meta-data
-
-    Wall.version = '0.3.1';
-    Wall.description = 'Intercepts all LOG events and prints them into a PRE ' +
-                       'element with an ordinal number and a timestamp.';
-
-    Wall.title = 'Wall';
-    Wall.className = 'wall';
-
-    // ## Dependencies
-
-    Wall.dependencies = {
-        JSUS: {}
-    };
-
-    /**
-     * ## Wall constructor
-     *
-     * `Wall` prints all LOG events into a PRE.
-     *
-     * @param {object} options Optional. Configuration options
-     */
-    function Wall(options) {
-
-        /**
-         * ### Wall.name
-         *
-         * The name of this Wall
-         */
-        this.name = options.name || this.name;
-
-        /**
-         * ### Wall.buffer
-         *
-         * Buffer for logs which are to be logged before the document is ready
-         */
-        this.buffer = [];
-
-        /**
-         * ### Wall.counter
-         *
-         * Counts number of entries on wall
-         */
-        this.counter = 0;
-
-        /**
-         * ### Wall.wall
-         *
-         * The PRE in which to write
-         */
-        this.wall = W.get('pre', this.id);
-    }
-
-    // ## Wall methods
-
-    /**
-     * ### Wall.init
-     *
-     * Initializes the instance
-     *
-     * If options are provided, the counter is set to `options.counter`
-     * otherwise nothing happens.
-     */
-    Wall.prototype.init = function(options) {
-        options = options || {};
-        this.counter = options.counter || this.counter;
-    };
-
-    Wall.prototype.append = function() {
-        return this.bodyDiv.appendChild(this.wall);
-    };
-
-    /**
-     * ### Wall.listeners
-     *
-     * Wall has a listener to the `LOG` event
-     */
-    Wall.prototype.listeners = function() {
-        var that = this;
-        node.on('LOG', function(msg) {
-            that.debuffer();
-            that.write(msg);
-        });
-    };
-
-
-    /**
-     *  ### Wall.write
-     *
-     * Writes argument as first entry of this.wall if document is fully loaded
-     *
-     * Writes into this.buffer if document is not ready yet.
-     */
-    Wall.prototype.write = function(text) {
-        var mark;
-        if (document.readyState !== 'complete') {
-            this.buffer.push(text);
-        }
-        else {
-            mark = this.counter++ + ') ' + J.getTime() + ' ';
-            this.wall.innerHTML = mark + text + "\n" + this.wall.innerHTML;
-        }
-    };
-
-    /**
-     * ### Wall.debuffer
-     *
-     * If the document is ready, the buffer content is written into this.wall
-     */
-    Wall.prototype.debuffer = function() {
-        var i;
-        if (document.readyState === 'complete' && this.buffer.length > 0) {
-            for (i=0; i < this.buffer.length; i++) {
-                this.write(this.buffer[i]);
-            }
-            this.buffer = [];
         }
     };
 

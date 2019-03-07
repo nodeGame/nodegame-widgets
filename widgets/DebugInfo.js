@@ -1,6 +1,6 @@
 /**
  * # DebugInfo
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Display information about the state of a player
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    DebugInfo.version = '0.6.1';
+    DebugInfo.version = '0.6.2';
     DebugInfo.description = 'Display basic info a client\'s status.';
 
     DebugInfo.title = 'Debug Info';
@@ -70,9 +70,17 @@
      * @see DebugInfo.updateAll
      */
     DebugInfo.prototype.init = function(options) {
+        var that;
         if ('number' === typeof options.intervalTime) {
             this.intervalTime = options.intervalTime;
         }
+
+        that = this;
+        this.on('destroyed', function() {
+            clearInterval(that.interval);
+            that.interval = null;
+            node.silly('DebugInfo destroyed.');
+        });
     };
 
     /**
@@ -157,12 +165,6 @@
 
         this.table.parse();
 
-    };
-
-    DebugInfo.prototype.destroy = function() {
-        clearInterval(this.interval);
-        this.interval = null;
-        node.silly('DebugInfo destroyed.');
     };
 
 })(node);

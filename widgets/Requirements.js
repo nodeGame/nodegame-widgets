@@ -603,10 +603,10 @@
 
             return conf;
         });
-    };
 
-    Requirements.prototype.destroy = function() {
-        node.deregisterSetup('requirements');
+        this.on('destroyed', function() {
+            node.deregisterSetup('requirements');
+        });
     };
 
     // ## Helper methods.

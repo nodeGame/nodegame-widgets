@@ -1,6 +1,6 @@
 /**
  * # VisualTimer
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.9.1';
+    VisualTimer.version = '0.9.2';
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
@@ -109,7 +109,6 @@
          * Internal timers are destroyed when widget is destroyed or cleared
          *
          * @see VisualTimer.gameTimer
-         * @see VisualTimer.destroy
          * @see VisualTimer.clear
          */
         this.internalTimer = null;
@@ -135,12 +134,6 @@
      */
     VisualTimer.prototype.init = function(options) {
         var t, gameTimerOptions;
-
-        options = options || {};
-        if ('object' !== typeof options) {
-            throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined. Found: ' + options);
-        }
 
         // Important! Do not modify directly options, because it might
         // modify a step-property. Will manual clone later.
@@ -548,19 +541,20 @@
                     that.stop();
                 }
             }
-       });
-    };
+        });
 
-    VisualTimer.prototype.destroy = function() {
-        if (this.internalTimer) {
-            node.timer.destroyTimer(this.gameTimer);
-            this.internalTimer = null;
-        }
-        else {
-            this.gameTimer.removeHook('VisualTimer_' + this.wid);
-        }
-        this.bodyDiv.removeChild(this.mainBox.boxDiv);
-        this.bodyDiv.removeChild(this.waitBox.boxDiv);
+        // Handle destroy.
+        this.on('destroyed', function() {
+            if (that.internalTimer) {
+                node.timer.destroyTimer(that.gameTimer);
+                that.internalTimer = null;
+            }
+            else {
+                that.gameTimer.removeHook('VisualTimer_' + that.wid);
+            }
+            that.bodyDiv.removeChild(that.mainBox.boxDiv);
+            that.bodyDiv.removeChild(that.waitBox.boxDiv);
+        });
     };
 
    /**

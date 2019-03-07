@@ -1,6 +1,6 @@
 /**
  * # DisconnectBox
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Shows a disconnect button
@@ -15,13 +15,18 @@
 
     // ## Meta-data
 
-    DisconnectBox.version = '0.2.2';
+    DisconnectBox.version = '0.2.3';
     DisconnectBox.description =
         'Visually display current, previous and next stage of the game.';
 
-    DisconnectBox.title = 'Disconnect';
+    DisconnectBox.title = false;
+    DisconnectBox.panel = false;
     DisconnectBox.className = 'disconnectbox';
-    DisconnectBox.texts.leave = "Leave Experiment";
+
+    DisconnectBox.texts = {
+        leave: 'Leave Experiment',
+        left: 'You Left'
+    };
 
     // ## Dependencies
 
@@ -51,12 +56,16 @@
      * @see DisconnectBox.writeStage
      */
     DisconnectBox.prototype.append = function() {
-        this.disconnectButton = W.get('button', this.getText('leave'));
-        this.disconnectButton.className = 'btn btn-lg';
-        this.bodyDiv.appendChild(this.disconnectButton);
+        var that = this;
+        this.disconnectButton = W.add('button', this.bodyDiv, {
+            innerHTML: this.getText('leave'),
+            className: 'btn btn-lg'
+        });
 
         this.disconnectButton.onclick = function() {
+            that.disconnectButton.disabled = true;
             node.socket.disconnect();
+            that.disconnectButton.innerHTML = that.getText('left');
         };
     };
 
@@ -65,18 +74,21 @@
 
         this.ee = node.getCurrentEventEmitter();
         this.ee.on('SOCKET_DISCONNECT', function DBdiscon() {
-            console.log('DB got socket_diconnect');
-            that.disconnectButton.disabled = true;
+            // console.log('DB got socket_diconnect');
         });
 
         this.ee.on('SOCKET_CONNECT', function DBcon() {
-            console.log('DB got socket_connect');
+            // console.log('DB got socket_connect');
+            if (that.disconnectButton.disabled) {
+                that.disconnectButton.disabled = false;
+                that.disconnectButton.innerHTML = that.getText('leave');
+            }
         });
-    };
 
-    DisconnectBox.prototype.destroy = function() {
-        this.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
-        this.ee.off('SOCKET_CONNECT', 'DBcon');
+        this.on('destroyed', function() {
+            that.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
+            that.ee.off('SOCKET_CONNECT', 'DBcon');
+        });
     };
 
 
