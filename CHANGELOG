@@ -1,5 +1,22 @@
 # nodegame-widgets change log
 
+## 5.0.0
+- New widget: BackButton to navigate backwards the step played.
+- New widget: BoxSelector is a clickable box presenting a list of options.
+- New widget: DebugWall displays all incoming and outgoing messages and output in a configurable div.
+- Rewritten widget Chat, new features and options available, see online doc.
+- Updated widget DisconnectBox.
+- Widget event emitters: every widget can emits events locally.
+- Widget.prototype.destroy removed. Used widget.on('destroyed') instead.
+- Fixed ChoiceTable selection with selectMultiple.
+- Remove panel at widget definition. If Widget.panel is false no panel is created (useful for buttons).
+- Docked widgets: widgets can be docked at the bottom of the page.
+- Class names passed as option are added to default class name, instead of replacing it.
+- Widgets can be minimized and closed completely.
+- Option collapseTarget: minimized widgets are moved into this specific area of the page.
+- WaitingRoom widget mode WAIT_FOR_DISPATCH
+- Several fixes and css improvements.
+
 ## 4.1.0
 - Waiting room supports treatment selection.
 - Fixed text tooManyPlayers.
