@@ -1546,7 +1546,6 @@
      * @return {boolean} TRUE, if the widget was found and destroyed.
      *
      * @see Widgets.get
-     * @see Widgets.destroyAll
      *
      * @api experimental
      */
@@ -1558,45 +1557,11 @@
     };
 
     /**
-     * ### Widgets.destroy
-     *
-     * Destroys the widget with the specified id
-     *
-     * @param {string} id The id of the widget to destroy
-     *
-     * @return {boolean} TRUE, if the widget was found and destroyed.
-     *
-     * @see Widgets.get
-     * @see Widgets.destroyAll
-     */
-    Widgets.prototype.destroy = function(id) {
-        var i, len;
-        if ('string' !== typeof id || !id.trim().length) {
-            throw new TypeError('Widgets.destroy: id must be a non-empty ' +
-                                'string. Found: ' + id);
-        }
-        i = -1, len = this.instances.length;
-        // Nested widgets can be destroyed by previous calls to destroy,
-        // and each call to destroy modify the array of instances.
-        for ( ; ++i < len ; ) {
-            if (this.instances[i].id === id) {
-                this.instances[i].destroy();
-                return true;
-            }
-        }
-        node.warn('node.widgets.destroy: widget could not be destroyed: ' + id);
-        return false;
-    };
-
-    /**
      * ### Widgets.destroyAll
      *
      * Removes all widgets that have been created through Widgets.get
      *
-     * Exceptions thrown in the widgets' destroy methods are caught.
-     *
-     * @see Widgets.get
-     * @see Widgets.destroy
+     * @see Widgets.instances
      */
     Widgets.prototype.destroyAll = function() {
         var i, len;
@@ -1606,6 +1571,7 @@
         for ( ; ++i < len ; ) {
             this.instances[0].destroy();
         }
+        this.lastAppended = null;
         if (this.instances.length) {
             node.warn('node.widgets.destroyAll: some widgets could ' +
                       'not be destroyed.');

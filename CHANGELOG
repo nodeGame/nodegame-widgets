@@ -15,6 +15,7 @@
 - Widgets can be minimized and closed completely.
 - Option collapseTarget: minimized widgets are moved into this specific area of the page.
 - WaitingRoom widget mode WAIT_FOR_DISPATCH
+- Widgets.destroy removed. Used the method on the widget itself.
 - Several fixes and css improvements.
 
 ## 4.1.0
