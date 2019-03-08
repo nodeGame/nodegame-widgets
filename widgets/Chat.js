@@ -9,6 +9,7 @@
  * // TODO: add bootstrap badge to count msg when collapsed
  * // TODO: check on data if message comes back
  * // TODO: highlight better incoming msg. Play sound?
+ * // TODO: removeParticipant and addParticipant methods.
  *
  * www.nodegame.org
  */
@@ -237,8 +238,8 @@
      *   - `receiverOnly`: If TRUE, no message can be sent
      *   - `chatEvent`: The event to fire when sending/receiving a message
      *   - `useSubmitButton`: If TRUE, a submit button is added, otherwise
-     *        messages are sent by pressing ENTER. Default: TRUE on mobiles
-     *   - `storeMsgs`: If TRUE, a copy of every message is stored in a db
+     *        messages are sent by pressing ENTER. Default: TRUE on mobile
+     *   - `storeMsgs`: If TRUE, a copy of every message is stored in
      *        a local db
      *   - `participants`: An array containing the ids of participants,
      *        cannot be empty

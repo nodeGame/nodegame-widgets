@@ -5,6 +5,8 @@
  *
  * Shows a disconnect button
  *
+ * // TODO: add light on/off for connected/disconnected status
+ *
  * www.nodegame.org
  */
 (function(node) {

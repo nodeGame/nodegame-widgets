@@ -48,7 +48,7 @@
          * @see BoxSelector.ul
          */
         this.button = null;
-        
+
         /**
          * ### BoxSelector.buttonText
          *
@@ -79,11 +79,11 @@
         this.onclick = null;
 
         /**
-         * ### BoxSelector.getText
+         * ### BoxSelector.getDescr
          *
          * A callback that renders an element into a text
          */
-        this.getText = null;
+        this.getDescr = null;
 
         /**
          * ### BoxSelector.getId
@@ -119,15 +119,15 @@
                 throw new Error('BoxSelector.init: options.getId must be ' +
                                 'function or undefined. Found: ' +
                                 options.getId);
-            }    
+            }
             this.onclick = options.onclick;
         }
-        
-        if ('function' !== typeof options.getText) {
-            throw new Error('BoxSelector.init: options.getText must be ' +
-                            'function. Found: ' + options.getText);
+
+        if ('function' !== typeof options.getDescr) {
+            throw new Error('BoxSelector.init: options.getDescr must be ' +
+                            'function. Found: ' + options.getDescr);
         }
-        this.getText = options.getText;
+        this.getDescr = options.getDescr;
 
         if (options.getId && 'function' !== typeof options.getId) {
             throw new Error('BoxSelector.init: options.getId must be ' +
@@ -135,18 +135,18 @@
         }
         this.getId = options.getId;
 
-    
+
     };
 
 
     BoxSelector.prototype.append = function() {
         var that, ul, btn, btnGroup, toggled;
-        
+
         btnGroup = W.add('div', this.bodyDiv);
         btnGroup.role = 'group';
         btnGroup['aria-label'] = 'Select Items';
         btnGroup.className = 'btn-group dropup';
-        
+
         // Here we create the Button holding the treatment.
         btn = this.button = W.add('button', btnGroup);
         btn.className = 'btn btn-default btn dropdown-toggle';
@@ -156,7 +156,7 @@
         btn.innerHTML = this.buttonText + '&nbsp;';
 
         W.add('span', btn, { className: 'caret' });
-        
+
         // Here the create the UL of treatments.
         // It will be populated later.
         ul = this.ul = W.add('ul', btnGroup);
@@ -177,7 +177,7 @@
                 toggled = true;
             }
         };
-        
+
         if (this.onclick) {
             that = this;
             ul.onclick = function(eventData) {
@@ -203,24 +203,31 @@
         }
     };
 
+    /**
+     * ### BoxSelector.addItem
+     *
+     * Adds an item to the list and renders it
+     *
+     * @param {mixed} item The item to add
+     */
     BoxSelector.prototype.addItem = function(item) {
         var ul, li, a, tmp;
         ul = this.ul;
         li = document.createElement('li');
         // Text.
-        tmp = this.getText(item);
+        tmp = this.getDescr(item);
         if (!tmp || 'string' !== typeof tmp) {
-            throw new Error('BoxSelector.addItem: getText did not return a ' +
+            throw new Error('BoxSelector.addItem: getDescr did not return a ' +
                             'string. Found: ' + tmp + '. Item: ' + item);
         }
         if (this.onclick) {
             a = document.createElement('a');
             a.href = '#';
-            a.innerHTML = tmp;        
+            a.innerHTML = tmp;
             li.appendChild(a);
         }
         else {
-            li.innerHTML = tmp;        
+            li.innerHTML = tmp;
         }
         // Id.
         tmp = this.getId(item);
@@ -234,6 +241,15 @@
         this.items.push(item);
     };
 
+    /**
+     * ### BoxSelector.removeItem
+     *
+     * Removes an item with given id from the list and the dom
+     *
+     * @param {mixed} item The item to add
+     *
+     * @return {mixed|boolean} The removed item or false if not found
+     */
     BoxSelector.prototype.removeItem = function(id) {
         var i, len, elem;
         len = this.items.length;

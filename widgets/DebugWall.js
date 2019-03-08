@@ -84,7 +84,7 @@
          *
          * The div element containing the wall (for scrolling)
          */
-        this.wall = null;
+        this.wallDiv = null;
 
         /**
          * ### DebugWall.origMsgInCb
@@ -116,6 +116,12 @@
      * Initializes the instance
      *
      * @param {object} options Optional. Configuration options
+     *
+     *  - msgIn: If FALSE, incoming messages are ignored.
+     *  - msgOut: If FALSE, outgoing  messages are ignored.
+     *  - log: If FALSE, log  messages are ignored.
+     *  - hiddenTypes: An object containing what is currently hidden
+     *     in the wall.
      */
     DebugWall.prototype.init = function(options) {
         var that;
