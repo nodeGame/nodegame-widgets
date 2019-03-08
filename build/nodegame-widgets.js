@@ -126,7 +126,11 @@
      *
      * @param {mixed} options Settings controlling the type of highlighting
      */
-    Widget.prototype.highlight = function(options) {};
+    Widget.prototype.highlight = function(options) {
+        if (this.isHighlighted()) return;
+        this.highlighted = true;
+        this.emit('highlighted');
+    };
 
     /**
      * ### Widget.highlight
@@ -142,7 +146,11 @@
      *
      * @see Widget.highlighted
      */
-    Widget.prototype.unhighlight = function() {};
+    Widget.prototype.unhighlight = function() {
+        if (!this.isHighlighted()) return;
+        this.highlighted = false;
+        this.emit('unhighlighted');
+    };
 
     /**
      * ### Widget.isHighlighted
@@ -156,7 +164,7 @@
     };
 
     /**
-     * ### Widget.isHighlighted
+     * ### Widget.isDocked
      *
      * Returns TRUE if widget is currently docked
      *
@@ -169,7 +177,7 @@
     /**
      * ### Widget.collapse
      *
-     * Collapses the widget,  (hides the body and footer)
+     * Collapses the widget (hides the body and footer)
      *
      * Only, if it was previously appended to DOM
      *
@@ -195,7 +203,7 @@
      *
      * Uncollapses the widget (shows the body and footer)
      *
-     * Only, if it was previously appended to DOM
+     * Only if it was previously appended to DOM
      *
      * @see Widget.collapse
      * @see Widget.isCollapsed
@@ -227,13 +235,14 @@
     };
 
     /**
-     * ### Widget.enabled
+     * ### Widget.enable
      *
      * Enables the widget
      *
      * An enabled widget allows the user to interact with it
      */
     Widget.prototype.enable = function() {
+        if (!this.disabled) return;
         this.disabled = false;
         this.emit('enabled');
     };
@@ -246,6 +255,7 @@
      * A disabled widget is still visible, but user cannot interact with it
      */
     Widget.prototype.disable = function() {
+        if (this.disabled) return;
         this.disabled = true;
         this.emit('disabled');
     };
@@ -253,10 +263,7 @@
     /**
      * ### Widget.isDisabled
      *
-     * Returns TRUE if widget is enabled
-     *
-     * `Widgets.get` wraps this method in an outer callback performing
-     * default cleanup operations.
+     * Returns TRUE if widget is disabled
      *
      * @return {boolean} TRUE if widget is disabled
      *
@@ -280,6 +287,7 @@
      */
     Widget.prototype.hide = function() {
         if (!this.panelDiv) return;
+        if (this.hidden) return;
         this.panelDiv.style.display = 'none';
         this.hidden = true;
         this.emit('hidden');
@@ -318,7 +326,7 @@
      */
     Widget.prototype.toggle = function(display) {
         if (!this.panelDiv) return;
-        if (this.hidden()) this.show();
+        if (this.hidden) this.show();
         else this.hide();
     };
 
@@ -560,7 +568,6 @@
         if (this.panelDiv) W.removeClass(this.panelDiv, 'panel-[a-z]*');
         if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
     };
-
 
     /**
      * ### Widget.isAppended
@@ -1178,7 +1185,7 @@
      *   - footer: as specified by the user or as found in the prototype
      *   - context: as specified by the user or as found in the prototype
      *   - className: as specified by the user or as found in the prototype
-     *   - id: user-defined id, if specified in options
+     *   - id: user-defined id
      *   - wid: random unique widget id
      *   - hooks: object containing event listeners
      *   - disabled: boolean flag indicating the widget state, set to FALSE
@@ -1708,7 +1715,7 @@
                             node.widgets.append('BoxSelector', document.body, {
                                 className: 'docked-left',
                                 getId: function(i) { return i.wid; },
-                                getText: function(i) { return i.title; },
+                                getDescr: function(i) { return i.title; },
                                 onclick: function(i, id) {
                                     i.show();
                                     // First add back to docked list,
@@ -2071,7 +2078,7 @@
          * @see BoxSelector.ul
          */
         this.button = null;
-        
+
         /**
          * ### BoxSelector.buttonText
          *
@@ -2102,11 +2109,11 @@
         this.onclick = null;
 
         /**
-         * ### BoxSelector.getText
+         * ### BoxSelector.getDescr
          *
          * A callback that renders an element into a text
          */
-        this.getText = null;
+        this.getDescr = null;
 
         /**
          * ### BoxSelector.getId
@@ -2142,15 +2149,15 @@
                 throw new Error('BoxSelector.init: options.getId must be ' +
                                 'function or undefined. Found: ' +
                                 options.getId);
-            }    
+            }
             this.onclick = options.onclick;
         }
-        
-        if ('function' !== typeof options.getText) {
-            throw new Error('BoxSelector.init: options.getText must be ' +
-                            'function. Found: ' + options.getText);
+
+        if ('function' !== typeof options.getDescr) {
+            throw new Error('BoxSelector.init: options.getDescr must be ' +
+                            'function. Found: ' + options.getDescr);
         }
-        this.getText = options.getText;
+        this.getDescr = options.getDescr;
 
         if (options.getId && 'function' !== typeof options.getId) {
             throw new Error('BoxSelector.init: options.getId must be ' +
@@ -2158,18 +2165,18 @@
         }
         this.getId = options.getId;
 
-    
+
     };
 
 
     BoxSelector.prototype.append = function() {
         var that, ul, btn, btnGroup, toggled;
-        
+
         btnGroup = W.add('div', this.bodyDiv);
         btnGroup.role = 'group';
         btnGroup['aria-label'] = 'Select Items';
         btnGroup.className = 'btn-group dropup';
-        
+
         // Here we create the Button holding the treatment.
         btn = this.button = W.add('button', btnGroup);
         btn.className = 'btn btn-default btn dropdown-toggle';
@@ -2179,7 +2186,7 @@
         btn.innerHTML = this.buttonText + '&nbsp;';
 
         W.add('span', btn, { className: 'caret' });
-        
+
         // Here the create the UL of treatments.
         // It will be populated later.
         ul = this.ul = W.add('ul', btnGroup);
@@ -2200,7 +2207,7 @@
                 toggled = true;
             }
         };
-        
+
         if (this.onclick) {
             that = this;
             ul.onclick = function(eventData) {
@@ -2226,24 +2233,31 @@
         }
     };
 
+    /**
+     * ### BoxSelector.addItem
+     *
+     * Adds an item to the list and renders it
+     *
+     * @param {mixed} item The item to add
+     */
     BoxSelector.prototype.addItem = function(item) {
         var ul, li, a, tmp;
         ul = this.ul;
         li = document.createElement('li');
         // Text.
-        tmp = this.getText(item);
+        tmp = this.getDescr(item);
         if (!tmp || 'string' !== typeof tmp) {
-            throw new Error('BoxSelector.addItem: getText did not return a ' +
+            throw new Error('BoxSelector.addItem: getDescr did not return a ' +
                             'string. Found: ' + tmp + '. Item: ' + item);
         }
         if (this.onclick) {
             a = document.createElement('a');
             a.href = '#';
-            a.innerHTML = tmp;        
+            a.innerHTML = tmp;
             li.appendChild(a);
         }
         else {
-            li.innerHTML = tmp;        
+            li.innerHTML = tmp;
         }
         // Id.
         tmp = this.getId(item);
@@ -2257,6 +2271,15 @@
         this.items.push(item);
     };
 
+    /**
+     * ### BoxSelector.removeItem
+     *
+     * Removes an item with given id from the list and the dom
+     *
+     * @param {mixed} item The item to add
+     *
+     * @return {mixed|boolean} The removed item or false if not found
+     */
     BoxSelector.prototype.removeItem = function(id) {
         var i, len, elem;
         len = this.items.length;
@@ -2290,6 +2313,7 @@
  * // TODO: add bootstrap badge to count msg when collapsed
  * // TODO: check on data if message comes back
  * // TODO: highlight better incoming msg. Play sound?
+ * // TODO: removeParticipant and addParticipant methods.
  *
  * www.nodegame.org
  */
@@ -2518,8 +2542,8 @@
      *   - `receiverOnly`: If TRUE, no message can be sent
      *   - `chatEvent`: The event to fire when sending/receiving a message
      *   - `useSubmitButton`: If TRUE, a submit button is added, otherwise
-     *        messages are sent by pressing ENTER. Default: TRUE on mobiles
-     *   - `storeMsgs`: If TRUE, a copy of every message is stored in a db
+     *        messages are sent by pressing ENTER. Default: TRUE on mobile
+     *   - `storeMsgs`: If TRUE, a copy of every message is stored in
      *        a local db
      *   - `participants`: An array containing the ids of participants,
      *        cannot be empty
@@ -8722,7 +8746,7 @@
          *
          * The div element containing the wall (for scrolling)
          */
-        this.wall = null;
+        this.wallDiv = null;
 
         /**
          * ### DebugWall.origMsgInCb
@@ -8754,6 +8778,12 @@
      * Initializes the instance
      *
      * @param {object} options Optional. Configuration options
+     *
+     *  - msgIn: If FALSE, incoming messages are ignored.
+     *  - msgOut: If FALSE, outgoing  messages are ignored.
+     *  - log: If FALSE, log  messages are ignored.
+     *  - hiddenTypes: An object containing what is currently hidden
+     *     in the wall.
      */
     DebugWall.prototype.init = function(options) {
         var that;
@@ -8956,6 +8986,8 @@
  * MIT Licensed
  *
  * Shows a disconnect button
+ *
+ * // TODO: add light on/off for connected/disconnected status
  *
  * www.nodegame.org
  */
