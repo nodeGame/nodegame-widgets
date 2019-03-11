@@ -1345,7 +1345,9 @@
             uncollapsed: [],
             disabled: [],
             enabled: [],
-            destroyed: []
+            destroyed: [],
+            highlighted: [],
+            unhighlighted: []
         };
 
         // Fixed properties.
@@ -5087,7 +5089,7 @@
             throw new TypeError('ChoiceManager.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        if (!this.dl || this.dl.style.border !== '') return;
+        if (!this.dl || this.highlighted === true) return;
         this.dl.style.border = border || '3px solid red';
         this.highlighted = true;
         this.emit('highlighted');
@@ -5101,7 +5103,7 @@
      * @see ChoiceManager.highlighted
      */
     ChoiceManager.prototype.unhighlight = function() {
-        if (!this.dl || this.dl.style.border === '') return;
+        if (!this.dl || this.highlighted !== true) return;
         this.dl.style.border = '';
         this.highlighted = false;
         this.emit('unhighlighted');
@@ -6238,6 +6240,7 @@
             J.removeClass(this.table, 'clickable');
             this.table.removeEventListener('click', this.listener);
         }
+        this.emit('disabled');
     };
 
     /**
@@ -6255,6 +6258,7 @@
         this.disabled = false;
         J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
+        this.emit('enabled');
     };
 
     /**
@@ -6419,13 +6423,14 @@
      * @see ChoiceTable.highlighted
      */
     ChoiceTable.prototype.highlight = function(border) {
-        if (!this.table) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('ChoiceTable.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.table || this.highlighted) return;
         this.table.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted', border);
     };
 
     /**
@@ -6436,9 +6441,10 @@
      * @see ChoiceTable.highlighted
      */
     ChoiceTable.prototype.unhighlight = function() {
-        if (!this.table) return;
+        if (!this.table || this.highlighted !== true) return;
         this.table.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**
@@ -7400,7 +7406,7 @@
         }
 
         // Enable onclick listener.
-        this.enable();
+        this.enable(true);
     };
 
     /**
@@ -7490,13 +7496,12 @@
      *
      * Disables clicking on the table and removes CSS 'clicklable' class
      */
-    ChoiceTableGroup.prototype.disable = function(force) {
-        if (this.disabled === true) return;
+    ChoiceTableGroup.prototype.disable = function() {
+        if (this.disabled === true || !this.table) return;
         this.disabled = true;
-        if (this.table) {
-            J.removeClass(this.table, 'clickable');
-            this.table.removeEventListener('click', this.listener);
-        }
+        J.removeClass(this.table, 'clickable');
+        this.table.removeEventListener('click', this.listener);
+        this.emit('disabled');
     };
 
     /**
@@ -7507,13 +7512,11 @@
      * @return {function} cb The event listener function
      */
     ChoiceTableGroup.prototype.enable = function(force) {
-        if (this.disabled === false) return;
-        if (!this.table) {
-            throw new Error('ChoiceTableGroup.enable: table not defined.');
-        }
+        if (!this.table || (!force && !this.disabled)) return;
         this.disabled = false;
         J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
+        this.emit('enabled');
     };
 
     /**
@@ -7595,13 +7598,14 @@
      * @see ChoiceTableGroup.highlighted
      */
     ChoiceTableGroup.prototype.highlight = function(border) {
-        if (!this.table) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('ChoiceTableGroup.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.table || this.highlighted === true) return; 
         this.table.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted', border);
     };
 
     /**
@@ -7612,9 +7616,10 @@
      * @see ChoiceTableGroup.highlighted
      */
     ChoiceTableGroup.prototype.unhighlight = function() {
-        if (!this.table) return;
+        if (!this.table || this.highlighted !== true) return;
         this.table.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**
@@ -11437,13 +11442,18 @@
             gauge.disable();
         });
 
+        this.on('highlighted', function() {
+            gauge.highlight();
+        });
+
+        this.on('unhighlighted', function() {
+            gauge.unhighlight();
+        });
     };
 
     MoodGauge.prototype.append = function() {
         node.widgets.append(this.gauge, this.bodyDiv, { panel: false });
     };
-
-    MoodGauge.prototype.listeners = function() {};
 
     /**
      * ## MoodGauge.addMethod
@@ -12372,6 +12382,14 @@
 
         this.on('disabled', function() {
             gauge.disable();
+        });
+
+        this.on('highlighted', function() {
+            gauge.highlight();
+        });
+
+        this.on('unhighlighted', function() {
+            gauge.unhighlight();
         });
     };
 

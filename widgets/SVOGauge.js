@@ -124,13 +124,19 @@
         this.on('disabled', function() {
             gauge.disable();
         });
+
+        this.on('highlighted', function() {
+            gauge.highlight();
+        });
+
+        this.on('unhighlighted', function() {
+            gauge.unhighlight();
+        });
     };
 
     SVOGauge.prototype.append = function() {
         node.widgets.append(this.gauge, this.bodyDiv);
     };
-
-    SVOGauge.prototype.listeners = function() {};
 
     /**
      * ## SVOGauge.addMethod

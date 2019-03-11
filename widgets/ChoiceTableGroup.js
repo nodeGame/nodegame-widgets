@@ -679,7 +679,7 @@
         }
 
         // Enable onclick listener.
-        this.enable();
+        this.enable(true);
     };
 
     /**
@@ -769,13 +769,12 @@
      *
      * Disables clicking on the table and removes CSS 'clicklable' class
      */
-    ChoiceTableGroup.prototype.disable = function(force) {
-        if (this.disabled === true) return;
+    ChoiceTableGroup.prototype.disable = function() {
+        if (this.disabled === true || !this.table) return;
         this.disabled = true;
-        if (this.table) {
-            J.removeClass(this.table, 'clickable');
-            this.table.removeEventListener('click', this.listener);
-        }
+        J.removeClass(this.table, 'clickable');
+        this.table.removeEventListener('click', this.listener);
+        this.emit('disabled');
     };
 
     /**
@@ -786,13 +785,11 @@
      * @return {function} cb The event listener function
      */
     ChoiceTableGroup.prototype.enable = function(force) {
-        if (this.disabled === false) return;
-        if (!this.table) {
-            throw new Error('ChoiceTableGroup.enable: table not defined.');
-        }
+        if (!this.table || (!force && !this.disabled)) return;
         this.disabled = false;
         J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
+        this.emit('enabled');
     };
 
     /**
@@ -874,13 +871,14 @@
      * @see ChoiceTableGroup.highlighted
      */
     ChoiceTableGroup.prototype.highlight = function(border) {
-        if (!this.table) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('ChoiceTableGroup.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.table || this.highlighted === true) return;
         this.table.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted', border);
     };
 
     /**
@@ -891,9 +889,10 @@
      * @see ChoiceTableGroup.highlighted
      */
     ChoiceTableGroup.prototype.unhighlight = function() {
-        if (!this.table) return;
+        if (!this.table || this.highlighted !== true) return;
         this.table.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**

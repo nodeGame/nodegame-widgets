@@ -1,6 +1,6 @@
 /**
  * # EmailForm
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays a form to input email
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    EmailForm.version = '0.9.0';
+    EmailForm.version = '0.10.0';
     EmailForm.description = 'Displays a configurable email form.';
 
     EmailForm.title = 'Email';
@@ -318,13 +318,14 @@
      * @see EmailForm.highlighted
      */
     EmailForm.prototype.highlight = function(border) {
-        if (!this.inputElement) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('EmailForm.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.inputElement || this.highlighted === true) return;
         this.inputElement.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted', border);
     };
 
     /**
@@ -335,9 +336,10 @@
      * @see EmailForm.highlighted
      */
     EmailForm.prototype.unhighlight = function() {
-        if (!this.inputElement) return;
+        if (!this.inputElement || this.highlighted !== true) return;
         this.inputElement.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**

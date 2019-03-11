@@ -476,7 +476,7 @@
             throw new TypeError('ChoiceManager.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        if (!this.dl || this.dl.style.border !== '') return;
+        if (!this.dl || this.highlighted === true) return;
         this.dl.style.border = border || '3px solid red';
         this.highlighted = true;
         this.emit('highlighted');
@@ -490,7 +490,7 @@
      * @see ChoiceManager.highlighted
      */
     ChoiceManager.prototype.unhighlight = function() {
-        if (!this.dl || this.dl.style.border === '') return;
+        if (!this.dl || this.highlighted !== true) return;
         this.dl.style.border = '';
         this.highlighted = false;
         this.emit('unhighlighted');

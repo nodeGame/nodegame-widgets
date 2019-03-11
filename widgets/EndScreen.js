@@ -1,6 +1,6 @@
 /**
  * # EndScreen
- * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -16,7 +16,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.5.0';
+    EndScreen.version = '0.6.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
@@ -227,12 +227,15 @@
         if (this.showEmailForm && !this.emailForm) {
             this.emailForm = node.widgets.get('EmailForm', J.mixin({
                 label: this.getText('contactQuestion'),
-                onsubmit: { say: true, emailOnly: true, updateUI: true }
+                onsubmit: { say: true, emailOnly: true, updateUI: true },
+                storeRef: false
             }, options.email));
         }
 
         if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback', options.feedback);
+            this.feedback = node.widgets.get('Feedback', J.mixin(
+                { storeRef: false },
+                options.feedback));
         }
     };
 

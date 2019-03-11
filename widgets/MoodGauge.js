@@ -124,13 +124,18 @@
             gauge.disable();
         });
 
+        this.on('highlighted', function() {
+            gauge.highlight();
+        });
+
+        this.on('unhighlighted', function() {
+            gauge.unhighlight();
+        });
     };
 
     MoodGauge.prototype.append = function() {
         node.widgets.append(this.gauge, this.bodyDiv, { panel: false });
     };
-
-    MoodGauge.prototype.listeners = function() {};
 
     /**
      * ## MoodGauge.addMethod

@@ -1054,6 +1054,7 @@
             J.removeClass(this.table, 'clickable');
             this.table.removeEventListener('click', this.listener);
         }
+        this.emit('disabled');
     };
 
     /**
@@ -1071,6 +1072,7 @@
         this.disabled = false;
         J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
+        this.emit('enabled');
     };
 
     /**
@@ -1235,13 +1237,14 @@
      * @see ChoiceTable.highlighted
      */
     ChoiceTable.prototype.highlight = function(border) {
-        if (!this.table) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('ChoiceTable.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.table || this.highlighted) return;
         this.table.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted', border);
     };
 
     /**
@@ -1252,9 +1255,10 @@
      * @see ChoiceTable.highlighted
      */
     ChoiceTable.prototype.unhighlight = function() {
-        if (!this.table) return;
+        if (!this.table || this.highlighted !== true) return;
         this.table.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**

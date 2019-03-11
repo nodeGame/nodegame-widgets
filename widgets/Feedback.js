@@ -1,6 +1,6 @@
 /**
  * # Feedback
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.0.1';
+    Feedback.version = '1.1.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
@@ -475,13 +475,14 @@
      * @see Feedback.highlighted
      */
     Feedback.prototype.highlight = function(border) {
-        if (!this.feedbackHTML) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('Feedback.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.feedbackHTML || this.highlighted === true) return;
         this.feedbackHTML.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted', border);
     };
 
     /**
@@ -492,9 +493,10 @@
      * @see Feedback.highlighted
      */
     Feedback.prototype.unhighlight = function() {
-        if (!this.feedbackHTML) return;
+        if (!this.feedbackHTML || this.highlighted !== true) return;
         this.feedbackHTML.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**
