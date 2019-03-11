@@ -1,6 +1,6 @@
 /**
  * # MoodGauge
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to query users about mood, emotions and well-being
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.2.1';
+    MoodGauge.version = '0.3.0';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
@@ -115,10 +115,22 @@
         checkGauge(this.method, gauge);
         // Approved.
         this.gauge = gauge;
+
+        this.on('enabled', function() {
+            gauge.enable();
+        });
+
+        this.on('disabled', function() {
+            gauge.disable();
+        });
+
     };
 
     MoodGauge.prototype.append = function() {
-        node.widgets.append(this.gauge, this.bodyDiv, { panel: false });
+        node.widgets.append(this.gauge, this.bodyDiv, {
+            panel: false,
+            storeReference: false
+        });
     };
 
     MoodGauge.prototype.listeners = function() {};
@@ -153,13 +165,6 @@
 
     MoodGauge.prototype.setValues = function(opts) {
         return this.gauge.setValues(opts);
-    };
-
-    MoodGauge.prototype.enable = function() {
-        return this.gauge.enable();
-    };
-    MoodGauge.prototype.enable = function() {
-        return this.gauge.disable();
     };
 
     // ## Helper functions.
@@ -243,7 +248,8 @@
             items: items,
             mainText: this.getText('mainText'),
             title: false,
-            requiredChoice: true
+            requiredChoice: true,
+            storeReference: false
         });
 
         return gauge;

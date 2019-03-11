@@ -1,6 +1,6 @@
 /**
  * # ChoiceTableGroup
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several choice tables widgets
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.3.0';
+    ChoiceTableGroup.version = '1.4.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -150,7 +150,7 @@
         /**
          * ### ChoiceTableGroup.items
          *
-         * The array available items
+         * The array of available items
          */
         this.items = null;
 
@@ -533,9 +533,8 @@
             options.freeText : !!options.freeText;
 
         // Add the items.
-        if ('undefined' !== typeof options.items) {
-            this.setItems(options.items);
-        }
+        if ('undefined' !== typeof options.items) this.setItems(options.items);
+
     };
 
     /**
@@ -1106,6 +1105,9 @@
         if ('undefined' === typeof s.timeFrom) s.timeFrom = that.timeFrom;
 
         if ('undefined' === typeof s.left) s.left = s.id;
+
+        // No reference is stored in node.widgets.
+        s.storeRef = false;
 
         return s;
     }
