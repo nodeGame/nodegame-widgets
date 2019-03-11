@@ -129,7 +129,7 @@
     Widget.prototype.highlight = function(options) {
         if (this.isHighlighted()) return;
         this.highlighted = true;
-        this.emit('highlighted');
+        this.emit('highlighted', options);
     };
 
     /**
@@ -146,10 +146,10 @@
      *
      * @see Widget.highlighted
      */
-    Widget.prototype.unhighlight = function() {
+    Widget.prototype.unhighlight = function(options) {
         if (!this.isHighlighted()) return;
         this.highlighted = false;
-        this.emit('unhighlighted');
+        this.emit('unhighlighted', options);
     };
 
     /**
@@ -241,10 +241,10 @@
      *
      * An enabled widget allows the user to interact with it
      */
-    Widget.prototype.enable = function() {
+    Widget.prototype.enable = function(options) {
         if (!this.disabled) return;
         this.disabled = false;
-        this.emit('enabled');
+        this.emit('enabled', options);
     };
 
     /**
@@ -254,10 +254,10 @@
      *
      * A disabled widget is still visible, but user cannot interact with it
      */
-    Widget.prototype.disable = function() {
+    Widget.prototype.disable = function(options) {
         if (this.disabled) return;
         this.disabled = true;
-        this.emit('disabled');
+        this.emit('disabled', options);
     };
 
     /**
@@ -4984,6 +4984,8 @@
         for ( ; ++i < len ; ) {
             this.forms[i].disable();
         }
+        this.disabled = true;
+        this.emit('disabled');
     };
 
     /**
@@ -4996,8 +4998,10 @@
         if (!this.disabled) return;
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
-            this.forms[i].disable();
+            this.forms[i].enable();
         }
+        this.disabled = false;
+        this.emit('enabled')
     };
 
     /**
@@ -5079,13 +5083,14 @@
      * @see ChoiceManager.highlighted
      */
     ChoiceManager.prototype.highlight = function(border) {
-        if (!this.dl) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('ChoiceManager.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.dl || this.dl.style.border !== '') return;
         this.dl.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted');
     };
 
     /**
@@ -5096,9 +5101,10 @@
      * @see ChoiceManager.highlighted
      */
     ChoiceManager.prototype.unhighlight = function() {
-        if (!this.dl) return;
+        if (!this.dl || this.dl.style.border === '') return;
         this.dl.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**
