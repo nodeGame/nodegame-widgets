@@ -127,10 +127,7 @@
     };
 
     MoodGauge.prototype.append = function() {
-        node.widgets.append(this.gauge, this.bodyDiv, {
-            panel: false,
-            storeReference: false
-        });
+        node.widgets.append(this.gauge, this.bodyDiv, { panel: false });
     };
 
     MoodGauge.prototype.listeners = function() {};
@@ -249,7 +246,7 @@
             mainText: this.getText('mainText'),
             title: false,
             requiredChoice: true,
-            storeReference: false
+            storeRef: false
         });
 
         return gauge;

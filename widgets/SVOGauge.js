@@ -1,6 +1,6 @@
 /**
  * # SVOGauge
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure users' social value orientation (S.V.O.)
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.5.1';
+    SVOGauge.version = '0.6.0';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
@@ -116,6 +116,14 @@
         checkGauge(this.method, gauge);
         // Approved.
         this.gauge = gauge;
+
+        this.on('enabled', function() {
+            gauge.enable();
+        });
+
+        this.on('disabled', function() {
+            gauge.disable();
+        });
     };
 
     SVOGauge.prototype.append = function() {
@@ -161,13 +169,6 @@
 
     SVOGauge.prototype.setValues = function(opts) {
         return this.gauge.setValues(opts);
-    };
-
-    SVOGauge.prototype.enable = function() {
-        return this.gauge.enable();
-    };
-    SVOGauge.prototype.enable = function() {
-        return this.gauge.disable();
     };
 
     // ## Helper functions.
@@ -307,7 +308,8 @@
             mainText: this.getText('mainText'),
             title: false,
             renderer: renderer,
-            requiredChoice: true
+            requiredChoice: true,
+            storeRef: false
         });
 
         return gauge;
