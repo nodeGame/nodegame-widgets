@@ -1144,22 +1144,13 @@
         // Garbage collection.
         node.on('FRAME_LOADED', function() {
             var w, i, fd;
-            var c1, c2, c3, cName;
-            // TODO: it still does not work. Some widgets are listed as not
-            // appended (e.g., ChoiceTable in ChoiceManager. check).
-
             fd = W.getFrameDocument();
             w = node.widgets.instances;
             for (i = 0; i < w.length; i++) {
-                c1 = w[i].isAppended();
-                c2 = (fd && !fd.contains(w[i].panelDiv));
-                c3 = !document.body.contains(w[i].panelDiv);
-                cName = w[i].constructor.name;
-                console.log(cName, c1, c2, c3);
                 // Check if widget is not on page any more.
-                if (c1 &&
-                    c2 &&
-                    c3) {
+                if (w[i].isAppended() &&
+                    (fd && !fd.contains(w[i].panelDiv)) &&
+                    !document.body.contains(w[i].panelDiv)) {
 
                     w[i].destroy();
                     i--;
@@ -1278,14 +1269,14 @@
                                 'must be object or undefined. Found: ' +
                                 options);
         }
-        if (options.storeReference === false) {
+        if (options.storeRef === false) {
             if (options.docked === true) {
                 throw new TypeError('Widgets.get: '  + widgetName +
-                                    'options.storeReference cannot be false ' +
+                                    'options.storeRef cannot be false ' +
                                     'if options.docked is true.');
             }
         }
-        
+
         that = this;
 
         WidgetPrototype = J.getNestedValue(widgetName, this.widgets);
@@ -1449,14 +1440,14 @@
             }
 
             // Remove widget from current instances, if found.
-            if (options.storeReference !== false) {
+            if (widget.storeRef !== false) {
                 i = -1, len = node.widgets.instances.length;
                 for ( ; ++i < len ; ) {
                     if (node.widgets.instances[i].wid === widget.wid) {
                         node.widgets.instances.splice(i,1);
                         break;
                     }
-                }   
+                }
                 // Remove from lastAppended.
                 if (node.widgets.lastAppended &&
                     node.widgets.lastAppended.wid === this.wid) {
@@ -1476,7 +1467,8 @@
         };
 
         // Store widget instance (e.g., used for destruction).
-        if (options.storeReference !== false) this.instances.push(widget);
+        if (options.storeRef !== false) this.instances.push(widget);
+        else widget.storeRef = false;
 
         return widget;
     };
@@ -1593,8 +1585,8 @@
         // Make sure the distance from the right side is correct.
         if (w.docked) setRightStyle(w);
 
-        // Store reference of last appended widget.
-        if (options.storeReference !== false) this.lastAppended = w;
+        // Store reference of last appended widget (.get method set storeRef).
+        if (w.storeRef !== false) this.lastAppended = w;
 
         return w;
     };
@@ -4634,7 +4626,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.0.0';
+    ChoiceManager.version = '1.1.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'selectable choices forms (e.g. ChoiceTable).';
 
@@ -4701,6 +4693,15 @@
         this.shuffleForms = null;
 
         /**
+         * ### ChoiceManager.shuffleForms
+         *
+         * TRUE, each form separately stored under node.widgets.instances
+         *
+         * Default: FALSE
+         */
+        this.storeRefForms = null;
+
+        /**
          * ### ChoiceManager.group
          *
          * The name of the group where the list belongs, if any
@@ -4751,6 +4752,7 @@
      *       if 'string', the text will be added inside the the textarea
      *   - forms: the forms to displayed, formatted as explained in
      *       `ChoiceManager.setForms`
+     *   - storeRefForms: if TRUE, forms are added under node.widgets.instances
      *
      * @param {object} options Configuration options
      *
@@ -4799,6 +4801,8 @@
                                 options.mainText);
         }
 
+        this.storeRefForms = !!options.storeRefForms || false;
+        
         // After all configuration options are evaluated, add forms.
 
         this.freeText = 'string' === typeof options.freeText ?
@@ -4868,6 +4872,7 @@
             form = parsedForms[i];
             if (!node.widgets.isWidget(form)) {
                 if ('string' === typeof form.name) {
+                    form.storeRef = !!form.storeRef || this.storeRefForms;
                     form = node.widgets.get(form.name, form);
                 }
                 if (!node.widgets.isWidget(form)) {
@@ -6727,7 +6732,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.3.0';
+    ChoiceTableGroup.version = '1.4.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -7243,18 +7248,8 @@
             options.freeText : !!options.freeText;
 
         // Add the items.
-        if ('undefined' !== typeof options.items) {
-            this.setItems(options.items);
-        }
+        if ('undefined' !== typeof options.items) this.setItems(options.items);
 
-        this.on('destroyed', function() {
-            var i, len;
-            i = 0;
-            len = that.items.length;
-            for ( ; i++ < len;) {
-                that.items[i].destroy();
-            }
-        });
     };
 
     /**
@@ -7826,8 +7821,9 @@
 
         if ('undefined' === typeof s.left) s.left = s.id;
 
-        if ('undefined' === typeof s.storeReference) s.storeReference = false;
-        
+        // No reference is stored in node.widgets.
+        s.storeRef = false;
+
         return s;
     }
 
@@ -11311,7 +11307,7 @@
 
 /**
  * # MoodGauge
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to query users about mood, emotions and well-being
@@ -11326,7 +11322,7 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.2.1';
+    MoodGauge.version = '0.3.0';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
@@ -11426,10 +11422,22 @@
         checkGauge(this.method, gauge);
         // Approved.
         this.gauge = gauge;
+
+        this.on('enabled', function() {
+            gauge.enable();
+        });
+
+        this.on('disabled', function() {
+            gauge.disable();
+        });
+
     };
 
     MoodGauge.prototype.append = function() {
-        node.widgets.append(this.gauge, this.bodyDiv, { panel: false });
+        node.widgets.append(this.gauge, this.bodyDiv, {
+            panel: false,
+            storeReference: false
+        });
     };
 
     MoodGauge.prototype.listeners = function() {};
@@ -11464,13 +11472,6 @@
 
     MoodGauge.prototype.setValues = function(opts) {
         return this.gauge.setValues(opts);
-    };
-
-    MoodGauge.prototype.enable = function() {
-        return this.gauge.enable();
-    };
-    MoodGauge.prototype.enable = function() {
-        return this.gauge.disable();
     };
 
     // ## Helper functions.
@@ -11554,7 +11555,8 @@
             items: items,
             mainText: this.getText('mainText'),
             title: false,
-            requiredChoice: true
+            requiredChoice: true,
+            storeReference: false
         });
 
         return gauge;

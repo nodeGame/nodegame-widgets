@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.0.0';
+    ChoiceManager.version = '1.1.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'selectable choices forms (e.g. ChoiceTable).';
 
@@ -82,6 +82,15 @@
         this.shuffleForms = null;
 
         /**
+         * ### ChoiceManager.shuffleForms
+         *
+         * TRUE, each form separately stored under node.widgets.instances
+         *
+         * Default: FALSE
+         */
+        this.storeRefForms = null;
+
+        /**
          * ### ChoiceManager.group
          *
          * The name of the group where the list belongs, if any
@@ -132,6 +141,7 @@
      *       if 'string', the text will be added inside the the textarea
      *   - forms: the forms to displayed, formatted as explained in
      *       `ChoiceManager.setForms`
+     *   - storeRefForms: if TRUE, forms are added under node.widgets.instances
      *
      * @param {object} options Configuration options
      *
@@ -179,6 +189,8 @@
                                 'be string, undefined. Found: ' +
                                 options.mainText);
         }
+
+        this.storeRefForms = !!options.storeRefForms || false;
 
         // After all configuration options are evaluated, add forms.
 
@@ -249,6 +261,7 @@
             form = parsedForms[i];
             if (!node.widgets.isWidget(form)) {
                 if ('string' === typeof form.name) {
+                    form.storeRef = !!form.storeRef || this.storeRefForms;
                     form = node.widgets.get(form.name, form);
                 }
                 if (!node.widgets.isWidget(form)) {
