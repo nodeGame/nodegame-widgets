@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## current
+- Fixed VisualTimer init method not receiving an object bug.
+
 ## 5.0.0
 - New widget: BackButton to navigate backwards the step played.
 - New widget: BoxSelector is a clickable box presenting a list of options.
