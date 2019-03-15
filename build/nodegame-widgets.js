@@ -12591,7 +12591,7 @@
 
 /**
  * # VisualRound
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -12613,7 +12613,7 @@
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
-    VisualRound.title = 'Round info';
+    VisualRound.title = false;
     VisualRound.className = 'visualround';
 
     VisualRound.texts.round = 'Round';
