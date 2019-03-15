@@ -7602,7 +7602,7 @@
             throw new TypeError('ChoiceTableGroup.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        if (!this.table || this.highlighted === true) return; 
+        if (!this.table || this.highlighted === true) return;
         this.table.style.border = border || '3px solid red';
         this.highlighted = true;
         this.emit('highlighted', border);
@@ -9318,7 +9318,7 @@
 
 /**
  * # EmailForm
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays a form to input email
@@ -9333,7 +9333,7 @@
 
     // ## Meta-data
 
-    EmailForm.version = '0.9.0';
+    EmailForm.version = '0.10.0';
     EmailForm.description = 'Displays a configurable email form.';
 
     EmailForm.title = 'Email';
@@ -9636,13 +9636,14 @@
      * @see EmailForm.highlighted
      */
     EmailForm.prototype.highlight = function(border) {
-        if (!this.inputElement) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('EmailForm.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.inputElement || this.highlighted === true) return;
         this.inputElement.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted', border);
     };
 
     /**
@@ -9653,9 +9654,10 @@
      * @see EmailForm.highlighted
      */
     EmailForm.prototype.unhighlight = function() {
-        if (!this.inputElement) return;
+        if (!this.inputElement || this.highlighted !== true) return;
         this.inputElement.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**
@@ -9691,7 +9693,7 @@
 
 /**
  * # EndScreen
- * Copyright(c) 2018 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -9707,7 +9709,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.5.0';
+    EndScreen.version = '0.6.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
@@ -9918,12 +9920,15 @@
         if (this.showEmailForm && !this.emailForm) {
             this.emailForm = node.widgets.get('EmailForm', J.mixin({
                 label: this.getText('contactQuestion'),
-                onsubmit: { say: true, emailOnly: true, updateUI: true }
+                onsubmit: { say: true, emailOnly: true, updateUI: true },
+                storeRef: false
             }, options.email));
         }
 
         if (this.showFeedbackForm) {
-            this.feedback = node.widgets.get('Feedback', options.feedback);
+            this.feedback = node.widgets.get('Feedback', J.mixin(
+                { storeRef: false },
+                options.feedback));
         }
     };
 
@@ -10146,7 +10151,7 @@
 
 /**
  * # Feedback
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -10161,7 +10166,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.0.1';
+    Feedback.version = '1.1.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
@@ -10621,13 +10626,14 @@
      * @see Feedback.highlighted
      */
     Feedback.prototype.highlight = function(border) {
-        if (!this.feedbackHTML) return;
         if (border && 'string' !== typeof border) {
             throw new TypeError('Feedback.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
+        if (!this.feedbackHTML || this.highlighted === true) return;
         this.feedbackHTML.style.border = border || '3px solid red';
         this.highlighted = true;
+        this.emit('highlighted', border);
     };
 
     /**
@@ -10638,9 +10644,10 @@
      * @see Feedback.highlighted
      */
     Feedback.prototype.unhighlight = function() {
-        if (!this.feedbackHTML) return;
+        if (!this.feedbackHTML || this.highlighted !== true) return;
         this.feedbackHTML.style.border = '';
         this.highlighted = false;
+        this.emit('unhighlighted');
     };
 
     /**
@@ -12397,8 +12404,6 @@
         node.widgets.append(this.gauge, this.bodyDiv);
     };
 
-    SVOGauge.prototype.listeners = function() {};
-
     /**
      * ## SVOGauge.addMethod
      *
@@ -13911,6 +13916,15 @@
      */
     VisualTimer.prototype.init = function(options) {
         var t, gameTimerOptions;
+
+        // We keep the check for object, because this widget is often
+        // called by users and the restart methods does not guarantee
+        // an object.
+        options = options || {};
+        if ('object' !== typeof options) {
+            throw new TypeError('VisualTimer.init: options must be ' +
+                                'object or undefined. Found: ' + options);
+        }
 
         // Important! Do not modify directly options, because it might
         // modify a step-property. Will manual clone later.
