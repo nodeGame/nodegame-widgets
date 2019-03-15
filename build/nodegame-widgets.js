@@ -4695,15 +4695,6 @@
         this.shuffleForms = null;
 
         /**
-         * ### ChoiceManager.shuffleForms
-         *
-         * TRUE, each form separately stored under node.widgets.instances
-         *
-         * Default: FALSE
-         */
-        this.storeRefForms = null;
-
-        /**
          * ### ChoiceManager.group
          *
          * The name of the group where the list belongs, if any
@@ -4716,6 +4707,20 @@
          * The order of the list within the group
          */
         this.groupOrder = null;
+
+        /**
+         * ### ChoiceManager.formsOptions
+         *
+         * An object containing options to be added to every form
+         *
+         * Options are added only if forms are specified as object literals,
+         * and can be overriden by each individual form.
+         */
+        this.formsOptions =  {
+            title: false,
+            frame: false,
+            storeRef: false
+        };
 
         /**
          * ### ChoiceManager.freeText
@@ -4754,7 +4759,7 @@
      *       if 'string', the text will be added inside the the textarea
      *   - forms: the forms to displayed, formatted as explained in
      *       `ChoiceManager.setForms`
-     *   - storeRefForms: if TRUE, forms are added under node.widgets.instances
+     *   - formsOptions: a set of default options to add to every form
      *
      * @param {object} options Configuration options
      *
@@ -4799,21 +4804,33 @@
         }
         else if ('undefined' !== typeof options.mainText) {
             throw new TypeError('ChoiceManager.init: options.mainText must ' +
-                                'be string, undefined. Found: ' +
+                                'be string or undefined. Found: ' +
                                 options.mainText);
         }
 
-        this.storeRefForms = !!options.storeRefForms || false;
-
-        // After all configuration options are evaluated, add forms.
-
+        // formsOptions.
+        if ('undefined' !== typeof options.formsOptions) {
+            if ('object' !== typeof options.formsOptions) {
+                throw new TypeError('ChoiceManager.init: options.formsOptions' +
+                                    ' must be object or undefined. Found: ' +
+                                    options.formsOptions);
+            }
+            if (options.formsOptions.hasOwnProperty('name')) {
+                throw new Error('ChoiceManager.init: options.formsOptions ' +
+                                'cannot contain property name. Found: ' +
+                                options.formsOptions);
+            }
+            this.formsOptions = J.mixin(this.formsOptions,
+                                        options.formsOptions);
+        }
+        
         this.freeText = 'string' === typeof options.freeText ?
             options.freeText : !!options.freeText;
 
-        // Add the forms.
-        if ('undefined' !== typeof options.forms) {
-            this.setForms(options.forms);
-        }
+
+        // After all configuration options are evaluated, add forms.
+        
+        if ('undefined' !== typeof options.forms) this.setForms(options.forms);
     };
 
     /**
@@ -4874,10 +4891,9 @@
             form = parsedForms[i];
             if (!node.widgets.isWidget(form)) {
                 if ('string' === typeof form.name) {
+                    debugger;
                     // Add some defaults.
-                    form.title = form.title || false;
-                    form.frame = form.frame || false;
-                    form.storeRef = !!form.storeRef || this.storeRefForms;
+                    J.mixout(form, this.formsOptions);
                     form = node.widgets.get(form.name, form);
                 }
                 if (!node.widgets.isWidget(form)) {
@@ -5206,7 +5222,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.3.1';
+    ChoiceTable.version = '1.3.2';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -5293,7 +5309,7 @@
             if (that.isChoiceCurrent(value)) {
                 that.unsetCurrentChoice(value);
                 J.removeClass(td, 'selected');
-                
+
                 if (that.selectMultiple) {
                     // Remove selected TD (need to keep this clean for reset).
                     i = -1, len = that.selected.length;
