@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## current
+- ChoiceManager formsOptions parameter.
+
 ## 5.0.1
 - Fixed VisualTimer init method not receiving an object bug.
 
