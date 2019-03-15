@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## current
+## 5.0.1
 - Fixed VisualTimer init method not receiving an object bug.
 
 ## 5.0.0
