@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.3.1';
+    ChoiceTable.version = '1.3.2';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -71,6 +71,7 @@
          */
         this.listener = function(e) {
             var name, value, td;
+            var i, len;
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -103,6 +104,20 @@
             if (that.isChoiceCurrent(value)) {
                 that.unsetCurrentChoice(value);
                 J.removeClass(td, 'selected');
+
+                if (that.selectMultiple) {
+                    // Remove selected TD (need to keep this clean for reset).
+                    i = -1, len = that.selected.length;
+                    for ( ; ++i < len ; ) {
+                        if (that.selected[i].id === td.id) {
+                            that.selected.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+                else {
+                    that.selected = null;
+                }
             }
             // Click on a new choice.
             else {

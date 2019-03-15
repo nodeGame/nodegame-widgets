@@ -15,11 +15,11 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.1.0';
+    ChoiceManager.version = '1.2.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'selectable choices forms (e.g. ChoiceTable).';
 
-    ChoiceManager.title = 'Complete the forms below';
+    ChoiceManager.title = false;
     ChoiceManager.className = 'choicemanager';
 
     // ## Dependencies
@@ -261,6 +261,9 @@
             form = parsedForms[i];
             if (!node.widgets.isWidget(form)) {
                 if ('string' === typeof form.name) {
+                    // Add some defaults.
+                    form.title = form.title || false;
+                    form.frame = form.frame || false;
                     form.storeRef = !!form.storeRef || this.storeRefForms;
                     form = node.widgets.get(form.name, form);
                 }
