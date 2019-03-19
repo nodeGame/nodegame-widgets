@@ -8409,19 +8409,25 @@
 
     CustomInput.texts = {
         numFloatErr: function(w, isFloat) {
-            var str, p;
+            var str, p, inc;
             p = w.params;
+            inc = '(inclusive)';
             str = 'Must be a ';
             if (isFloat) str += 'floating point ';
-            str += 'number';
-            if ('undefined' !== typeof p.lower) {
-                str += ' greater than ';
+            str += 'number ';            
+            if (p.between) {
+                str += 'between ' + p.lower;
+                if (p.leq) str += inc;
+                str += ' and ' + p.upper;
+                if (p.ueq) str += inc;
+            }
+            else if ('undefined' !== typeof p.lower) {
+                str += 'greater than ';
                 if (p.leq) str += 'or equal to ';
                 str += p.lower;
             }
-            if ('undefined' !== typeof p.upper) {
-                if (str) str += ' and ';
-                str += ' smaller than ';
+            else {
+                str += 'less than ';
                 if (p.leq) str += 'or equal to ';
                 str += p.upper;
             }
@@ -8616,6 +8622,10 @@
                                             'is "text". Found: ' + options.max);
                     }
                     this.params.upper = options.max;
+                    if ('undefined' !== typeof this.params.lower) {
+                        // Store this to create better error strings.
+                        this.params.between = true;
+                    }
                 }
                 if ('undefined' !== typeof options.maxEq) {
                     tmp = J.isNumber(options.maxEq);

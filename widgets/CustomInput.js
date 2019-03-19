@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.1.0';
+    CustomInput.version = '0.2.0';
     CustomInput.description = 'Creates a configurable input box';
 
     CustomInput.title = false;
@@ -30,19 +30,25 @@
 
     CustomInput.texts = {
         numFloatErr: function(w, isFloat) {
-            var str, p;
+            var str, p, inc;
             p = w.params;
+            inc = '(inclusive)';
             str = 'Must be a ';
             if (isFloat) str += 'floating point ';
-            str += 'number';
-            if ('undefined' !== typeof p.lower) {
-                str += ' greater than ';
+            str += 'number ';
+            if (p.between) {
+                str += 'between ' + p.lower;
+                if (p.leq) str += inc;
+                str += ' and ' + p.upper;
+                if (p.ueq) str += inc;
+            }
+            else if ('undefined' !== typeof p.lower) {
+                str += 'greater than ';
                 if (p.leq) str += 'or equal to ';
                 str += p.lower;
             }
-            if ('undefined' !== typeof p.upper) {
-                if (str) str += ' and ';
-                str += ' smaller than ';
+            else {
+                str += 'less than ';
                 if (p.leq) str += 'or equal to ';
                 str += p.upper;
             }
@@ -122,20 +128,6 @@
         this.params = {};
 
         /**
-         * ### CustomInput.hint
-         *
-         * A text describing how to fill in the form
-         */
-        this.hintText = null;
-
-        /**
-         * ### CustomInput.hintBox
-         *
-         * An HTML element containing the hint text
-         */
-        this.hintBox = null;
-
-        /**
          * ### CustomInput.errorBox
          *
          * An HTML element displayed when a validation error occurs
@@ -148,6 +140,15 @@
          * A text preceeding the date selector
          */
         this.mainText = null;
+
+        /**
+         * ### CustomInput.breakAfterMainText
+         *
+         * TRUE, if a br is inserted between the main text and the input
+         *
+         * Default: TRUE
+         */
+        this.breakAfterMainText = null;
     }
 
     // ## CustomInput methods
@@ -168,8 +169,7 @@
         e = 'CustomInput.init: options.';
         if (options.type) {
             if (!CustomInput.types[options.type]) {
-                throw new Error('CustomInput.init: type not supported: ' +
-                                options.type);
+                throw new Error(e + 'type not supported: ' + options.type);
             }
             this.type = options.type;
         }
@@ -237,6 +237,10 @@
                                             'is "text". Found: ' + options.max);
                     }
                     this.params.upper = options.max;
+                    if ('undefined' !== typeof this.params.lower) {
+                        // Store this to create better error strings.
+                        this.params.between = true;
+                    }
                 }
                 if ('undefined' !== typeof options.maxEq) {
                     tmp = J.isNumber(options.maxEq);
@@ -306,16 +310,7 @@
             }
             this.mainText = options.mainText;
         }
-        if (options.hintText) {
-            if ('string' !== typeof options.hintText) {
-                throw new TypeError(e + 'hintText must be string or ' +
-                                    'undefined. Found: ' + options.hintText);
-            }
-            this.hintText = options.hintText;
-        }
-        else {
-            // TODO: generate a simple hint text based on type and params.
-        }
+        this.breakAfterMainText = !!options.breakAfterMainText: true;
     };
 
 
@@ -323,14 +318,6 @@
      * ### CustomInput.append
      *
      * Implements Widget.append
-     *
-     * Checks that id is unique.
-     *
-     * Appends (all optional):
-     *
-     *   - mainText: a question or statement introducing the choices
-     *   - table: the table containing the choices
-     *   - freeText: a textarea for comments
      *
      * @see Widget.append
      */
@@ -340,11 +327,11 @@
 
         // MainText.
         if (this.mainText) {
-            this.spanMainText = document.createElement('span');
-            this.spanMainText.className = 'maintext';
-            this.spanMainText.innerHTML = this.mainText;
-            // Append mainText.
-            this.bodyDiv.appendChild(this.spanMainText);
+            this.spanMainText = W.append('span', this.bodyDiv, {
+                className: 'maintext',
+                innerHTML: this.mainText
+            });
+            if (this.breakAfterMainText) W.append('br', this.bodyDiv);
         }
 
         this.input = W.append('input', this.bodyDiv);
