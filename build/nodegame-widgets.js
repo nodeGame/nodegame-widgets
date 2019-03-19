@@ -1545,9 +1545,9 @@
         if ('string' === typeof w) w = this.get(w, options);
 
         // Add panelDiv (with or without panel).
+        tmp = options.panel === false ? true : w.panel === false;
         tmp = {
-            className: options.panel === false ?
-                [ 'ng_widget',  'no-panel', w.className ] :
+            className: tmp ? [ 'ng_widget',  'no-panel', w.className ] :
                 [ 'ng_widget', 'panel', 'panel-default', w.className ]
         };
 
@@ -8394,10 +8394,11 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.0.1';
+    CustomInput.version = '0.1.0';
     CustomInput.description = 'Creates a configurable input box';
 
-    CustomInput.title = 'false';
+    CustomInput.title = false;
+    CustomInput.panel = false;
     CustomInput.className = 'custominput';
 
     CustomInput.texts = {
@@ -8424,11 +8425,10 @@
             var str, p;
             p = w.params;
             str = 'Please enter a text ';
-            if ('undefined' !== typeof p.lower) {
-                str += ' at least ' + p.lower;
-            }
+            if ('undefined' !== typeof p.lower) str += 'at least ' + p.lower;
             if ('undefined' !== typeof p.upper) {
-                if (str) str += ' and no more than ' + p.upper;
+                if (str) str += ' and';
+                str += ' no more than ' + p.upper;
             }
             str += ' characters long. Current length: ' + len;
             return str;
@@ -8630,7 +8630,7 @@
                         if (('undefined' !== typeof p.lower && len < p.lower) ||
                             ('undefined' !== typeof p.upper && len > p.upper)) {
 
-                            value.err = that.getText('textErr', len);
+                            out.err = that.getText('textErr', len);
                         }
                         return out;
                     };
@@ -8656,10 +8656,10 @@
 
             // TODO: add other types, e.g. date.
 
-            this.validation = function() {
+            this.validation = function(value) {
                 that.lastError = null;
                 that.lastValue = null;
-                return tmp();
+                return tmp(value);
             };
         }
 
@@ -8715,20 +8715,25 @@
 
         this.input = W.append('input', this.bodyDiv);
 
-        this.erroBox = W.append('div', this.bodyDiv);
+        this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
 
-        this.input.onchange = function() {
+        this.input.oninput = function() {
+            console.log('onchange');
             if (timeout) clearTimeout(timeout);
+            if (that.isHighlighted()) that.unhighlight();
             timeout = setTimeout(function() {
                 var res;
                 if (that.validation) res = that.validation(that.input.value);
-                if (res) {
-                    that.errorBox.innerHTML = res;
+                if (res.err) {
+                    that.errorBox.innerHTML = res.err;
                     that.highlight();
                 }
             }, 500);
         };
-
+        this.input.onclick = function() {
+            if (that.isHighlighted()) that.unhighlight();
+            
+        };
     };
 
 
@@ -8747,7 +8752,7 @@
             throw new TypeError('CustomInput.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        if (!this.table || this.highlighted) return;
+        if (!this.input || this.highlighted) return;
         this.input.style.border = border || '3px solid red';
         this.highlighted = true;
         this.emit('highlighted', border);
@@ -8764,6 +8769,7 @@
         if (!this.input || this.highlighted !== true) return;
         this.input.style.border = '';
         this.highlighted = false;
+        this.errorBox.innerHTML = '';
         this.emit('unhighlighted');
     };
 
@@ -8794,12 +8800,13 @@
     CustomInput.prototype.getValues = function(opts) {
         var res, valid;
         opts = opts || {};
-        res = this.validation(this.input.value);
+        res = this.input.value;
+        res = this.validation ? this.validation(res) : { value: res };
         valid = !!res.err;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
         if (!valid) this.highlight(res.err);
         else if (opts.reset) this.reset();
-        return value;
+        return res;
     };
 
 
@@ -9024,19 +9031,19 @@
 //  * www.nodegame.org
 //  */
 // (function(node) {
-// 
+//
 //     "use strict";
-// 
+//
 //     node.widgets.register('DateSelector', DateSelector);
-// 
+//
 //     // ## Meta-data
-// 
+//
 //     DateSelector.version = '0.0.1';
 //     DateSelector.description = 'Creates a date selector.';
-// 
+//
 //     DateSelector.title = 'false';
 //     DateSelector.className = 'dateselector';
-// 
+//
 //     DateSelector.text.months = function() {
 //         return [
 //             'January',
@@ -9051,15 +9058,15 @@
 //             'October',
 //             'November',
 //             'December'
-//         ];        
+//         ];
 //     };
-// 
+//
 //     // ## Dependencies
-// 
+//
 //     DateSelector.dependencies = {
 //         JSUS: {}
 //     };
-// 
+//
 //     /**
 //      * ## DateSelector constructor
 //      *
@@ -9070,39 +9077,39 @@
 //      *   table. All other options are passed to the init method.
 //      */
 //     function DateSelector(options) {
-// 
+//
 //         /**
 //          * ### DateSelector.months
 //          *
 //          * The HTML element triggering the listener function when clicked
 //          */
 //         this.months = null;
-// 
+//
 //         /**
 //          * ### DateSelector.days
 //          *
 //          * The HTML element triggering the listener function when clicked
 //          */
 //         this.days = null;
-// 
+//
 //         /**
 //          * ### DateSelector.years
 //          *
 //          * The s
 //          */
 //         this.years = null;
-// 
-// 
+//
+//
 //         /**
 //          * ### DateSelector.mainText
 //          *
 //          * A text preceeding the date selector
-//          */        
+//          */
 //         this.mainText = null;
 //     }
-// 
+//
 //     // ## DateSelector methods
-// 
+//
 //     /**
 //      * ### DateSelector.init
 //      *
@@ -9116,10 +9123,10 @@
 //     DateSelector.prototype.init = function(options) {
 //         var tmp, that;
 //         that = this;
-// 
+//
 //     };
-// 
-// 
+//
+//
 //     /**
 //      * ### DateSelector.append
 //      *
@@ -9136,7 +9143,7 @@
 //      * @see Widget.append
 //      */
 //     DateSelector.prototype.append = function() {
-// 
+//
 //         // MainText.
 //         if (this.mainText) {
 //             this.spanMainText = document.createElement('span');
@@ -9146,10 +9153,10 @@
 //             // Append mainText.
 //             this.bodyDiv.appendChild(this.spanMainText);
 //         }
-// 
+//
 //     };
-// 
-// 
+//
+//
 //     /**
 //      * ### DateSelector.highlight
 //      *
@@ -9170,7 +9177,7 @@
 //         this.highlighted = true;
 //         this.emit('highlighted', border);
 //     };
-// 
+//
 //     /**
 //      * ### DateSelector.unhighlight
 //      *
@@ -9184,7 +9191,7 @@
 //         this.highlighted = false;
 //         this.emit('unhighlighted');
 //     };
-// 
+//
 //     /**
 //      * ### DateSelector.getValues
 //      *
@@ -9211,11 +9218,11 @@
 //     DateSelector.prototype.getValues = function(opts) {
 //         var obj, resetOpts;
 //         opts = opts || {};
-// 
+//
 //         return obj;
 //     };
-// 
-// 
+//
+//
 // })(node);
 
 /**
