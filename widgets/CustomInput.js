@@ -31,16 +31,17 @@
     };
 
     CustomInput.texts = {
-        numFloatErr: function(w, isFloat) {
+        numericErr: function(w) {
             var str, p, inc;
             p = w.params;
             // Weird, but valid, case.
             if (p.exactly) return 'Must enter ' + p.lower;
             // Others.
             inc = '(inclusive)';
-            str = 'Must be a ';
-            if (isFloat) str += 'floating point ';
-            str += 'number ';
+            str = 'Must be a';
+            if (w.type === 'float') str += 'floating point';
+            else if (w.type === 'int') str += 'n integer';
+            str += ' number ';
             if (p.between) {
                 str += 'between ' + p.lower;
                 if (p.leq) str += inc;
@@ -176,7 +177,7 @@
     CustomInput.prototype.init = function(opts) {
         var tmp, that, e, isText;
         that = this;
-        e = 'CustomInput.init: options.';
+        e = 'CustomInput.init: ';
         if (opts.type) {
             if (!CustomInput.types[opts.type]) {
                 throw new Error(e + 'type not supported: ' + opts.type);
@@ -211,20 +212,6 @@
                                             'undefined. Found: ' + opts.min);
                     }
                     this.params.lower = opts.min;
-                }
-                // Greater or equal than.
-                if ('undefined' !== typeof opts.minEq) {
-                    tmp = J.isNumber(opts.minEq);
-                    if (false === tmp) {
-                        throw new TypeError(e + 'minEq ' +
-                                            'must be number or undefined. ' +
-                                            'Found: ' + opts.minEq);
-                    }
-                    if ('undefined' !== typeof this.params.lower) {
-                        node.warn(e + 'min is ignored if minEq is also set');
-                    }
-                    // Set the params for text and num/float.
-                    this.params.lower = opts.minEq;
                     this.params.leq = true;
                 }
                 // Less than.
@@ -235,21 +222,11 @@
                                             'undefined. Found: ' + opts.max);
                     }
                     this.params.upper = opts.max;
-                }
-                // Less or equal than.
-                if ('undefined' !== typeof opts.maxEq) {
-                    tmp = J.isNumber(opts.maxEq);
-                    if (false === tmp) {
-                        throw new TypeError(e + 'maxEq must be number or ' +
-                                            'undefined. Found: ' + opts.maxEq);
-                    }
-                    if ('undefined' !== typeof this.params.upper) {
-                        node.warn(e + 'max is ignored if maxEq is also set');
-                    }
-                    // Set the params for text and num/float.
-                    this.params.upper = opts.maxEq;
                     this.params.ueq = true;
                 }
+
+                if (opts.strictlyGreater) this.params.leq = false;
+                if (opts.strictlyLess) this.params.ueq = false;
 
                 // Checks on both min and max.
                 if ('undefined' !== typeof this.params.lower &&
@@ -257,7 +234,7 @@
 
                     if (this.params.lower > this.params.upper) {
                         throw new TypeError(e + 'min cannot be greater ' +
-                                            'than options.max. Found: ' +
+                                            'than max. Found: ' +
                                             opts.min + '> ' + opts.max);
                     }
                     // Exact length.
@@ -265,9 +242,21 @@
                         if (!this.params.leq || !this.params.ueq) {
 
                             throw new TypeError(e + 'min cannot be equal to ' +
-                                                'options.max. Try minEq  ' +
-                                                'and maxEq instead. Found: ' +
-                                                opts.min);
+                                                'max when strictlyGreater or ' +
+                                                'strictlyLess are set. ' +
+                                                'Found: ' + opts.min);
+                        }
+                        if (this.type === 'int' || this.type === 'text') {
+                            if (J.isFloat(this.params.lower)) {
+
+
+                                throw new TypeError(e + 'min cannot be a ' +
+                                                    'floating point number ' +
+                                                    'and equal to ' +
+                                                    'max, when type ' +
+                                                    'is not "float". Found: ' +
+                                                    opts.min);
+                            }
                         }
                         // Store this to create better error strings.
                         this.params.exactly = true;
@@ -280,23 +269,20 @@
 
                 // Checks for text only.
                 if (isText) {
-                    if (this.params.lower < 0) {
-                        throw new TypeError(e + 'min and minEq cannot be a ' +
-                                            'negative when type ' +
-                                            'is "text". Found: ' +
-                                            this.params.lower);
-                    }
-                    if (this.params.upper < 0) {
-                        throw new TypeError(e + 'max and maxEq cannot be  ' +
-                                            'negative when type ' +
-                                            'is "text". Found: ' +
-                                            this.params.upper);
-                    }
-
                     if ('undefined' !== typeof this.params.lower) {
+                        if (this.params.lower < 0) {
+                            throw new TypeError(e + 'min cannot be negative ' +
+                                                'when type is "text". Found: ' +
+                                                this.params.lower);
+                        }
                         if (!this.params.leq) this.params.lower++;
                     }
                     if ('undefined' !== typeof this.params.upper) {
+                        if (this.params.upper < 0) {
+                            throw new TypeError(e + 'max cannot be negative ' +
+                                                'when type is "text". Found: ' +
+                                                this.params.upper);
+                        }
                         if (!this.params.ueq) this.params.upper--;
                     }
 
@@ -323,9 +309,10 @@
                 }
                 else {
                     tmp = (function() {
-                        var cb, isFloat;
-                        cb = isFloat ? J.isFloat : J.isNumber;
-                        isFloat = that.type === 'float';
+                        var cb;
+                        if (that.type === 'float') cb = J.isFloat;
+                        else if (that.type === 'int') cb = J.isInt;
+                        else cb = J.isNumber;
                         return function(value) {
                             var res, p;
                             p = that.params;
@@ -333,7 +320,7 @@
                             if (res !== false) return { value: res };
                             return {
                                 value: value,
-                                err: that.getText('numFloatErr', isFloat)
+                                err: that.getText('numericErr')
                             };
                         };
                     })();
@@ -471,6 +458,5 @@
         else if (opts.reset) this.reset();
         return res;
     };
-
 
 })(node);
