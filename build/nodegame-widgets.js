@@ -8463,6 +8463,9 @@
         dateErr: function(w, invalid) {
             return invalid ? 'Date is invalid' : 'Must follow format ' +
                 w.params.format;
+        },
+        emptyErr: function(w) {
+            return 'Cannot be empty'
         }
     };
 
@@ -8496,6 +8499,15 @@
          * The type of input
          */
         this.type = null;
+
+        /**
+         * ### CustomInput.preprocess
+         *
+         * The function that preprocess the input before validation
+         *
+         * The function receives the input form and must modify it directly
+         */
+        this.preprocess = null;
 
         /**
          * ### CustomInput.validation
@@ -8541,11 +8553,20 @@
         /**
          * ### CustomInput.brAfterMainText
          *
-         * TRUE, if a br is inserted between the main text and the input
+         * If TRUE, a br is inserted between the main text and the input
          *
          * Default: TRUE
          */
         this.brAfterMainText = null;
+
+        /**
+         * ### CustomInput.requiredChoice
+         *
+         * If TRUE, the input form cannot be left empty
+         *
+         * Default: TRUE
+         */
+        this.requiredChoice = null;
     }
 
     // ## CustomInput methods
@@ -8561,6 +8582,10 @@
         var tmp, that, e, isText;
         that = this;
         e = 'CustomInput.init: ';
+
+        debugger
+        this.requiredChoice = !!opts.requiredChoice;
+        
         if (opts.type) {
             if (!CustomInput.types[opts.type]) {
                 throw new Error(e + 'type not supported: ' + opts.type);
@@ -8728,7 +8753,7 @@
                         throw new Error(e + 'date format is invalid. Found: ' +
                                         opts.format);
                     }
-                    this.params.format = opts.format;                 
+                    this.params.format = opts.format;
                 }
                 else {
                     this.params.format = 'mm/dd/yyyy';
@@ -8738,13 +8763,13 @@
                 this.params.yearDigits = tmp[2].length;
                 this.params.dayPos = tmp[0].charAt(0) === 'd' ? 0 : 1;
                 this.params.monthPos =  this.params.dayPos ? 0 : 1;
-                
+
                 tmp = function(value) {
                     var p, tokens, tmp, err, res, dayNum, l1, l2;
                     p = that.params;
 
                     // Is the format valid.
-                    
+
                     tokens = value.split(p.sep);
                     if (tokens.length !== 3) {
                         return { err: that.getText('dateErr') };
@@ -8754,10 +8779,10 @@
                     if (tokens[2].length !== p.yearDigits) {
                         return { err: that.getText('dateErr') };
                     }
-                    
+
                     // Now we check if the date is valid.
-                    
-                    res = {};                    
+
+                    res = {};
                     if (p.yearDigits === 2) {
                         l1 = -1;
                         l2 = 100;
@@ -8769,8 +8794,8 @@
                     tmp = J.isInt(tokens[2], l1, l2);
                     if (tmp !== false) res.year = tmp;
                     else err = true;
-                    
-                    
+
+
                     // Month.
                     tmp = J.isInt(tokens[p.monthPos], 1, 12, 1, 1);
                     if (!tmp) err = true;
@@ -8778,7 +8803,7 @@
                     // 31 or 30 days?
                     if (tmp === 1 || tmp === 3 || tmp === 5 || tmp === 7 ||
                         tmp === 8 || tmp === 10 || tmp === 12) {
-                        
+
                         dayNum = 31;
                     }
                     else if (tmp !== 2) {
@@ -8795,16 +8820,32 @@
                     if (!tmp) err = true;
                     else res.day = tmp;
 
-                    // 
+                    //
                     if (err) res.err = that.getText('dateErr', true);
                     return res;
                 };
             }
             // TODO: add other types, e.g. date, int and email.
 
-            this.validation = tmp;
+            this.validation = function(value) {
+                var res;
+                if (that.requiredChoice && value.trim() === '') {
+                    res = { err: that.getText('emptyErr') };
+                }
+                else {
+                    res = tmp(value);
+                }
+                return res;
+            };                
         }
 
+        if (opts.preprocess) {
+            if ('function' !== typeof opts.preprocess) {
+                throw new TypeError(e + 'preprocess must be function or ' +
+                                    'undefined. Found: ' + opts.preprocess);
+            }
+            this.preprocess = opts.preprocess;
+        }
         if (opts.mainText) {
             if ('string' !== typeof opts.mainText) {
                 throw new TypeError(e + 'mainText must be string or ' +
@@ -8844,6 +8885,7 @@
         this.input.oninput = function() {
             if (timeout) clearTimeout(timeout);
             if (that.isHighlighted()) that.unhighlight();
+            if (that.preprocess) that.preprocess(that.input);
             timeout = setTimeout(function() {
                 var res;
                 if (that.validation) res = that.validation(that.input.value);
@@ -8925,10 +8967,11 @@
         opts = opts || {};
         res = this.input.value;
         res = this.validation ? this.validation(res) : { value: res };
-        valid = !!res.err;
+        valid = !res.err;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
         if (!valid) this.highlight(res.err);
         else if (opts.reset) this.reset();
+        res.id = this.id;
         return res;
     };
 

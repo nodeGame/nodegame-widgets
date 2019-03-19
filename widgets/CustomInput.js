@@ -84,6 +84,9 @@
         dateErr: function(w, invalid) {
             return invalid ? 'Date is invalid' : 'Must follow format ' +
                 w.params.format;
+        },
+        emptyErr: function(w) {
+            return 'Cannot be empty'
         }
     };
 
@@ -117,6 +120,15 @@
          * The type of input
          */
         this.type = null;
+
+        /**
+         * ### CustomInput.preprocess
+         *
+         * The function that preprocess the input before validation
+         *
+         * The function receives the input form and must modify it directly
+         */
+        this.preprocess = null;
 
         /**
          * ### CustomInput.validation
@@ -162,11 +174,20 @@
         /**
          * ### CustomInput.brAfterMainText
          *
-         * TRUE, if a br is inserted between the main text and the input
+         * If TRUE, a br is inserted between the main text and the input
          *
          * Default: TRUE
          */
         this.brAfterMainText = null;
+
+        /**
+         * ### CustomInput.requiredChoice
+         *
+         * If TRUE, the input form cannot be left empty
+         *
+         * Default: TRUE
+         */
+        this.requiredChoice = null;
     }
 
     // ## CustomInput methods
@@ -182,6 +203,10 @@
         var tmp, that, e, isText;
         that = this;
         e = 'CustomInput.init: ';
+
+        // TODO: this becomes false later on. Why???
+        this.requiredChoice = !!opts.requiredChoice;
+
         if (opts.type) {
             if (!CustomInput.types[opts.type]) {
                 throw new Error(e + 'type not supported: ' + opts.type);
@@ -423,9 +448,25 @@
             }
             // TODO: add other types, e.g. date, int and email.
 
-            this.validation = tmp;
+            this.validation = function(value) {
+                var res;
+                if (that.requiredChoice && value.trim() === '') {
+                    res = { err: that.getText('emptyErr') };
+                }
+                else {
+                    res = tmp(value);
+                }
+                return res;
+            };
         }
 
+        if (opts.preprocess) {
+            if ('function' !== typeof opts.preprocess) {
+                throw new TypeError(e + 'preprocess must be function or ' +
+                                    'undefined. Found: ' + opts.preprocess);
+            }
+            this.preprocess = opts.preprocess;
+        }
         if (opts.mainText) {
             if ('string' !== typeof opts.mainText) {
                 throw new TypeError(e + 'mainText must be string or ' +
@@ -465,6 +506,7 @@
         this.input.oninput = function() {
             if (timeout) clearTimeout(timeout);
             if (that.isHighlighted()) that.unhighlight();
+            if (that.preprocess) that.preprocess(that.input);
             timeout = setTimeout(function() {
                 var res;
                 if (that.validation) res = that.validation(that.input.value);
@@ -546,10 +588,11 @@
         opts = opts || {};
         res = this.input.value;
         res = this.validation ? this.validation(res) : { value: res };
-        valid = !!res.err;
+        valid = !res.err;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
         if (!valid) this.highlight(res.err);
         else if (opts.reset) this.reset();
+        res.id = this.id;
         return res;
     };
 
