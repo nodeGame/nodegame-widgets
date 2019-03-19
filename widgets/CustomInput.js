@@ -22,11 +22,17 @@
     CustomInput.panel = false;
     CustomInput.className = 'custominput';
 
+    CustomInput.types = {
+        text: true,
+        number: true,
+        'float': true
+    };
+
     CustomInput.texts = {
         numFloatErr: function(w, isFloat) {
             var str, p;
             p = w.params;
-            str = 'Please enter a ';
+            str = 'Must be a ';
             if (isFloat) str += 'floating point ';
             str += 'number';
             if ('undefined' !== typeof p.lower) {
@@ -45,7 +51,7 @@
         textErr: function(w, len) {
             var str, p;
             p = w.params;
-            str = 'Please enter a text ';
+            str = 'Must be ';
             if ('undefined' !== typeof p.lower) str += 'at least ' + p.lower;
             if ('undefined' !== typeof p.upper) {
                 if (str) str += ' and';
@@ -159,10 +165,13 @@
     CustomInput.prototype.init = function(options) {
         var tmp, that, e, isText;
         that = this;
-        e = 'CustomInput.init: ';
-        if (options.type && !CustomInput.types[option.type]) {
-            throw new Error('CustomInput.init: type not supported: ' +
-                            options.type);
+        e = 'CustomInput.init: options.';
+        if (options.type) {
+            if (!CustomInput.types[options.type]) {
+                throw new Error('CustomInput.init: type not supported: ' +
+                                options.type);
+            }
+            this.type = options.type;
         }
         else {
             this.type = 'text';
@@ -170,7 +179,7 @@
 
         if (options.validation) {
             if ('function' !== typeof options.validation) {
-                throw new TypeError(e + 'options.validation must be function ' +
+                throw new TypeError(e + 'validation must be function ' +
                                     'or undefined. Found: ' +
                                     options.validation);
             }
@@ -187,60 +196,66 @@
                 if ('undefined' !== typeof options.min) {
                     tmp = J.isNumber(options.min);
                     if (false === tmp) {
-                        throw new TypeError(e + 'options.min must be ' +
-                                            'number or undefined. Found: ' +
-                                            options.min);
+                        throw new TypeError(e + 'min must be number or ' +
+                                            'undefined. Found: ' + options.min);
                     }
                     if (isText && tmp < 0) {
-                        throw new TypeError(e + 'options.min cannot be a ' +
+                        throw new TypeError(e + 'min cannot be a ' +
                                             'negative number when type ' +
                                             'is "text". Found: ' + options.min);
                     }
                     this.params.lower = options.min;
                 }
                 if ('undefined' !== typeof options.minEq) {
-                    tmp = J.isNumber(options.min);
+                    tmp = J.isNumber(options.minEq);
                     if (false === tmp) {
-                        throw new TypeError(e + 'options.minEq ' +
+                        throw new TypeError(e + 'minEq ' +
                                             'must be number or undefined. ' +
                                             'Found: ' + options.minEq);
                     }
-                    if ('undefined' !== typeof this.params.min) {
-                        node.warn(e + 'option min is ignored when ' +
-                                  'minEq is specified.');
+                    if ('undefined' !== typeof this.params.lower) {
+                        node.warn(e + 'min is ignored if minEq is also set');
                     }
                     // Set the params for text and num/float.
-                    if (isText)  this.params.min--;
-                    else this.params.leq = true;
+                    if (isText) {
+                        this.params.min--;
+                    }
+                    else {
+                        this.params.lower = options.minEq;
+                        this.params.leq = true;
+                    }
                 }
                 if ('undefined' !== typeof options.max) {
                     tmp = J.isNumber(options.max);
                     if (false === tmp) {
-                        throw new TypeError(e + 'options.max must be ' +
-                                            'number or undefined. Found: ' +
-                                            options.max);
+                        throw new TypeError(e + 'max must be number or ' +
+                                            'undefined. Found: ' + options.max);
                     }
                     if (isText && tmp < 0) {
-                        throw new TypeError(e + 'options.max cannot be a ' +
+                        throw new TypeError(e + 'max cannot be a ' +
                                             'negative number when type ' +
                                             'is "text". Found: ' + options.max);
                     }
                     this.params.upper = options.max;
                 }
                 if ('undefined' !== typeof options.maxEq) {
-                    tmp = J.isNumber(options.max);
+                    tmp = J.isNumber(options.maxEq);
                     if (false === tmp) {
-                        throw new TypeError(e + 'options.maxEq ' +
-                                            'must be number or undefined. ' +
-                                            'Found: ' + options.maxEq);
+                        throw new TypeError(e + 'maxEq must be number or ' +
+                                            'undefined. Found: ' +
+                                            options.maxEq);
                     }
-                    if ('undefined' !== typeof this.params.max) {
-                        node.warn(e + 'option max is ignored when ' +
-                                  'maxEq is specified.');
+                    if ('undefined' !== typeof this.params.upper) {
+                        node.warn(e + 'max is ignored if maxEq is also set');
                     }
                     // Set the params for text and num/float.
-                    if (isText)  this.params.min++;
-                    else this.params.ueq = true;
+                    if (isText) {
+                        this.params.min++;
+                    }
+                    else {
+                        this.params.upper = options.max;
+                        this.params.ueq = true;
+                    }
                 }
                 if (isText) {
                     tmp = function(value) {
@@ -268,7 +283,7 @@
                             if (res !== false) return { value: res };
                             return {
                                 value: value,
-                                err: that.getText('numOrFloatErr', isFloat)
+                                err: that.getText('numFloatErr', isFloat)
                             };
                         };
                     })();
@@ -286,17 +301,15 @@
 
         if (options.mainText) {
             if ('string' !== typeof options.mainText) {
-                throw new TypeError(e + 'options.mainText ' +
-                                    'must be string or undefined. Found: ' +
-                                    options.mainText);
+                throw new TypeError(e + 'mainText must be string or ' +
+                                    'undefined. Found: ' + options.mainText);
             }
             this.mainText = options.mainText;
         }
         if (options.hintText) {
             if ('string' !== typeof options.hintText) {
-                throw new TypeError(e + 'options.hintText ' +
-                                    'must be string or undefined. Found: ' +
-                                    options.hintText);
+                throw new TypeError(e + 'hintText must be string or ' +
+                                    'undefined. Found: ' + options.hintText);
             }
             this.hintText = options.hintText;
         }
