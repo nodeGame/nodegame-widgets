@@ -8394,7 +8394,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.1.0';
+    CustomInput.version = '0.3.0';
     CustomInput.description = 'Creates a configurable input box';
 
     CustomInput.title = false;
@@ -8404,17 +8404,22 @@
     CustomInput.types = {
         text: true,
         number: true,
-        'float': true
+        'float': true,
+        'int': true,
+        date: true
     };
 
     CustomInput.texts = {
         numFloatErr: function(w, isFloat) {
             var str, p, inc;
             p = w.params;
+            // Weird, but valid, case.
+            if (p.exactly) return 'Must enter ' + p.lower;
+            // Others.
             inc = '(inclusive)';
             str = 'Must be a ';
             if (isFloat) str += 'floating point ';
-            str += 'number ';            
+            str += 'number ';
             if (p.between) {
                 str += 'between ' + p.lower;
                 if (p.leq) str += inc;
@@ -8437,14 +8442,22 @@
             var str, p;
             p = w.params;
             str = 'Must be ';
-            if ('undefined' !== typeof p.lower) str += 'at least ' + p.lower;
-            if ('undefined' !== typeof p.upper) {
-                if (str) str += ' and';
-                str += ' no more than ' + p.upper;
+            if (p.exactly) {
+                str += 'exactly ' + (p.lower + 1);
             }
-            str += ' characters long. Current length: ' + len;
+            else if (p.between) {
+                str += 'between ' + p.lower + ' and ' + p.upper;
+            }
+            else if ('undefined' !== typeof p.lower) {
+                str += ' more than ' + (p.lower -1);
+            }
+            else if ('undefined' !== typeof p.upper) {
+                str += ' less than ' + (p.upper + 1);
+            }
+            str += ' characters long';
+            if (p.between) str += ' (extremes included)';
+            str += '. Current length: ' + len;
             return str;
-
         }
     };
 
@@ -8507,20 +8520,6 @@
         this.params = {};
 
         /**
-         * ### CustomInput.hint
-         *
-         * A text describing how to fill in the form
-         */
-        this.hintText = null;
-
-        /**
-         * ### CustomInput.hintBox
-         *
-         * An HTML element containing the hint text
-         */
-        this.hintBox = null;
-
-        /**
          * ### CustomInput.errorBox
          *
          * An HTML element displayed when a validation error occurs
@@ -8533,6 +8532,15 @@
          * A text preceeding the date selector
          */
         this.mainText = null;
+
+        /**
+         * ### CustomInput.brAfterMainText
+         *
+         * TRUE, if a br is inserted between the main text and the input
+         *
+         * Default: TRUE
+         */
+        this.brAfterMainText = null;
     }
 
     // ## CustomInput methods
@@ -8542,121 +8550,153 @@
      *
      * Initializes the instance
      *
-     * Available options are:
-     *
-     *
-     * @param {object} options Configuration options
+     * @param {object} opts Configuration options
      */
-    CustomInput.prototype.init = function(options) {
+    CustomInput.prototype.init = function(opts) {
         var tmp, that, e, isText;
         that = this;
         e = 'CustomInput.init: options.';
-        if (options.type) {
-            if (!CustomInput.types[options.type]) {
-                throw new Error('CustomInput.init: type not supported: ' +
-                                options.type);
+        if (opts.type) {
+            if (!CustomInput.types[opts.type]) {
+                throw new Error(e + 'type not supported: ' + opts.type);
             }
-            this.type = options.type;
+            this.type = opts.type;
         }
         else {
             this.type = 'text';
         }
 
-        if (options.validation) {
-            if ('function' !== typeof options.validation) {
+        if (opts.validation) {
+            if ('function' !== typeof opts.validation) {
                 throw new TypeError(e + 'validation must be function ' +
                                     'or undefined. Found: ' +
-                                    options.validation);
+                                    opts.validation);
             }
-            this.validation = options.validation;
+            this.validation = opts.validation;
         }
         else {
             // Add default validations based on type.
 
             if (this.type === 'number' || this.type === 'float' ||
-                this.type === 'text') {
+                this.type === 'int' || this.type === 'text') {
 
                 isText = this.type === 'text';
 
-                if ('undefined' !== typeof options.min) {
-                    tmp = J.isNumber(options.min);
+                // Greater than.
+                if ('undefined' !== typeof opts.min) {
+                    tmp = J.isNumber(opts.min);
                     if (false === tmp) {
                         throw new TypeError(e + 'min must be number or ' +
-                                            'undefined. Found: ' + options.min);
+                                            'undefined. Found: ' + opts.min);
                     }
-                    if (isText && tmp < 0) {
-                        throw new TypeError(e + 'min cannot be a ' +
-                                            'negative number when type ' +
-                                            'is "text". Found: ' + options.min);
-                    }
-                    this.params.lower = options.min;
+                    this.params.lower = opts.min;
                 }
-                if ('undefined' !== typeof options.minEq) {
-                    tmp = J.isNumber(options.minEq);
+                // Greater or equal than.
+                if ('undefined' !== typeof opts.minEq) {
+                    tmp = J.isNumber(opts.minEq);
                     if (false === tmp) {
                         throw new TypeError(e + 'minEq ' +
                                             'must be number or undefined. ' +
-                                            'Found: ' + options.minEq);
+                                            'Found: ' + opts.minEq);
                     }
                     if ('undefined' !== typeof this.params.lower) {
                         node.warn(e + 'min is ignored if minEq is also set');
                     }
                     // Set the params for text and num/float.
-                    if (isText) {
-                        this.params.min--;
-                    }
-                    else {
-                        this.params.lower = options.minEq;
-                        this.params.leq = true;
-                    }
+                    this.params.lower = opts.minEq;
+                    this.params.leq = true;
                 }
-                if ('undefined' !== typeof options.max) {
-                    tmp = J.isNumber(options.max);
+                // Less than.
+                if ('undefined' !== typeof opts.max) {
+                    tmp = J.isNumber(opts.max);
                     if (false === tmp) {
                         throw new TypeError(e + 'max must be number or ' +
-                                            'undefined. Found: ' + options.max);
+                                            'undefined. Found: ' + opts.max);
                     }
-                    if (isText && tmp < 0) {
-                        throw new TypeError(e + 'max cannot be a ' +
-                                            'negative number when type ' +
-                                            'is "text". Found: ' + options.max);
-                    }
-                    this.params.upper = options.max;
-                    if ('undefined' !== typeof this.params.lower) {
-                        // Store this to create better error strings.
-                        this.params.between = true;
-                    }
+                    this.params.upper = opts.max;
                 }
-                if ('undefined' !== typeof options.maxEq) {
-                    tmp = J.isNumber(options.maxEq);
+                // Less or equal than.
+                if ('undefined' !== typeof opts.maxEq) {
+                    tmp = J.isNumber(opts.maxEq);
                     if (false === tmp) {
                         throw new TypeError(e + 'maxEq must be number or ' +
-                                            'undefined. Found: ' +
-                                            options.maxEq);
+                                            'undefined. Found: ' + opts.maxEq);
                     }
                     if ('undefined' !== typeof this.params.upper) {
                         node.warn(e + 'max is ignored if maxEq is also set');
                     }
                     // Set the params for text and num/float.
-                    if (isText) {
-                        this.params.min++;
+                    this.params.upper = opts.maxEq;
+                    this.params.ueq = true;
+                }
+
+                // Checks on both min and max.
+                if ('undefined' !== typeof this.params.lower &&
+                    'undefined' !== typeof this.params.upper) {
+
+                    if (this.params.lower > this.params.upper) {
+                        throw new TypeError(e + 'min cannot be greater ' +
+                                            'than options.max. Found: ' +
+                                            opts.min + '> ' + opts.max);
+                    }
+                    // Exact length.
+                    if (this.params.lower === this.params.upper) {
+                        if (!this.params.leq || !this.params.ueq) {
+
+                            throw new TypeError(e + 'min cannot be equal to ' +
+                                                'options.max. Try minEq  ' +
+                                                'and maxEq instead. Found: ' +
+                                                opts.min);
+                        }
+                        // Store this to create better error strings.
+                        this.params.exactly = true;
                     }
                     else {
-                        this.params.upper = options.max;
-                        this.params.ueq = true;
+                        // Store this to create better error strings.
+                        this.params.between = true;
                     }
                 }
+
+                // Checks for text only.
                 if (isText) {
+                    if (this.params.lower < 0) {
+                        throw new TypeError(e + 'min and minEq cannot be a ' +
+                                            'negative when type ' +
+                                            'is "text". Found: ' +
+                                            this.params.lower);
+                    }
+                    if (this.params.upper < 0) {
+                        throw new TypeError(e + 'max and maxEq cannot be  ' +
+                                            'negative when type ' +
+                                            'is "text". Found: ' +
+                                            this.params.upper);
+                    }
+
+                    if ('undefined' !== typeof this.params.lower) {
+                        if (!this.params.leq) this.params.lower++;
+                    }
+                    if ('undefined' !== typeof this.params.upper) {
+                        if (!this.params.ueq) this.params.upper--;
+                    }
+
                     tmp = function(value) {
-                        var len, p, out;
+                        var len, p, out, err;
                         p = that.params;
                         len = value.length;
                         out = { value: value };
-                        if (('undefined' !== typeof p.lower && len < p.lower) ||
-                            ('undefined' !== typeof p.upper && len > p.upper)) {
-
-                            out.err = that.getText('textErr', len);
+                        if (p.exactly) {
+                            err = len !== p.lower;
                         }
+                        else {
+                            if (('undefined' !== typeof p.lower &&
+                                 len < p.lower) ||
+                                ('undefined' !== typeof p.upper &&
+                                 len > p.upper)) {
+
+                                err = true;
+                            }
+                        }
+                        if (err) out.err = that.getText('textErr', len);
                         return out;
                     };
                 }
@@ -8666,7 +8706,7 @@
                         cb = isFloat ? J.isFloat : J.isNumber;
                         isFloat = that.type === 'float';
                         return function(value) {
-                            var out, res, p;
+                            var res, p;
                             p = that.params;
                             res = cb(value, p.lower, p.upper, p.leq, p.ueq);
                             if (res !== false) return { value: res };
@@ -8679,32 +8719,20 @@
                 }
             }
 
-            // TODO: add other types, e.g. date.
+            // TODO: add other types, e.g. date, int and email.
 
-            this.validation = function(value) {
-                that.lastError = null;
-                that.lastValue = null;
-                return tmp(value);
-            };
+            this.validation = tmp;
         }
 
-        if (options.mainText) {
-            if ('string' !== typeof options.mainText) {
+        if (opts.mainText) {
+            if ('string' !== typeof opts.mainText) {
                 throw new TypeError(e + 'mainText must be string or ' +
-                                    'undefined. Found: ' + options.mainText);
+                                    'undefined. Found: ' + opts.mainText);
             }
-            this.mainText = options.mainText;
+            this.mainText = opts.mainText;
         }
-        if (options.hintText) {
-            if ('string' !== typeof options.hintText) {
-                throw new TypeError(e + 'hintText must be string or ' +
-                                    'undefined. Found: ' + options.hintText);
-            }
-            this.hintText = options.hintText;
-        }
-        else {
-            // TODO: generate a simple hint text based on type and params.
-        }
+        this.brAfterMainText = 'undefined' === typeof opts.brAfterMainText ?
+            true : !!opts.brAfterMainText;
     };
 
 
@@ -8712,14 +8740,6 @@
      * ### CustomInput.append
      *
      * Implements Widget.append
-     *
-     * Checks that id is unique.
-     *
-     * Appends (all optional):
-     *
-     *   - mainText: a question or statement introducing the choices
-     *   - table: the table containing the choices
-     *   - freeText: a textarea for comments
      *
      * @see Widget.append
      */
@@ -8729,11 +8749,11 @@
 
         // MainText.
         if (this.mainText) {
-            this.spanMainText = document.createElement('span');
-            this.spanMainText.className = 'maintext';
-            this.spanMainText.innerHTML = this.mainText;
-            // Append mainText.
-            this.bodyDiv.appendChild(this.spanMainText);
+            this.spanMainText = W.append('span', this.bodyDiv, {
+                className: 'maintext',
+                innerHTML: this.mainText
+            });
+            if (this.brAfterMainText) W.append('br', this.bodyDiv);
         }
 
         this.input = W.append('input', this.bodyDiv);
@@ -8741,7 +8761,6 @@
         this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
 
         this.input.oninput = function() {
-            console.log('onchange');
             if (timeout) clearTimeout(timeout);
             if (that.isHighlighted()) that.unhighlight();
             timeout = setTimeout(function() {
@@ -9041,212 +9060,6 @@
     };
 
 })(node);
-
-// /**
-//  * # DateSelector
-//  * Copyright(c) 2019 Stefano Balietti
-//  * MIT Licensed
-//  *
-//  * Creates a configurable table where each cell is a selectable choice
-//  *
-//  * // TODO: register time for each current choice if selectMultiple is on?
-//  *
-//  * www.nodegame.org
-//  */
-// (function(node) {
-//
-//     "use strict";
-//
-//     node.widgets.register('DateSelector', DateSelector);
-//
-//     // ## Meta-data
-//
-//     DateSelector.version = '0.0.1';
-//     DateSelector.description = 'Creates a date selector.';
-//
-//     DateSelector.title = 'false';
-//     DateSelector.className = 'dateselector';
-//
-//     DateSelector.text.months = function() {
-//         return [
-//             'January',
-//             'February',
-//             'March',
-//             'April',
-//             'May',
-//             'June',
-//             'July',
-//             'August',
-//             'September',
-//             'October',
-//             'November',
-//             'December'
-//         ];
-//     };
-//
-//     // ## Dependencies
-//
-//     DateSelector.dependencies = {
-//         JSUS: {}
-//     };
-//
-//     /**
-//      * ## DateSelector constructor
-//      *
-//      * Creates a new instance of DateSelector
-//      *
-//      * @param {object} options Optional. Configuration options.
-//      *   If a `table` option is specified, it sets it as the clickable
-//      *   table. All other options are passed to the init method.
-//      */
-//     function DateSelector(options) {
-//
-//         /**
-//          * ### DateSelector.months
-//          *
-//          * The HTML element triggering the listener function when clicked
-//          */
-//         this.months = null;
-//
-//         /**
-//          * ### DateSelector.days
-//          *
-//          * The HTML element triggering the listener function when clicked
-//          */
-//         this.days = null;
-//
-//         /**
-//          * ### DateSelector.years
-//          *
-//          * The s
-//          */
-//         this.years = null;
-//
-//
-//         /**
-//          * ### DateSelector.mainText
-//          *
-//          * A text preceeding the date selector
-//          */
-//         this.mainText = null;
-//     }
-//
-//     // ## DateSelector methods
-//
-//     /**
-//      * ### DateSelector.init
-//      *
-//      * Initializes the instance
-//      *
-//      * Available options are:
-//      *
-//      *
-//      * @param {object} options Configuration options
-//      */
-//     DateSelector.prototype.init = function(options) {
-//         var tmp, that;
-//         that = this;
-//
-//     };
-//
-//
-//     /**
-//      * ### DateSelector.append
-//      *
-//      * Implements Widget.append
-//      *
-//      * Checks that id is unique.
-//      *
-//      * Appends (all optional):
-//      *
-//      *   - mainText: a question or statement introducing the choices
-//      *   - table: the table containing the choices
-//      *   - freeText: a textarea for comments
-//      *
-//      * @see Widget.append
-//      */
-//     DateSelector.prototype.append = function() {
-//
-//         // MainText.
-//         if (this.mainText) {
-//             this.spanMainText = document.createElement('span');
-//             this.spanMainText.className = this.className ?
-//                 DateSelector.className + '-maintext' : 'maintext';
-//             this.spanMainText.innerHTML = this.mainText;
-//             // Append mainText.
-//             this.bodyDiv.appendChild(this.spanMainText);
-//         }
-//
-//     };
-//
-//
-//     /**
-//      * ### DateSelector.highlight
-//      *
-//      * Highlights the choice table
-//      *
-//      * @param {string} The style for the table's border.
-//      *   Default '3px solid red'
-//      *
-//      * @see DateSelector.highlighted
-//      */
-//     DateSelector.prototype.highlight = function(border) {
-//         if (border && 'string' !== typeof border) {
-//             throw new TypeError('DateSelector.highlight: border must be ' +
-//                                 'string or undefined. Found: ' + border);
-//         }
-//         if (!this.table || this.highlighted) return;
-//         this.table.style.border = border || '3px solid red';
-//         this.highlighted = true;
-//         this.emit('highlighted', border);
-//     };
-//
-//     /**
-//      * ### DateSelector.unhighlight
-//      *
-//      * Removes highlight from the choice table
-//      *
-//      * @see DateSelector.highlighted
-//      */
-//     DateSelector.prototype.unhighlight = function() {
-//         if (!this.table || this.highlighted !== true) return;
-//         this.table.style.border = '';
-//         this.highlighted = false;
-//         this.emit('unhighlighted');
-//     };
-//
-//     /**
-//      * ### DateSelector.getValues
-//      *
-//      * Returns the values for current selection and other paradata
-//      *
-//      * Paradata that is not set or recorded will be omitted
-//      *
-//      * @param {object} opts Optional. Configures the return value.
-//      *   Available optionts:
-//      *
-//      *   - markAttempt: If TRUE, getting the value counts as an attempt
-//      *       to find the correct answer. Default: TRUE.
-//      *   - highlight:   If TRUE, if current value is not the correct
-//      *       value, widget will be highlighted. Default: FALSE.
-//      *   - reset:       If TRUTHY and a correct choice is selected (or not
-//      *       specified), then it resets the state of the widgets before
-//      *       returning it. Default: FALSE.
-//      *
-//      * @return {object} Object containing the choice and paradata
-//      *
-//      * @see DateSelector.verifyChoice
-//      * @see DateSelector.reset
-//      */
-//     DateSelector.prototype.getValues = function(opts) {
-//         var obj, resetOpts;
-//         opts = opts || {};
-//
-//         return obj;
-//     };
-//
-//
-// })(node);
 
 /**
  * # DebugInfo
