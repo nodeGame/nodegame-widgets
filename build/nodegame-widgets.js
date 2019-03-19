@@ -8410,7 +8410,7 @@
     };
 
     CustomInput.texts = {
-        numFloatErr: function(w) {
+        numericErr: function(w) {
             var str, p, inc;
             p = w.params;
             // Weird, but valid, case.
@@ -8459,6 +8459,10 @@
             if (p.between) str += ' (extremes included)';
             str += '. Current length: ' + len;
             return str;
+        },
+        dateErr: function(w, invalid) {
+            return invalid ? 'Date is invalid' : 'Must follow format ' +
+                w.params.format;
         }
     };
 
@@ -8590,7 +8594,7 @@
                         throw new TypeError(e + 'min must be number or ' +
                                             'undefined. Found: ' + opts.min);
                     }
-                    this.params.lower = opts.min;                    
+                    this.params.lower = opts.min;
                     this.params.leq = true;
                 }
                 // Less than.
@@ -8600,7 +8604,7 @@
                         throw new TypeError(e + 'max must be number or ' +
                                             'undefined. Found: ' + opts.max);
                     }
-                    this.params.upper = opts.max;                    
+                    this.params.upper = opts.max;
                     this.params.ueq = true;
                 }
 
@@ -8619,7 +8623,7 @@
                     // Exact length.
                     if (this.params.lower === this.params.upper) {
                         if (!this.params.leq || !this.params.ueq) {
-                            
+
                             throw new TypeError(e + 'min cannot be equal to ' +
                                                 'max when strictlyGreater or ' +
                                                 'strictlyLess are set. ' +
@@ -8627,9 +8631,9 @@
                         }
                         if (this.type === 'int' || this.type === 'text') {
                             if (J.isFloat(this.params.lower)) {
-                                
-                                
-                                throw new TypeError(e + 'min cannot be a ' + 
+
+
+                                throw new TypeError(e + 'min cannot be a ' +
                                                     'floating point number ' +
                                                     'and equal to ' +
                                                     'max, when type ' +
@@ -8699,13 +8703,103 @@
                             if (res !== false) return { value: res };
                             return {
                                 value: value,
-                                err: that.getText('numFloatErr')
+                                err: that.getText('numericErr')
                             };
                         };
                     })();
                 }
             }
+            else if (this.type === 'date') {
+                if ('undefined' !== typeof opts.format) {
+                    // TODO: use regex.
+                    if (opts.format !== 'mm-dd-yy' &&
+                        opts.format !== 'dd-mm-yy' &&
+                        opts.format !== 'mm-dd-yyyy' &&
+                        opts.format !== 'dd-mm-yyyy' &&
+                        opts.format !== 'mm.dd.yy' &&
+                        opts.format !== 'dd.mm.yy' &&
+                        opts.format !== 'mm.dd.yyyy' &&
+                        opts.format !== 'dd.mm.yyyy' &&
+                        opts.format !== 'mm/dd/yy' &&
+                        opts.format !== 'dd/mm/yy' &&
+                        opts.format !== 'mm/dd/yyyy' &&
+                        opts.format !== 'dd/mm/yyyy') {
 
+                        throw new Error(e + 'date format is invalid. Found: ' +
+                                        opts.format);
+                    }
+                    this.params.format = opts.format;                 
+                }
+                else {
+                    this.params.format = 'mm/dd/yyyy';
+                }
+                this.params.sep = this.params.format.charAt(2);
+                tmp = this.params.format.split(this.params.sep);
+                this.params.yearDigits = tmp[2].length;
+                this.params.dayPos = tmp[0].charAt(0) === 'd' ? 0 : 1;
+                this.params.monthPos =  this.params.dayPos ? 0 : 1;
+                
+                tmp = function(value) {
+                    var p, tokens, tmp, err, res, dayNum, l1, l2;
+                    p = that.params;
+
+                    // Is the format valid.
+                    
+                    tokens = value.split(p.sep);
+                    if (tokens.length !== 3) {
+                        return { err: that.getText('dateErr') };
+                    }
+
+                    // Year.
+                    if (tokens[2].length !== p.yearDigits) {
+                        return { err: that.getText('dateErr') };
+                    }
+                    
+                    // Now we check if the date is valid.
+                    
+                    res = {};                    
+                    if (p.yearDigits === 2) {
+                        l1 = -1;
+                        l2 = 100;
+                    }
+                    else {
+                        l1 = -1
+                        l2 = 10000;
+                    }
+                    tmp = J.isInt(tokens[2], l1, l2);
+                    if (tmp !== false) res.year = tmp;
+                    else err = true;
+                    
+                    
+                    // Month.
+                    tmp = J.isInt(tokens[p.monthPos], 1, 12, 1, 1);
+                    if (!tmp) err = true;
+                    else res.month = tmp;
+                    // 31 or 30 days?
+                    if (tmp === 1 || tmp === 3 || tmp === 5 || tmp === 7 ||
+                        tmp === 8 || tmp === 10 || tmp === 12) {
+                        
+                        dayNum = 31;
+                    }
+                    else if (tmp !== 2) {
+                        dayNum = 30;
+                    }
+                    else {
+                        // Is it leap year?
+                        dayNum = (res.year % 4 === 0 && res.year % 100 !== 0) ||
+                            res.year % 400 === 0 ? 29 : 28;
+                    }
+                    res.month = tmp;
+                    // Day.
+                    tmp = J.isInt(tokens[p.dayPos], 1, dayNum, 1, 1);
+                    if (!tmp) err = true;
+                    else res.day = tmp;
+
+                    // 
+                    if (err) res.err = that.getText('dateErr', true);
+                    return res;
+                };
+            }
             // TODO: add other types, e.g. date, int and email.
 
             this.validation = tmp;
