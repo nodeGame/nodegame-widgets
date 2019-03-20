@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.1.0';
+    Feedback.version = '1.2.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
@@ -101,7 +101,7 @@
         }
         else if (J.isNumber(options.maxAttemptLength, 0) !== false) {
             this.maxAttemptLength = Math.max(this.maxLength,
-                                                     options.maxAttemptLength);
+                                             options.maxAttemptLength);
         }
         else {
             throw new TypeError('Feedback constructor: ' +
@@ -125,6 +125,18 @@
         else {
             this.showCharCount = !!options.showCount;
         }
+
+        /**
+         * ### Feedback.showSubmit
+         *
+         * If TRUE, the submit button is shown
+         *
+         * Default: true
+         *
+         * @see Feedback.submitButton
+         */
+        this.showSubmit = 'undefined' === typeof options.showSubmit ?
+            true : !!options.showSubmit;
 
         /**
          * ### Feedback.onsubmit
@@ -237,36 +249,44 @@
         feedbackTextarea.setAttribute('rows', '3');
         feedbackForm.appendChild(feedbackTextarea);
 
-        submit = document.createElement('input');
-        submit.className = 'btn btn-lg btn-primary';
-        submit.setAttribute('type', 'submit');
-        submit.setAttribute('value', 'Submit feedback');
-        feedbackForm.appendChild(submit);
+        if (this.showSubmit) {
+            submit = document.createElement('input');
+            submit.className = 'btn btn-lg btn-primary';
+            submit.setAttribute('type', 'submit');
+            submit.setAttribute('value', 'Submit feedback');
+            feedbackForm.appendChild(submit);
+
+            // Add listeners.
+            J.addEvent(feedbackForm, 'submit', function(event) {
+                event.preventDefault();
+                that.getValues(that.onsubmit);
+            });
+
+            // Store reference.
+            this.submitButton = submit;
+        }
 
         if (this.showCharCount) {
             charCounter = document.createElement('span');
             charCounter.className = 'feedback-char-count badge';
             charCounter.innerHTML = this.maxLength;
-            // Until no char is inserted is hidden.
-            charCounter.style.display = 'none';
             feedbackForm.appendChild(charCounter);
+
+            // Store reference.
+            this.charCounter = charCounter;
         }
 
-        // Add listeners.
-        J.addEvent(feedbackForm, 'submit', function(event) {
-            event.preventDefault();
-            that.getValues(that.onsubmit);
-        });
-
         J.addEvent(feedbackForm, 'input', function(event) {
+            if (that.isHighlighted()) that.unhighlight();
             that.verifyFeedback(false, true);
+        });
+        J.addEvent(feedbackForm, 'click', function(event) {
+            if (that.isHighlighted()) that.unhighlight();
         });
 
         // Store references.
-        this.submitButton = submit;
         this.feedbackHTML = feedbackHTML;
         this.textareaElement = feedbackTextarea;
-        this.charCounter = charCounter || null;
 
         // Check it once at the beginning to initialize counter.
         this.verifyFeedback(false, true);
@@ -326,9 +346,8 @@
         }
 
         if (updateUI) {
-            submitButton.disabled = !res;
+            if (submitButton) submitButton.disabled = !res;
             if (charCounter) {
-                charCounter.style.display = length ? '' : 'none';
                 charCounter.style.backgroundColor = updateColor;
                 charCounter.innerHTML = updateCount;
             }
@@ -422,7 +441,8 @@
                 timeBegin: this.timeInputBegin,
                 feedback: feedback,
                 attempts: this.attempts,
-                valid: res
+                valid: res,
+                isCorrect: res
             };
         }
 
@@ -480,7 +500,7 @@
                                 'string or undefined. Found: ' + border);
         }
         if (!this.feedbackHTML || this.highlighted === true) return;
-        this.feedbackHTML.style.border = border || '3px solid red';
+        this.textareaElement.style.border = border || '3px solid red';
         this.highlighted = true;
         this.emit('highlighted', border);
     };
@@ -494,7 +514,7 @@
      */
     Feedback.prototype.unhighlight = function() {
         if (!this.feedbackHTML || this.highlighted !== true) return;
-        this.feedbackHTML.style.border = '';
+        this.textareaElement.style.border = '';
         this.highlighted = false;
         this.emit('unhighlighted');
     };
@@ -511,6 +531,34 @@
 
         if (this.feedbackHTML) this.feedbackHTML.value = '';
         if (this.isHighlighted()) this.unhighlight();
+    };
+
+    /**
+     * ### Feedback.disable
+     *
+     * Disables clicking on the table and removes CSS 'clicklable' class
+     */
+    Feedback.prototype.disable = function() {
+        if (this.disabled === true) return;
+        this.disabled = true;
+        if (this.submitElement) this.submitElement.disabled = true;
+        this.textareaElement.disabled = true;
+        this.emit('disabled');
+    };
+
+    /**
+     * ### Feedback.enable
+     *
+     * Enables clicking on the table and adds CSS 'clicklable' class
+     *
+     * @return {function} cb The event listener function
+     */
+    Feedback.prototype.enable = function() {
+        if (this.disabled === false || !this.textareaElement) return;
+        this.disabled = false;
+        if (this.submitElement) this.submitElement.disabled = false;
+        this.textareaElement.disabled = false;
+        this.emit('enabled');
     };
 
     // ## Helper functions.
