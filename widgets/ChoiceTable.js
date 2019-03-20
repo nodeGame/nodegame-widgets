@@ -747,6 +747,10 @@
     ChoiceTable.prototype.buildTable = function() {
         var i, len, tr, H;
 
+        if (!this.choicesCells) {
+            throw new Error('ChoiceTable.buildTable: choices not set, cannot ' +
+                            'build table. Id: ' + this.id);
+        }
         len = this.choicesCells.length;
 
         // Start adding tr/s and tds based on the orientation.

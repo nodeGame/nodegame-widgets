@@ -5958,6 +5958,10 @@
     ChoiceTable.prototype.buildTable = function() {
         var i, len, tr, H;
 
+        if (!this.choicesCells) {
+            throw new Error('ChoiceTable.buildTable: choices not set, cannot ' +
+                            'build table. Id: ' + this.id);
+        }
         len = this.choicesCells.length;
 
         // Start adding tr/s and tds based on the orientation.
@@ -8494,6 +8498,24 @@
         this.input = null;
 
         /**
+         * ### CustomInput.placeholder
+         *
+         * The placeholder text for the input form
+         *
+         * Some types preset it automatically
+         */
+        this.placeholder = null;
+
+        /**
+         * ### CustomInput.inputWidth
+         *
+         * The width of the input form as string (css attribute)
+         *
+         * Some types preset it automatically
+         */
+        this.inputWidth = null;
+
+        /**
          * ### CustomInput.type
          *
          * The type of input
@@ -8576,7 +8598,7 @@
 
         // TODO: this becomes false later on. Why???
         this.requiredChoice = !!opts.requiredChoice;
-        
+
         if (opts.type) {
             if (!CustomInput.types[opts.type]) {
                 throw new Error(e + 'type not supported: ' + opts.type);
@@ -8724,6 +8746,13 @@
                         };
                     })();
                 }
+
+                // Preset inputWidth.
+                if (this.params.upper) {
+                    if (this.params.upper < 10) this.inputWidth = '100px';
+                    else if (this.params.upper < 20) this.inputWidth = '200px';
+                }
+
             }
             else if (this.type === 'date') {
                 if ('undefined' !== typeof opts.format) {
@@ -8749,11 +8778,20 @@
                 else {
                     this.params.format = 'mm/dd/yyyy';
                 }
+
                 this.params.sep = this.params.format.charAt(2);
                 tmp = this.params.format.split(this.params.sep);
                 this.params.yearDigits = tmp[2].length;
                 this.params.dayPos = tmp[0].charAt(0) === 'd' ? 0 : 1;
                 this.params.monthPos =  this.params.dayPos ? 0 : 1;
+
+
+                // Preset inputWidth.
+                if (this.params.yearDigits === 2) this.inputWidth = '100px';
+                else this.inputWidth = '150px';
+
+                // Preset placeholder.
+                this.placeholder = this.params.format;
 
                 tmp = function(value) {
                     var p, tokens, tmp, err, res, dayNum, l1, l2;
@@ -8827,7 +8865,7 @@
                     res = tmp(value);
                 }
                 return res;
-            };                
+            };
         }
 
         if (opts.preprocess) {
@@ -8843,6 +8881,20 @@
                                     'undefined. Found: ' + opts.mainText);
             }
             this.mainText = opts.mainText;
+        }
+        if (opts.placeholder) {
+            if ('string' !== typeof opts.placeholder) {
+                throw new TypeError(e + 'placeholder must be string or ' +
+                                    'undefined. Found: ' + opts.placeholder);
+            }
+            this.placeholder = opts.placeholder;
+        }
+        if (opts.width) {
+            if ('string' !== typeof opts.width) {
+                throw new TypeError(e + 'width must be string or ' +
+                                    'undefined. Found: ' + opts.width);
+            }
+            this.inputWidth = opts.width;
         }
     };
 
@@ -8867,6 +8919,8 @@
         }
 
         this.input = W.append('input', this.bodyDiv);
+        if (this.placeholder) this.input.placeholder = this.placeholder;
+        if (this.inputWidth) this.input.style.width = this.inputWidth;
 
         this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
 
@@ -8876,10 +8930,9 @@
             if (that.preprocess) that.preprocess(that.input);
             timeout = setTimeout(function() {
                 var res;
-                if (that.validation) res = that.validation(that.input.value);
-                if (res.err) {
-                    that.errorBox.innerHTML = res.err;
-                    that.highlight();
+                if (that.validation) {
+                    res = that.validation(that.input.value);
+                    if (res.err) that.setError(res.err);
                 }
             }, 500);
         };
@@ -8889,7 +8942,21 @@
         };
     };
 
-
+    /**
+     * ### CustomInput.setError
+     *
+     * Set the error msg inside the errorBox and call highlight 
+     *
+     * @param {string} The error msg (can contain HTML)
+     *
+     * @see CustomInput.highlight
+     * @see CustomInput.errorBox
+     */
+    CustomInput.prototype.setError = function(err) {
+        this.errorBox.innerHTML = err;
+        this.highlight();
+    };
+    
     /**
      * ### CustomInput.highlight
      *
@@ -8955,10 +9022,15 @@
         opts = opts || {};
         res = this.input.value;
         res = this.validation ? this.validation(res) : { value: res };
-        valid = !res.err;
+        res.isCorrect = valid = !res.err;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
-        if (!valid) this.highlight(res.err);
-        else if (opts.reset) this.reset();
+        if (!valid) {
+            this.setError(res.err);
+            res.isCorrect = false;
+        }
+        else if (opts.reset) {
+            this.reset();
+        }
         res.id = this.id;
         return res;
     };
