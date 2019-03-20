@@ -135,18 +135,7 @@
          *
          * The validation function for the input
          *
-         * The function is called only if input is non-empty.
-         * If the form cannot be left empty, set attribute `requiredChoice`.
-         *
-         * The function returns an object with this format:
-         *
-         * ```
-         * {
-         *     value: 'a validated value',
-         *     err: 'an error string if validation fails'
-         *     // Additional properties as fit.
-         * }
-         * ```
+         * The function returns an error message in case of error.
          */
         this.validation = null;
 
@@ -181,15 +170,6 @@
          * A text preceeding the date selector
          */
         this.mainText = null;
-
-        /**
-         * ### CustomInput.brAfterMainText
-         *
-         * If TRUE, a br is inserted between the main text and the input
-         *
-         * Default: TRUE
-         */
-        this.brAfterMainText = null;
 
         /**
          * ### CustomInput.requiredChoice
@@ -457,14 +437,12 @@
                     return res;
                 };
             }
-            // TODO: add other types: email, text-nodigits, list.
+            // TODO: add other types, e.g. date, int and email.
 
             this.validation = function(value) {
                 var res;
-                if (value.trim() === '') {
-                    res = {};
-                    if (that.requiredChoice) res.err = that.getText('emptyErr');
-                    else res.value = value;
+                if (that.requiredChoice && value.trim() === '') {
+                    res = { err: that.getText('emptyErr') };
                 }
                 else {
                     res = tmp(value);
@@ -487,8 +465,6 @@
             }
             this.mainText = opts.mainText;
         }
-        this.brAfterMainText = 'undefined' === typeof opts.brAfterMainText ?
-            true : !!opts.brAfterMainText;
     };
 
 
@@ -506,10 +482,9 @@
         // MainText.
         if (this.mainText) {
             this.spanMainText = W.append('span', this.bodyDiv, {
-                className: 'maintext',
+                className: 'custominput-maintext',
                 innerHTML: this.mainText
             });
-            if (this.brAfterMainText) W.append('br', this.bodyDiv);
         }
 
         this.input = W.append('input', this.bodyDiv);
@@ -603,7 +578,7 @@
         res = this.validation ? this.validation(res) : { value: res };
         valid = !res.err;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
-        if (!valid) this.highlight();
+        if (!valid) this.highlight(res.err);
         else if (opts.reset) this.reset();
         res.id = this.id;
         return res;
