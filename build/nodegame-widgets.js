@@ -8514,7 +8514,18 @@
          *
          * The validation function for the input
          *
-         * The function returns an error message in case of error.
+         * The function is called only if input is non-empty.
+         * If the form cannot be left empty, set attribute `requiredChoice`.
+         *
+         * The function returns an object with this format:
+         *
+         * ```
+         * {
+         *     value: 'a validated value',
+         *     err: 'an error string if validation fails'
+         *     // Additional properties as fit.
+         * }
+         * ```
          */
         this.validation = null;
 
@@ -8583,9 +8594,9 @@
         that = this;
         e = 'CustomInput.init: ';
 
-        debugger
+        // TODO: this becomes false later on. Why???
         this.requiredChoice = !!opts.requiredChoice;
-        
+
         if (opts.type) {
             if (!CustomInput.types[opts.type]) {
                 throw new Error(e + 'type not supported: ' + opts.type);
@@ -8825,18 +8836,20 @@
                     return res;
                 };
             }
-            // TODO: add other types, e.g. date, int and email.
+            // TODO: add other types: email, text-nodigits, list.
 
             this.validation = function(value) {
                 var res;
-                if (that.requiredChoice && value.trim() === '') {
-                    res = { err: that.getText('emptyErr') };
+                if (value.trim() === '') {
+                    res = {};
+                    if (that.requiredChoice) res.err = that.getText('emptyErr');
+                    else res.value = value;
                 }
                 else {
                     res = tmp(value);
                 }
                 return res;
-            };                
+            };
         }
 
         if (opts.preprocess) {
@@ -8969,7 +8982,7 @@
         res = this.validation ? this.validation(res) : { value: res };
         valid = !res.err;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
-        if (!valid) this.highlight(res.err);
+        if (!valid) this.highlight();
         else if (opts.reset) this.reset();
         res.id = this.id;
         return res;
