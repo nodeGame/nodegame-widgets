@@ -5283,6 +5283,14 @@
         this.listener = function(e) {
             var name, value, td;
             var i, len;
+
+            e = e || window.event;
+            td = e.target || e.srcElement;
+
+            // Not a clickable choice.
+            if ('undefined' === typeof that.choicesIds[td.id]) return;
+
+            
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -5292,13 +5300,7 @@
                 that.timeCurrentChoice = Date.now ?
                     Date.now() : new Date().getTime();
             }
-
-            e = e || window.event;
-            td = e.target || e.srcElement;
-
-            // Not a clickable choice.
-            if ('undefined' === typeof that.choicesIds[td.id]) return;
-
+            
             // Id of elements are in the form of name_value or name_item_value.
             value = td.id.split(that.separator);
 
@@ -5332,6 +5334,11 @@
             }
             // Click on a new choice.
             else {
+
+                // Have we exhausted available choices?
+                if ('number' === typeof that.selectMultiple &&
+                    that.selected.length === that.selectMultiple) return;
+                
                 that.setCurrentChoice(value);
                 J.addClass(td, 'selected');
 
@@ -5688,8 +5695,17 @@
         this.shuffleChoices = tmp;
 
         // Option selectMultiple, default false.
-        if ('undefined' === typeof options.selectMultiple) tmp = false;
-        else tmp = !!options.selectMultiple;
+        tmp = options.selectMultiple;
+        if ('undefined' === typeof tmp) {
+            tmp = false;
+        }
+        else if ('boolean' !== typeof tmp) {
+            tmp = J.isInt(tmp, 1);
+            if (!tmp) {
+                throw new Error('ChoiceTable.init: selectMultiple must be ' +
+                                'undefined or an integer > 1. Found: ' + tmp);
+            }
+        }
         this.selectMultiple = tmp;
         // Make an array for currentChoice and selected.
         if (tmp) {
@@ -8398,8 +8414,8 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.3.0';
-    CustomInput.description = 'Creates a configurable input box';
+    CustomInput.version = '0.4.0';
+    CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
     CustomInput.panel = false;
@@ -8945,7 +8961,7 @@
     /**
      * ### CustomInput.setError
      *
-     * Set the error msg inside the errorBox and call highlight 
+     * Set the error msg inside the errorBox and call highlight
      *
      * @param {string} The error msg (can contain HTML)
      *
@@ -8956,7 +8972,7 @@
         this.errorBox.innerHTML = err;
         this.highlight();
     };
-    
+
     /**
      * ### CustomInput.highlight
      *
