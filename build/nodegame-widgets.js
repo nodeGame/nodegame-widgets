@@ -5228,7 +5228,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.3.2';
+    ChoiceTable.version = '1.4.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -5264,6 +5264,13 @@
         this.table = null;
 
         /**
+         * ### ChoiceTable.choicesSetSize
+         *
+         * How many choices can be on the same row/column
+         */
+        this.choicesSetSize = null;
+
+        /**
          * ### ChoiceTable.tr
          *
          * Reference to TR elements of the table
@@ -5290,7 +5297,7 @@
             // Not a clickable choice.
             if ('undefined' === typeof that.choicesIds[td.id]) return;
 
-            
+
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -5300,7 +5307,7 @@
                 that.timeCurrentChoice = Date.now ?
                     Date.now() : new Date().getTime();
             }
-            
+
             // Id of elements are in the form of name_value or name_item_value.
             value = td.id.split(that.separator);
 
@@ -5338,7 +5345,7 @@
                 // Have we exhausted available choices?
                 if ('number' === typeof that.selectMultiple &&
                     that.selected.length === that.selectMultiple) return;
-                
+
                 that.setCurrentChoice(value);
                 J.addClass(td, 'selected');
 
@@ -5715,6 +5722,19 @@
 
         // Option requiredChoice, if any.
         if ('number' === typeof options.requiredChoice) {
+            if (!J.isInt(options.requiredChoice, 0)) {
+                throw new Error('ChoiceTable.init: if number, requiredChoice ' +
+                                'must a positive integer. Found: ' +
+                                options.requiredChoice);
+            }
+            if ('number' === typeof this.selectMultiple &&
+                options.requiredChoice > this.selectMultiple) {
+
+                throw new Error('ChoiceTable.init: requiredChoice cannot be ' +
+                                'larger than selectMultiple. Found: ' +
+                                options.requiredChoice + ' > ' +
+                                this.selectMultiple);
+            }
             this.requiredChoice = options.requiredChoice;
         }
         else if ('boolean' === typeof options.requiredChoice) {
@@ -5722,7 +5742,7 @@
         }
         else if ('undefined' !== typeof options.requiredChoice) {
             throw new TypeError('ChoiceTable.init: options.requiredChoice ' +
-                                'be number or boolean or undefined. Found: ' +
+                                'be number, boolean or undefined. Found: ' +
                                 options.requiredChoice);
         }
 
@@ -5888,9 +5908,20 @@
         if ('undefined' !== typeof options.correctChoice) {
             if (this.requiredChoice) {
                 throw new Error('ChoiceTable.init: cannot specify both ' +
-                                'options requiredChoice and correctChoice.');
+                                'options requiredChoice and correctChoice');
             }
             this.setCorrectChoice(options.correctChoice);
+        }
+
+        // Add the correct choices.
+        if ('undefined' !== typeof options.choicesSetSize) {
+            if (!J.isInt(options.choicesSetSize, 0)) {
+                throw new Error('ChoiceTable.init: choicesSetSize must be ' +
+                                'undefined or an integer > 0. Found: ' +
+                                options.choicesSetSize);
+            }
+
+            this.choicesSetSize = options.choicesSetSize;
         }
     };
 
@@ -5970,44 +6001,62 @@
      * @see ChoiceTable.order
      * @see ChoiceTable.renderChoice
      * @see ChoiceTable.orientation
+     * @see ChoiceTable.choicesSetSize
      */
-    ChoiceTable.prototype.buildTable = function() {
-        var i, len, tr, H;
+    ChoiceTable.prototype.buildTable = (function() {
 
-        if (!this.choicesCells) {
-            throw new Error('ChoiceTable.buildTable: choices not set, cannot ' +
-                            'build table. Id: ' + this.id);
-        }
-        len = this.choicesCells.length;
-
-        // Start adding tr/s and tds based on the orientation.
-        i = -1, H = this.orientation === 'H';
-
-        if (H) {
-            tr = createTR(this, 'main');
-            // Add horizontal choices title.
-            if (this.leftCell) tr.appendChild(this.leftCell);
-        }
-        // Main loop.
-        for ( ; ++i < len ; ) {
-            if (!H) {
-                tr = createTR(this, 'left');
-                // Add vertical choices title.
-                if (i === 0 && this.leftCell) {
-                    tr.appendChild(this.leftCell);
-                    tr = createTR(this, i);
-                }
+        function makeSet(i, len, H, doSets) {
+            var tr, counter;
+            counter = 0;
+            // Start adding tr/s and tds based on the orientation.
+            if (H) {
+                tr = createTR(this, 'main');
+                // Add horizontal choices title.
+                if (this.leftCell) tr.appendChild(this.leftCell);
             }
-            // Clickable cell.
-            tr.appendChild(this.choicesCells[i]);
+            // Main loop.
+            for ( ; ++i < len ; ) {
+                if (!H) {
+                    tr = createTR(this, 'left');
+                    // Add vertical choices title.
+                    if (i === 0 && this.leftCell) {
+                        tr.appendChild(this.leftCell);
+                        tr = createTR(this, i);
+                    }
+                }
+                // Clickable cell.
+                tr.appendChild(this.choicesCells[i]);
+                // Stop if we reached set size (still need to add the right).
+                if (doSets && ++counter >= this.choicesSetSize) break;
+            }
+            if (this.rightCell) {
+                if (!H) tr = createTR(this, 'right');
+                tr.appendChild(this.rightCell);
+            }
+
+            // Start a new set, if necessary.
+            if (i !== len) makeSet.call(this, i, len, H, doSets);
         }
-        if (this.rightCell) {
-            if (!H) tr = createTR(this, 'right');
-            tr.appendChild(this.rightCell);
-        }
-        // Enable onclick listener.
-        this.enable();
-    };
+
+        return function() {
+            var i, len, H, doSets;
+
+            if (!this.choicesCells) {
+                throw new Error('ChoiceTable.buildTable: choices not set, ' +
+                                'cannot build table. Id: ' + this.id);
+            }
+
+            H = this.orientation === 'H';
+            len = this.choicesCells.length;
+            doSets = 'number' === typeof this.choicesSetSize;
+
+            // Recursively makes sets
+            makeSet.call(this, -1, len, H, doSets);
+
+            // Enable onclick listener.
+            this.enable();
+        };
+    })();
 
     /**
      * ### ChoiceTable.buildTableAndChoices
@@ -7710,7 +7759,8 @@
         obj = {
             id: this.id,
             order: this.order,
-            items: {}
+            items: {},
+            isCorrect: true
         };
         opts = opts || {};
         // Make sure reset is done only at the end.
@@ -7722,7 +7772,10 @@
             obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) {
                 obj.missValues = true;
-                if (tbl.requiredChoice) toHighlight = true;
+                if (tbl.requiredChoice) {
+                    toHighlight = true;
+                    obj.isCorrect = false;
+                }
             }
             if (obj.items[tbl.id].isCorrect === false && opts.highlight) {
                 toHighlight = true;

@@ -923,7 +923,8 @@
         obj = {
             id: this.id,
             order: this.order,
-            items: {}
+            items: {},
+            isCorrect: true
         };
         opts = opts || {};
         // Make sure reset is done only at the end.
@@ -935,7 +936,10 @@
             obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) {
                 obj.missValues = true;
-                if (tbl.requiredChoice) toHighlight = true;
+                if (tbl.requiredChoice) {
+                    toHighlight = true;
+                    obj.isCorrect = false;
+                }
             }
             if (obj.items[tbl.id].isCorrect === false && opts.highlight) {
                 toHighlight = true;

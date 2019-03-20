@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## Current
+- CustomInput widget.
+- ChoiceTable: selectMultiple can be an integer controlling how many selected items are allowed.
+
 ## 5.0.1
 - Fixed VisualTimer init method not receiving an object bug.
 
