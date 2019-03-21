@@ -458,7 +458,7 @@
         that = this;
 
         if (!this.id) {
-            throw new TypeError('ChoiceTable.init: options.id is missing.');
+            throw new TypeError('ChoiceTable.init: options.id is missing');
         }
 
         // Option orientation, default 'H'.
@@ -527,7 +527,7 @@
             this.requiredChoice = options.requiredChoice;
         }
         else if ('boolean' === typeof options.requiredChoice) {
-            this.requiredChoice = options.requiredChoice ? 1 : 0;
+            this.requiredChoice = options.requiredChoice ? 1 : null;
         }
         else if ('undefined' !== typeof options.requiredChoice) {
             throw new TypeError('ChoiceTable.init: options.requiredChoice ' +
@@ -1151,7 +1151,7 @@
     ChoiceTable.prototype.enable = function() {
         if (this.disabled === false) return;
         if (!this.table) {
-            throw new Error('ChoiceTable.enable: table not defined.');
+            throw new Error('ChoiceTable.enable: table not defined');
         }
         this.disabled = false;
         J.addClass(this.table, 'clickable');

@@ -548,12 +548,13 @@
         for ( ; ++i < len ; ) {
             form = this.forms[i];
             obj.forms[form.id] = form.getValues(opts);
-            if (obj.forms[form.id].choice === null ||
-                (form.selectMultiple && !obj.forms[form.id].choice.length)) {
+            if (obj.forms[form.id].requiredChoice &&
+                (obj.forms[form.id].choice === null ||
+                 (form.selectMultiple && !obj.forms[form.id].choice.length))) {
 
                 obj.missValues.push(form.id);
             }
-            if (opts.markAttempt && !obj.forms[form.id].isCorrect) {
+            if (opts.markAttempt && obj.forms[form.id].isCorrect === false) {
                 obj.isCorrect = false;
             }
         }

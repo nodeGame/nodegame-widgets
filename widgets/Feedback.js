@@ -23,7 +23,7 @@
 
     Feedback.texts = {
         submit: 'Submit feedback',
-        label: 'Any feedback about the experiment? Let us know here:',
+        label: 'Any feedback? Let us know here:',
         sent: 'Sent!'
     };
 
@@ -183,8 +183,6 @@
          * Internal storage of the value of the feedback
          *
          * This value is used when the form has not been created yet
-         *
-         * @see Feedback.createForm
          */
         this._feedback = options.feedback || null;
 
@@ -203,11 +201,11 @@
         this.timeInputBegin = null;
 
         /**
-         * ### Feedback.feedbackHTML
+         * ### Feedback.feedbackForm
          *
-         * The HTML element containing the form elements
+         * The HTML form element containing the textarea
          */
-        this.feedbackHTML = null;
+        this.feedbackForm = null;
 
         /**
          * ### Feedback.textareaElement
@@ -233,70 +231,6 @@
     }
 
     // ## Feedback methods
-
-    /**
-     * ### Feedback.createForm
-     *
-     * Builds the HTML forms
-     */
-    Feedback.prototype.createForm = function() {
-
-        var that, feedbackForm, label;
-
-        that = this;
-
-        this.feedbackHTML = W.get('div', { className: 'feedback' });
-
-        feedbackForm = W.append('form', this.feedbackHTML, {
-            className: 'feedback-form'
-        });
-
-        label = this.getText('label');
-        if (label !== false) {
-            W.append('label', feedbackForm, {
-                'for': 'feedback-input',
-                innerHTML: label
-            });
-        }
-
-        this.textareaElement = W.append('textarea', feedbackForm, {
-            className: 'feedback-textarea form-control',
-            type: 'text',
-            rows: this.rows
-        });
-
-        if (this.showSubmit) {
-            this.submit = W.append('input', feedbackForm, {
-                className: 'btn btn-lg btn-primary',
-                type: 'submit',
-                value: this.getText('submit')
-            });
-
-            // Add listeners.
-            J.addEvent(feedbackForm, 'submit', function(event) {
-                event.preventDefault();
-                that.getValues(that.onsubmit);
-            });
-        }
-
-        if (this.showCharCount) {
-            this.charCounter = W.append('span', feedbackForm, {
-                className: 'feedback-char-count badge',
-                innerHTML: this.maxLength
-            });
-        }
-
-        J.addEvent(feedbackForm, 'input', function(event) {
-            if (that.isHighlighted()) that.unhighlight();
-            that.verifyFeedback(false, true);
-        });
-        J.addEvent(feedbackForm, 'click', function(event) {
-            if (that.isHighlighted()) that.unhighlight();
-        });
-
-        // Check it once at the beginning to initialize counter.
-        this.verifyFeedback(false, true);
-    };
 
     /**
      * ### Feedback.verifyFeedback
@@ -372,8 +306,55 @@
      * Appends widget to this.bodyDiv
      */
     Feedback.prototype.append = function() {
-        this.createForm();
-        this.bodyDiv.appendChild(this.feedbackHTML);
+        var that, label;
+        that = this;
+
+        // this.feedbackForm = W.get('div', { className: 'feedback' });
+
+        this.feedbackForm = W.append('form', this.bodyDiv, {
+            className: 'feedback-form'
+        });
+
+        label = this.getText('label');
+        if (label !== false) {
+            W.append('label', this.feedbackForm, {
+                'for': 'feedback-input',
+                innerHTML: label
+            });
+        }
+
+        this.textareaElement = W.append('textarea', this.feedbackForm, {
+            className: 'feedback-textarea form-control',
+            type: 'text',
+            rows: this.rows
+        });
+
+        if (this.showSubmit) {
+            this.submit = W.append('input', this.feedbackForm, {
+                className: 'btn btn-lg btn-primary',
+                type: 'submit',
+                value: this.getText('submit')
+            });
+
+            // Add listeners.
+            J.addEvent(this.feedbackForm, 'submit', function(event) {
+                event.preventDefault();
+                that.getValues(that.onsubmit);
+            });
+        }
+
+        if (this.showCharCount) this.showCount();
+
+        J.addEvent(this.feedbackForm, 'input', function(event) {
+            if (that.isHighlighted()) that.unhighlight();
+            that.verifyFeedback(false, true);
+        });
+        J.addEvent(this.feedbackForm, 'click', function(event) {
+            if (that.isHighlighted()) that.unhighlight();
+        });
+
+        // Check it once at the beginning to initialize counter.
+        this.verifyFeedback(false, true);
     };
 
     /**
@@ -392,8 +373,8 @@
             feedback = options.feedback;
         }
 
-        if (!this.feedbackHTML) this._feedback = feedback;
-        else this.feedbackHTML.value = feedback;
+        if (!this.textareaElement) this._feedback = feedback;
+        else this.textareaElement.value = feedback;
 
         this.timeInputBegin = J.now();
     };
@@ -407,6 +388,8 @@
      *   Available optionts:
      *
      *   - feedbackOnly:If TRUE, returns just the feedback (default: FALSE),
+     *   - keepBreaks:  If TRUE, returns a value where all line breaks are
+     *                  substituted with HTML <br /> tags (default: FALSE)
      *   - verify:      If TRUE, check if the feedback is valid (default: TRUE),
      *   - reset:       If TRUTHY and the feedback is valid, then it resets
      *       the feedback value before returning (default: FALSE),
@@ -428,11 +411,13 @@
      * @see getFeedback
      */
     Feedback.prototype.getValues = function(opts) {
-        var feedback, res;
+        var feedback, feedbackBr, res;
 
         opts = opts || {};
 
         feedback = getFeedback.call(this);
+
+        if (opts.keepBreaks) feedback = feedback.replace(/\n\r?/g, '<br />');
 
         if (opts.verify !== false) res = this.verifyFeedback(opts.markAttempt,
                                                              opts.updateUI);
@@ -504,7 +489,7 @@
             throw new TypeError('Feedback.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        if (!this.feedbackHTML || this.highlighted === true) return;
+        if (!this.isAppended() || this.highlighted === true) return;
         this.textareaElement.style.border = border || '3px solid red';
         this.highlighted = true;
         this.emit('highlighted', border);
@@ -518,7 +503,7 @@
      * @see Feedback.highlighted
      */
     Feedback.prototype.unhighlight = function() {
-        if (!this.feedbackHTML || this.highlighted !== true) return;
+        if (!this.isAppended() || this.highlighted !== true) return;
         this.textareaElement.style.border = '';
         this.highlighted = false;
         this.emit('unhighlighted');
@@ -534,17 +519,19 @@
         this.timeInputBegin = null;
         this._feedback = null;
 
-        if (this.feedbackHTML) this.feedbackHTML.value = '';
+        if (this.textareaElement) this.textareaElement.value = '';
         if (this.isHighlighted()) this.unhighlight();
     };
 
     /**
      * ### Feedback.disable
      *
-     * Disables clicking on the table and removes CSS 'clicklable' class
+     * Disables texarea and submit button (if present)
      */
     Feedback.prototype.disable = function() {
-        if (this.disabled === true) return;
+        // TODO: This gets off when WaitScreen locks all inputs.
+        // if (this.disabled === true) return;
+        if (!this.textareaElement || this.textareaElement.disabled) return;
         this.disabled = true;
         if (this.submitElement) this.submitElement.disabled = true;
         this.textareaElement.disabled = true;
@@ -554,16 +541,48 @@
     /**
      * ### Feedback.enable
      *
-     * Enables clicking on the table and adds CSS 'clicklable' class
+     * Enables texarea and submit button (if present)
      *
-     * @return {function} cb The event listener function
      */
     Feedback.prototype.enable = function() {
-        if (this.disabled === false || !this.textareaElement) return;
+        // TODO: This gets off when WaitScreen locks all inputs.
+        // if (this.disabled === false || !this.textareaElement) return;
+        if (!this.textareaElement || !this.textareaElement.disabled) return;
         this.disabled = false;
         if (this.submitElement) this.submitElement.disabled = false;
         this.textareaElement.disabled = false;
         this.emit('enabled');
+    };
+
+    /**
+     * ### Feedback.showCount
+     *
+     * Shows the character counter
+     *
+     * If not existing before, it creates it.
+     *
+     * @see Feedback.charCounter
+     */
+    Feedback.prototype.showCount = function() {
+        if (!this.charCounter) {
+            this.charCounter = W.append('span', this.feedbackForm, {
+                className: 'feedback-char-count badge',
+                innerHTML: this.maxLength
+            });
+        }
+        else {
+            this.charCounter.style.display = '';
+        }
+    };
+
+    /**
+     * ### Feedback.hideCount
+     *
+     * Hides the character counter
+     */
+    Feedback.prototype.hideCount = function() {
+        if (!this.charCounter) return;
+        this.charCounter.style.display = 'none';
     };
 
     // ## Helper functions.
@@ -579,7 +598,8 @@
      */
     function getFeedback() {
         var out;
-        out = this.feedbackHTML ? this.textareaElement.value : this._feedback;
+        out = this.textareaElement ?
+            this.textareaElement.value : this._feedback;
         return out ? out.trim() : out;
     }
 

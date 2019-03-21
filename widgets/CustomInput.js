@@ -475,8 +475,9 @@
 
             this.validation = function(value) {
                 var res;
-                if (that.requiredChoice && value.trim() === '') {
-                    res = { err: that.getText('emptyErr') };
+                if (value.trim() === '') {
+                    res = that.requiredChoice ?
+                        { err: that.getText('emptyErr') } : { value: '' };
                 }
                 else {
                     res = tmp(value);
