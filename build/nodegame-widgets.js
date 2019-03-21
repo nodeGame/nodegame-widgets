@@ -10935,13 +10935,14 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.2.0';
+    Feedback.version = '1.3.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
     Feedback.className = 'feedback';
 
     Feedback.texts = {
+        submit: 'Submit feedback',
         label: 'Any feedback about the experiment? Let us know here:',
         sent: 'Sent!'
     };
@@ -10963,7 +10964,7 @@
      *    - showCount: If TRUE, the character count is displayed
      *    - minLength: The minimum number of characters in textarea
      *    - maxLength: The max number of characters in textarea
-     *    - label: The text to display above the textarea
+     *    - rows: The number of rows of the textarea
      */
     function Feedback(options) {
 
@@ -10977,12 +10978,12 @@
         if ('undefined' === typeof options.maxLength) {
             this.maxLength = 800;
         }
-        else if (J.isNumber(options.maxLength, 0) !== false) {
+        else if (J.isInt(options.maxLength, 0) !== false) {
             this.maxLength = options.maxLength;
         }
         else {
-            throw new TypeError('Feedback constructor: options.maxLength ' +
-                                'must be a number >= 0 or undefined. ' +
+            throw new TypeError('Feedback constructor: maxLength ' +
+                                'must be an integer >= 0 or undefined. ' +
                                 'Found: ' + options.maxLength);
         }
 
@@ -10997,15 +10998,34 @@
         if ('undefined' === typeof options.minLength) {
             this.minLength = 1;
         }
-        else if (J.isNumber(options.minLength, 0) !== false) {
+        else if (J.isInt(options.minLength, 0) !== false) {
             this.minLength = options.minLength;
         }
         else {
-            throw new TypeError('Feedback constructor: options.minLength ' +
-                                'must be a number >= 0 or undefined. ' +
+            throw new TypeError('Feedback constructor: minLength ' +
+                                'must be an integer >= 0 or undefined. ' +
                                 'Found: ' + options.minLength);
         }
 
+        /**
+         * ### Feedback.rows
+         *
+         * The number of initial rows of the texarea 
+         *
+         * Default: 3
+         */
+        if ('undefined' === typeof options.rows) {
+            this.rows = 3;
+        }
+        else if (J.isInt(options.rows, 0) !== false) {
+            this.rows = options.rows;
+        }
+        else {
+            throw new TypeError('Feedback constructor: rows ' +
+                                'must be an integer > 0 or undefined. ' +
+                                'Found: ' + options.rows);
+        }
+        
         /**
          * ### Feedback.maxAttemptLength
          *
@@ -11056,7 +11076,7 @@
          * @see Feedback.submitButton
          */
         this.showSubmit = 'undefined' === typeof options.showSubmit ?
-            true : !!options.showSubmit;        
+            true : !!options.showSubmit;
 
         /**
          * ### Feedback.onsubmit
@@ -11072,7 +11092,7 @@
             this.onsubmit = options.onsubmit;
         }
         else {
-            throw new TypeError('Feedback constructor: options.onsubmit ' +
+            throw new TypeError('Feedback constructor: onsubmit ' +
                                 'must be string or object. Found: ' +
                                 options.onsubmit);
         }
@@ -11096,11 +11116,11 @@
         this.attempts = [];
 
         /**
-         * ### Feedback.timeBegin
+         * ### Feedback.timeInputBegin
          *
          * Time when feedback was inserted (first character, last attempt)
          */
-        this.timeBegin = null;
+        this.timeInputBegin = null;
 
         /**
          * ### Feedback.feedbackHTML
@@ -11141,59 +11161,49 @@
      */
     Feedback.prototype.createForm = function() {
 
-        var that;
-        var feedbackHTML;
-        var feedbackForm;
-        var feedbackLabel;
-        var feedbackTextarea;
-        var submit;
-        var charCounter;
+        var that, feedbackForm, label;
 
         that = this;
 
-        feedbackHTML = document.createElement('div');
-        feedbackHTML.className = 'feedback';
+        this.feedbackHTML = W.get('div', { className: 'feedback' });
 
-        feedbackForm = document.createElement('form');
-        feedbackForm.className = 'feedback-form';
-        feedbackHTML.appendChild(feedbackForm);
+        feedbackForm = W.append('form', this.feedbackHTML, {
+            className: 'feedback-form'
+        });
 
-        feedbackLabel = document.createElement('label');
-        feedbackLabel.setAttribute('for', 'feedback-input');
-        feedbackLabel.innerHTML = this.getText('label');
-        feedbackForm.appendChild(feedbackLabel);
+        label = this.getText('label');
+        if (label !== false) {
+            W.append('label', feedbackForm, {
+                'for': 'feedback-input',
+                innerHTML: label
+            });
+        }
 
-        feedbackTextarea = document.createElement('textarea');
-        feedbackTextarea.className = 'feedback-textarea form-control';
-        feedbackTextarea.setAttribute('type', 'text');
-        feedbackTextarea.setAttribute('rows', '3');
-        feedbackForm.appendChild(feedbackTextarea);
+        this.textareaElement = W.append('textarea', feedbackForm, {
+            className: 'feedback-textarea form-control',
+            type: 'text',
+            rows: this.rows
+        });
 
         if (this.showSubmit) {
-            submit = document.createElement('input');
-            submit.className = 'btn btn-lg btn-primary';
-            submit.setAttribute('type', 'submit');
-            submit.setAttribute('value', 'Submit feedback');
-            feedbackForm.appendChild(submit);
-            
+            this.submit = W.append('input', feedbackForm, {
+                className: 'btn btn-lg btn-primary',
+                type: 'submit',
+                value: this.getText('submit')
+            });
+
             // Add listeners.
             J.addEvent(feedbackForm, 'submit', function(event) {
                 event.preventDefault();
                 that.getValues(that.onsubmit);
             });
-
-            // Store reference.
-            this.submitButton = submit;
         }
 
         if (this.showCharCount) {
-            charCounter = document.createElement('span');
-            charCounter.className = 'feedback-char-count badge';
-            charCounter.innerHTML = this.maxLength;            
-            feedbackForm.appendChild(charCounter);
-
-            // Store reference.
-            this.charCounter = charCounter;
+            this.charCounter = W.append('span', feedbackForm, {
+                className: 'feedback-char-count badge',
+                innerHTML: this.maxLength
+            });
         }
 
         J.addEvent(feedbackForm, 'input', function(event) {
@@ -11203,15 +11213,9 @@
         J.addEvent(feedbackForm, 'click', function(event) {
             if (that.isHighlighted()) that.unhighlight();
         });
-        
-        // Store references.
-        this.feedbackHTML = feedbackHTML;
-        this.textareaElement = feedbackTextarea;
 
         // Check it once at the beginning to initialize counter.
         this.verifyFeedback(false, true);
-
-        return feedbackHTML;
     };
 
     /**
@@ -11353,7 +11357,8 @@
         if (opts.verify !== false) res = this.verifyFeedback(opts.markAttempt,
                                                              opts.updateUI);
 
-        if (res === false && opts.updateUI || opts.highlight) this.highlight();
+        if (res === false &&
+            (opts.updateUI || opts.highlight)) this.highlight();
 
         // Only value.
         if (!opts.feedbackOnly) {
@@ -11480,7 +11485,7 @@
         this.textareaElement.disabled = false;
         this.emit('enabled');
     };
-    
+
     // ## Helper functions.
 
     /**
