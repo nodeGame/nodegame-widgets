@@ -3,6 +3,7 @@
 ## Current
 - CustomInput widget.
 - ChoiceTable: selectMultiple can be an integer controlling how many selected items are allowed.
+- After a widget is destroyed, frame height is checked and adjusted.
 
 ## 5.0.1
 - Fixed VisualTimer init method not receiving an object bug.
