@@ -1466,9 +1466,10 @@
                 }
             }
 
-            // Remove from docked.
+            // Remove from docked or adjust frame height.
             if (this.docked) closeDocked(widget.wid, false);
-
+            else if (node.window) node.window.adjustFrameHeight(undefined, 120);
+                
             // In case the widget is stored somewhere else, set destroyed.
             this.destroyed = true;
 
@@ -11340,7 +11341,7 @@
         feedback = getFeedback.call(this);
 
         if (opts.keepBreaks) feedback = feedback.replace(/\n\r?/g, '<br />');
-        
+
         if (opts.verify !== false) res = this.verifyFeedback(opts.markAttempt,
                                                              opts.updateUI);
 
@@ -11506,7 +11507,7 @@
         if (!this.charCounter) return;
         this.charCounter.style.display = 'none';
     };
-    
+
     // ## Helper functions.
 
     /**
@@ -11520,7 +11521,8 @@
      */
     function getFeedback() {
         var out;
-        out = this.textareaElement ? this.textareaElement.value : this._feedback;
+        out = this.textareaElement ?
+            this.textareaElement.value : this._feedback;
         return out ? out.trim() : out;
     }
 
