@@ -31,6 +31,10 @@
     };
 
     CustomInput.texts = {
+        autoHint: function(w) {
+            if (w.requiredChoice) return '*'
+            else return false;
+        },
         numericErr: function(w) {
             var str, p, inc;
             p = w.params;
@@ -185,9 +189,20 @@
         /**
          * ### CustomInput.mainText
          *
-         * A text preceeding the date selector
+         * A text preceeding the custom input
          */
         this.mainText = null;
+
+        /**
+         * ### CustomInput.hint
+         *
+         * An additional text with information about the input
+         *
+         * If not specified, it may be auto-filled, e.g. '*'.
+         *
+         * @see CustomInput.texts.autoHint
+         */
+        this.hint = null;
 
         /**
          * ### CustomInput.requiredChoice
@@ -500,6 +515,16 @@
             }
             this.mainText = opts.mainText;
         }
+        if ('undefined' !== typeof opts.hint) {
+            if ('string' !== typeof opts.hint) {
+                throw new TypeError(e + 'hint must be string or ' +
+                                    'undefined. Found: ' + opts.hint);
+            }
+            this.hint = opts.hint;
+        }
+        else {
+            this.hint = this.getText('autoHint');
+        }
         if (opts.placeholder) {
             if ('string' !== typeof opts.placeholder) {
                 throw new TypeError(e + 'placeholder must be string or ' +
@@ -533,6 +558,13 @@
             this.spanMainText = W.append('span', this.bodyDiv, {
                 className: 'custominput-maintext',
                 innerHTML: this.mainText
+            });
+        }
+
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.bodyDiv, {
+                className: 'choicetable-hint',
+                innerHTML: this.hint
             });
         }
 

@@ -17,12 +17,22 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.4.0';
+    ChoiceTable.version = '1.5.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
     ChoiceTable.title = 'Make your choice';
     ChoiceTable.className = 'choicetable';
+
+    ChoiceTable.texts.autoHint = function(w) {
+        var res;
+        if (!w.requiredChoice && !w.selectMultiple) return false;
+        if (!w.selectMultiple) return '*'
+        res = '(pick ';
+        res += !w.requiredChoice ? 'up to ' + w.selectMultiple :
+            'between ' + w.requiredChoice + ' and ' + w.selectMultiple;
+        return res + ')';
+    };
 
     ChoiceTable.separator = '::';
 
@@ -160,6 +170,17 @@
          * @see ChoiceTable.spanMainText
          */
         this.mainText = null;
+
+        /**
+         * ### ChoiceTable.hint
+         *
+         * An additional text with information about how to select items
+         *
+         * If not specified, it may be auto-filled, e.g. '(pick 2)'.
+         *
+         * @see Feedback.texts.autoHint
+         */
+        this.hint = null;
 
         /**
          * ### ChoiceTable.spanMainText
@@ -437,6 +458,7 @@
      *   - onclick: a custom onclick listener function. Context is
      *       `this` instance
      *   - mainText: a text to be displayed above the table
+     *   - hint: a text with extra info to be displayed after mainText
      *   - choices: the array of available choices. See
      *       `ChoiceTable.renderChoice` for info about the format
      *   - correctChoice: the array|number|string of correct choices. See
@@ -577,6 +599,20 @@
             throw new TypeError('ChoiceTable.init: options.mainText must ' +
                                 'be string or undefined. Found: ' +
                                 options.mainText);
+        }
+
+        // Set the mainText, if any.
+        if ('string' === typeof options.hint) {
+            this.hint = options.hint;
+        }
+        else if ('undefined' !== typeof options.hint) {
+            throw new TypeError('ChoiceTable.init: options.hint must ' +
+                                'be string or undefined. Found: ' +
+                                options.hint);
+        }
+        else {
+            // Returns undefined if there are no constraints.
+            this.hint = this.getText('autoHint');
         }
 
         // Set the timeFrom, if any.
@@ -1069,12 +1105,17 @@
 
         // MainText.
         if (this.mainText) {
-            this.spanMainText = document.createElement('span');
-            this.spanMainText.className = this.className ?
-                ChoiceTable.className + '-maintext' : 'maintext';
-            this.spanMainText.innerHTML = this.mainText;
-            // Append mainText.
-            this.bodyDiv.appendChild(this.spanMainText);
+            this.spanMainText = W.append('span', this.bodyDiv, {
+                className: 'choicetable-maintext',
+                innerHTML: this.mainText
+            });
+        }
+
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.bodyDiv, {
+                className: 'choicetable-hint',
+                innerHTML: this.hint
+            });
         }
 
         // Create/set table.

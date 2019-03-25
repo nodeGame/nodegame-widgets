@@ -894,9 +894,10 @@
             that[collection][name] : that.constructor[collection][name];
         if ('function' === typeof res) {
             res = res(that, param);
-            if ('string' !== typeof res) {
-                throw new TypeError(method + ': cb "' + name +
-                                    ' did not return a string. Found: ' + res);
+            if ('string' !== typeof res && res !== false) {
+                throw new TypeError(method + ': cb "' + name + '" did not ' +
+                                    'return neither string or false. Found: ' +
+                                    res);
             }
         }
         return res;
@@ -5244,12 +5245,22 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.4.0';
+    ChoiceTable.version = '1.5.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
     ChoiceTable.title = 'Make your choice';
     ChoiceTable.className = 'choicetable';
+
+    ChoiceTable.texts.autoHint = function(w) {
+        var res;
+        if (!w.requiredChoice && !w.selectMultiple) return false;
+        if (!w.selectMultiple) return '*'
+        res = '(pick ';
+        res += !w.requiredChoice ? 'up to ' + w.selectMultiple :
+            'between ' + w.requiredChoice + ' and ' + w.selectMultiple;
+        return res + ')';
+    };
 
     ChoiceTable.separator = '::';
 
@@ -5387,6 +5398,17 @@
          * @see ChoiceTable.spanMainText
          */
         this.mainText = null;
+
+        /**
+         * ### ChoiceTable.hint
+         *
+         * An additional text with information about how to select items
+         *
+         * If not specified, it may be auto-filled, e.g. '(pick 2)'.
+         *
+         * @see Feedback.texts.autoHint
+         */
+        this.hint = null;
 
         /**
          * ### ChoiceTable.spanMainText
@@ -5664,6 +5686,7 @@
      *   - onclick: a custom onclick listener function. Context is
      *       `this` instance
      *   - mainText: a text to be displayed above the table
+     *   - hint: a text with extra info to be displayed after mainText
      *   - choices: the array of available choices. See
      *       `ChoiceTable.renderChoice` for info about the format
      *   - correctChoice: the array|number|string of correct choices. See
@@ -5804,6 +5827,20 @@
             throw new TypeError('ChoiceTable.init: options.mainText must ' +
                                 'be string or undefined. Found: ' +
                                 options.mainText);
+        }
+
+        // Set the mainText, if any.
+        if ('string' === typeof options.hint) {
+            this.hint = options.hint;
+        }
+        else if ('undefined' !== typeof options.hint) {
+            throw new TypeError('ChoiceTable.init: options.hint must ' +
+                                'be string or undefined. Found: ' +
+                                options.hint);
+        }
+        else {
+            // Returns undefined if there are no constraints.
+            this.hint = this.getText('autoHint');
         }
 
         // Set the timeFrom, if any.
@@ -6296,12 +6333,17 @@
 
         // MainText.
         if (this.mainText) {
-            this.spanMainText = document.createElement('span');
-            this.spanMainText.className = this.className ?
-                ChoiceTable.className + '-maintext' : 'maintext';
-            this.spanMainText.innerHTML = this.mainText;
-            // Append mainText.
-            this.bodyDiv.appendChild(this.spanMainText);
+            this.spanMainText = W.append('span', this.bodyDiv, {
+                className: 'choicetable-maintext',
+                innerHTML: this.mainText
+            });
+        }
+
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.bodyDiv, {
+                className: 'choicetable-hint',
+                innerHTML: this.hint
+            });
         }
 
         // Create/set table.
@@ -8499,6 +8541,10 @@
     };
 
     CustomInput.texts = {
+        autoHint: function(w) {
+            if (w.requiredChoice) return '*'            
+            else return false;
+        },
         numericErr: function(w) {
             var str, p, inc;
             p = w.params;
@@ -8653,9 +8699,20 @@
         /**
          * ### CustomInput.mainText
          *
-         * A text preceeding the date selector
+         * A text preceeding the custom input
          */
         this.mainText = null;
+
+        /**
+         * ### CustomInput.hint
+         *
+         * An additional text with information about the input
+         *
+         * If not specified, it may be auto-filled, e.g. '*'.
+         *
+         * @see CustomInput.texts.autoHint
+         */
+        this.hint = null;
 
         /**
          * ### CustomInput.requiredChoice
@@ -8968,6 +9025,16 @@
             }
             this.mainText = opts.mainText;
         }
+        if ('undefined' !== typeof opts.hint) {
+            if ('string' !== typeof opts.hint) {
+                throw new TypeError(e + 'hint must be string or ' +
+                                    'undefined. Found: ' + opts.hint);
+            }
+            this.hint = opts.hint;
+        }
+        else {
+            this.hint = this.getText('autoHint');
+        }
         if (opts.placeholder) {
             if ('string' !== typeof opts.placeholder) {
                 throw new TypeError(e + 'placeholder must be string or ' +
@@ -9004,6 +9071,13 @@
             });
         }
 
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.bodyDiv, {
+                className: 'choicetable-hint',
+                innerHTML: this.hint
+            });
+        }
+        
         this.input = W.append('input', this.bodyDiv);
         if (this.placeholder) this.input.placeholder = this.placeholder;
         if (this.inputWidth) this.input.style.width = this.inputWidth;
@@ -10946,6 +11020,7 @@
  *
  * TODO: rename css class feedback-char-count
  * TODO: words and chars count without contraints, just show.
+ * TODO: shows all constraints in gray before the textarea.
  */
 (function(node) {
 
@@ -11071,7 +11146,7 @@
             tmp = J.isInt(options.maxWords, 0, undefined, true);
             if (tmp !== false) {
                 this.maxWords = options.maxWords;
-            }        
+            }
             else {
                 throw new TypeError('Feedback constructor: maxWords ' +
                                     'must be an integer >= 0 or undefined. ' +
