@@ -9,6 +9,7 @@
  *
  * TODO: rename css class feedback-char-count
  * TODO: words and chars count without contraints, just show.
+ * TODO: shows all constraints in gray before the textarea.
  */
 (function(node) {
 
