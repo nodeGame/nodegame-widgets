@@ -26,6 +26,42 @@
     Feedback.className = 'feedback';
 
     Feedback.texts = {
+        autoHint: function(w) {
+            var res, res2;
+            if (w.minChars && w.maxChars) {
+                res = 'beetween ' + w.minChars + ' and ' + w.maxChars +
+                    ' characters';
+            }
+            else if (w.minChars) {
+                res = 'at least ' + w.minChars + ' character';
+                if (w.minChars > 1) res += 's';
+            }
+            else {
+                res = 'at most ' +  w.maxChars + ' character';
+                if (w.maxChars > 1) res += 's';
+            }
+            if (w.minWords && w.maxWords) {
+                res2 = 'beetween ' + w.minWords + ' and ' + w.maxWords +
+                    ' words';
+            }
+            else if (w.minWords) {
+                res2 = 'at least ' + w.minWords + ' word';
+                if (w.minWords > 1) res += 's';
+            }
+            else {
+                res2 = 'at most ' +  w.maxWords + ' word';
+                if (w.maxWords > 1) res += 's';
+            }
+            if (res) {
+                res = '(' + res;;
+                if (res2) res +=  ', and ' + res2;
+                return res + ')';
+            }
+            else if (res2) {
+                return '(' + res2 + ')';
+            }
+            return false;
+        },
         submit: 'Submit feedback',
         label: 'Any feedback? Let us know here:',
         sent: 'Sent!',
@@ -72,6 +108,33 @@
                         'use minChars instead***');
             options.minChars = options.minLength;
         }
+
+        /**
+         * ### Feedback.mainText
+         *
+         * The main text introducing the choices
+         *
+         * @see Feedback.spanMainText
+         */
+        this.mainText = null;
+
+        /**
+         * ### Feedback.hint
+         *
+         * An additional text with information about how to select items
+         *
+         * If not specified, it may be auto-filled, e.g. '(pick 2)'.
+         *
+         * @see Feedback.texts.autoHint
+         */
+        this.hint = null;
+
+        /**
+         * ### Feedback.spanMainText
+         *
+         * The span containing the main text
+         */
+        this.spanMainText = null;
 
         /**
          * ### Feedback.maxChars
@@ -315,6 +378,36 @@
 
     // ## Feedback methods
 
+    // TODO: move all initialization here from constructor.
+    Feedback.prototype.init = function(options) {
+        // Set the mainText, if any.
+        if ('string' === typeof options.mainText) {
+            this.mainText = options.mainText;
+        }
+        else if ('undefined' === typeof options.mainText) {
+            this.mainText = this.getText('label');
+        }
+        else {
+            throw new TypeError('Feedback.init: options.mainText must ' +
+                                'be string or undefined. Found: ' +
+                                options.mainText);
+        }
+
+        // Set the hint, if any.
+        if ('string' === typeof options.hint || false === options.hint) {
+            this.hint = options.hint;
+        }
+        else if ('undefined' !== typeof options.hint) {
+            throw new TypeError('Feedback.init: options.hint must ' +
+                                'be a string, false, or undefined. Found: ' +
+                                options.hint);
+        }
+        else {
+            // Returns undefined if there are no constraints.
+            this.hint = this.getText('autoHint');
+        }
+    };
+
     /**
      * ### Feedback.verifyFeedback
      *
@@ -449,11 +542,18 @@
             className: 'feedback-form'
         });
 
-        label = this.getText('label');
-        if (label !== false) {
-            W.append('label', this.feedbackForm, {
-                'for': 'feedback-input',
-                innerHTML: label
+        // MainText.
+        if (this.mainText) {
+            this.spanMainText = W.append('span', this.feedbackForm, {
+                className: 'feedback-maintext',
+                innerHTML: this.mainText
+            });
+        }
+        // Hint.
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.feedbackForm, {
+                className: 'feedback-hint',
+                innerHTML: this.hint
             });
         }
 

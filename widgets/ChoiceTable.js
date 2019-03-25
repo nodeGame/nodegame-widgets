@@ -1110,7 +1110,7 @@
                 innerHTML: this.mainText
             });
         }
-
+        // Hint.
         if (this.hint) {
             W.append('span', this.spanMainText || this.bodyDiv, {
                 className: 'choicetable-hint',
