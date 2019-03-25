@@ -6,6 +6,8 @@
  * Sends a feedback message to the server
  *
  * www.nodegame.org
+ *
+ * TODO: rename css class feedback-char-count
  */
 (function(node) {
 
@@ -15,7 +17,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.3.0';
+    Feedback.version = '1.4.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
@@ -24,8 +26,23 @@
     Feedback.texts = {
         submit: 'Submit feedback',
         label: 'Any feedback? Let us know here:',
-        sent: 'Sent!'
+        sent: 'Sent!',
+        counter: function(w, param) {
+            var res;
+            res = param.chars ? ' character' : ' word';
+            if (param.len !== 1) res += 's';
+            if (param.needed) res += ' needed';
+            else if (param.over) res += ' over';
+            else res += ' remaining';
+            return res;
+        }
     };
+
+    // Colors for missing, excess or ok.
+    var colNeeded, colOver, colRemain;
+    colNeeded = '#a32020'; // #f2dede';
+    colOver = '#a32020'; // #f2dede';
+    colRemain = '#78b360'; // '#dff0d8';
 
     // ## Dependencies
 
@@ -38,53 +55,101 @@
      *
      * `Feedback` sends a feedback message to the server
      *
-     * @param {object} options Optional. Configuration option.
-     *   Available options:
-     *
-     *    - showCount: If TRUE, the character count is displayed
-     *    - minLength: The minimum number of characters in textarea
-     *    - maxLength: The max number of characters in textarea
-     *    - rows: The number of rows of the textarea
+     * @param {object} options Optional. Configuration options
      */
     function Feedback(options) {
 
+        if ('undefined' !== typeof options.maxLength) {
+            console.log('***Feedback constructor: maxLength is deprecated, ' +
+                        'use maxChars instead***');
+            options.maxChars = options.maxLength;
+        }
+        if ('undefined' !== typeof options.minLength) {
+            console.log('***Feedback constructor: minLength is deprecated, ' +
+                        'use minChars instead***');
+            options.minChars = options.minLength;
+        }
+
         /**
-         * ### Feedback.maxLength
+         * ### Feedback.maxChars
          *
          * The maximum character length for feedback to be submitted
          *
          * Default: 800
          */
-        if ('undefined' === typeof options.maxLength) {
-            this.maxLength = 800;
+        if ('undefined' === typeof options.maxChars) {
+            this.maxChars = 800;
         }
-        else if (J.isInt(options.maxLength, 0) !== false) {
-            this.maxLength = options.maxLength;
+        else if (J.isInt(options.maxChars, 0) !== false) {
+            this.maxChars = options.maxChars;
         }
         else {
-            throw new TypeError('Feedback constructor: maxLength ' +
+            throw new TypeError('Feedback constructor: maxChars ' +
                                 'must be an integer >= 0 or undefined. ' +
-                                'Found: ' + options.maxLength);
+                                'Found: ' + options.maxChars);
         }
 
         /**
-         * ### Feedback.minLength
+         * ### Feedback.minChars
          *
          * The minimum character length for feedback to be submitted
          *
-         * If minLength = 0, then there is no minimum length checked.
+         * If minChars = 0, then there is no minimum length checked.
+         *
          * Default: 1
          */
-        if ('undefined' === typeof options.minLength) {
-            this.minLength = 1;
+        if ('undefined' === typeof options.minChars) {
+            this.minChars = 1;
         }
-        else if (J.isInt(options.minLength, 0) !== false) {
-            this.minLength = options.minLength;
+        else if (J.isInt(options.minChars, 0, undefined, true) !== false) {
+            this.minChars = options.minChars;
         }
         else {
-            throw new TypeError('Feedback constructor: minLength ' +
+            throw new TypeError('Feedback constructor: minChars ' +
                                 'must be an integer >= 0 or undefined. ' +
-                                'Found: ' + options.minLength);
+                                'Found: ' + options.minChars);
+        }
+
+        /**
+         * ### Feedback.maxWords
+         *
+         * The maximum number of words for feedback to be submitted
+         *
+         * Set to 0 for no checks.
+         *
+         * Default: 0
+         */
+        if ('undefined' === typeof options.maxWords) {
+            this.maxWords = 0;
+        }
+        else if (J.isInt(options.maxWords, 0, undefined, true) !== false) {
+            this.maxWords = options.maxWords;
+        }
+        else {
+            throw new TypeError('Feedback constructor: maxWords ' +
+                                'must be an integer >= 0 or undefined. ' +
+                                'Found: ' + options.maxWords);
+        }
+
+        /**
+         * ### Feedback.minWords
+         *
+         * The minimum number of words for feedback to be submitted
+         *
+         * If minChars = 0, then there is no minimum checked.
+         *
+         * Default: 0
+         */
+        if ('undefined' === typeof options.minWords) {
+            this.minWords = 0;
+        }
+        else if (J.isInt(options.minWords, 0, undefined, true) !== false) {
+            this.minWords = options.minWords;
+        }
+        else {
+            throw new TypeError('Feedback constructor: minWords ' +
+                                'must be an integer >= 0 or undefined. ' +
+                                'Found: ' + options.minWords);
         }
 
         /**
@@ -114,13 +179,13 @@
          * Attempts are stored in the attempts array. This allows to store
          * longer texts than accepts feedbacks
          *
-         * Default: Max(2000, maxLength)
+         * Default: Max(2000, maxChars)
          */
         if ('undefined' === typeof options.maxAttemptLength) {
             this.maxAttemptLength = 2000;
         }
         else if (J.isNumber(options.maxAttemptLength, 0) !== false) {
-            this.maxAttemptLength = Math.max(this.maxLength,
+            this.maxAttemptLength = Math.max(this.maxChars,
                                              options.maxAttemptLength);
         }
         else {
@@ -128,22 +193,6 @@
                                 'options.maxAttemptLength must be a number ' +
                                 '>= 0 or undefined. Found: ' +
                                 options.maxAttemptLength);
-        }
-
-        /**
-         * ### Feedback.showCharCount
-         *
-         * If TRUE, the character count is shown
-         *
-         * Default: true
-         *
-         * @see Feedback.charCounter
-         */
-        if ('undefined' === typeof options.showCount) {
-            this.showCharCount = true;
-        }
-        else {
-            this.showCharCount = !!options.showCount;
         }
 
         /**
@@ -222,6 +271,13 @@
         this.charCounter = null;
 
         /**
+         * ### Feedback.wordCounter
+         *
+         * The HTML span element containing the words count
+         */
+        this.wordCounter = null;
+
+        /**
          * ### Feedback.submitButton
          *
          * The HTML submit button
@@ -249,45 +305,96 @@
      * @see getFeedback
      */
     Feedback.prototype.verifyFeedback = function(markAttempt, updateUI) {
-        var feedback, length, updateCount, updateColor, res;
-        var submitButton, charCounter, tmp;
+        var feedback, length,  res;
+        var submitButton, charCounter, wordCounter, tmp;
+        var updateCharCount, updateCharColor, updateWordCount, updateWordColor;
 
         feedback = getFeedback.call(this);
         length = feedback ? feedback.length : 0;
 
         submitButton = this.submitButton;
         charCounter = this.charCounter;
+        wordCounter = this.wordCounter;
 
-        if (length < this.minLength) {
+        res = true;
+
+        if (length < this.minChars) {
             res = false;
-            tmp = this.minLength - length;
-            updateCount = tmp + ' character';
-            if (tmp > 1) updateCount += 's';
-            updateCount += ' needed.';
-            updateColor = '#a32020'; // #f2dede';
+            tmp = this.minChars - length;
+            updateCharCount = tmp + this.getText('counter', {
+                chars: true,
+                needed: true,
+                len: tmp
+            });
+            updateCharColor = colNeeded;
         }
-        else if (length > this.maxLength) {
+        else if (this.maxChars && length > this.maxChars) {
             res = false;
-            tmp = length - this.maxLength;
-            updateCount = tmp + ' character';
-            if (tmp > 1) updateCount += 's';
-            updateCount += ' over.';
-            updateColor = '#a32020'; // #f2dede';
+            tmp = length - this.maxChars;
+            updateCharCount = tmp + this.getText('counter', {
+                chars: true,
+                over: true,
+                len: tmp
+            });
+            updateCharColor = colOver;
         }
         else {
-            res = true;
-            tmp = this.maxLength - length;
-            updateCount = tmp + ' character';
-            if (tmp > 1) updateCount += 's';
-            updateCount += ' remaining.';
-            updateColor = '#78b360'; // '#dff0d8';
+            tmp = this.maxChars - length;
+            updateCharCount = tmp + this.getText('counter', {
+                chars: true,
+                len: tmp
+            });
+            updateCharColor = colRemain;
+        }
+
+        if (wordCounter) {
+            // kudos: https://css-tricks.com/build-word-counter-app/
+            // word count using \w metacharacter -
+            // replacing this with .* to match anything between word
+            // boundaries since it was not taking 'a' as a word.
+            // this is a masterstroke - to count words with any number
+            // of hyphens as one word
+            // [-?(\w+)?]+ looks for hyphen and a word (we make
+            // both optional with ?). + at the end makes it a repeated pattern
+            // \b is word boundary metacharacter
+            tmp = feedback ? feedback.match(/\b[-?(\w+)?]+\b/gi) : 0;
+            length = tmp ? tmp.length : 0;
+            if (length < this.minWords) {
+                res = false;
+                tmp = tmp = this.minWords - length;
+                updateWordCount = tmp + this.getText('counter', {
+                    needed: true,
+                    len: tmp
+                });
+                updateWordColor = colNeeded;
+            }
+            else if (this.maxWords && length > this.maxWords) {
+                res = false;
+                tmp = length - this.maxWords;
+                updateWordCount = tmp + this.getText('counter', {
+                    over: true,
+                    len: tmp
+                });
+                updateWordColor = colOver;
+            }
+            else {
+                  tmp = this.maxWords - length;
+                  updateWordCount = tmp + this.getText('counter', {
+                      len: tmp
+                  });
+                  updateWordColor = colRemain;
+            }
         }
 
         if (updateUI) {
             if (submitButton) submitButton.disabled = !res;
             if (charCounter) {
-                charCounter.style.backgroundColor = updateColor;
-                charCounter.innerHTML = updateCount;
+                charCounter.style.backgroundColor = updateCharColor;
+                charCounter.innerHTML = updateCharCount;
+            }
+            if (wordCounter) {
+                wordCounter.style.backgroundColor = updateWordColor;
+                wordCounter.innerHTML = updateWordCount;
             }
         }
 
@@ -343,7 +450,7 @@
             });
         }
 
-        if (this.showCharCount) this.showCount();
+        this.showCounters();
 
         J.addEvent(this.feedbackForm, 'input', function(event) {
             if (that.isHighlighted()) that.unhighlight();
@@ -366,7 +473,7 @@
         var feedback;
         options = options || {};
         if (!options.feedback) {
-            feedback = J.randomString(J.randomInt(0, this.maxLength),
+            feedback = J.randomString(J.randomInt(0, this.maxChars),
                                       'aA_1');
         }
         else {
@@ -555,7 +662,7 @@
     };
 
     /**
-     * ### Feedback.showCount
+     * ### Feedback.showCounters
      *
      * Shows the character counter
      *
@@ -563,26 +670,42 @@
      *
      * @see Feedback.charCounter
      */
-    Feedback.prototype.showCount = function() {
+    Feedback.prototype.showCounters = function() {
         if (!this.charCounter) {
-            this.charCounter = W.append('span', this.feedbackForm, {
-                className: 'feedback-char-count badge',
-                innerHTML: this.maxLength
-            });
+            if (this.minChars || this.maxChars) {
+                this.charCounter = W.append('span', this.feedbackForm, {
+                    className: 'feedback-char-count badge',
+                    innerHTML: this.maxChars
+                });
+            }
         }
         else {
             this.charCounter.style.display = '';
         }
+        if (!this.wordCounter) {
+            if (this.minWords || this.maxWords) {
+                this.wordCounter = W.append('span', this.feedbackForm, {
+                    className: 'feedback-char-count badge',
+                    innerHTML: this.maxWords
+                });
+                if (this.charCounter) {
+                    this.wordCounter.style['margin-left'] = '10px';
+                }
+            }
+        }
+        else {
+            this.wordCounter.style.display = '';
+        }
     };
 
     /**
-     * ### Feedback.hideCount
+     * ### Feedback.hideCounters
      *
      * Hides the character counter
      */
-    Feedback.prototype.hideCount = function() {
-        if (!this.charCounter) return;
-        this.charCounter.style.display = 'none';
+    Feedback.prototype.hideCounters = function() {
+        if (this.charCounter) this.charCounter.style.display = 'none';
+        if (this.wordCounter) this.wordCounter.style.display = 'none';
     };
 
     // ## Helper functions.
