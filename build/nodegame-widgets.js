@@ -10945,6 +10945,7 @@
  * www.nodegame.org
  *
  * TODO: rename css class feedback-char-count
+ * TODO: words and chars count without contraints, just show.
  */
 (function(node) {
 
@@ -10995,13 +10996,14 @@
      * @param {object} options Optional. Configuration options
      */
     function Feedback(options) {
-       
-        if ('undefined' !== typeof options.maxLength) {            
+        var tmp;
+
+        if ('undefined' !== typeof options.maxLength) {
             console.log('***Feedback constructor: maxLength is deprecated, ' +
                         'use maxChars instead***');
             options.maxChars = options.maxLength;
         }
-        if ('undefined' !== typeof options.minLength) {            
+        if ('undefined' !== typeof options.minLength) {
             console.log('***Feedback constructor: minLength is deprecated, ' +
                         'use minChars instead***');
             options.minChars = options.minLength;
@@ -11017,13 +11019,16 @@
         if ('undefined' === typeof options.maxChars) {
             this.maxChars = 800;
         }
-        else if (J.isInt(options.maxChars, 0) !== false) {
-            this.maxChars = options.maxChars;            
-        }
         else {
-            throw new TypeError('Feedback constructor: maxChars ' +
-                                'must be an integer >= 0 or undefined. ' +
-                                'Found: ' + options.maxChars);
+            tmp = J.isInt(options.maxChars, 0);
+            if (tmp !== false) {
+                this.maxChars = options.maxChars;
+            }
+            else {
+                throw new TypeError('Feedback constructor: maxChars ' +
+                                    'must be an integer >= 0 or undefined. ' +
+                                    'Found: ' + options.maxChars);
+            }
         }
 
         /**
@@ -11038,13 +11043,16 @@
         if ('undefined' === typeof options.minChars) {
             this.minChars = 1;
         }
-        else if (J.isInt(options.minChars, 0, undefined, true) !== false) {
-            this.minChars = options.minChars;
-        }
         else {
-            throw new TypeError('Feedback constructor: minChars ' +
-                                'must be an integer >= 0 or undefined. ' +
-                                'Found: ' + options.minChars);
+            tmp = J.isInt(options.minChars, 0, undefined, true);
+            if (tmp !== false) {
+                this.minChars = options.minChars;
+            }
+            else {
+                throw new TypeError('Feedback constructor: minChars ' +
+                                    'must be an integer >= 0 or undefined. ' +
+                                    'Found: ' + options.minChars);
+            }
         }
 
         /**
@@ -11059,13 +11067,16 @@
         if ('undefined' === typeof options.maxWords) {
             this.maxWords = 0;
         }
-        else if (J.isInt(options.maxWords, 0, undefined, true) !== false) {
-            this.maxWords = options.maxWords;
-        }
         else {
-            throw new TypeError('Feedback constructor: maxWords ' +
-                                'must be an integer >= 0 or undefined. ' +
-                                'Found: ' + options.maxWords);
+            tmp = J.isInt(options.maxWords, 0, undefined, true);
+            if (tmp !== false) {
+                this.maxWords = options.maxWords;
+            }        
+            else {
+                throw new TypeError('Feedback constructor: maxWords ' +
+                                    'must be an integer >= 0 or undefined. ' +
+                                    'Found: ' + options.maxWords);
+            }
         }
 
         /**
@@ -11080,13 +11091,28 @@
         if ('undefined' === typeof options.minWords) {
             this.minWords = 0;
         }
-        else if (J.isInt(options.minWords, 0, undefined, true) !== false) {
-            this.minWords = options.minWords;
-        }
         else {
-            throw new TypeError('Feedback constructor: minWords ' +
-                                'must be an integer >= 0 or undefined. ' +
-                                'Found: ' + options.minWords);
+            tmp = J.isInt(options.minWords, 0, undefined, true);
+            if (tmp  !== false) {
+                this.minWords = options.minWords;
+
+                // Checking if words and characters limit are compatible.
+                if (this.maxChars) {
+                    tmp = (this.maxChars+1)/2;
+                    if (this.minWords > tmp) {
+
+                        throw new TypeError('Feedback constructor: minWords ' +
+                                            'cannot be larger than ' +
+                                            '(maxChars+1)/2. Found: ' +
+                                            this.minWords + ' > ' + tmp);
+                    }
+                }
+            }
+            else {
+                throw new TypeError('Feedback constructor: minWords ' +
+                                    'must be an integer >= 0 or undefined. ' +
+                                    'Found: ' + options.minWords);
+            }
         }
 
         /**
@@ -11607,7 +11633,7 @@
      *
      * @see Feedback.charCounter
      */
-    Feedback.prototype.showCounters = function() {        
+    Feedback.prototype.showCounters = function() {
         if (!this.charCounter) {
             if (this.minChars || this.maxChars) {
                 this.charCounter = W.append('span', this.feedbackForm, {
@@ -11664,7 +11690,6 @@
     }
 
 })(node);
-
 
 /**
  * # LanguageSelector
