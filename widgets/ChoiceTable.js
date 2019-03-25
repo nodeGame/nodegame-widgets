@@ -601,13 +601,13 @@
                                 options.mainText);
         }
 
-        // Set the mainText, if any.
-        if ('string' === typeof options.hint) {
+        // Set the hint, if any.
+        if ('string' === typeof options.hint || false === options.hint) {
             this.hint = options.hint;
         }
         else if ('undefined' !== typeof options.hint) {
             throw new TypeError('ChoiceTable.init: options.hint must ' +
-                                'be string or undefined. Found: ' +
+                                'be a string, false, or undefined. Found: ' +
                                 options.hint);
         }
         else {

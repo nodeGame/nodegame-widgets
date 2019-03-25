@@ -5829,13 +5829,13 @@
                                 options.mainText);
         }
 
-        // Set the mainText, if any.
-        if ('string' === typeof options.hint) {
+        // Set the hint, if any.
+        if ('string' === typeof options.hint || false === options.hint) {
             this.hint = options.hint;
         }
         else if ('undefined' !== typeof options.hint) {
             throw new TypeError('ChoiceTable.init: options.hint must ' +
-                                'be string or undefined. Found: ' +
+                                'be a string, false, or undefined. Found: ' +
                                 options.hint);
         }
         else {
@@ -6911,7 +6911,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.4.0';
+    ChoiceTableGroup.version = '1.5.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -6920,6 +6920,11 @@
 
     ChoiceTableGroup.separator = '::';
 
+    ChoiceTableGroup.texts.autoHint = function(w) {
+        if (w.requiredChoice) return '*';
+        else return false;
+    };
+    
     // ## Dependencies
 
     ChoiceTableGroup.dependencies = {
@@ -7040,6 +7045,17 @@
          * The span containing the main text
          */
         this.spanMainText = null;
+
+        /**
+         * ### ChoiceTableGroup.hint
+         *
+         * An additional text with information about how to select items
+         *
+         * If not specified, it may be auto-filled, e.g. '(pick 2)'.
+         *
+         * @see Feedback.texts.autoHint
+         */
+        this.hint = null;
 
         /**
          * ### ChoiceTableGroup.items
@@ -7360,6 +7376,20 @@
                                 options.mainText);
         }
 
+        // Set the hint, if any.
+        if ('string' === typeof options.hint || false === options.hint) {
+            this.hint = options.hint;
+        }
+        else if ('undefined' !== typeof options.hint) {
+            throw new TypeError('ChoiceTableGroup.init: options.hint must ' +
+                                'be a string, false, or undefined. Found: ' +
+                                options.hint);
+        }
+        else {
+            // Returns undefined if there are no constraints.
+            this.hint = this.getText('autoHint');
+        }
+        
         // Set the timeFrom, if any.
         if (options.timeFrom === false ||
             'string' === typeof options.timeFrom) {
@@ -7600,14 +7630,19 @@
 
         // MainText.
         if (this.mainText) {
-            this.spanMainText = document.createElement('span');
-            this.spanMainText.className =
-                ChoiceTableGroup.className + '-maintext';
-            this.spanMainText.innerHTML = this.mainText;
-            // Append.
-            this.bodyDiv.appendChild(this.spanMainText);
+            this.spanMainText = W.append('span', this.bodyDiv, {
+                className: 'custominput-maintext',
+                innerHTML: this.mainText
+            });
         }
-
+        // Hint.
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.bodyDiv, {
+                className: 'choicetable-hint',
+                innerHTML: this.hint
+            });
+        }
+        
         // Create/set table, if requested.
         if (this.table !== false) {
             if ('undefined' === typeof this.table) {
@@ -8525,7 +8560,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.4.0';
+    CustomInput.version = '0.5.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -8542,7 +8577,7 @@
 
     CustomInput.texts = {
         autoHint: function(w) {
-            if (w.requiredChoice) return '*'            
+            if (w.requiredChoice) return '*';
             else return false;
         },
         numericErr: function(w) {
@@ -9026,8 +9061,8 @@
             this.mainText = opts.mainText;
         }
         if ('undefined' !== typeof opts.hint) {
-            if ('string' !== typeof opts.hint) {
-                throw new TypeError(e + 'hint must be string or ' +
+            if (false !== opts.hint && 'string' !== typeof opts.hint) {
+                throw new TypeError(e + 'hint must be a string, false, or ' +
                                     'undefined. Found: ' + opts.hint);
             }
             this.hint = opts.hint;
@@ -9070,14 +9105,14 @@
                 innerHTML: this.mainText
             });
         }
-
+        // Hint.
         if (this.hint) {
             W.append('span', this.spanMainText || this.bodyDiv, {
                 className: 'choicetable-hint',
                 innerHTML: this.hint
             });
         }
-        
+
         this.input = W.append('input', this.bodyDiv);
         if (this.placeholder) this.input.placeholder = this.placeholder;
         if (this.inputWidth) this.input.style.width = this.inputWidth;

@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.4.0';
+    CustomInput.version = '0.5.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -32,7 +32,7 @@
 
     CustomInput.texts = {
         autoHint: function(w) {
-            if (w.requiredChoice) return '*'
+            if (w.requiredChoice) return '*';
             else return false;
         },
         numericErr: function(w) {
@@ -516,8 +516,8 @@
             this.mainText = opts.mainText;
         }
         if ('undefined' !== typeof opts.hint) {
-            if ('string' !== typeof opts.hint) {
-                throw new TypeError(e + 'hint must be string or ' +
+            if (false !== opts.hint && 'string' !== typeof opts.hint) {
+                throw new TypeError(e + 'hint must be a string, false, or ' +
                                     'undefined. Found: ' + opts.hint);
             }
             this.hint = opts.hint;
@@ -560,7 +560,7 @@
                 innerHTML: this.mainText
             });
         }
-
+        // Hint.
         if (this.hint) {
             W.append('span', this.spanMainText || this.bodyDiv, {
                 className: 'choicetable-hint',
