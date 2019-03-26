@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.5.0';
+    CustomInput.version = '0.6.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -27,13 +27,17 @@
         number: true,
         'float': true,
         'int': true,
-        date: true
+        date: true,
+        list: true
     };
 
     CustomInput.texts = {
         autoHint: function(w) {
-            if (w.requiredChoice) return '*';
-            else return false;
+            var res;
+            res = w.type === 'list' ?
+                '(separate items with ' + w.params.listSep + ')' : '';
+            if (w.requiredChoice) return res + '*';
+            else return res ? res : false;
         },
         numericErr: function(w) {
             var str, p, inc;
@@ -104,12 +108,8 @@
      * ## CustomInput constructor
      *
      * Creates a new instance of CustomInput
-     *
-     * @param {object} options Optional. Configuration options.
-     *   If a `table` option is specified, it sets it as the clickable
-     *   table. All other options are passed to the init method.
      */
-    function CustomInput(options) {
+    function CustomInput() {
 
         /**
          * ### CustomInput.input
@@ -511,6 +511,22 @@
             return res;
         };
 
+        // List.
+
+        if (this.type === 'list') {
+            if (opts.listSeparator) {
+                if ('string' !== typeof opts.listSeparator) {
+                    throw new TypeError(e + 'listSeparator must be string or ' +
+                                        'undefined. Found: ' +
+                                        opts.listSeperator);
+                }
+                this.params.listSep = opts.listSeparator;
+            }
+            else {
+                this.params.listSep = ',';
+            }
+        }
+
         // Preprocess
 
         if (opts.preprocess) {
@@ -522,18 +538,64 @@
         }
         else if (opts.preprocess !== false) {
 
-
             if (this.type === 'date') {
                 this.preprocess = function(input) {
-                    var sep;
+                    var sep, len;
+                    len = input.value.length;
                     sep = that.params.sep;
-                    if (input.value.length === 2) input.value += sep;
-                    else if (input.value.length === 5) input.value += sep;
+                    if (len === 2) {
+                        if (input.selectionStart === 2) input.value += sep;
+                    }
+                    else if (len === 5 && input.selectionStart === 5) {
+                        input.value += sep;
+                    }
                 };
             }
-
-
         }
+
+        // Postprocess.
+
+        if (opts.postprocess) {
+            if ('function' !== typeof opts.postprocess) {
+                throw new TypeError(e + 'postprocess must be function or ' +
+                                    'undefined. Found: ' + opts.postprocess);
+            }
+            this.postprocess = opts.postprocess;
+        }
+        else {
+            if (this.type === 'list') {
+                this.postprocess = function(value, valid) {
+                    var i, len;
+                    if (!value) return value;
+                    value = value.split(this.params.listSep);
+                    len = value.length;
+                    if (!len) return value;
+                    value[0] = value[0].trim();
+                    if (len > 1) value[1] = value[1].trim();
+                    if (len > 2) value[2] = value[2].trim();
+                    if (len > 3) {
+                        for (i = 3; i < len ; i++) {
+                            value[i] = value[i].trim();
+                        }
+                    }
+                    return value;
+                };
+            }
+            else if (this.type === 'date') {
+                this.postprocess = function(value, valid) {
+                    if (!valid || !value) return value;
+                    return {
+                        value: value,
+                        day: value.substring(0,2),
+                        month: value.substring(3,5),
+                        year: value.subtring(6, value.length)
+                    };
+                };
+            }
+        }
+
+        // MainText, Hint, and other visuals.
+
         if (opts.mainText) {
             if ('string' !== typeof opts.mainText) {
                 throw new TypeError(e + 'mainText must be string or ' +
