@@ -1354,7 +1354,7 @@
         widget.wid = '' + J.randomInt(0,10000000000000000000);
 
         // UI properties.
-        
+
         widget.disabled = null;
         widget.highlighted = null;
         widget.collapsed = null;
@@ -1362,13 +1362,13 @@
         widget.docked = null
 
         // Properties that will modify the UI of the widget once appended.
-        
+
         if (options.disabled) widget._disabled = true;
         if (options.highlighted) widget._highlighted = true;
         if (options.collapsed) widget._collapsed = true;
         if (options.hidden) widget._hidden = true;
         if (options.docked) widget._docked = true;
-        
+
         // Call init.
         widget.init(options);
 
@@ -6058,7 +6058,7 @@
         len = choices.length;
 
         // Save the order in which the choices will be added.
-        this.order = J.seq(0, len-1);        
+        this.order = J.seq(0, len-1);
         if (this.shuffleChoices) {
             this.originalOrder = this.order;
             this.order = J.shuffle(this.order);
@@ -9109,12 +9109,28 @@
             return res;
         };
 
+        // Preprocess
+
         if (opts.preprocess) {
             if ('function' !== typeof opts.preprocess) {
                 throw new TypeError(e + 'preprocess must be function or ' +
                                     'undefined. Found: ' + opts.preprocess);
             }
             this.preprocess = opts.preprocess;
+        }
+        else if (opts.preprocess !== false) {
+
+            
+            if (this.type === 'date') {
+                this.preprocess = function(input) {
+                    var sep;
+                    sep = that.params.sep;
+                    if (input.value.length === 2) input.value += sep;
+                    else if (input.value.length === 5) input.value += sep;
+                };
+            }
+            
+            
         }
         if (opts.mainText) {
             if ('string' !== typeof opts.mainText) {

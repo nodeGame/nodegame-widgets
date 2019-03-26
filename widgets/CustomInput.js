@@ -511,12 +511,28 @@
             return res;
         };
 
+        // Preprocess
+
         if (opts.preprocess) {
             if ('function' !== typeof opts.preprocess) {
                 throw new TypeError(e + 'preprocess must be function or ' +
                                     'undefined. Found: ' + opts.preprocess);
             }
             this.preprocess = opts.preprocess;
+        }
+        else if (opts.preprocess !== false) {
+
+
+            if (this.type === 'date') {
+                this.preprocess = function(input) {
+                    var sep;
+                    sep = that.params.sep;
+                    if (input.value.length === 2) input.value += sep;
+                    else if (input.value.length === 5) input.value += sep;
+                };
+            }
+
+
         }
         if (opts.mainText) {
             if ('string' !== typeof opts.mainText) {
