@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.5.0';
+    ChoiceTable.version = '1.5.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -88,7 +88,7 @@
          */
         this.listener = function(e) {
             var name, value, td;
-            var i, len;
+            var i, len, removed;
 
             e = e || window.event;
             td = e.target || e.srcElement;
@@ -137,6 +137,7 @@
                 else {
                     that.selected = null;
                 }
+                removed = true;
             }
             // Click on a new choice.
             else {
@@ -160,6 +161,9 @@
 
             // Remove any warning/errors on click.
             if (that.isHighlighted()) that.unhighlight();
+
+            // Call onclick, if any.
+            if (that.onclick) that.onclick.call(that, value, td, removed);
         };
 
         /**
@@ -295,6 +299,9 @@
          * ### ChoiceTable.originalOrder
          *
          * The initial order of display of choices
+         *
+         * TODO: Do we need this? originalOrder is always 0,1,2,3...
+         * ChoiceManager does not have it.
          *
          * @see ChoiceTable.order
          */
@@ -455,7 +462,9 @@
      *   - orientation: orientation of the table: vertical (v) or horizontal (h)
      *   - group: the name of the group (number or string), if any
      *   - groupOrder: the order of the table in the group, if any
-     *   - onclick: a custom onclick listener function. Context is
+     *   - listener: a function executed at every click. Context is
+     *       `this` instance
+     *   - onclick: a function executed after the listener function. Context is
      *       `this` instance
      *   - mainText: a text to be displayed above the table
      *   - hint: a text with extra info to be displayed after mainText
@@ -579,11 +588,21 @@
                                 options.groupOrder);
         }
 
-        // Set the onclick listener, if any.
-        if ('function' === typeof options.onclick) {
+        // Set the main onclick listener, if any.
+        if ('function' === typeof options.listener) {
             this.listener = function(e) {
-                options.onclick.call(this, e);
+                options.listener.call(this, e);
             };
+        }
+        else if ('undefined' !== typeof options.listener) {
+            throw new TypeError('ChoiceTable.init: options.listener must ' +
+                                'be function or undefined. Found: ' +
+                                options.listener);
+        }
+
+        // Set an additional onclick onclick, if any.
+        if ('function' === typeof options.onclick) {
+            this.onclick = options.onclick;
         }
         else if ('undefined' !== typeof options.onclick) {
             throw new TypeError('ChoiceTable.init: options.onclick must ' +
@@ -780,8 +799,10 @@
 
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
-        if (this.shuffleChoices) this.order = J.shuffle(this.order);
-        this.originalOrder = this.order;
+        if (this.shuffleChoices) {
+            this.originalOrder = this.order;
+            this.order = J.shuffle(this.order);
+        }
 
         // Build the table and choices at once (faster).
         if (this.table) this.buildTableAndChoices();

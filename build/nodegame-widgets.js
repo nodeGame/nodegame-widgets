@@ -1352,15 +1352,23 @@
         widget.widgetName = widgetName;
         // Add random unique widget id.
         widget.wid = '' + J.randomInt(0,10000000000000000000);
-        // Add enabled.
-        widget.disabled = null;
-        // Add highlighted.
-        widget.highlighted = null;
-        // Add collapsed.
-        widget.collapsed = null;
-        // Add hidden.
-        widget.hidden = null;
 
+        // UI properties.
+        
+        widget.disabled = null;
+        widget.highlighted = null;
+        widget.collapsed = null;
+        widget.hidden = null;
+        widget.docked = null
+
+        // Properties that will modify the UI of the widget once appended.
+        
+        if (options.disabled) widget._disabled = true;
+        if (options.highlighted) widget._highlighted = true;
+        if (options.collapsed) widget._collapsed = true;
+        if (options.hidden) widget._hidden = true;
+        if (options.docked) widget._docked = true;
+        
         // Call init.
         widget.init(options);
 
@@ -1542,7 +1550,7 @@
         };
 
         // Dock it.
-        if (options.docked) {
+        if (options.docked || w._docked) {
             tmp.className.push('docked');
             this.docked.push(w);
             w.docked = true;
@@ -1572,13 +1580,15 @@
         // Optionally set context.
         if (w.context) w.setContext(w.context);
 
-        // Be hidden, if requested.
-        if (options.hidden) w.hide();
+        // Adapt UI, if requested.
+        if (options.hidden || w._hidden) w.hide();
+        if (options.collapsed || w._collapsed) w.collapse();
+        if (options.disabled || w._disabled) w.disable();
+        if (options.highlighted || w._highlighted) w.highlight();
 
+        // Append.
         root.appendChild(w.panelDiv);
-
         w.originalRoot = root;
-
         w.append();
 
         // Make sure the distance from the right side is correct.
@@ -4700,8 +4710,21 @@
          * ### ChoiceManager.forms
          *
          * The array available forms
+         *
+         * @see ChoiceManager.formsById
          */
         this.forms = null;
+
+        /**
+         * ### ChoiceManager.forms
+         *
+         * A map form id to form
+         *
+         * Note: if a form does not have an id, it will not be added here.
+         *
+         * @see ChoiceManager.forms
+         */
+        this.formsById = null;
 
         /**
          * ### ChoiceManager.order
@@ -4885,7 +4908,7 @@
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
-        var form, i, len, parsedForms;
+        var form, formsById, i, len, parsedForms;
         if ('function' === typeof forms) {
             parsedForms = forms.call(node.game);
             if (!J.isArray(parsedForms)) {
@@ -4908,6 +4931,7 @@
         }
 
         // Manual clone forms.
+        formsById = {};
         forms = new Array(len);
         i = -1;
         for ( ; ++i < len ; ) {
@@ -4919,15 +4943,23 @@
                     form = node.widgets.get(form.name, form);
                 }
                 if (!node.widgets.isWidget(form)) {
-                    throw new Error('ChoiceManager.buildDl: one of the forms ' +
-                                    'is not a widget-like element: ' +
-                                    parsedForms[i]);
+                    throw new Error('ChoiceManager.setForms: one of the ' +
+                                    'forms is not a widget-like element: ' +
+                                    form);
                 }
+            }
+            if (form.id) {
+                if (formsById[form.id]) {
+                    throw new Error('ChoiceManager.setForms: duplicated ' +
+                                    'form id: ' + form.id);
+                }
+                formsById[form.id] = form;
             }
             forms[i] = form;
         }
         // Assigned verified forms.
         this.forms = forms;
+        this.formsById = formsById;
 
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
@@ -5245,7 +5277,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.5.0';
+    ChoiceTable.version = '1.5.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -5316,7 +5348,7 @@
          */
         this.listener = function(e) {
             var name, value, td;
-            var i, len;
+            var i, len, removed;
 
             e = e || window.event;
             td = e.target || e.srcElement;
@@ -5365,6 +5397,7 @@
                 else {
                     that.selected = null;
                 }
+                removed = true;
             }
             // Click on a new choice.
             else {
@@ -5388,6 +5421,9 @@
 
             // Remove any warning/errors on click.
             if (that.isHighlighted()) that.unhighlight();
+
+            // Call onclick, if any.
+            if (that.onclick) that.onclick.call(that, value, td, removed);
         };
 
         /**
@@ -5523,6 +5559,9 @@
          * ### ChoiceTable.originalOrder
          *
          * The initial order of display of choices
+         *
+         * TODO: Do we need this? originalOrder is always 0,1,2,3...
+         * ChoiceManager does not have it.
          *
          * @see ChoiceTable.order
          */
@@ -5683,7 +5722,9 @@
      *   - orientation: orientation of the table: vertical (v) or horizontal (h)
      *   - group: the name of the group (number or string), if any
      *   - groupOrder: the order of the table in the group, if any
-     *   - onclick: a custom onclick listener function. Context is
+     *   - listener: a function executed at every click. Context is
+     *       `this` instance
+     *   - onclick: a function executed after the listener function. Context is
      *       `this` instance
      *   - mainText: a text to be displayed above the table
      *   - hint: a text with extra info to be displayed after mainText
@@ -5807,11 +5848,21 @@
                                 options.groupOrder);
         }
 
-        // Set the onclick listener, if any.
-        if ('function' === typeof options.onclick) {
+        // Set the main onclick listener, if any.
+        if ('function' === typeof options.listener) {
             this.listener = function(e) {
-                options.onclick.call(this, e);
+                options.listener.call(this, e);
             };
+        }
+        else if ('undefined' !== typeof options.listener) {
+            throw new TypeError('ChoiceTable.init: options.listener must ' +
+                                'be function or undefined. Found: ' +
+                                options.listener);
+        }
+
+        // Set an additional onclick onclick, if any.
+        if ('function' === typeof options.onclick) {
+            this.onclick = options.onclick;
         }
         else if ('undefined' !== typeof options.onclick) {
             throw new TypeError('ChoiceTable.init: options.onclick must ' +
@@ -6007,9 +6058,11 @@
         len = choices.length;
 
         // Save the order in which the choices will be added.
-        this.order = J.seq(0, len-1);
-        if (this.shuffleChoices) this.order = J.shuffle(this.order);
-        this.originalOrder = this.order;
+        this.order = J.seq(0, len-1);        
+        if (this.shuffleChoices) {
+            this.originalOrder = this.order;
+            this.order = J.shuffle(this.order);
+        }
 
         // Build the table and choices at once (faster).
         if (this.table) this.buildTableAndChoices();
@@ -8702,7 +8755,14 @@
          *
          * The validation function for the input
          *
-         * The function returns an error message in case of error.
+         * The function returns an object like:
+         *
+         * ```javascript
+         *  {
+         *    value: 'validvalue',
+         *    err:   'This error occurred' // If invalid.
+         *  }
+         * ```
          */
         this.validation = null;
 
@@ -8792,7 +8852,7 @@
                                     'or undefined. Found: ' +
                                     opts.validation);
             }
-            this.validation = opts.validation;
+            tmp = opts.validation;
         }
         else {
             // Add default validations based on type.
@@ -9032,19 +9092,22 @@
                 };
             }
             // TODO: add other types, e.g. date, int and email.
-
-            this.validation = function(value) {
-                var res;
-                if (value.trim() === '') {
-                    res = that.requiredChoice ?
-                        { err: that.getText('emptyErr') } : { value: '' };
-                }
-                else {
-                    res = tmp(value);
-                }
-                return res;
-            };
         }
+
+        // Variable tmp contains a validation function, either from
+        // defaults, or from user option.
+
+        this.validation = function(value) {
+            var res;
+            res = { value: value };
+            if (value.trim() === '') {
+                if (that.requiredChoice) res.err = that.getText('emptyErr');
+            }
+            else if (tmp) {
+                res = tmp(value);
+            }
+            return res;
+        };
 
         if (opts.preprocess) {
             if ('function' !== typeof opts.preprocess) {
@@ -9195,7 +9258,7 @@
      */
     CustomInput.prototype.reset = function() {
         if (this.input) this.input.value = '';
-        if (this.isHighilighted()) this.unhighlight();
+        if (this.isHighlighted()) this.unhighlight();
     };
 
     /**
