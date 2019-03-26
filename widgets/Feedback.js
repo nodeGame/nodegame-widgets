@@ -36,7 +36,7 @@
                 res = 'at least ' + w.minChars + ' character';
                 if (w.minChars > 1) res += 's';
             }
-            else {
+            else if (w.maxChars) {
                 res = 'at most ' +  w.maxChars + ' character';
                 if (w.maxChars > 1) res += 's';
             }
@@ -48,7 +48,7 @@
                 res2 = 'at least ' + w.minWords + ' word';
                 if (w.minWords > 1) res += 's';
             }
-            else {
+            else if (w.maxWords) {
                 res2 = 'at most ' +  w.maxWords + ' word';
                 if (w.maxWords > 1) res += 's';
             }
