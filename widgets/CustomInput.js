@@ -157,7 +157,14 @@
          *
          * The validation function for the input
          *
-         * The function returns an error message in case of error.
+         * The function returns an object like:
+         *
+         * ```javascript
+         *  {
+         *    value: 'validvalue',
+         *    err:   'This error occurred' // If invalid.
+         *  }
+         * ```
          */
         this.validation = null;
 
@@ -247,7 +254,7 @@
                                     'or undefined. Found: ' +
                                     opts.validation);
             }
-            this.validation = opts.validation;
+            tmp = opts.validation;
         }
         else {
             // Add default validations based on type.
@@ -487,19 +494,22 @@
                 };
             }
             // TODO: add other types, e.g. date, int and email.
-
-            this.validation = function(value) {
-                var res;
-                if (value.trim() === '') {
-                    res = that.requiredChoice ?
-                        { err: that.getText('emptyErr') } : { value: '' };
-                }
-                else {
-                    res = tmp(value);
-                }
-                return res;
-            };
         }
+
+        // Variable tmp contains a validation function, either from
+        // defaults, or from user option.
+
+        this.validation = function(value) {
+            var res;
+            res = { value: value };
+            if (value.trim() === '') {
+                if (that.requiredChoice) res.err = that.getText('emptyErr');
+            }
+            else if (tmp) {
+                res = tmp(value);
+            }
+            return res;
+        };
 
         if (opts.preprocess) {
             if ('function' !== typeof opts.preprocess) {
@@ -650,7 +660,7 @@
      */
     CustomInput.prototype.reset = function() {
         if (this.input) this.input.value = '';
-        if (this.isHighilighted()) this.unhighlight();
+        if (this.isHighlighted()) this.unhighlight();
     };
 
     /**
