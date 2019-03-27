@@ -8613,7 +8613,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.6.0';
+    CustomInput.version = '0.7.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -8636,6 +8636,10 @@
     };
 
     CustomInput.texts = {
+        listErr: function(w) {
+            return 'Check that there are no empty items; do not end with ' +
+                'the separator';
+        },
         autoHint: function(w) {
             var res, sep;
             if (w.type === 'list') {
@@ -9099,7 +9103,52 @@
                     return res;
                 };
             }
-            // TODO: add other types, e.g. date, int and email.
+            // List.
+
+            else if (this.type === 'list') {
+                if (opts.listSeparator) {
+                    if ('string' !== typeof opts.listSeparator) {
+                        throw new TypeError(e + 'listSeparator must be ' +
+                                            'string or undefined. Found: ' +
+                                            opts.listSeperator);
+                    }
+                    this.params.listSep = opts.listSeparator;
+                }
+                else {
+                    this.params.listSep = ',';
+                }
+
+                tmp = function(value) {
+                    var i, len, v;
+                    debugger
+                    value = value.split(that.params.listSep);
+                    len = value.length;
+                    if (!len) return value;
+                    i = 0;
+                    v = value[0].trim();
+                    if (!v) return { err: that.getText('listErr') };
+                    value[i++] = v;
+                    if (len > 1) {
+                        v = value[1].trim();
+                        if (!v) return { err: that.getText('listErr') };
+                        value[i++] = v;
+                    }
+                    if (len > 2) {
+                        v = value[2].trim();
+                        if (!v) return { err: that.getText('listErr') };
+                        value[i++] = v;
+                    }
+                    if (len > 3) {
+                        for ( ; i < len ; ) {
+                            v = value[i].trim();                            
+                            if (!v) return { err: that.getText('listErr') };
+                            value[i++] = v;
+                        }
+                    }
+                    return { value: value };
+                }
+            }
+            // TODO: add other types, e.g.int and email.
         }
 
         // Variable tmp contains a validation function, either from
@@ -9117,21 +9166,7 @@
             return res;
         };
 
-        // List.
-
-        if (this.type === 'list') {
-            if (opts.listSeparator) {
-                if ('string' !== typeof opts.listSeparator) {
-                    throw new TypeError(e + 'listSeparator must be string or ' +
-                                        'undefined. Found: ' +
-                                        opts.listSeperator);
-                }
-                this.params.listSep = opts.listSeparator;
-            }
-            else {
-                this.params.listSep = ',';
-            }
-        }
+       
 
         // Preprocess
 
@@ -9171,6 +9206,23 @@
                     }
                 };
             }
+            else if (this.type === 'list') {
+                // Add a space after separator, if separator is not space.
+                if (this.params.listSep.trim() !== '') {
+                    this.preprocess = function(input) {
+                        var sep, len;
+                        len = input.value.length;
+                        sep = that.params.listSep;
+                        if (len > 1 &&
+                            len === input.selectionStart &&
+                            input.value.charAt(len-1) === sep &&
+                            input.value.charAt(len-2) !== sep) {
+                            
+                            input.value += ' ';
+                        }
+                    };
+                }
+            }
         }
 
         // Postprocess.
@@ -9183,25 +9235,7 @@
             this.postprocess = opts.postprocess;
         }
         else {
-            if (this.type === 'list') {
-                this.postprocess = function(value, valid) {
-                    var i, len;
-                    if (!value) return value;
-                    value = value.split(this.params.listSep);
-                    len = value.length;
-                    if (!len) return value;
-                    value[0] = value[0].trim();
-                    if (len > 1) value[1] = value[1].trim();
-                    if (len > 2) value[2] = value[2].trim();
-                    if (len > 3) {
-                        for (i = 3; i < len ; i++) {
-                            value[i] = value[i].trim();
-                        }
-                    }
-                    return value;
-                };
-            }
-            else if (this.type === 'date') {
+            if (this.type === 'date') {
                 this.postprocess = function(value, valid) {
                     if (!valid || !value) return value;
                     return {
