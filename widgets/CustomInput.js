@@ -180,6 +180,15 @@
         this.validation = null;
 
         /**
+         * ### CustomInput.validationSpeed
+         *
+         * How often (in milliseconds) the validation function is called
+         *
+         * Default: 500
+         */
+        this.validationSpeed = 500;
+
+        /**
          * ### CustomInput.postprocess
          *
          * The function that postprocess the input after validation
@@ -230,6 +239,20 @@
          * Default: TRUE
          */
         this.requiredChoice = null;
+
+        /**
+         * ### CustomInput.timeBegin
+         *
+         * When the first character was inserted
+         */
+        this.timeBegin = null;
+
+        /**
+         * ### CustomInput.timeEnd
+         *
+         * When the last character was inserted
+         */
+        this.timeEnd = null;
     }
 
     // ## CustomInput methods
@@ -649,6 +672,17 @@
             }
         }
 
+        // Validation Speed
+        if ('undefined' !== typeof opts.validationSpeed) {
+            tmp = J.isInt(opts.valiadtionSpeed, 0, undefined, true);
+            if (tmp === false) {
+                throw new TypeError(e + 'validationSpeed must a non-negative ' +
+                                    'number or undefined. Found: ' +
+                                    opts.validationSpeed);
+            }
+            this.validationSpeed = tmp;
+        }
+
         // MainText, Hint, and other visuals.
 
         if (opts.mainText) {
@@ -718,6 +752,12 @@
         this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
 
         this.input.oninput = function() {
+            if (!that.timeBegin) {
+                that.timeEnd = that.timeBegin = node.timer.getTimeSince('step');
+            }
+            else {
+                that.timeEnd = node.timer.getTimeSince('step');
+            }
             if (timeout) clearTimeout(timeout);
             if (that.isHighlighted()) that.unhighlight();
             if (that.preprocess) that.preprocess(that.input);
@@ -727,11 +767,10 @@
                     res = that.validation(that.input.value);
                     if (res.err) that.setError(res.err);
                 }
-            }, 500);
+            }, that.validationSpeed);
         };
         this.input.onclick = function() {
             if (that.isHighlighted()) that.unhighlight();
-
         };
     };
 
@@ -794,6 +833,7 @@
     CustomInput.prototype.reset = function() {
         if (this.input) this.input.value = '';
         if (this.isHighlighted()) this.unhighlight();
+        this.timeBegin = this.timeEnd = null;
     };
 
     /**
@@ -816,6 +856,8 @@
         res = this.input.value;
         res = this.validation ? this.validation(res) : { value: res };
         res.isCorrect = valid = !res.err;
+        res.timeBegin = this.timeBegin;
+        res.timeEnd = this.timeEnd;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
         if (!valid) {
             this.setError(res.err);

@@ -302,14 +302,14 @@
                                     form);
                 }
             }
+            forms[i] = form;
             if (form.id) {
                 if (formsById[form.id]) {
                     throw new Error('ChoiceManager.setForms: duplicated ' +
                                     'form id: ' + form.id);
                 }
-                formsById[form.id] = form;
+                formsById[form.id] = forms[i];
             }
-            forms[i] = form;
         }
         // Assigned verified forms.
         this.forms = forms;
