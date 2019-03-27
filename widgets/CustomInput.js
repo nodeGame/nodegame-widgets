@@ -31,13 +31,20 @@
         list: true
     };
 
+    var sepNames = {
+        ',': 'comma',
+        ' ': 'space',
+        '.': 'dot'
+    };
+
     CustomInput.texts = {
         autoHint: function(w) {
-            var res;
-            res = w.type === 'list' ?
-                '(separate items with ' + w.params.listSep + ')' : '';
-            if (w.requiredChoice) return res + '*';
-            else return res ? res : false;
+            var res, sep;
+            if (w.type === 'list') {
+                sep = sepNames[w.params.listSep] || w.params.listSep;
+                res = '(if more than one, separate with ' + sep + ')';
+            }
+            return w.requiredChoice ? (res + '*') : (res || false);
         },
         numericErr: function(w) {
             var str, p, inc;
@@ -423,6 +430,7 @@
                 this.params.yearDigits = tmp[2].length;
                 this.params.dayPos = tmp[0].charAt(0) === 'd' ? 0 : 1;
                 this.params.monthPos =  this.params.dayPos ? 0 : 1;
+                this.params.dateLen = tmp[2].length + 6;
 
 
                 // Preset inputWidth.
@@ -544,10 +552,24 @@
                     len = input.value.length;
                     sep = that.params.sep;
                     if (len === 2) {
-                        if (input.selectionStart === 2) input.value += sep;
+                        if (input.selectionStart === 2) {
+                            if (input.value.charAt(1) !== sep) {
+                                input.value += sep;
+                            }
+                        }
                     }
-                    else if (len === 5 && input.selectionStart === 5) {
-                        input.value += sep;
+                    else if (len === 5) {
+                        if (input.selectionStart === 5) {
+                            if (input.value.charAt(4) !== sep &&
+                                (input.value.split(sep).length - 1) === 1) {
+
+                                input.value += sep;
+                            }
+                        }
+                    }
+                    else if (len > this.params.dateLen) {
+                        input.value =
+                            input.value.substring(0, this.params.dateLen);
                     }
                 };
             }
