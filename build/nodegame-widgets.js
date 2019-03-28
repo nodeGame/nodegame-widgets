@@ -4948,14 +4948,14 @@
                                     form);
                 }
             }
+            forms[i] = form;
             if (form.id) {
                 if (formsById[form.id]) {
                     throw new Error('ChoiceManager.setForms: duplicated ' +
                                     'form id: ' + form.id);
                 }
-                formsById[form.id] = form;
+                formsById[form.id] = forms[i];
             }
-            forms[i] = form;
         }
         // Assigned verified forms.
         this.forms = forms;
@@ -8626,7 +8626,8 @@
         'float': true,
         'int': true,
         date: true,
-        list: true
+        list: true,
+        us_city_state_zip: true
     };
 
     var sepNames = {
@@ -8635,16 +8636,101 @@
         '.': 'dot'
     };
 
+    var usStates = {
+        Alabama: 'AL',
+        Alaska: 'AK',
+        Arizona: 'AZ',
+        Arkansas: 'AR',
+        California: 'CA',
+        Colorado: 'CO',
+        Connecticut: 'CT',
+        Delaware: 'DE',
+        Florida: 'FL',
+        Georgia: 'GA',
+        Hawaii: 'HI',
+        Idaho: 'ID',
+        Illinois: 'IL',
+        Indiana: 'IN',
+        Iowa: 'IA',
+        Kansas: 'KS',
+        Kentucky: 'KY',
+        Louisiana: 'LA',
+        Maine: 'ME',
+        Maryland: 'MD',
+        Massachusetts: 'MA',
+        Michigan: 'MI',
+        Minnesota: 'MN',
+        Mississippi: 'MS',
+        Missouri: 'MO',
+        Montana: 'MT',
+        Nebraska: 'NE',
+        Nevada: 'NV',
+        'New Hampshire': 'NH',
+        'New Jersey': 'NJ',
+        'New Mexico': 'NM',
+        'New York': 'NY',
+        'North Carolina': 'NC',
+        'North Dakota': 'ND',
+        Ohio: 'OH',
+        Oklahoma: 'OK',
+        Oregon: 'OR',
+        Pennsylvania: 'PA',
+        'Rhode Island': 'RI',
+        'South Carolina': 'SC',
+        'South Dakota': 'SD',
+        Tennessee: 'TN',
+        Texas: 'TX',
+        Utah: 'UT',
+        Vermont: 'VT',
+        Virginia: 'VA',
+        Washington: 'WA',
+        'West Virginia': 'WV',
+        Wisconsin: 'WI',
+        Wyoming: 'WY',
+    };
+
+    var usTerr = {
+        'American Samoa': 'AS',
+        'District of Columbia': 'DC',
+        'Federated States of Micronesia': 'FM',
+        Guam: 'GU',
+        'Marshall Islands': 'MH',
+        'Northern Mariana Islands': 'MP',
+        Palau: 'PW',
+        'Puerto Rico': 'PR',
+        'Virgin Islands': 'VI'
+    };
+
+    // To be filled if requested.
+    var usTerrByAbbr;
+    var usStatesByAbbr;
+    var usStatesTerr;
+    var usStatesTerrByAbbr;
+
     CustomInput.texts = {
-        listErr: function(w) {
-            return 'Check that there are no empty items; do not end with ' +
-                'the separator';
+        listErr: 'Check that there are no empty items; do not end with ' +
+            'the separator',
+        listSizeErr: function(w, param) {
+            if (w.params.fixedSize) {
+                return w.params.minItems + ' items required';
+            }
+            if (param === 'min') {
+                return 'Too few items. Min: ' + w.params.minItems;
+            }
+            return 'Too many items. Max: ' + w.params.maxItems;
+            
         },
+        usStateErr: 'Not valid state abbreviation (must be 2 characters)',
+        usZipErr: 'Not valid ZIP code (must be 5-digits)',
         autoHint: function(w) {
             var res, sep;
             if (w.type === 'list') {
                 sep = sepNames[w.params.listSep] || w.params.listSep;
                 res = '(if more than one, separate with ' + sep + ')';
+            }
+            else if (w.type === 'us_city_state_zip') {
+                sep = w.params.listSep;
+                res = '(Format: Town' + sep + ' State' + sep + ' ZIP code)';
             }
             return w.requiredChoice ? (res + '*') : (res || false);
         },
@@ -8778,6 +8864,15 @@
         this.validation = null;
 
         /**
+         * ### CustomInput.validationSpeed
+         *
+         * How often (in milliseconds) the validation function is called
+         *
+         * Default: 500
+         */
+        this.validationSpeed = 500;
+
+        /**
          * ### CustomInput.postprocess
          *
          * The function that postprocess the input after validation
@@ -8828,6 +8923,20 @@
          * Default: TRUE
          */
         this.requiredChoice = null;
+
+        /**
+         * ### CustomInput.timeBegin
+         *
+         * When the first character was inserted
+         */
+        this.timeBegin = null;
+
+        /**
+         * ### CustomInput.timeEnd
+         *
+         * When the last character was inserted
+         */
+        this.timeEnd = null;
     }
 
     // ## CustomInput methods
@@ -9103,9 +9212,11 @@
                     return res;
                 };
             }
-            // List.
+            // Lists.
 
-            else if (this.type === 'list') {
+            else if (this.type === 'list' ||
+                     this.type === 'us_city_state_zip') {
+
                 if (opts.listSeparator) {
                     if ('string' !== typeof opts.listSeparator) {
                         throw new TypeError(e + 'listSeparator must be ' +
@@ -9118,36 +9229,115 @@
                     this.params.listSep = ',';
                 }
 
+                if (this.type === 'us_city_state_zip') {
+                    // Create validation abbr.
+                    if (!usStatesTerrByAbbr) {
+                        usStatesTerr = J.mixin(usStates, usTerr);
+                        usStatesTerrByAbbr = J.reverseObj(usStatesTerr);
+                    }
+                    this.params.minItems = this.params.maxItems = 3;
+                    this.params.fixedSize = true;
+                    this.params.itemValidation = function(item, idx) {
+                        if (idx === 2) {
+                            if (!usStatesTerrByAbbr[item.toUpperCase()]) {
+                                return { err: that.getText('usStateErr') };
+                            }
+                        }
+                        else if (idx === 3) {
+                            if (item.length !== 5 || !J.isInt(item, 0)) {
+                                return { err: that.getText('usZipErr') };
+                            }
+                        }
+                    };
+
+                    this.placeholder = 'Town' + this.params.listSep +
+                        ' State' + this.params.listSep + ' ZIP';
+                }
+                else {
+                    if ('undefined' !== typeof opts.minItems) {
+                        tmp = J.isInt(opts.minItems, 0);
+                        if (tmp === false) {
+                            throw new TypeError(e + 'minItems must be ' +
+                                                'a positive integer. Found: ' +
+                                                opts.minItems);
+                        }
+                        this.params.minItems = tmp;
+                    }
+                    if ('undefined' !== typeof opts.maxItems) {
+                        tmp = J.isInt(opts.maxItems, 0);
+                        if (tmp === false) {
+                            throw new TypeError(e + 'maxItems must be ' +
+                                                'a positive integer. Found: ' +
+                                                opts.maxItems);
+                        }
+                        if (this.params.minItems &&
+                            this.params.minItems > tmp) {
+
+                            throw new TypeError(e + 'maxItems must be larger ' +
+                                                'than minItems. Found: ' +
+                                                tmp + ' < ' +
+                                                this.params.minItems);
+                        }
+                        this.params.maxItems = tmp;
+                    }
+                }
+
                 tmp = function(value) {
-                    var i, len, v;
-                    debugger
+                    var i, len, v, iVal, err;
                     value = value.split(that.params.listSep);
                     len = value.length;
                     if (!len) return value;
+                    iVal = that.params.itemValidation;
                     i = 0;
                     v = value[0].trim();
                     if (!v) return { err: that.getText('listErr') };
+                    if (iVal) {
+                        err = iVal(v, 1);
+                        if (err) return err;
+                    }
                     value[i++] = v;
                     if (len > 1) {
                         v = value[1].trim();
                         if (!v) return { err: that.getText('listErr') };
+                        if (iVal) {
+                            err = iVal(v, (i+1));
+                            if (err) return err;
+                        }
                         value[i++] = v;
                     }
                     if (len > 2) {
                         v = value[2].trim();
                         if (!v) return { err: that.getText('listErr') };
+                        if (iVal) {
+                            err = iVal(v, (i+1));
+                            if (err) return err;
+                        }
                         value[i++] = v;
                     }
                     if (len > 3) {
                         for ( ; i < len ; ) {
-                            v = value[i].trim();                            
+                            v = value[i].trim();
                             if (!v) return { err: that.getText('listErr') };
+                            if (iVal) {
+                                err = iVal(v, (i+1));
+                                if (err) return err;
+                            }
                             value[i++] = v;
                         }
+                    }
+                    // Need to do it here, because some elements might be empty.
+                    if (that.params.minItems && i < that.params.minItems) {
+                        return { err: that.getText('listSizeErr', 'min') };
+                    }
+                    if (that.params.maxItems && i > that.params.maxItems) {
+                        return { err: that.getText('listSizeErr', 'max') };
                     }
                     return { value: value };
                 }
             }
+
+            // US_Town,State, Zip Code
+
             // TODO: add other types, e.g.int and email.
         }
 
@@ -9166,7 +9356,7 @@
             return res;
         };
 
-       
+
 
         // Preprocess
 
@@ -9206,7 +9396,9 @@
                     }
                 };
             }
-            else if (this.type === 'list') {
+            else if (this.type === 'list' ||
+                     this.type === 'us_city_state_zip') {
+
                 // Add a space after separator, if separator is not space.
                 if (this.params.listSep.trim() !== '') {
                     this.preprocess = function(input) {
@@ -9217,7 +9409,7 @@
                             len === input.selectionStart &&
                             input.value.charAt(len-1) === sep &&
                             input.value.charAt(len-2) !== sep) {
-                            
+
                             input.value += ' ';
                         }
                     };
@@ -9246,6 +9438,17 @@
                     };
                 };
             }
+        }
+
+        // Validation Speed
+        if ('undefined' !== typeof opts.validationSpeed) {
+            tmp = J.isInt(opts.valiadtionSpeed, 0, undefined, true);
+            if (tmp === false) {
+                throw new TypeError(e + 'validationSpeed must a non-negative ' +
+                                    'number or undefined. Found: ' +
+                                    opts.validationSpeed);
+            }
+            this.validationSpeed = tmp;
         }
 
         // MainText, Hint, and other visuals.
@@ -9317,6 +9520,12 @@
         this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
 
         this.input.oninput = function() {
+            if (!that.timeBegin) {
+                that.timeEnd = that.timeBegin = node.timer.getTimeSince('step');
+            }
+            else {
+                that.timeEnd = node.timer.getTimeSince('step');
+            }
             if (timeout) clearTimeout(timeout);
             if (that.isHighlighted()) that.unhighlight();
             if (that.preprocess) that.preprocess(that.input);
@@ -9326,11 +9535,10 @@
                     res = that.validation(that.input.value);
                     if (res.err) that.setError(res.err);
                 }
-            }, 500);
+            }, that.validationSpeed);
         };
         this.input.onclick = function() {
             if (that.isHighlighted()) that.unhighlight();
-
         };
     };
 
@@ -9393,6 +9601,7 @@
     CustomInput.prototype.reset = function() {
         if (this.input) this.input.value = '';
         if (this.isHighlighted()) this.unhighlight();
+        this.timeBegin = this.timeEnd = null;
     };
 
     /**
@@ -9415,6 +9624,8 @@
         res = this.input.value;
         res = this.validation ? this.validation(res) : { value: res };
         res.isCorrect = valid = !res.err;
+        res.timeBegin = this.timeBegin;
+        res.timeEnd = this.timeEnd;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
         if (!valid) {
             this.setError(res.err);
