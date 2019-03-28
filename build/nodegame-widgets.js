@@ -5288,24 +5288,24 @@
         var res;
         if (!w.requiredChoice && !w.selectMultiple) return false;
         if (!w.selectMultiple) return '*';
-        res = '(select ';
+        res = '(';
         if (!w.requiredChoice) {
             if ('number' === typeof w.selectMultiple) {
-                res += 'up to ' + w.selectMultiple;
+                res += 'select up to ' + w.selectMultiple;
             }
             else {
-                res += 'as many as you wish';
+                res += 'multiple selection allowed';
             }
         }
         else {
             if ('number' === typeof w.selectMultiple) {
-                res += 'between ' + w.requiredChoice + ' and ' +
+                res += 'select between ' + w.requiredChoice + ' and ' +
                     w.selectMultiple;
             }
             else {
-                res += 'at least ' + w.requiredChoice;
+                res += 'select at least ' + w.requiredChoice;
             }
-        }            
+        }
         return res + ')';
     };
 
