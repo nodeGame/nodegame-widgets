@@ -134,6 +134,9 @@
                 sep = w.params.listSep;
                 res = '(Format: Town' + sep + ' State' + sep + ' ZIP code)';
             }
+            else if (w.type === 'date') {
+                res = '(Format: ' + w.params.format + ')';
+            }
             return w.requiredChoice ? (res + '*') : (res || false);
         },
         numericErr: function(w) {

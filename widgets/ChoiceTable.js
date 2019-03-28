@@ -27,10 +27,25 @@
     ChoiceTable.texts.autoHint = function(w) {
         var res;
         if (!w.requiredChoice && !w.selectMultiple) return false;
-        if (!w.selectMultiple) return '*'
-        res = '(pick ';
-        res += !w.requiredChoice ? 'up to ' + w.selectMultiple :
-            'between ' + w.requiredChoice + ' and ' + w.selectMultiple;
+        if (!w.selectMultiple) return '*';
+        res = '(select ';
+        if (!w.requiredChoice) {
+            if ('number' === typeof w.selectMultiple) {
+                res += 'up to ' + w.selectMultiple;
+            }
+            else {
+                res += 'as many as you wish';
+            }
+        }
+        else {
+            if ('number' === typeof w.selectMultiple) {
+                res += 'between ' + w.requiredChoice + ' and ' +
+                    w.selectMultiple;
+            }
+            else {
+                res += 'at least ' + w.requiredChoice;
+            }
+        }
         return res + ')';
     };
 
