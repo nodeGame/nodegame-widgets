@@ -304,23 +304,9 @@
          *
          * The current order of display of choices
          *
-         * May differ from `originalOrder` if shuffled.
-         *
          * @see ChoiceTable.originalOrder
          */
         this.order = null;
-
-        /**
-         * ### ChoiceTable.originalOrder
-         *
-         * The initial order of display of choices
-         *
-         * TODO: Do we need this? originalOrder is always 0,1,2,3...
-         * ChoiceManager does not have it.
-         *
-         * @see ChoiceTable.order
-         */
-        this.originalOrder = null;
 
         /**
          * ### ChoiceTable.correctChoice
@@ -814,10 +800,7 @@
 
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
-        if (this.shuffleChoices) {
-            this.originalOrder = this.order;
-            this.order = J.shuffle(this.order);
-        }
+        if (this.shuffleChoices) this.order = J.shuffle(this.order);
 
         // Build the table and choices at once (faster).
         if (this.table) this.buildTableAndChoices();
@@ -1423,6 +1406,24 @@
     };
 
     /**
+     * ### ChoiceTable.getChoiceAtPosition
+     *
+     * Returns a choice displayed at a given position
+     *
+     * @param {string|number} i The numeric position of a choice in display
+     *
+     * @return {string|undefined} The value associated the numeric position.
+     *   If no value is found, returns undefined
+     *
+     * @see ChoiceTable.order
+     * @see ChoiceTable.choices
+     */
+    ChoiceTable.prototype.getChoiceAtPosition = function(i) {
+        if (!this.choices || !this.order) return;
+        return this.choices[this.order[parseInt(i, 10)]];
+    };
+
+    /**
      * ### ChoiceTable.getValues
      *
      * Returns the values for current selection and other paradata
@@ -1446,7 +1447,7 @@
      * @see ChoiceTable.reset
      */
     ChoiceTable.prototype.getValues = function(opts) {
-        var obj, resetOpts;
+        var obj, resetOpts, i, len;
         opts = opts || {};
         obj = {
             id: this.id,
@@ -1458,10 +1459,27 @@
         if (opts.processChoice) {
             obj.choice = opts.processChoice.call(this, obj.choice);
         }
-        if (this.shuffleChoices) {
-            obj.originalOrder = this.originalOrder;
-            obj.order = this.order;
+        if (this.shuffleChoices) obj.order = this.order;
+
+        if (opts.getValue !== false) {
+            if (!this.selectMultiple) {
+                obj.value = this.choices[obj.choice];
+            }
+            else {
+                len = obj.choice.length;
+                obj.value = new Array(len);
+                if (len === 1) {
+                    obj.value[0] = this.choices[obj.choice[0]];
+                }
+                else {
+                    i = -1;
+                    for ( ; ++i < len ; ) {
+                        obj.value[i] = this.choices[obj.choice[i]];
+                    }
+                }
+            }
         }
+
         if (this.group === 0 || this.group) {
             obj.group = this.group;
         }

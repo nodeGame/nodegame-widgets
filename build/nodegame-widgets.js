@@ -5564,23 +5564,9 @@
          *
          * The current order of display of choices
          *
-         * May differ from `originalOrder` if shuffled.
-         *
          * @see ChoiceTable.originalOrder
          */
         this.order = null;
-
-        /**
-         * ### ChoiceTable.originalOrder
-         *
-         * The initial order of display of choices
-         *
-         * TODO: Do we need this? originalOrder is always 0,1,2,3...
-         * ChoiceManager does not have it.
-         *
-         * @see ChoiceTable.order
-         */
-        this.originalOrder = null;
 
         /**
          * ### ChoiceTable.correctChoice
@@ -6074,10 +6060,7 @@
 
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
-        if (this.shuffleChoices) {
-            this.originalOrder = this.order;
-            this.order = J.shuffle(this.order);
-        }
+        if (this.shuffleChoices) this.order = J.shuffle(this.order);        
 
         // Build the table and choices at once (faster).
         if (this.table) this.buildTableAndChoices();
@@ -6683,6 +6666,24 @@
     };
 
     /**
+     * ### ChoiceTable.getChoiceAtPosition
+     *
+     * Returns a choice displayed at a given position
+     *
+     * @param {string|number} i The numeric position of a choice in display
+     *
+     * @return {string|undefined} The value associated the numeric position.
+     *   If no value is found, returns undefined
+     *
+     * @see ChoiceTable.order
+     * @see ChoiceTable.choices
+     */
+    ChoiceTable.prototype.getChoiceAtPosition = function(i) {
+        if (!this.choices || !this.order) return;
+        return this.choices[this.order[parseInt(i, 10)]];
+    };
+    
+    /**
      * ### ChoiceTable.getValues
      *
      * Returns the values for current selection and other paradata
@@ -6706,7 +6707,7 @@
      * @see ChoiceTable.reset
      */
     ChoiceTable.prototype.getValues = function(opts) {
-        var obj, resetOpts;
+        var obj, resetOpts, i, len;
         opts = opts || {};
         obj = {
             id: this.id,
@@ -6718,10 +6719,27 @@
         if (opts.processChoice) {
             obj.choice = opts.processChoice.call(this, obj.choice);
         }
-        if (this.shuffleChoices) {
-            obj.originalOrder = this.originalOrder;
-            obj.order = this.order;
+        if (this.shuffleChoices) obj.order = this.order;
+
+        if (opts.getValue !== false) {
+            if (!this.selectMultiple) {
+                obj.value = this.choices[obj.choice];
+            }
+            else {
+                len = obj.choice.length;
+                obj.value = new Array(len);
+                if (len === 1) {
+                    obj.value[0] = this.choices[obj.choice[0]];
+                }
+                else {
+                    i = -1;
+                    for ( ; ++i < len ; ) {
+                        obj.value[i] = this.choices[obj.choice[i]];
+                    }
+                }
+            }
         }
+        
         if (this.group === 0 || this.group) {
             obj.group = this.group;
         }
@@ -8628,7 +8646,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.7.0';
+    CustomInput.version = '0.8.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -9210,7 +9228,7 @@
                 this.placeholder = this.params.format;
 
                 tmp = function(value) {
-                    var p, tokens, tmp, err, res, dayNum, l1, l2;
+                    var p, tokens, tmp, res, dayNum, l1, l2;
                     p = that.params;
 
                     // Is the format valid.
@@ -9233,17 +9251,16 @@
                         l2 = 100;
                     }
                     else {
-                        l1 = -1
+                        l1 = -1;
                         l2 = 10000;
                     }
                     tmp = J.isInt(tokens[2], l1, l2);
                     if (tmp !== false) res.year = tmp;
-                    else err = true;
-
+                    else res.err = true;
 
                     // Month.
                     tmp = J.isInt(tokens[p.monthPos], 1, 12, 1, 1);
-                    if (!tmp) err = true;
+                    if (!tmp) res.err = true;
                     else res.month = tmp;
                     // 31 or 30 days?
                     if (tmp === 1 || tmp === 3 || tmp === 5 || tmp === 7 ||
@@ -9262,12 +9279,13 @@
                     res.month = tmp;
                     // Day.
                     tmp = J.isInt(tokens[p.dayPos], 1, dayNum, 1, 1);
-                    if (!tmp) err = true;
+                    if (!tmp) res.err = true;
                     else res.day = tmp;
 
-                    if (err) res.err = that.getText('dateErr', true);
-
-                    if (p.minDate || p.maxDate) {
+                    if (res.err) {
+                        res.err = that.getText('dateErr', 'invalid');
+                    }
+                    else if (p.minDate || p.maxDate) {
                         tmp = new Date(value);
                         if (p.minDate.obj && p.minDate.obj > tmp) {
                             res.err = that.getText('dateErr', 'min');
@@ -9276,7 +9294,10 @@
                             res.err = that.getText('dateErr', 'max');
                         }
                     }
-
+                    if (!res.err) {
+                        res.value = value;
+                        res = { value: res };
+                    }
                     return res;
                 };
             }
@@ -9495,17 +9516,7 @@
             this.postprocess = opts.postprocess;
         }
         else {
-            if (this.type === 'date') {
-                this.postprocess = function(value, valid) {
-                    if (!valid || !value) return value;
-                    return {
-                        value: value,
-                        day: value.substring(0,2),
-                        month: value.substring(3,5),
-                        year: value.subtring(6, value.length)
-                    };
-                };
-            }
+            // Add postprocess as needed.
         }
 
         // Validation Speed

@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.7.0';
+    CustomInput.version = '0.8.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -597,7 +597,7 @@
                 this.placeholder = this.params.format;
 
                 tmp = function(value) {
-                    var p, tokens, tmp, err, res, dayNum, l1, l2;
+                    var p, tokens, tmp, res, dayNum, l1, l2;
                     p = that.params;
 
                     // Is the format valid.
@@ -620,17 +620,16 @@
                         l2 = 100;
                     }
                     else {
-                        l1 = -1
+                        l1 = -1;
                         l2 = 10000;
                     }
                     tmp = J.isInt(tokens[2], l1, l2);
                     if (tmp !== false) res.year = tmp;
-                    else err = true;
-
+                    else res.err = true;
 
                     // Month.
                     tmp = J.isInt(tokens[p.monthPos], 1, 12, 1, 1);
-                    if (!tmp) err = true;
+                    if (!tmp) res.err = true;
                     else res.month = tmp;
                     // 31 or 30 days?
                     if (tmp === 1 || tmp === 3 || tmp === 5 || tmp === 7 ||
@@ -649,12 +648,13 @@
                     res.month = tmp;
                     // Day.
                     tmp = J.isInt(tokens[p.dayPos], 1, dayNum, 1, 1);
-                    if (!tmp) err = true;
+                    if (!tmp) res.err = true;
                     else res.day = tmp;
 
-                    if (err) res.err = that.getText('dateErr', true);
-
-                    if (p.minDate || p.maxDate) {
+                    if (res.err) {
+                        res.err = that.getText('dateErr', 'invalid');
+                    }
+                    else if (p.minDate || p.maxDate) {
                         tmp = new Date(value);
                         if (p.minDate.obj && p.minDate.obj > tmp) {
                             res.err = that.getText('dateErr', 'min');
@@ -663,7 +663,10 @@
                             res.err = that.getText('dateErr', 'max');
                         }
                     }
-
+                    if (!res.err) {
+                        res.value = value;
+                        res = { value: res };
+                    }
                     return res;
                 };
             }
@@ -882,17 +885,7 @@
             this.postprocess = opts.postprocess;
         }
         else {
-            if (this.type === 'date') {
-                this.postprocess = function(value, valid) {
-                    if (!valid || !value) return value;
-                    return {
-                        value: value,
-                        day: value.substring(0,2),
-                        month: value.substring(3,5),
-                        year: value.subtring(6, value.length)
-                    };
-                };
-            }
+            // Add postprocess as needed.
         }
 
         // Validation Speed
