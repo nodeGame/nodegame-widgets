@@ -8748,7 +8748,19 @@
                 res = '(Format: Town' + sep + ' State' + sep + ' ZIP code)';
             }
             else if (w.type === 'date') {
-                res = '(Format: ' + w.params.format + ')';
+                if (w.params.minDate && w.params.maxDate) {
+                    res = '(Must be between ' + w.params.minDate.str + ' and ' +
+                        w.params.maxDate.str + ')';
+                }
+                else if (w.params.minDate) {
+                    res = '(Must be after ' + w.params.minDate.str + ')';
+                }
+                else if (w.params.maxDate) {
+                    res = '(Must be before ' + w.params.maxDate.str + ')';
+                }
+                else {
+                    res = '(Format: ' + w.params.format + ')';
+                }
             }
             return w.requiredChoice ? (res + '*') : (res || false);
         },
@@ -8802,9 +8814,15 @@
             str += '. Current length: ' + len;
             return str;
         },
-        dateErr: function(w, invalid) {
-            return invalid ? 'Date is invalid' : 'Must follow format ' +
-                w.params.format;
+        dateErr: function(w, param) {
+            if (param === 'invalid') return 'Date is invalid';
+            if (param === 'min') {
+                return 'Date must be after ' + w.params.minDate.str;
+            }
+            if (param === 'max') {
+                return 'Date must be before ' + w.params.maxDate.str;
+            }
+            return 'Must follow format ' + w.params.format;
         },
         emptyErr: function(w) {
             return 'Cannot be empty'
@@ -9160,7 +9178,29 @@
                 this.params.dayPos = tmp[0].charAt(0) === 'd' ? 0 : 1;
                 this.params.monthPos =  this.params.dayPos ? 0 : 1;
                 this.params.dateLen = tmp[2].length + 6;
+                if (opts.minDate) {
+                    tmp = getParsedDate(opts.minDate, this.params);
+                    if (!tmp) {
+                        throw new Error(e + 'minDate must be a Date object. ' +
+                                        'Found: ' + opts.minDate);
+                    }
+                    this.params.minDate = tmp;
+                }
+                if (opts.maxDate) {
+                    tmp = getParsedDate(opts.maxDate, this.params);
+                    if (!tmp) {
+                        throw new Error(e + 'maxDate must be a Date object. ' +
+                                        'Found: ' + opts.maxDate);
+                    }
+                    if (this.params.minDate &&
+                        this.params.minDate.obj > tmp.obj) {
 
+                        throw new Error(e + 'maxDate cannot be prior to ' +
+                                        'minDate. Found: ' + tmp.str +
+                                        ' < ' + this.params.minDate.str);
+                    }
+                    this.params.maxDate = tmp;
+                }
 
                 // Preset inputWidth.
                 if (this.params.yearDigits === 2) this.inputWidth = '100px';
@@ -9225,8 +9265,18 @@
                     if (!tmp) err = true;
                     else res.day = tmp;
 
-                    //
                     if (err) res.err = that.getText('dateErr', true);
+
+                    if (p.minDate || p.maxDate) {
+                        tmp = new Date(value);
+                        if (p.minDate.obj && p.minDate.obj > tmp) {
+                            res.err = that.getText('dateErr', 'min');
+                        }
+                        else if (p.maxDate.obj && p.maxDate.obj < tmp) {
+                            res.err = that.getText('dateErr', 'max');
+                        }
+                    }
+
                     return res;
                 };
             }
@@ -9655,6 +9705,43 @@
         res.id = this.id;
         return res;
     };
+
+    // ## Helper functions.
+
+    // ### getParsedDate
+    //
+    // Tries to parse a date object, catches exceptions
+    //
+    // @param {string|Date} d The date object
+    // @param {object} p The configuration object for date format
+    //
+    // @return {object|boolean} An object with the parsed date or false
+    //   if an error occurred
+    //
+    function getParsedDate(d, p) {
+        var res, day;
+        if ('string' === typeof d) {
+            d = d === 'today' ? new Date() : new Date(d);
+            // If invalid  date it return NaN.
+            day = d.getDate();
+            if (!day) return false;
+        }
+        try {
+            res = {
+                day: day || d.getDate(),
+                month: d.getMonth() + 1,
+                year: d.getFullYear(),
+                obj: d
+            };
+        }
+        catch(e) {
+            return false;
+        }
+        res.str = (p.dayPos ? res.day + p.sep + res.month :
+                   res.month + p.sep + res.day) + p.sep;
+        res.str += p.yearDigits === 2 ? res.year.substring(3,4) : res.year;
+        return res;
+    }
 
 })(node);
 
