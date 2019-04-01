@@ -6,6 +6,10 @@
  * Sends a feedback message to the server
  *
  * www.nodegame.org
+ *
+ * TODO: rename css class feedback-char-count
+ * TODO: words and chars count without contraints, just show.
+ * TODO: shows all constraints in gray before the textarea.
  */
 (function(node) {
 
@@ -15,16 +19,68 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.1.0';
+    Feedback.version = '1.4.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
     Feedback.className = 'feedback';
 
     Feedback.texts = {
-        label: 'Any feedback about the experiment? Let us know here:',
-        sent: 'Sent!'
+        autoHint: function(w) {
+            var res, res2;
+            if (w.minChars && w.maxChars) {
+                res = 'beetween ' + w.minChars + ' and ' + w.maxChars +
+                    ' characters';
+            }
+            else if (w.minChars) {
+                res = 'at least ' + w.minChars + ' character';
+                if (w.minChars > 1) res += 's';
+            }
+            else if (w.maxChars) {
+                res = 'at most ' +  w.maxChars + ' character';
+                if (w.maxChars > 1) res += 's';
+            }
+            if (w.minWords && w.maxWords) {
+                res2 = 'beetween ' + w.minWords + ' and ' + w.maxWords +
+                    ' words';
+            }
+            else if (w.minWords) {
+                res2 = 'at least ' + w.minWords + ' word';
+                if (w.minWords > 1) res += 's';
+            }
+            else if (w.maxWords) {
+                res2 = 'at most ' +  w.maxWords + ' word';
+                if (w.maxWords > 1) res += 's';
+            }
+            if (res) {
+                res = '(' + res;;
+                if (res2) res +=  ', and ' + res2;
+                return res + ')';
+            }
+            else if (res2) {
+                return '(' + res2 + ')';
+            }
+            return false;
+        },
+        submit: 'Submit feedback',
+        label: 'Any feedback? Let us know here:',
+        sent: 'Sent!',
+        counter: function(w, param) {
+            var res;
+            res = param.chars ? ' character' : ' word';
+            if (param.len !== 1) res += 's';
+            if (param.needed) res += ' needed';
+            else if (param.over) res += ' over';
+            else res += ' remaining';
+            return res;
+        }
     };
+
+    // Colors for missing, excess or ok.
+    var colNeeded, colOver, colRemain;
+    colNeeded = '#a32020'; // #f2dede';
+    colOver = '#a32020'; // #f2dede';
+    colRemain = '#78b360'; // '#dff0d8';
 
     // ## Dependencies
 
@@ -37,53 +93,172 @@
      *
      * `Feedback` sends a feedback message to the server
      *
-     * @param {object} options Optional. Configuration option.
-     *   Available options:
-     *
-     *    - showCount: If TRUE, the character count is displayed
-     *    - minLength: The minimum number of characters in textarea
-     *    - maxLength: The max number of characters in textarea
-     *    - label: The text to display above the textarea
+     * @param {object} options Optional. Configuration options
      */
     function Feedback(options) {
+        var tmp;
+
+        if ('undefined' !== typeof options.maxLength) {
+            console.log('***Feedback constructor: maxLength is deprecated, ' +
+                        'use maxChars instead***');
+            options.maxChars = options.maxLength;
+        }
+        if ('undefined' !== typeof options.minLength) {
+            console.log('***Feedback constructor: minLength is deprecated, ' +
+                        'use minChars instead***');
+            options.minChars = options.minLength;
+        }
 
         /**
-         * ### Feedback.maxLength
+         * ### Feedback.mainText
+         *
+         * The main text introducing the choices
+         *
+         * @see Feedback.spanMainText
+         */
+        this.mainText = null;
+
+        /**
+         * ### Feedback.hint
+         *
+         * An additional text with information about how to select items
+         *
+         * If not specified, it may be auto-filled, e.g. '(pick 2)'.
+         *
+         * @see Feedback.texts.autoHint
+         */
+        this.hint = null;
+
+        /**
+         * ### Feedback.spanMainText
+         *
+         * The span containing the main text
+         */
+        this.spanMainText = null;
+
+        /**
+         * ### Feedback.maxChars
          *
          * The maximum character length for feedback to be submitted
          *
          * Default: 800
          */
-        if ('undefined' === typeof options.maxLength) {
-            this.maxLength = 800;
-        }
-        else if (J.isNumber(options.maxLength, 0) !== false) {
-            this.maxLength = options.maxLength;
+        if ('undefined' === typeof options.maxChars) {
+            this.maxChars = 800;
         }
         else {
-            throw new TypeError('Feedback constructor: options.maxLength ' +
-                                'must be a number >= 0 or undefined. ' +
-                                'Found: ' + options.maxLength);
+            tmp = J.isInt(options.maxChars, 0);
+            if (tmp !== false) {
+                this.maxChars = options.maxChars;
+            }
+            else {
+                throw new TypeError('Feedback constructor: maxChars ' +
+                                    'must be an integer >= 0 or undefined. ' +
+                                    'Found: ' + options.maxChars);
+            }
         }
 
         /**
-         * ### Feedback.minLength
+         * ### Feedback.minChars
          *
          * The minimum character length for feedback to be submitted
          *
-         * If minLength = 0, then there is no minimum length checked.
+         * If minChars = 0, then there is no minimum length checked.
+         *
          * Default: 1
          */
-        if ('undefined' === typeof options.minLength) {
-            this.minLength = 1;
-        }
-        else if (J.isNumber(options.minLength, 0) !== false) {
-            this.minLength = options.minLength;
+        if ('undefined' === typeof options.minChars) {
+            this.minChars = 1;
         }
         else {
-            throw new TypeError('Feedback constructor: options.minLength ' +
-                                'must be a number >= 0 or undefined. ' +
-                                'Found: ' + options.minLength);
+            tmp = J.isInt(options.minChars, 0, undefined, true);
+            if (tmp !== false) {
+                this.minChars = options.minChars;
+            }
+            else {
+                throw new TypeError('Feedback constructor: minChars ' +
+                                    'must be an integer >= 0 or undefined. ' +
+                                    'Found: ' + options.minChars);
+            }
+        }
+
+        /**
+         * ### Feedback.maxWords
+         *
+         * The maximum number of words for feedback to be submitted
+         *
+         * Set to 0 for no checks.
+         *
+         * Default: 0
+         */
+        if ('undefined' === typeof options.maxWords) {
+            this.maxWords = 0;
+        }
+        else {
+            tmp = J.isInt(options.maxWords, 0, undefined, true);
+            if (tmp !== false) {
+                this.maxWords = options.maxWords;
+            }
+            else {
+                throw new TypeError('Feedback constructor: maxWords ' +
+                                    'must be an integer >= 0 or undefined. ' +
+                                    'Found: ' + options.maxWords);
+            }
+        }
+
+        /**
+         * ### Feedback.minWords
+         *
+         * The minimum number of words for feedback to be submitted
+         *
+         * If minChars = 0, then there is no minimum checked.
+         *
+         * Default: 0
+         */
+        if ('undefined' === typeof options.minWords) {
+            this.minWords = 0;
+        }
+        else {
+            tmp = J.isInt(options.minWords, 0, undefined, true);
+            if (tmp  !== false) {
+                this.minWords = options.minWords;
+
+                // Checking if words and characters limit are compatible.
+                if (this.maxChars) {
+                    tmp = (this.maxChars+1)/2;
+                    if (this.minWords > tmp) {
+
+                        throw new TypeError('Feedback constructor: minWords ' +
+                                            'cannot be larger than ' +
+                                            '(maxChars+1)/2. Found: ' +
+                                            this.minWords + ' > ' + tmp);
+                    }
+                }
+            }
+            else {
+                throw new TypeError('Feedback constructor: minWords ' +
+                                    'must be an integer >= 0 or undefined. ' +
+                                    'Found: ' + options.minWords);
+            }
+        }
+
+        /**
+         * ### Feedback.rows
+         *
+         * The number of initial rows of the texarea
+         *
+         * Default: 3
+         */
+        if ('undefined' === typeof options.rows) {
+            this.rows = 3;
+        }
+        else if (J.isInt(options.rows, 0) !== false) {
+            this.rows = options.rows;
+        }
+        else {
+            throw new TypeError('Feedback constructor: rows ' +
+                                'must be an integer > 0 or undefined. ' +
+                                'Found: ' + options.rows);
         }
 
         /**
@@ -94,14 +269,14 @@
          * Attempts are stored in the attempts array. This allows to store
          * longer texts than accepts feedbacks
          *
-         * Default: Max(2000, maxLength)
+         * Default: Max(2000, maxChars)
          */
         if ('undefined' === typeof options.maxAttemptLength) {
             this.maxAttemptLength = 2000;
         }
         else if (J.isNumber(options.maxAttemptLength, 0) !== false) {
-            this.maxAttemptLength = Math.max(this.maxLength,
-                                                     options.maxAttemptLength);
+            this.maxAttemptLength = Math.max(this.maxChars,
+                                             options.maxAttemptLength);
         }
         else {
             throw new TypeError('Feedback constructor: ' +
@@ -111,20 +286,16 @@
         }
 
         /**
-         * ### Feedback.showCharCount
+         * ### Feedback.showSubmit
          *
-         * If TRUE, the character count is shown
+         * If TRUE, the submit button is shown
          *
          * Default: true
          *
-         * @see Feedback.charCounter
+         * @see Feedback.submitButton
          */
-        if ('undefined' === typeof options.showCount) {
-            this.showCharCount = true;
-        }
-        else {
-            this.showCharCount = !!options.showCount;
-        }
+        this.showSubmit = 'undefined' === typeof options.showSubmit ?
+            true : !!options.showSubmit;
 
         /**
          * ### Feedback.onsubmit
@@ -140,7 +311,7 @@
             this.onsubmit = options.onsubmit;
         }
         else {
-            throw new TypeError('Feedback constructor: options.onsubmit ' +
+            throw new TypeError('Feedback constructor: onsubmit ' +
                                 'must be string or object. Found: ' +
                                 options.onsubmit);
         }
@@ -151,8 +322,6 @@
          * Internal storage of the value of the feedback
          *
          * This value is used when the form has not been created yet
-         *
-         * @see Feedback.createForm
          */
         this._feedback = options.feedback || null;
 
@@ -164,18 +333,18 @@
         this.attempts = [];
 
         /**
-         * ### Feedback.timeBegin
+         * ### Feedback.timeInputBegin
          *
          * Time when feedback was inserted (first character, last attempt)
          */
-        this.timeBegin = null;
+        this.timeInputBegin = null;
 
         /**
-         * ### Feedback.feedbackHTML
+         * ### Feedback.feedbackForm
          *
-         * The HTML element containing the form elements
+         * The HTML form element containing the textarea
          */
-        this.feedbackHTML = null;
+        this.feedbackForm = null;
 
         /**
          * ### Feedback.textareaElement
@@ -192,6 +361,13 @@
         this.charCounter = null;
 
         /**
+         * ### Feedback.wordCounter
+         *
+         * The HTML span element containing the words count
+         */
+        this.wordCounter = null;
+
+        /**
          * ### Feedback.submitButton
          *
          * The HTML submit button
@@ -202,76 +378,34 @@
 
     // ## Feedback methods
 
-    /**
-     * ### Feedback.createForm
-     *
-     * Builds the HTML forms
-     */
-    Feedback.prototype.createForm = function() {
-
-        var that;
-        var feedbackHTML;
-        var feedbackForm;
-        var feedbackLabel;
-        var feedbackTextarea;
-        var submit;
-        var charCounter;
-
-        that = this;
-
-        feedbackHTML = document.createElement('div');
-        feedbackHTML.className = 'feedback';
-
-        feedbackForm = document.createElement('form');
-        feedbackForm.className = 'feedback-form';
-        feedbackHTML.appendChild(feedbackForm);
-
-        feedbackLabel = document.createElement('label');
-        feedbackLabel.setAttribute('for', 'feedback-input');
-        feedbackLabel.innerHTML = this.getText('label');
-        feedbackForm.appendChild(feedbackLabel);
-
-        feedbackTextarea = document.createElement('textarea');
-        feedbackTextarea.className = 'feedback-textarea form-control';
-        feedbackTextarea.setAttribute('type', 'text');
-        feedbackTextarea.setAttribute('rows', '3');
-        feedbackForm.appendChild(feedbackTextarea);
-
-        submit = document.createElement('input');
-        submit.className = 'btn btn-lg btn-primary';
-        submit.setAttribute('type', 'submit');
-        submit.setAttribute('value', 'Submit feedback');
-        feedbackForm.appendChild(submit);
-
-        if (this.showCharCount) {
-            charCounter = document.createElement('span');
-            charCounter.className = 'feedback-char-count badge';
-            charCounter.innerHTML = this.maxLength;
-            // Until no char is inserted is hidden.
-            charCounter.style.display = 'none';
-            feedbackForm.appendChild(charCounter);
+    // TODO: move all initialization here from constructor.
+    Feedback.prototype.init = function(options) {
+        // Set the mainText, if any.
+        if ('string' === typeof options.mainText) {
+            this.mainText = options.mainText;
+        }
+        else if ('undefined' === typeof options.mainText) {
+            this.mainText = this.getText('label');
+        }
+        else {
+            throw new TypeError('Feedback.init: options.mainText must ' +
+                                'be string or undefined. Found: ' +
+                                options.mainText);
         }
 
-        // Add listeners.
-        J.addEvent(feedbackForm, 'submit', function(event) {
-            event.preventDefault();
-            that.getValues(that.onsubmit);
-        });
-
-        J.addEvent(feedbackForm, 'input', function(event) {
-            that.verifyFeedback(false, true);
-        });
-
-        // Store references.
-        this.submitButton = submit;
-        this.feedbackHTML = feedbackHTML;
-        this.textareaElement = feedbackTextarea;
-        this.charCounter = charCounter || null;
-
-        // Check it once at the beginning to initialize counter.
-        this.verifyFeedback(false, true);
-
-        return feedbackHTML;
+        // Set the hint, if any.
+        if ('string' === typeof options.hint || false === options.hint) {
+            this.hint = options.hint;
+        }
+        else if ('undefined' !== typeof options.hint) {
+            throw new TypeError('Feedback.init: options.hint must ' +
+                                'be a string, false, or undefined. Found: ' +
+                                options.hint);
+        }
+        else {
+            // Returns undefined if there are no constraints.
+            this.hint = this.getText('autoHint');
+        }
     };
 
     /**
@@ -291,46 +425,96 @@
      * @see getFeedback
      */
     Feedback.prototype.verifyFeedback = function(markAttempt, updateUI) {
-        var feedback, length, updateCount, updateColor, res;
-        var submitButton, charCounter, tmp;
+        var feedback, length,  res;
+        var submitButton, charCounter, wordCounter, tmp;
+        var updateCharCount, updateCharColor, updateWordCount, updateWordColor;
 
         feedback = getFeedback.call(this);
         length = feedback ? feedback.length : 0;
 
         submitButton = this.submitButton;
         charCounter = this.charCounter;
+        wordCounter = this.wordCounter;
 
-        if (length < this.minLength) {
+        res = true;
+
+        if (length < this.minChars) {
             res = false;
-            tmp = this.minLength - length;
-            updateCount = tmp + ' character';
-            if (tmp > 1) updateCount += 's';
-            updateCount += ' needed.';
-            updateColor = '#a32020'; // #f2dede';
+            tmp = this.minChars - length;
+            updateCharCount = tmp + this.getText('counter', {
+                chars: true,
+                needed: true,
+                len: tmp
+            });
+            updateCharColor = colNeeded;
         }
-        else if (length > this.maxLength) {
+        else if (this.maxChars && length > this.maxChars) {
             res = false;
-            tmp = length - this.maxLength;
-            updateCount = tmp + ' character';
-            if (tmp > 1) updateCount += 's';
-            updateCount += ' over.';
-            updateColor = '#a32020'; // #f2dede';
+            tmp = length - this.maxChars;
+            updateCharCount = tmp + this.getText('counter', {
+                chars: true,
+                over: true,
+                len: tmp
+            });
+            updateCharColor = colOver;
         }
         else {
-            res = true;
-            tmp = this.maxLength - length;
-            updateCount = tmp + ' character';
-            if (tmp > 1) updateCount += 's';
-            updateCount += ' remaining.';
-            updateColor = '#78b360'; // '#dff0d8';
+            tmp = this.maxChars - length;
+            updateCharCount = tmp + this.getText('counter', {
+                chars: true,
+                len: tmp
+            });
+            updateCharColor = colRemain;
+        }
+
+        if (wordCounter) {
+            // kudos: https://css-tricks.com/build-word-counter-app/
+            // word count using \w metacharacter -
+            // replacing this with .* to match anything between word
+            // boundaries since it was not taking 'a' as a word.
+            // this is a masterstroke - to count words with any number
+            // of hyphens as one word
+            // [-?(\w+)?]+ looks for hyphen and a word (we make
+            // both optional with ?). + at the end makes it a repeated pattern
+            // \b is word boundary metacharacter
+            tmp = feedback ? feedback.match(/\b[-?(\w+)?]+\b/gi) : 0;
+            length = tmp ? tmp.length : 0;
+            if (length < this.minWords) {
+                res = false;
+                tmp = tmp = this.minWords - length;
+                updateWordCount = tmp + this.getText('counter', {
+                    needed: true,
+                    len: tmp
+                });
+                updateWordColor = colNeeded;
+            }
+            else if (this.maxWords && length > this.maxWords) {
+                res = false;
+                tmp = length - this.maxWords;
+                updateWordCount = tmp + this.getText('counter', {
+                    over: true,
+                    len: tmp
+                });
+                updateWordColor = colOver;
+            }
+            else {
+                  tmp = this.maxWords - length;
+                  updateWordCount = tmp + this.getText('counter', {
+                      len: tmp
+                  });
+                  updateWordColor = colRemain;
+            }
         }
 
         if (updateUI) {
-            submitButton.disabled = !res;
+            if (submitButton) submitButton.disabled = !res;
             if (charCounter) {
-                charCounter.style.display = length ? '' : 'none';
-                charCounter.style.backgroundColor = updateColor;
-                charCounter.innerHTML = updateCount;
+                charCounter.style.backgroundColor = updateCharColor;
+                charCounter.innerHTML = updateCharCount;
+            }
+            if (wordCounter) {
+                wordCounter.style.backgroundColor = updateWordColor;
+                wordCounter.innerHTML = updateWordCount;
             }
         }
 
@@ -349,8 +533,62 @@
      * Appends widget to this.bodyDiv
      */
     Feedback.prototype.append = function() {
-        this.createForm();
-        this.bodyDiv.appendChild(this.feedbackHTML);
+        var that, label;
+        that = this;
+
+        // this.feedbackForm = W.get('div', { className: 'feedback' });
+
+        this.feedbackForm = W.append('form', this.bodyDiv, {
+            className: 'feedback-form'
+        });
+
+        // MainText.
+        if (this.mainText) {
+            this.spanMainText = W.append('span', this.feedbackForm, {
+                className: 'feedback-maintext',
+                innerHTML: this.mainText
+            });
+        }
+        // Hint.
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.feedbackForm, {
+                className: 'feedback-hint',
+                innerHTML: this.hint
+            });
+        }
+
+        this.textareaElement = W.append('textarea', this.feedbackForm, {
+            className: 'feedback-textarea form-control',
+            type: 'text',
+            rows: this.rows
+        });
+
+        if (this.showSubmit) {
+            this.submit = W.append('input', this.feedbackForm, {
+                className: 'btn btn-lg btn-primary',
+                type: 'submit',
+                value: this.getText('submit')
+            });
+
+            // Add listeners.
+            J.addEvent(this.feedbackForm, 'submit', function(event) {
+                event.preventDefault();
+                that.getValues(that.onsubmit);
+            });
+        }
+
+        this.showCounters();
+
+        J.addEvent(this.feedbackForm, 'input', function(event) {
+            if (that.isHighlighted()) that.unhighlight();
+            that.verifyFeedback(false, true);
+        });
+        J.addEvent(this.feedbackForm, 'click', function(event) {
+            if (that.isHighlighted()) that.unhighlight();
+        });
+
+        // Check it once at the beginning to initialize counter.
+        this.verifyFeedback(false, true);
     };
 
     /**
@@ -362,15 +600,15 @@
         var feedback;
         options = options || {};
         if (!options.feedback) {
-            feedback = J.randomString(J.randomInt(0, this.maxLength),
+            feedback = J.randomString(J.randomInt(0, this.maxChars),
                                       'aA_1');
         }
         else {
             feedback = options.feedback;
         }
 
-        if (!this.feedbackHTML) this._feedback = feedback;
-        else this.feedbackHTML.value = feedback;
+        if (!this.textareaElement) this._feedback = feedback;
+        else this.textareaElement.value = feedback;
 
         this.timeInputBegin = J.now();
     };
@@ -384,6 +622,8 @@
      *   Available optionts:
      *
      *   - feedbackOnly:If TRUE, returns just the feedback (default: FALSE),
+     *   - keepBreaks:  If TRUE, returns a value where all line breaks are
+     *                  substituted with HTML <br /> tags (default: FALSE)
      *   - verify:      If TRUE, check if the feedback is valid (default: TRUE),
      *   - reset:       If TRUTHY and the feedback is valid, then it resets
      *       the feedback value before returning (default: FALSE),
@@ -405,16 +645,19 @@
      * @see getFeedback
      */
     Feedback.prototype.getValues = function(opts) {
-        var feedback, res;
+        var feedback, feedbackBr, res;
 
         opts = opts || {};
 
         feedback = getFeedback.call(this);
 
+        if (opts.keepBreaks) feedback = feedback.replace(/\n\r?/g, '<br />');
+
         if (opts.verify !== false) res = this.verifyFeedback(opts.markAttempt,
                                                              opts.updateUI);
 
-        if (res === false && opts.updateUI || opts.highlight) this.highlight();
+        if (res === false &&
+            (opts.updateUI || opts.highlight)) this.highlight();
 
         // Only value.
         if (!opts.feedbackOnly) {
@@ -422,7 +665,8 @@
                 timeBegin: this.timeInputBegin,
                 feedback: feedback,
                 attempts: this.attempts,
-                valid: res
+                valid: res,
+                isCorrect: res
             };
         }
 
@@ -479,8 +723,8 @@
             throw new TypeError('Feedback.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        if (!this.feedbackHTML || this.highlighted === true) return;
-        this.feedbackHTML.style.border = border || '3px solid red';
+        if (!this.isAppended() || this.highlighted === true) return;
+        this.textareaElement.style.border = border || '3px solid red';
         this.highlighted = true;
         this.emit('highlighted', border);
     };
@@ -493,8 +737,8 @@
      * @see Feedback.highlighted
      */
     Feedback.prototype.unhighlight = function() {
-        if (!this.feedbackHTML || this.highlighted !== true) return;
-        this.feedbackHTML.style.border = '';
+        if (!this.isAppended() || this.highlighted !== true) return;
+        this.textareaElement.style.border = '';
         this.highlighted = false;
         this.emit('unhighlighted');
     };
@@ -509,8 +753,86 @@
         this.timeInputBegin = null;
         this._feedback = null;
 
-        if (this.feedbackHTML) this.feedbackHTML.value = '';
+        if (this.textareaElement) this.textareaElement.value = '';
         if (this.isHighlighted()) this.unhighlight();
+    };
+
+    /**
+     * ### Feedback.disable
+     *
+     * Disables texarea and submit button (if present)
+     */
+    Feedback.prototype.disable = function() {
+        // TODO: This gets off when WaitScreen locks all inputs.
+        // if (this.disabled === true) return;
+        if (!this.textareaElement || this.textareaElement.disabled) return;
+        this.disabled = true;
+        if (this.submitElement) this.submitElement.disabled = true;
+        this.textareaElement.disabled = true;
+        this.emit('disabled');
+    };
+
+    /**
+     * ### Feedback.enable
+     *
+     * Enables texarea and submit button (if present)
+     *
+     */
+    Feedback.prototype.enable = function() {
+        // TODO: This gets off when WaitScreen locks all inputs.
+        // if (this.disabled === false || !this.textareaElement) return;
+        if (!this.textareaElement || !this.textareaElement.disabled) return;
+        this.disabled = false;
+        if (this.submitElement) this.submitElement.disabled = false;
+        this.textareaElement.disabled = false;
+        this.emit('enabled');
+    };
+
+    /**
+     * ### Feedback.showCounters
+     *
+     * Shows the character counter
+     *
+     * If not existing before, it creates it.
+     *
+     * @see Feedback.charCounter
+     */
+    Feedback.prototype.showCounters = function() {
+        if (!this.charCounter) {
+            if (this.minChars || this.maxChars) {
+                this.charCounter = W.append('span', this.feedbackForm, {
+                    className: 'feedback-char-count badge',
+                    innerHTML: this.maxChars
+                });
+            }
+        }
+        else {
+            this.charCounter.style.display = '';
+        }
+        if (!this.wordCounter) {
+            if (this.minWords || this.maxWords) {
+                this.wordCounter = W.append('span', this.feedbackForm, {
+                    className: 'feedback-char-count badge',
+                    innerHTML: this.maxWords
+                });
+                if (this.charCounter) {
+                    this.wordCounter.style['margin-left'] = '10px';
+                }
+            }
+        }
+        else {
+            this.wordCounter.style.display = '';
+        }
+    };
+
+    /**
+     * ### Feedback.hideCounters
+     *
+     * Hides the character counter
+     */
+    Feedback.prototype.hideCounters = function() {
+        if (this.charCounter) this.charCounter.style.display = 'none';
+        if (this.wordCounter) this.wordCounter.style.display = 'none';
     };
 
     // ## Helper functions.
@@ -526,7 +848,8 @@
      */
     function getFeedback() {
         var out;
-        out = this.feedbackHTML ? this.textareaElement.value : this._feedback;
+        out = this.textareaElement ?
+            this.textareaElement.value : this._feedback;
         return out ? out.trim() : out;
     }
 

@@ -64,8 +64,21 @@
          * ### ChoiceManager.forms
          *
          * The array available forms
+         *
+         * @see ChoiceManager.formsById
          */
         this.forms = null;
+
+        /**
+         * ### ChoiceManager.forms
+         *
+         * A map form id to form
+         *
+         * Note: if a form does not have an id, it will not be added here.
+         *
+         * @see ChoiceManager.forms
+         */
+        this.formsById = null;
 
         /**
          * ### ChoiceManager.order
@@ -249,7 +262,7 @@
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
-        var form, i, len, parsedForms;
+        var form, formsById, i, len, parsedForms;
         if ('function' === typeof forms) {
             parsedForms = forms.call(node.game);
             if (!J.isArray(parsedForms)) {
@@ -272,6 +285,7 @@
         }
 
         // Manual clone forms.
+        formsById = {};
         forms = new Array(len);
         i = -1;
         for ( ; ++i < len ; ) {
@@ -283,15 +297,23 @@
                     form = node.widgets.get(form.name, form);
                 }
                 if (!node.widgets.isWidget(form)) {
-                    throw new Error('ChoiceManager.buildDl: one of the forms ' +
-                                    'is not a widget-like element: ' +
-                                    parsedForms[i]);
+                    throw new Error('ChoiceManager.setForms: one of the ' +
+                                    'forms is not a widget-like element: ' +
+                                    form);
                 }
             }
             forms[i] = form;
+            if (form.id) {
+                if (formsById[form.id]) {
+                    throw new Error('ChoiceManager.setForms: duplicated ' +
+                                    'form id: ' + form.id);
+                }
+                formsById[form.id] = forms[i];
+            }
         }
         // Assigned verified forms.
         this.forms = forms;
+        this.formsById = formsById;
 
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
@@ -548,12 +570,13 @@
         for ( ; ++i < len ; ) {
             form = this.forms[i];
             obj.forms[form.id] = form.getValues(opts);
-            if (obj.forms[form.id].choice === null ||
-                (form.selectMultiple && !obj.forms[form.id].choice.length)) {
+            if (obj.forms[form.id].requiredChoice &&
+                (obj.forms[form.id].choice === null ||
+                 (form.selectMultiple && !obj.forms[form.id].choice.length))) {
 
                 obj.missValues.push(form.id);
             }
-            if (opts.markAttempt && !obj.forms[form.id].isCorrect) {
+            if (opts.markAttempt && obj.forms[form.id].isCorrect === false) {
                 obj.isCorrect = false;
             }
         }

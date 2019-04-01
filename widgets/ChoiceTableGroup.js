@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.4.0';
+    ChoiceTableGroup.version = '1.5.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -25,6 +25,11 @@
     ChoiceTableGroup.className = 'choicetable';
 
     ChoiceTableGroup.separator = '::';
+
+    ChoiceTableGroup.texts.autoHint = function(w) {
+        if (w.requiredChoice) return '*';
+        else return false;
+    };
 
     // ## Dependencies
 
@@ -146,6 +151,17 @@
          * The span containing the main text
          */
         this.spanMainText = null;
+
+        /**
+         * ### ChoiceTableGroup.hint
+         *
+         * An additional text with information about how to select items
+         *
+         * If not specified, it may be auto-filled, e.g. '(pick 2)'.
+         *
+         * @see Feedback.texts.autoHint
+         */
+        this.hint = null;
 
         /**
          * ### ChoiceTableGroup.items
@@ -466,6 +482,20 @@
                                 options.mainText);
         }
 
+        // Set the hint, if any.
+        if ('string' === typeof options.hint || false === options.hint) {
+            this.hint = options.hint;
+        }
+        else if ('undefined' !== typeof options.hint) {
+            throw new TypeError('ChoiceTableGroup.init: options.hint must ' +
+                                'be a string, false, or undefined. Found: ' +
+                                options.hint);
+        }
+        else {
+            // Returns undefined if there are no constraints.
+            this.hint = this.getText('autoHint');
+        }
+
         // Set the timeFrom, if any.
         if (options.timeFrom === false ||
             'string' === typeof options.timeFrom) {
@@ -706,12 +736,17 @@
 
         // MainText.
         if (this.mainText) {
-            this.spanMainText = document.createElement('span');
-            this.spanMainText.className =
-                ChoiceTableGroup.className + '-maintext';
-            this.spanMainText.innerHTML = this.mainText;
-            // Append.
-            this.bodyDiv.appendChild(this.spanMainText);
+            this.spanMainText = W.append('span', this.bodyDiv, {
+                className: 'custominput-maintext',
+                innerHTML: this.mainText
+            });
+        }
+        // Hint.
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.bodyDiv, {
+                className: 'choicetable-hint',
+                innerHTML: this.hint
+            });
         }
 
         // Create/set table, if requested.
@@ -923,7 +958,8 @@
         obj = {
             id: this.id,
             order: this.order,
-            items: {}
+            items: {},
+            isCorrect: true
         };
         opts = opts || {};
         // Make sure reset is done only at the end.
@@ -935,7 +971,10 @@
             obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) {
                 obj.missValues = true;
-                if (tbl.requiredChoice) toHighlight = true;
+                if (tbl.requiredChoice) {
+                    toHighlight = true;
+                    obj.isCorrect = false;
+                }
             }
             if (obj.items[tbl.id].isCorrect === false && opts.highlight) {
                 toHighlight = true;

@@ -17,12 +17,37 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.3.2';
+    ChoiceTable.version = '1.5.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
     ChoiceTable.title = 'Make your choice';
     ChoiceTable.className = 'choicetable';
+
+    ChoiceTable.texts.autoHint = function(w) {
+        var res;
+        if (!w.requiredChoice && !w.selectMultiple) return false;
+        if (!w.selectMultiple) return '*';
+        res = '(';
+        if (!w.requiredChoice) {
+            if ('number' === typeof w.selectMultiple) {
+                res += 'select up to ' + w.selectMultiple;
+            }
+            else {
+                res += 'multiple selection allowed';
+            }
+        }
+        else {
+            if ('number' === typeof w.selectMultiple) {
+                res += 'select between ' + w.requiredChoice + ' and ' +
+                    w.selectMultiple;
+            }
+            else {
+                res += 'select at least ' + w.requiredChoice;
+            }
+        }
+        return res + ')';
+    };
 
     ChoiceTable.separator = '::';
 
@@ -53,6 +78,13 @@
         this.table = null;
 
         /**
+         * ### ChoiceTable.choicesSetSize
+         *
+         * How many choices can be on the same row/column
+         */
+        this.choicesSetSize = null;
+
+        /**
          * ### ChoiceTable.tr
          *
          * Reference to TR elements of the table
@@ -71,7 +103,15 @@
          */
         this.listener = function(e) {
             var name, value, td;
-            var i, len;
+            var i, len, removed;
+
+            e = e || window.event;
+            td = e.target || e.srcElement;
+
+            // Not a clickable choice.
+            if ('undefined' === typeof that.choicesIds[td.id]) return;
+
+
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -81,12 +121,6 @@
                 that.timeCurrentChoice = Date.now ?
                     Date.now() : new Date().getTime();
             }
-
-            e = e || window.event;
-            td = e.target || e.srcElement;
-
-            // Not a clickable choice.
-            if ('undefined' === typeof that.choicesIds[td.id]) return;
 
             // Id of elements are in the form of name_value or name_item_value.
             value = td.id.split(that.separator);
@@ -118,9 +152,15 @@
                 else {
                     that.selected = null;
                 }
+                removed = true;
             }
             // Click on a new choice.
             else {
+
+                // Have we exhausted available choices?
+                if ('number' === typeof that.selectMultiple &&
+                    that.selected.length === that.selectMultiple) return;
+
                 that.setCurrentChoice(value);
                 J.addClass(td, 'selected');
 
@@ -136,6 +176,9 @@
 
             // Remove any warning/errors on click.
             if (that.isHighlighted()) that.unhighlight();
+
+            // Call onclick, if any.
+            if (that.onclick) that.onclick.call(that, value, td, removed);
         };
 
         /**
@@ -146,6 +189,17 @@
          * @see ChoiceTable.spanMainText
          */
         this.mainText = null;
+
+        /**
+         * ### ChoiceTable.hint
+         *
+         * An additional text with information about how to select items
+         *
+         * If not specified, it may be auto-filled, e.g. '(pick 2)'.
+         *
+         * @see Feedback.texts.autoHint
+         */
+        this.hint = null;
 
         /**
          * ### ChoiceTable.spanMainText
@@ -250,20 +304,9 @@
          *
          * The current order of display of choices
          *
-         * May differ from `originalOrder` if shuffled.
-         *
          * @see ChoiceTable.originalOrder
          */
         this.order = null;
-
-        /**
-         * ### ChoiceTable.originalOrder
-         *
-         * The initial order of display of choices
-         *
-         * @see ChoiceTable.order
-         */
-        this.originalOrder = null;
 
         /**
          * ### ChoiceTable.correctChoice
@@ -420,9 +463,12 @@
      *   - orientation: orientation of the table: vertical (v) or horizontal (h)
      *   - group: the name of the group (number or string), if any
      *   - groupOrder: the order of the table in the group, if any
-     *   - onclick: a custom onclick listener function. Context is
+     *   - listener: a function executed at every click. Context is
+     *       `this` instance
+     *   - onclick: a function executed after the listener function. Context is
      *       `this` instance
      *   - mainText: a text to be displayed above the table
+     *   - hint: a text with extra info to be displayed after mainText
      *   - choices: the array of available choices. See
      *       `ChoiceTable.renderChoice` for info about the format
      *   - correctChoice: the array|number|string of correct choices. See
@@ -444,7 +490,7 @@
         that = this;
 
         if (!this.id) {
-            throw new TypeError('ChoiceTable.init: options.id is missing.');
+            throw new TypeError('ChoiceTable.init: options.id is missing');
         }
 
         // Option orientation, default 'H'.
@@ -477,8 +523,17 @@
         this.shuffleChoices = tmp;
 
         // Option selectMultiple, default false.
-        if ('undefined' === typeof options.selectMultiple) tmp = false;
-        else tmp = !!options.selectMultiple;
+        tmp = options.selectMultiple;
+        if ('undefined' === typeof tmp) {
+            tmp = false;
+        }
+        else if ('boolean' !== typeof tmp) {
+            tmp = J.isInt(tmp, 1);
+            if (!tmp) {
+                throw new Error('ChoiceTable.init: selectMultiple must be ' +
+                                'undefined or an integer > 1. Found: ' + tmp);
+            }
+        }
         this.selectMultiple = tmp;
         // Make an array for currentChoice and selected.
         if (tmp) {
@@ -488,14 +543,27 @@
 
         // Option requiredChoice, if any.
         if ('number' === typeof options.requiredChoice) {
+            if (!J.isInt(options.requiredChoice, 0)) {
+                throw new Error('ChoiceTable.init: if number, requiredChoice ' +
+                                'must a positive integer. Found: ' +
+                                options.requiredChoice);
+            }
+            if ('number' === typeof this.selectMultiple &&
+                options.requiredChoice > this.selectMultiple) {
+
+                throw new Error('ChoiceTable.init: requiredChoice cannot be ' +
+                                'larger than selectMultiple. Found: ' +
+                                options.requiredChoice + ' > ' +
+                                this.selectMultiple);
+            }
             this.requiredChoice = options.requiredChoice;
         }
         else if ('boolean' === typeof options.requiredChoice) {
-            this.requiredChoice = options.requiredChoice ? 1 : 0;
+            this.requiredChoice = options.requiredChoice ? 1 : null;
         }
         else if ('undefined' !== typeof options.requiredChoice) {
             throw new TypeError('ChoiceTable.init: options.requiredChoice ' +
-                                'be number or boolean or undefined. Found: ' +
+                                'be number, boolean or undefined. Found: ' +
                                 options.requiredChoice);
         }
 
@@ -521,11 +589,21 @@
                                 options.groupOrder);
         }
 
-        // Set the onclick listener, if any.
-        if ('function' === typeof options.onclick) {
+        // Set the main onclick listener, if any.
+        if ('function' === typeof options.listener) {
             this.listener = function(e) {
-                options.onclick.call(this, e);
+                options.listener.call(this, e);
             };
+        }
+        else if ('undefined' !== typeof options.listener) {
+            throw new TypeError('ChoiceTable.init: options.listener must ' +
+                                'be function or undefined. Found: ' +
+                                options.listener);
+        }
+
+        // Set an additional onclick onclick, if any.
+        if ('function' === typeof options.onclick) {
+            this.onclick = options.onclick;
         }
         else if ('undefined' !== typeof options.onclick) {
             throw new TypeError('ChoiceTable.init: options.onclick must ' +
@@ -541,6 +619,20 @@
             throw new TypeError('ChoiceTable.init: options.mainText must ' +
                                 'be string or undefined. Found: ' +
                                 options.mainText);
+        }
+
+        // Set the hint, if any.
+        if ('string' === typeof options.hint || false === options.hint) {
+            this.hint = options.hint;
+        }
+        else if ('undefined' !== typeof options.hint) {
+            throw new TypeError('ChoiceTable.init: options.hint must ' +
+                                'be a string, false, or undefined. Found: ' +
+                                options.hint);
+        }
+        else {
+            // Returns undefined if there are no constraints.
+            this.hint = this.getText('autoHint');
         }
 
         // Set the timeFrom, if any.
@@ -661,9 +753,20 @@
         if ('undefined' !== typeof options.correctChoice) {
             if (this.requiredChoice) {
                 throw new Error('ChoiceTable.init: cannot specify both ' +
-                                'options requiredChoice and correctChoice.');
+                                'options requiredChoice and correctChoice');
             }
             this.setCorrectChoice(options.correctChoice);
+        }
+
+        // Add the correct choices.
+        if ('undefined' !== typeof options.choicesSetSize) {
+            if (!J.isInt(options.choicesSetSize, 0)) {
+                throw new Error('ChoiceTable.init: choicesSetSize must be ' +
+                                'undefined or an integer > 0. Found: ' +
+                                options.choicesSetSize);
+            }
+
+            this.choicesSetSize = options.choicesSetSize;
         }
     };
 
@@ -698,7 +801,6 @@
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
         if (this.shuffleChoices) this.order = J.shuffle(this.order);
-        this.originalOrder = this.order;
 
         // Build the table and choices at once (faster).
         if (this.table) this.buildTableAndChoices();
@@ -743,40 +845,62 @@
      * @see ChoiceTable.order
      * @see ChoiceTable.renderChoice
      * @see ChoiceTable.orientation
+     * @see ChoiceTable.choicesSetSize
      */
-    ChoiceTable.prototype.buildTable = function() {
-        var i, len, tr, H;
+    ChoiceTable.prototype.buildTable = (function() {
 
-        len = this.choicesCells.length;
-
-        // Start adding tr/s and tds based on the orientation.
-        i = -1, H = this.orientation === 'H';
-
-        if (H) {
-            tr = createTR(this, 'main');
-            // Add horizontal choices title.
-            if (this.leftCell) tr.appendChild(this.leftCell);
-        }
-        // Main loop.
-        for ( ; ++i < len ; ) {
-            if (!H) {
-                tr = createTR(this, 'left');
-                // Add vertical choices title.
-                if (i === 0 && this.leftCell) {
-                    tr.appendChild(this.leftCell);
-                    tr = createTR(this, i);
-                }
+        function makeSet(i, len, H, doSets) {
+            var tr, counter;
+            counter = 0;
+            // Start adding tr/s and tds based on the orientation.
+            if (H) {
+                tr = createTR(this, 'main');
+                // Add horizontal choices title.
+                if (this.leftCell) tr.appendChild(this.leftCell);
             }
-            // Clickable cell.
-            tr.appendChild(this.choicesCells[i]);
+            // Main loop.
+            for ( ; ++i < len ; ) {
+                if (!H) {
+                    tr = createTR(this, 'left');
+                    // Add vertical choices title.
+                    if (i === 0 && this.leftCell) {
+                        tr.appendChild(this.leftCell);
+                        tr = createTR(this, i);
+                    }
+                }
+                // Clickable cell.
+                tr.appendChild(this.choicesCells[i]);
+                // Stop if we reached set size (still need to add the right).
+                if (doSets && ++counter >= this.choicesSetSize) break;
+            }
+            if (this.rightCell) {
+                if (!H) tr = createTR(this, 'right');
+                tr.appendChild(this.rightCell);
+            }
+
+            // Start a new set, if necessary.
+            if (i !== len) makeSet.call(this, i, len, H, doSets);
         }
-        if (this.rightCell) {
-            if (!H) tr = createTR(this, 'right');
-            tr.appendChild(this.rightCell);
-        }
-        // Enable onclick listener.
-        this.enable();
-    };
+
+        return function() {
+            var i, len, H, doSets;
+
+            if (!this.choicesCells) {
+                throw new Error('ChoiceTable.buildTable: choices not set, ' +
+                                'cannot build table. Id: ' + this.id);
+            }
+
+            H = this.orientation === 'H';
+            len = this.choicesCells.length;
+            doSets = 'number' === typeof this.choicesSetSize;
+
+            // Recursively makes sets
+            makeSet.call(this, -1, len, H, doSets);
+
+            // Enable onclick listener.
+            this.enable();
+        };
+    })();
 
     /**
      * ### ChoiceTable.buildTableAndChoices
@@ -1000,12 +1124,17 @@
 
         // MainText.
         if (this.mainText) {
-            this.spanMainText = document.createElement('span');
-            this.spanMainText.className = this.className ?
-                ChoiceTable.className + '-maintext' : 'maintext';
-            this.spanMainText.innerHTML = this.mainText;
-            // Append mainText.
-            this.bodyDiv.appendChild(this.spanMainText);
+            this.spanMainText = W.append('span', this.bodyDiv, {
+                className: 'choicetable-maintext',
+                innerHTML: this.mainText
+            });
+        }
+        // Hint.
+        if (this.hint) {
+            W.append('span', this.spanMainText || this.bodyDiv, {
+                className: 'choicetable-hint',
+                innerHTML: this.hint
+            });
         }
 
         // Create/set table.
@@ -1082,7 +1211,7 @@
     ChoiceTable.prototype.enable = function() {
         if (this.disabled === false) return;
         if (!this.table) {
-            throw new Error('ChoiceTable.enable: table not defined.');
+            throw new Error('ChoiceTable.enable: table not defined');
         }
         this.disabled = false;
         J.addClass(this.table, 'clickable');
@@ -1277,6 +1406,24 @@
     };
 
     /**
+     * ### ChoiceTable.getChoiceAtPosition
+     *
+     * Returns a choice displayed at a given position
+     *
+     * @param {string|number} i The numeric position of a choice in display
+     *
+     * @return {string|undefined} The value associated the numeric position.
+     *   If no value is found, returns undefined
+     *
+     * @see ChoiceTable.order
+     * @see ChoiceTable.choices
+     */
+    ChoiceTable.prototype.getChoiceAtPosition = function(i) {
+        if (!this.choices || !this.order) return;
+        return this.choices[this.order[parseInt(i, 10)]];
+    };
+
+    /**
      * ### ChoiceTable.getValues
      *
      * Returns the values for current selection and other paradata
@@ -1300,7 +1447,7 @@
      * @see ChoiceTable.reset
      */
     ChoiceTable.prototype.getValues = function(opts) {
-        var obj, resetOpts;
+        var obj, resetOpts, i, len;
         opts = opts || {};
         obj = {
             id: this.id,
@@ -1312,10 +1459,27 @@
         if (opts.processChoice) {
             obj.choice = opts.processChoice.call(this, obj.choice);
         }
-        if (this.shuffleChoices) {
-            obj.originalOrder = this.originalOrder;
-            obj.order = this.order;
+        if (this.shuffleChoices) obj.order = this.order;
+
+        if (opts.getValue !== false) {
+            if (!this.selectMultiple) {
+                obj.value = this.choices[obj.choice];
+            }
+            else {
+                len = obj.choice.length;
+                obj.value = new Array(len);
+                if (len === 1) {
+                    obj.value[0] = this.choices[obj.choice[0]];
+                }
+                else {
+                    i = -1;
+                    for ( ; ++i < len ; ) {
+                        obj.value[i] = this.choices[obj.choice[i]];
+                    }
+                }
+            }
         }
+
         if (this.group === 0 || this.group) {
             obj.group = this.group;
         }
