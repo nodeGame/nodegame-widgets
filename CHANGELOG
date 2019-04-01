@@ -1,9 +1,13 @@
 # nodegame-widgets change log
 
-## Current
+## 5.1.0
 - CustomInput widget.
 - ChoiceTable: selectMultiple can be an integer controlling how many selected items are allowed.
 - After a widget is destroyed, frame height is checked and adjusted.
+- Widgets implements a garbage collector method to remove widgets no longer on page.
+- ChoiceTable.originalOrder removed, not meaningful.
+- Feedback widget implements word counts and other improvements.
+- Minor improvements.
 
 ## 5.0.1
 - Fixed VisualTimer init method not receiving an object bug.
