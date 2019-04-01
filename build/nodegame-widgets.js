@@ -6060,7 +6060,7 @@
 
         // Save the order in which the choices will be added.
         this.order = J.seq(0, len-1);
-        if (this.shuffleChoices) this.order = J.shuffle(this.order);        
+        if (this.shuffleChoices) this.order = J.shuffle(this.order);
 
         // Build the table and choices at once (faster).
         if (this.table) this.buildTableAndChoices();
@@ -6682,7 +6682,7 @@
         if (!this.choices || !this.order) return;
         return this.choices[this.order[parseInt(i, 10)]];
     };
-    
+
     /**
      * ### ChoiceTable.getValues
      *
@@ -6739,7 +6739,7 @@
                 }
             }
         }
-        
+
         if (this.group === 0 || this.group) {
             obj.group = this.group;
         }
@@ -8780,34 +8780,41 @@
                     res = '(Format: ' + w.params.format + ')';
                 }
             }
-            return w.requiredChoice ? (res + '*') : (res || false);
+            else if (w.type === 'number' || w.type === 'int' ||
+                     w.type === 'float') {
+
+                if (w.params.min && w.params.max) {
+                    res = '(Must be between ' + w.params.min + ' and ' +
+                        w.params.max + ')';
+                }
+                else if (w.params.min) {
+                    res = '(Must be after ' + w.params.min + ')';
+                }
+                else if (w.params.max) {
+                    res = '(Must be before ' + w.params.max + ')';
+                }
+            }
+            return w.requiredChoice ? ((res || '') + '*') : (res || false);
         },
         numericErr: function(w) {
-            var str, p, inc;
+            var str, p;
             p = w.params;
             // Weird, but valid, case.
             if (p.exactly) return 'Must enter ' + p.lower;
             // Others.
-            inc = '(inclusive)';
-            str = 'Must be a';
-            if (w.type === 'float') str += 'floating point';
-            else if (w.type === 'int') str += 'n integer';
-            str += ' number ';
+            str = 'Must be ';
+            if (w.type === 'float') str += 'a floating point number ';
+            else if (w.type === 'int') str += 'an integer ';
             if (p.between) {
-                str += 'between ' + p.lower;
-                if (p.leq) str += inc;
-                str += ' and ' + p.upper;
-                if (p.ueq) str += inc;
+                str += (p.leq ? '&ge; ' : '<' ) + p.lower;
+                str += ' and ';
+                str += (p.ueq ? '&le; ' : '> ') + p.upper;
             }
             else if ('undefined' !== typeof p.lower) {
-                str += 'greater than ';
-                if (p.leq) str += 'or equal to ';
-                str += p.lower;
+                str += (p.leq ? '&ge; ' : '< ') + p.lower;
             }
             else {
-                str += 'less than ';
-                if (p.leq) str += 'or equal to ';
-                str += p.upper;
+                str += (p.ueq ? '&le; ' : '> ') + p.upper;
             }
             return str;
         },
@@ -9715,6 +9722,19 @@
         }
         res.id = this.id;
         return res;
+    };
+
+    /**
+     * ### CustomInput.setValues
+     *
+     * Set the value of the input form
+     *
+     * @param {string} The error msg (can contain HTML)
+     *
+     * @experimental
+     */
+    CustomInput.prototype.setValues = function(value) {        
+        this.input.value = value;
     };
 
     // ## Helper functions.
