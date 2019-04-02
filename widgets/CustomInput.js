@@ -383,7 +383,6 @@
         that = this;
         e = 'CustomInput.init: ';
 
-        // TODO: this becomes false later on. Why???
         this.requiredChoice = !!opts.requiredChoice;
 
         if (opts.type) {
@@ -963,7 +962,7 @@
         // Hint.
         if (this.hint) {
             W.append('span', this.spanMainText || this.bodyDiv, {
-                className: 'choicetable-hint',
+                className: 'custominput-hint',
                 innerHTML: this.hint
             });
         }
