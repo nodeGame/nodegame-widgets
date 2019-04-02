@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## current
+- Feedback and EmailForm can also send set messages (depreacted "say" option, use "send").
+- EndScreen askServer.
+
 ## 5.1.0
 - CustomInput widget.
 - ChoiceManager formsOptions parameter.
