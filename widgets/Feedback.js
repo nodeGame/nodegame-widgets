@@ -374,6 +374,15 @@
          */
         this.submitButton = null;
 
+        /**
+         * ### Feedback.setMsg
+         *
+         * If TRUE, a set message is sent instead of a data msg
+         *
+         * Default: FALSE
+         */
+        this.setMsg = !!options.setMsg || false;
+
     }
 
     // ## Feedback methods
@@ -633,10 +642,12 @@
      *                  Default: FALSE.
      *   - highlight:   If TRUE, if feedback is not the valid, widget is
      *                  is highlighted. Default: (updateUI || FALSE).
-     *   - say:         If TRUE, and the feedback is valid, then it sends
-     *                  a data msg. Default: FALSE.
-     *   - sayAnyway:   If TRUE, it sends a data msg regardless of the
-     *                  validity of the feedback. Default: FALSE.
+     *   - send:        If TRUE, and the email is valid, then it sends
+     *                  a data or set msg. Default: FALSE.
+     *   - sendAnyway:  If TRUE, it sends a data or set msg regardless of
+     *                  the validity of the email. Default: FALSE.
+     *   - say:         same as send, but deprecated.
+     *   - sayAnyway:   same as sendAnyway, but deprecated
      *
      * @return {string|object} The feedback, and optional paradata
      *
@@ -648,6 +659,17 @@
         var feedback, feedbackBr, res;
 
         opts = opts || {};
+
+        if ('undefined' !== typeof opts.say) {
+            console.log('***EmailForm.getValues: option say is deprecated, ' +
+                        ' use send.***');
+            opts.send = opts.say;
+        }
+        if ('undefined' !== typeof opts.sayAnyway) {
+            console.log('***EmailForm.getValues: option sayAnyway is ' +
+                        'deprecated, use sendAnyway.***');
+            opts.sendAnyway = opts.sayAnyway;
+        }
 
         feedback = getFeedback.call(this);
 
@@ -671,7 +693,7 @@
         }
 
         // Send the message.
-        if ((opts.say && res) || opts.sayAnyway) {
+        if ((opts.send && res) || opts.sendAnyway) {
             this.sendValues({ values: feedback });
             if (opts.updateUI) {
                 this.submitButton.setAttribute('value', this.getText('sent'));
@@ -705,7 +727,13 @@
         var values;
         opts = opts || { feedbackOnly: true };
         values = opts.values || this.getValues(opts);
-        node.say('feedback', opts.to || 'SERVER', values);
+        if (this.setMsg) {
+            if ('string' === typeof values) values = { feedback: values };
+            node.set(values, opts.to || 'SERVER');
+        }
+        else {
+            node.say('feedback', opts.to || 'SERVER', values);
+        }
         return values;
     };
 

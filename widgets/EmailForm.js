@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    EmailForm.version = '0.10.0';
+    EmailForm.version = '0.11.0';
     EmailForm.description = 'Displays a configurable email form.';
 
     EmailForm.title = 'Email';
@@ -23,7 +23,7 @@
 
     EmailForm.texts.label = 'Enter your email:';
     EmailForm.texts.errString = 'Not a valid email address, ' +
-                                'please correct it and submit it again.';
+        'please correct it and submit it again.';
 
     // ## Dependencies
 
@@ -46,7 +46,11 @@
          * @see Feedback.getValues
          */
         if (!options.onsubmit) {
-            this.onsubmit = { emailOnly: true, say: true, updateUI: true };
+            this.onsubmit = {
+                emailOnly: true,
+                send: true,
+                updateUI: true
+            };
         }
         else if ('object' === typeof options.onsubmit) {
             this.onsubmit = options.onsubmit;
@@ -102,6 +106,15 @@
          * The email's HTML submit button
          */
         this.buttonElement = null;
+
+        /**
+         * ### EmailForm.setMsg
+         *
+         * If TRUE, a set message is sent instead of a data msg
+         *
+         * Default: FALSE
+         */
+        this.setMsg = !!options.setMsg || false;
     }
 
     // ## EmailForm methods
@@ -238,10 +251,12 @@
      *                  Default: FALSE.
      *   - highlight:   If TRUE, if email is not the valid, widget is
      *                  is highlighted. Default: (updateUI || FALSE).
-     *   - say:         If TRUE, and the email is valid, then it sends
-     *                  a data msg. Default: FALSE.
-     *   - sayAnyway:   If TRUE, it sends a data msg regardless of the
-     *                  validity of the email. Default: FALSE.
+     *   - send:        If TRUE, and the email is valid, then it sends
+     *                  a data or set msg. Default: FALSE.
+     *   - sendAnyway:  If TRUE, it sends a data or set msg regardless of
+     *                  the validity of the email. Default: FALSE.
+     *   - say:         same as send, but deprecated.
+     *   - sayAnyway:   same as sendAnyway, but deprecated
      *
      * @return {string|object} The email, and optional paradata
      *
@@ -252,6 +267,17 @@
     EmailForm.prototype.getValues = function(opts) {
         var email, res;
         opts = opts || {};
+
+        if ('undefined' !== typeof opts.say) {
+            console.log('***EmailForm.getValues: option say is deprecated, ' +
+                        ' use send.***');
+            opts.send = opts.say;
+        }
+        if ('undefined' !== typeof opts.sayAnyway) {
+            console.log('***EmailForm.getValues: option sayAnyway is ' +
+                        'deprecated, use sendAnyway.***');
+            opts.sendAnyway = opts.sayAnyway;
+        }
 
         email = getEmail.call(this);
 
@@ -275,7 +301,7 @@
         }
 
         // Send the message.
-        if ((opts.say && res) || opts.sayAnyway) {
+        if ((opts.send && res) || opts.sendAnyway) {
             this.sendValues({ values: email });
         }
 
@@ -304,7 +330,13 @@
         var values;
         opts = opts || { emailOnly: true };
         values = opts.values || this.getValues(opts);
-        node.say('email', opts.to || 'SERVER', values);
+        if (this.setMsg) {
+            if ('string' === typeof values) values = { email: values };
+            node.set(values, opts.to || 'SERVER');
+        }
+        else {
+            node.say('email', opts.to || 'SERVER', values);
+        }
         return values;
     };
 
