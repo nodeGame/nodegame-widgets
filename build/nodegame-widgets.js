@@ -10803,7 +10803,7 @@
          */
         if (!options.onsubmit) {
             this.onsubmit = {
-                emailOnly: true,               
+                emailOnly: true,
                 send: true,
                 updateUI: true
             };
@@ -12198,7 +12198,7 @@
         }
 
         this.textareaElement = W.append('textarea', this.feedbackForm, {
-            className: 'feedback-textarea form-control',
+            className: 'form-control feedback-textarea',
             type: 'text',
             rows: this.rows
         });

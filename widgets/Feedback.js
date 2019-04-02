@@ -567,7 +567,7 @@
         }
 
         this.textareaElement = W.append('textarea', this.feedbackForm, {
-            className: 'feedback-textarea form-control',
+            className: 'form-control feedback-textarea',
             type: 'text',
             rows: this.rows
         });
