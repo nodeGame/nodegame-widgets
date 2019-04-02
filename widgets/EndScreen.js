@@ -221,6 +221,15 @@
          * null initially, element added on append()
          */
         this.endScreenHTML = null;
+
+        /**
+         * ### EndScreen.askServer
+         *
+         * If TRUE, after being appended it sends a 'WIN' message to server
+         *
+         * Default: FALSE
+         */
+        this.askServer = options.askServer || false;
     }
 
     EndScreen.prototype.init = function(options) {
@@ -243,6 +252,7 @@
     EndScreen.prototype.append = function() {
         this.endScreenHTML = this.makeEndScreen();
         this.bodyDiv.appendChild(this.endScreenHTML);
+        if (this.askServer) setTimeout(function() { node.say('WIN'); });
     };
 
     /**
