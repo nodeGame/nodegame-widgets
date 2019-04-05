@@ -3,6 +3,8 @@
 ## current
 - Feedback and EmailForm can also send set messages (depreacted "say" option, use "send").
 - EndScreen askServer.
+- ChoiceTable.setValus accepts and validates preset values.
+- node.widgets.append accepts an id as root element.
 
 ## 5.1.0
 - CustomInput widget.
