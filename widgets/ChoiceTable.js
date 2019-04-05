@@ -367,7 +367,7 @@
         /**
          * ### ChoiceTable.selectMultiple
          *
-         * If TRUE, it allows to select multiple cells
+         * The number of maximum simulataneous selection (>1), or false
          */
         this.selectMultiple = null;
 
@@ -1511,7 +1511,7 @@
      * @experimental
      */
     ChoiceTable.prototype.setValues = function(options) {
-        var choice, correctChoice, cell;
+        var choice, correctChoice, cell, tmp;
         var i, len, j, lenJ;
 
         if (!this.choices || !this.choices.length) {
@@ -1523,6 +1523,7 @@
         // Use options.visual.
 
         // TODO: allow it to set random or fixed values, or correct values
+        // TODO: set freetext or not.
 
         if (!this.choicesCells || !this.choicesCells.length) {
             throw new Error('Choicetable.setValues: table was not ' +
@@ -1557,16 +1558,48 @@
             return;
         }
 
-        // How many random choices?
-        if (!this.selectMultiple) len = 1;
-        else len = J.randomInt(0, this.choicesCells.length);
-
+        // Set values, random or pre-set.
         i = -1;
-        for ( ; ++i < len ; ) {
-            choice = J.randomInt(0, this.choicesCells.length)-1;
-            // Do not click it again if it is already selected.
-            if (!this.isChoiceCurrent(choice)) {
+        if ('undefined' !== typeof options.values) {
+            if (this.selectMultiple) {
+                if (!J.isArray(options.values)) {
+                    throw new Error('ChoiceTable.setValues: values must be ' +
+                                    'array or undefined if selectMultiple is ' +
+                                    'truthy. Found: ' + options.values);
+                }
+                len = options.values.length;
+                if (len > this.selectMultiple) {
+                    throw new Error('ChoiceTable.setValues: values array ' +
+                                    'cannot be larger than selectMultiple: ' +
+                                    len +  ' > ' +  this.selectMultiple);
+                }
+                tmp = options.values;
+            }
+            else {
+                tmp = [options.values];
+            }
+            // Validate value.
+            for ( ; ++i < len ; ) {
+                choice = J.isInt(tmp[i], 0, this.choices.length, 1, 1);
+                if (false === choice) {
+                    throw new Error('ChoiceTable.setValues: invalid ' +
+                                    'choice value. Found: ' +
+                                    tmp[i]);
+                }
                 this.choicesCells[choice].click();
+            }
+        }
+        else {
+            // How many random choices?
+            if (!this.selectMultiple) len = 1;
+            else len = J.randomInt(0, this.choicesCells.length);
+
+            for ( ; ++i < len ; ) {
+                choice = J.randomInt(0, this.choicesCells.length)-1;
+                // Do not click it again if it is already selected.
+                if (!this.isChoiceCurrent(choice)) {
+                    this.choicesCells[choice].click();
+                }
             }
         }
 

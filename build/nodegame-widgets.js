@@ -1494,9 +1494,9 @@
      *
      * @param {string|object} w The name of the widget to load or a loaded
      *   widget object
-     * @param {object} root Optional. The HTML element under which the widget
-     *   will be appended. Default: the `document.body` element of the main
-     *   frame (if one is defined), or `document.body` elment of the page
+     * @param {object|string} root Optional. The HTML element (or its id) under
+     *   which the widget will be appended. Default: `document.body` of the
+     *   frame (if one is defined) or of the page
      * @param {options} options Optional. Configuration options to be passed
      *   to the widget
      *
@@ -1513,17 +1513,6 @@
             throw new TypeError('Widgets.append: w must be string or object. ' +
                                'Found: ' + w);
         }
-        if (root && !J.isElement(root)) {
-            throw new TypeError('Widgets.append: root must be HTMLElement ' +
-                                'or undefined. Found: ' + root);
-        }
-        if (options && 'object' !== typeof options) {
-            throw new TypeError('Widgets.append: options must be object or ' +
-                                'undefined. Found: ' + options);
-        }
-
-        // Init default values.
-        options = options || {};
 
         // If no root is defined, use the body element of the main frame,
         // if none is found, use the document.body.
@@ -1532,7 +1521,26 @@
             if (root) root = root.body;
             if (!root) root = document.body;
         }
+        else if ('string' === typeof root) {
+            tmp = W.gid(root);
+            if (!tmp) {
+                throw new Error('Widgets.append: element with id "' + root +
+                                '" not found');
+            }
+            root = tmp;
+        }
+        if (!J.isElement(root)) {
+            throw new TypeError('Widgets.append: root must be HTMLElement, ' +
+                                'string or undefined. Found: ' + root);
+        }
 
+        if (options && 'object' !== typeof options) {
+            throw new TypeError('Widgets.append: options must be object or ' +
+                                'undefined. Found: ' + options);
+        }
+
+        // Init default values.
+        options = options || {};
         if ('undefined' === typeof options.panel) {
             if (root === W.getHeader()) options.panel = false;
         }
@@ -5627,7 +5635,7 @@
         /**
          * ### ChoiceTable.selectMultiple
          *
-         * If TRUE, it allows to select multiple cells
+         * The number of maximum simulataneous selection (>1), or false
          */
         this.selectMultiple = null;
 
@@ -6771,7 +6779,7 @@
      * @experimental
      */
     ChoiceTable.prototype.setValues = function(options) {
-        var choice, correctChoice, cell;
+        var choice, correctChoice, cell, tmp;
         var i, len, j, lenJ;
 
         if (!this.choices || !this.choices.length) {
@@ -6783,6 +6791,7 @@
         // Use options.visual.
 
         // TODO: allow it to set random or fixed values, or correct values
+        // TODO: set freetext or not.
 
         if (!this.choicesCells || !this.choicesCells.length) {
             throw new Error('Choicetable.setValues: table was not ' +
@@ -6817,16 +6826,48 @@
             return;
         }
 
-        // How many random choices?
-        if (!this.selectMultiple) len = 1;
-        else len = J.randomInt(0, this.choicesCells.length);
-
+        // Set values, random or pre-set.
         i = -1;
-        for ( ; ++i < len ; ) {
-            choice = J.randomInt(0, this.choicesCells.length)-1;
-            // Do not click it again if it is already selected.
-            if (!this.isChoiceCurrent(choice)) {
+        if ('undefined' !== typeof options.values) {
+            if (this.selectMultiple) {
+                if (!J.isArray(options.values)) {
+                    throw new Error('ChoiceTable.setValues: values must be ' +
+                                    'array or undefined if selectMultiple is ' +
+                                    'truthy. Found: ' + options.values);
+                }                            
+                len = options.values.length;
+                if (len > this.selectMultiple) {
+                    throw new Error('ChoiceTable.setValues: values array ' +
+                                    'cannot be larger than selectMultiple: ' +
+                                    len +  ' > ' +  this.selectMultiple);
+                }
+                tmp = options.values;
+            }
+            else {                
+                tmp = [options.values];                
+            }
+            // Validate value.
+            for ( ; ++i < len ; ) {
+                choice = J.isInt(tmp[i], 0, this.choices.length, 1, 1);
+                if (false === choice) {
+                    throw new Error('ChoiceTable.setValues: invalid ' +
+                                    'choice value. Found: ' +
+                                    tmp[i]);
+                }
                 this.choicesCells[choice].click();
+            }
+        }
+        else {
+            // How many random choices?
+            if (!this.selectMultiple) len = 1;
+            else len = J.randomInt(0, this.choicesCells.length);
+
+            for ( ; ++i < len ; ) {
+                choice = J.randomInt(0, this.choicesCells.length)-1;
+                // Do not click it again if it is already selected.
+                if (!this.isChoiceCurrent(choice)) {
+                    this.choicesCells[choice].click();
+                }
             }
         }
 
