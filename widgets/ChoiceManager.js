@@ -570,7 +570,7 @@
         for ( ; ++i < len ; ) {
             form = this.forms[i];
             obj.forms[form.id] = form.getValues(opts);
-            if (obj.forms[form.id].requiredChoice &&
+            if (form.requiredChoice &&
                 (obj.forms[form.id].choice === null ||
                  (form.selectMultiple && !obj.forms[form.id].choice.length))) {
 
@@ -580,6 +580,7 @@
                 obj.isCorrect = false;
             }
         }
+        if (obj.missValues.length) obj.isCorrect = false;
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
