@@ -537,6 +537,22 @@
     };
 
     /**
+     * ### ChoiceManager.reset
+     *
+     * Resets all forms
+     *
+     * @param {object} opts Optional. Reset options to pass each form
+     */
+    ChoiceManager.prototype.reset = function(opts) {
+        var i, len;
+        i = -1;
+        len = this.forms.length;
+        for ( ; ++i < len ; ) {
+            this.forms[i].reset(opts);
+        }
+    };
+
+    /**
      * ### ChoiceManager.getValues
      *
      * Returns the values for current selection and other paradata
