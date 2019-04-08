@@ -1,7 +1,9 @@
 # nodegame-widgets change log
 
-## current
-- Feedback and EmailForm can also send set messages (depreacted "say" option, use "send").
+## 5.2.0
+- ChoiceManager.reset to reset all forms in the widget.
+- Fixed ChoiceManager.getValues for forms with requiredChoice truthy.
+- Feedback and EmailForm can also send set messages (deprecated "say" option, use "send").
 - EndScreen askServer.
 - ChoiceTable.setValus accepts and validates preset values.
 - node.widgets.append accepts an id as root element.
