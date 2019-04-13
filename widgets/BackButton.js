@@ -67,7 +67,7 @@
         /**
          * ### BackButton.acrossStages
          *
-         * If TRUE, the Back button allows to go back within the same stage only
+         * If TRUE, it allows to go back to previous stages
          *
          * Default: FALSE
          */
@@ -76,7 +76,7 @@
         /**
          * ### BackButton.acrossRounds
          *
-         * If TRUE, the Back button allows to go back within the same stage only
+         * If TRUE, it allows to go back previous rounds in the same stage
          *
          * Default: TRUE
          */

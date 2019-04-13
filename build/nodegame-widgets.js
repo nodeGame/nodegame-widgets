@@ -1933,7 +1933,7 @@
         /**
          * ### BackButton.acrossStages
          *
-         * If TRUE, the Back button allows to go back within the same stage only
+         * If TRUE, it allows to go back to previous stages
          *
          * Default: FALSE
          */
@@ -1942,7 +1942,7 @@
         /**
          * ### BackButton.acrossRounds
          *
-         * If TRUE, the Back button allows to go back within the same stage only
+         * If TRUE, it allows to go back previous rounds in the same stage
          *
          * Default: TRUE
          */
@@ -2084,9 +2084,7 @@
      * @return {GameStage|Boolean} The previous step or FALSE if none is found
      */
     function getPreviousStep(that) {
-        var curStage,  prevStage;
-        curStage = node.game.getCurrentGameStage();
-        if (curStage.stage === 0) return;
+        var prevStage;
         prevStage = node.game.getPreviousStep();
         if (prevStage.stage === 0) return;
         if ((curStage.stage > prevStage.stage) && !that.acrossStages) {
@@ -5234,8 +5232,8 @@
             missValues: []
         };
         opts = opts || {};
+        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
         if (opts.markAttempt) obj.isCorrect = true;
-        opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
             form = this.forms[i];

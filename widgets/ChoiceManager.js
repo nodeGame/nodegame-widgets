@@ -580,8 +580,8 @@
             missValues: []
         };
         opts = opts || {};
+        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
         if (opts.markAttempt) obj.isCorrect = true;
-        opts = opts || {};
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
             form = this.forms[i];
