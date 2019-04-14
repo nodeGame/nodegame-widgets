@@ -19,7 +19,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.5.0';
+    Feedback.version = '1.6.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
@@ -71,7 +71,7 @@
             if (param.len !== 1) res += 's';
             if (param.needed) res += ' needed';
             else if (param.over) res += ' over';
-            else res += ' remaining';
+            else if (!param.justcount) res += ' remaining';
             return res;
         }
     };
@@ -141,15 +141,15 @@
          *
          * The maximum character length for feedback to be submitted
          *
-         * Default: 800
+         * Default: 0
          */
         if ('undefined' === typeof options.maxChars) {
-            this.maxChars = 800;
+            this.maxChars = 0;
         }
         else {
             tmp = J.isInt(options.maxChars, 0);
             if (tmp !== false) {
-                this.maxChars = options.maxChars;
+                this.maxChars = tmp;
             }
             else {
                 throw new TypeError('Feedback constructor: maxChars ' +
@@ -165,15 +165,21 @@
          *
          * If minChars = 0, then there is no minimum length checked.
          *
-         * Default: 1
+         * Default: 0
          */
         if ('undefined' === typeof options.minChars) {
-            this.minChars = 1;
+            this.minChars = 0;
         }
         else {
             tmp = J.isInt(options.minChars, 0, undefined, true);
             if (tmp !== false) {
-                this.minChars = options.minChars;
+                if (this.maxChars && tmp > this.maxChars) {
+                    throw new TypeError('Feedback constructor: minChars ' +
+                                        'cannot be greater than maxChars. ' +
+                                        'Found: ' + tmp + ' > ' +
+                                        this.maxChars);
+                }
+                this.minChars = tmp;
             }
             else {
                 throw new TypeError('Feedback constructor: minChars ' +
@@ -211,7 +217,7 @@
          *
          * The minimum number of words for feedback to be submitted
          *
-         * If minChars = 0, then there is no minimum checked.
+         * If minWords = 0, then there is no minimum checked.
          *
          * Default: 0
          */
@@ -242,6 +248,22 @@
             }
         }
 
+        // Extra checks.
+        if (this.maxWords) {
+            if (this.maxChars && this.maxChars < this.maxWords) {
+                throw new TypeError('Feedback constructor: maxChars ' +
+                                    'cannot be smaller than maxWords. ' +
+                                    'Found: ' + this.maxChars + ' > ' +
+                                    this.maxWords);
+            }
+            if (this.minChars > this.maxWords) {
+                throw new TypeError('Feedback constructor: minChars ' +
+                                    'cannot be greater than maxWords. ' +
+                                    'Found: ' + this.minChars + ' > ' +
+                                    this.maxWords);
+            }
+        }
+
         /**
          * ### Feedback.rows
          *
@@ -266,23 +288,27 @@
          *
          * The maximum character length for an attempt to submit feedback
          *
-         * Attempts are stored in the attempts array. This allows to store
-         * longer texts than accepts feedbacks
+         * Attempts are stored in the attempts array. You can store attempts
+         * longer than valid feedbacks.
          *
-         * Default: Max(2000, maxChars)
+         * Set to 0 for no limit.
+         *
+         * Default: 0
          */
         if ('undefined' === typeof options.maxAttemptLength) {
-            this.maxAttemptLength = 2000;
-        }
-        else if (J.isNumber(options.maxAttemptLength, 0) !== false) {
-            this.maxAttemptLength = Math.max(this.maxChars,
-                                             options.maxAttemptLength);
+            this.maxAttemptLength = 0;
         }
         else {
-            throw new TypeError('Feedback constructor: ' +
+            tmp = J.isNumber(options.maxAttemptLength, 0);
+            if (tmp !== false) {
+                this.maxAttemptLength = tmp;
+            }
+            else {
+                throw new TypeError('Feedback constructor: ' +
                                 'options.maxAttemptLength must be a number ' +
-                                '>= 0 or undefined. Found: ' +
+                                '> 0 or undefined. Found: ' +
                                 options.maxAttemptLength);
+            }
         }
 
         /**
@@ -431,6 +457,7 @@
      * @return {boolean} TRUE, if the feedback is valid
      *
      * @see Feedback.getValues
+     * @see Feedback.maxAttemptLength
      * @see getFeedback
      */
     Feedback.prototype.verifyFeedback = function(markAttempt, updateUI) {
@@ -468,10 +495,11 @@
             updateCharColor = colOver;
         }
         else {
-            tmp = this.maxChars - length;
+            tmp = this.maxChars ? this.maxChars - length : length;
             updateCharCount = tmp + this.getText('counter', {
                 chars: true,
-                len: tmp
+                len: tmp,
+                justcount: !this.maxChars
             });
             updateCharColor = colRemain;
         }
@@ -507,11 +535,12 @@
                 updateWordColor = colOver;
             }
             else {
-                  tmp = this.maxWords - length;
-                  updateWordCount = tmp + this.getText('counter', {
-                      len: tmp
-                  });
-                  updateWordColor = colRemain;
+                tmp = this.maxWords ? this.maxWords - length : length;
+                updateWordCount = tmp + this.getText('counter', {
+                    len: tmp,
+                    justcount: !this.maxWords
+                });
+                updateWordColor = colRemain;
             }
         }
 
@@ -528,7 +557,7 @@
         }
 
         if (!res && ('undefined' === typeof markAttempt || markAttempt)) {
-            if (length > this.maxAttemptLength) {
+            if (this.maxAttemptLength && length > this.maxAttemptLength) {
                 feedback = feedback.substr(0, this.maxAttemptLength);
             }
             this.attempts.push(feedback);
