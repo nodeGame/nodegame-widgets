@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.8.0';
+    CustomInput.version = '0.9.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -1066,6 +1066,15 @@
      * The postprocess function is called if specified
      *
      * @param {object} opts Optional. Configures the return value.
+     *   Available options:
+     *
+     *   - markAttempt: If TRUE, getting the value counts as an attempt
+     *       to find the correct answer. Default: TRUE.
+     *   - highlight:   If TRUE, if current value is not the correct
+     *       value, widget will be highlighted. Default: TRUE.
+     *   - reset:       If TRUTHY and a correct choice is selected (or not
+     *       specified), then it resets the state of the widgets before
+     *       returning it. Default: FALSE.
      *
      * @return {mixed} The value in the input
      *
@@ -1075,18 +1084,21 @@
     CustomInput.prototype.getValues = function(opts) {
         var res, valid;
         opts = opts || {};
+        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         res = this.input.value;
         res = this.validation ? this.validation(res) : { value: res };
-        res.isCorrect = valid = !res.err;
+        valid = !res.err;
         res.timeBegin = this.timeBegin;
         res.timeEnd = this.timeEnd;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
         if (!valid) {
-            this.setError(res.err);
-            res.isCorrect = false;
+            if (opts.highlight) this.setError(res.err);
+            if (opts.markAttempt) res.isCorrect = false;
         }
-        else if (opts.reset) {
-            this.reset();
+        else {
+            if (opts.markAttempt) res.isCorrect = true;
+            if (opts.reset) this.reset();
         }
         res.id = this.id;
         return res;

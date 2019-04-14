@@ -19,7 +19,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.4.0';
+    Feedback.version = '1.5.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
@@ -671,6 +671,9 @@
             opts.sendAnyway = opts.sayAnyway;
         }
 
+        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
+
         feedback = getFeedback.call(this);
 
         if (opts.keepBreaks) feedback = feedback.replace(/\n\r?/g, '<br />');
@@ -687,9 +690,9 @@
                 timeBegin: this.timeInputBegin,
                 feedback: feedback,
                 attempts: this.attempts,
-                valid: res,
-                isCorrect: res
+                valid: res
             };
+            if (opts.markAttempt) feedback.isCorrect = res;
         }
 
         // Send the message.

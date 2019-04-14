@@ -2084,7 +2084,9 @@
      * @return {GameStage|Boolean} The previous step or FALSE if none is found
      */
     function getPreviousStep(that) {
-        var prevStage;
+        var curStage,  prevStage;
+        curStage = node.game.getCurrentGameStage();
+        if (curStage.stage === 0) return;
         prevStage = node.game.getPreviousStep();
         if (prevStage.stage === 0) return;
         if ((curStage.stage > prevStage.stage) && !that.acrossStages) {
@@ -5217,7 +5219,7 @@
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, forms that do not have a correct value
-     *      will be highlighted. Default: FALSE.
+     *      will be highlighted. Default: TRUE.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -5233,6 +5235,7 @@
         };
         opts = opts || {};
         if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         if (opts.markAttempt) obj.isCorrect = true;
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
@@ -5300,7 +5303,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.5.1';
+    ChoiceTable.version = '1.6.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -6719,7 +6722,7 @@
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *       to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, if current value is not the correct
-     *       value, widget will be highlighted. Default: FALSE.
+     *       value, widget will be highlighted. Default: TRUE.
      *   - reset:       If TRUTHY and a correct choice is selected (or not
      *       specified), then it resets the state of the widgets before
      *       returning it. Default: FALSE.
@@ -6739,6 +6742,7 @@
             time: this.timeCurrentChoice,
             nClicks: this.numberOfClicks
         };
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         if (opts.processChoice) {
             obj.choice = opts.processChoice.call(this, obj.choice);
         }
@@ -7053,7 +7057,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.5.0';
+    ChoiceTableGroup.version = '1.6.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -7979,7 +7983,7 @@
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, if current value is not the correct
-     *      value, widget will be highlighted. Default: FALSE.
+     *      value, widget will be highlighted. Default: TRUE.
      *   - reset:    If TRUTHY and no item raises an error,
      *       then it resets the state of all items before
      *       returning it. Default: FALSE.
@@ -7998,6 +8002,7 @@
             isCorrect: true
         };
         opts = opts || {};
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         // Make sure reset is done only at the end.
         toReset = opts.reset;
         opts.reset = false;
@@ -8016,9 +8021,9 @@
                 toHighlight = true;
             }
         }
-
-        if (toHighlight) this.highlight();
+        if (opts.highlight && toHighlight) this.highlight();
         else if (toReset) this.reset(toReset);
+        opts.reset = toReset;
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
@@ -8702,7 +8707,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.8.0';
+    CustomInput.version = '0.9.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -9753,6 +9758,15 @@
      * The postprocess function is called if specified
      *
      * @param {object} opts Optional. Configures the return value.
+     *   Available options:
+     *
+     *   - markAttempt: If TRUE, getting the value counts as an attempt
+     *       to find the correct answer. Default: TRUE.
+     *   - highlight:   If TRUE, if current value is not the correct
+     *       value, widget will be highlighted. Default: TRUE.
+     *   - reset:       If TRUTHY and a correct choice is selected (or not
+     *       specified), then it resets the state of the widgets before
+     *       returning it. Default: FALSE.
      *
      * @return {mixed} The value in the input
      *
@@ -9762,18 +9776,21 @@
     CustomInput.prototype.getValues = function(opts) {
         var res, valid;
         opts = opts || {};
+        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         res = this.input.value;
         res = this.validation ? this.validation(res) : { value: res };
-        res.isCorrect = valid = !res.err;
+        valid = !res.err;
         res.timeBegin = this.timeBegin;
         res.timeEnd = this.timeEnd;
         if (this.postprocess) res.value = this.postprocess(res.value, valid);
         if (!valid) {
-            this.setError(res.err);
-            res.isCorrect = false;
+            if (opts.highlight) this.setError(res.err);
+            if (opts.markAttempt) res.isCorrect = false;
         }
-        else if (opts.reset) {
-            this.reset();
+        else {
+            if (opts.markAttempt) res.isCorrect = true;
+            if (opts.reset) this.reset();
         }
         res.id = this.id;
         return res;
@@ -10827,7 +10844,7 @@
 
     // ## Meta-data
 
-    EmailForm.version = '0.11.0';
+    EmailForm.version = '0.12.0';
     EmailForm.description = 'Displays a configurable email form.';
 
     EmailForm.title = 'Email';
@@ -11091,6 +11108,9 @@
             opts.sendAnyway = opts.sayAnyway;
         }
 
+        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
+
         email = getEmail.call(this);
 
         if (opts.verify !== false) {
@@ -11103,8 +11123,8 @@
                 time: this.timeInput,
                 email: email,
                 attempts: this.attempts,
-                valid: res
             };
+            if (opts.markAttempt) email.isCorrect = res;
         }
 
         if (res === false) {
@@ -11706,7 +11726,7 @@
 
     // ## Meta-data
 
-    Feedback.version = '1.4.0';
+    Feedback.version = '1.5.0';
     Feedback.description = 'Displays a configurable feedback form';
 
     Feedback.title = 'Feedback';
@@ -12358,6 +12378,9 @@
             opts.sendAnyway = opts.sayAnyway;
         }
 
+        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
+
         feedback = getFeedback.call(this);
 
         if (opts.keepBreaks) feedback = feedback.replace(/\n\r?/g, '<br />');
@@ -12374,9 +12397,9 @@
                 timeBegin: this.timeInputBegin,
                 feedback: feedback,
                 attempts: this.attempts,
-                valid: res,
-                isCorrect: res
+                valid: res
             };
+            if (opts.markAttempt) feedback.isCorrect = res;
         }
 
         // Send the message.

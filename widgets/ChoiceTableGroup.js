@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.5.0';
+    ChoiceTableGroup.version = '1.6.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -943,7 +943,7 @@
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, if current value is not the correct
-     *      value, widget will be highlighted. Default: FALSE.
+     *      value, widget will be highlighted. Default: TRUE.
      *   - reset:    If TRUTHY and no item raises an error,
      *       then it resets the state of all items before
      *       returning it. Default: FALSE.
@@ -962,6 +962,7 @@
             isCorrect: true
         };
         opts = opts || {};
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         // Make sure reset is done only at the end.
         toReset = opts.reset;
         opts.reset = false;
@@ -980,9 +981,9 @@
                 toHighlight = true;
             }
         }
-
-        if (toHighlight) this.highlight();
+        if (opts.highlight && toHighlight) this.highlight();
         else if (toReset) this.reset(toReset);
+        opts.reset = toReset;
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };

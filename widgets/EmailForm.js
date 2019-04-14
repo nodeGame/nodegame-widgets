@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    EmailForm.version = '0.11.0';
+    EmailForm.version = '0.12.0';
     EmailForm.description = 'Displays a configurable email form.';
 
     EmailForm.title = 'Email';
@@ -279,6 +279,9 @@
             opts.sendAnyway = opts.sayAnyway;
         }
 
+        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
+
         email = getEmail.call(this);
 
         if (opts.verify !== false) {
@@ -291,8 +294,8 @@
                 time: this.timeInput,
                 email: email,
                 attempts: this.attempts,
-                valid: res
             };
+            if (opts.markAttempt) email.isCorrect = res;
         }
 
         if (res === false) {

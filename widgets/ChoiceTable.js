@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.5.1';
+    ChoiceTable.version = '1.6.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -1436,7 +1436,7 @@
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *       to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, if current value is not the correct
-     *       value, widget will be highlighted. Default: FALSE.
+     *       value, widget will be highlighted. Default: TRUE.
      *   - reset:       If TRUTHY and a correct choice is selected (or not
      *       specified), then it resets the state of the widgets before
      *       returning it. Default: FALSE.
@@ -1456,6 +1456,7 @@
             time: this.timeCurrentChoice,
             nClicks: this.numberOfClicks
         };
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         if (opts.processChoice) {
             obj.choice = opts.processChoice.call(this, obj.choice);
         }

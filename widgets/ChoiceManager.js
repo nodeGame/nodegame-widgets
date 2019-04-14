@@ -565,7 +565,7 @@
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, forms that do not have a correct value
-     *      will be highlighted. Default: FALSE.
+     *      will be highlighted. Default: TRUE.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -581,6 +581,7 @@
         };
         opts = opts || {};
         if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         if (opts.markAttempt) obj.isCorrect = true;
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
