@@ -5397,7 +5397,6 @@
             // Not a clickable choice.
             if ('undefined' === typeof that.choicesIds[td.id]) return;
 
-
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -5463,8 +5462,13 @@
             // Remove any warning/errors on click.
             if (that.isHighlighted()) that.unhighlight();
 
-            // Call onclick, if any.
-            if (that.onclick) that.onclick.call(that, value, td, removed);
+            // Call onclick, if any. 
+            if (that.onclick) {
+                // TODO: Should we parseInt it anyway when we store
+                // the current choice?
+                value = parseInt(value, 10);
+                that.onclick.call(that, value, td, removed, that);
+            }
         };
 
         /**
@@ -8721,7 +8725,8 @@
         'int': true,
         date: true,
         list: true,
-        us_city_state_zip: true
+        us_city_state_zip: true,
+        us_state: true
     };
 
     var sepNames = {
@@ -8814,13 +8819,18 @@
             return 'Too many items. Max: ' + w.params.maxItems;
 
         },
-        usStateErr: 'Not valid state abbreviation (must be 2 characters)',
-        usZipErr: 'Not valid ZIP code (must be 5-digits)',
+        usStateAbbrErr: 'Not a valid state abbreviation (must be 2 characters)',
+        usStateErr: 'Not a valid state (full name required)',
+        usZipErr: 'Not a valid ZIP code (must be 5-digits)',
         autoHint: function(w) {
             var res, sep;
             if (w.type === 'list') {
                 sep = sepNames[w.params.listSep] || w.params.listSep;
                 res = '(if more than one, separate with ' + sep + ')';
+            }
+            else if (w.type === 'us_state') {
+                res = w.params.abbr ? '(Use 2-letter abbreviation)' :
+                    '(Type the full name of state)';
             }
             else if (w.type === 'us_city_state_zip') {
                 sep = w.params.listSep;
@@ -9059,6 +9069,27 @@
          * When the last character was inserted
          */
         this.timeEnd = null;
+
+        /**
+         * ### CustomInput.checkbox
+         *
+         * A checkbox element for an additional action
+         */
+        this.checkbox = null;
+
+        /**
+         * ### CustomInput.checkboxText
+         *
+         * The text next to the checkbox
+         */
+        this.checkboxText = null;
+
+        /**
+         * ### CustomInput.checkboxCb
+         *
+         * The callback executed when the checkbox is clicked
+         */
+        this.checkboxCb = null;
     }
 
     // ## CustomInput methods
@@ -9368,6 +9399,42 @@
                     return res;
                 };
             }
+            else if (this.type === 'us_state') {
+                if (opts.abbreviation) {
+                    this.params.abbr = true;
+                    this.inputWidth = '100px';
+                }
+                else {
+                    this.inputWidth = '200px';
+                }
+                if (opts.territories !== false) {
+                    this.terr = true;
+                    if (this.params.abbr) {
+                        tmp = getUsStatesList('usStatesTerrByAbbr');
+                    }
+                    else {
+                        tmp = getUsStatesList('usStatesTerr');
+                    }
+                }
+                else {
+                    if (this.params.abbr) {
+                        tmp = getUsStatesList('usStatesByAbbr');
+                    }
+                    else {
+                        tmp = getUsStatesList('usStates');
+                    }
+                }
+                this.params.usStateVal = tmp;
+
+                tmp = function(value) {
+                    var res;
+                    res = { value: value };
+                    if (!that.params.usStateVal[value]) {
+                        res.err = that.getText('usStateErr');
+                    }
+                    return res;
+                };
+            }
             // Lists.
 
             else if (this.type === 'list' ||
@@ -9386,17 +9453,14 @@
                 }
 
                 if (this.type === 'us_city_state_zip') {
-                    // Create validation abbr.
-                    if (!usStatesTerrByAbbr) {
-                        usStatesTerr = J.mixin(usStates, usTerr);
-                        usStatesTerrByAbbr = J.reverseObj(usStatesTerr);
-                    }
+
+                    createStateList(true, true, true);
                     this.params.minItems = this.params.maxItems = 3;
                     this.params.fixedSize = true;
                     this.params.itemValidation = function(item, idx) {
                         if (idx === 2) {
                             if (!usStatesTerrByAbbr[item.toUpperCase()]) {
-                                return { err: that.getText('usStateErr') };
+                                return { err: that.getText('usStateAbbrErr') };
                             }
                         }
                         else if (idx === 3) {
@@ -9630,6 +9694,26 @@
             }
             this.inputWidth = opts.width;
         }
+
+        if (opts.checkboxText) {
+            if ('string' !== typeof opts.checkboxText) {
+                throw new TypeError(e + 'checkboxText must be string or ' +
+                                    'undefined. Found: ' + opts.checkboxText);
+            }
+            this.checkboxText = opts.checkboxText;
+        }
+
+        if (opts.checkboxCb) {
+            if (!this.checkboxText) {
+                throw new TypeError(e + 'checkboxCb cannot be defined ' +
+                                    'if checkboxText is not defined');
+            }
+            if ('function' !== typeof opts.checkboxCb) {
+                throw new TypeError(e + 'checkboxCb must be function or ' +
+                                    'undefined. Found: ' + opts.checkboxCb);
+            }
+            this.checkboxCb = opts.checkboxCb;
+        }
     };
 
 
@@ -9686,6 +9770,25 @@
         this.input.onclick = function() {
             if (that.isHighlighted()) that.unhighlight();
         };
+
+
+        // Checkbox.
+        if (this.checkboxText) {
+            this.checkbox = W.append('input', this.bodyDiv, {
+                type: 'checkbox',
+                className: 'custominput-checkbox'
+            });
+            W.append('span', this.bodyDiv, {
+                className: 'custominput-checkbox-text',
+                innerHTML: this.checkboxText
+            });
+
+            if (this.checkboxCb) {
+                J.addEvent(this.checkbox, 'change', function() {
+                    that.checkboxCb(that.checkbox.checked, that);
+                });
+            }
+        }
     };
 
     /**
@@ -9737,6 +9840,42 @@
         this.highlighted = false;
         this.errorBox.innerHTML = '';
         this.emit('unhighlighted');
+    };
+
+    /**
+     * ### CustomInput.disable
+     *
+     * Disables the widget
+     *
+     * @see CustomInput.disabled
+     */
+    CustomInput.prototype.disable = function(opts) {
+        if (this.disabled) return;
+        if (!this.isAppended()) return;
+        this.disabled = true;
+        this.input.disabled = true;
+        if (this.checkbox && (!opts || opts.checkbox !== false)) {
+            this.checkbox.disable = true;
+        }
+        this.emit('disabled');
+    };
+
+    /**
+     * ### CustomInput.enable
+     *
+     * Enables the widget
+     *
+     * @see CustomInput.disabled
+     */
+    CustomInput.prototype.enable = function(opts) {
+        if (this.disabled !== true) return;
+        if (!this.isAppended()) return;
+        this.disabled = false;
+        this.input.disabled = false;
+        if (this.checkbox && (!opts || opts.checkbox !== false)) {
+            this.checkbox.disable = false;
+        }
+        this.emit('enabled');
     };
 
     /**
@@ -9844,6 +9983,41 @@
                    res.month + p.sep + res.day) + p.sep;
         res.str += p.yearDigits === 2 ? res.year.substring(3,4) : res.year;
         return res;
+    }
+
+
+    // ### getUsStatesList
+    //
+    // Sets the value of a global variable and returns it.
+    //
+    // @param {string} s A string specifying the type of list
+    //
+    // @return {object} The requested list
+    //
+    function getUsStatesList(s) {
+        switch(s) {
+        case 'usStatesTerrByAbbr':
+            if (!usStatesTerrByAbbr) {
+                createStateList('usStatesTerr');
+                usStatesTerrByAbbr = J.reverseObj(usStatesTerr);
+            }
+            return usStatesTerrByAbbr;
+        case 'usTerrByAbbr':
+            if (!usTerrByAbbr) usTerrByAbbr = J.reverseObj(usTerr);
+            return usTerrByAbbr;
+        case 'usStatesByAbbr':
+            if (!usStatesByAbbr) usStatesByAbbr = J.reverseObj(usStates);
+            return usStatesByAbbr;
+        case 'usStatesTerr':
+            if (!usStatesTerr) usStatesTerr = J.mixin(usStates, usTerr);
+            return usStatesTerr;
+        case 'usStates':
+            return usStates;
+        case 'usTerr':
+            return usTerr;
+        default:
+            throw new Error('getUsStatesList: unknown request: ' + s);
+        }
     }
 
 })(node);
