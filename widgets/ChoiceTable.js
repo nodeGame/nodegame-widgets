@@ -111,7 +111,6 @@
             // Not a clickable choice.
             if ('undefined' === typeof that.choicesIds[td.id]) return;
 
-
             // Relative time.
             if ('string' === typeof that.timeFrom) {
                 that.timeCurrentChoice = node.timer.getTimeSince(that.timeFrom);
@@ -178,7 +177,12 @@
             if (that.isHighlighted()) that.unhighlight();
 
             // Call onclick, if any.
-            if (that.onclick) that.onclick.call(that, value, td, removed);
+            if (that.onclick) {
+                // TODO: Should we parseInt it anyway when we store
+                // the current choice?
+                value = parseInt(value, 10);
+                that.onclick.call(that, value, td, removed, that);
+            }
         };
 
         /**
