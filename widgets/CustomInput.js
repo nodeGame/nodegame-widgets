@@ -30,7 +30,8 @@
         date: true,
         list: true,
         us_city_state_zip: true,
-        us_state: true
+        us_state: true,
+        us_zip: true
     };
 
     var sepNames = {
@@ -125,7 +126,7 @@
         },
         usStateAbbrErr: 'Not a valid state abbreviation (must be 2 characters)',
         usStateErr: 'Not a valid state (full name required)',
-        usZipErr: 'Not a valid ZIP code (must be 5-digits)',
+        usZipErr: 'Not a valid ZIP code (must be 5 digits)',
         autoHint: function(w) {
             var res, sep;
             if (w.type === 'list') {
@@ -135,6 +136,9 @@
             else if (w.type === 'us_state') {
                 res = w.params.abbr ? '(Use 2-letter abbreviation)' :
                     '(Type the full name of state)';
+            }
+            else if (w.type === 'us_zip') {
+                res = '(Use 5-digit ZIP code)';
             }
             else if (w.type === 'us_city_state_zip') {
                 sep = w.params.listSep;
@@ -225,7 +229,7 @@
             return 'Must follow format ' + w.params.format;
         },
         emptyErr: function(w) {
-            return 'Cannot be empty'
+            return 'Cannot be empty';
         }
     };
 
@@ -739,6 +743,17 @@
                     return res;
                 };
             }
+            else if (this.type === 'us_zip') {
+                tmp = function(value) {
+                    var res;
+                    res = { value: value };
+                    if (!isValidUSZip(value)) {
+                        res.err = that.getText('usZipErr');
+                    }
+                    return res;
+                };
+            }
+
             // Lists.
 
             else if (this.type === 'list' ||
@@ -768,7 +783,7 @@
                             }
                         }
                         else if (idx === 3) {
-                            if (item.length !== 5 || !J.isInt(item, 0)) {
+                            if (!isValidUSZip(item)) {
                                 return { err: that.getText('usZipErr') };
                             }
                         }
@@ -857,7 +872,7 @@
                         return { err: that.getText('listSizeErr', 'max') };
                     }
                     return { value: value };
-                }
+                };
             }
 
             // US_Town,State, Zip Code
@@ -1235,6 +1250,7 @@
             if (opts.markAttempt) res.isCorrect = true;
             if (opts.reset) this.reset();
         }
+        if (this.checkbox) res.checked = this.checkbox.checked;
         res.id = this.id;
         return res;
     };
@@ -1289,7 +1305,6 @@
         return res;
     }
 
-
     // ### getUsStatesList
     //
     // Sets the value of a global variable and returns it.
@@ -1322,6 +1337,18 @@
         default:
             throw new Error('getUsStatesList: unknown request: ' + s);
         }
+    }
+
+    // ### isValidUSZip
+    //
+    // Trivial validation of a US ZIP code
+    //
+    // @param {string} z
+    //
+    // @return {boolean} TRUE if valid
+    //
+    function isValidUSZip(z) {
+        return z.length === 5 && J.isInt(z, 0);
     }
 
 })(node);
