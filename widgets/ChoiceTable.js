@@ -630,6 +630,7 @@
         // Set the hint, if any.
         if ('string' === typeof options.hint || false === options.hint) {
             this.hint = options.hint;
+            if (this.requiredChoice) this.hint += ' *';
         }
         else if ('undefined' !== typeof options.hint) {
             throw new TypeError('ChoiceTable.init: options.hint must ' +

@@ -110,6 +110,14 @@
     var usStatesByAbbr;
     var usStatesTerr;
     var usStatesTerrByAbbr;
+    // Lower case keys.
+    var usStatesLow;
+    var usTerrLow;
+    var usStatesTerrLow;
+    var usTerrByAbbrLow;
+    var usStatesByAbbrLow;
+    var usStatesTerrLow;
+    var usStatesTerrByAbbrLow;
 
     CustomInput.texts = {
         listErr: 'Check that there are no empty items; do not end with ' +
@@ -135,7 +143,7 @@
             }
             else if (w.type === 'us_state') {
                 res = w.params.abbr ? '(Use 2-letter abbreviation)' :
-                    '(Type the full name of state)';
+                    '(Type the full name of the state)';
             }
             else if (w.type === 'us_zip') {
                 res = '(Use 5-digit ZIP code)';
@@ -718,18 +726,18 @@
                 if (opts.territories !== false) {
                     this.terr = true;
                     if (this.params.abbr) {
-                        tmp = getUsStatesList('usStatesTerrByAbbr');
+                        tmp = getUsStatesList('usStatesTerrByAbbrLow');
                     }
                     else {
-                        tmp = getUsStatesList('usStatesTerr');
+                        tmp = getUsStatesList('usStatesTerrLow');
                     }
                 }
                 else {
                     if (this.params.abbr) {
-                        tmp = getUsStatesList('usStatesByAbbr');
+                        tmp = getUsStatesList('usStatesByAbbrLow');
                     }
                     else {
-                        tmp = getUsStatesList('usStates');
+                        tmp = getUsStatesList('usStatesLow');
                     }
                 }
                 this.params.usStateVal = tmp;
@@ -737,7 +745,7 @@
                 tmp = function(value) {
                     var res;
                     res = { value: value };
-                    if (!that.params.usStateVal[value]) {
+                    if (!that.params.usStateVal[value.toLowerCase()]) {
                         res.err = that.getText('usStateErr');
                     }
                     return res;
@@ -995,6 +1003,7 @@
                                     'undefined. Found: ' + opts.hint);
             }
             this.hint = opts.hint;
+            if (this.requiredChoice) this.hint += ' *';
         }
         else {
             this.hint = this.getText('autoHint');
@@ -1128,7 +1137,7 @@
     /**
      * ### CustomInput.highlight
      *
-     * Highlights the choice table
+     * Highlights the input
      *
      * @param {string} The style for the table's border.
      *   Default '3px solid red'
@@ -1149,7 +1158,7 @@
     /**
      * ### CustomInput.unhighlight
      *
-     * Removes highlight from the choice table
+     * Removes highlight from the input
      *
      * @see CustomInput.highlighted
      */
@@ -1305,6 +1314,8 @@
         return res;
     }
 
+
+
     // ### getUsStatesList
     //
     // Sets the value of a global variable and returns it.
@@ -1314,29 +1325,81 @@
     // @return {object} The requested list
     //
     function getUsStatesList(s) {
+        var p;
         switch(s) {
+
+        case 'usStatesTerrByAbbrLow':
+            if (!usStatesTerrByAbbrLow) {
+                createStateList('usStatesTerrLow');
+                usStatesTerrByAbbrLow = J.reverseObj(usStatesTerr, toLK);
+            }
+            return usStatesTerrByAbbrLow;
         case 'usStatesTerrByAbbr':
             if (!usStatesTerrByAbbr) {
                 createStateList('usStatesTerr');
                 usStatesTerrByAbbr = J.reverseObj(usStatesTerr);
             }
             return usStatesTerrByAbbr;
+
+        case 'usTerrByAbbrLow':
+            if (!usTerrByAbbrLow) usTerrByAbbrLow = J.reverseObj(usTerr, toLK);
+            return usTerrByAbbrLow;
         case 'usTerrByAbbr':
             if (!usTerrByAbbr) usTerrByAbbr = J.reverseObj(usTerr);
             return usTerrByAbbr;
+
+        case 'usStatesByAbbrLow':
+            if (!usStatesByAbbrLow) {
+                usStatesByAbbrLow = J.reverseObj(usStates, toLK);
+            }
+            return usStatesByAbbrLow;
         case 'usStatesByAbbr':
             if (!usStatesByAbbr) usStatesByAbbr = J.reverseObj(usStates);
             return usStatesByAbbr;
+
+        case 'usStatesTerrLow':
+            if (!usStatesTerrLow) {
+                if (!usStatesLow) usStatesLow = objToLK(usStates);
+                if (!usTerrLow) usTerrLow = objToLK(usTerr);
+                usStatesTerrLow = J.merge(usStatesLow, usTerrLow);
+            }
+            return usStatesTerrLow;
         case 'usStatesTerr':
-            if (!usStatesTerr) usStatesTerr = J.mixin(usStates, usTerr);
+            if (!usStatesTerr) usStatesTerr = J.merge(usStates, usTerr);
             return usStatesTerr;
+
+        case 'usStatesLow':
+            if (!usStatesLow) usStatesLow = objToLow(usStates, toLK);
+            return usStatesLow;
         case 'usStates':
             return usStates;
+
+        case 'usTerrLow':
+            if (!usTerrLow) usTerrLow = objToLow(usTerr, toLK);
+            return usTerrLow;
         case 'usTerr':
             return usTerr;
+
         default:
             throw new Error('getUsStatesList: unknown request: ' + s);
         }
+    }
+
+    // Helper function for getUsStatesList
+    // @see OBJ.reverseObj
+    function toLK(key, value) {
+        return [ key.toLowerCase(), value ];
+    }
+    // Helper function for getUsStatesList
+    function objToLK(obj) {
+        var p, objLow;
+        objLow = {};
+        for (p in obj) {
+            if (obj.hasOwnProperty(p)) {
+                objLow[p.toLowerCase()] = obj[p];
+            }
+        }
+        return objLow;
     }
 
     // ### isValidUSZip
