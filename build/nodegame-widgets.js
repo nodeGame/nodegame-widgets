@@ -5332,7 +5332,9 @@
                 res += 'select at least ' + w.requiredChoice;
             }
         }
-        return res + ')';
+        res += ')';
+        if (w.requiredChoice) res += ' *';
+        return res;
     };
 
     ChoiceTable.separator = '::';
@@ -8869,7 +8871,7 @@
                     res = '(Must be before ' + w.params.max + ')';
                 }
             }
-            return w.requiredChoice ? ((res || '') + '*') : (res || false);
+            return w.requiredChoice ? ((res || '') + ' *') : (res || false);
         },
         numericErr: function(w) {
             var str, p;
@@ -10046,7 +10048,7 @@
     function isValidUSZip(z) {
         return z.length === 5 && J.isInt(z, 0);
     }
-    
+
 })(node);
 
 /**

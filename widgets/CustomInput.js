@@ -173,7 +173,7 @@
                     res = '(Must be before ' + w.params.max + ')';
                 }
             }
-            return w.requiredChoice ? ((res || '') + '*') : (res || false);
+            return w.requiredChoice ? ((res || '') + ' *') : (res || false);
         },
         numericErr: function(w) {
             var str, p;

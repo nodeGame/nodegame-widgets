@@ -46,7 +46,9 @@
                 res += 'select at least ' + w.requiredChoice;
             }
         }
-        return res + ')';
+        res += ')';
+        if (w.requiredChoice) res += ' *';
+        return res;
     };
 
     ChoiceTable.separator = '::';
