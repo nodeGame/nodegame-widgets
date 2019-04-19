@@ -586,15 +586,27 @@
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
             form = this.forms[i];
-            obj.forms[form.id] = form.getValues(opts);
-            if (form.requiredChoice &&
-                (obj.forms[form.id].choice === null ||
-                 (form.selectMultiple && !obj.forms[form.id].choice.length))) {
+            // If it is hidden we do not do validation.
+            if (!form.isHidden()) {
+                obj.forms[form.id] = form.getValues(opts);
+                if (form.requiredChoice &&
+                    (obj.forms[form.id].choice === null ||
+                     (form.selectMultiple &&
+                      !obj.forms[form.id].choice.length))) {
 
-                obj.missValues.push(form.id);
+                    obj.missValues.push(form.id);
+                }
+                if (opts.markAttempt &&
+                    obj.forms[form.id].isCorrect === false) {
+
+                    obj.isCorrect = false;
+                }
             }
-            if (opts.markAttempt && obj.forms[form.id].isCorrect === false) {
-                obj.isCorrect = false;
+            else {
+                obj.forms[form.id] = form.getValues({
+                    markAttempt: false,
+                    highlight: false
+                });
             }
         }
         if (obj.missValues.length) obj.isCorrect = false;

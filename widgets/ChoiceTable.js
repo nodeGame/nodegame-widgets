@@ -183,7 +183,7 @@
                 // TODO: Should we parseInt it anyway when we store
                 // the current choice?
                 value = parseInt(value, 10);
-                that.onclick.call(that, value, td, removed, that);
+                that.onclick.call(that, value, removed, td);
             }
         };
 
