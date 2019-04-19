@@ -29,7 +29,7 @@
         autoHint: function(w) {
             var res, res2;
             if (w.minChars && w.maxChars) {
-                res = 'beetween ' + w.minChars + ' and ' + w.maxChars +
+                res = 'between ' + w.minChars + ' and ' + w.maxChars +
                     ' characters';
             }
             else if (w.minChars) {

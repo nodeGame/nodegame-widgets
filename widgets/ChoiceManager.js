@@ -586,8 +586,14 @@
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
             form = this.forms[i];
-            // If it is hidden we do not do validation.
-            if (!form.isHidden()) {
+            // If it is hidden or disabled we do not do validation.
+            if (form.isHidden() || form.isDisabled()) {
+                obj.forms[form.id] = form.getValues({
+                    markAttempt: false,
+                    highlight: false
+                });
+            }
+            else {
                 obj.forms[form.id] = form.getValues(opts);
                 if (form.requiredChoice &&
                     (obj.forms[form.id].choice === null ||
@@ -601,12 +607,6 @@
 
                     obj.isCorrect = false;
                 }
-            }
-            else {
-                obj.forms[form.id] = form.getValues({
-                    markAttempt: false,
-                    highlight: false
-                });
             }
         }
         if (obj.missValues.length) obj.isCorrect = false;
