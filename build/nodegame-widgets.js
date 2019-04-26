@@ -5240,7 +5240,7 @@
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
             form = this.forms[i];
-            // If it is hidden or disabled we do not do validation.            
+            // If it is hidden or disabled we do not do validation.
             if (form.isHidden() || form.isDisabled()) {
                 obj.forms[form.id] = form.getValues({
                     markAttempt: false,
@@ -12015,7 +12015,7 @@
         autoHint: function(w) {
             var res, res2;
             if (w.minChars && w.maxChars) {
-                res = 'beetween ' + w.minChars + ' and ' + w.maxChars +
+                res = 'between ' + w.minChars + ' and ' + w.maxChars +
                     ' characters';
             }
             else if (w.minChars) {
@@ -12588,7 +12588,7 @@
         });
 
         if (this.showSubmit) {
-            this.submit = W.append('input', this.feedbackForm, {
+            this.submitButton = W.append('input', this.feedbackForm, {
                 className: 'btn btn-lg btn-primary',
                 type: 'submit',
                 value: this.getText('submit')
@@ -12711,7 +12711,7 @@
         }
 
         // Send the message.
-        if ((opts.send && res) || opts.sendAnyway) {
+        if (feedback !== '' && ((opts.send && res) || opts.sendAnyway)) {
             this.sendValues({ values: feedback });
             if (opts.updateUI) {
                 this.submitButton.setAttribute('value', this.getText('sent'));

@@ -725,7 +725,7 @@
         }
 
         // Send the message.
-        if ((opts.send && res) || opts.sendAnyway) {
+        if (feedback !== '' && ((opts.send && res) || opts.sendAnyway)) {
             this.sendValues({ values: feedback });
             if (opts.updateUI) {
                 this.submitButton.setAttribute('value', this.getText('sent'));
