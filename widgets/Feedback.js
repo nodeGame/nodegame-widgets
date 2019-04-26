@@ -602,7 +602,7 @@
         });
 
         if (this.showSubmit) {
-            this.submit = W.append('input', this.feedbackForm, {
+            this.submitButton = W.append('input', this.feedbackForm, {
                 className: 'btn btn-lg btn-primary',
                 type: 'submit',
                 value: this.getText('submit')
