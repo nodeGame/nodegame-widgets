@@ -1269,11 +1269,54 @@
      *
      * Set the value of the input form
      *
-     * @param {string} The error msg (can contain HTML)
+     * @param {object} opts An object containing values or info about how
+     *   how to set values.
      *
      * @experimental
      */
-    CustomInput.prototype.setValues = function(value) {
+    CustomInput.prototype.setValues = function(opts) {
+        var value;
+        if (opts && 'undefined' !== typeof opts.value) {
+            value = opts.value;
+        }
+        else {
+            //             text: true,
+            //             number: true,
+            //             'float': true,
+            //             'int': true,
+            //             date: true,
+            //             list: true,
+            //             us_city_state_zip: true,
+            //             us_state: true,
+            //             us_zip: true
+
+            // TODO: actually do it random.
+
+            if (this.type === 'text') {
+                value = J.randomString();
+            }
+            else if (this.type === 'number') {
+                value = 1;
+            }
+            else if (this.type === 'float') {
+                value = 1.1;
+            }
+            else if (this.type === 'date') {
+                value = '02/26/1983';
+            }
+            else if (this.type === 'list') {
+                value = 'one, two';
+            }
+            else if (this.type === 'us_city_state_zip') {
+                value = 'Brooklyn, NY, 11249';
+            }
+            else if (this.type === 'us_state') {
+                value = 'NEW YORK';
+            }
+            else if (this.type === 'us_zip') {
+                value = '11249';
+            }
+        }
         this.input.value = value;
     };
 

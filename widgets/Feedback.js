@@ -635,11 +635,16 @@
      * Set the value of the feedback
      */
     Feedback.prototype.setValues = function(options) {
-        var feedback;
+        var feedback, maxChars;
         options = options || {};
         if (!options.feedback) {
-            feedback = J.randomString(J.randomInt(0, this.maxChars),
-                                      'aA_1');
+            if (this.maxChars) {
+                maxChars = this.maxChars;
+            }
+            else if (this.maxWords) {
+                maxChars = this.maxWords * 4;
+            }
+            feedback = J.randomString(J.randomInt(0, maxChars), 'aA_1');
         }
         else {
             feedback = options.feedback;
