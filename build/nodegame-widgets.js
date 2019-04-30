@@ -9986,7 +9986,7 @@
      * @experimental
      */
     CustomInput.prototype.setValues = function(opts) {
-        var value;
+        var value, tmp;
         if (opts && 'undefined' !== typeof opts.value) {
             value = opts.value;
         }
@@ -10002,9 +10002,9 @@
             //             us_zip: true
 
             // TODO: actually do it random.
-            
+
             if (this.type === 'text') {
-                value = J.randomString();
+                value = J.randomString(this.params.upper || 6);
             }
             else if (this.type === 'number') {
                 value = 1;
@@ -10013,7 +10013,12 @@
                 value = 1.1;
             }
             else if (this.type === 'date') {
-                value = '02/26/1983';
+                // Play it safe. TODO: Make it better.
+                value = J.randomInt(0, 12) +
+                    this.params.sep +
+                    J.randomInt(0, 28) +
+                    this.params.sep +
+                    J.randomInt(1911, 2011);
             }
             else if (this.type === 'list') {
                 value = 'one, two';
