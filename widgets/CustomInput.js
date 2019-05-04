@@ -790,6 +790,13 @@
                     }
                     return res;
                 };
+
+                setValues = function(opts) {
+                    var keys;
+                    keys = Object.keys(that.params.usStateVal);
+                    return keys[ keys.length * Math.random() << 0];
+                };
+
             }
             else if (this.type === 'us_zip') {
                 tmp = function(value) {
@@ -799,6 +806,10 @@
                         res.err = that.getText('usZipErr');
                     }
                     return res;
+                };
+
+                setValues = function(opts) {
+                    return Math.floor(Math.random()*90000) + 10000;
                 };
             }
 
@@ -1335,7 +1346,8 @@
             if (this.type === 'text' ||
                 this.type === 'number' ||
                 this.type === 'float' ||
-                this.type === 'date') {
+                this.type === 'date' ||
+                this.type === 'us_state') {
 
                 value = this._setValues(opts);
             }
@@ -1345,14 +1357,9 @@
             else if (this.type === 'us_city_state_zip') {
                 value = 'Brooklyn, NY, 11249';
             }
-            else if (this.type === 'us_state') {
-                value = 'NEW YORK';
-            }
-            else if (this.type === 'us_zip') {
-                value = '11249';
-            }
         }
         this.input.value = value;
+        if (this.preprocess) this.preprocess(this.input)
     };
 
     // ## Helper functions.
