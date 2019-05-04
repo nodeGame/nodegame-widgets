@@ -418,7 +418,7 @@
      * @param {object} opts Configuration options
      */
     CustomInput.prototype.init = function(opts) {
-        var tmp, that, e, isText;
+        var tmp, that, e, isText, setValues;
         that = this;
         e = 'CustomInput.init: ';
 
@@ -552,6 +552,15 @@
                         if (err) out.err = that.getText('textErr', len);
                         return out;
                     };
+
+                    setValues = function(opts) {
+                        var a, b;
+                        a = 'undefined' !== typeof that.params.lower ?
+                            (that.params.lower + 1) : 5;
+                        b = 'undefined' !== typeof that.params.upper ?
+                            that.params.upper : (a + 5);
+                        return J.randomString(J.randomInt(a, b));
+                    };
                 }
                 else {
                     tmp = (function() {
@@ -570,6 +579,21 @@
                             };
                         };
                     })();
+
+                    setValues = function(opts) {
+                        var p, a, b;
+                        p = that.params;
+                        if (that.type === 'float') return J.random();
+                        a = 0;
+                        b = 10;
+                        if ('undefined' !== typeof p.lower) {
+                            a = p.leq ? (p.lower - 1) : p.lower;
+                        }
+                        if ('undefined' !== typeof p.upper) {
+                            b = p.ueq ? p.upper : (p.upper - 1);
+                        }
+                        return J.randomInt(a, b);
+                    };
                 }
 
                 // Preset inputWidth.
@@ -713,6 +737,22 @@
                         res = { value: res };
                     }
                     return res;
+                };
+
+                setValues = function(opts) {
+                    var p, minD, maxD, d, day, month, year;
+                    p = that.params;
+                    minD = p.minDate ? p.minDate.obj : new Date('01/01/1900');
+                    maxD = p.maxDate ? p.maxDate.obj : undefined;
+                    d = J.randomDate(minD, maxD);
+                    day = d.getDate();
+                    month = (d.getMonth() + 1);
+                    year = d.getFullYear();
+                    if (p.yearDigits === 2) year = ('' + year).substr(2);
+                    if (p.monthPos === 0) d = month + p.sep + day;
+                    else d = day + p.sep + month;
+                    d += p.sep + year;
+                    return d;
                 };
             }
             else if (this.type === 'us_state') {
@@ -903,7 +943,7 @@
             return res;
         };
 
-
+        this._setValues = setValues;
 
         // Preprocess
 
@@ -1292,22 +1332,12 @@
 
             // TODO: actually do it random.
 
-            if (this.type === 'text') {
-                value = J.randomString(this.params.upper || 6);
-            }
-            else if (this.type === 'number') {
-                value = 1;
-            }
-            else if (this.type === 'float') {
-                value = 1.1;
-            }
-            else if (this.type === 'date') {
-                // Play it safe. TODO: Make it better.
-                value = J.randomInt(0, 12) +
-                    this.params.sep +
-                    J.randomInt(0, 28) +
-                    this.params.sep +
-                    J.randomInt(1911, 2011);
+            if (this.type === 'text' ||
+                this.type === 'number' ||
+                this.type === 'float' ||
+                this.type === 'date') {
+
+                value = this._setValues(opts);
             }
             else if (this.type === 'list') {
                 value = 'one, two';
