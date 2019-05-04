@@ -792,9 +792,7 @@
                 };
 
                 setValues = function(opts) {
-                    var keys;
-                    keys = Object.keys(that.params.usStateVal);
-                    return keys[ keys.length * Math.random() << 0];
+                    return J.randomKey(that.params.usStateVal);
                 };
 
             }
@@ -832,7 +830,7 @@
 
                 if (this.type === 'us_city_state_zip') {
 
-                    createStateList(true, true, true);
+                    getUsStatesList('usStatesTerrByAbbr');
                     this.params.minItems = this.params.maxItems = 3;
                     this.params.fixedSize = true;
                     this.params.itemValidation = function(item, idx) {
@@ -932,6 +930,32 @@
                     }
                     return { value: value };
                 };
+
+                if (this.type === 'us_city_state_zip') {
+                    setValues = function(opts) {
+                        var sep;
+                        sep = that.params.listSep + ' ';
+                        return J.randomString(8) + sep +
+                            J.randomKey(usStatesTerrByAbbr) + sep +
+                            (Math.floor(Math.random()*90000) + 10000);
+                    };
+                }
+                else {
+                    setValues = function(opts) {
+                        var p, minItems, nItems, i, str;
+                        p = that.params;
+                        minItems = p.minItems || 0;
+                        nItems = J.randomInt(minItems,
+                                             p.maxItems || (minItems + 4)) + 1;
+                        str = '';
+                        for (i = 0; i < nItems; i++) {
+                            if (i !== 0) str += p.listSep + ' ';
+                            str += J.randomString(J.randomInt(3,10));
+                        }
+                        return str;
+                    };
+                }
+
             }
 
             // US_Town,State, Zip Code
@@ -1331,32 +1355,7 @@
             value = opts.value;
         }
         else {
-            //             text: true,
-            //             number: true,
-            //             'float': true,
-            //             'int': true,
-            //             date: true,
-            //             list: true,
-            //             us_city_state_zip: true,
-            //             us_state: true,
-            //             us_zip: true
-
-            // TODO: actually do it random.
-
-            if (this.type === 'text' ||
-                this.type === 'number' ||
-                this.type === 'float' ||
-                this.type === 'date' ||
-                this.type === 'us_state') {
-
-                value = this._setValues(opts);
-            }
-            else if (this.type === 'list') {
-                value = 'one, two';
-            }
-            else if (this.type === 'us_city_state_zip') {
-                value = 'Brooklyn, NY, 11249';
-            }
+            value = this._setValues(opts);
         }
         this.input.value = value;
         if (this.preprocess) this.preprocess(this.input)
@@ -1415,13 +1414,13 @@
 
         case 'usStatesTerrByAbbrLow':
             if (!usStatesTerrByAbbrLow) {
-                createStateList('usStatesTerrLow');
+                getUsStatesList('usStatesTerrLow');
                 usStatesTerrByAbbrLow = J.reverseObj(usStatesTerr, toLK);
             }
             return usStatesTerrByAbbrLow;
         case 'usStatesTerrByAbbr':
             if (!usStatesTerrByAbbr) {
-                createStateList('usStatesTerr');
+                getUsStatesList('usStatesTerr');
                 usStatesTerrByAbbr = J.reverseObj(usStatesTerr);
             }
             return usStatesTerrByAbbr;
