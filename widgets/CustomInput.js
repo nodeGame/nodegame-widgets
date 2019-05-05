@@ -113,7 +113,6 @@
     // Lower case keys.
     var usStatesLow;
     var usTerrLow;
-    var usStatesTerrLow;
     var usTerrByAbbrLow;
     var usStatesByAbbrLow;
     var usStatesTerrLow;
@@ -942,15 +941,25 @@
                 }
                 else {
                     setValues = function(opts) {
-                        var p, minItems, nItems, i, str;
+                        var p, minItems, nItems, i, str, sample;
                         p = that.params;
                         minItems = p.minItems || 0;
-                        nItems = J.randomInt(minItems,
-                                             p.maxItems || (minItems + 4)) + 1;
+                        if (opts.availableValues) {
+                            nItems = J.randomInt(minItems,
+                                                 opts.availableValues.length);
+                            nItems--;
+                            sample = J.sample(0, (nItems-1));
+                        }
+                        else {
+                            nItems = J.randomInt(minItems,
+                                                 p.maxItems || (minItems + 5));
+                            nItems--;
+                        }
                         str = '';
                         for (i = 0; i < nItems; i++) {
                             if (i !== 0) str += p.listSep + ' ';
-                            str += J.randomString(J.randomInt(3,10));
+                            if (sample) str += opts.availableValues[sample[i]];
+                            else str += J.randomString(J.randomInt(3,10));
                         }
                         return str;
                     };
@@ -1354,11 +1363,30 @@
         if (opts && 'undefined' !== typeof opts.value) {
             value = opts.value;
         }
+        else if (opts.availableValues) {
+            tmp = opts.availableValues;
+            if (!J.isArray(tmp) || !tmp.length) {
+                throw new TypeError('CustomInput.setValues: availableValues ' +
+                                    'must be a non-empty array or undefined. ' +
+                                    'Found: ' + tmp);
+            }
+            if (this.type === 'list') {
+                if (tmp.length < this.params.minItems) {
+                    throw new Error('CustomInput.setValues: availableValues ' +
+                                    'must be a non-empty array or undefined. ' +
+                                    'Found: ' + tmp);
+                }
+                value = this._setValues(opts);
+            }
+            else {
+                value = tmp[J.randomInt(0, tmp.length) -1];
+            }
+        }
         else {
             value = this._setValues(opts);
         }
         this.input.value = value;
-        if (this.preprocess) this.preprocess(this.input)
+        if (this.preprocess) this.preprocess(this.input);
     };
 
     // ## Helper functions.
@@ -1409,7 +1437,6 @@
     // @return {object} The requested list
     //
     function getUsStatesList(s) {
-        var p;
         switch(s) {
 
         case 'usStatesTerrByAbbrLow':
