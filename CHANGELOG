@@ -1,5 +1,14 @@
 # nodegame-widgets change log
 
+## 5.3.0
+- CustomInput.setValues sets random values or picks from option
+availableValues.
+- ChoiceManager does not check values of hidden or disabled widgets.
+- Fixed typo and submitButton in Feedback widget.
+- More CustomInput types.
+- ChoiceTable onclick listener receives a numeric value instead of a string.
+- All "Survey" widgets, e.g. CustomInput, ChoiceTable, etc, have `highlight` and `markAttempt` true by default.
+	
 ## 5.2.0
 - ChoiceManager.reset to reset all forms in the widget.
 - Fixed ChoiceManager.getValues for forms with requiredChoice truthy.
