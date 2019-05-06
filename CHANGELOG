@@ -8,6 +8,8 @@ availableValues.
 - More CustomInput types.
 - ChoiceTable onclick listener receives a numeric value instead of a string.
 - All "Survey" widgets, e.g. CustomInput, ChoiceTable, etc, have `highlight` and `markAttempt` true by default.
+- When no title is specified for a widget, an empty header is created (instead
+of no header).
 	
 ## 5.2.0
 - ChoiceManager.reset to reset all forms in the widget.
