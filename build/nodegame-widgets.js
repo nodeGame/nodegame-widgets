@@ -1307,7 +1307,7 @@
 
         // Set prototype values or options values.
         widget.title = 'undefined' === typeof options.title ?
-            WidgetPrototype.title : options.title;
+            (WidgetPrototype.title  || '&nbsp;') : options.title;
         widget.panel = 'undefined' === typeof options.panel ?
             WidgetPrototype.panel : options.panel;
         widget.footer = 'undefined' === typeof options.footer ?
@@ -9657,7 +9657,7 @@
                         minItems = p.minItems || 0;
                         if (opts.availableValues) {
                             nItems = J.randomInt(minItems,
-                                                 opts.availableValues.length); 
+                                                 opts.availableValues.length);
                             nItems--;
                             sample = J.sample(0, (nItems-1));
                         }
@@ -10071,8 +10071,13 @@
      */
     CustomInput.prototype.setValues = function(opts) {
         var value, tmp;
-        if (opts && 'undefined' !== typeof opts.value) {
+        opts = opts || {};
+        if ('undefined' !== typeof opts.value) {
             value = opts.value;
+        }
+        // Alias.
+        else if ('undefined' !== typeof opts.values) {
+            value = opts.values;
         }
         else if (opts.availableValues) {
             tmp = opts.availableValues;
