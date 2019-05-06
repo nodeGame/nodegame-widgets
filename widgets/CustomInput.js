@@ -1360,8 +1360,13 @@
      */
     CustomInput.prototype.setValues = function(opts) {
         var value, tmp;
-        if (opts && 'undefined' !== typeof opts.value) {
+        opts = opts || {};
+        if ('undefined' !== typeof opts.value) {
             value = opts.value;
+        }
+        // Alias.
+        else if ('undefined' !== typeof opts.values) {
+            value = opts.values;
         }
         else if (opts.availableValues) {
             tmp = opts.availableValues;
