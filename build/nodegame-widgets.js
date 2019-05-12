@@ -16032,16 +16032,16 @@
 
     // ## Meta-data
 
-    VisualStage.version = '0.7.0';
+    VisualStage.version = '0.8.0';
     VisualStage.description =
         'Displays the name of the current, previous and next step of the game.';
 
-    VisualStage.title = 'Stage';
+    VisualStage.title = false;
     VisualStage.className = 'visualstage';
 
     VisualStage.texts = {
         miss: '',
-        current: 'Current: ',
+        current: 'Stage: ',
         previous: 'Prev: ',
         next: 'Next: '
     };
@@ -16068,16 +16068,18 @@
         // The HTML element containing the information in 'table' mode
         this.table = null;
 
-        // ### VisualStage.div
-        //
-        // The HTML element containing the information in 'inline' mode
-        this.div = null;
-
         // ### VisualStage.preprocess
         //
         // A callback function preprocessing the information displayed
         this.preprocess = null;
 
+        // ### VisualStage.order
+        //
+        // The order in which information is displayed, if available.
+        //
+        // In 'init' it gets reassigned based on displayMode. 
+        this.order = [ 'current', 'next', 'previous' ];
+        
         // ### VisualStage.capitalize
         //
         // If TRUE, the name/id of a step is capitalized. Default: TRUE.
@@ -16109,6 +16111,7 @@
     // ## VisualStage methods
 
     VisualStage.prototype.init = function(opts) {
+        var err;
         if ('undefined' !== typeof opts.displayMode) {
             if (opts.displayMode !== 'inline' &&
                 opts.displayMode !== 'table') {
@@ -16130,6 +16133,24 @@
         }
         if ('undefined' !== typeof opts.current) {
             this.showCurrent = !!opts.current;
+        }
+        if ('undefined' !== typeof opts.order) {
+            if (!J.isArray(opts.order) || opts.order.length !== 3) {
+                throw new TypeError('VisualStage.init: order must be ' +
+                                    'an array of length 3 or undefined. ' +
+                                    'Found: ' + opts.order);
+            }
+            err = checkOrderOption(opts.order, this.order.slice(0));
+            if (err) {
+                throw new TypeError('VisualStage.init: order contains ' +
+                                    'errors: ' + order);
+            }
+            this.order = opts.order;
+        }
+        else {
+            if (this.displayMode === 'inline') {
+                this.order = [ 'previous', 'current', 'next' ];
+            }
         }
         if ('undefined' !== typeof opts.preprocess) {
             if ('function' !== typeof opts.preprocess) {
@@ -16184,18 +16205,20 @@
         var name, str;
         var curStep, nextStep, prevStep;
         var curStepName, nextStepName, prevStepName;
-        var t;
+        var order, t, tmp;
 
+        order = {};
         curStep = node.game.getCurrentGameStage();
-
         if (curStep) {
             if (this.showCurrent) {
                 curStepName = this.getStepName(curStep, curStep, 'current');
+                order.current = curStepName;
             }
             if (this.showNext) {
                 nextStep = node.game.plot.next(curStep);
                 if (nextStep) {
                     nextStepName = this.getStepName(nextStep, curStep, 'next');
+                    order.next = nextStepName;
                 }
             }
             if (this.showPrevious) {
@@ -16203,53 +16226,54 @@
                 if (prevStep) {
                     prevStepName = this.getStepName(prevStep, curStep,
                                                     'previous');
+                    order.previous = prevStepName;
                 }
             }
         }
 
         if (this.displayMode === 'table') {
             this.table.clear(true);
-            str = this.getText('current');
-            name = str === false ? [ curStepName ] : [ str, curStepName ];
-            this.table.addRow(name);
-            str = this.getText('previous');
-            name = str === false ? [ prevStepName ] : [ str, prevStepName ];
-            this.table.addRow(name);
-            str = this.getText('next');
-            name = str === false ? [ nextStepName ] : [ str, nextStepName ];
-            this.table.addRow(name);
+            addRow(this, 0, order);
+            addRow(this, 1, order);
+            addRow(this, 2, order);
             //
             t = this.table.selexec('y', '=', 0);
             t.addClass('strong');
-            t.selexec('x', '=', 1).addClass('underline');
+            // t.selexec('x', '=', 1).addClass('underline');
             this.table.parse();
         }
         else {
             this.div.innerHTML = '';
-            if (curStepName) {
+            addSpan(this, 0, order);
+            addSpan(this, 1, order);
+            addSpan(this, 2, order);
+            
+            if (false){
+                if (curStepName) {
                 W.add('span', this.div, {
                     className: 'curstep',
                     innerHTML: curStepName,
-                    className: 'visualstage-curr'
+                    className: 'visualstage-current'
                 });
             }
-            if (nextStepName) {
+                if (nextStepName) {
                 W.add('span', this.div, {
                     className: 'nextstep',
-                    innerHTML: '<strong>' + this.getText('next') + '</strong>'+
-                        nextStepName,
+                    innerHTML: '<span class="strong">' + this.getText('next') +
+                        '</span>' + nextStepName,
                     className: 'visualstage-next'
                 });
             }
             if (prevStepName) {
                 W.add('span', this.div, {
                     className: 'prevstep',
-                    innerHTML: '<strong>' + this.getText('previous') +
-                        '</strong>' + prevStepName,
-                    className: 'visualstage-prev'
+                    innerHTML: '<span class="strong">' +
+                        this.getText('previous') +
+                        '</span>' + prevStepName,
+                    className: 'visualstage-previous'
                 });
             }
-            this.setTitle(false);
+            }
         }
     };
 
@@ -16314,7 +16338,7 @@
             round = 1;
         }
         return round;
-    };
+    }
 
     // ### getName
     //
@@ -16347,6 +16371,53 @@
         return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
     }
 
+    function addRow(that, idx, order) {
+        var row, str, type, name, className, obj;
+        type = that.order[idx];
+        str = that.getText(type);
+        name = order[type];
+        if (!name) return;
+        className = 'visualstage-' + type;
+        obj = {
+            className: className,
+            content: name
+        };
+        if (str === false) row = [ obj ];
+        else if (type === 'current') row = [ { content: name, colspan: 2 } ];
+        else row = [ { className: className, content: str }, obj ];
+        that.table.addRow(row);
+    }
+    
+    function addSpan(that, idx, order) {
+        var str, tmp;
+        tmp = that.order[idx];
+        str = order[tmp];
+        if (!str) return;
+        if (tmp !== 'current') {
+            str = '<span class="strong">' +
+                that.getText(tmp) + '</span>' + str; 
+        }
+        W.add('span', that.div, {
+            innerHTML: str,
+            className: 'visualstage-' + tmp
+        });
+    }
+
+    function checkOrderOption(order, arr) {
+        var i;
+        i = arr.indexOf(order[0]);
+        if (i === -1) return 'unknown item: ' + order[0];
+        arr.splice(i,1);
+        i = arr.indexOf(order[1]);
+        if (i === -1) return 'unknown item: ' + order[1];
+        arr.splice(i,1);
+        i = arr.indexOf(order[2]);
+        if (i === -1) return 'unknown item: ' + order[2];
+        arr.splice(i,1);
+        if (arr.length) return 'duplicated entry: ' + arr[0];
+        return;
+    }
+    
 })(node);
 
 /**
@@ -16567,7 +16638,7 @@
         if ('undefined' !== typeof options.timeup) {
             gameTimerOptions.timeup = options.timeup;
         }
-        
+
         if ('undefined' === typeof options.stopOnDone) {
             options.stopOnDone = !!options.stopOnDone;
         }
@@ -16875,7 +16946,6 @@
 
         node.on('PLAYING', function() {
             var options;
-            debugger
             if (that.options.startOnPlaying) {
                 options = that.gameTimer.getStepOptions();
                 if (options) {
