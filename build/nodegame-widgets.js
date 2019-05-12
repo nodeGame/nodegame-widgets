@@ -16032,7 +16032,7 @@
 
     // ## Meta-data
 
-    VisualStage.version = '0.6.0';
+    VisualStage.version = '0.7.0';
     VisualStage.description =
         'Displays the name of the current, previous and next step of the game.';
 
@@ -16040,10 +16040,9 @@
     VisualStage.className = 'visualstage';
 
     VisualStage.texts = {
-        miss: '-',
-        current: function(w) {
-            if (w.displayMode === 'Current: ',
-        previous: 'Previous: ',
+        miss: '',
+        current: 'Current: ',
+        previous: 'Prev: ',
         next: 'Next: '
     };
 
@@ -16065,12 +16064,12 @@
         //
         // The HTML element containing the information
         this.table = new Table();
- 
+
         // ### VisualStage.displayMode
         //
         // The display mode: 'compact', 'table'.
         this.displayMode = 'table';
-        
+
         // ### VisualStage.preprocess
         //
         // A callback function preprocessing the information displayed
@@ -16083,29 +16082,42 @@
 
         // Default display settings.
 
+        // ### VisualStage.showRounds
+        //
+        // If TRUE, round number is added to the name of steps in repeat stages 
+        this.showRounds = true;
+        
         // ### VisualStage.showPrevious
         //
         // If TRUE, the name of the previuos step is displayed.
         this.showPrevious = true;
+
+        // ### VisualStage.showCurrent
+        //
         // If TRUE, the name of the current step is displayed.
         this.showCurrent = true;
+
+        // ### VisualStage.showNext
+        //
         // If TRUE, the name of the next step is displayed.
         this.showNext = true;
-
     }
 
     // ## VisualStage methods
 
     VisualStage.prototype.init = function(opts) {
         if ('undefined' !== typeof opts.displayMode) {
-            if (opts.displayMode !== 'compact' &&
+            if (opts.displayMode !== 'inline' &&
                 opts.displayMode !== 'table') {
 
                 throw new TypeError('VisualStage.init: displayMode must be ' +
-                                    '"compact", "table" or undefined.' +
+                                    '"inline", "table" or undefined. ' +
                                     'Found: ' + opts.displayMode);
             }
             this.displayMode = opts.displayMode;
+        }
+        if ('undefined' !== typeof opts.rounds) {
+            this.showRounds = !!opts.rounds;
         }
         if ('undefined' !== typeof opts.previous) {
             this.showPrevious = !!opts.previous;
@@ -16176,18 +16188,19 @@
 
         if (curStep) {
             if (this.showCurrent) {
-                curStepName = this.getStepName(curStep, 'current');
+                curStepName = this.getStepName(curStep, curStep, 'current');
             }
             if (this.showNext) {
                 nextStep = node.game.plot.next(curStep);
                 if (nextStep) {
-                    nextStepName = this.getStepName(nextStep, 'next');
+                    nextStepName = this.getStepName(nextStep, curStep, 'next');
                 }
             }
             if (this.showPrevious) {
                 prevStep = node.game.plot.previous(curStep);
                 if (prevStep) {
-                    prevStepName = this.getStepName(prevStep, 'previous');
+                    prevStepName = this.getStepName(prevStep, curStep,
+                                                    'previous');
                 }
             }
         }
@@ -16209,25 +16222,40 @@
             this.table.parse();
         }
         else {
-            if (prevStepName) {
-                W.add('span', this.div, {
-                    className: 'prevstep',
-                    innerHMTL: prevStepName
-                });
-            }
+            this.div.innerHTML = '';
             if (curStepName) {
                 W.add('span', this.div, {
                     className: 'curstep',
-                    innerHMTL: curStepName
+                    innerHTML: curStepName,
+                    style: {
+                        'margin': '0 15px',
+                        'font-weight': 'bold'
+                    }
                 });
             }
             if (nextStepName) {
                 W.add('span', this.div, {
                     className: 'nextstep',
-                    innerHMTL: nextStepName
+                    innerHTML: '<strong>' + this.getText('next') + '</strong>'+
+                        nextStepName,
+                    style: { 
+                        'margin': '0 15px',
+                        'font-size': '13px'
+                    }
                 });
             }
-            this.setTitle(str);
+            if (prevStepName) {
+                W.add('span', this.div, {
+                    className: 'prevstep',
+                    innerHTML: '<strong>' + this.getText('previous') +
+                        '</strong>' + prevStepName,
+                    style: { 
+                        'margin': '0 15px',
+                        'font-size': '13px'
+                    }
+                });
+            }
+            this.setTitle(false);
         }
     };
 
@@ -16236,23 +16264,65 @@
      *
      * Returns the step name of a given step
      *
-     * @param {GameStage} gameStage A game stage
+     * @param {GameStage} gameStage The game stage we want to to get the name
+     * @param {GameStage} gameStage The current game stage
      * @param {string} A modifier: 'current', 'previous', 'next'.
      *
      * @return {string} name The name of the step
      *
      * @see getName
      */
-    VisualStage.prototype.getStepName = function(gameStage, mod) {
-        var name;
+    VisualStage.prototype.getStepName = function(gameStage, curStage, mod) {
+        var name, round;
         name = getName(gameStage, this.getText('miss'));
         if (this.capitalize) name = capitalize(name);
-        if (this.preprocess) name = this.preprocess(name, mod);
+        if (this.showRounds) {
+            round = getRound(gameStage, curStage, mod);
+            if (round) name += ' ' + round;
+        }
+        if (this.preprocess) name = this.preprocess(name, mod, round);
         return name;
     };
 
     // ## Helper functions.
 
+    
+    /**
+     * ### getRound
+     *
+     * Returns the round for a given step, if its stage is a repeat stage
+     *
+     * @param {GameStage} gameStage The game stage we want to to get the round
+     * @param {GameStage} gameStage The current game stage
+     * @param {string} A modifier: 'current', 'previous', 'next'.
+     *
+     * @return {number} round The round for the step
+     *
+     * @see getName
+     */
+    function getRound(gameStage, curStage, mod) {
+        var round, totRounds;
+        debugger
+        if (!gameStage.stage) return;
+        totRounds = node.game.plot.stager.sequence[(gameStage.stage - 1)].num;
+        if (!totRounds) return;
+        round = node.game.getRound();
+        // Same stage: can be current, next, or previous.
+        if (curStage.stage === gameStage.stage) {
+            if (mod === 'next') round++;
+            else if (mod === 'previous') round--;
+        }
+        // This is a previous stage.
+        else if (curStage.stage > gameStage.stage) {
+            round = totRounds;
+        }
+        // This is a next stage.
+        else {
+            round = 1;
+        }
+        return round;
+    };
+    
     // ### getName
     //
     // Returns the name or the id property or miss.
@@ -16267,7 +16337,7 @@
     }
 
     function capitalize(str) {
-        var tks, str, i, len;
+        var tks, i, len;
         tks = str.split(' ');
         str = capWord(tks[0]);
         len = tks.length;
