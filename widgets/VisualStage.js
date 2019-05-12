@@ -40,20 +40,23 @@
 
     /**
      * ## VisualStage constructor
-     *
-     * `VisualStage` displays current, previous and next stage of the game
      */
     function VisualStage() {
-
-        // ### VisualStage.table
-        //
-        // The HTML element containing the information
-        this.table = new Table();
 
         // ### VisualStage.displayMode
         //
         // The display mode: 'compact', 'table'.
-        this.displayMode = 'table';
+        this.displayMode = 'inline';
+
+        // ### VisualStage.table
+        //
+        // The HTML element containing the information in 'table' mode
+        this.table = null;
+
+        // ### VisualStage.div
+        //
+        // The HTML element containing the information in 'inline' mode
+        this.div = null;
 
         // ### VisualStage.preprocess
         //
@@ -135,6 +138,7 @@
      */
     VisualStage.prototype.append = function() {
         if (this.displayMode === 'table') {
+            this.table = new Table();
             this.bodyDiv.appendChild(this.table.table);
         }
         else {
@@ -154,7 +158,7 @@
     /**
      * ### VisualStage.updateDisplay
      *
-     * Writes the current, previous and next step into `this.table`
+     * Writes the current, previous and next step names
      *
      * It uses the step property `name`, if existing, otherwise `id`.
      * Depending on current settings, it capitalizes it, and preprocess it.
@@ -168,8 +172,6 @@
         var t;
 
         curStep = node.game.getCurrentGameStage();
-
-        this.table.clear(true);
 
         if (curStep) {
             if (this.showCurrent) {
@@ -191,6 +193,7 @@
         }
 
         if (this.displayMode === 'table') {
+            this.table.clear(true);
             str = this.getText('current');
             name = str === false ? [ curStepName ] : [ str, curStepName ];
             this.table.addRow(name);

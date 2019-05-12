@@ -16055,20 +16055,23 @@
 
     /**
      * ## VisualStage constructor
-     *
-     * `VisualStage` displays current, previous and next stage of the game
      */
     function VisualStage() {
-
-        // ### VisualStage.table
-        //
-        // The HTML element containing the information
-        this.table = new Table();
 
         // ### VisualStage.displayMode
         //
         // The display mode: 'compact', 'table'.
-        this.displayMode = 'table';
+        this.displayMode = 'inline';
+
+        // ### VisualStage.table
+        //
+        // The HTML element containing the information in 'table' mode
+        this.table = null;
+
+        // ### VisualStage.div
+        //
+        // The HTML element containing the information in 'inline' mode
+        this.div = null;
 
         // ### VisualStage.preprocess
         //
@@ -16084,9 +16087,9 @@
 
         // ### VisualStage.showRounds
         //
-        // If TRUE, round number is added to the name of steps in repeat stages 
+        // If TRUE, round number is added to the name of steps in repeat stages
         this.showRounds = true;
-        
+
         // ### VisualStage.showPrevious
         //
         // If TRUE, the name of the previuos step is displayed.
@@ -16150,6 +16153,7 @@
      */
     VisualStage.prototype.append = function() {
         if (this.displayMode === 'table') {
+            this.table = new Table();
             this.bodyDiv.appendChild(this.table.table);
         }
         else {
@@ -16169,7 +16173,7 @@
     /**
      * ### VisualStage.updateDisplay
      *
-     * Writes the current, previous and next step into `this.table`
+     * Writes the current, previous and next step names
      *
      * It uses the step property `name`, if existing, otherwise `id`.
      * Depending on current settings, it capitalizes it, and preprocess it.
@@ -16183,8 +16187,6 @@
         var t;
 
         curStep = node.game.getCurrentGameStage();
-
-        this.table.clear(true);
 
         if (curStep) {
             if (this.showCurrent) {
@@ -16206,6 +16208,7 @@
         }
 
         if (this.displayMode === 'table') {
+            this.table.clear(true);
             str = this.getText('current');
             name = str === false ? [ curStepName ] : [ str, curStepName ];
             this.table.addRow(name);
@@ -16277,7 +16280,7 @@
 
     // ## Helper functions.
 
-    
+
     /**
      * ### getRound
      *
@@ -16293,7 +16296,6 @@
      */
     function getRound(gameStage, curStage, mod) {
         var round, totRounds;
-        debugger
         if (!gameStage.stage) return;
         totRounds = node.game.plot.stager.sequence[(gameStage.stage - 1)].num;
         if (!totRounds) return;
@@ -16313,7 +16315,7 @@
         }
         return round;
     };
-    
+
     // ### getName
     //
     // Returns the name or the id property or miss.
@@ -16565,6 +16567,13 @@
         if ('undefined' !== typeof options.timeup) {
             gameTimerOptions.timeup = options.timeup;
         }
+        
+        if ('undefined' === typeof options.stopOnDone) {
+            options.stopOnDone = !!options.stopOnDone;
+        }
+        if ('undefined' === typeof options.startOnPlaying) {
+            options.startOnPlaying = !!options.startOnPlaying;
+        }
 
         // Init the gameTimer, regardless of the source (internal vs external).
         this.gameTimer.init(gameTimerOptions);
@@ -16591,12 +16600,6 @@
 
         this.options = gameTimerOptions;
 
-        if ('undefined' === typeof this.options.stopOnDone) {
-            this.options.stopOnDone = true;
-        }
-        if ('undefined' === typeof this.options.startOnPlaying) {
-            this.options.startOnPlaying = true;
-        }
 
         if (!this.options.mainBoxOptions) {
             this.options.mainBoxOptions = {};
@@ -16872,6 +16875,7 @@
 
         node.on('PLAYING', function() {
             var options;
+            debugger
             if (that.options.startOnPlaying) {
                 options = that.gameTimer.getStepOptions();
                 if (options) {
