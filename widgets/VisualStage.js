@@ -212,10 +212,7 @@
                 W.add('span', this.div, {
                     className: 'curstep',
                     innerHTML: curStepName,
-                    style: {
-                        'margin': '0 15px',
-                        'font-weight': 'bold'
-                    }
+                    className: 'visualstage-curr'
                 });
             }
             if (nextStepName) {
@@ -223,10 +220,7 @@
                     className: 'nextstep',
                     innerHTML: '<strong>' + this.getText('next') + '</strong>'+
                         nextStepName,
-                    style: {
-                        'margin': '0 15px',
-                        'font-size': '13px'
-                    }
+                    className: 'visualstage-next'
                 });
             }
             if (prevStepName) {
@@ -234,10 +228,7 @@
                     className: 'prevstep',
                     innerHTML: '<strong>' + this.getText('previous') +
                         '</strong>' + prevStepName,
-                    style: {
-                        'margin': '0 15px',
-                        'font-size': '13px'
-                    }
+                    className: 'visualstage-prev'
                 });
             }
             this.setTitle(false);
