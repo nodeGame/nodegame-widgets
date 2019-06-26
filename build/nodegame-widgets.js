@@ -5756,6 +5756,19 @@
          * @see ChoiceTable.renderChoice
          */
         this.separator = ChoiceTable.separator;
+
+        /**
+         * ### ChoiceTable.tabbable
+         *
+         * If TRUE, the elements of the table can be accessed with TAB
+         *
+         * Clicking is also simulated upon pressing space or enter.
+         *
+         * Default TRUE
+         *
+         * @see ChoiceTable.renderChoice
+         */
+        this.tabbable = null;
     }
 
     // ## ChoiceTable methods
@@ -5793,6 +5806,8 @@
      *       if 'string', the text will be added inside the textarea
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
+     *   - tabbable: if TRUE, each cell can be reached with TAB and clicked
+     *       with SPACE or ENTER. Default: TRUE.
      *
      * @param {object} options Configuration options
      */
@@ -5912,7 +5927,7 @@
                                 options.listener);
         }
 
-        // Set an additional onclick onclick, if any.
+        // Set an additional onclick, if any.
         if ('function' === typeof options.onclick) {
             this.onclick = options.onclick;
         }
@@ -6026,6 +6041,8 @@
                                 'className must be string, array, ' +
                                 'or undefined. Found: ' + options.className);
         }
+
+        if (options.tabbable !== false) this.tabbable = true;
 
         // Set the renderer, if any.
         if ('function' === typeof options.renderer) {
@@ -6327,6 +6344,7 @@
     ChoiceTable.prototype.renderChoice = function(choice, idx) {
         var td, value;
         td = document.createElement('td');
+        if (this.tabbable) J.makeTabbable(td);
 
         // Use custom renderer.
         if (this.renderer) {
@@ -6509,6 +6527,9 @@
         if (this.table) {
             J.removeClass(this.table, 'clickable');
             this.table.removeEventListener('click', this.listener);
+            if (this.tabbable) {
+                this.table.removeEventListener('keydown', J.makeTabbable.click);
+            }
         }
         this.emit('disabled');
     };
@@ -6528,6 +6549,9 @@
         this.disabled = false;
         J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
+        if (this.tabbable) {
+            this.table.addEventListener('keydown', J.makeTabbable.click);
+        }
         this.emit('enabled');
     };
 
@@ -16077,9 +16101,9 @@
         //
         // The order in which information is displayed, if available.
         //
-        // In 'init' it gets reassigned based on displayMode. 
+        // In 'init' it gets reassigned based on displayMode.
         this.order = [ 'current', 'next', 'previous' ];
-        
+
         // ### VisualStage.capitalize
         //
         // If TRUE, the name/id of a step is capitalized. Default: TRUE.
@@ -16247,33 +16271,6 @@
             addSpan(this, 0, order);
             addSpan(this, 1, order);
             addSpan(this, 2, order);
-            
-            if (false){
-                if (curStepName) {
-                W.add('span', this.div, {
-                    className: 'curstep',
-                    innerHTML: curStepName,
-                    className: 'visualstage-current'
-                });
-            }
-                if (nextStepName) {
-                W.add('span', this.div, {
-                    className: 'nextstep',
-                    innerHTML: '<span class="strong">' + this.getText('next') +
-                        '</span>' + nextStepName,
-                    className: 'visualstage-next'
-                });
-            }
-            if (prevStepName) {
-                W.add('span', this.div, {
-                    className: 'prevstep',
-                    innerHTML: '<span class="strong">' +
-                        this.getText('previous') +
-                        '</span>' + prevStepName,
-                    className: 'visualstage-previous'
-                });
-            }
-            }
         }
     };
 
@@ -16387,7 +16384,7 @@
         else row = [ { className: className, content: str }, obj ];
         that.table.addRow(row);
     }
-    
+
     function addSpan(that, idx, order) {
         var str, tmp;
         tmp = that.order[idx];
@@ -16395,7 +16392,7 @@
         if (!str) return;
         if (tmp !== 'current') {
             str = '<span class="strong">' +
-                that.getText(tmp) + '</span>' + str; 
+                that.getText(tmp) + '</span>' + str;
         }
         W.add('span', that.div, {
             innerHTML: str,
@@ -16417,7 +16414,7 @@
         if (arr.length) return 'duplicated entry: ' + arr[0];
         return;
     }
-    
+
 })(node);
 
 /**

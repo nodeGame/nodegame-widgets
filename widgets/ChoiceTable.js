@@ -451,6 +451,19 @@
          * @see ChoiceTable.renderChoice
          */
         this.separator = ChoiceTable.separator;
+
+        /**
+         * ### ChoiceTable.tabbable
+         *
+         * If TRUE, the elements of the table can be accessed with TAB
+         *
+         * Clicking is also simulated upon pressing space or enter.
+         *
+         * Default TRUE
+         *
+         * @see ChoiceTable.renderChoice
+         */
+        this.tabbable = null;
     }
 
     // ## ChoiceTable methods
@@ -488,6 +501,8 @@
      *       if 'string', the text will be added inside the textarea
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
+     *   - tabbable: if TRUE, each cell can be reached with TAB and clicked
+     *       with SPACE or ENTER. Default: TRUE.
      *
      * @param {object} options Configuration options
      */
@@ -607,7 +622,7 @@
                                 options.listener);
         }
 
-        // Set an additional onclick onclick, if any.
+        // Set an additional onclick, if any.
         if ('function' === typeof options.onclick) {
             this.onclick = options.onclick;
         }
@@ -721,6 +736,8 @@
                                 'className must be string, array, ' +
                                 'or undefined. Found: ' + options.className);
         }
+
+        if (options.tabbable !== false) this.tabbable = true;
 
         // Set the renderer, if any.
         if ('function' === typeof options.renderer) {
@@ -1022,6 +1039,7 @@
     ChoiceTable.prototype.renderChoice = function(choice, idx) {
         var td, value;
         td = document.createElement('td');
+        if (this.tabbable) J.makeTabbable(td);
 
         // Use custom renderer.
         if (this.renderer) {
@@ -1204,6 +1222,9 @@
         if (this.table) {
             J.removeClass(this.table, 'clickable');
             this.table.removeEventListener('click', this.listener);
+            if (this.tabbable) {
+                this.table.removeEventListener('keydown', J.makeTabbable.click);
+            }
         }
         this.emit('disabled');
     };
@@ -1223,6 +1244,9 @@
         this.disabled = false;
         J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
+        if (this.tabbable) {
+            this.table.addEventListener('keydown', J.makeTabbable.click);
+        }
         this.emit('enabled');
     };
 
