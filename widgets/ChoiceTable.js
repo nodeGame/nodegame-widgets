@@ -1222,9 +1222,8 @@
         if (this.table) {
             J.removeClass(this.table, 'clickable');
             this.table.removeEventListener('click', this.listener);
-            if (this.tabbable) {
-                this.table.removeEventListener('keydown', J.makeTabbable.click);
-            }
+            // Remove listener to make cells clickable with the keyboard.
+            if (this.tabbable) J.makeClickable(this.table, false);
         }
         this.emit('disabled');
     };
@@ -1244,9 +1243,8 @@
         this.disabled = false;
         J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
-        if (this.tabbable) {
-            this.table.addEventListener('keydown', J.makeTabbable.click);
-        }
+        // Add listener to make cells clickable with the keyboard.
+        if (this.tabbable) J.makeClickable(this.table);
         this.emit('enabled');
     };
 
