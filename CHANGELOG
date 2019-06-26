@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## current
+- ChoiceTable is tabbable.
+- ChoiceTableGroup is tabbable.
+
 ## 5.4.0
 - Fixed VisualTimer.startOnPlaying and stopOnDone options.
 - VisualStage widget updated, contains also an 'inline' mode.

@@ -457,7 +457,7 @@
          *
          * If TRUE, the elements of the table can be accessed with TAB
          *
-         * Clicking is also simulated upon pressing space or enter.
+         * Clicking is simulated upon pressing space or enter.
          *
          * Default TRUE
          *

@@ -354,6 +354,19 @@
          * @see mixinSettings
          */
         this.shuffleChoices = null;
+
+        /**
+         * ### ChoiceTableGroup.tabbable
+         *
+         * If TRUE, the elements of each choicetable can be accessed with TAB
+         *
+         * Clicking is simulated upon pressing space or enter.
+         *
+         * Default TRUE
+         *
+         * @see ChoiceTable.tabbable
+         */
+        this.tabbable = null;
     }
 
     // ## ChoiceTableGroup methods
@@ -379,6 +392,8 @@
      *       if 'string', the text will be added inside the the textarea
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
+     *   - tabbable: if TRUE, each cell can be reached with TAB and clicked
+     *       with SPACE or ENTER. Default: TRUE.
      *
      * @param {object} options Configuration options
      */
@@ -543,6 +558,8 @@
                                 'className must be string, array, ' +
                                 'or undefined. Found: ' + options.className);
         }
+
+        if (options.tabbable !== false) this.tabbable = true;
 
         // After all configuration options are evaluated, add items.
 
@@ -809,6 +826,8 @@
         this.disabled = true;
         J.removeClass(this.table, 'clickable');
         this.table.removeEventListener('click', this.listener);
+        // Remove listener to make cells clickable with the keyboard.
+        if (this.tabbable) J.makeClickable(this.table, false);
         this.emit('disabled');
     };
 
@@ -824,6 +843,8 @@
         this.disabled = false;
         J.addClass(this.table, 'clickable');
         this.table.addEventListener('click', this.listener);
+        // Add listener to make cells clickable with the keyboard.
+        if (this.tabbable) J.makeClickable(this.table);
         this.emit('enabled');
     };
 
