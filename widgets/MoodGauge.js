@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.3.0';
+    MoodGauge.version = '0.4.0';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
@@ -76,6 +76,13 @@
         this.method = 'I-PANAS-SF';
 
         /**
+         * ### MoodGauge.mainText
+         *
+         * A text preceeding the SVO gauger
+         */
+        this.mainText = null;
+
+        /**
          * ## SVOGauge.gauge
          *
          * The object measuring mood
@@ -94,23 +101,30 @@
      *
      * Initializes the widget
      *
-     * @param {object} options Optional. Configuration options.
+     * @param {object} opts Optional. Configuration options.
      */
-    MoodGauge.prototype.init = function(options) {
+    MoodGauge.prototype.init = function(opts) {
         var gauge;
-        if ('undefined' !== typeof options.method) {
-            if ('string' !== typeof options.method) {
-                throw new TypeError('MoodGauge.init: options.method must be ' +
-                                    'string or undefined: ' + options.method);
+        if ('undefined' !== typeof opts.method) {
+            if ('string' !== typeof opts.method) {
+                throw new TypeError('MoodGauge.init: method must be string ' +
+                                    'or undefined: ' + opts.method);
             }
-            if (!this.methods[options.method]) {
-                throw new Error('MoodGauge.init: options.method is not a ' +
-                                'valid method: ' + options.method);
+            if (!this.methods[opts.method]) {
+                throw new Error('MoodGauge.init: method is invalid: ' +
+                                opts.method);
             }
-            this.method = options.method;
+            this.method = opts.method;
+        }
+        if (opts.mainText) {
+            if ('string' !== typeof opts.mainText) {
+                throw new TypeError('MoodGauge.init: mainText must be string ' +
+                                    'or undefined. Found: ' + opts.mainText);
+            }
+            this.mainText = opts.mainText;
         }
         // Call method.
-        gauge = this.methods[this.method].call(this, options);
+        gauge = this.methods[this.method].call(this, opts);
         // Check properties.
         checkGauge(this.method, gauge);
         // Approved.
@@ -248,7 +262,7 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'ipnassf',
             items: items,
-            mainText: this.getText('mainText'),
+            mainText: this.mainText || this.getText('mainText'),
             title: false,
             requiredChoice: true,
             storeRef: false

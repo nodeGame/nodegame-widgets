@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.6.0';
+    SVOGauge.version = '0.7.0';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
@@ -77,6 +77,13 @@
         this.method = 'Slider';
 
         /**
+         * ### SVOGauge.mainText
+         *
+         * A text preceeding the SVO gauger
+         */
+        this.mainText = null;
+
+        /**
          * ## SVOGauge.gauge
          *
          * The object measuring svo
@@ -95,23 +102,31 @@
      *
      * Initializes the widget
      *
-     * @param {object} options Optional. Configuration options.
+     * @param {object} opts Optional. Configuration options.
      */
-    SVOGauge.prototype.init = function(options) {
+    SVOGauge.prototype.init = function(opts) {
         var gauge;
-        if ('undefined' !== typeof options.method) {
-            if ('string' !== typeof options.method) {
-                throw new TypeError('SVOGauge.init: options.method must be ' +
-                                    'string or undefined: ' + options.method);
+        if ('undefined' !== typeof opts.method) {
+            if ('string' !== typeof opts.method) {
+                throw new TypeError('SVOGauge.init: method must be string ' +
+                                    'or undefined. Found: ' + opts.method);
             }
-            if (!this.methods[options.method]) {
-                throw new Error('SVOGauge.init: options.method is not a ' +
-                                'valid method: ' + options.method);
+            if (!this.methods[opts.method]) {
+                throw new Error('SVOGauge.init: method is invalid: ' +
+                                opts.method);
             }
-            this.method = options.method;
+            this.method = opts.method;
         }
+        if (opts.mainText) {
+            if ('string' !== typeof opts.mainText) {
+                throw new TypeError('SVOGauge.init: mainText must be string ' +
+                                    'or undefined. Found: ' + opts.mainText);
+            }
+            this.mainText = opts.mainText;
+        }
+
         // Call method.
-        gauge = this.methods[this.method].call(this, options);
+        gauge = this.methods[this.method].call(this, opts);
         // Check properties.
         checkGauge(this.method, gauge);
         // Approved.
@@ -311,7 +326,8 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: 'svo_slider',
             items: items,
-            mainText: this.getText('mainText'),
+            // TODO: should it be on getText at all?
+            mainText: this.mainText || this.getText('mainText'),
             title: false,
             renderer: renderer,
             requiredChoice: true,
