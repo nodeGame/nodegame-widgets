@@ -754,7 +754,7 @@
         // MainText.
         if (this.mainText) {
             this.spanMainText = W.append('span', this.bodyDiv, {
-                className: 'custominput-maintext',
+                className: 'choicetable-maintext',
                 innerHTML: this.mainText
             });
         }
