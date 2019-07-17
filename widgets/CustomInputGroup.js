@@ -1,9 +1,11 @@
 /**
- * # CustomInput
+ * # CustomInputGroup
  * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
- * Creates a configurable input form with validation
+ * Creates a table that groups together several choice tables widgets
+ *
+ * @see CustomInput
  *
  * www.nodegame.org
  */
@@ -11,1523 +13,1203 @@
 
     "use strict";
 
-    node.widgets.register('CustomInput', CustomInput);
+    node.widgets.register('CustomInputGroup', CustomInputGroup);
 
     // ## Meta-data
 
-    CustomInput.version = '0.9.0';
-    CustomInput.description = 'Creates a configurable input form';
+    CustomInputGroup.version = '1.6.0';
+    CustomInputGroup.description = 'Groups together and manages sets of ' +
+        'CustomInput widgets.';
 
-    CustomInput.title = false;
-    CustomInput.panel = false;
-    CustomInput.className = 'custominput';
+    CustomInputGroup.title = 'Make your choice';
+    CustomInputGroup.className = 'choicetable';
 
-    CustomInput.types = {
-        text: true,
-        number: true,
-        'float': true,
-        'int': true,
-        date: true,
-        list: true,
-        us_city_state_zip: true,
-        us_state: true,
-        us_zip: true
-    };
+    CustomInputGroup.separator = '::';
 
-    var sepNames = {
-        ',': 'comma',
-        ' ': 'space',
-        '.': 'dot'
-    };
-
-    var usStates = {
-        Alabama: 'AL',
-        Alaska: 'AK',
-        Arizona: 'AZ',
-        Arkansas: 'AR',
-        California: 'CA',
-        Colorado: 'CO',
-        Connecticut: 'CT',
-        Delaware: 'DE',
-        Florida: 'FL',
-        Georgia: 'GA',
-        Hawaii: 'HI',
-        Idaho: 'ID',
-        Illinois: 'IL',
-        Indiana: 'IN',
-        Iowa: 'IA',
-        Kansas: 'KS',
-        Kentucky: 'KY',
-        Louisiana: 'LA',
-        Maine: 'ME',
-        Maryland: 'MD',
-        Massachusetts: 'MA',
-        Michigan: 'MI',
-        Minnesota: 'MN',
-        Mississippi: 'MS',
-        Missouri: 'MO',
-        Montana: 'MT',
-        Nebraska: 'NE',
-        Nevada: 'NV',
-        'New Hampshire': 'NH',
-        'New Jersey': 'NJ',
-        'New Mexico': 'NM',
-        'New York': 'NY',
-        'North Carolina': 'NC',
-        'North Dakota': 'ND',
-        Ohio: 'OH',
-        Oklahoma: 'OK',
-        Oregon: 'OR',
-        Pennsylvania: 'PA',
-        'Rhode Island': 'RI',
-        'South Carolina': 'SC',
-        'South Dakota': 'SD',
-        Tennessee: 'TN',
-        Texas: 'TX',
-        Utah: 'UT',
-        Vermont: 'VT',
-        Virginia: 'VA',
-        Washington: 'WA',
-        'West Virginia': 'WV',
-        Wisconsin: 'WI',
-        Wyoming: 'WY',
-    };
-
-    var usTerr = {
-        'American Samoa': 'AS',
-        'District of Columbia': 'DC',
-        'Federated States of Micronesia': 'FM',
-        Guam: 'GU',
-        'Marshall Islands': 'MH',
-        'Northern Mariana Islands': 'MP',
-        Palau: 'PW',
-        'Puerto Rico': 'PR',
-        'Virgin Islands': 'VI'
-    };
-
-    // To be filled if requested.
-    var usTerrByAbbr;
-    var usStatesByAbbr;
-    var usStatesTerr;
-    var usStatesTerrByAbbr;
-    // Lower case keys.
-    var usStatesLow;
-    var usTerrLow;
-    var usTerrByAbbrLow;
-    var usStatesByAbbrLow;
-    var usStatesTerrLow;
-    var usStatesTerrByAbbrLow;
-
-    CustomInput.texts = {
-        listErr: 'Check that there are no empty items; do not end with ' +
-            'the separator',
-        listSizeErr: function(w, param) {
-            if (w.params.fixedSize) {
-                return w.params.minItems + ' items required';
-            }
-            if (param === 'min') {
-                return 'Too few items. Min: ' + w.params.minItems;
-            }
-            return 'Too many items. Max: ' + w.params.maxItems;
-
-        },
-        usStateAbbrErr: 'Not a valid state abbreviation (must be 2 characters)',
-        usStateErr: 'Not a valid state (full name required)',
-        usZipErr: 'Not a valid ZIP code (must be 5 digits)',
-        autoHint: function(w) {
-            var res, sep;
-            if (w.type === 'list') {
-                sep = sepNames[w.params.listSep] || w.params.listSep;
-                res = '(if more than one, separate with ' + sep + ')';
-            }
-            else if (w.type === 'us_state') {
-                res = w.params.abbr ? '(Use 2-letter abbreviation)' :
-                    '(Type the full name of the state)';
-            }
-            else if (w.type === 'us_zip') {
-                res = '(Use 5-digit ZIP code)';
-            }
-            else if (w.type === 'us_city_state_zip') {
-                sep = w.params.listSep;
-                res = '(Format: Town' + sep + ' State' + sep + ' ZIP code)';
-            }
-            else if (w.type === 'date') {
-                if (w.params.minDate && w.params.maxDate) {
-                    res = '(Must be between ' + w.params.minDate.str + ' and ' +
-                        w.params.maxDate.str + ')';
-                }
-                else if (w.params.minDate) {
-                    res = '(Must be after ' + w.params.minDate.str + ')';
-                }
-                else if (w.params.maxDate) {
-                    res = '(Must be before ' + w.params.maxDate.str + ')';
-                }
-                else {
-                    res = '(Format: ' + w.params.format + ')';
-                }
-            }
-            else if (w.type === 'number' || w.type === 'int' ||
-                     w.type === 'float') {
-
-                if (w.params.min && w.params.max) {
-                    res = '(Must be between ' + w.params.min + ' and ' +
-                        w.params.max + ')';
-                }
-                else if (w.params.min) {
-                    res = '(Must be after ' + w.params.min + ')';
-                }
-                else if (w.params.max) {
-                    res = '(Must be before ' + w.params.max + ')';
-                }
-            }
-            return w.requiredChoice ? ((res || '') + ' *') : (res || false);
-        },
-        numericErr: function(w) {
-            var str, p;
-            p = w.params;
-            // Weird, but valid, case.
-            if (p.exactly) return 'Must enter ' + p.lower;
-            // Others.
-            str = 'Must be ';
-            if (w.type === 'float') str += 'a floating point number ';
-            else if (w.type === 'int') str += 'an integer ';
-            if (p.between) {
-                str += (p.leq ? '&ge; ' : '<' ) + p.lower;
-                str += ' and ';
-                str += (p.ueq ? '&le; ' : '> ') + p.upper;
-            }
-            else if ('undefined' !== typeof p.lower) {
-                str += (p.leq ? '&ge; ' : '< ') + p.lower;
-            }
-            else {
-                str += (p.ueq ? '&le; ' : '> ') + p.upper;
-            }
-            return str;
-        },
-        textErr: function(w, len) {
-            var str, p;
-            p = w.params;
-            str = 'Must be ';
-            if (p.exactly) {
-                str += 'exactly ' + (p.lower + 1);
-            }
-            else if (p.between) {
-                str += 'between ' + p.lower + ' and ' + p.upper;
-            }
-            else if ('undefined' !== typeof p.lower) {
-                str += ' more than ' + (p.lower -1);
-            }
-            else if ('undefined' !== typeof p.upper) {
-                str += ' less than ' + (p.upper + 1);
-            }
-            str += ' characters long';
-            if (p.between) str += ' (extremes included)';
-            str += '. Current length: ' + len;
-            return str;
-        },
-        dateErr: function(w, param) {
-            if (param === 'invalid') return 'Date is invalid';
-            if (param === 'min') {
-                return 'Date must be after ' + w.params.minDate.str;
-            }
-            if (param === 'max') {
-                return 'Date must be before ' + w.params.maxDate.str;
-            }
-            return 'Must follow format ' + w.params.format;
-        },
-        emptyErr: function(w) {
-            return 'Cannot be empty';
-        }
+    CustomInputGroup.texts.autoHint = function(w) {
+        if (w.requiredChoice) return '*';
+        else return false;
     };
 
     // ## Dependencies
 
-    CustomInput.dependencies = {
+    CustomInputGroup.dependencies = {
         JSUS: {}
     };
 
     /**
-     * ## CustomInput constructor
+     * ## CustomInputGroup constructor
      *
-     * Creates a new instance of CustomInput
+     * Creates a new instance of CustomInputGroup
+     *
+     * @param {object} options Optional. Configuration options.
+     *   If a `table` option is specified, it sets it as the clickable
+     *   table. All other options are passed to the init method.
      */
-    function CustomInput() {
+    function CustomInputGroup(options) {
+        var that;
+        that = this;
 
         /**
-         * ### CustomInput.input
+         * ### CustomInputGroup.dl
          *
-         * The HTML input element
+         * The clickable table containing all the cells
          */
-        this.input = null;
+        this.table = null;
 
         /**
-         * ### CustomInput.placeholder
+         * ### CustomInputGroup.trs
          *
-         * The placeholder text for the input form
+         * Collection of all trs created
          *
-         * Some types preset it automatically
+         * Useful when shuffling items/choices
+         *
+         * @see CustomInputGroup.shuffle
          */
-        this.placeholder = null;
+        this.trs = [];
 
         /**
-         * ### CustomInput.inputWidth
+         * ## CustomInputGroup.listener
          *
-         * The width of the input form as string (css attribute)
+         * The listener function
          *
-         * Some types preset it automatically
+         * @see GameChoice.enable
+         * @see GameChoice.disable
          */
-        this.inputWidth = null;
+        this.listener = function(e) {
+            var name, value, item, td, oldSelected;
+            var time;
+
+            // Relative time.
+            if ('string' === typeof that.timeFrom) {
+                time = node.timer.getTimeSince(that.timeFrom);
+            }
+            // Absolute time.
+            else {
+                time = Date.now ? Date.now() : new Date().getTime();
+            }
+
+            e = e || window.event;
+            td = e.target || e.srcElement;
+
+            // Not a clickable choice.
+            if (!td.id || td.id === '') return;
+
+            // Not a clickable choice.
+            if (!that.choicesById[td.id]) return;
+
+            // Id of elements are in the form of name_value or name_item_value.
+            value = td.id.split(that.separator);
+
+            // Separator not found, not a clickable cell.
+            if (value.length === 1) return;
+
+            name = value[0];
+            value = value[1];
+
+            item = that.itemsById[name];
+
+            // Not a clickable cell.
+            if (!item) return;
+
+            item.timeCurrentChoice = time;
+
+            // One more click.
+            item.numberOfClicks++;
+
+            // If only 1 selection allowed, remove selection from oldSelected.
+            if (!item.selectMultiple) {
+                oldSelected = item.selected;
+                if (oldSelected) J.removeClass(oldSelected, 'selected');
+
+                if (item.isChoiceCurrent(value)) {
+                    item.unsetCurrentChoice(value);
+                }
+                else {
+                    item.currentChoice = value;
+                    J.addClass(td, 'selected');
+                    item.selected = td;
+                }
+            }
+
+            // Remove any warning/error from form on click.
+            if (that.isHighlighted()) that.unhighlight();
+        };
 
         /**
-         * ### CustomInput.type
+         * ### CustomInputGroup.mainText
          *
-         * The type of input
-         */
-        this.type = null;
-
-        /**
-         * ### CustomInput.preprocess
+         * The main text introducing the choices
          *
-         * The function that preprocess the input before validation
-         *
-         * The function receives the input form and must modify it directly
-         */
-        this.preprocess = null;
-
-        /**
-         * ### CustomInput.validation
-         *
-         * The validation function for the input
-         *
-         * The function returns an object like:
-         *
-         * ```javascript
-         *  {
-         *    value: 'validvalue',
-         *    err:   'This error occurred' // If invalid.
-         *  }
-         * ```
-         */
-        this.validation = null;
-
-        /**
-         * ### CustomInput.validationSpeed
-         *
-         * How often (in milliseconds) the validation function is called
-         *
-         * Default: 500
-         */
-        this.validationSpeed = 500;
-
-        /**
-         * ### CustomInput.postprocess
-         *
-         * The function that postprocess the input after validation
-         *
-         * The function returns the postprocessed valued
-         */
-        this.postprocess = null;
-
-        /**
-         * ### CustomInput.params
-         *
-         * Object containing extra validation params
-         *
-         * This object is populated by the init function
-         */
-        this.params = {};
-
-        /**
-         * ### CustomInput.errorBox
-         *
-         * An HTML element displayed when a validation error occurs
-         */
-        this.errorBox = null;
-
-        /**
-         * ### CustomInput.mainText
-         *
-         * A text preceeding the custom input
+         * @see CustomInputGroup.spanMainText
          */
         this.mainText = null;
 
         /**
-         * ### CustomInput.hint
+         * ### CustomInputGroup.spanMainText
          *
-         * An additional text with information about the input
+         * The span containing the main text
+         */
+        this.spanMainText = null;
+
+        /**
+         * ### CustomInputGroup.hint
          *
-         * If not specified, it may be auto-filled, e.g. '*'.
+         * An additional text with information about how to select items
          *
-         * @see CustomInput.texts.autoHint
+         * If not specified, it may be auto-filled, e.g. '(pick 2)'.
+         *
+         * @see Feedback.texts.autoHint
          */
         this.hint = null;
 
         /**
-         * ### CustomInput.requiredChoice
+         * ### CustomInputGroup.items
          *
-         * If TRUE, the input form cannot be left empty
+         * The array of available items
+         */
+        this.items = null;
+
+        /**
+         * ### CustomInputGroup.itemsById
          *
-         * Default: TRUE
+         * Map of items ids to items
+         */
+        this.itemsById = {};
+
+        /**
+         * ### CustomInputGroup.itemsMap
+         *
+         * Maps items ids to the position in the items array
+         */
+        this.itemsMap = {};
+
+        /**
+         * ### CustomInputGroup.choices
+         *
+         * Array of default choices (if passed as global parameter)
+         */
+        this.choices = null;
+
+        /**
+         * ### CustomInputGroup.choicesById
+         *
+         * Map of items choices ids to corresponding cell
+         *
+         * Useful to detect clickable cells.
+         */
+        this.choicesById = {};
+
+        /**
+         * ### CustomInputGroup.itemsSettings
+         *
+         * The array of settings for each item
+         */
+        this.itemsSettings = null;
+
+        /**
+         * ### CustomInputGroup.order
+         *
+         * The current order of display of choices
+         *
+         * May differ from `originalOrder` if shuffled.
+         *
+         * @see CustomInputGroup.originalOrder
+         */
+        this.order = null;
+
+        /**
+         * ### CustomInputGroup.originalOrder
+         *
+         * The initial order of display of choices
+         *
+         * @see CustomInput.order
+         */
+        this.originalOrder = null;
+
+        /**
+         * ### CustomInputGroup.shuffleItems
+         *
+         * If TRUE, items are inserted in random order
+         *
+         * @see CustomInputGroup.order
+         */
+        this.shuffleItems = null;
+
+        /**
+         * ### CustomInputGroup.requiredChoice
+         *
+         * The number of required choices.
          */
         this.requiredChoice = null;
 
         /**
-         * ### CustomInput.timeBegin
+         * ### CustomInputGroup.orientation
          *
-         * When the first character was inserted
+         * Orientation of display of items: vertical ('V') or horizontal ('H')
+         *
+         * Default orientation is horizontal.
          */
-        this.timeBegin = null;
+        this.orientation = 'H';
 
         /**
-         * ### CustomInput.timeEnd
+         * ### CustomInputGroup.group
          *
-         * When the last character was inserted
+         * The name of the group where the table belongs, if any
          */
-        this.timeEnd = null;
+        this.group = null;
 
         /**
-         * ### CustomInput.checkbox
+         * ### CustomInputGroup.groupOrder
          *
-         * A checkbox element for an additional action
+         * The order of the choice table within the group
          */
-        this.checkbox = null;
+        this.groupOrder = null;
 
         /**
-         * ### CustomInput.checkboxText
+         * ### CustomInputGroup.freeText
          *
-         * The text next to the checkbox
+         * If truthy, a textarea for free-text comment will be added
+         *
+         * If 'string', the text will be added inside the the textarea
          */
-        this.checkboxText = null;
+        this.freeText = null;
 
         /**
-         * ### CustomInput.checkboxCb
+         * ### CustomInputGroup.textarea
          *
-         * The callback executed when the checkbox is clicked
+         * Textarea for free-text comment
          */
-        this.checkboxCb = null;
+        this.textarea = null;
+
+        // Options passed to each individual item.
+
+        /**
+         * ### CustomInputGroup.timeFrom
+         *
+         * Time is measured from timestamp as saved by node.timer
+         *
+         * Default event is a new step is loaded (user can interact with
+         * the screen). Set it to FALSE, to have absolute time.
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         *
+         * @see node.timer.getTimeSince
+         */
+        this.timeFrom = 'step';
+
+        /**
+         * ### CustomInputGroup.selectMultiple
+         *
+         * If TRUE, it allows to select multiple cells
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         */
+        this.selectMultiple = null;
+
+        /**
+         * ### CustomInputGroup.renderer
+         *
+         * A callback that renders the content of each cell
+         *
+         * The callback must accept three parameters:
+         *
+         *   - a td HTML element,
+         *   - a choice
+         *   - the index of the choice element within the choices array
+         *
+         * and optionally return the _value_ for the choice (otherwise
+         * the order in the choices array is used as value).
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         */
+        this.renderer = null;
+
+        /**
+         * ### CustomInputGroup.separator
+         *
+         * Symbol used to separate tokens in the id attribute of every cell
+         *
+         * Default CustomInputGroup.separator
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         */
+        this.separator = CustomInputGroup.separator;
+
+        /**
+         * ### CustomInputGroup.shuffleChoices
+         *
+         * If TRUE, choices in items are shuffled
+         *
+         * This option is passed to each individual item.
+         *
+         * @see mixinSettings
+         */
+        this.shuffleChoices = null;
     }
 
-    // ## CustomInput methods
+    // ## CustomInputGroup methods
 
     /**
-     * ### CustomInput.init
+     * ### CustomInputGroup.init
      *
      * Initializes the instance
      *
-     * @param {object} opts Configuration options
+     * Available options are:
+     *
+     *   - className: the className of the table (string, array), or false
+     *       to have none.
+     *   - orientation: orientation of the table: vertical (v) or horizontal (h)
+     *   - group: the name of the group (number or string), if any
+     *   - groupOrder: the order of the table in the group, if any
+     *   - onclick: a custom onclick listener function. Context is
+     *       `this` instance
+     *   - mainText: a text to be displayed above the table
+     *   - shuffleItems: if TRUE, items are shuffled before being added
+     *       to the table
+     *   - freeText: if TRUE, a textarea will be added under the table,
+     *       if 'string', the text will be added inside the the textarea
+     *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
+     *       or FALSE, to measure absolute time for current choice
+     *
+     * @param {object} options Configuration options
      */
-    CustomInput.prototype.init = function(opts) {
-        var tmp, that, e, isText, setValues;
+    CustomInputGroup.prototype.init = function(options) {
+        var tmp, that;
         that = this;
-        e = 'CustomInput.init: ';
 
-        this.requiredChoice = !!opts.requiredChoice;
+        // TODO: many options checking are replicated. Skip them all?
+        // Have a method in CustomInput?
 
-        if (opts.type) {
-            if (!CustomInput.types[opts.type]) {
-                throw new Error(e + 'type not supported: ' + opts.type);
-            }
-            this.type = opts.type;
+        if (!this.id) {
+            throw new TypeError('CustomInputGroup.init: options.id ' +
+                                'is missing.');
+        }
+
+        // Option orientation, default 'H'.
+        if ('undefined' === typeof options.orientation) {
+            tmp = 'H';
+        }
+        else if ('string' !== typeof options.orientation) {
+            throw new TypeError('CustomInputGroup.init: options.orientation ' +
+                                'must be string, or undefined. Found: ' +
+                                options.orientation);
         }
         else {
-            this.type = 'text';
-        }
-
-        if (opts.validation) {
-            if ('function' !== typeof opts.validation) {
-                throw new TypeError(e + 'validation must be function ' +
-                                    'or undefined. Found: ' +
-                                    opts.validation);
+            tmp = options.orientation.toLowerCase().trim();
+            if (tmp === 'horizontal' || tmp === 'h') {
+                tmp = 'H';
             }
-            tmp = opts.validation;
-        }
-        else {
-            // Add default validations based on type.
-
-            if (this.type === 'number' || this.type === 'float' ||
-                this.type === 'int' || this.type === 'text') {
-
-                isText = this.type === 'text';
-
-                // Greater than.
-                if ('undefined' !== typeof opts.min) {
-                    tmp = J.isNumber(opts.min);
-                    if (false === tmp) {
-                        throw new TypeError(e + 'min must be number or ' +
-                                            'undefined. Found: ' + opts.min);
-                    }
-                    this.params.lower = opts.min;
-                    this.params.leq = true;
-                }
-                // Less than.
-                if ('undefined' !== typeof opts.max) {
-                    tmp = J.isNumber(opts.max);
-                    if (false === tmp) {
-                        throw new TypeError(e + 'max must be number or ' +
-                                            'undefined. Found: ' + opts.max);
-                    }
-                    this.params.upper = opts.max;
-                    this.params.ueq = true;
-                }
-
-                if (opts.strictlyGreater) this.params.leq = false;
-                if (opts.strictlyLess) this.params.ueq = false;
-
-                // Checks on both min and max.
-                if ('undefined' !== typeof this.params.lower &&
-                    'undefined' !== typeof this.params.upper) {
-
-                    if (this.params.lower > this.params.upper) {
-                        throw new TypeError(e + 'min cannot be greater ' +
-                                            'than max. Found: ' +
-                                            opts.min + '> ' + opts.max);
-                    }
-                    // Exact length.
-                    if (this.params.lower === this.params.upper) {
-                        if (!this.params.leq || !this.params.ueq) {
-
-                            throw new TypeError(e + 'min cannot be equal to ' +
-                                                'max when strictlyGreater or ' +
-                                                'strictlyLess are set. ' +
-                                                'Found: ' + opts.min);
-                        }
-                        if (this.type === 'int' || this.type === 'text') {
-                            if (J.isFloat(this.params.lower)) {
-
-
-                                throw new TypeError(e + 'min cannot be a ' +
-                                                    'floating point number ' +
-                                                    'and equal to ' +
-                                                    'max, when type ' +
-                                                    'is not "float". Found: ' +
-                                                    opts.min);
-                            }
-                        }
-                        // Store this to create better error strings.
-                        this.params.exactly = true;
-                    }
-                    else {
-                        // Store this to create better error strings.
-                        this.params.between = true;
-                    }
-                }
-
-                // Checks for text only.
-                if (isText) {
-                    if ('undefined' !== typeof this.params.lower) {
-                        if (this.params.lower < 0) {
-                            throw new TypeError(e + 'min cannot be negative ' +
-                                                'when type is "text". Found: ' +
-                                                this.params.lower);
-                        }
-                        if (!this.params.leq) this.params.lower++;
-                    }
-                    if ('undefined' !== typeof this.params.upper) {
-                        if (this.params.upper < 0) {
-                            throw new TypeError(e + 'max cannot be negative ' +
-                                                'when type is "text". Found: ' +
-                                                this.params.upper);
-                        }
-                        if (!this.params.ueq) this.params.upper--;
-                    }
-
-                    tmp = function(value) {
-                        var len, p, out, err;
-                        p = that.params;
-                        len = value.length;
-                        out = { value: value };
-                        if (p.exactly) {
-                            err = len !== p.lower;
-                        }
-                        else {
-                            if (('undefined' !== typeof p.lower &&
-                                 len < p.lower) ||
-                                ('undefined' !== typeof p.upper &&
-                                 len > p.upper)) {
-
-                                err = true;
-                            }
-                        }
-                        if (err) out.err = that.getText('textErr', len);
-                        return out;
-                    };
-
-                    setValues = function(opts) {
-                        var a, b;
-                        a = 'undefined' !== typeof that.params.lower ?
-                            (that.params.lower + 1) : 5;
-                        b = 'undefined' !== typeof that.params.upper ?
-                            that.params.upper : (a + 5);
-                        return J.randomString(J.randomInt(a, b));
-                    };
-                }
-                else {
-                    tmp = (function() {
-                        var cb;
-                        if (that.type === 'float') cb = J.isFloat;
-                        else if (that.type === 'int') cb = J.isInt;
-                        else cb = J.isNumber;
-                        return function(value) {
-                            var res, p;
-                            p = that.params;
-                            res = cb(value, p.lower, p.upper, p.leq, p.ueq);
-                            if (res !== false) return { value: res };
-                            return {
-                                value: value,
-                                err: that.getText('numericErr')
-                            };
-                        };
-                    })();
-
-                    setValues = function(opts) {
-                        var p, a, b;
-                        p = that.params;
-                        if (that.type === 'float') return J.random();
-                        a = 0;
-                        b = 10;
-                        if ('undefined' !== typeof p.lower) {
-                            a = p.leq ? (p.lower - 1) : p.lower;
-                        }
-                        if ('undefined' !== typeof p.upper) {
-                            b = p.ueq ? p.upper : (p.upper - 1);
-                        }
-                        return J.randomInt(a, b);
-                    };
-                }
-
-                // Preset inputWidth.
-                if (this.params.upper) {
-                    if (this.params.upper < 10) this.inputWidth = '100px';
-                    else if (this.params.upper < 20) this.inputWidth = '200px';
-                }
-
+            else if (tmp === 'vertical' || tmp === 'v') {
+                tmp = 'V';
             }
-            else if (this.type === 'date') {
-                if ('undefined' !== typeof opts.format) {
-                    // TODO: use regex.
-                    if (opts.format !== 'mm-dd-yy' &&
-                        opts.format !== 'dd-mm-yy' &&
-                        opts.format !== 'mm-dd-yyyy' &&
-                        opts.format !== 'dd-mm-yyyy' &&
-                        opts.format !== 'mm.dd.yy' &&
-                        opts.format !== 'dd.mm.yy' &&
-                        opts.format !== 'mm.dd.yyyy' &&
-                        opts.format !== 'dd.mm.yyyy' &&
-                        opts.format !== 'mm/dd/yy' &&
-                        opts.format !== 'dd/mm/yy' &&
-                        opts.format !== 'mm/dd/yyyy' &&
-                        opts.format !== 'dd/mm/yyyy') {
-
-                        throw new Error(e + 'date format is invalid. Found: ' +
-                                        opts.format);
-                    }
-                    this.params.format = opts.format;
-                }
-                else {
-                    this.params.format = 'mm/dd/yyyy';
-                }
-
-                this.params.sep = this.params.format.charAt(2);
-                tmp = this.params.format.split(this.params.sep);
-                this.params.yearDigits = tmp[2].length;
-                this.params.dayPos = tmp[0].charAt(0) === 'd' ? 0 : 1;
-                this.params.monthPos =  this.params.dayPos ? 0 : 1;
-                this.params.dateLen = tmp[2].length + 6;
-                if (opts.minDate) {
-                    tmp = getParsedDate(opts.minDate, this.params);
-                    if (!tmp) {
-                        throw new Error(e + 'minDate must be a Date object. ' +
-                                        'Found: ' + opts.minDate);
-                    }
-                    this.params.minDate = tmp;
-                }
-                if (opts.maxDate) {
-                    tmp = getParsedDate(opts.maxDate, this.params);
-                    if (!tmp) {
-                        throw new Error(e + 'maxDate must be a Date object. ' +
-                                        'Found: ' + opts.maxDate);
-                    }
-                    if (this.params.minDate &&
-                        this.params.minDate.obj > tmp.obj) {
-
-                        throw new Error(e + 'maxDate cannot be prior to ' +
-                                        'minDate. Found: ' + tmp.str +
-                                        ' < ' + this.params.minDate.str);
-                    }
-                    this.params.maxDate = tmp;
-                }
-
-                // Preset inputWidth.
-                if (this.params.yearDigits === 2) this.inputWidth = '100px';
-                else this.inputWidth = '150px';
-
-                // Preset placeholder.
-                this.placeholder = this.params.format;
-
-                tmp = function(value) {
-                    var p, tokens, tmp, res, dayNum, l1, l2;
-                    p = that.params;
-
-                    // Is the format valid.
-
-                    tokens = value.split(p.sep);
-                    if (tokens.length !== 3) {
-                        return { err: that.getText('dateErr') };
-                    }
-
-                    // Year.
-                    if (tokens[2].length !== p.yearDigits) {
-                        return { err: that.getText('dateErr') };
-                    }
-
-                    // Now we check if the date is valid.
-
-                    res = {};
-                    if (p.yearDigits === 2) {
-                        l1 = -1;
-                        l2 = 100;
-                    }
-                    else {
-                        l1 = -1;
-                        l2 = 10000;
-                    }
-                    tmp = J.isInt(tokens[2], l1, l2);
-                    if (tmp !== false) res.year = tmp;
-                    else res.err = true;
-
-                    // Month.
-                    tmp = J.isInt(tokens[p.monthPos], 1, 12, 1, 1);
-                    if (!tmp) res.err = true;
-                    else res.month = tmp;
-                    // 31 or 30 days?
-                    if (tmp === 1 || tmp === 3 || tmp === 5 || tmp === 7 ||
-                        tmp === 8 || tmp === 10 || tmp === 12) {
-
-                        dayNum = 31;
-                    }
-                    else if (tmp !== 2) {
-                        dayNum = 30;
-                    }
-                    else {
-                        // Is it leap year?
-                        dayNum = (res.year % 4 === 0 && res.year % 100 !== 0) ||
-                            res.year % 400 === 0 ? 29 : 28;
-                    }
-                    res.month = tmp;
-                    // Day.
-                    tmp = J.isInt(tokens[p.dayPos], 1, dayNum, 1, 1);
-                    if (!tmp) res.err = true;
-                    else res.day = tmp;
-
-                    if (res.err) {
-                        res.err = that.getText('dateErr', 'invalid');
-                    }
-                    else if (p.minDate || p.maxDate) {
-                        tmp = new Date(value);
-                        if (p.minDate.obj && p.minDate.obj > tmp) {
-                            res.err = that.getText('dateErr', 'min');
-                        }
-                        else if (p.maxDate.obj && p.maxDate.obj < tmp) {
-                            res.err = that.getText('dateErr', 'max');
-                        }
-                    }
-                    if (!res.err) {
-                        res.value = value;
-                        res = { value: res };
-                    }
-                    return res;
-                };
-
-                setValues = function(opts) {
-                    var p, minD, maxD, d, day, month, year;
-                    p = that.params;
-                    minD = p.minDate ? p.minDate.obj : new Date('01/01/1900');
-                    maxD = p.maxDate ? p.maxDate.obj : undefined;
-                    d = J.randomDate(minD, maxD);
-                    day = d.getDate();
-                    month = (d.getMonth() + 1);
-                    year = d.getFullYear();
-                    if (p.yearDigits === 2) year = ('' + year).substr(2);
-                    if (p.monthPos === 0) d = month + p.sep + day;
-                    else d = day + p.sep + month;
-                    d += p.sep + year;
-                    return d;
-                };
-            }
-            else if (this.type === 'us_state') {
-                if (opts.abbreviation) {
-                    this.params.abbr = true;
-                    this.inputWidth = '100px';
-                }
-                else {
-                    this.inputWidth = '200px';
-                }
-                if (opts.territories !== false) {
-                    this.terr = true;
-                    if (this.params.abbr) {
-                        tmp = getUsStatesList('usStatesTerrByAbbrLow');
-                    }
-                    else {
-                        tmp = getUsStatesList('usStatesTerrLow');
-                    }
-                }
-                else {
-                    if (this.params.abbr) {
-                        tmp = getUsStatesList('usStatesByAbbrLow');
-                    }
-                    else {
-                        tmp = getUsStatesList('usStatesLow');
-                    }
-                }
-                this.params.usStateVal = tmp;
-
-                tmp = function(value) {
-                    var res;
-                    res = { value: value };
-                    if (!that.params.usStateVal[value.toLowerCase()]) {
-                        res.err = that.getText('usStateErr');
-                    }
-                    return res;
-                };
-
-                setValues = function(opts) {
-                    return J.randomKey(that.params.usStateVal);
-                };
-
-            }
-            else if (this.type === 'us_zip') {
-                tmp = function(value) {
-                    var res;
-                    res = { value: value };
-                    if (!isValidUSZip(value)) {
-                        res.err = that.getText('usZipErr');
-                    }
-                    return res;
-                };
-
-                setValues = function(opts) {
-                    return Math.floor(Math.random()*90000) + 10000;
-                };
-            }
-
-            // Lists.
-
-            else if (this.type === 'list' ||
-                     this.type === 'us_city_state_zip') {
-
-                if (opts.listSeparator) {
-                    if ('string' !== typeof opts.listSeparator) {
-                        throw new TypeError(e + 'listSeparator must be ' +
-                                            'string or undefined. Found: ' +
-                                            opts.listSeperator);
-                    }
-                    this.params.listSep = opts.listSeparator;
-                }
-                else {
-                    this.params.listSep = ',';
-                }
-
-                if (this.type === 'us_city_state_zip') {
-
-                    getUsStatesList('usStatesTerrByAbbr');
-                    this.params.minItems = this.params.maxItems = 3;
-                    this.params.fixedSize = true;
-                    this.params.itemValidation = function(item, idx) {
-                        if (idx === 2) {
-                            if (!usStatesTerrByAbbr[item.toUpperCase()]) {
-                                return { err: that.getText('usStateAbbrErr') };
-                            }
-                        }
-                        else if (idx === 3) {
-                            if (!isValidUSZip(item)) {
-                                return { err: that.getText('usZipErr') };
-                            }
-                        }
-                    };
-
-                    this.placeholder = 'Town' + this.params.listSep +
-                        ' State' + this.params.listSep + ' ZIP';
-                }
-                else {
-                    if ('undefined' !== typeof opts.minItems) {
-                        tmp = J.isInt(opts.minItems, 0);
-                        if (tmp === false) {
-                            throw new TypeError(e + 'minItems must be ' +
-                                                'a positive integer. Found: ' +
-                                                opts.minItems);
-                        }
-                        this.params.minItems = tmp;
-                    }
-                    if ('undefined' !== typeof opts.maxItems) {
-                        tmp = J.isInt(opts.maxItems, 0);
-                        if (tmp === false) {
-                            throw new TypeError(e + 'maxItems must be ' +
-                                                'a positive integer. Found: ' +
-                                                opts.maxItems);
-                        }
-                        if (this.params.minItems &&
-                            this.params.minItems > tmp) {
-
-                            throw new TypeError(e + 'maxItems must be larger ' +
-                                                'than minItems. Found: ' +
-                                                tmp + ' < ' +
-                                                this.params.minItems);
-                        }
-                        this.params.maxItems = tmp;
-                    }
-                }
-
-                tmp = function(value) {
-                    var i, len, v, iVal, err;
-                    value = value.split(that.params.listSep);
-                    len = value.length;
-                    if (!len) return value;
-                    iVal = that.params.itemValidation;
-                    i = 0;
-                    v = value[0].trim();
-                    if (!v) return { err: that.getText('listErr') };
-                    if (iVal) {
-                        err = iVal(v, 1);
-                        if (err) return err;
-                    }
-                    value[i++] = v;
-                    if (len > 1) {
-                        v = value[1].trim();
-                        if (!v) return { err: that.getText('listErr') };
-                        if (iVal) {
-                            err = iVal(v, (i+1));
-                            if (err) return err;
-                        }
-                        value[i++] = v;
-                    }
-                    if (len > 2) {
-                        v = value[2].trim();
-                        if (!v) return { err: that.getText('listErr') };
-                        if (iVal) {
-                            err = iVal(v, (i+1));
-                            if (err) return err;
-                        }
-                        value[i++] = v;
-                    }
-                    if (len > 3) {
-                        for ( ; i < len ; ) {
-                            v = value[i].trim();
-                            if (!v) return { err: that.getText('listErr') };
-                            if (iVal) {
-                                err = iVal(v, (i+1));
-                                if (err) return err;
-                            }
-                            value[i++] = v;
-                        }
-                    }
-                    // Need to do it here, because some elements might be empty.
-                    if (that.params.minItems && i < that.params.minItems) {
-                        return { err: that.getText('listSizeErr', 'min') };
-                    }
-                    if (that.params.maxItems && i > that.params.maxItems) {
-                        return { err: that.getText('listSizeErr', 'max') };
-                    }
-                    return { value: value };
-                };
-
-                if (this.type === 'us_city_state_zip') {
-                    setValues = function(opts) {
-                        var sep;
-                        sep = that.params.listSep + ' ';
-                        return J.randomString(8) + sep +
-                            J.randomKey(usStatesTerrByAbbr) + sep +
-                            (Math.floor(Math.random()*90000) + 10000);
-                    };
-                }
-                else {
-                    setValues = function(opts) {
-                        var p, minItems, nItems, i, str, sample;
-                        p = that.params;
-                        minItems = p.minItems || 0;
-                        if (opts.availableValues) {
-                            nItems = J.randomInt(minItems,
-                                                 opts.availableValues.length);
-                            nItems--;
-                            sample = J.sample(0, (nItems-1));
-                        }
-                        else {
-                            nItems = J.randomInt(minItems,
-                                                 p.maxItems || (minItems + 5));
-                            nItems--;
-                        }
-                        str = '';
-                        for (i = 0; i < nItems; i++) {
-                            if (i !== 0) str += p.listSep + ' ';
-                            if (sample) str += opts.availableValues[sample[i]];
-                            else str += J.randomString(J.randomInt(3,10));
-                        }
-                        return str;
-                    };
-                }
-
-            }
-
-            // US_Town,State, Zip Code
-
-            // TODO: add other types, e.g.int and email.
-        }
-
-        // Variable tmp contains a validation function, either from
-        // defaults, or from user option.
-
-        this.validation = function(value) {
-            var res;
-            res = { value: value };
-            if (value.trim() === '') {
-                if (that.requiredChoice) res.err = that.getText('emptyErr');
-            }
-            else if (tmp) {
-                res = tmp(value);
-            }
-            return res;
-        };
-
-        this._setValues = setValues;
-
-        // Preprocess
-
-        if (opts.preprocess) {
-            if ('function' !== typeof opts.preprocess) {
-                throw new TypeError(e + 'preprocess must be function or ' +
-                                    'undefined. Found: ' + opts.preprocess);
-            }
-            this.preprocess = opts.preprocess;
-        }
-        else if (opts.preprocess !== false) {
-
-            if (this.type === 'date') {
-                this.preprocess = function(input) {
-                    var sep, len;
-                    len = input.value.length;
-                    sep = that.params.sep;
-                    if (len === 2) {
-                        if (input.selectionStart === 2) {
-                            if (input.value.charAt(1) !== sep) {
-                                input.value += sep;
-                            }
-                        }
-                    }
-                    else if (len === 5) {
-                        if (input.selectionStart === 5) {
-                            if (input.value.charAt(4) !== sep &&
-                                (input.value.split(sep).length - 1) === 1) {
-
-                                input.value += sep;
-                            }
-                        }
-                    }
-                    else if (len > this.params.dateLen) {
-                        input.value =
-                            input.value.substring(0, this.params.dateLen);
-                    }
-                };
-            }
-            else if (this.type === 'list' ||
-                     this.type === 'us_city_state_zip') {
-
-                // Add a space after separator, if separator is not space.
-                if (this.params.listSep.trim() !== '') {
-                    this.preprocess = function(input) {
-                        var sep, len;
-                        len = input.value.length;
-                        sep = that.params.listSep;
-                        if (len > 1 &&
-                            len === input.selectionStart &&
-                            input.value.charAt(len-1) === sep &&
-                            input.value.charAt(len-2) !== sep) {
-
-                            input.value += ' ';
-                        }
-                    };
-                }
+            else {
+                throw new Error('CustomInputGroup.init: options.orientation ' +
+                                'is invalid: ' + tmp);
             }
         }
+        this.orientation = tmp;
 
-        // Postprocess.
+        // Option shuffleItems, default false.
+        if ('undefined' === typeof options.shuffleItems) tmp = false;
+        else tmp = !!options.shuffleItems;
+        this.shuffleItems = tmp;
 
-        if (opts.postprocess) {
-            if ('function' !== typeof opts.postprocess) {
-                throw new TypeError(e + 'postprocess must be function or ' +
-                                    'undefined. Found: ' + opts.postprocess);
-            }
-            this.postprocess = opts.postprocess;
+        // Option requiredChoice, if any.
+        if ('number' === typeof options.requiredChoice) {
+            this.requiredChoice = options.requiredChoice;
+        }
+        else if ('boolean' === typeof options.requiredChoice) {
+            this.requiredChoice = options.requiredChoice ? 1 : 0;
+        }
+        else if ('undefined' !== typeof options.requiredChoice) {
+            throw new TypeError('CustomInputGroup.init: ' +
+                                'options.requiredChoice ' +
+                                'be number or boolean or undefined. Found: ' +
+                                options.requiredChoice);
+        }
+
+        // Set the group, if any.
+        if ('string' === typeof options.group ||
+            'number' === typeof options.group) {
+
+            this.group = options.group;
+        }
+        else if ('undefined' !== typeof options.group) {
+            throw new TypeError('CustomInputGroup.init: options.group must ' +
+                                'be string, number or undefined. Found: ' +
+                                options.group);
+        }
+
+        // Set the groupOrder, if any.
+        if ('number' === typeof options.groupOrder) {
+
+            this.groupOrder = options.groupOrder;
+        }
+        else if ('undefined' !== typeof options.group) {
+            throw new TypeError('CustomInputGroup.init: options.groupOrder ' +
+                                'must be number or undefined. Found: ' +
+                                options.groupOrder);
+        }
+
+        // Set the onclick listener, if any.
+        if ('function' === typeof options.onclick) {
+            this.listener = function(e) {
+                options.onclick.call(this, e);
+            };
+        }
+        else if ('undefined' !== typeof options.onclick) {
+            throw new TypeError('CustomInputGroup.init: options.onclick must ' +
+                                'be function or undefined. Found: ' +
+                                options.onclick);
+        }
+
+        // Set the mainText, if any.
+        if ('string' === typeof options.mainText) {
+            this.mainText = options.mainText;
+        }
+        else if ('undefined' !== typeof options.mainText) {
+            throw new TypeError('CustomInputGroup.init: options.mainText ' +
+                                'must be string or undefined. Found: ' +
+                                options.mainText);
+        }
+
+        // Set the hint, if any.
+        if ('string' === typeof options.hint || false === options.hint) {
+            this.hint = options.hint;
+        }
+        else if ('undefined' !== typeof options.hint) {
+            throw new TypeError('CustomInputGroup.init: options.hint must ' +
+                                'be a string, false, or undefined. Found: ' +
+                                options.hint);
         }
         else {
-            // Add postprocess as needed.
-        }
-
-        // Validation Speed
-        if ('undefined' !== typeof opts.validationSpeed) {
-            tmp = J.isInt(opts.valiadtionSpeed, 0, undefined, true);
-            if (tmp === false) {
-                throw new TypeError(e + 'validationSpeed must a non-negative ' +
-                                    'number or undefined. Found: ' +
-                                    opts.validationSpeed);
-            }
-            this.validationSpeed = tmp;
-        }
-
-        // MainText, Hint, and other visuals.
-
-        if (opts.mainText) {
-            if ('string' !== typeof opts.mainText) {
-                throw new TypeError(e + 'mainText must be string or ' +
-                                    'undefined. Found: ' + opts.mainText);
-            }
-            this.mainText = opts.mainText;
-        }
-        if ('undefined' !== typeof opts.hint) {
-            if (false !== opts.hint && 'string' !== typeof opts.hint) {
-                throw new TypeError(e + 'hint must be a string, false, or ' +
-                                    'undefined. Found: ' + opts.hint);
-            }
-            this.hint = opts.hint;
-            if (this.requiredChoice) this.hint += ' *';
-        }
-        else {
+            // Returns undefined if there are no constraints.
             this.hint = this.getText('autoHint');
         }
-        if (opts.placeholder) {
-            if ('string' !== typeof opts.placeholder) {
-                throw new TypeError(e + 'placeholder must be string or ' +
-                                    'undefined. Found: ' + opts.placeholder);
-            }
-            this.placeholder = opts.placeholder;
+
+        // Set the timeFrom, if any.
+        if (options.timeFrom === false ||
+            'string' === typeof options.timeFrom) {
+
+            this.timeFrom = options.timeFrom;
         }
-        if (opts.width) {
-            if ('string' !== typeof opts.width) {
-                throw new TypeError(e + 'width must be string or ' +
-                                    'undefined. Found: ' + opts.width);
-            }
-            this.inputWidth = opts.width;
+        else if ('undefined' !== typeof options.timeFrom) {
+            throw new TypeError('CustomInputGroup.init: options.timeFrom ' +
+                                'must be string, false, or undefined. Found: ' +
+                                options.timeFrom);
         }
 
-        if (opts.checkboxText) {
-            if ('string' !== typeof opts.checkboxText) {
-                throw new TypeError(e + 'checkboxText must be string or ' +
-                                    'undefined. Found: ' + opts.checkboxText);
-            }
-            this.checkboxText = opts.checkboxText;
+        // Option shuffleChoices, default false.
+        if ('undefined' !== typeof options.shuffleChoices) {
+            this.shuffleChoices = !!options.shuffleChoices;
         }
 
-        if (opts.checkboxCb) {
-            if (!this.checkboxText) {
-                throw new TypeError(e + 'checkboxCb cannot be defined ' +
-                                    'if checkboxText is not defined');
-            }
-            if ('function' !== typeof opts.checkboxCb) {
-                throw new TypeError(e + 'checkboxCb must be function or ' +
-                                    'undefined. Found: ' + opts.checkboxCb);
-            }
-            this.checkboxCb = opts.checkboxCb;
+        // Set the renderer, if any.
+        if ('function' === typeof options.renderer) {
+            this.renderer = options.renderer;
         }
+        else if ('undefined' !== typeof options.renderer) {
+            throw new TypeError('CustomInputGroup.init: options.renderer ' +
+                                'must be function or undefined. Found: ' +
+                                options.renderer);
+        }
+
+        // Set default choices, if any.
+        if ('undefined' !== typeof options.choices) {
+            this.choices = options.choices;
+        }
+
+        // Set the className, if not use default.
+        if ('undefined' === typeof options.className) {
+            this.className = CustomInputGroup.className;
+        }
+        else if (options.className === false ||
+                 'string' === typeof options.className ||
+                 J.isArray(options.className)) {
+
+            this.className = options.className;
+        }
+        else {
+            throw new TypeError('CustomInputGroup.init: options.' +
+                                'className must be string, array, ' +
+                                'or undefined. Found: ' + options.className);
+        }
+
+        // After all configuration options are evaluated, add items.
+
+        if ('object' === typeof options.table) {
+            this.table = options.table;
+        }
+        else if ('undefined' !== typeof options.table &&
+                 false !== options.table) {
+
+            throw new TypeError('CustomInputGroup.init: options.table ' +
+                                'must be object, false or undefined. ' +
+                                'Found: ' + options.table);
+        }
+
+        this.table = options.table;
+
+        this.freeText = 'string' === typeof options.freeText ?
+            options.freeText : !!options.freeText;
+
+        // Add the items.
+        if ('undefined' !== typeof options.items) this.setItems(options.items);
+
     };
 
+    /**
+     * ### CustomInputGroup.setItems
+     *
+     * Sets the available items and optionally builds the table
+     *
+     * @param {array} items The array of items
+     *
+     * @see CustomInputGroup.table
+     * @see CustomInputGroup.order
+     * @see CustomInputGroup.shuffleItems
+     * @see CustomInputGroup.buildTable
+     */
+    CustomInputGroup.prototype.setItems = function(items) {
+        var len;
+        if (!J.isArray(items)) {
+            throw new TypeError('CustomInputGroup.setItems: ' +
+                                'items must be array. Found: ' + items);
+        }
+        if (!items.length) {
+            throw new Error('CustomInputGroup.setItems: ' +
+                            'items is an empty array.');
+        }
+
+        len = items.length;
+        this.itemsSettings = items;
+        this.items = new Array(len);
+
+        // Save the order in which the items will be added.
+        this.order = J.seq(0, len-1);
+        if (this.shuffleItems) this.order = J.shuffle(this.order);
+        this.originalOrder = this.order;
+
+        // Build the table and items at once (faster).
+        if (this.table) this.buildTable();
+    };
 
     /**
-     * ### CustomInput.append
+     * ### CustomInputGroup.buildTable
+     *
+     * Builds the table of clickable items and enables it
+     *
+     * Must be called after items have been set already.
+     *
+     * @see CustomInputGroup.setCustomInputs
+     * @see CustomInputGroup.order
+     */
+    CustomInputGroup.prototype.buildTable = function() {
+        var i, len, tr, H, ct;
+        var j, lenJ, lenJOld, hasRight, cell;
+
+        H = this.orientation === 'H';
+        i = -1, len = this.itemsSettings.length;
+        if (H) {
+            for ( ; ++i < len ; ) {
+                // Get item.
+                ct = getCustomInput(this, i);
+
+                // Add new TR.
+                tr = createTR(this, ct.id);
+
+                // Append choices for item.
+                tr.appendChild(ct.leftCell);
+                j = -1, lenJ = ct.choicesCells.length;
+                // Make sure all items have same number of choices.
+                if (i === 0) {
+                    lenJOld = lenJ;
+                }
+                else if (lenJ !== lenJOld) {
+                    throw new Error('CustomInputGroup.buildTable: item ' +
+                                    'do not have same number of choices: ' +
+                                    ct.id);
+                }
+                // TODO: might optimize. There are two loops (+1 inside ct).
+                for ( ; ++j < lenJ ; ) {
+                    cell = ct.choicesCells[j];
+                    tr.appendChild(cell);
+                    this.choicesById[cell.id] = cell;
+                }
+                if (ct.rightCell) tr.appendChild(ct.rightCell);
+            }
+        }
+        else {
+
+            // Add new TR.
+            tr = createTR(this, 'header');
+
+            // Build all items first.
+            for ( ; ++i < len ; ) {
+
+                // Get item, append choices for item.
+                ct = getCustomInput(this, i);
+
+                // Make sure all items have same number of choices.
+                lenJ = ct.choicesCells.length;
+                if (i === 0) {
+                    lenJOld = lenJ;
+                }
+                else if (lenJ !== lenJOld) {
+                    throw new Error('CustomInputGroup.buildTable: item ' +
+                                    'do not have same number of choices: ' +
+                                    ct.id);
+                }
+
+                if ('undefined' === typeof hasRight) {
+                    hasRight = !!ct.rightCell;
+                }
+                else if ((!ct.rightCell && hasRight) ||
+                         (ct.rightCell && !hasRight)) {
+
+                    throw new Error('CustomInputGroup.buildTable: either all ' +
+                                    'items or no item must have the right ' +
+                                    'cell: ' + ct.id);
+
+                }
+                // Add left.
+                tr.appendChild(ct.leftCell);
+            }
+
+            if (hasRight) lenJ++;
+
+            j = -1;
+            for ( ; ++j < lenJ ; ) {
+                // Add new TR.
+                tr = createTR(this, 'row' + (j+1));
+
+                i = -1;
+                // TODO: might optimize. There are two loops (+1 inside ct).
+                for ( ; ++i < len ; ) {
+                    if (hasRight && j === (lenJ-1)) {
+                        tr.appendChild(this.items[i].rightCell);
+                    }
+                    else {
+                        cell = this.items[i].choicesCells[j];
+                        tr.appendChild(cell);
+                        this.choicesById[cell.id] = cell;
+                    }
+                }
+            }
+
+        }
+
+        // Enable onclick listener.
+        this.enable(true);
+    };
+
+    /**
+     * ### CustomInputGroup.append
      *
      * Implements Widget.append
      *
+     * Checks that id is unique.
+     *
+     * Appends (all optional):
+     *
+     *   - mainText: a question or statement introducing the choices
+     *   - table: the table containing the choices
+     *   - freeText: a textarea for comments
+     *
      * @see Widget.append
      */
-    CustomInput.prototype.append = function() {
-        var that, timeout;
-        that = this;
+    CustomInputGroup.prototype.append = function() {
+        // Id must be unique.
+        if (W.getElementById(this.id)) {
+            throw new Error('CustomInputGroup.append: id ' +
+                            'is not unique: ' + this.id);
+        }
 
         // MainText.
         if (this.mainText) {
             this.spanMainText = W.append('span', this.bodyDiv, {
-                className: 'custominput-maintext',
+                className: 'choicetable-maintext',
                 innerHTML: this.mainText
             });
         }
         // Hint.
         if (this.hint) {
             W.append('span', this.spanMainText || this.bodyDiv, {
-                className: 'custominput-hint',
+                className: 'choicetable-hint',
                 innerHTML: this.hint
             });
         }
 
-        this.input = W.append('input', this.bodyDiv);
-        if (this.placeholder) this.input.placeholder = this.placeholder;
-        if (this.inputWidth) this.input.style.width = this.inputWidth;
-
-        this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
-
-        this.input.oninput = function() {
-            if (!that.timeBegin) {
-                that.timeEnd = that.timeBegin = node.timer.getTimeSince('step');
+        // Create/set table, if requested.
+        if (this.table !== false) {
+            if ('undefined' === typeof this.table) {
+                this.table = document.createElement('table');
+                if (this.items) this.buildTable();
             }
-            else {
-                that.timeEnd = node.timer.getTimeSince('step');
+            // Set table id.
+            this.table.id = this.id;
+            if (this.className) J.addClass(this.table, this.className);
+            else this.table.className = '';
+            // Append table.
+            this.bodyDiv.appendChild(this.table);
+        }
+
+        // Creates a free-text textarea, possibly with placeholder text.
+        if (this.freeText) {
+            this.textarea = document.createElement('textarea');
+            this.textarea.id = this.id + '_text';
+            this.textarea.className = CustomInputGroup.className + '-freetext';
+            if ('string' === typeof this.freeText) {
+                this.textarea.placeholder = this.freeText;
             }
-            if (timeout) clearTimeout(timeout);
-            if (that.isHighlighted()) that.unhighlight();
-            if (that.preprocess) that.preprocess(that.input);
-            timeout = setTimeout(function() {
-                var res;
-                if (that.validation) {
-                    res = that.validation(that.input.value);
-                    if (res.err) that.setError(res.err);
-                }
-            }, that.validationSpeed);
-        };
-        this.input.onclick = function() {
-            if (that.isHighlighted()) that.unhighlight();
-        };
-
-
-        // Checkbox.
-        if (this.checkboxText) {
-            this.checkbox = W.append('input', this.bodyDiv, {
-                type: 'checkbox',
-                className: 'custominput-checkbox'
-            });
-            W.append('span', this.bodyDiv, {
-                className: 'custominput-checkbox-text',
-                innerHTML: this.checkboxText
-            });
-
-            if (this.checkboxCb) {
-                J.addEvent(this.checkbox, 'change', function() {
-                    that.checkboxCb(that.checkbox.checked, that);
-                });
-            }
+            // Append textarea.
+            this.bodyDiv.appendChild(this.textarea);
         }
     };
 
     /**
-     * ### CustomInput.setError
+     * ### CustomInputGroup.listeners
      *
-     * Set the error msg inside the errorBox and call highlight
+     * Implements Widget.listeners
      *
-     * @param {string} The error msg (can contain HTML)
+     * Adds two listeners two disable/enable the widget on events:
+     * INPUT_DISABLE, INPUT_ENABLE
      *
-     * @see CustomInput.highlight
-     * @see CustomInput.errorBox
+     * Notice! Nested choice tables listeners are not executed.
+     *
+     * @see Widget.listeners
+     * @see mixinSettings
      */
-    CustomInput.prototype.setError = function(err) {
-        this.errorBox.innerHTML = err;
-        this.highlight();
+    CustomInputGroup.prototype.listeners = function() {
+        var that = this;
+        node.on('INPUT_DISABLE', function() {
+            that.disable();
+        });
+        node.on('INPUT_ENABLE', function() {
+            that.enable();
+        });
     };
 
     /**
-     * ### CustomInput.highlight
+     * ### CustomInputGroup.disable
      *
-     * Highlights the input
+     * Disables clicking on the table and removes CSS 'clicklable' class
+     */
+    CustomInputGroup.prototype.disable = function() {
+        if (this.disabled === true || !this.table) return;
+        this.disabled = true;
+        J.removeClass(this.table, 'clickable');
+        this.table.removeEventListener('click', this.listener);
+        // Remove listener to make cells clickable with the keyboard.
+        this.emit('disabled');
+    };
+
+    /**
+     * ### CustomInputGroup.enable
+     *
+     * Enables clicking on the table and adds CSS 'clicklable' class
+     *
+     * @return {function} cb The event listener function
+     */
+    CustomInputGroup.prototype.enable = function(force) {
+        if (!this.table || (!force && !this.disabled)) return;
+        this.disabled = false;
+        J.addClass(this.table, 'clickable');
+        this.table.addEventListener('click', this.listener);
+        // Add listener to make cells clickable with the keyboard.
+        this.emit('enabled');
+    };
+
+    /**
+     * ### CustomInputGroup.verifyChoice
+     *
+     * Compares the current choice/s with the correct one/s
+     *
+     * @param {boolean} markAttempt Optional. If TRUE, the value of
+     *   current choice is added to the attempts array. Default
+     *
+     * @return {boolean|null} TRUE if current choice is correct,
+     *   FALSE if it is not correct, or NULL if no correct choice
+     *   was set
+     *
+     * @see CustomInputGroup.attempts
+     * @see CustomInputGroup.setCorrectChoice
+     */
+    CustomInputGroup.prototype.verifyChoice = function(markAttempt) {
+        var i, len, out;
+        out = {};
+        // Mark attempt by default.
+        markAttempt = 'undefined' === typeof markAttempt ? true : markAttempt;
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            out[this.items[i].id] = this.items[i].verifyChoice(markAttempt);
+        }
+        return out;
+    };
+
+    /**
+     * ### CustomInput.setCurrentChoice
+     *
+     * Marks a choice as current in each item
+     *
+     * If the item allows it, multiple choices can be set as current.
+     *
+     * @param {number|string} The choice to mark as current
+     *
+     * @see CustomInput.currentChoice
+     * @see CustomInput.selectMultiple
+     */
+    CustomInputGroup.prototype.setCurrentChoice = function(choice) {
+        var i, len;
+        i = -1, len = this.items[i].length;
+        for ( ; ++i < len ; ) {
+            this.items[i].setCurrentChoice(choice);
+        }
+    };
+
+    /**
+     * ### CustomInputGroup.unsetCurrentChoice
+     *
+     * Deletes the value for currentChoice from every item
+     *
+     * If `CustomInputGroup.selectMultiple` is set the
+     *
+     * @param {number|string} Optional. The choice to delete from currentChoice
+     *   when multiple selections are allowed
+     *
+     * @see CustomInputGroup.currentChoice
+     * @see CustomInputGroup.selectMultiple
+     */
+    CustomInputGroup.prototype.unsetCurrentChoice = function(choice) {
+        var i, len;
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            this.items[i].unsetCurrentChoice(choice);
+        }
+    };
+
+    /**
+     * ### CustomInputGroup.highlight
+     *
+     * Highlights the choice table
      *
      * @param {string} The style for the table's border.
-     *   Default '3px solid red'
+     *   Default '1px solid red'
      *
-     * @see CustomInput.highlighted
+     * @see CustomInputGroup.highlighted
      */
-    CustomInput.prototype.highlight = function(border) {
+    CustomInputGroup.prototype.highlight = function(border) {
         if (border && 'string' !== typeof border) {
-            throw new TypeError('CustomInput.highlight: border must be ' +
+            throw new TypeError('CustomInputGroup.highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
-        if (!this.input || this.highlighted) return;
-        this.input.style.border = border || '3px solid red';
+        if (!this.table || this.highlighted === true) return;
+        this.table.style.border = border || '3px solid red';
         this.highlighted = true;
         this.emit('highlighted', border);
     };
 
     /**
-     * ### CustomInput.unhighlight
+     * ### CustomInputGroup.unhighlight
      *
-     * Removes highlight from the input
+     * Removes highlight from the choice table
      *
-     * @see CustomInput.highlighted
+     * @see CustomInputGroup.highlighted
      */
-    CustomInput.prototype.unhighlight = function() {
-        if (!this.input || this.highlighted !== true) return;
-        this.input.style.border = '';
+    CustomInputGroup.prototype.unhighlight = function() {
+        if (!this.table || this.highlighted !== true) return;
+        this.table.style.border = '';
         this.highlighted = false;
-        this.errorBox.innerHTML = '';
         this.emit('unhighlighted');
     };
 
     /**
-     * ### CustomInput.disable
+     * ### CustomInputGroup.getValues
      *
-     * Disables the widget
+     * Returns the values for current selection and other paradata
      *
-     * @see CustomInput.disabled
-     */
-    CustomInput.prototype.disable = function(opts) {
-        if (this.disabled) return;
-        if (!this.isAppended()) return;
-        this.disabled = true;
-        this.input.disabled = true;
-        if (this.checkbox && (!opts || opts.checkbox !== false)) {
-            this.checkbox.disable = true;
-        }
-        this.emit('disabled');
-    };
-
-    /**
-     * ### CustomInput.enable
-     *
-     * Enables the widget
-     *
-     * @see CustomInput.disabled
-     */
-    CustomInput.prototype.enable = function(opts) {
-        if (this.disabled !== true) return;
-        if (!this.isAppended()) return;
-        this.disabled = false;
-        this.input.disabled = false;
-        if (this.checkbox && (!opts || opts.checkbox !== false)) {
-            this.checkbox.disable = false;
-        }
-        this.emit('enabled');
-    };
-
-    /**
-     * ### CustomInput.reset
-     *
-     * Resets the widget
-     */
-    CustomInput.prototype.reset = function() {
-        if (this.input) this.input.value = '';
-        if (this.isHighlighted()) this.unhighlight();
-        this.timeBegin = this.timeEnd = null;
-    };
-
-    /**
-     * ### CustomInput.getValues
-     *
-     * Returns the value currently in the input
-     *
-     * The postprocess function is called if specified
+     * Paradata that is not set or recorded will be omitted
      *
      * @param {object} opts Optional. Configures the return value.
-     *   Available options:
+     *   Available optionts:
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
-     *       to find the correct answer. Default: TRUE.
+     *      to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, if current value is not the correct
-     *       value, widget will be highlighted. Default: TRUE.
-     *   - reset:       If TRUTHY and a correct choice is selected (or not
-     *       specified), then it resets the state of the widgets before
+     *      value, widget will be highlighted. Default: TRUE.
+     *   - reset:    If TRUTHY and no item raises an error,
+     *       then it resets the state of all items before
      *       returning it. Default: FALSE.
      *
-     * @return {mixed} The value in the input
+     * @return {object} Object containing the choice and paradata
      *
-     * @see CustomInput.verifyChoice
-     * @see CustomInput.reset
+     * @see CustomInputGroup.verifyChoice
+     * @see CustomInputGroup.reset
      */
-    CustomInput.prototype.getValues = function(opts) {
-        var res, valid;
+    CustomInputGroup.prototype.getValues = function(opts) {
+        var obj, i, len, tbl, toHighlight, toReset;
+        obj = {
+            id: this.id,
+            order: this.order,
+            items: {},
+            isCorrect: true
+        };
         opts = opts || {};
-        if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
-        res = this.input.value;
-        res = this.validation ? this.validation(res) : { value: res };
-        valid = !res.err;
-        res.timeBegin = this.timeBegin;
-        res.timeEnd = this.timeEnd;
-        if (this.postprocess) res.value = this.postprocess(res.value, valid);
-        if (!valid) {
-            if (opts.highlight) this.setError(res.err);
-            if (opts.markAttempt) res.isCorrect = false;
+        // Make sure reset is done only at the end.
+        toReset = opts.reset;
+        opts.reset = false;
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            tbl = this.items[i];
+            obj.items[tbl.id] = tbl.getValues(opts);
+            if (obj.items[tbl.id].choice === null) {
+                obj.missValues = true;
+                if (tbl.requiredChoice) {
+                    toHighlight = true;
+                    obj.isCorrect = false;
+                }
+            }
+            if (obj.items[tbl.id].isCorrect === false && opts.highlight) {
+                toHighlight = true;
+            }
         }
-        else {
-            if (opts.markAttempt) res.isCorrect = true;
-            if (opts.reset) this.reset();
-        }
-        if (this.checkbox) res.checked = this.checkbox.checked;
-        res.id = this.id;
-        return res;
+        if (opts.highlight && toHighlight) this.highlight();
+        else if (toReset) this.reset(toReset);
+        opts.reset = toReset;
+        if (this.textarea) obj.freetext = this.textarea.value;
+        return obj;
     };
 
     /**
-     * ### CustomInput.setValues
+     * ### CustomInputGroup.setValues
      *
-     * Set the value of the input form
+     * Sets values in the choice table group as specified by the options
      *
-     * @param {object} opts An object containing values or info about how
-     *   how to set values.
+     * @param {object} options Optional. Options specifying how to set
+     *   the values. If no parameter is specified, random values will
+     *   be set.
+     *
+     * @see CustomInput.setValues
      *
      * @experimental
      */
-    CustomInput.prototype.setValues = function(opts) {
-        var value, tmp;
+    CustomInputGroup.prototype.setValues = function(opts) {
+        var i, len;
+        if (!this.items || !this.items.length) {
+            throw new Error('CustomInputGroup.setValues: no items found.');
+        }
         opts = opts || {};
-        if ('undefined' !== typeof opts.value) {
-            value = opts.value;
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            this.items[i].setValues(opts);
         }
-        // Alias.
-        else if ('undefined' !== typeof opts.values) {
-            value = opts.values;
-        }
-        else if (opts.availableValues) {
-            tmp = opts.availableValues;
-            if (!J.isArray(tmp) || !tmp.length) {
-                throw new TypeError('CustomInput.setValues: availableValues ' +
-                                    'must be a non-empty array or undefined. ' +
-                                    'Found: ' + tmp);
-            }
-            if (this.type === 'list') {
-                if (tmp.length < this.params.minItems) {
-                    throw new Error('CustomInput.setValues: availableValues ' +
-                                    'must be a non-empty array or undefined. ' +
-                                    'Found: ' + tmp);
-                }
-                value = this._setValues(opts);
-            }
-            else {
-                value = tmp[J.randomInt(0, tmp.length) -1];
-            }
-        }
-        else {
-            value = this._setValues(opts);
-        }
-        this.input.value = value;
-        if (this.preprocess) this.preprocess(this.input);
+
+        // Make a random comment.
+        if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
     };
 
-    // ## Helper functions.
+    /**
+     * ### CustomInputGroup.reset
+     *
+     * Resets all the CustomInput items and textarea
+     *
+     * @param {object} options Optional. Options specifying how to set
+     *   to reset each item
+     *
+     * @see CustomInput.reset
+     * @see CustomInputGroup.shuffle
+     */
+    CustomInputGroup.prototype.reset = function(opts) {
+        var i, len;
+        opts = opts || {};
+        i = -1, len = this.items.length;
+        for ( ; ++i < len ; ) {
+            this.items[i].reset(opts);
+        }
+        // Delete textarea, if found.
+        if (this.textarea) this.textarea.value = '';
+        if (opts.shuffleItems) this.shuffle();
+        if (this.isHighlighted()) this.unhighlight();
+    };
 
-    // ### getParsedDate
-    //
-    // Tries to parse a date object, catches exceptions
-    //
-    // @param {string|Date} d The date object
-    // @param {object} p The configuration object for date format
-    //
-    // @return {object|boolean} An object with the parsed date or false
-    //   if an error occurred
-    //
-    function getParsedDate(d, p) {
-        var res, day;
-        if ('string' === typeof d) {
-            d = d === 'today' ? new Date() : new Date(d);
-            // If invalid  date it return NaN.
-            day = d.getDate();
-            if (!day) return false;
+    /**
+     * ### CustomInputGroup.shuffle
+     *
+     * Shuffles the order of the displayed items
+     *
+     * Assigns the new order of items to `this.order`.
+     *
+     * @param {object} options Optional. Not used for now.
+     *
+     * TODO: shuffle choices in each item. (Note: can't use
+     * item.shuffle, because the cells are taken out, so
+     * there is no table and no tr in there)
+     *
+     * JSUS.shuffleElements
+     */
+    CustomInputGroup.prototype.shuffle = function(opts) {
+        var order, i, len, j, lenJ, that, cb, newOrder;
+        if (!this.items) return;
+        len = this.items.length;
+        if (!len) return;
+        that = this;
+        newOrder = new Array(len);
+        // Updates the groupOrder property of each item,
+        // and saves the order of items correctly.
+        cb = function(el, newPos, oldPos) {
+            var i;
+            i = el.id.split(that.separator);
+            i = that.orientation === 'H' ? i[2] : i[0];
+            i = that.itemsMap[i];
+            that.items[i].groupOrder = (newPos+1);
+            newOrder[newPos] = i;
+        };
+        order = J.shuffle(this.order);
+        if (this.orientation === 'H') {
+            J.shuffleElements(this.table, order, cb);
         }
-        try {
-            res = {
-                day: day || d.getDate(),
-                month: d.getMonth() + 1,
-                year: d.getFullYear(),
-                obj: d
-            };
+        else {
+            // Here we maintain the columns manually. Each TR contains TD
+            // belonging to different items, we make sure the order is the
+            // same for all TR.
+            len = this.trs.length;
+            for ( i = -1 ; ++i < len ; ) {
+                J.shuffleElements(this.trs[i], order, cb);
+                // Call cb only on first iteration.
+                cb = undefined;
+            }
         }
-        catch(e) {
-            return false;
+        this.order = newOrder;
+    };
+
+
+
+    // ## Helper methods.
+
+    /**
+     * ### mixinSettings
+     *
+     * Mix-ins global settings with local settings for specific choice tables
+     *
+     * @param {CustomInputGroup} that This instance
+     * @param {object|string} s The current settings for the item
+     *   (choice table), or just its id, to mixin all settings.
+     * @param {number} i The ordinal position of the table in the group
+     *
+     * @return {object} s The mixed-in settings
+     */
+    function mixinSettings(that, s, i) {
+        if ('string' === typeof s) {
+            s = { id: s };
         }
-        res.str = (p.dayPos ? res.day + p.sep + res.month :
-                   res.month + p.sep + res.day) + p.sep;
-        res.str += p.yearDigits === 2 ? res.year.substring(3,4) : res.year;
-        return res;
+        else if ('object' !== typeof s) {
+            throw new TypeError('CustomInputGroup.buildTable: item must be ' +
+                                'string or object. Found: ' + s);
+        }
+        s.group = that.id;
+        s.groupOrder = i+1;
+        s.orientation = that.orientation;
+        s.title = false;
+        s.listeners = false;
+        s.separator = that.separator;
+
+        if ('undefined' === typeof s.choices && that.choices) {
+            s.choices = that.choices;
+        }
+
+        if (!s.renderer && that.renderer) s.renderer = that.renderer;
+
+        if ('undefined' === typeof s.requiredChoice && that.requiredChoice) {
+            s.requiredChoice = that.requiredChoice;
+        }
+
+        if ('undefined' === typeof s.selectMultiple &&
+            null !== that.selectMultiple) {
+
+            s.selectMultiple = that.selectMultiple;
+        }
+
+        if ('undefined' === typeof s.shuffleChoices && that.shuffleChoices) {
+            s.shuffleChoices = that.shuffleChoices;
+        }
+
+        if ('undefined' === typeof s.timeFrom) s.timeFrom = that.timeFrom;
+
+        if ('undefined' === typeof s.left) s.left = s.id;
+
+        // No reference is stored in node.widgets.
+        s.storeRef = false;
+
+        return s;
     }
 
-
-
-    // ### getUsStatesList
-    //
-    // Sets the value of a global variable and returns it.
-    //
-    // @param {string} s A string specifying the type of list
-    //
-    // @return {object} The requested list
-    //
-    function getUsStatesList(s) {
-        switch(s) {
-
-        case 'usStatesTerrByAbbrLow':
-            if (!usStatesTerrByAbbrLow) {
-                getUsStatesList('usStatesTerrLow');
-                usStatesTerrByAbbrLow = J.reverseObj(usStatesTerr, toLK);
-            }
-            return usStatesTerrByAbbrLow;
-        case 'usStatesTerrByAbbr':
-            if (!usStatesTerrByAbbr) {
-                getUsStatesList('usStatesTerr');
-                usStatesTerrByAbbr = J.reverseObj(usStatesTerr);
-            }
-            return usStatesTerrByAbbr;
-
-        case 'usTerrByAbbrLow':
-            if (!usTerrByAbbrLow) usTerrByAbbrLow = J.reverseObj(usTerr, toLK);
-            return usTerrByAbbrLow;
-        case 'usTerrByAbbr':
-            if (!usTerrByAbbr) usTerrByAbbr = J.reverseObj(usTerr);
-            return usTerrByAbbr;
-
-        case 'usStatesByAbbrLow':
-            if (!usStatesByAbbrLow) {
-                usStatesByAbbrLow = J.reverseObj(usStates, toLK);
-            }
-            return usStatesByAbbrLow;
-        case 'usStatesByAbbr':
-            if (!usStatesByAbbr) usStatesByAbbr = J.reverseObj(usStates);
-            return usStatesByAbbr;
-
-        case 'usStatesTerrLow':
-            if (!usStatesTerrLow) {
-                if (!usStatesLow) usStatesLow = objToLK(usStates);
-                if (!usTerrLow) usTerrLow = objToLK(usTerr);
-                usStatesTerrLow = J.merge(usStatesLow, usTerrLow);
-            }
-            return usStatesTerrLow;
-        case 'usStatesTerr':
-            if (!usStatesTerr) usStatesTerr = J.merge(usStates, usTerr);
-            return usStatesTerr;
-
-        case 'usStatesLow':
-            if (!usStatesLow) usStatesLow = objToLow(usStates, toLK);
-            return usStatesLow;
-        case 'usStates':
-            return usStates;
-
-        case 'usTerrLow':
-            if (!usTerrLow) usTerrLow = objToLow(usTerr, toLK);
-            return usTerrLow;
-        case 'usTerr':
-            return usTerr;
-
-        default:
-            throw new Error('getUsStatesList: unknown request: ' + s);
+    /**
+     * ### getCustomInput
+     *
+     * Creates a instance i-th of choice table with relative settings
+     *
+     * Stores a reference of each table in `itemsById`
+     *
+     * @param {CustomInputGroup} that This instance
+     * @param {number} i The ordinal position of the table in the group
+     *
+     * @return {object} ct The requested choice table
+     *
+     * @see CustomInputGroup.itemsSettings
+     * @see CustomInputGroup.itemsById
+     * @see mixinSettings
+     */
+    function getCustomInput(that, i) {
+        var ct, s, idx;
+        idx = that.order[i];
+        s = mixinSettings(that, that.itemsSettings[idx], i);
+        ct = node.widgets.get('CustomInput', s);
+        if (that.itemsById[ct.id]) {
+            throw new Error('CustomInputGroup.buildTable: an item ' +
+                            'with the same id already exists: ' + ct.id);
         }
-    }
-
-    // Helper function for getUsStatesList
-    // @see OBJ.reverseObj
-    function toLK(key, value) {
-        return [ key.toLowerCase(), value ];
-    }
-    // Helper function for getUsStatesList
-    function objToLK(obj) {
-        var p, objLow;
-        objLow = {};
-        for (p in obj) {
-            if (obj.hasOwnProperty(p)) {
-                objLow[p.toLowerCase()] = obj[p];
-            }
+        if (!ct.leftCell) {
+            throw new Error('CustomInputGroup.buildTable: item ' +
+                            'is missing a left cell: ' + s.id);
         }
-        return objLow;
+        that.itemsById[ct.id] = ct;
+        that.items[idx] = ct;
+        that.itemsMap[ct.id] = idx;
+        return ct;
     }
 
-    // ### isValidUSZip
-    //
-    // Trivial validation of a US ZIP code
-    //
-    // @param {string} z
-    //
-    // @return {boolean} TRUE if valid
-    //
-    function isValidUSZip(z) {
-        return z.length === 5 && J.isInt(z, 0);
+    /**
+     * ### createTR
+     *
+     * Creates and append a new TR element
+     *
+     * If required by current configuration, the `id` attribute is
+     * added to the TR in the form of: 'tr' + separator + widget_id
+     *
+     * @param {CustomInput} that This instance
+     *
+     * @return {HTMLElement} Thew newly created TR element
+     */
+    function createTR(that, trid) {
+        var tr, sep;
+        tr = document.createElement('tr');
+        that.table.appendChild(tr);
+        // Set id.
+        sep = that.separator;
+        tr.id = that.id + sep + 'tr' + sep + trid;
+        // Store reference.
+        that.trs.push(tr);
+        return tr;
     }
 
 })(node);
