@@ -11,18 +11,39 @@
  */
 (function(node) {
 
+    // Test TO DELETE
+
+    if (false) {
+        node.widgets.append('CustomInputGroup', document.body, {
+            id: 'mycustominputgroup',
+            orientation: 'H',
+            items: [
+                {
+                    id: 'ci1',
+                    mainText: 'CI 1',
+                    type: 'int'
+                },
+                {
+                    id: 'ci2',
+                    mainText: 'CI 2',
+                    type: 'int'
+                },
+            ]
+        });
+    }
+
     "use strict";
 
     node.widgets.register('CustomInputGroup', CustomInputGroup);
 
     // ## Meta-data
 
-    CustomInputGroup.version = '1.6.0';
+    CustomInputGroup.version = '0.0.1';
     CustomInputGroup.description = 'Groups together and manages sets of ' +
         'CustomInput widgets.';
 
     CustomInputGroup.title = 'Make your choice';
-    CustomInputGroup.className = 'choicetable';
+    CustomInputGroup.className = 'custominputgroup';
 
     CustomInputGroup.separator = '::';
 
@@ -43,7 +64,7 @@
      * Creates a new instance of CustomInputGroup
      *
      * @param {object} options Optional. Configuration options.
-     *   If a `table` option is specified, it sets it as the clickable
+     *   If a `table` option is specified, it sets it as main
      *   table. All other options are passed to the init method.
      */
     function CustomInputGroup(options) {
@@ -53,7 +74,7 @@
         /**
          * ### CustomInputGroup.dl
          *
-         * The clickable table containing all the cells
+         * The table containing all the custom inputs
          */
         this.table = null;
 
@@ -67,74 +88,6 @@
          * @see CustomInputGroup.shuffle
          */
         this.trs = [];
-
-        /**
-         * ## CustomInputGroup.listener
-         *
-         * The listener function
-         *
-         * @see GameChoice.enable
-         * @see GameChoice.disable
-         */
-        this.listener = function(e) {
-            var name, value, item, td, oldSelected;
-            var time;
-
-            // Relative time.
-            if ('string' === typeof that.timeFrom) {
-                time = node.timer.getTimeSince(that.timeFrom);
-            }
-            // Absolute time.
-            else {
-                time = Date.now ? Date.now() : new Date().getTime();
-            }
-
-            e = e || window.event;
-            td = e.target || e.srcElement;
-
-            // Not a clickable choice.
-            if (!td.id || td.id === '') return;
-
-            // Not a clickable choice.
-            if (!that.choicesById[td.id]) return;
-
-            // Id of elements are in the form of name_value or name_item_value.
-            value = td.id.split(that.separator);
-
-            // Separator not found, not a clickable cell.
-            if (value.length === 1) return;
-
-            name = value[0];
-            value = value[1];
-
-            item = that.itemsById[name];
-
-            // Not a clickable cell.
-            if (!item) return;
-
-            item.timeCurrentChoice = time;
-
-            // One more click.
-            item.numberOfClicks++;
-
-            // If only 1 selection allowed, remove selection from oldSelected.
-            if (!item.selectMultiple) {
-                oldSelected = item.selected;
-                if (oldSelected) J.removeClass(oldSelected, 'selected');
-
-                if (item.isChoiceCurrent(value)) {
-                    item.unsetCurrentChoice(value);
-                }
-                else {
-                    item.currentChoice = value;
-                    J.addClass(td, 'selected');
-                    item.selected = td;
-                }
-            }
-
-            // Remove any warning/error from form on click.
-            if (that.isHighlighted()) that.unhighlight();
-        };
 
         /**
          * ### CustomInputGroup.mainText
@@ -248,9 +201,9 @@
          *
          * Orientation of display of items: vertical ('V') or horizontal ('H')
          *
-         * Default orientation is horizontal.
+         * Default orientation is vertical.
          */
-        this.orientation = 'H';
+        this.orientation = 'V';
 
         /**
          * ### CustomInputGroup.group
@@ -299,37 +252,6 @@
          * @see node.timer.getTimeSince
          */
         this.timeFrom = 'step';
-
-        /**
-         * ### CustomInputGroup.selectMultiple
-         *
-         * If TRUE, it allows to select multiple cells
-         *
-         * This option is passed to each individual item.
-         *
-         * @see mixinSettings
-         */
-        this.selectMultiple = null;
-
-        /**
-         * ### CustomInputGroup.renderer
-         *
-         * A callback that renders the content of each cell
-         *
-         * The callback must accept three parameters:
-         *
-         *   - a td HTML element,
-         *   - a choice
-         *   - the index of the choice element within the choices array
-         *
-         * and optionally return the _value_ for the choice (otherwise
-         * the order in the choices array is used as value).
-         *
-         * This option is passed to each individual item.
-         *
-         * @see mixinSettings
-         */
-        this.renderer = null;
 
         /**
          * ### CustomInputGroup.separator
@@ -396,7 +318,7 @@
 
         // Option orientation, default 'H'.
         if ('undefined' === typeof options.orientation) {
-            tmp = 'H';
+            tmp = 'V';
         }
         else if ('string' !== typeof options.orientation) {
             throw new TypeError('CustomInputGroup.init: options.orientation ' +
@@ -614,98 +536,16 @@
      * @see CustomInputGroup.order
      */
     CustomInputGroup.prototype.buildTable = function() {
-        var i, len, tr, H, ct;
-        var j, lenJ, lenJOld, hasRight, cell;
+        var i, len, tr, H, ci;
 
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
-        if (H) {
-            for ( ; ++i < len ; ) {
-                // Get item.
-                ct = getCustomInput(this, i);
 
-                // Add new TR.
-                tr = createTR(this, ct.id);
-
-                // Append choices for item.
-                tr.appendChild(ct.leftCell);
-                j = -1, lenJ = ct.choicesCells.length;
-                // Make sure all items have same number of choices.
-                if (i === 0) {
-                    lenJOld = lenJ;
-                }
-                else if (lenJ !== lenJOld) {
-                    throw new Error('CustomInputGroup.buildTable: item ' +
-                                    'do not have same number of choices: ' +
-                                    ct.id);
-                }
-                // TODO: might optimize. There are two loops (+1 inside ct).
-                for ( ; ++j < lenJ ; ) {
-                    cell = ct.choicesCells[j];
-                    tr.appendChild(cell);
-                    this.choicesById[cell.id] = cell;
-                }
-                if (ct.rightCell) tr.appendChild(ct.rightCell);
-            }
-        }
-        else {
-
+        if (H) tr = createTR(this, 'row1');
+        for ( ; ++i < len ; ) {
             // Add new TR.
-            tr = createTR(this, 'header');
-
-            // Build all items first.
-            for ( ; ++i < len ; ) {
-
-                // Get item, append choices for item.
-                ct = getCustomInput(this, i);
-
-                // Make sure all items have same number of choices.
-                lenJ = ct.choicesCells.length;
-                if (i === 0) {
-                    lenJOld = lenJ;
-                }
-                else if (lenJ !== lenJOld) {
-                    throw new Error('CustomInputGroup.buildTable: item ' +
-                                    'do not have same number of choices: ' +
-                                    ct.id);
-                }
-
-                if ('undefined' === typeof hasRight) {
-                    hasRight = !!ct.rightCell;
-                }
-                else if ((!ct.rightCell && hasRight) ||
-                         (ct.rightCell && !hasRight)) {
-
-                    throw new Error('CustomInputGroup.buildTable: either all ' +
-                                    'items or no item must have the right ' +
-                                    'cell: ' + ct.id);
-
-                }
-                // Add left.
-                tr.appendChild(ct.leftCell);
-            }
-
-            if (hasRight) lenJ++;
-
-            j = -1;
-            for ( ; ++j < lenJ ; ) {
-                // Add new TR.
-                tr = createTR(this, 'row' + (j+1));
-
-                i = -1;
-                // TODO: might optimize. There are two loops (+1 inside ct).
-                for ( ; ++i < len ; ) {
-                    if (hasRight && j === (lenJ-1)) {
-                        tr.appendChild(this.items[i].rightCell);
-                    }
-                    else {
-                        cell = this.items[i].choicesCells[j];
-                        tr.appendChild(cell);
-                        this.choicesById[cell.id] = cell;
-                    }
-                }
-            }
-
+            if (!H) tr = createTR(this, 'row' + (i+1));
+            addCustomInput(this, tr, i);
         }
 
         // Enable onclick listener.
@@ -807,9 +647,6 @@
     CustomInputGroup.prototype.disable = function() {
         if (this.disabled === true || !this.table) return;
         this.disabled = true;
-        J.removeClass(this.table, 'clickable');
-        this.table.removeEventListener('click', this.listener);
-        // Remove listener to make cells clickable with the keyboard.
         this.emit('disabled');
     };
 
@@ -823,78 +660,7 @@
     CustomInputGroup.prototype.enable = function(force) {
         if (!this.table || (!force && !this.disabled)) return;
         this.disabled = false;
-        J.addClass(this.table, 'clickable');
-        this.table.addEventListener('click', this.listener);
-        // Add listener to make cells clickable with the keyboard.
         this.emit('enabled');
-    };
-
-    /**
-     * ### CustomInputGroup.verifyChoice
-     *
-     * Compares the current choice/s with the correct one/s
-     *
-     * @param {boolean} markAttempt Optional. If TRUE, the value of
-     *   current choice is added to the attempts array. Default
-     *
-     * @return {boolean|null} TRUE if current choice is correct,
-     *   FALSE if it is not correct, or NULL if no correct choice
-     *   was set
-     *
-     * @see CustomInputGroup.attempts
-     * @see CustomInputGroup.setCorrectChoice
-     */
-    CustomInputGroup.prototype.verifyChoice = function(markAttempt) {
-        var i, len, out;
-        out = {};
-        // Mark attempt by default.
-        markAttempt = 'undefined' === typeof markAttempt ? true : markAttempt;
-        i = -1, len = this.items.length;
-        for ( ; ++i < len ; ) {
-            out[this.items[i].id] = this.items[i].verifyChoice(markAttempt);
-        }
-        return out;
-    };
-
-    /**
-     * ### CustomInput.setCurrentChoice
-     *
-     * Marks a choice as current in each item
-     *
-     * If the item allows it, multiple choices can be set as current.
-     *
-     * @param {number|string} The choice to mark as current
-     *
-     * @see CustomInput.currentChoice
-     * @see CustomInput.selectMultiple
-     */
-    CustomInputGroup.prototype.setCurrentChoice = function(choice) {
-        var i, len;
-        i = -1, len = this.items[i].length;
-        for ( ; ++i < len ; ) {
-            this.items[i].setCurrentChoice(choice);
-        }
-    };
-
-    /**
-     * ### CustomInputGroup.unsetCurrentChoice
-     *
-     * Deletes the value for currentChoice from every item
-     *
-     * If `CustomInputGroup.selectMultiple` is set the
-     *
-     * @param {number|string} Optional. The choice to delete from currentChoice
-     *   when multiple selections are allowed
-     *
-     * @see CustomInputGroup.currentChoice
-     * @see CustomInputGroup.selectMultiple
-     */
-    CustomInputGroup.prototype.unsetCurrentChoice = function(choice) {
-        var i, len;
-        i = -1, len = this.items.length;
-        for ( ; ++i < len ; ) {
-            this.items[i].unsetCurrentChoice(choice);
-        }
     };
 
     /**
@@ -1154,13 +920,14 @@
     }
 
     /**
-     * ### getCustomInput
+     * ### addCustomInput
      *
      * Creates a instance i-th of choice table with relative settings
      *
      * Stores a reference of each table in `itemsById`
      *
      * @param {CustomInputGroup} that This instance
+     * @param {HTMLElement} tr A TR element where the custom input is appended
      * @param {number} i The ordinal position of the table in the group
      *
      * @return {object} ct The requested choice table
@@ -1169,23 +936,21 @@
      * @see CustomInputGroup.itemsById
      * @see mixinSettings
      */
-    function getCustomInput(that, i) {
-        var ct, s, idx;
+    function addCustomInput(that, tr, i) {
+        var ci, s, td, idx;
         idx = that.order[i];
         s = mixinSettings(that, that.itemsSettings[idx], i);
-        ct = node.widgets.get('CustomInput', s);
-        if (that.itemsById[ct.id]) {
-            throw new Error('CustomInputGroup.buildTable: an item ' +
-                            'with the same id already exists: ' + ct.id);
+        td = document.createElement('td');
+        tr.appendChild(td);
+        ci = node.widgets.append('CustomInput', td, s);
+        if (that.itemsById[ci.id]) {
+            throw new Error('CustomInputGroup.buildTable: an input ' +
+                            'with the same id already exists: ' + ci.id);
         }
-        if (!ct.leftCell) {
-            throw new Error('CustomInputGroup.buildTable: item ' +
-                            'is missing a left cell: ' + s.id);
-        }
-        that.itemsById[ct.id] = ct;
-        that.items[idx] = ct;
-        that.itemsMap[ct.id] = idx;
-        return ct;
+        that.itemsById[ci.id] = ci;
+        that.items[idx] = ci;
+        that.itemsMap[ci.id] = idx;
+        return ci;
     }
 
     /**
