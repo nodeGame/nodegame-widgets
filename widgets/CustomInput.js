@@ -189,18 +189,19 @@
             if (p.exactly) return 'Must enter ' + p.lower;
             // Others.
             str = 'Must be ';
-            if (w.type === 'float') str += 'a floating point number ';
-            else if (w.type === 'int') str += 'an integer ';
+            if (w.type === 'float') str += 'a floating point number';
+            else if (w.type === 'int') str += 'an integer';
             if (p.between) {
-                str += (p.leq ? '&ge; ' : '<' ) + p.lower;
+                str += ' ' + (p.leq ? '&ge; ' : '<' ) + p.lower;
                 str += ' and ';
                 str += (p.ueq ? '&le; ' : '> ') + p.upper;
             }
             else if ('undefined' !== typeof p.lower) {
-                str += (p.leq ? '&ge; ' : '< ') + p.lower;
+                str += ' ' + (p.leq ? '&ge; ' : '< ') + p.lower;
             }
-            else {
-                str += (p.ueq ? '&le; ' : '> ') + p.upper;
+            // It can be also a non-numeric error, e.g. a string here.
+            else if ('undefined' !== typeof p.upper) {
+                str += ' ' + (p.ueq ? '&le; ' : '> ') + p.upper;
             }
             return str;
         },
