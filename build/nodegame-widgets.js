@@ -5406,7 +5406,7 @@
         /**
          * ### ChoiceTable.listener
          *
-         * The listener function
+         * The function listening on clicks
          */
         this.listener = function(e) {
             var name, value, td;
@@ -5415,8 +5415,14 @@
             e = e || window.event;
             td = e.target || e.srcElement;
 
-            // Not a clickable choice.
-            if ('undefined' === typeof that.choicesIds[td.id]) return;
+            // See if it is a clickable choice.
+            if ('undefined' === typeof that.choicesIds[td.id]) {
+                // It might be a nested element, try the parent.
+                td = td.parentNode;
+                if (!td || 'undefined' === typeof that.choicesIds[td.id]) {
+                    return;
+                }
+            }
 
             // Relative time.
             if ('string' === typeof that.timeFrom) {
@@ -7179,12 +7185,16 @@
 
             e = e || window.event;
             td = e.target || e.srcElement;
-
+            
             // Not a clickable choice.
-            if (!td.id || td.id === '') return;
-
-            // Not a clickable choice.
-            if (!that.choicesById[td.id]) return;
+            if ('undefined' === typeof that.choicesById[td.id]) {
+                // It might be a nested element, try the parent.
+                td = td.parentNode;
+                if (!td || 'undefined' === typeof that.choicesById[td.id]) {
+                    return;
+                }
+            }
+            // if (!that.choicesById[td.id]) return;
 
             // Id of elements are in the form of name_value or name_item_value.
             value = td.id.split(that.separator);

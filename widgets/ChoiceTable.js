@@ -101,7 +101,7 @@
         /**
          * ### ChoiceTable.listener
          *
-         * The listener function
+         * The function listening on clicks
          */
         this.listener = function(e) {
             var name, value, td;
@@ -110,8 +110,14 @@
             e = e || window.event;
             td = e.target || e.srcElement;
 
-            // Not a clickable choice.
-            if ('undefined' === typeof that.choicesIds[td.id]) return;
+            // See if it is a clickable choice.
+            if ('undefined' === typeof that.choicesIds[td.id]) {
+                // It might be a nested element, try the parent.
+                td = td.parentNode;
+                if (!td || 'undefined' === typeof that.choicesIds[td.id]) {
+                    return;
+                }
+            }
 
             // Relative time.
             if ('string' === typeof that.timeFrom) {
