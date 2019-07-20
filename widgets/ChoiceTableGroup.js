@@ -22,7 +22,7 @@
         'ChoiceTable widgets.';
 
     ChoiceTableGroup.title = 'Make your choice';
-    ChoiceTableGroup.className = 'choicetable';
+    ChoiceTableGroup.className = 'choicetable'; // TODO: choicetablegroup?
 
     ChoiceTableGroup.separator = '::';
 
