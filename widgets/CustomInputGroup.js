@@ -256,7 +256,6 @@
          */
         this.shuffleChoices = null;
 
-
         /**
          * ### CustomInputGroup.sharedOptions
          *
@@ -266,6 +265,38 @@
          * and can be overriden by each individual form.
          */
         this.sharedOptions = {};
+
+        /**
+         * ### CustomInputGroup.summaryInput
+         *
+         * A summary custom input added last which can be updated in real time
+         *
+         * @see CustomInputGroup.summaryInputCb
+         */
+        this.summaryInput = null;
+
+        /**
+         * ### CustomInputGroup.summaryInputCb
+         *
+         * The callback updating in real time the summary input
+         *
+         * The callbacks receives the current values of all inputs as array
+         *
+         * @see CustomInputGroup.summaryInput
+         */
+        this.summaryInputCb = null;
+
+        /**
+         * ### CustomInputGroup.validation
+         *
+         * The callback validating all the inputs at once
+         *
+         * The callback is executed each time one of the input is changed
+         * and receives all the inputs and a reference to this widget.
+         *
+         * @see CustomInput.oninputCb
+         */
+        this.validation = null;
     }
 
     // ## CustomInputGroup methods
@@ -291,6 +322,10 @@
      *       if 'string', the text will be added inside the the textarea
      *   - timeFrom: The timestamp as recorded by `node.timer.setTimestamp`
      *       or FALSE, to measure absolute time for current choice
+     *   - sharedOptions: Options shared across all inputs
+     *   - summary: An object containing the options to instantiate a custom
+     *       input summary field.
+     *   - validation: A validation callback for all inputs.
      *
      * @param {object} options Configuration options
      */
@@ -395,17 +430,13 @@
         }
 
         // Set the hint, if any.
-        if ('string' === typeof options.hint || false === options.hint) {
+        if ('string' === typeof options.hint) {
             this.hint = options.hint;
         }
         else if ('undefined' !== typeof options.hint) {
             throw new TypeError('CustomInputGroup.init: options.hint must ' +
-                                'be a string, false, or undefined. Found: ' +
+                                'be a string, or undefined. Found: ' +
                                 options.hint);
-        }
-        else {
-            // Returns undefined if there are no constraints.
-            this.hint = this.getText('autoHint');
         }
 
         // Set the timeFrom, if any.
@@ -423,21 +454,6 @@
         // Option shuffleChoices, default false.
         if ('undefined' !== typeof options.shuffleChoices) {
             this.shuffleChoices = !!options.shuffleChoices;
-        }
-
-        // Set the renderer, if any.
-        if ('function' === typeof options.renderer) {
-            this.renderer = options.renderer;
-        }
-        else if ('undefined' !== typeof options.renderer) {
-            throw new TypeError('CustomInputGroup.init: options.renderer ' +
-                                'must be function or undefined. Found: ' +
-                                options.renderer);
-        }
-
-        // Set default choices, if any.
-        if ('undefined' !== typeof options.choices) {
-            this.choices = options.choices;
         }
 
         // Set the className, if not use default.

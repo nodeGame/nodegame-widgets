@@ -330,6 +330,16 @@
         this.postprocess = null;
 
         /**
+         * ### CustomInput.oninput
+         *
+         * A function that is executed after any input
+         *
+         * It is executed after validation and receives a result object
+         * and a reference to this widget.
+         */
+        this.oninput = null;
+
+        /**
          * ### CustomInput.params
          *
          * Object containing extra validation params
@@ -1096,6 +1106,16 @@
             // Add postprocess as needed.
         }
 
+        // Oninput.
+
+        if (opts.oninput) {
+            if ('function' !== typeof opts.oninput) {
+                throw new TypeError(e + 'oninput must be function or ' +
+                                    'undefined. Found: ' + opts.oninput);
+            }
+            this.oninput = opts.oninput;
+        }
+
         // Validation Speed
         if ('undefined' !== typeof opts.validationSpeed) {
             tmp = J.isInt(opts.valiadtionSpeed, 0, undefined, true);
@@ -1212,6 +1232,8 @@
                     res = that.validation(that.input.value);
                     if (res.err) that.setError(res.err);
                 }
+                // In case something else needs to be updated.
+                if (that.oninput) that.oninput(res, that);
             }, that.validationSpeed);
         };
         this.input.onclick = function() {
