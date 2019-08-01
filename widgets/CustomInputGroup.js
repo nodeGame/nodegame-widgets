@@ -11,34 +11,13 @@
  */
 (function(node) {
 
-    // Test TO DELETE
-
-    if (false) {
-        node.widgets.append('CustomInputGroup', document.body, {
-            id: 'mycustominputgroup',
-            orientation: 'H',
-            items: [
-                {
-                    id: 'ci1',
-                    mainText: 'CI 1',
-                    type: 'int'
-                },
-                {
-                    id: 'ci2',
-                    mainText: 'CI 2',
-                    type: 'int'
-                },
-            ]
-        });
-    }
-
     "use strict";
 
     node.widgets.register('CustomInputGroup', CustomInputGroup);
 
     // ## Meta-data
 
-    CustomInputGroup.version = '0.0.1';
+    CustomInputGroup.version = '0.1.0';
     CustomInputGroup.description = 'Groups together and manages sets of ' +
         'CustomInput widgets.';
 
@@ -276,6 +255,17 @@
          * @see mixinSettings
          */
         this.shuffleChoices = null;
+
+
+        /**
+         * ### CustomInputGroup.sharedOptions
+         *
+         * An object containing options to be added to every custom input
+         *
+         * Options are added only if forms are specified as object literals,
+         * and can be overriden by each individual form.
+         */
+        this.sharedOptions = {};
     }
 
     // ## CustomInputGroup methods
@@ -464,6 +454,22 @@
             throw new TypeError('CustomInputGroup.init: options.' +
                                 'className must be string, array, ' +
                                 'or undefined. Found: ' + options.className);
+        }
+
+        // sharedOptions.
+        if ('undefined' !== typeof options.sharedOptions) {
+            if ('object' !== typeof options.sharedOptions) {
+                throw new TypeError('CustomInputGroup.init: sharedOptions' +
+                                    ' must be object or undefined. Found: ' +
+                                    options.sharedOptions);
+            }
+            if (options.sharedOptions.hasOwnProperty('name')) {
+                throw new Error('CustomInputGroup.init: sharedOptions ' +
+                                'cannot contain property name. Found: ' +
+                                options.sharedOptions);
+            }
+            this.sharedOptions = J.mixin(this.sharedOptions,
+                                        options.sharedOptions);
         }
 
         // After all configuration options are evaluated, add items.
@@ -886,32 +892,14 @@
         s.groupOrder = i+1;
         s.orientation = that.orientation;
         s.title = false;
-        s.listeners = false;
-        s.separator = that.separator;
-
-        if ('undefined' === typeof s.choices && that.choices) {
-            s.choices = that.choices;
-        }
-
-        if (!s.renderer && that.renderer) s.renderer = that.renderer;
 
         if ('undefined' === typeof s.requiredChoice && that.requiredChoice) {
             s.requiredChoice = that.requiredChoice;
         }
 
-        if ('undefined' === typeof s.selectMultiple &&
-            null !== that.selectMultiple) {
-
-            s.selectMultiple = that.selectMultiple;
-        }
-
-        if ('undefined' === typeof s.shuffleChoices && that.shuffleChoices) {
-            s.shuffleChoices = that.shuffleChoices;
-        }
-
         if ('undefined' === typeof s.timeFrom) s.timeFrom = that.timeFrom;
 
-        if ('undefined' === typeof s.left) s.left = s.id;
+        s = J.mixout(s, that.sharedOptions);
 
         // No reference is stored in node.widgets.
         s.storeRef = false;

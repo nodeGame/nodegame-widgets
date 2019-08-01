@@ -108,6 +108,7 @@
          */
         this.groupOrder = null;
 
+        // TODO: rename in sharedOptions.
         /**
          * ### ChoiceManager.formsOptions
          *

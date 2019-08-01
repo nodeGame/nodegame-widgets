@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.9.0';
+    CustomInput.version = '0.10.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -406,6 +406,19 @@
          * The callback executed when the checkbox is clicked
          */
         this.checkboxCb = null;
+
+        /**
+         * ### CustomInput.orientation
+         *
+         * The orientation of main text relative to the input box
+         *
+         * Options:
+         *   - 'V': main text above input box
+         *   - 'H': main text next to input box
+         *
+         * Default: 'V'
+         */
+        this.orientation = null;
     }
 
     // ## CustomInput methods
@@ -421,6 +434,27 @@
         var tmp, that, e, isText, setValues;
         that = this;
         e = 'CustomInput.init: ';
+
+
+        // Option orientation, default 'H'.
+        if ('undefined' === typeof opts.orientation) {
+            tmp = 'V';
+        }
+        else if ('string' !== typeof opts.orientation) {
+            throw new TypeError('CustomInput.init: orientation must ' +
+                                'be string, or undefined. Found: ' +
+                                opts.orientation);
+        }
+        else {
+            tmp = opts.orientation.toLowerCase().trim();
+            if (tmp === 'h') tmp = 'H';
+            else if (tmp === 'v') tmp = 'V';
+            else {
+                throw new Error('CustomInput.init: unknown orientation: ' +
+                                tmp);
+            }
+        }
+        this.orientation = tmp;
 
         this.requiredChoice = !!opts.requiredChoice;
 
