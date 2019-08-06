@@ -3,7 +3,7 @@
  * Copyright(c) 2019 Stefano Balietti
  * MIT Licensed
  *
- * Creates a table that groups together several choice tables widgets
+ * Creates a table that groups together several custom input widgets
  *
  * @see CustomInput
  *
@@ -21,15 +21,14 @@
     CustomInputGroup.description = 'Groups together and manages sets of ' +
         'CustomInput widgets.';
 
-    CustomInputGroup.title = 'Make your choice';
+    CustomInputGroup.title = false;
     CustomInputGroup.className = 'custominputgroup';
-
-    CustomInputGroup.separator = '::';
 
     CustomInputGroup.texts.autoHint = function(w) {
         if (w.requiredChoice) return '*';
         else return false;
     };
+    CustomInputGroup.texts.inputErr = 'One or more errors detected.';
 
     // ## Dependencies
 
@@ -276,27 +275,65 @@
         this.summaryInput = null;
 
         /**
-         * ### CustomInputGroup.summaryInputCb
+         * ### CustomInputGroup.errorBox
          *
-         * The callback updating in real time the summary input
-         *
-         * The callbacks receives the current values of all inputs as array
-         *
-         * @see CustomInputGroup.summaryInput
+         * An HTML element displayed when a validation error occurs
          */
-        this.summaryInputCb = null;
+        this.errorBox = null;
 
         /**
          * ### CustomInputGroup.validation
          *
          * The callback validating all the inputs at once
          *
-         * The callback is executed each time one of the input is changed
-         * and receives all the inputs and a reference to this widget.
+         * The callback is executed by getValues.
          *
-         * @see CustomInput.oninputCb
+         * Input paramers:
+         *
+         * - res: the validation result of all inputs
+         * - values: object literal containing the current value of each input
+         * - widget: a reference to this widget
+         *
+         * Return value:
+         *
+         * - res: the result object as it is on success, or with with an err
+         *        property containing the error message on failure. Any change
+         *        to the result object is carried over.
+         *
+         * @see CustomInputGroup.oninput
          */
         this.validation = null;
+
+        /**
+         * ### CustomInputGroup._validation
+         *
+         * Reference to the user defined validation function
+         *
+         * @api private
+         */
+        this._validation = null;
+
+        /**
+         * ### CustomInputGroup.oninput
+         *
+         * Callback called when any input has changed
+         *
+         * Input paramers:
+         *
+         * - res: the validation result of the single input
+         * - input: the custom input that fired oninput
+         * - widget: a reference to this widget
+         */
+        this.oninput = null;
+
+        /**
+         * ### CustomInputGroup._oninput
+         *
+         * Reference to the user defined oninput function
+         *
+         * @api private
+         */
+        this._oninput = null;
     }
 
     // ## CustomInputGroup methods
@@ -326,10 +363,11 @@
      *   - summary: An object containing the options to instantiate a custom
      *       input summary field.
      *   - validation: A validation callback for all inputs.
+     *   - oninput: A callback called when any input is changed
      *
-     * @param {object} options Configuration options
+     * @param {object} opts Configuration options
      */
-    CustomInputGroup.prototype.init = function(options) {
+    CustomInputGroup.prototype.init = function(opts) {
         var tmp, that;
         that = this;
 
@@ -337,21 +375,21 @@
         // Have a method in CustomInput?
 
         if (!this.id) {
-            throw new TypeError('CustomInputGroup.init: options.id ' +
+            throw new TypeError('CustomInputGroup.init: id ' +
                                 'is missing.');
         }
 
         // Option orientation, default 'H'.
-        if ('undefined' === typeof options.orientation) {
+        if ('undefined' === typeof opts.orientation) {
             tmp = 'V';
         }
-        else if ('string' !== typeof options.orientation) {
-            throw new TypeError('CustomInputGroup.init: options.orientation ' +
+        else if ('string' !== typeof opts.orientation) {
+            throw new TypeError('CustomInputGroup.init: orientation ' +
                                 'must be string, or undefined. Found: ' +
-                                options.orientation);
+                                opts.orientation);
         }
         else {
-            tmp = options.orientation.toLowerCase().trim();
+            tmp = opts.orientation.toLowerCase().trim();
             if (tmp === 'horizontal' || tmp === 'h') {
                 tmp = 'H';
             }
@@ -359,155 +397,190 @@
                 tmp = 'V';
             }
             else {
-                throw new Error('CustomInputGroup.init: options.orientation ' +
+                throw new Error('CustomInputGroup.init: orientation ' +
                                 'is invalid: ' + tmp);
             }
         }
         this.orientation = tmp;
 
         // Option shuffleItems, default false.
-        if ('undefined' === typeof options.shuffleItems) tmp = false;
-        else tmp = !!options.shuffleItems;
+        if ('undefined' === typeof opts.shuffleItems) tmp = false;
+        else tmp = !!opts.shuffleItems;
         this.shuffleItems = tmp;
 
         // Option requiredChoice, if any.
-        if ('number' === typeof options.requiredChoice) {
-            this.requiredChoice = options.requiredChoice;
+        if ('number' === typeof opts.requiredChoice) {
+            this.requiredChoice = opts.requiredChoice;
         }
-        else if ('boolean' === typeof options.requiredChoice) {
-            this.requiredChoice = options.requiredChoice ? 1 : 0;
+        else if ('boolean' === typeof opts.requiredChoice) {
+            this.requiredChoice = opts.requiredChoice ? 1 : 0;
         }
-        else if ('undefined' !== typeof options.requiredChoice) {
+        else if ('undefined' !== typeof opts.requiredChoice) {
             throw new TypeError('CustomInputGroup.init: ' +
-                                'options.requiredChoice ' +
+                                'requiredChoice ' +
                                 'be number or boolean or undefined. Found: ' +
-                                options.requiredChoice);
+                                opts.requiredChoice);
         }
 
         // Set the group, if any.
-        if ('string' === typeof options.group ||
-            'number' === typeof options.group) {
+        if ('string' === typeof opts.group ||
+            'number' === typeof opts.group) {
 
-            this.group = options.group;
+            this.group = opts.group;
         }
-        else if ('undefined' !== typeof options.group) {
-            throw new TypeError('CustomInputGroup.init: options.group must ' +
+        else if ('undefined' !== typeof opts.group) {
+            throw new TypeError('CustomInputGroup.init: group must ' +
                                 'be string, number or undefined. Found: ' +
-                                options.group);
+                                opts.group);
         }
 
         // Set the groupOrder, if any.
-        if ('number' === typeof options.groupOrder) {
+        if ('number' === typeof opts.groupOrder) {
 
-            this.groupOrder = options.groupOrder;
+            this.groupOrder = opts.groupOrder;
         }
-        else if ('undefined' !== typeof options.group) {
-            throw new TypeError('CustomInputGroup.init: options.groupOrder ' +
+        else if ('undefined' !== typeof opts.group) {
+            throw new TypeError('CustomInputGroup.init: groupOrder ' +
                                 'must be number or undefined. Found: ' +
-                                options.groupOrder);
+                                opts.groupOrder);
         }
 
-        // Set the onclick listener, if any.
-        if ('function' === typeof options.onclick) {
-            this.listener = function(e) {
-                options.onclick.call(this, e);
+        // Set the validation function.
+        if ('function' === typeof opts.validation) {
+            this._validation = opts.validation;
+
+            this.validation = function(values, res) {
+                if (!values) values = that.getValues({ valuesOnly: true });
+                return that._validation(res || {}, values, that)
             };
         }
-        else if ('undefined' !== typeof options.onclick) {
-            throw new TypeError('CustomInputGroup.init: options.onclick must ' +
+        else if ('undefined' !== typeof opts.validation) {
+            throw new TypeError('CustomInputGroup.init: validation must ' +
                                 'be function or undefined. Found: ' +
-                                options.onclick);
+                                opts.validation);
+        }
+
+        // Set the validation function.
+        if ('function' === typeof opts.oninput) {
+            this._oninput = opts.oninput;
+
+            this.oninput = function(res, input) {
+                that._oninput(res, input, that);
+            };
+        }
+        else if ('undefined' !== typeof opts.validation) {
+            throw new TypeError('CustomInputGroup.init: oninput must ' +
+                                'be function or undefined. Found: ' +
+                                opts.oninput);
         }
 
         // Set the mainText, if any.
-        if ('string' === typeof options.mainText) {
-            this.mainText = options.mainText;
+        if ('string' === typeof opts.mainText) {
+            this.mainText = opts.mainText;
         }
-        else if ('undefined' !== typeof options.mainText) {
-            throw new TypeError('CustomInputGroup.init: options.mainText ' +
+        else if ('undefined' !== typeof opts.mainText) {
+            throw new TypeError('CustomInputGroup.init: mainText ' +
                                 'must be string or undefined. Found: ' +
-                                options.mainText);
+                                opts.mainText);
         }
 
         // Set the hint, if any.
-        if ('string' === typeof options.hint) {
-            this.hint = options.hint;
+        if ('string' === typeof opts.hint) {
+            this.hint = opts.hint;
         }
-        else if ('undefined' !== typeof options.hint) {
-            throw new TypeError('CustomInputGroup.init: options.hint must ' +
+        else if ('undefined' !== typeof opts.hint) {
+            throw new TypeError('CustomInputGroup.init: hint must ' +
                                 'be a string, or undefined. Found: ' +
-                                options.hint);
+                                opts.hint);
+        }
+        else {
+            // Returns undefined if there are no constraints.
+            this.hint = this.getText('autoHint');
         }
 
         // Set the timeFrom, if any.
-        if (options.timeFrom === false ||
-            'string' === typeof options.timeFrom) {
+        if (opts.timeFrom === false ||
+            'string' === typeof opts.timeFrom) {
 
-            this.timeFrom = options.timeFrom;
+            this.timeFrom = opts.timeFrom;
         }
-        else if ('undefined' !== typeof options.timeFrom) {
-            throw new TypeError('CustomInputGroup.init: options.timeFrom ' +
+        else if ('undefined' !== typeof opts.timeFrom) {
+            throw new TypeError('CustomInputGroup.init: timeFrom ' +
                                 'must be string, false, or undefined. Found: ' +
-                                options.timeFrom);
+                                opts.timeFrom);
         }
 
         // Option shuffleChoices, default false.
-        if ('undefined' !== typeof options.shuffleChoices) {
-            this.shuffleChoices = !!options.shuffleChoices;
+        if ('undefined' !== typeof opts.shuffleChoices) {
+            this.shuffleChoices = !!opts.shuffleChoices;
         }
 
         // Set the className, if not use default.
-        if ('undefined' === typeof options.className) {
+        if ('undefined' === typeof opts.className) {
             this.className = CustomInputGroup.className;
         }
-        else if (options.className === false ||
-                 'string' === typeof options.className ||
-                 J.isArray(options.className)) {
+        else if (opts.className === false ||
+                 'string' === typeof opts.className ||
+                 J.isArray(opts.className)) {
 
-            this.className = options.className;
+            this.className = opts.className;
         }
         else {
-            throw new TypeError('CustomInputGroup.init: options.' +
+            throw new TypeError('CustomInputGroup.init: ' +
                                 'className must be string, array, ' +
-                                'or undefined. Found: ' + options.className);
+                                'or undefined. Found: ' + opts.className);
         }
 
         // sharedOptions.
-        if ('undefined' !== typeof options.sharedOptions) {
-            if ('object' !== typeof options.sharedOptions) {
+        if ('undefined' !== typeof opts.sharedOptions) {
+            if ('object' !== typeof opts.sharedOptions) {
                 throw new TypeError('CustomInputGroup.init: sharedOptions' +
                                     ' must be object or undefined. Found: ' +
-                                    options.sharedOptions);
+                                    opts.sharedOptions);
             }
-            if (options.sharedOptions.hasOwnProperty('name')) {
+            if (opts.sharedOptions.hasOwnProperty('name')) {
                 throw new Error('CustomInputGroup.init: sharedOptions ' +
                                 'cannot contain property name. Found: ' +
-                                options.sharedOptions);
+                                opts.sharedOptions);
             }
             this.sharedOptions = J.mixin(this.sharedOptions,
-                                        options.sharedOptions);
+                                        opts.sharedOptions);
+        }
+
+        if ('undefined' !== typeof opts.summary) {
+            if ('string' === typeof opts.summary) {
+                opts.summary = { mainText: opts.summary }
+            }
+            else if ('object' !== typeof opts.summary) {
+                throw new TypeError('CustomInputGroup.init: summary' +
+                                    ' must be object or undefined. Found: ' +
+                                    opts.summary);
+            }
+
+            this.summaryInput = opts.summary;
         }
 
         // After all configuration options are evaluated, add items.
 
-        if ('object' === typeof options.table) {
-            this.table = options.table;
+        if ('object' === typeof opts.table) {
+            this.table = opts.table;
         }
-        else if ('undefined' !== typeof options.table &&
-                 false !== options.table) {
+        else if ('undefined' !== typeof opts.table &&
+                 false !== opts.table) {
 
-            throw new TypeError('CustomInputGroup.init: options.table ' +
+            throw new TypeError('CustomInputGroup.init: table ' +
                                 'must be object, false or undefined. ' +
-                                'Found: ' + options.table);
+                                'Found: ' + opts.table);
         }
 
-        this.table = options.table;
+        // TODO: check this.
+        this.table = opts.table;
 
-        this.freeText = 'string' === typeof options.freeText ?
-            options.freeText : !!options.freeText;
+        this.freeText = 'string' === typeof opts.freeText ?
+            opts.freeText : !!opts.freeText;
 
         // Add the items.
-        if ('undefined' !== typeof options.items) this.setItems(options.items);
+        if ('undefined' !== typeof opts.items) this.setItems(opts.items);
 
     };
 
@@ -555,10 +628,9 @@
      * Must be called after items have been set already.
      *
      * @see CustomInputGroup.setCustomInputs
-     * @see CustomInputGroup.order
      */
     CustomInputGroup.prototype.buildTable = function() {
-        var i, len, tr, H, ci;
+        var i, len, tr, H;
 
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
@@ -569,8 +641,18 @@
             if (!H) tr = createTR(this, 'row' + (i+1));
             addCustomInput(this, tr, i);
         }
+        if (this.summaryInput) {
+            if (!H) tr = createTR(this, 'row' + (i+1));
+            addSummaryInput(this, tr, i);
+        }
 
-        // Enable onclick listener.
+
+        var that = this;
+        this.table.onclick = function() {
+            // Remove any warning/error from form on click.
+            if (that.isHighlighted()) that.unhighlight();
+        };
+
         this.enable(true);
     };
 
@@ -599,14 +681,14 @@
         // MainText.
         if (this.mainText) {
             this.spanMainText = W.append('span', this.bodyDiv, {
-                className: 'choicetable-maintext',
+                className: 'custominputgroup-maintext',
                 innerHTML: this.mainText
             });
         }
         // Hint.
         if (this.hint) {
             W.append('span', this.spanMainText || this.bodyDiv, {
-                className: 'choicetable-hint',
+                className: 'custominputgroup-hint',
                 innerHTML: this.hint
             });
         }
@@ -624,6 +706,8 @@
             // Append table.
             this.bodyDiv.appendChild(this.table);
         }
+
+        this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
 
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
@@ -717,6 +801,7 @@
         if (!this.table || this.highlighted !== true) return;
         this.table.style.border = '';
         this.highlighted = false;
+        this.errorBox.innerHTML = '';
         this.emit('unhighlighted');
     };
 
@@ -730,6 +815,7 @@
      * @param {object} opts Optional. Configures the return value.
      *   Available optionts:
      *
+     *   - valuesOnly: just returns the current values, no other checkings.
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *      to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, if current value is not the correct
@@ -744,38 +830,54 @@
      * @see CustomInputGroup.reset
      */
     CustomInputGroup.prototype.getValues = function(opts) {
-        var obj, i, len, tbl, toHighlight, toReset;
-        obj = {
+        var res, i, len, input, toReset, values;
+
+        opts = opts || {};
+        i = -1, len = this.items.length;
+        if (opts.valuesOnly) {
+            res = {};
+            for ( ; ++i < len ; ) {
+                res[this.items[i].id] =
+                    this.items[i].getValues({ valuesOnly: true });
+            }
+            return res;
+        }
+        res = {
             id: this.id,
             order: this.order,
             items: {},
             isCorrect: true
         };
-        opts = opts || {};
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
         // Make sure reset is done only at the end.
         toReset = opts.reset;
         opts.reset = false;
-        i = -1, len = this.items.length;
+        if (this.validation) values = {};
         for ( ; ++i < len ; ) {
-            tbl = this.items[i];
-            obj.items[tbl.id] = tbl.getValues(opts);
-            if (obj.items[tbl.id].choice === null) {
-                obj.missValues = true;
-                if (tbl.requiredChoice) {
-                    toHighlight = true;
-                    obj.isCorrect = false;
+            input = this.items[i];
+            res.items[input.id] = input.getValues(opts);
+            // TODO is null or empty?
+            if (res.items[input.id].value === null) {
+                res.missValues = true;
+                if (input.requiredChoice) {
+                    res.err = true;
+                    res.isCorrect = false;
                 }
             }
-            if (obj.items[tbl.id].isCorrect === false && opts.highlight) {
-                toHighlight = true;
+            if (res.items[input.id].isCorrect === false && opts.highlight) {
+                res.err = true;
             }
+            if (values) values[input.id] = res.items[input.id].value;
         }
-        if (opts.highlight && toHighlight) this.highlight();
+        if (res.err) res.err = this.getText('inputErr');
+        else if (values) this.validation(res, values);
+        res.timeBegin = this.timeBegin;
+        res.timeEnd = this.timeEnd;
+        if (opts.highlight && res.err) this.setError(res.err);
         else if (toReset) this.reset(toReset);
         opts.reset = toReset;
-        if (this.textarea) obj.freetext = this.textarea.value;
-        return obj;
+        if (this.textarea) res.freetext = this.textarea.value;
+        return res;
     };
 
     /**
@@ -846,7 +948,7 @@
      * JSUS.shuffleElements
      */
     CustomInputGroup.prototype.shuffle = function(opts) {
-        var order, i, len, j, lenJ, that, cb, newOrder;
+        var order, i, len, that, cb, newOrder;
         if (!this.items) return;
         len = this.items.length;
         if (!len) return;
@@ -880,8 +982,20 @@
         this.order = newOrder;
     };
 
-
-
+    /**
+     * ### CustomInputGroup.setError
+     *
+     * Set the error msg inside the errorBox and call highlight
+     *
+     * @param {string} The error msg (can contain HTML)
+     *
+     * @see CustomInput.highlight
+     * @see CustomInput.errorBox
+     */
+    CustomInputGroup.prototype.setError = function(err) {
+        this.errorBox.innerHTML = err;
+        this.highlight();
+    };
     // ## Helper methods.
 
     /**
@@ -909,6 +1023,8 @@
         s.orientation = that.orientation;
         s.title = false;
 
+        if (that.oninput) s.oninput = that.oninput;
+
         if ('undefined' === typeof s.requiredChoice && that.requiredChoice) {
             s.requiredChoice = that.requiredChoice;
         }
@@ -928,7 +1044,7 @@
      *
      * Creates a instance i-th of choice table with relative settings
      *
-     * Stores a reference of each table in `itemsById`
+     * Stores a reference of each input in `itemsById`
      *
      * @param {CustomInputGroup} that This instance
      * @param {HTMLElement} tr A TR element where the custom input is appended
@@ -954,6 +1070,39 @@
         that.itemsById[ci.id] = ci;
         that.items[idx] = ci;
         that.itemsMap[ci.id] = idx;
+        return ci;
+    }
+
+    /**
+     * ### addSummaryInput
+     *
+     * Creates the last summary input
+     *
+     * Stores a reference in `summaryInput`
+     *
+     * @param {CustomInputGroup} that This instance
+     * @param {HTMLElement} tr A TR element where the custom input is appended
+     * @param {number} i The ordinal position of the table in the group
+     *
+     * @return {object} ct The requested choice table
+     *
+     * @see CustomInputGroup.itemsSettings
+     * @see CustomInputGroup.itemsById
+     * @see mixinSettings
+     */
+    function addSummaryInput(that, tr, i) {
+        var ci, s, td;
+        s = J.mixout({
+            id: that.id + '_summary',
+            storeRef: false,
+            title: false,
+            panel: false,
+        }, that.sharedOptions);
+        s = J.mixin(s, that.summaryInput);
+        td = document.createElement('td');
+        tr.appendChild(td);
+        ci = node.widgets.append('CustomInput', td, s);
+        that.summaryInput = ci;
         return ci;
     }
 

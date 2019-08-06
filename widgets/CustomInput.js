@@ -1384,9 +1384,10 @@
     CustomInput.prototype.getValues = function(opts) {
         var res, valid;
         opts = opts || {};
+        res = this.input.value;
+        if (opts.valuesOnly) return res;
         if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
-        res = this.input.value;
         res = this.validation ? this.validation(res) : { value: res };
         valid = !res.err;
         res.timeBegin = this.timeBegin;
