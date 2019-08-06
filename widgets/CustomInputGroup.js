@@ -24,6 +24,8 @@
     CustomInputGroup.title = false;
     CustomInputGroup.className = 'custominputgroup';
 
+    CustomInputGroup.separator = '::';
+
     CustomInputGroup.texts.autoHint = function(w) {
         if (w.requiredChoice) return '*';
         else return false;
@@ -449,7 +451,7 @@
         if ('function' === typeof opts.validation) {
             this._validation = opts.validation;
 
-            this.validation = function(values, res) {
+            this.validation = function(res, values) {
                 if (!values) values = that.getValues({ valuesOnly: true });
                 return that._validation(res || {}, values, that)
             };
@@ -468,7 +470,7 @@
                 that._oninput(res, input, that);
             };
         }
-        else if ('undefined' !== typeof opts.validation) {
+        else if ('undefined' !== typeof opts.oninput) {
             throw new TypeError('CustomInputGroup.init: oninput must ' +
                                 'be function or undefined. Found: ' +
                                 opts.oninput);
@@ -487,6 +489,7 @@
         // Set the hint, if any.
         if ('string' === typeof opts.hint) {
             this.hint = opts.hint;
+            if (this.requiredChoice) this.hint += ' *';
         }
         else if ('undefined' !== typeof opts.hint) {
             throw new TypeError('CustomInputGroup.init: hint must ' +
@@ -852,12 +855,13 @@
         // Make sure reset is done only at the end.
         toReset = opts.reset;
         opts.reset = false;
+
         if (this.validation) values = {};
         for ( ; ++i < len ; ) {
             input = this.items[i];
             res.items[input.id] = input.getValues(opts);
             // TODO is null or empty?
-            if (res.items[input.id].value === null) {
+            if (res.items[input.id].value === "") {
                 res.missValues = true;
                 if (input.requiredChoice) {
                     res.err = true;
@@ -869,11 +873,12 @@
             }
             if (values) values[input.id] = res.items[input.id].value;
         }
-        if (res.err) res.err = this.getText('inputErr');
-        else if (values) this.validation(res, values);
-        res.timeBegin = this.timeBegin;
-        res.timeEnd = this.timeEnd;
-        if (opts.highlight && res.err) this.setError(res.err);
+        if (!res.err && values) {
+            // res.err = this.getText('inputErr');
+            this.validation(res, values);
+            if (opts.highlight && res.err) this.setError(res.err);
+
+        }
         else if (toReset) this.reset(toReset);
         opts.reset = toReset;
         if (this.textarea) res.freetext = this.textarea.value;
@@ -1097,6 +1102,8 @@
             storeRef: false,
             title: false,
             panel: false,
+            className: 'custominputgroup-summary',
+            disabled: true
         }, that.sharedOptions);
         s = J.mixin(s, that.summaryInput);
         td = document.createElement('td');
