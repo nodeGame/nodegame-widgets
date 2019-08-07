@@ -787,7 +787,7 @@
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
+            if (this.id) this.textarea.id = this.id + '_text';
             this.textarea.className = ChoiceTableGroup.className + '-freetext';
             if ('string' === typeof this.freeText) {
                 this.textarea.placeholder = this.freeText;

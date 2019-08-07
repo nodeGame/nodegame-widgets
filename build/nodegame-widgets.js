@@ -5010,7 +5010,6 @@
     };
 
     ChoiceManager.prototype.append = function() {
-        var tmp;
         // Id must be unique.
         if (W.getElementById(this.id)) {
             throw new Error('ChoiceManager.append: id is not ' +
@@ -5035,12 +5034,11 @@
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
+            if (this.id) this.textarea.id = this.id + '_text';
             if ('string' === typeof this.freeText) {
                 this.textarea.placeholder = this.freeText;
             }
-            tmp = this.className ? this.className + '-freetext' : 'freetext';
-            this.textarea.className = tmp;
+            this.textarea.className = ChoiceManager.className + '-freetext';
             // Append textarea.
             this.bodyDiv.appendChild(this.textarea);
         }
@@ -6495,7 +6493,7 @@
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
+            if (this.id) this.textarea.id = this.id + '_text';
             if ('string' === typeof this.freeText) {
                 this.textarea.placeholder = this.freeText;
             }
@@ -7189,7 +7187,7 @@
 
             e = e || window.event;
             td = e.target || e.srcElement;
-
+            
             // Not a clickable choice.
             if ('undefined' === typeof that.choicesById[td.id]) {
                 // It might be a nested element, try the parent.
@@ -7885,7 +7883,7 @@
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
+            if (this.id) this.textarea.id = this.id + '_text';
             this.textarea.className = ChoiceTableGroup.className + '-freetext';
             if ('string' === typeof this.freeText) {
                 this.textarea.placeholder = this.freeText;
@@ -10392,7 +10390,7 @@
     CustomInputGroup.className = 'custominputgroup';
 
     CustomInputGroup.separator = '::';
-    
+
     CustomInputGroup.texts.autoHint = function(w) {
         if (w.requiredChoice) return '*';
         else return false;
@@ -10855,7 +10853,7 @@
 
         // Set the hint, if any.
         if ('string' === typeof opts.hint) {
-            this.hint = opts.hint;            
+            this.hint = opts.hint;
             if (this.requiredChoice) this.hint += ' *';
         }
         else if ('undefined' !== typeof opts.hint) {

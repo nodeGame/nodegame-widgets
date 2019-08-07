@@ -346,7 +346,6 @@
     };
 
     ChoiceManager.prototype.append = function() {
-        var tmp;
         // Id must be unique.
         if (W.getElementById(this.id)) {
             throw new Error('ChoiceManager.append: id is not ' +
@@ -371,12 +370,11 @@
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
-            this.textarea.id = this.id + '_text';
+            if (this.id) this.textarea.id = this.id + '_text';
             if ('string' === typeof this.freeText) {
                 this.textarea.placeholder = this.freeText;
             }
-            tmp = this.className ? this.className + '-freetext' : 'freetext';
-            this.textarea.className = tmp;
+            this.textarea.className = ChoiceManager.className + '-freetext';
             // Append textarea.
             this.bodyDiv.appendChild(this.textarea);
         }
