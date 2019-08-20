@@ -58,7 +58,7 @@
 
     // ## Meta-data
 
-    Chat.version = '1.0.0';
+    Chat.version = '1.1.0';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the server.';
 
@@ -403,7 +403,7 @@
                 });
                 this.submitButton.onclick = function() {
                     sendMsg(that);
-                    if ('function' === that.textarea.focus) {
+                    if ('function' === typeof that.textarea.focus) {
                         that.textarea.focus();
                     }
                 };
