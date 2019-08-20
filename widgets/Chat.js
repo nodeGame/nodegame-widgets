@@ -114,7 +114,7 @@
         /**
          * ### Chat.useSubmitButton
          *
-         * If TRUE, a button is added to send messages else ENTER sends msgs
+         * If TRUE, a button is added to send messages
          *
          * By default, this is TRUE on mobile devices.
          *
@@ -122,6 +122,18 @@
          * @see Chat.receiverOnly
          */
         this.useSubmitButton = null;
+
+        /**
+         * ### Chat.useSubmitButton
+         *
+         * If TRUE, pressing ENTER sends the msg
+         *
+         * By default, TRUE
+         *
+         * @see Chat.submitButton
+         * @see Chat.receiverOnly
+         */
+        this.useSubmitEnter = null;
 
         /**
          * ### Chat.receiverOnly
@@ -237,8 +249,10 @@
      * The  options object can have the following attributes:
      *   - `receiverOnly`: If TRUE, no message can be sent
      *   - `chatEvent`: The event to fire when sending/receiving a message
-     *   - `useSubmitButton`: If TRUE, a submit button is added, otherwise
-     *        messages are sent by pressing ENTER. Default: TRUE on mobile
+     *   - `useSubmitButton`: If TRUE, a submit button is added.
+     *        Default: TRUE on mobile
+     *   - `useSubmitEnter`: If TRUE, pressing ENTER sends a msg.
+     *        Default: TRUE
      *   - `storeMsgs`: If TRUE, a copy of every message is stored in
      *        a local db
      *   - `participants`: An array containing the ids of participants,
@@ -276,9 +290,13 @@
             if (!this.db) this.db = new NDDB();
         }
 
-        // Button or send on Enter?.
+        // Button to send msg.
         this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
             J.isMobileAgent() : !!options.useSubmitButton;
+
+        // Enter to send msg (does not exclude button).
+        this.useSubmitEnter = 'undefined' === typeof options.useSubmitEnter ?
+            true : !!options.useSubmitEnter;
 
         // Participants.
         tmp = options.participants;
@@ -385,10 +403,13 @@
                 });
                 this.submitButton.onclick = function() {
                     sendMsg(that);
+                    if ('function' === that.textarea.focus) {
+                        that.textarea.focus();
+                    }
                 };
                 inputGroup.appendChild(this.submitButton);
             }
-            else {
+            if (this.useSubmitEnter) {
                 this.textarea.onkeydown = function(e) {
                     e = e || window.event;
                     if ((e.keyCode || e.which) === 13) sendMsg(that);
@@ -451,7 +472,7 @@
      *
      * @param {string} code A value indicating the the type of msg. Available:
      *   'incoming', 'outgoing', and anything else.
-     * @param {string} data The content of the message
+     * @param {object} data The content of the message and the id of the sender
      *
      * @return {string} The current value in the textarea
      *
@@ -464,6 +485,15 @@
             innerHTML: this.getText(code, data),
             className: 'chat_msg chat_msg_' + c
         });
+        this.scrollToBottom();
+    };
+
+    /**
+     * ### Chat.scrollToBottom
+     *
+     * Scrolls the chat to the last message
+     */
+    Chat.prototype.scrollToBottom = function() {
         this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     };
 

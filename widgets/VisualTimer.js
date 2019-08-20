@@ -168,7 +168,7 @@
             if (!this.isInitialized) {
                 this.internalTimer = true;
                 this.gameTimer = node.timer.createTimer({
-                    name: options.name || 'VisualTimer'
+                    name: options.name || 'VisualTimer' // TODO auto naming
                 });
             }
         }
