@@ -3,6 +3,9 @@
 ## current
 - ChoiceTable is tabbable.
 - ChoiceTableGroup is tabbable.
+- CustomInputGroup
+- Chat improvements: enter and submit can be used together; auto focus on
+textarea after pressing on submit; scroll to bottom method.
 
 ## 5.4.0
 - Fixed VisualTimer.startOnPlaying and stopOnDone options.
