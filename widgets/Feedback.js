@@ -633,18 +633,34 @@
      * ### Feedback.setValues
      *
      * Set the value of the feedback
+     *
+     * @param {object} options Conf options. Values:
+     *
+     *   - feedback: a string containing the desired feedback.
+     *               If not set, a random string will be set.
+     *   - verify: if TRUE, the method verifyFeedback is called
+     *             afterwards, updating the UI. Default: TRUE
+     *   - markAttempt: if TRUE, the verify attempt is added. Default: TRUE
      */
     Feedback.prototype.setValues = function(options) {
-        var feedback, maxChars;
+        var feedback, maxChars, minChars, nWords, i;
         options = options || {};
         if (!options.feedback) {
-            if (this.maxChars) {
-                maxChars = this.maxChars;
+            minChars = this.minChars || 0;
+            if (this.maxChars) maxChars = this.maxChars;
+            else if (this.maxWords) maxChars = this.maxWords * 4;
+            else if (minChars) maxChars = minChars + 80;
+            else maxChars = 80;
+
+            feedback = J.randomString(J.randomInt(minChars, maxChars), 'aA_1');
+            if (this.minWords) {
+                nWords = this.minWords - feedback.split(' ').length;
+                if (nWords > 0) {
+                    for (i = 0; i < nWords ; i++) {
+                        feedback += ' ' + i;
+                    }
+                }
             }
-            else if (this.maxWords) {
-                maxChars = this.maxWords * 4;
-            }
-            feedback = J.randomString(J.randomInt(0, maxChars), 'aA_1');
         }
         else {
             feedback = options.feedback;
@@ -654,6 +670,10 @@
         else this.textareaElement.value = feedback;
 
         this.timeInputBegin = J.now();
+
+        if (options.verify !== false) {
+            this.verifyFeedback(options.markAttempt, true);
+        }
     };
 
     /**
