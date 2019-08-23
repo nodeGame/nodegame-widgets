@@ -7,6 +7,8 @@
 - Chat improvements: enter and submit can be used together; auto focus on
 textarea after pressing on submit; scroll to bottom method.
 - Feedback.setValues improved.
+- DisconnectBox improved.
+- DoneButton automatically disables on disconnect (option to prevent it).
 
 ## 5.4.0
 - Fixed VisualTimer.startOnPlaying and stopOnDone options.
