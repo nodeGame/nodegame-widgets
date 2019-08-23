@@ -903,6 +903,9 @@
                         }
                         this.params.minItems = tmp;
                     }
+                    else if (this.requiredChoice) {
+                        this.params.minItems = 1;
+                    }
                     if ('undefined' !== typeof opts.maxItems) {
                         tmp = J.isInt(opts.maxItems, 0);
                         if (tmp === false) {
