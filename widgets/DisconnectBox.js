@@ -5,8 +5,6 @@
  *
  * Shows a disconnect button
  *
- * // TODO: add light on/off for connected/disconnected status
- *
  * www.nodegame.org
  */
 (function(node) {
@@ -18,16 +16,17 @@
     // ## Meta-data
 
     DisconnectBox.version = '0.2.3';
-    DisconnectBox.description =
-        'Visually display current, previous and next stage of the game.';
+    DisconnectBox.description = 'A button to disconnect from server.';
 
     DisconnectBox.title = false;
     DisconnectBox.panel = false;
     DisconnectBox.className = 'disconnectbox';
 
     DisconnectBox.texts = {
-        leave: 'Leave Experiment',
-        left: 'You Left'
+        leave: 'Leave Task',
+        left: 'You Left',
+        disconnected: 'Disconnected!',
+        connected: 'Connected'
     };
 
     // ## Dependencies
@@ -37,59 +36,120 @@
     /**
      * ## DisconnectBox constructor
      *
-     * `DisconnectBox` displays current, previous and next stage of the game
      */
     function DisconnectBox() {
-        // ### DisconnectBox.disconnectButton
+
+        // ### DisconnectBox.showStatus
+        // If TRUE, it shows current connection status. Default: TRUE
+        this.showStatus = null;
+
+        // ### DisconnectBox.showDiscBtn
+        // If TRUE, it shows the disconnect button. Default: FALSE
+        this.showDiscBtn = null;
+
+        // ### DisconnectBox.statusSpan
+        // The SPAN containing the status
+        this.statusSpan = null;
+
+        // ### DisconnectBox.disconnectBtn
         // The button for disconnection
-        this.disconnectButton = null;
+        this.disconnectBtn = null;
+
+        // ### DisconnectBox.disconnectBtn
+        // TRUE, user pressed the disconnect button
+        this.userDiscFlag = null;
+
         // ### DisconnectBox.ee
         // The event emitter with whom the events are registered
         this.ee = null;
+
+        // ### DisconnectBox.disconnectCb
+        // Callback executed when a disconnection is detected
+        this.disconnectCb = null;
+
+        // ### DisconnectBox.disconnectCb
+        // Callback executed when a connection is detected
+        this.connectCb = null;
     }
 
     // ## DisconnectBox methods
+    DisconnectBox.prototype.init = function(opts) {
+        var that;
+        that = this;
 
-    /**
-     * ### DisconnectBox.append
-     *
-     * Appends widget to `this.bodyDiv` and writes the stage
-     *
-     * @see DisconnectBox.writeStage
-     */
+        if (opts.connectCb) {
+            if ('function' !== typeof opts.connectCb) {
+                throw new TypeError('DisconnectBox.init: connectCb must be ' +
+                                    'function or undefined. Found: ' +
+                                    opts.connectCb);
+            }
+            this.connectCb = opts.connectCb;
+        }
+        if (opts.disconnectCb) {
+            if ('function' !== typeof opts.disconnectCb) {
+                throw new TypeError('DisconnectBox.init: disconnectCb must ' +
+                                    'be function or undefined. Found: ' +
+                                    opts.disconnectCb);
+            }
+            this.disconnectCb = opts.disconnectCb;
+        }
+
+        this.showDiscBtn = !!opts.showDiscBtn;
+        this.showStatus = !!opts.showStatus;
+    };
+
     DisconnectBox.prototype.append = function() {
-        var that = this;
-        this.disconnectButton = W.add('button', this.bodyDiv, {
-            innerHTML: this.getText('leave'),
-            className: 'btn btn-lg'
-        });
+        var that;
+        that = this;
+        if (this.showStatus) {
+            this.statusSpan = W.add('span', this.bodyDiv, {
+                innerHTML: node.socket.isConnected() ?
+                    this.getText('connected') : this.getText('disconnected')
+            });
+        }
+        if (this.showDiscBtn) {
+            this.disconnectBtn = W.add('button', this.bodyDiv, {
+                innerHTML: this.getText('leave'),
+                className: 'btn'
+            });
+            this.disconnectBtn.onclick = function() {
+                that.disconnectBtn.disabled = true;
+                that.userDiscFlag = true;
+                node.socket.disconnect();
+            };
+        }
 
-        this.disconnectButton.onclick = function() {
-            that.disconnectButton.disabled = true;
-            node.socket.disconnect();
-            that.disconnectButton.innerHTML = that.getText('left');
-        };
+    };
+
+    DisconnectBox.prototype.updateStatus = function(status) {
+        this.status = status;
+        this.statusSpan.innerHTML = status;
     };
 
     DisconnectBox.prototype.listeners = function() {
-        var that = this;
+        var that;
+        that = this;
 
         this.ee = node.getCurrentEventEmitter();
-        this.ee.on('SOCKET_DISCONNECT', function DBdiscon() {
-            // console.log('DB got socket_diconnect');
-        });
-
-        this.ee.on('SOCKET_CONNECT', function DBcon() {
-            // console.log('DB got socket_connect');
-            if (that.disconnectButton.disabled) {
-                that.disconnectButton.disabled = false;
-                that.disconnectButton.innerHTML = that.getText('leave');
+        this.ee.on('SOCKET_DISCONNECT', function() {
+            // TODO: disconnect color text-danger.
+            that.updateStatus(that.getText('disconnected'));
+            if (that.disconnectBtn  && !that.disconnectBtn.disabled) {
+                that.disconnectBtn.disabled = true;
+                that.disconnectBtn.innerHTML = that.getText('left');
             }
+            if (that.disconnectCb) that.disconnectCb(that.userDiscFlag);
         });
 
-        this.on('destroyed', function() {
-            that.ee.off('SOCKET_DISCONNECT', 'DBdiscon');
-            that.ee.off('SOCKET_CONNECT', 'DBcon');
+        this.ee.on('SOCKET_CONNECT', function() {
+            that.updateStatus(that.getText('connected'));
+            if (that.disconnectBtn && that.disconnectBtn.disabled) {
+                that.disconnectBtn.disabled = false;
+                that.disconnectBtn.innerHTML = that.getText('leave');
+            }
+            if (that.connectCb) that.disconnectCb();
+            // Reset pressedDisc.
+            that.userDiscFlag = false;
         });
     };
 

@@ -67,6 +67,8 @@
             res = node.done();
             if (res) that.disable();
         };
+
+        this.disableOnDisconnect = null;
     }
 
     // ## DoneButton methods
@@ -84,52 +86,56 @@
      *     to have none. Default bootstrap classes: 'btn btn-lg btn-primary'
      * - text: the text on the button. Default: DoneButton.text
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} opts Optional. Configuration options
      */
-    DoneButton.prototype.init = function(options) {
+    DoneButton.prototype.init = function(opts) {
         var tmp;
-        options = options || {};
+        opts = opts || {};
 
         //Button
-        if ('undefined' === typeof options.id) {
+        if ('undefined' === typeof opts.id) {
             tmp = DoneButton.className;
         }
-        else if ('string' === typeof options.id) {
-            tmp = options.id;
+        else if ('string' === typeof opts.id) {
+            tmp = opts.id;
         }
-        else if (false === options.id) {
-            tmp = '';
+        else if (false === opts.id) {
+            tmp = false;
         }
         else {
-            throw new TypeError('DoneButton.init: options.id must ' +
+            throw new TypeError('DoneButton.init: id must ' +
                                 'be string, false, or undefined. Found: ' +
-                                options.id);
+                                opts.id);
         }
-        this.button.id = tmp;
+        if (tmp) this.button.id = tmp;
 
         // Button className.
-        if ('undefined' === typeof options.className) {
+        if ('undefined' === typeof opts.className) {
             tmp  = 'btn btn-lg btn-primary';
         }
-        else if (options.className === false) {
+        else if (opts.className === false) {
             tmp = '';
         }
-        else if ('string' === typeof options.className) {
-            tmp = options.className;
+        else if ('string' === typeof opts.className) {
+            tmp = opts.className;
         }
-        else if (J.isArray(options.className)) {
-            tmp = options.className.join(' ');
+        else if (J.isArray(opts.className)) {
+            tmp = opts.className.join(' ');
         }
         else  {
-            throw new TypeError('DoneButton.init: options.className must ' +
+            throw new TypeError('DoneButton.init: className must ' +
                                 'be string, array, or undefined. Found: ' +
-                                options.className);
+                                opts.className);
         }
         this.button.className = tmp;
 
         // Button text.
-        this.button.value = 'string' === typeof options.text ?
-            options.text : this.getText('done');
+        this.button.value = 'string' === typeof opts.text ?
+            opts.text : this.getText('done');
+
+        this.disableOnDisconnect =
+            'undefined' === typeof opts.disableOnDisconnect ?
+            true : !! opts.disableOnDisconnect;
     };
 
     DoneButton.prototype.append = function() {
@@ -137,7 +143,8 @@
     };
 
     DoneButton.prototype.listeners = function() {
-        var that = this;
+        var that, disabled;
+        that = this;
 
         // This is normally executed after the PLAYING listener of
         // GameWindow where lockUnlockedInputs takes place.
@@ -159,6 +166,22 @@
             if ('string' === typeof prop) that.button.value = prop;
             else if (prop && prop.text) that.button.value = prop.text;
         });
+
+        if (this.disableOnDisconnect) {
+            node.on('SOCKET_DISCONNECT', function() {
+                if (!that.isDisabled()) {
+                    that.disable();
+                    disabled = true;
+                }
+            });
+
+            node.on('SOCKET_CONNECT', function() {
+                if (disabled) {
+                    if (that.isDisabled()) that.enable();
+                    disabled = false;
+                }
+            });
+        }
     };
 
     /**
