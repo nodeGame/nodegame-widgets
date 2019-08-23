@@ -12252,8 +12252,8 @@
 
     // ## Meta-data
 
-    DisconnectBox.version = '0.2.3';
-    DisconnectBox.description = 'A button to disconnect from server.';
+    DisconnectBox.version = '0.4.0';
+    DisconnectBox.description = 'Monitors and handles disconnections';
 
     DisconnectBox.title = false;
     DisconnectBox.panel = false;
@@ -12287,7 +12287,7 @@
         // ### DisconnectBox.statusSpan
         // The SPAN containing the status
         this.statusSpan = null;
-        
+
         // ### DisconnectBox.disconnectBtn
         // The button for disconnection
         this.disconnectBtn = null;
@@ -12334,21 +12334,22 @@
         this.showDiscBtn = !!opts.showDiscBtn;
         this.showStatus = !!opts.showStatus;
     };
-    
+
     DisconnectBox.prototype.append = function() {
-        var that;
+        var that, con;
         that = this;
+        con = node.socket.isConnected();
         if (this.showStatus) {
-            this.statusSpan = W.add('span', this.bodyDiv, {
-                innerHTML: node.socket.isConnected() ?
-                    this.getText('connected') : this.getText('disconnected')
-            });
+            this.statusSpan = W.add('span', this.bodyDiv);
+            this.updateStatus(con ? 'connected' : 'disconnected');            
         }
         if (this.showDiscBtn) {
             this.disconnectBtn = W.add('button', this.bodyDiv, {
-                innerHTML: this.getText('leave'),
-                className: 'btn'
+                innerHTML: this.getText(con ? 'leave' : 'left'),
+                className: 'btn',
+                style: { 'margin-left': '10px' }
             });
+            if (!con) this.disconnectBtn.disabled = true;
             this.disconnectBtn.onclick = function() {
                 that.disconnectBtn.disabled = true;
                 that.userDiscFlag = true;
@@ -12359,8 +12360,9 @@
     };
 
     DisconnectBox.prototype.updateStatus = function(status) {
-        this.status = status;
-        this.statusSpan.innerHTML = status;
+        this.statusSpan.innerHTML = this.getText(status);        
+        this.statusSpan.className = status === 'disconnected' ?
+            'text-danger' : '';
     };
 
     DisconnectBox.prototype.listeners = function() {
@@ -12369,16 +12371,18 @@
 
         this.ee = node.getCurrentEventEmitter();
         this.ee.on('SOCKET_DISCONNECT', function() {
-            that.updateStatus(that.getText('disconnected'));
+            // TODO: disconnect color text-danger.
+            that.updateStatus('disconnected');
             if (that.disconnectBtn) {
+                that.disconnectBtn.disabled = true;
                 that.disconnectBtn.innerHTML = that.getText('left');
             }
             if (that.disconnectCb) that.disconnectCb(that.userDiscFlag);
         });
 
         this.ee.on('SOCKET_CONNECT', function() {
-            that.updateStatus(that.getText('connected'));
-            if (that.disconnectBtn && that.disconnectBtn.disabled) {
+            that.updateStatus('connected');
+            if (that.disconnectBtn) {
                 that.disconnectBtn.disabled = false;
                 that.disconnectBtn.innerHTML = that.getText('leave');
             }
@@ -12567,7 +12571,7 @@
                     disabled = true;
                 }
             });
-        
+
             node.on('SOCKET_CONNECT', function() {
                 if (disabled) {
                     if (that.isDisabled()) that.enable();
