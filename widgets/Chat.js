@@ -53,12 +53,13 @@
             return w.useSubmitButton ? 'Type something' :
                 'Type something and press enter to send';
         },
-        submitButton: 'Send'
+        submitButton: 'Send',
+        isTyping: 'is typing...'
     };
 
     // ## Meta-data
 
-    Chat.version = '1.1.0';
+    Chat.version = '1.2.0';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the server.';
 
@@ -235,6 +236,15 @@
          * Map recipient id (msg.to) to sender id (msg.from)
          */
         this.recipientToSenderMap = null;
+
+        /**
+         * ### Chat.isTypingTimeout
+         *
+         * Timeout to send the "isTyping" notification
+         */
+        this.isTypingTimeout = null;
+
+
     }
 
     // ## Chat methods
@@ -246,7 +256,7 @@
      *
      * @param {object} options Optional. Configuration options.
      *
-     * The  options object can have the following attributes:
+     * The options object can have the following attributes:
      *   - `receiverOnly`: If TRUE, no message can be sent
      *   - `chatEvent`: The event to fire when sending/receiving a message
      *   - `useSubmitButton`: If TRUE, a submit button is added.
@@ -379,12 +389,12 @@
 
     Chat.prototype.append = function() {
         var that, inputGroup, initialText;
+        that = this;
 
         this.chatDiv = W.get('div', { className: 'chat_chat' });
         this.bodyDiv.appendChild(this.chatDiv);
 
         if (!this.receiverOnly) {
-            that = this;
 
             // Input group.
             inputGroup = document.createElement('div');
@@ -409,10 +419,15 @@
                 };
                 inputGroup.appendChild(this.submitButton);
             }
-            if (this.useSubmitEnter) {
+            if (this.useSubmitEnter || this.showIsTyping) {
                 this.textarea.onkeydown = function(e) {
-                    e = e || window.event;
-                    if ((e.keyCode || e.which) === 13) sendMsg(that);
+                    if (that.useSubmitEnter) {
+                        e = e || window.event;
+                        if ((e.keyCode || e.which) === 13) sendMsg(that);
+                    }
+                    else if (that.showIsTyping) {
+                        sendIsTyping(that);
+                    }
                 };
             }
 
@@ -502,6 +517,7 @@
 
         node.on.data(this.chatEvent, function(msg) {
             if (!that.handleMsg(msg)) return;
+
             that.stats.received++;
             // Store message if so requested.
             if (that.storeMsgs) {
@@ -541,6 +557,8 @@
             if (!that.handleMsg(msg)) return;
             that.writeMsg('collapse', { id: msg.from, collapsed: msg.data});
         });
+
+        // TODO chatEvent typing
     };
 
     /**
@@ -630,6 +648,23 @@
         node.say(that.chatEvent, to, msg);
         // Make sure the cursor goes back to top.
         setTimeout(function() { that.textarea.value = ''; });
+    }
+    // ### sendMsg
+    // Reads the textarea and delivers the msg to the server.
+    function sendIsTyping(that) {
+        var msg, to, ids;
+
+        // No msg sent.
+        if (that.isDisabled()) return;
+
+        // Do not send to many
+        if (that.isTypingTimeout) return;
+
+        that.isTypingTimeout = setTimeout(function() {
+            that.isTipyingTimeout = null;
+        }, 3000);
+
+        node.say(that.chatEvent + '_TYPING', to);
     }
 
 })(node);
