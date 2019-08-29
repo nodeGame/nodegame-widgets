@@ -5,7 +5,6 @@
  *
  * Creates a simple configurable chat
  *
- * // TODO: add is...typing
  * // TODO: add bootstrap badge to count msg when collapsed
  * // TODO: check on data if message comes back
  * // TODO: highlight better incoming msg. Play sound?
@@ -50,8 +49,8 @@
                 (data.collapsed ? 'mini' : 'maxi') + 'mized the chat';
         },
         textareaPlaceholder: function(w) {
-            return w.useSubmitButton ? 'Type something' :
-                'Type something and press enter to send';
+            return w.useSubmitEnter ?
+                'Type something and press enter to send' : 'Type something';
         },
         submitButton: 'Send',
         isTyping: 'is typing...'
@@ -238,13 +237,40 @@
         this.recipientToSenderMap = null;
 
         /**
-         * ### Chat.isTypingTimeout
+         * ### Chat.showIsTyping
          *
-         * Timeout to send the "isTyping" notification
+         * TRUE, if "is typing" notice is shown
          */
-        this.isTypingTimeout = null;
+        this.showIsTyping = null;
 
+        /**
+         * ### Chat.amTypingTimeout
+         *
+         * Timeout to send an own "isTyping" notification
+         *
+         * Timeout is added as soon as the user start typing, cleared when
+         * a message is sent.
+         */
+        this.amTypingTimeout = null;
 
+        /**
+         * ### Chat.isTypingTimeouts
+         *
+         * Object containing timeouts for all participants currently typing
+         *
+         * A new timeout is added when an IS_TYPING msg is received and
+         * cleared when a msg arrives or at expiration.
+         */
+        this.isTypingTimeouts = {};
+
+        /**
+         * ### Chat.isTypingDivs
+         *
+         * Object containing divs where "is typing" is diplayed
+         *
+         * Once created
+         */
+        this.isTypingDivs = {};
     }
 
     // ## Chat methods
@@ -254,7 +280,7 @@
      *
      * Initializes the widget
      *
-     * @param {object} options Optional. Configuration options.
+     * @param {object} opts Optional. Configuration options.
      *
      * The options object can have the following attributes:
      *   - `receiverOnly`: If TRUE, no message can be sent
@@ -263,6 +289,8 @@
      *        Default: TRUE on mobile
      *   - `useSubmitEnter`: If TRUE, pressing ENTER sends a msg.
      *        Default: TRUE
+     *   - `showIsTyping: If TRUE, a notice is displayed when users are
+     *        typing. Default: TRUE
      *   - `storeMsgs`: If TRUE, a copy of every message is stored in
      *        a local db
      *   - `participants`: An array containing the ids of participants,
@@ -276,40 +304,40 @@
      *   - `printNames`: If TRUE, the names of the participants of the chat
      *        is printed at the beginning of the chat. Default: FALSE.
      */
-    Chat.prototype.init = function(options) {
+    Chat.prototype.init = function(opts) {
         var tmp, i, rec, sender, that;
 
         that = this;
 
         // Chat id.
-        tmp = options.chatEvent;
+        tmp = opts.chatEvent;
         if (tmp) {
             if ('string' !== typeof tmp) {
                 throw new TypeError('Chat.init: chatEvent must be a non-' +
                                     'empty string or undefined. Found: ' + tmp);
             }
-            this.chatEvent = options.chatEvent;
+            this.chatEvent = opts.chatEvent;
         }
         else {
             this.chatEvent = 'CHAT';
         }
 
         // Store.
-        this.storeMsgs = !!options.storeMsgs;
+        this.storeMsgs = !!opts.storeMsgs;
         if (this.storeMsgs) {
             if (!this.db) this.db = new NDDB();
         }
 
         // Button to send msg.
-        this.useSubmitButton = 'undefined' === typeof options.useSubmitButton ?
-            J.isMobileAgent() : !!options.useSubmitButton;
+        this.useSubmitButton = 'undefined' === typeof opts.useSubmitButton ?
+            J.isMobileAgent() : !!opts.useSubmitButton;
 
         // Enter to send msg (does not exclude button).
-        this.useSubmitEnter = 'undefined' === typeof options.useSubmitEnter ?
-            true : !!options.useSubmitEnter;
+        this.useSubmitEnter = 'undefined' === typeof opts.useSubmitEnter ?
+            true : !!opts.useSubmitEnter;
 
         // Participants.
-        tmp = options.participants;
+        tmp = opts.participants;
         if (!J.isArray(tmp) || !tmp.length) {
             throw new TypeError('Chat.init: participants must be ' +
                                 'a non-empty array. Found: ' + tmp);
@@ -350,18 +378,18 @@
         }
 
         // Other.
-        this.uncollapseOnMsg = options.uncollapseOnMsg || false;
+        this.uncollapseOnMsg = opts.uncollapseOnMsg || false;
 
-        this.printStartTime = options.printStartTime || false;
-        this.printNames = options.printNames || false;
+        this.printStartTime = opts.printStartTime || false;
+        this.printNames = opts.printNames || false;
 
-        if (options.initialMsg) {
-            if ('object' !== typeof options.initialMsg) {
+        if (opts.initialMsg) {
+            if ('object' !== typeof opts.initialMsg) {
                 throw new TypeError('Chat.init: initialMsg must be ' +
                                     'object or undefined. Found: ' +
-                                    options.initialMsg);
+                                    opts.initialMsg);
             }
-            this.initialMsg = options.initialMsg;
+            this.initialMsg = opts.initialMsg;
         }
 
         this.on('uncollapsed', function() {
@@ -385,6 +413,9 @@
                 node.say(that.chatEvent + '_QUIT', that.recipientsIds);
             }
         });
+
+        this.showIsTyping = 'undefined' === typeof opts.showIsTyping ?
+            true : !!opts.showIsTyping;
     };
 
     Chat.prototype.append = function() {
@@ -424,9 +455,10 @@
                     if (that.useSubmitEnter) {
                         e = e || window.event;
                         if ((e.keyCode || e.which) === 13) sendMsg(that);
+                        else sendAmTyping(that);
                     }
                     else if (that.showIsTyping) {
-                        sendIsTyping(that);
+                        sendAmTyping(that);
                     }
                 };
             }
@@ -489,18 +521,19 @@
      *   'incoming', 'outgoing', and anything else.
      * @param {object} data The content of the message and the id of the sender
      *
-     * @return {string} The current value in the textarea
+     * @return {HTMLElement} c The div just inserted with the msg
      *
      * @see Chat.chatDiv
      */
     Chat.prototype.writeMsg = function(code, data) {
         var c;
         c = (code === 'incoming' || code === 'outgoing') ? code : 'event';
-        W.add('div', this.chatDiv, {
+        c = W.add('div', this.chatDiv, {
             innerHTML: this.getText(code, data),
             className: 'chat_msg chat_msg_' + c
         });
         this.scrollToBottom();
+        return c;
     };
 
     /**
@@ -528,6 +561,8 @@
                     timestamp: J.now()
                 });
             }
+            // Remove is typing sign, if any.
+            that.clearIsTyping(msg.from);
             that.writeMsg('incoming', { msg: msg.data, id: msg.from });
         });
 
@@ -558,7 +593,47 @@
             that.writeMsg('collapse', { id: msg.from, collapsed: msg.data});
         });
 
-        // TODO chatEvent typing
+        node.on.data(this.chatEvent + '_TYPING', function(msg) {
+            if (!that.handleMsg(msg)) return;
+            that.addIsTyping(msg.from);
+        });
+    };
+
+    Chat.prototype.addIsTyping = function(id) {
+        var t, div, that;
+        // Stop existing timeouts.
+        t = this.isTypingTimeouts[id];
+        if (t) clearTimeout(t);
+        // Make or show the div.
+        div = this.isTypingDivs[id];
+        if (div) {
+            // Move last and show..
+            this.chatDiv.appendChild(div);
+            div.style.display = '';
+        }
+        else {
+            this.isTypingDivs[id] = this.writeMsg('incoming', {
+                msg: this.getText('isTyping', {id: id })
+            });
+        }
+        this.scrollToBottom();
+        // Add new timeout (msg are sent every 4000).
+        that = this;
+        this.isTypingTimeouts[id] = setTimeout(function() {
+            that.clearIsTyping(id);
+            that.isTypingTimeouts[id] = null;
+        }, 5000);
+    };
+
+    Chat.prototype.clearIsTyping = function(id) {
+        if (this.isTypingTimeouts[id]) {
+            clearTimeout(this.isTypingTimeouts[id]);
+            this.isTypingTimeouts[id] = null;
+        }
+        // Keep the div element, just hide it, it will be recycled.
+        if (this.isTypingDivs[id]) {
+            this.isTypingDivs[id].style.display = 'none';
+        }
     };
 
     /**
@@ -648,22 +723,27 @@
         node.say(that.chatEvent, to, msg);
         // Make sure the cursor goes back to top.
         setTimeout(function() { that.textarea.value = ''; });
+        // Clear any typing timeout.
+        if (that.amTypingTimeout) {
+            clearTimeout(that.amTypingTimeout);
+            that.amTypingTimeout = null;
+        }
     }
     // ### sendMsg
     // Reads the textarea and delivers the msg to the server.
-    function sendIsTyping(that) {
-        var msg, to, ids;
-
-        // No msg sent.
+    function sendAmTyping(that) {
+        var to;
         if (that.isDisabled()) return;
-
-        // Do not send to many
-        if (that.isTypingTimeout) return;
-
-        that.isTypingTimeout = setTimeout(function() {
-            that.isTipyingTimeout = null;
-        }, 3000);
-
+        // Do not send too many notifications.
+        if (that.amTypingTimeout) return;
+        // Simplify things, if there is only one recipient.
+        to = that.recipientsIds;
+        if (!to.length) return;
+        else if (to.length === 1) to = to[0];
+        // No new notifications for 4s.
+        that.amTypingTimeout = setTimeout(function() {
+            that.amTypingTimeout = null;
+        }, 4000);
         node.say(that.chatEvent + '_TYPING', to);
     }
 

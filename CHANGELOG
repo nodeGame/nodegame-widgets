@@ -9,6 +9,7 @@ textarea after pressing on submit; scroll to bottom method.
 - Feedback.setValues improved.
 - DisconnectBox improved.
 - DoneButton automatically disables on disconnect (option to prevent it).
+- Chat is typing notification.
 
 ## 5.4.0
 - Fixed VisualTimer.startOnPlaying and stopOnDone options.
