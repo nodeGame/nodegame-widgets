@@ -236,7 +236,7 @@
         if (this.showEmailForm && !this.emailForm) {
             this.emailForm = node.widgets.get('EmailForm', J.mixin({
                 label: this.getText('contactQuestion'),
-                onsubmit: { say: true, emailOnly: true, updateUI: true },
+                onsubmit: { send: true, emailOnly: true, updateUI: true },
                 storeRef: false
             }, options.email));
         }

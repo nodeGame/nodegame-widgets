@@ -218,10 +218,10 @@
         }
 
         if ('undefined' === typeof options.stopOnDone) {
-            options.stopOnDone = !!options.stopOnDone;
+            options.stopOnDone = true;
         }
         if ('undefined' === typeof options.startOnPlaying) {
-            options.startOnPlaying = !!options.startOnPlaying;
+            options.startOnPlaying = true;
         }
 
         // Init the gameTimer, regardless of the source (internal vs external).
