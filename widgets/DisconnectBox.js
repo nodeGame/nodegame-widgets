@@ -123,6 +123,10 @@
     };
 
     DisconnectBox.prototype.updateStatus = function(status) {
+        if (!this.statusSpan) {
+            node.warn('DisconnectBox.updateStatus: display disabled.');
+            return;
+        }
         this.statusSpan.innerHTML = this.getText(status);
         this.statusSpan.className = status === 'disconnected' ?
             'text-danger' : '';
@@ -134,8 +138,7 @@
 
         this.ee = node.getCurrentEventEmitter();
         this.ee.on('SOCKET_DISCONNECT', function() {
-            // TODO: disconnect color text-danger.
-            that.updateStatus('disconnected');
+            if (that.statusSpan) that.updateStatus('disconnected');
             if (that.disconnectBtn) {
                 that.disconnectBtn.disabled = true;
                 that.disconnectBtn.innerHTML = that.getText('left');
@@ -144,7 +147,7 @@
         });
 
         this.ee.on('SOCKET_CONNECT', function() {
-            that.updateStatus('connected');
+            if (that.statusSpan) that.updateStatus('connected');
             if (that.disconnectBtn) {
                 that.disconnectBtn.disabled = false;
                 that.disconnectBtn.innerHTML = that.getText('leave');
