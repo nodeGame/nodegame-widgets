@@ -1,16 +1,14 @@
 # nodegame-widgets change log
 
-## current
-- ChoiceTable is tabbable.
-- ChoiceTableGroup is tabbable.
-- CustomInputGroup
+## 5.5.0
+- ChoiceTable and ChoiceTableGroup is tabbable.
+- New widgets: CustomInputGroup, RiskGauge, ContentBox.
 - Chat improvements: enter and submit can be used together; auto focus on
 textarea after pressing on submit; scroll to bottom method.
 - Feedback.setValues improved.
 - DisconnectBox improved.
 - DoneButton automatically disables on disconnect (option to prevent it).
 - Chat is typing notification.
-- ContentBox to display simple text/content.
 
 ## 5.4.0
 - Fixed VisualTimer.startOnPlaying and stopOnDone options.
