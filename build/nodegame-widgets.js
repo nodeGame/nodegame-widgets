@@ -15555,7 +15555,7 @@
 
 /**
  * # Requirements
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Checks a list of requirements and displays the results
@@ -15573,7 +15573,7 @@
 
     // ## Meta-data
 
-    Requirements.version = '0.7.1';
+    Requirements.version = '0.7.2';
     Requirements.description = 'Checks a set of requirements and display the ' +
         'results';
 
@@ -15954,7 +15954,7 @@
 
         this.timeoutId = setTimeout(function() {
             if (that.stillChecking > 0) {
-                that.displayResults([this.getText('errStr')]);
+                that.displayResults([that.getText('errStr')]);
             }
             that.timeoutId = null;
             that.hasFailed = true;
