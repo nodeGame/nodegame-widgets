@@ -168,7 +168,7 @@
             if (!this.isInitialized) {
                 this.internalTimer = true;
                 this.gameTimer = node.timer.createTimer({
-                    name: options.name || 'VisualTimer' // TODO auto naming
+                    name: options.name || 'VisualTimer_' + J.randomInt(10000000)
                 });
             }
         }
@@ -218,10 +218,10 @@
         }
 
         if ('undefined' === typeof options.stopOnDone) {
-            options.stopOnDone = true;
+            this.options.stopOnDone = true;
         }
         if ('undefined' === typeof options.startOnPlaying) {
-            options.startOnPlaying = true;
+            this.options.startOnPlaying = true;
         }
 
         // Init the gameTimer, regardless of the source (internal vs external).
