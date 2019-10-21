@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 5.5.1
+- DoneButton correctly detects isDisabled.
+
 ## 5.5.0
 - ChoiceTable and ChoiceTableGroup is tabbable.
 - New widgets: CustomInputGroup, RiskGauge, ContentBox.
