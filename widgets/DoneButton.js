@@ -189,8 +189,11 @@
      *
      * Disables the done button
      */
-    DoneButton.prototype.disable = function() {
-        this.button.disabled = 'disabled';
+    DoneButton.prototype.disable = function(opts) {
+        if (this.disabled) return;
+        this.disabled = true;
+        this.button.disabled = true;
+        this.emit('disabled', opts);
     };
 
     /**
@@ -198,8 +201,11 @@
      *
      * Enables the done button
      */
-    DoneButton.prototype.enable = function() {
+    DoneButton.prototype.enable = function(opts) {
+        if (!this.disabled) return;
+        this.disabled = false;
         this.button.disabled = false;
+        this.emit('enabled', opts);
     };
 
 })(node);
