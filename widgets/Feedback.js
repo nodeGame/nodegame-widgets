@@ -46,11 +46,11 @@
             }
             else if (w.minWords) {
                 res2 = 'at least ' + w.minWords + ' word';
-                if (w.minWords > 1) res += 's';
+                if (w.minWords > 1) res2 += 's';
             }
             else if (w.maxWords) {
                 res2 = 'at most ' +  w.maxWords + ' word';
-                if (w.maxWords > 1) res += 's';
+                if (w.maxWords > 1) res2 += 's';
             }
             if (res) {
                 res = '(' + res;;
