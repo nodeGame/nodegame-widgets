@@ -39,8 +39,13 @@
         }
         else {
             if ('number' === typeof w.selectMultiple) {
-                res += 'select between ' + w.requiredChoice + ' and ' +
-                    w.selectMultiple;
+                if (w.selectMultiple === w.requiredChoice) {
+                    res += 'select ' + w.requiredChoice;
+                }
+                else {
+                    res += 'select between ' + w.requiredChoice +
+                        ' and ' + w.selectMultiple;
+                }
             }
             else {
                 res += 'select at least ' + w.requiredChoice;
