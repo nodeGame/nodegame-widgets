@@ -298,7 +298,8 @@
                     options.canvas.width = options.width;
                 }
             }
-            this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
+            this.canvas = W.get('canvas', options.canvas);
+            this.canvas.id = 'ChernoffFaces_canvas';
 
             // Face Painter.
             this.fp = new FacePainter(this.canvas);
