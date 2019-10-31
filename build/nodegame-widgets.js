@@ -3435,7 +3435,8 @@
                     options.canvas.width = options.width;
                 }
             }
-            this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
+            this.canvas = W.get('canvas', options.canvas);
+            this.canvas.id = 'ChernoffFaces_canvas';
 
             // Face Painter.
             this.fp = new FacePainter(this.canvas);
@@ -5491,8 +5492,13 @@
         }
         else {
             if ('number' === typeof w.selectMultiple) {
-                res += 'select between ' + w.requiredChoice + ' and ' +
-                    w.selectMultiple;
+                if (w.selectMultiple === w.requiredChoice) {
+                    res += 'select ' + w.requiredChoice;
+                }
+                else {
+                    res += 'select between ' + w.requiredChoice +
+                        ' and ' + w.selectMultiple;
+                }
             }
             else {
                 res += 'select at least ' + w.requiredChoice;
@@ -13744,11 +13750,11 @@
             }
             else if (w.minWords) {
                 res2 = 'at least ' + w.minWords + ' word';
-                if (w.minWords > 1) res += 's';
+                if (w.minWords > 1) res2 += 's';
             }
             else if (w.maxWords) {
                 res2 = 'at most ' +  w.maxWords + ' word';
-                if (w.maxWords > 1) res += 's';
+                if (w.maxWords > 1) res2 += 's';
             }
             if (res) {
                 res = '(' + res;;
