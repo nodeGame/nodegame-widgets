@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.6.1';
+    ChoiceTable.version = '1.6.2';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -1689,7 +1689,7 @@
             }
         }
 
-        if (this.textArea) this.textArea.value = '';
+        if (this.textarea) this.textarea.value = '';
         if (this.isHighlighted()) this.unhighlight();
 
         if (options.shuffleChoices) this.shuffle();
