@@ -1383,9 +1383,7 @@
      *
      * Returns TRUE if a choice is currently selected
      *
-     * @param {number|string} The choice to check. If choices are shuffled
-     *   it should be called `getChoiceAtPosition` first to know if the
-     *   choice at a given position is current.
+     * @param {number|string} The choice to check.
      *
      * @return {boolean} TRUE, if the choice is currently selected
      *
@@ -1400,18 +1398,30 @@
             throw new TypeError('ChoiceTable.isChoiceCurrent: choice ' +
                                 'must be string or number. Found: ' + choice);
         }
-        if (!this.selectMultiple) {
-            return this.currentChoice === choice;
-        }
-        else {
-            i = -1, len = this.currentChoice.length;
-            for ( ; ++i < len ; ) {
-                if (this.currentChoice[i] === choice) {
-                    return true;
-                }
-            }
+        if (!this.selectMultiple) return this.currentChoice === choice;
+        i = -1, len = this.currentChoice.length;
+        for ( ; ++i < len ; ) {
+            if (this.currentChoice[i] === choice) return true;
         }
         return false;
+    };
+
+    /**
+     * ### ChoiceTable.getChoiceAtPosition
+     *
+     * Returns a choice displayed at a given position
+     *
+     * @param {string|number} i The numeric position of a choice in display
+     *
+     * @return {string|undefined} The value associated the numeric position.
+     *   If no value is found, returns undefined
+     *
+     * @see ChoiceTable.order
+     * @see ChoiceTable.choices
+     */
+    ChoiceTable.prototype.getChoiceAtPosition = function(i) {
+        if (!this.choices || !this.order) return;
+        return this.choices[this.order[parseInt(i, 10)]];
     };
 
     /**
@@ -1447,24 +1457,6 @@
         this.table.style.border = '';
         this.highlighted = false;
         this.emit('unhighlighted');
-    };
-
-    /**
-     * ### ChoiceTable.getChoiceAtPosition
-     *
-     * Returns a choice displayed at a given position
-     *
-     * @param {string|number} i The numeric position of a choice in display
-     *
-     * @return {string|undefined} The value associated the numeric position.
-     *   If no value is found, returns undefined
-     *
-     * @see ChoiceTable.order
-     * @see ChoiceTable.choices
-     */
-    ChoiceTable.prototype.getChoiceAtPosition = function(i) {
-        if (!this.choices || !this.order) return;
-        return this.choices[this.order[parseInt(i, 10)]];
     };
 
     /**
