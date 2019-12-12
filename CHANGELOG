@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## current
+- CustomInput type text checks for no numbers.
+
 ## 5.5.2
 - Fixed autoHint in feedback.
 - Fixed ChoiceTable requiredChoice == selectMultiple in autoHint.
