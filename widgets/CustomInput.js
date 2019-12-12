@@ -205,8 +205,9 @@
             }
             return str;
         },
-        textErr: function(w, len) {
+        textErr: function(w, param) {
             var str, p;
+            if (param === 'num') return 'Cannot contain numbers';
             p = w.params;
             str = 'Must be ';
             if (p.exactly) {
@@ -223,7 +224,7 @@
             }
             str += ' characters long';
             if (p.between) str += ' (extremes included)';
-            str += '. Current length: ' + len;
+            str += '. Current length: ' + param;
             return str;
         },
         dateErr: function(w, param) {
@@ -559,6 +560,9 @@
 
                 // Checks for text only.
                 if (isText) {
+
+                    this.params.noNumbers = opts.noNumbers;
+
                     if ('undefined' !== typeof this.params.lower) {
                         if (this.params.lower < 0) {
                             throw new TypeError(e + 'min cannot be negative ' +
@@ -581,19 +585,25 @@
                         p = that.params;
                         len = value.length;
                         out = { value: value };
-                        if (p.exactly) {
-                            err = len !== p.lower;
+                        if (p.noNumbers && /\d/.test(value)) {
+                            err = that.getText('textErr', 'num');
                         }
                         else {
-                            if (('undefined' !== typeof p.lower &&
-                                 len < p.lower) ||
-                                ('undefined' !== typeof p.upper &&
-                                 len > p.upper)) {
-
-                                err = true;
+                            if (p.exactly) {
+                                err = len !== p.lower;
                             }
+                            else {
+                                if (('undefined' !== typeof p.lower &&
+                                     len < p.lower) ||
+                                    ('undefined' !== typeof p.upper &&
+                                     len > p.upper)) {
+
+                                    err = true;
+                                }
+                            }
+                            if (err) err = that.getText('textErr', len);
                         }
-                        if (err) out.err = that.getText('textErr', len);
+                        if (err) out.err = err;
                         return out;
                     };
 
