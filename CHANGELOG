@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## current
+## 5.6.0
 - CustomInput type text checks for no numbers.
 
 ## 5.5.2
