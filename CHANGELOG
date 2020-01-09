@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 5.6.1
+- RiskGauge scale and values options.
+
 ## 5.6.0
 - CustomInput type text checks for no numbers.
 
