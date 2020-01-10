@@ -1881,8 +1881,6 @@
  *
  * Creates a button that if pressed goes to the previous step
  *
- * // TODO: check the changes to node.game.getProperty
- *
  * www.nodegame.org
  */
 (function(node) {
@@ -1893,7 +1891,7 @@
 
     // ## Meta-data
 
-    BackButton.version = '0.1.0';
+    BackButton.version = '0.2.0';
     BackButton.description = 'Creates a button that if ' +
         'pressed goes to the previous step.';
 
@@ -2046,7 +2044,7 @@
         var that = this;
 
         // Locks the back button in case of a timeout.
-        node.on('PLAYING', function() {
+        node.events.game.on('PLAYING', function() {
             var prop, step;
             step = getPreviousStep(that);
             // It might be enabled already, but we do it again.
@@ -2097,7 +2095,7 @@
         var curStage,  prevStage;
         curStage = node.game.getCurrentGameStage();
         if (curStage.stage === 0) return;
-        prevStage = node.game.getPreviousStep();
+        prevStage = node.game.plot.jump(curStage, -1);
         if (prevStage.stage === 0) return;
         if ((curStage.stage > prevStage.stage) && !that.acrossStages) {
             return false;
@@ -16258,7 +16256,7 @@
 
     // ## Meta-data
 
-    RiskGauge.version = '0.2.0';
+    RiskGauge.version = '0.3.0';
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences.';
 
@@ -16314,8 +16312,8 @@
          *
          * References:
          *
-         * Holt, C. A., & Laury, S. K. (2002). 
-         * Risk aversion and incentive effects. 
+         * Holt, C. A., & Laury, S. K. (2002).
+         * Risk aversion and incentive effects.
          * American economic review, 92(5), 1644-1655.
          */
         this.method = 'Holt_Laury';
@@ -16481,7 +16479,7 @@
         var tmp, v1, v2, v3, v4, p1, p2;
 
         tmp = options.values || [ 2, 1.6, 3.85, 0.1 ];
-        
+
         if (options.scale) {
             tmp = tmp.map(function(i) { return i * options.scale; });
         }
@@ -16490,7 +16488,7 @@
         v2 = tmp[1].toFixed(2);
         v3 = tmp[2].toFixed(2);
         v4 = tmp[3].toFixed(2);
-        
+
         len = 10;
         items = new Array(len);
         for (i = 0; i < len ; i++) {

@@ -5,8 +5,6 @@
  *
  * Creates a button that if pressed goes to the previous step
  *
- * // TODO: check the changes to node.game.getProperty
- *
  * www.nodegame.org
  */
 (function(node) {
@@ -17,7 +15,7 @@
 
     // ## Meta-data
 
-    BackButton.version = '0.1.0';
+    BackButton.version = '0.2.0';
     BackButton.description = 'Creates a button that if ' +
         'pressed goes to the previous step.';
 
@@ -170,7 +168,7 @@
         var that = this;
 
         // Locks the back button in case of a timeout.
-        node.on('PLAYING', function() {
+        node.events.game.on('PLAYING', function() {
             var prop, step;
             step = getPreviousStep(that);
             // It might be enabled already, but we do it again.
@@ -221,7 +219,7 @@
         var curStage,  prevStage;
         curStage = node.game.getCurrentGameStage();
         if (curStage.stage === 0) return;
-        prevStage = node.game.getPreviousStep();
+        prevStage = node.game.plot.jump(curStage, -1);
         if (prevStage.stage === 0) return;
         if ((curStage.stage > prevStage.stage) && !that.acrossStages) {
             return false;
