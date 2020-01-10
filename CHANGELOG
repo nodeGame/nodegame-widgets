@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## 5.6.2
+- BackButton gets the right previous step when multiple calls are made in
+sequence.
+
 ## 5.6.1
 - RiskGauge scale and values options.
 
