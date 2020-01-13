@@ -13633,7 +13633,7 @@
             }
 
             if ('undefined' !== typeof data.total) {
-                totalWin = J.isNumber(data.total, 0);
+                totalWin = J.isNumber(data.total);
                 if (totalWin === false) {
                     node.err('EndScreen.updateDisplay: invalid data.total: ' +
                              data.total);
