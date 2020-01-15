@@ -7261,7 +7261,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.6.0';
+    ChoiceTableGroup.version = '1.6.1';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -7322,7 +7322,7 @@
          */
         this.listener = function(e) {
             var name, value, item, td, oldSelected;
-            var time;
+            var time, removed;
 
             // Relative time.
             if ('string' === typeof that.timeFrom) {
@@ -7372,6 +7372,7 @@
 
                 if (item.isChoiceCurrent(value)) {
                     item.unsetCurrentChoice(value);
+                    removed = true;
                 }
                 else {
                     item.currentChoice = value;
@@ -7382,6 +7383,14 @@
 
             // Remove any warning/error from form on click.
             if (that.isHighlighted()) that.unhighlight();
+
+            // Call onclick, if any.
+            if (that.onclick) {
+                // TODO: Should we parseInt it anyway when we store
+                // the current choice?
+                value = parseInt(value, 10);
+                that.onclick.call(that, name, value, removed, td);
+            }
         };
 
         /**
@@ -7631,7 +7640,9 @@
      *   - orientation: orientation of the table: vertical (v) or horizontal (h)
      *   - group: the name of the group (number or string), if any
      *   - groupOrder: the order of the table in the group, if any
-     *   - onclick: a custom onclick listener function. Context is
+     *   - listener: a custom function executed at every click. Context is
+     *       `this` instance.
+     *   - onclick: a function executed after the listener function. Context is
      *       `this` instance
      *   - mainText: a text to be displayed above the table
      *   - shuffleItems: if TRUE, items are shuffled before being added
@@ -7643,9 +7654,9 @@
      *   - tabbable: if TRUE, each cell can be reached with TAB and clicked
      *       with SPACE or ENTER. Default: TRUE.
      *
-     * @param {object} options Configuration options
+     * @param {object} opts Configuration options
      */
-    ChoiceTableGroup.prototype.init = function(options) {
+    ChoiceTableGroup.prototype.init = function(opts) {
         var tmp, that;
         that = this;
 
@@ -7653,21 +7664,21 @@
         // Have a method in ChoiceTable?
 
         if (!this.id) {
-            throw new TypeError('ChoiceTableGroup.init: options.id ' +
+            throw new TypeError('ChoiceTableGroup.init: opts.id ' +
                                 'is missing.');
         }
 
         // Option orientation, default 'H'.
-        if ('undefined' === typeof options.orientation) {
+        if ('undefined' === typeof opts.orientation) {
             tmp = 'H';
         }
-        else if ('string' !== typeof options.orientation) {
-            throw new TypeError('ChoiceTableGroup.init: options.orientation ' +
+        else if ('string' !== typeof opts.orientation) {
+            throw new TypeError('ChoiceTableGroup.init: opts.orientation ' +
                                 'must be string, or undefined. Found: ' +
-                                options.orientation);
+                                opts.orientation);
         }
         else {
-            tmp = options.orientation.toLowerCase().trim();
+            tmp = opts.orientation.toLowerCase().trim();
             if (tmp === 'horizontal' || tmp === 'h') {
                 tmp = 'H';
             }
@@ -7675,84 +7686,94 @@
                 tmp = 'V';
             }
             else {
-                throw new Error('ChoiceTableGroup.init: options.orientation ' +
+                throw new Error('ChoiceTableGroup.init: opts.orientation ' +
                                 'is invalid: ' + tmp);
             }
         }
         this.orientation = tmp;
 
         // Option shuffleItems, default false.
-        if ('undefined' === typeof options.shuffleItems) tmp = false;
-        else tmp = !!options.shuffleItems;
+        if ('undefined' === typeof opts.shuffleItems) tmp = false;
+        else tmp = !!opts.shuffleItems;
         this.shuffleItems = tmp;
 
         // Option requiredChoice, if any.
-        if ('number' === typeof options.requiredChoice) {
-            this.requiredChoice = options.requiredChoice;
+        if ('number' === typeof opts.requiredChoice) {
+            this.requiredChoice = opts.requiredChoice;
         }
-        else if ('boolean' === typeof options.requiredChoice) {
-            this.requiredChoice = options.requiredChoice ? 1 : 0;
+        else if ('boolean' === typeof opts.requiredChoice) {
+            this.requiredChoice = opts.requiredChoice ? 1 : 0;
         }
-        else if ('undefined' !== typeof options.requiredChoice) {
+        else if ('undefined' !== typeof opts.requiredChoice) {
             throw new TypeError('ChoiceTableGroup.init: ' +
-                                'options.requiredChoice ' +
+                                'opts.requiredChoice ' +
                                 'be number or boolean or undefined. Found: ' +
-                                options.requiredChoice);
+                                opts.requiredChoice);
         }
 
         // Set the group, if any.
-        if ('string' === typeof options.group ||
-            'number' === typeof options.group) {
+        if ('string' === typeof opts.group ||
+            'number' === typeof opts.group) {
 
-            this.group = options.group;
+            this.group = opts.group;
         }
-        else if ('undefined' !== typeof options.group) {
-            throw new TypeError('ChoiceTableGroup.init: options.group must ' +
+        else if ('undefined' !== typeof opts.group) {
+            throw new TypeError('ChoiceTableGroup.init: opts.group must ' +
                                 'be string, number or undefined. Found: ' +
-                                options.group);
+                                opts.group);
         }
 
         // Set the groupOrder, if any.
-        if ('number' === typeof options.groupOrder) {
+        if ('number' === typeof opts.groupOrder) {
 
-            this.groupOrder = options.groupOrder;
+            this.groupOrder = opts.groupOrder;
         }
-        else if ('undefined' !== typeof options.group) {
-            throw new TypeError('ChoiceTableGroup.init: options.groupOrder ' +
+        else if ('undefined' !== typeof opts.group) {
+            throw new TypeError('ChoiceTableGroup.init: opts.groupOrder ' +
                                 'must be number or undefined. Found: ' +
-                                options.groupOrder);
+                                opts.groupOrder);
         }
 
-        // Set the onclick listener, if any.
-        if ('function' === typeof options.onclick) {
+        // Set the main onclick listener, if any.
+        if ('function' === typeof opts.listener) {
             this.listener = function(e) {
-                options.onclick.call(this, e);
+                opts.listener.call(this, e);
             };
         }
-        else if ('undefined' !== typeof options.onclick) {
-            throw new TypeError('ChoiceTableGroup.init: options.onclick must ' +
+        else if ('undefined' !== typeof opts.listener) {
+            throw new TypeError('ChoiceTableGroup.init: opts.listener ' +
+                                'must be function or undefined. Found: ' +
+                                opts.listener);
+        }
+
+        // Set an additional onclick, if any.
+        if ('function' === typeof opts.onclick) {
+            this.onclick = opts.onclick;
+        }
+        else if ('undefined' !== typeof opts.onclick) {
+            throw new TypeError('ChoiceTableGroup.init: opts.onclick must ' +
                                 'be function or undefined. Found: ' +
-                                options.onclick);
+                                opts.onclick);
         }
 
         // Set the mainText, if any.
-        if ('string' === typeof options.mainText) {
-            this.mainText = options.mainText;
+        if ('string' === typeof opts.mainText) {
+            this.mainText = opts.mainText;
         }
-        else if ('undefined' !== typeof options.mainText) {
-            throw new TypeError('ChoiceTableGroup.init: options.mainText ' +
+        else if ('undefined' !== typeof opts.mainText) {
+            throw new TypeError('ChoiceTableGroup.init: opts.mainText ' +
                                 'must be string or undefined. Found: ' +
-                                options.mainText);
+                                opts.mainText);
         }
 
         // Set the hint, if any.
-        if ('string' === typeof options.hint || false === options.hint) {
-            this.hint = options.hint;
+        if ('string' === typeof opts.hint || false === opts.hint) {
+            this.hint = opts.hint;
         }
-        else if ('undefined' !== typeof options.hint) {
-            throw new TypeError('ChoiceTableGroup.init: options.hint must ' +
+        else if ('undefined' !== typeof opts.hint) {
+            throw new TypeError('ChoiceTableGroup.init: opts.hint must ' +
                                 'be a string, false, or undefined. Found: ' +
-                                options.hint);
+                                opts.hint);
         }
         else {
             // Returns undefined if there are no constraints.
@@ -7760,75 +7781,75 @@
         }
 
         // Set the timeFrom, if any.
-        if (options.timeFrom === false ||
-            'string' === typeof options.timeFrom) {
+        if (opts.timeFrom === false ||
+            'string' === typeof opts.timeFrom) {
 
-            this.timeFrom = options.timeFrom;
+            this.timeFrom = opts.timeFrom;
         }
-        else if ('undefined' !== typeof options.timeFrom) {
-            throw new TypeError('ChoiceTableGroup.init: options.timeFrom ' +
+        else if ('undefined' !== typeof opts.timeFrom) {
+            throw new TypeError('ChoiceTableGroup.init: opts.timeFrom ' +
                                 'must be string, false, or undefined. Found: ' +
-                                options.timeFrom);
+                                opts.timeFrom);
         }
 
         // Option shuffleChoices, default false.
-        if ('undefined' !== typeof options.shuffleChoices) {
-            this.shuffleChoices = !!options.shuffleChoices;
+        if ('undefined' !== typeof opts.shuffleChoices) {
+            this.shuffleChoices = !!opts.shuffleChoices;
         }
 
         // Set the renderer, if any.
-        if ('function' === typeof options.renderer) {
-            this.renderer = options.renderer;
+        if ('function' === typeof opts.renderer) {
+            this.renderer = opts.renderer;
         }
-        else if ('undefined' !== typeof options.renderer) {
-            throw new TypeError('ChoiceTableGroup.init: options.renderer ' +
+        else if ('undefined' !== typeof opts.renderer) {
+            throw new TypeError('ChoiceTableGroup.init: opts.renderer ' +
                                 'must be function or undefined. Found: ' +
-                                options.renderer);
+                                opts.renderer);
         }
 
         // Set default choices, if any.
-        if ('undefined' !== typeof options.choices) {
-            this.choices = options.choices;
+        if ('undefined' !== typeof opts.choices) {
+            this.choices = opts.choices;
         }
 
         // Set the className, if not use default.
-        if ('undefined' === typeof options.className) {
+        if ('undefined' === typeof opts.className) {
             this.className = ChoiceTableGroup.className;
         }
-        else if (options.className === false ||
-                 'string' === typeof options.className ||
-                 J.isArray(options.className)) {
+        else if (opts.className === false ||
+                 'string' === typeof opts.className ||
+                 J.isArray(opts.className)) {
 
-            this.className = options.className;
+            this.className = opts.className;
         }
         else {
-            throw new TypeError('ChoiceTableGroup.init: options.' +
+            throw new TypeError('ChoiceTableGroup.init: opts.' +
                                 'className must be string, array, ' +
-                                'or undefined. Found: ' + options.className);
+                                'or undefined. Found: ' + opts.className);
         }
 
-        if (options.tabbable !== false) this.tabbable = true;
+        if (opts.tabbable !== false) this.tabbable = true;
 
-        // After all configuration options are evaluated, add items.
+        // After all configuration opts are evaluated, add items.
 
-        if ('object' === typeof options.table) {
-            this.table = options.table;
+        if ('object' === typeof opts.table) {
+            this.table = opts.table;
         }
-        else if ('undefined' !== typeof options.table &&
-                 false !== options.table) {
+        else if ('undefined' !== typeof opts.table &&
+                 false !== opts.table) {
 
-            throw new TypeError('ChoiceTableGroup.init: options.table ' +
+            throw new TypeError('ChoiceTableGroup.init: opts.table ' +
                                 'must be object, false or undefined. ' +
-                                'Found: ' + options.table);
+                                'Found: ' + opts.table);
         }
 
-        this.table = options.table;
+        this.table = opts.table;
 
-        this.freeText = 'string' === typeof options.freeText ?
-            options.freeText : !!options.freeText;
+        this.freeText = 'string' === typeof opts.freeText ?
+            opts.freeText : !!opts.freeText;
 
         // Add the items.
-        if ('undefined' !== typeof options.items) this.setItems(options.items);
+        if ('undefined' !== typeof opts.items) this.setItems(opts.items);
 
     };
 
