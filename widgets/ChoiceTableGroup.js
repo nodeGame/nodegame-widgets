@@ -71,10 +71,11 @@
         /**
          * ## ChoiceTableGroup.listener
          *
-         * The listener function
+         * The main listener function
          *
-         * @see GameChoice.enable
-         * @see GameChoice.disable
+         * @see ChoiceTableGroup.enable
+         * @see ChoiceTableGroup.disable
+         * @see ChoiceTableGroup.onclick
          */
         this.listener = function(e) {
             var name, value, item, td, oldSelected;
@@ -148,6 +149,19 @@
                 that.onclick.call(that, name, value, removed, td);
             }
         };
+
+        /**
+         * ## ChoiceTableGroup.onclick
+         *
+         * The user-defined onclick function
+         *
+         * Receives 4 input parameters: the name of the choice table clicked,
+         * the value of the clicked choice, whether it was a remove action,
+         * and the reference to the TD object.
+         *
+         * @see ChoiceTableGroup.listener
+         */
+        this.onclick = null;
 
         /**
          * ### ChoiceTableGroup.mainText

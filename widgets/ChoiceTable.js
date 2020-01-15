@@ -106,7 +106,9 @@
         /**
          * ### ChoiceTable.listener
          *
-         * The function listening on clicks
+         * The main function listening on clicks
+         *
+         * @see ChoiceTable.onclick
          */
         this.listener = function(e) {
             var name, value, td;
@@ -197,6 +199,18 @@
                 that.onclick.call(that, value, removed, td);
             }
         };
+
+        /**
+         * ## ChoiceTable.onclick
+         *
+         * The user-defined onclick listener
+         *
+         * Receives 3 input parameters: the value of the clicked choice,
+         * whether it was a remove action, and the reference to the TD object.
+         *
+         * @see ChoiceTableGroup.listener
+         */
+        this.onclick = null;
 
         /**
          * ### ChoiceTable.mainText
