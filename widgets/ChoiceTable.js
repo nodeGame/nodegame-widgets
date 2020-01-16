@@ -1501,6 +1501,10 @@
      *   - reset:       If TRUTHY and a correct choice is selected (or not
      *       specified), then it resets the state of the widgets before
      *       returning it. Default: FALSE.
+     *   - getValue:    If not FALSE, it add the value to the return object.
+     *   - sortValue:   If TRUE and multiple choices are allowed, the values
+     *       in the .value property are sorted alphabetically. Note! The
+     *       choices array is not sorted.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -1540,6 +1544,7 @@
                         obj.value[i] =
                             getValueFromChoice(this.choices[obj.choice[i]]);
                     }
+                    if (opts.sortValue !== false) obj.value.sort();
                 }
             }
         }
