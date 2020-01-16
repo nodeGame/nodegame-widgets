@@ -5,6 +5,7 @@
 - ChoiceTable choices option accepts objects of the type { value: 'X',
 display: 'Y' }.
 - ChoiceTableGroup correctly distinguishes listener and onclick options.
+- EndScreen accepts any value as winning (before only > 0).
 
 ## 5.6.2
 - BackButton gets the right previous step when multiple calls are made in
