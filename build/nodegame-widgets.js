@@ -6499,7 +6499,7 @@
      *   restriction on the format of choice
      * @param {number} idx The position of the choice within the choice array
      */
-    
+
     /**
      * ### ChoiceTable.renderChoice
      *
@@ -6540,9 +6540,9 @@
                 shortValue = choice.value;
                 choice = choice.display;
             }
-            
+
             value = this.shuffleChoices ? this.order[idx] : idx;
-            
+
             if ('string' === typeof choice || 'number' === typeof choice) {
                 td.innerHTML = choice;
             }
@@ -6947,15 +6947,15 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *       to find the correct answer. Default: TRUE.
-     *   - highlight:   If TRUE, if current value is not the correct
-     *       value, widget will be highlighted. Default: TRUE.
-     *   - reset:       If TRUTHY and a correct choice is selected (or not
+     *   - highlight: If TRUE, if current value is not the correct
+     *       value, widget is highlighted. Default: TRUE.
+     *   - reset: If TRUTHY and a correct choice is selected (or not
      *       specified), then it resets the state of the widgets before
      *       returning it. Default: FALSE.
-     *   - getValue:    If not FALSE, it add the value to the return object.
-     *   - sortValue:   If TRUE and multiple choices are allowed, the values
-     *       in the .value property are sorted alphabetically. Note! The
-     *       choices array is not sorted.
+     *   - addValue: If FALSE, it does not add .value property. Default: TRUE.
+     *   - sortValue: If TRUE and multiple choices are allowed, the values
+     *       in the `.value` property are sorted alphabetically. Note! The
+     *       choices array is not sorted. Default: TRUE.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -6978,7 +6978,8 @@
         }
         if (this.shuffleChoices) obj.order = this.order;
 
-        if (opts.getValue !== false) {
+        // Option getValue backward compatible.
+        if (opts.addValue !== false && opts.getValue !== false) {
             if (!this.selectMultiple) {
                 obj.value = getValueFromChoice(this.choices[obj.choice]);
             }
@@ -7271,20 +7272,20 @@
         that.trs.push(tr);
         return tr;
     }
-    
+
     /**
      * ### getValueFromChoice
      *
      * Extract the value from a choice
-     *     
+     *
      * The value is either the text displayed or short value specified
      * by the choice.
      *
-     * @param {mixed} choice 
+     * @param {mixed} choice
      * @param {boolean} display TRUE to return the display value instead
      *   one. Default: FALSE.
      *
-     * @return {string|number|null} The value of the choice, 
+     * @return {string|number|null} The value of the choice,
      *   or null if not found.
      *
      * @see ChoiceTable.getValues
