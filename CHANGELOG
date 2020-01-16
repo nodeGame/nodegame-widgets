@@ -1,5 +1,11 @@
 # nodegame-widgets change log
 
+## 5.6.3
+- ChoiceTable.getValues has option to sort multiple choices (sortValue).
+- ChoiceTable choices option accepts objects of the type { value: 'X',
+display: 'Y' }.
+- ChoiceTableGroup correctly distinguishes listener and onclick options.
+
 ## 5.6.2
 - BackButton gets the right previous step when multiple calls are made in
 sequence.
