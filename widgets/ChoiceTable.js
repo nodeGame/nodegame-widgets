@@ -529,27 +529,27 @@
      *   - tabbable: if TRUE, each cell can be reached with TAB and clicked
      *       with SPACE or ENTER. Default: TRUE.
      *
-     * @param {object} options Configuration options
+     * @param {object} opts Configuration options
      */
-    ChoiceTable.prototype.init = function(options) {
+    ChoiceTable.prototype.init = function(opts) {
         var tmp, that;
         that = this;
 
         if (!this.id) {
-            throw new TypeError('ChoiceTable.init: options.id is missing');
+            throw new TypeError('ChoiceTable.init: opts.id is missing');
         }
 
         // Option orientation, default 'H'.
-        if ('undefined' === typeof options.orientation) {
+        if ('undefined' === typeof opts.orientation) {
             tmp = 'H';
         }
-        else if ('string' !== typeof options.orientation) {
-            throw new TypeError('ChoiceTable.init: options.orientation must ' +
+        else if ('string' !== typeof opts.orientation) {
+            throw new TypeError('ChoiceTable.init: opts.orientation must ' +
                                 'be string, or undefined. Found: ' +
-                                options.orientation);
+                                opts.orientation);
         }
         else {
-            tmp = options.orientation.toLowerCase().trim();
+            tmp = opts.orientation.toLowerCase().trim();
             if (tmp === 'horizontal' || tmp === 'h') {
                 tmp = 'H';
             }
@@ -557,19 +557,19 @@
                 tmp = 'V';
             }
             else {
-                throw new Error('ChoiceTable.init: options.orientation is ' +
+                throw new Error('ChoiceTable.init: opts.orientation is ' +
                                 'invalid: ' + tmp);
             }
         }
         this.orientation = tmp;
 
         // Option shuffleChoices, default false.
-        if ('undefined' === typeof options.shuffleChoices) tmp = false;
-        else tmp = !!options.shuffleChoices;
+        if ('undefined' === typeof opts.shuffleChoices) tmp = false;
+        else tmp = !!opts.shuffleChoices;
         this.shuffleChoices = tmp;
 
         // Option selectMultiple, default false.
-        tmp = options.selectMultiple;
+        tmp = opts.selectMultiple;
         if ('undefined' === typeof tmp) {
             tmp = false;
         }
@@ -588,94 +588,94 @@
         }
 
         // Option requiredChoice, if any.
-        if ('number' === typeof options.requiredChoice) {
-            if (!J.isInt(options.requiredChoice, 0)) {
+        if ('number' === typeof opts.requiredChoice) {
+            if (!J.isInt(opts.requiredChoice, 0)) {
                 throw new Error('ChoiceTable.init: if number, requiredChoice ' +
                                 'must a positive integer. Found: ' +
-                                options.requiredChoice);
+                                opts.requiredChoice);
             }
             if ('number' === typeof this.selectMultiple &&
-                options.requiredChoice > this.selectMultiple) {
+                opts.requiredChoice > this.selectMultiple) {
 
                 throw new Error('ChoiceTable.init: requiredChoice cannot be ' +
                                 'larger than selectMultiple. Found: ' +
-                                options.requiredChoice + ' > ' +
+                                opts.requiredChoice + ' > ' +
                                 this.selectMultiple);
             }
-            this.requiredChoice = options.requiredChoice;
+            this.requiredChoice = opts.requiredChoice;
         }
-        else if ('boolean' === typeof options.requiredChoice) {
-            this.requiredChoice = options.requiredChoice ? 1 : null;
+        else if ('boolean' === typeof opts.requiredChoice) {
+            this.requiredChoice = opts.requiredChoice ? 1 : null;
         }
-        else if ('undefined' !== typeof options.requiredChoice) {
-            throw new TypeError('ChoiceTable.init: options.requiredChoice ' +
+        else if ('undefined' !== typeof opts.requiredChoice) {
+            throw new TypeError('ChoiceTable.init: opts.requiredChoice ' +
                                 'be number, boolean or undefined. Found: ' +
-                                options.requiredChoice);
+                                opts.requiredChoice);
         }
 
         // Set the group, if any.
-        if ('string' === typeof options.group ||
-            'number' === typeof options.group) {
+        if ('string' === typeof opts.group ||
+            'number' === typeof opts.group) {
 
-            this.group = options.group;
+            this.group = opts.group;
         }
-        else if ('undefined' !== typeof options.group) {
-            throw new TypeError('ChoiceTable.init: options.group must ' +
+        else if ('undefined' !== typeof opts.group) {
+            throw new TypeError('ChoiceTable.init: opts.group must ' +
                                 'be string, number or undefined. Found: ' +
-                                options.group);
+                                opts.group);
         }
 
         // Set the groupOrder, if any.
-        if ('number' === typeof options.groupOrder) {
-            this.groupOrder = options.groupOrder;
+        if ('number' === typeof opts.groupOrder) {
+            this.groupOrder = opts.groupOrder;
         }
-        else if ('undefined' !== typeof options.groupOrder) {
-            throw new TypeError('ChoiceTable.init: options.groupOrder must ' +
+        else if ('undefined' !== typeof opts.groupOrder) {
+            throw new TypeError('ChoiceTable.init: opts.groupOrder must ' +
                                 'be number or undefined. Found: ' +
-                                options.groupOrder);
+                                opts.groupOrder);
         }
 
         // Set the main onclick listener, if any.
-        if ('function' === typeof options.listener) {
+        if ('function' === typeof opts.listener) {
             this.listener = function(e) {
-                options.listener.call(this, e);
+                opts.listener.call(this, e);
             };
         }
-        else if ('undefined' !== typeof options.listener) {
-            throw new TypeError('ChoiceTable.init: options.listener must ' +
+        else if ('undefined' !== typeof opts.listener) {
+            throw new TypeError('ChoiceTable.init: opts.listener must ' +
                                 'be function or undefined. Found: ' +
-                                options.listener);
+                                opts.listener);
         }
 
         // Set an additional onclick, if any.
-        if ('function' === typeof options.onclick) {
-            this.onclick = options.onclick;
+        if ('function' === typeof opts.onclick) {
+            this.onclick = opts.onclick;
         }
-        else if ('undefined' !== typeof options.onclick) {
-            throw new TypeError('ChoiceTable.init: options.onclick must ' +
+        else if ('undefined' !== typeof opts.onclick) {
+            throw new TypeError('ChoiceTable.init: opts.onclick must ' +
                                 'be function or undefined. Found: ' +
-                                options.onclick);
+                                opts.onclick);
         }
 
         // Set the mainText, if any.
-        if ('string' === typeof options.mainText) {
-            this.mainText = options.mainText;
+        if ('string' === typeof opts.mainText) {
+            this.mainText = opts.mainText;
         }
-        else if ('undefined' !== typeof options.mainText) {
-            throw new TypeError('ChoiceTable.init: options.mainText must ' +
+        else if ('undefined' !== typeof opts.mainText) {
+            throw new TypeError('ChoiceTable.init: opts.mainText must ' +
                                 'be string or undefined. Found: ' +
-                                options.mainText);
+                                opts.mainText);
         }
 
         // Set the hint, if any.
-        if ('string' === typeof options.hint || false === options.hint) {
-            this.hint = options.hint;
+        if ('string' === typeof opts.hint || false === opts.hint) {
+            this.hint = opts.hint;
             if (this.requiredChoice) this.hint += ' *';
         }
-        else if ('undefined' !== typeof options.hint) {
-            throw new TypeError('ChoiceTable.init: options.hint must ' +
+        else if ('undefined' !== typeof opts.hint) {
+            throw new TypeError('ChoiceTable.init: opts.hint must ' +
                                 'be a string, false, or undefined. Found: ' +
-                                options.hint);
+                                opts.hint);
         }
         else {
             // Returns undefined if there are no constraints.
@@ -683,139 +683,139 @@
         }
 
         // Set the timeFrom, if any.
-        if (options.timeFrom === false ||
-            'string' === typeof options.timeFrom) {
+        if (opts.timeFrom === false ||
+            'string' === typeof opts.timeFrom) {
 
-            this.timeFrom = options.timeFrom;
+            this.timeFrom = opts.timeFrom;
         }
-        else if ('undefined' !== typeof options.timeFrom) {
-            throw new TypeError('ChoiceTable.init: options.timeFrom must ' +
+        else if ('undefined' !== typeof opts.timeFrom) {
+            throw new TypeError('ChoiceTable.init: opts.timeFrom must ' +
                                 'be string, false, or undefined. Found: ' +
-                                options.timeFrom);
+                                opts.timeFrom);
         }
 
         // Set the separator, if any.
-        if ('string' === typeof options.separator) {
-            this.separator = options.separator;
+        if ('string' === typeof opts.separator) {
+            this.separator = opts.separator;
         }
-        else if ('undefined' !== typeof options.separator) {
-            throw new TypeError('ChoiceTable.init: options.separator must ' +
+        else if ('undefined' !== typeof opts.separator) {
+            throw new TypeError('ChoiceTable.init: opts.separator must ' +
                                 'be string, or undefined. Found: ' +
-                                options.separator);
+                                opts.separator);
         }
 
         // Conflict might be generated by id or seperator,
         // as specified by user.
-        if (this.id.indexOf(options.separator) !== -1) {
-            throw new Error('ChoiceTable.init: options.separator ' +
+        if (this.id.indexOf(opts.separator) !== -1) {
+            throw new Error('ChoiceTable.init: opts.separator ' +
                             'cannot be a sequence of characters ' +
                             'included in the table id. Found: ' +
-                            options.separator);
+                            opts.separator);
         }
 
-        if ('string' === typeof options.left ||
-            'number' === typeof options.left) {
+        if ('string' === typeof opts.left ||
+            'number' === typeof opts.left) {
 
-            this.left = '' + options.left;
+            this.left = '' + opts.left;
         }
-        else if(J.isNode(options.left) ||
-                J.isElement(options.left)) {
+        else if(J.isNode(opts.left) ||
+                J.isElement(opts.left)) {
 
-            this.left = options.left;
+            this.left = opts.left;
         }
-        else if ('undefined' !== typeof options.left) {
-            throw new TypeError('ChoiceTable.init: options.left must ' +
+        else if ('undefined' !== typeof opts.left) {
+            throw new TypeError('ChoiceTable.init: opts.left must ' +
                                 'be string, number, an HTML Element or ' +
-                                'undefined. Found: ' + options.left);
+                                'undefined. Found: ' + opts.left);
         }
 
-        if ('string' === typeof options.right ||
-            'number' === typeof options.right) {
+        if ('string' === typeof opts.right ||
+            'number' === typeof opts.right) {
 
-            this.right = '' + options.right;
+            this.right = '' + opts.right;
         }
-        else if(J.isNode(options.right) ||
-                J.isElement(options.right)) {
+        else if(J.isNode(opts.right) ||
+                J.isElement(opts.right)) {
 
-            this.right = options.right;
+            this.right = opts.right;
         }
-        else if ('undefined' !== typeof options.right) {
-            throw new TypeError('ChoiceTable.init: options.right must ' +
+        else if ('undefined' !== typeof opts.right) {
+            throw new TypeError('ChoiceTable.init: opts.right must ' +
                                 'be string, number, an HTML Element or ' +
-                                'undefined. Found: ' + options.right);
+                                'undefined. Found: ' + opts.right);
         }
 
 
         // Set the className, if not use default.
-        if ('undefined' === typeof options.className) {
+        if ('undefined' === typeof opts.className) {
             this.className = ChoiceTable.className;
         }
-        else if (options.className === false ||
-                 'string' === typeof options.className ||
-                 J.isArray(options.className)) {
+        else if (opts.className === false ||
+                 'string' === typeof opts.className ||
+                 J.isArray(opts.className)) {
 
-            this.className = options.className;
+            this.className = opts.className;
         }
         else {
-            throw new TypeError('ChoiceTable.init: options.' +
+            throw new TypeError('ChoiceTable.init: opts.' +
                                 'className must be string, array, ' +
-                                'or undefined. Found: ' + options.className);
+                                'or undefined. Found: ' + opts.className);
         }
 
-        if (options.tabbable !== false) this.tabbable = true;
+        if (opts.tabbable !== false) this.tabbable = true;
 
         // Set the renderer, if any.
-        if ('function' === typeof options.renderer) {
-            this.renderer = options.renderer;
+        if ('function' === typeof opts.renderer) {
+            this.renderer = opts.renderer;
         }
-        else if ('undefined' !== typeof options.renderer) {
-            throw new TypeError('ChoiceTable.init: options.renderer must ' +
+        else if ('undefined' !== typeof opts.renderer) {
+            throw new TypeError('ChoiceTable.init: opts.renderer must ' +
                                 'be function or undefined. Found: ' +
-                                options.renderer);
+                                opts.renderer);
         }
 
-        // After all configuration options are evaluated, add choices.
+        // After all configuration opts are evaluated, add choices.
 
         // Set table.
-        if ('object' === typeof options.table) {
-            this.table = options.table;
+        if ('object' === typeof opts.table) {
+            this.table = opts.table;
         }
-        else if ('undefined' !== typeof options.table &&
-                 false !== options.table) {
+        else if ('undefined' !== typeof opts.table &&
+                 false !== opts.table) {
 
-            throw new TypeError('ChoiceTable.init: options.table ' +
+            throw new TypeError('ChoiceTable.init: opts.table ' +
                                 'must be object, false or undefined. ' +
-                                'Found: ' + options.table);
+                                'Found: ' + opts.table);
         }
 
-        this.table = options.table;
+        this.table = opts.table;
 
-        this.freeText = 'string' === typeof options.freeText ?
-            options.freeText : !!options.freeText;
+        this.freeText = 'string' === typeof opts.freeText ?
+            opts.freeText : !!opts.freeText;
 
         // Add the choices.
-        if ('undefined' !== typeof options.choices) {
-            this.setChoices(options.choices);
+        if ('undefined' !== typeof opts.choices) {
+            this.setChoices(opts.choices);
         }
 
         // Add the correct choices.
-        if ('undefined' !== typeof options.correctChoice) {
+        if ('undefined' !== typeof opts.correctChoice) {
             if (this.requiredChoice) {
                 throw new Error('ChoiceTable.init: cannot specify both ' +
-                                'options requiredChoice and correctChoice');
+                                'opts requiredChoice and correctChoice');
             }
-            this.setCorrectChoice(options.correctChoice);
+            this.setCorrectChoice(opts.correctChoice);
         }
 
         // Add the correct choices.
-        if ('undefined' !== typeof options.choicesSetSize) {
-            if (!J.isInt(options.choicesSetSize, 0)) {
+        if ('undefined' !== typeof opts.choicesSetSize) {
+            if (!J.isInt(opts.choicesSetSize, 0)) {
                 throw new Error('ChoiceTable.init: choicesSetSize must be ' +
                                 'undefined or an integer > 0. Found: ' +
-                                options.choicesSetSize);
+                                opts.choicesSetSize);
             }
 
-            this.choicesSetSize = options.choicesSetSize;
+            this.choicesSetSize = opts.choicesSetSize;
         }
     };
 
