@@ -1496,15 +1496,15 @@
      *
      *   - markAttempt: If TRUE, getting the value counts as an attempt
      *       to find the correct answer. Default: TRUE.
-     *   - highlight:   If TRUE, if current value is not the correct
-     *       value, widget will be highlighted. Default: TRUE.
-     *   - reset:       If TRUTHY and a correct choice is selected (or not
+     *   - highlight: If TRUE, if current value is not the correct
+     *       value, widget is highlighted. Default: TRUE.
+     *   - reset: If TRUTHY and a correct choice is selected (or not
      *       specified), then it resets the state of the widgets before
      *       returning it. Default: FALSE.
-     *   - getValue:    If not FALSE, it add the value to the return object.
-     *   - sortValue:   If TRUE and multiple choices are allowed, the values
-     *       in the .value property are sorted alphabetically. Note! The
-     *       choices array is not sorted.
+     *   - addValue: If FALSE, it does not add .value property. Default: TRUE.
+     *   - sortValue: If TRUE and multiple choices are allowed, the values
+     *       in the `.value` property are sorted alphabetically. Note! The
+     *       choices array is not sorted. Default: TRUE.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -1527,7 +1527,8 @@
         }
         if (this.shuffleChoices) obj.order = this.order;
 
-        if (opts.getValue !== false) {
+        // Option getValue backward compatible.
+        if (opts.addValue !== false && opts.getValue !== false) {
             if (!this.selectMultiple) {
                 obj.value = getValueFromChoice(this.choices[obj.choice]);
             }
