@@ -839,10 +839,10 @@
         var len;
         if (!J.isArray(choices)) {
             throw new TypeError('ChoiceTable.setChoices: choices ' +
-                                'must be array.');
+                                'must be array');
         }
         if (!choices.length) {
-            throw new Error('ChoiceTable.setChoices: choices is empty array.');
+            throw new Error('ChoiceTable.setChoices: choices array is empty');
         }
         this.choices = choices;
         len = choices.length;
@@ -856,7 +856,6 @@
         // Or just build choices.
         else this.buildChoices();
     };
-
 
     /**
      * ### ChoiceTable.buildChoices
@@ -1040,6 +1039,15 @@
         td.id = this.id + this.separator + 'special-cell-' + type;
         return td;
     };
+    /* UPDATED TEX
+     * @param {mixed} choice The choice element. It must be string or
+     *   number, HTML element, or an array. If array, the first
+     *   element is the short value (string or number), and the second
+     *   one the the full value (string, number or HTML element) to
+     *   display. If a renderer function is defined there are no
+     *   restriction on the format of choice
+     * @param {number} idx The position of the choice within the choice array
+     */
 
     /**
      * ### ChoiceTable.renderChoice
@@ -1062,7 +1070,7 @@
      * @see ChoiceTable.choicesCells
      */
     ChoiceTable.prototype.renderChoice = function(choice, idx) {
-        var td, value;
+        var td, shortValue, value;
         td = document.createElement('td');
         if (this.tabbable) J.makeTabbable(td);
 
@@ -1074,12 +1082,15 @@
         // Or use standard format.
         else {
             if (J.isArray(choice)) {
-                value = choice[0];
+                shortValue = choice[0];
                 choice = choice[1];
             }
-            else {
-                value = this.shuffleChoices ? this.order[idx] : idx;
+            else if ('object' === typeof choice) {
+                shortValue = choice.value;
+                choice = choice.display;
             }
+
+            value = this.shuffleChoices ? this.order[idx] : idx;
 
             if ('string' === typeof choice || 'number' === typeof choice) {
                 td.innerHTML = choice;
@@ -1497,7 +1508,7 @@
      * @see ChoiceTable.reset
      */
     ChoiceTable.prototype.getValues = function(opts) {
-        var obj, resetOpts, i, len;
+        var obj, resetOpts, i, len, tmp;
         opts = opts || {};
         obj = {
             id: this.id,
@@ -1514,18 +1525,20 @@
 
         if (opts.getValue !== false) {
             if (!this.selectMultiple) {
-                obj.value = this.choices[obj.choice];
+                obj.value = getValueFromChoice(this.choices[obj.choice]);
             }
             else {
                 len = obj.choice.length;
                 obj.value = new Array(len);
                 if (len === 1) {
-                    obj.value[0] = this.choices[obj.choice[0]];
+                    obj.value[0] =
+                        getValueFromChoice(this.choices[obj.choice[0]]);
                 }
                 else {
                     i = -1;
                     for ( ; ++i < len ; ) {
-                        obj.value[i] = this.choices[obj.choice[i]];
+                        obj.value[i] =
+                            getValueFromChoice(this.choices[obj.choice[i]]);
                     }
                 }
             }
@@ -1801,6 +1814,36 @@
         // Store reference.
         that.trs.push(tr);
         return tr;
+    }
+
+    /**
+     * ### getValueFromChoice
+     *
+     * Extract the value from a choice
+     *
+     * The value is either the text displayed or short value specified
+     * by the choice.
+     *
+     * @param {mixed} choice
+     * @param {boolean} display TRUE to return the display value instead
+     *   one. Default: FALSE.
+     *
+     * @return {string|number|null} The value of the choice,
+     *   or null if not found.
+     *
+     * @see ChoiceTable.getValues
+     * @see ChoiceTable.renderChoice
+     */
+    function getValueFromChoice(choice, display) {
+        if ('string' === typeof choice || 'number' === typeof choice) {
+            return choice;
+        }
+        if (J.isArray(choice)) return choice[display ? 1 : 0];
+        if ('object' === typeof choice) {
+            return choice[ display ? 'display' : 'value' ];
+        }
+        if (J.isElement(choice) || J.isNode(choice)) return choice.innerHTML;
+        return null;
     }
 
 })(node);
