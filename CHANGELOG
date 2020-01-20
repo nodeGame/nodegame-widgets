@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## current
+- Fixed RiskGauge currency option; added option currencyAfter.
+
 ## 5.6.4
 - ChoiceTable getValue -> addValue.
 
