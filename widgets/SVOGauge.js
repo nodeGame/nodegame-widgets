@@ -324,7 +324,7 @@
         }
 
         gauge = node.widgets.get('ChoiceTableGroup', {
-            id: 'svo_slider',
+            id: options.id || 'svo_slider',
             items: items,
             // TODO: should it be on getText at all?
             mainText: this.mainText || this.getText('mainText'),

@@ -260,7 +260,7 @@
         }
 
         gauge = node.widgets.get('ChoiceTableGroup', {
-            id: 'ipnassf',
+            id: options.id || 'ipnassf',
             items: items,
             mainText: this.mainText || this.getText('mainText'),
             title: false,

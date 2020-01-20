@@ -1,6 +1,6 @@
 /**
  * # RiskGauge
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure risk preferences.
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    RiskGauge.version = '0.3.0';
+    RiskGauge.version = '0.4.0';
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences.';
 
@@ -204,19 +204,19 @@
         }
         if ('function' !== typeof gauge.getValues) {
             throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function getValues.');
+                            ': gauge missing function getValues');
         }
         if ('function' !== typeof gauge.enable) {
             throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function enable.');
+                            ': gauge missing function enable');
         }
         if ('function' !== typeof gauge.disable) {
             throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function disable.');
+                            ': gauge missing function disable');
         }
         if ('function' !== typeof gauge.append) {
             throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function append.');
+                            ': gauge missing function append');
         }
     }
 
@@ -225,12 +225,16 @@
     // ### Holt and Laury
 
     function makeProbString(p1, v1, p2, v2, opts) {
-        var of, cur, sep;
+        var of, cur, sep, out;
         opts = opts || {};
         of = (opts.of || ' chance to win ');
         cur = opts.currency || '$';
         sep = opts.sep || '<span class="sep">and</span>';
-        return p1 + of + cur + v1 + sep + p2 + of + cur + v2;
+        out = p1 + of;
+        // Place currency sign before or after.
+        out += opts.currencyAfter ? v1 + cur : cur + v1;
+        out += sep + p2 + of;
+        return out + (opts.currencyAfter ? v2 + cur : cur + v2);
     }
 
     function holtLaury(options) {
@@ -258,14 +262,14 @@
                 id: 'hl_' + j,
                 left: j + '. ',
                 choices: [
-                    makeProbString(p1, v1, p2, v2),
-                    makeProbString(p1, v3, p2, v4),
+                    makeProbString(p1, v1, p2, v2, options),
+                    makeProbString(p1, v3, p2, v4, options),
                 ]
             };
         }
 
         gauge = node.widgets.get('ChoiceTableGroup', {
-            id: 'holt_laury',
+            id: options.id || 'holt_laury',
             items: items,
             mainText: this.mainText || this.getText('mainText'),
             title: false,
