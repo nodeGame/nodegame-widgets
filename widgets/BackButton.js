@@ -1,6 +1,6 @@
 /**
  * # BackButton
- * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed goes to the previous step
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    BackButton.version = '0.2.0';
+    BackButton.version = '0.4.0';
     BackButton.description = 'Creates a button that if ' +
         'pressed goes to the previous step.';
 
@@ -62,30 +62,35 @@
                                 options.button);
         }
 
-        /**
-         * ### BackButton.acrossStages
-         *
-         * If TRUE, it allows to go back to previous stages
-         *
-         * Default: FALSE
-         */
-        this.acrossStages = null;
-
-        /**
-         * ### BackButton.acrossRounds
-         *
-         * If TRUE, it allows to go back previous rounds in the same stage
-         *
-         * Default: TRUE
-         */
-        this.acrossRounds = null;
-
         this.button.onclick = function() {
             var res;
-            res = getPreviousStep(that);
-            if (!res) return;
-            res = node.game.gotoStep(res);
+            res = node.game.stepBack(that.stepOptions);
             if (res) that.disable();
+        };
+
+        this.stepOptions = {
+
+            /**
+             * #### BackButton.stepOptions.acrossStages
+             *
+             * If TRUE, it allows to go back to previous stages
+             *
+             * Default: FALSE
+             */
+            acrossStages: null,
+
+            /**
+             * #### BackButton.stepOptions.acrossRounds
+             *
+             * If TRUE, it allows to go back previous rounds in the same stage
+             *
+             * Default: TRUE
+             */
+            acrossRounds: null,
+
+
+            // ## @api: private.
+            noZeroStep: true
         };
     }
 
@@ -154,9 +159,11 @@
         this.button.value = 'string' === typeof options.text ?
             options.text : this.getText('back');
 
-        this.acrossStages = 'undefined' === typeof options.acrossStages ?
+        this.stepOptions.acrossStages =
+            'undefined' === typeof options.acrossStages ?
             false : !!options.acrossStages;
-        this.acrossRounds = 'undefined' === typeof options.acrossRounds ?
+        this.stepOptions.acrossRounds =
+            'undefined' === typeof options.acrossRounds ?
             true : !!options.acrossRounds;
     };
 
@@ -170,7 +177,7 @@
         // Locks the back button in case of a timeout.
         node.events.game.on('PLAYING', function() {
             var prop, step;
-            step = getPreviousStep(that);
+            step = node.game.getPreviousStep(1, that.stepOptions);
             // It might be enabled already, but we do it again.
             if (step) that.enable();
             // Check options.
@@ -203,31 +210,5 @@
     BackButton.prototype.enable = function() {
         this.button.disabled = false;
     };
-
-    // ## Helper functions.
-
-    /**
-     * ### getPreviousStage
-     *
-     * Returns the previous step accordingly with widget's settings
-     *
-     * @param {BackButton} that The current instance
-     *
-     * @return {GameStage|Boolean} The previous step or FALSE if none is found
-     */
-    function getPreviousStep(that) {
-        var curStage,  prevStage;
-        curStage = node.game.getCurrentGameStage();
-        if (curStage.stage === 0) return;
-        prevStage = node.game.plot.jump(curStage, -1);
-        if (prevStage.stage === 0) return;
-        if ((curStage.stage > prevStage.stage) && !that.acrossStages) {
-            return false;
-        }
-        if ((curStage.round > prevStage.round) && !that.acrossRounds) {
-            return false;
-        }
-        return prevStage;
-    }
 
 })(node);

@@ -1876,7 +1876,7 @@
 
 /**
  * # BackButton
- * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed goes to the previous step
@@ -1891,7 +1891,7 @@
 
     // ## Meta-data
 
-    BackButton.version = '0.2.0';
+    BackButton.version = '0.3.0';
     BackButton.description = 'Creates a button that if ' +
         'pressed goes to the previous step.';
 
@@ -1938,30 +1938,44 @@
                                 options.button);
         }
 
-        /**
-         * ### BackButton.acrossStages
-         *
-         * If TRUE, it allows to go back to previous stages
-         *
-         * Default: FALSE
-         */
-        this.acrossStages = null;
-
-        /**
-         * ### BackButton.acrossRounds
-         *
-         * If TRUE, it allows to go back previous rounds in the same stage
-         *
-         * Default: TRUE
-         */
-        this.acrossRounds = null;
-
         this.button.onclick = function() {
             var res;
+            res = node.game.stepBack(that.stepOptions);
+            if (res) that.disable();
+            return;
+            // OLD IMPLEMENTATION.
             res = getPreviousStep(that);
             if (!res) return;
+            // Update the array of stepped steps before we go back
+            // so that the new game.getPreviousStep() works correctly.
+            this._steppedSteps.pop();
             res = node.game.gotoStep(res);
             if (res) that.disable();
+        };
+
+        this.stepOptions = {
+
+            /**
+             * #### BackButton.stepOptions.acrossStages
+             *
+             * If TRUE, it allows to go back to previous stages
+             *
+             * Default: FALSE
+             */
+            acrossStages: null,
+
+            /**
+             * #### BackButton.stepOptions.acrossRounds
+             *
+             * If TRUE, it allows to go back previous rounds in the same stage
+             *
+             * Default: TRUE
+             */
+            acrossRounds: null,
+
+
+            // ## @api: private.
+            noZeroStep: true
         };
     }
 
@@ -2030,9 +2044,11 @@
         this.button.value = 'string' === typeof options.text ?
             options.text : this.getText('back');
 
-        this.acrossStages = 'undefined' === typeof options.acrossStages ?
+        this.stepOptions.acrossStages =
+            'undefined' === typeof options.acrossStages ?
             false : !!options.acrossStages;
-        this.acrossRounds = 'undefined' === typeof options.acrossRounds ?
+        this.stepOptions.acrossRounds =
+            'undefined' === typeof options.acrossRounds ?
             true : !!options.acrossRounds;
     };
 
@@ -2046,7 +2062,7 @@
         // Locks the back button in case of a timeout.
         node.events.game.on('PLAYING', function() {
             var prop, step;
-            step = getPreviousStep(that);
+            step = node.game.getPreviousStep(1, that.stepOptions);
             // It might be enabled already, but we do it again.
             if (step) that.enable();
             // Check options.
@@ -2092,7 +2108,7 @@
      * @return {GameStage|Boolean} The previous step or FALSE if none is found
      */
     function getPreviousStep(that) {
-        var curStage,  prevStage;
+        var curStage, prevStage;
         curStage = node.game.getCurrentGameStage();
         if (curStage.stage === 0) return;
         prevStage = node.game.plot.jump(curStage, -1);
@@ -16339,7 +16355,7 @@
 
 /**
  * # RiskGauge
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure risk preferences.
@@ -16354,7 +16370,7 @@
 
     // ## Meta-data
 
-    RiskGauge.version = '0.3.0';
+    RiskGauge.version = '0.4.0';
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences.';
 
@@ -16543,19 +16559,19 @@
         }
         if ('function' !== typeof gauge.getValues) {
             throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function getValues.');
+                            ': gauge missing function getValues');
         }
         if ('function' !== typeof gauge.enable) {
             throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function enable.');
+                            ': gauge missing function enable');
         }
         if ('function' !== typeof gauge.disable) {
             throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function disable.');
+                            ': gauge missing function disable');
         }
         if ('function' !== typeof gauge.append) {
             throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function append.');
+                            ': gauge missing function append');
         }
     }
 
