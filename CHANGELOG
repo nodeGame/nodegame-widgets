@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## current
+## 5.6.5
 - Fixed RiskGauge currency option; added option currencyAfter.
 - BackButton updated to new Game API.
 
