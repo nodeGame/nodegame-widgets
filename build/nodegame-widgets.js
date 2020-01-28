@@ -1891,7 +1891,7 @@
 
     // ## Meta-data
 
-    BackButton.version = '0.3.0';
+    BackButton.version = '0.4.0';
     BackButton.description = 'Creates a button that if ' +
         'pressed goes to the previous step.';
 
@@ -1941,15 +1941,6 @@
         this.button.onclick = function() {
             var res;
             res = node.game.stepBack(that.stepOptions);
-            if (res) that.disable();
-            return;
-            // OLD IMPLEMENTATION.
-            res = getPreviousStep(that);
-            if (!res) return;
-            // Update the array of stepped steps before we go back
-            // so that the new game.getPreviousStep() works correctly.
-            this._steppedSteps.pop();
-            res = node.game.gotoStep(res);
             if (res) that.disable();
         };
 
@@ -2095,32 +2086,6 @@
     BackButton.prototype.enable = function() {
         this.button.disabled = false;
     };
-
-    // ## Helper functions.
-
-    /**
-     * ### getPreviousStage
-     *
-     * Returns the previous step accordingly with widget's settings
-     *
-     * @param {BackButton} that The current instance
-     *
-     * @return {GameStage|Boolean} The previous step or FALSE if none is found
-     */
-    function getPreviousStep(that) {
-        var curStage, prevStage;
-        curStage = node.game.getCurrentGameStage();
-        if (curStage.stage === 0) return;
-        prevStage = node.game.plot.jump(curStage, -1);
-        if (prevStage.stage === 0) return;
-        if ((curStage.stage > prevStage.stage) && !that.acrossStages) {
-            return false;
-        }
-        if ((curStage.round > prevStage.round) && !that.acrossRounds) {
-            return false;
-        }
-        return prevStage;
-    }
 
 })(node);
 
@@ -5642,16 +5607,27 @@
                 if ('number' === typeof that.selectMultiple &&
                     that.selected.length === that.selectMultiple) return;
 
-                that.setCurrentChoice(value);
                 J.addClass(td, 'selected');
 
-                if (that.selectMultiple) {
-                    that.selected.push(td);
+                if (that.oneTimeClick) {
+                    setTimeout(function() {
+                        J.removeClass(td, 'selected');
+                    }, 60);
                 }
                 else {
-                    // If only 1 selection allowed, remove old selection.
-                    if (that.selected) J.removeClass(that.selected, 'selected');
-                    that.selected = td;
+
+                    that.setCurrentChoice(value);
+
+                    if (that.selectMultiple) {
+                        that.selected.push(td);
+                    }
+                    else {
+                        // If only 1 selection allowed, remove old selection.
+                        if (that.selected) {
+                            J.removeClass(that.selected, 'selected');
+                        }
+                        that.selected = td;
+                    }
                 }
             }
 
@@ -5866,8 +5842,22 @@
          * ### ChoiceTable.selectMultiple
          *
          * The number of maximum simulataneous selections (>1), or false
+         *
+         * Note: this option is incompatible with `oneTimeClick`.
          */
         this.selectMultiple = null;
+
+
+        /**
+        * ### ChoiceTable.oneTimeClick
+        *
+        * If TRUE, the selection is immediately removed after one click
+        *
+        * This is useful to create a buttons group which trigger some actions.
+        *
+        * Note: this option is incompatible with `selectMultiple`.
+        */
+        this.oneTimeClick = null;
 
         /**
          * ### ChoiceTable.shuffleChoices
@@ -6078,6 +6068,10 @@
             throw new TypeError('ChoiceTable.init: opts.requiredChoice ' +
                                 'be number, boolean or undefined. Found: ' +
                                 opts.requiredChoice);
+        }
+
+        if ('undefined' !== typeof opts.oneTimeClick) {
+            this.oneTimeClick = !!opts.oneTimeClick;
         }
 
         // Set the group, if any.
@@ -7098,14 +7092,10 @@
         // Set values, random or pre-set.
         i = -1;
         if ('undefined' !== typeof options.values) {
+            if (!J.isArray(options.values)) tmp = [ options.values ];
+            len = tmp.length;
             // Can be true/false or a number > 1.
             if (this.selectMultiple) {
-                if (!J.isArray(options.values)) {
-                    throw new Error('ChoiceTable.setValues: values must be ' +
-                                    'array or undefined if selectMultiple is ' +
-                                    'truthy. Found: ' + options.values);
-                }
-                len = options.values.length;
                 tmp = 'number' === typeof this.selectMultiple ?
                     this.selectMultiple : this.choices.length;
                 if (len > tmp) {
@@ -7115,15 +7105,13 @@
                 }
                 tmp = options.values;
             }
-            else {
-                tmp = [options.values];
-            }
+
             // Validate value.
             for ( ; ++i < len ; ) {
                 choice = J.isInt(tmp[i], -1, (this.choices.length-1), 1, 1);
                 if (false === choice) {
                     throw new Error('ChoiceTable.setValues: invalid ' +
-                                    'choice value. Found: ' +tmp[i]);
+                                    'choice value. Found: ' + tmp[i]);
                 }
                 this.choicesCells[choice].click();
             }
