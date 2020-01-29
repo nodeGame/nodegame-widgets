@@ -1,5 +1,11 @@
 # nodegame-widgets change log
 
+## 5.6.6
+- ChoiceTable.setValues ignores "correct" option (instead of throwing) when
+there is no correct choice.
+- ChoiceTable.oneTimeClick option immediately removes selection after a click
+(useful to create buttons).
+
 ## 5.6.5
 - Fixed RiskGauge currency option; added option currencyAfter.
 - BackButton updated to new Game API.
