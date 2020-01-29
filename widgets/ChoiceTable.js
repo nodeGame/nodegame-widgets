@@ -1,6 +1,6 @@
 /**
  * # ChoiceTable
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.6.2';
+    ChoiceTable.version = '1.6.3';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -1629,12 +1629,10 @@
                             'built yet.');
         }
 
-        if (options.correct) {
-            // Value this.correctChoice can be string or array.
-            if (!this.correctChoice || !this.correctChoice.length) {
-                throw new Error('Choicetable.setValues: "correct" is set, ' +
-                               'but no correct choice is found.');
-            }
+        // Value this.correctChoice can undefined, string or array.
+        // If no correct choice is set, we simply ignore the correct param.
+        if (options.correct && this.correctChoice) {
+
             // Make it an array (can be a string).
             correctChoice = J.isArray(this.correctChoice) ?
                 this.correctChoice : [this.correctChoice];
