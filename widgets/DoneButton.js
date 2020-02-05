@@ -178,7 +178,8 @@
         // then unlocked by GameWindow, but otherwise it must be
         // done here.
         node.on('PLAYING', function() {
-            var prop, step;
+            var prop, step, delay;
+
             step = node.game.getCurrentGameStage();
             prop = node.game.plot.getProperty(step, 'donebutton');
             if (prop === false || (prop && prop.enableOnPlaying === false)) {
@@ -186,12 +187,19 @@
                 that.disable();
             }
             else {
-                if (that.delayOnPlaying) {
+                if (prop && prop.hasOwnProperty &&
+                    prop.hasOwnProperty('delayOnPlaying')) {
+                        delay = prop.delayOnPlaying;
+                }
+                else {
+                    delay = that.delayOnPlaying;
+                }
+                if (delay) {
                     setTimeout(function () {
                         // If not disabled because of a disconnection,
                         // enable it.
                         if (!disabled) that.enable();
-                    }, that.delayOnPlaying);
+                    }, delay);
                 }
                 else {
                     // It might be enabled already, but we do it again.
