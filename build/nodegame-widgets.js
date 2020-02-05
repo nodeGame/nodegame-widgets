@@ -6517,11 +6517,11 @@
      *
      * A reference to the cell is saved in `choicesCells`.
      *
-     * @param {mixed} choice The choice element. It must be string or number,
-     *   or array where the first element is the 'value' (incorporated in the
-     *   `id` field) and the second the text to display as choice. If a
-     *   renderer function is defined there are no restriction on the
-     *   format of choice
+     * @param {mixed} choice The choice element. It may be string, number,
+     *   array where the first element is the 'value' and the second the
+     *   text to display as choice, or an object with properties value and
+     *   display. If a renderer function is defined there are no restriction
+     *   on the format of choice.
      * @param {number} idx The position of the choice within the choice array
      *
      * @return {HTMLElement} td The newly created cell of the table
@@ -12714,7 +12714,7 @@
 
 /**
  * # DoneButton
- * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed emits node.done()
@@ -12729,7 +12729,7 @@
 
     // ## Meta-data
 
-    DoneButton.version = '1.0.0';
+    DoneButton.version = '1.1.0';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
@@ -12782,7 +12782,21 @@
             if (res) that.disable();
         };
 
+        /**
+         * ### DoneButton.disableOnDisconnect
+         *
+         * If TRUE, the button is automatically disableb upon disconnection
+         */
         this.disableOnDisconnect = null;
+
+        /**
+         * ### DoneButton.delayOnPlaying
+         *
+         * The number of milliseconds to wait to enable at a new step
+         *
+         * A small delay prevents accidental double clicking between steps.
+         */
+        this.delayOnPlaying = 800;
     }
 
     // ## DoneButton methods
@@ -12799,6 +12813,9 @@
      * - className: the className of the button (string, array), or false
      *     to have none. Default bootstrap classes: 'btn btn-lg btn-primary'
      * - text: the text on the button. Default: DoneButton.text
+     * - disableOnDisconnect: TRUE to disable upon disconnection. Default: TRUE
+     * - delayOnPlaying: number of milliseconds to wait to enable after
+     *     the `PLAYING` event is fired (e.g., a new step begins). Default: 800
      *
      * @param {object} opts Optional. Configuration options
      */
@@ -12850,6 +12867,15 @@
         this.disableOnDisconnect =
             'undefined' === typeof opts.disableOnDisconnect ?
             true : !! opts.disableOnDisconnect;
+
+        tmp = opts.delayOnPlaying;
+        if ('number' === typeof tmp) {
+            this.delayOnPlaying = tmp;
+        }
+        else if ('undefined' !== typeof tmp) {
+            throw new TypeError('DoneButton.init: delayOnPlaying must ' +
+                                'be number or undefined. Found: ' + tmp);
+        }
     };
 
     DoneButton.prototype.append = function() {
@@ -12874,8 +12900,17 @@
                 that.disable();
             }
             else {
-                // It might be enabled already, but we do it again.
-                that.enable();
+                if (that.delayOnPlaying) {
+                    setTimeout(function () {
+                        // If not disabled because of a disconnection,
+                        // enable it.
+                        if (!disabled) that.enable();
+                    }, that.delayOnPlaying);
+                }
+                else {
+                    // It might be enabled already, but we do it again.
+                    that.enable();
+                }
             }
             if ('string' === typeof prop) that.button.value = prop;
             else if (prop && prop.text) that.button.value = prop.text;

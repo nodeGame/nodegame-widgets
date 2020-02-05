@@ -1085,11 +1085,11 @@
      *
      * A reference to the cell is saved in `choicesCells`.
      *
-     * @param {mixed} choice The choice element. It must be string or number,
-     *   or array where the first element is the 'value' (incorporated in the
-     *   `id` field) and the second the text to display as choice. If a
-     *   renderer function is defined there are no restriction on the
-     *   format of choice
+     * @param {mixed} choice The choice element. It may be string, number,
+     *   array where the first element is the 'value' and the second the
+     *   text to display as choice, or an object with properties value and
+     *   display. If a renderer function is defined there are no restriction
+     *   on the format of choice.
      * @param {number} idx The position of the choice within the choice array
      *
      * @return {HTMLElement} td The newly created cell of the table
