@@ -1,6 +1,6 @@
 /**
  * # ChoiceManager
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g., ChoiceTable).
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.2.0';
+    ChoiceManager.version = '1.2.1';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'selectable choices forms (e.g. ChoiceTable).';
 
@@ -34,9 +34,6 @@
      * Creates a new instance of ChoiceManager
      */
     function ChoiceManager() {
-        var that;
-        that = this;
-
         /**
          * ### ChoiceManager.dl
          *
@@ -167,8 +164,7 @@
      * @see ChoiceManager.setForms
      */
     ChoiceManager.prototype.init = function(options) {
-        var tmp, that;
-        that = this;
+        var tmp;
 
         // Option shuffleForms, default false.
         if ('undefined' === typeof options.shuffleForms) tmp = false;
@@ -303,14 +299,19 @@
                                     form);
                 }
             }
-            forms[i] = form;
+
             if (form.id) {
                 if (formsById[form.id]) {
                     throw new Error('ChoiceManager.setForms: duplicated ' +
                                     'form id: ' + form.id);
                 }
-                formsById[form.id] = forms[i];
+
             }
+            else {
+                form.id = form.className + '_' + i;
+            }
+            forms[i] = form;
+            formsById[form.id] = forms[i];
         }
         // Assigned verified forms.
         this.forms = forms;
@@ -332,7 +333,7 @@
      * @see ChoiceManager.order
      */
     ChoiceManager.prototype.buildDl = function() {
-        var i, len, dl, dt;
+        var i, len, dt;
         var form;
 
         i = -1, len = this.forms.length;
