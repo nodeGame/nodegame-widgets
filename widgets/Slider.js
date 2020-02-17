@@ -65,13 +65,13 @@
          *
          * The current value of the slider
          */
-        this.currentValue = null;
+        this.currentValue = 50;
 
         /** Slider.initialValue
         *
         * The initial value of the slider
         */
-        this.initialValue = null;
+        this.initialValue = 50;
 
         /**
         * ### Slider.mainText

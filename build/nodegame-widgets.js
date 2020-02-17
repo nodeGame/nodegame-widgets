@@ -16734,13 +16734,13 @@
          *
          * The current value of the slider
          */
-        this.currentValue = null;
+        this.currentValue = 50;
 
         /** Slider.initialValue
         *
         * The initial value of the slider
         */
-        this.initialValue = null;
+        this.initialValue = 50;
 
         /**
         * ### Slider.mainText
@@ -16914,9 +16914,9 @@
             else {
                 tmp = J.isInt(tmp, this.min, this.max, true, true);
                 if ('number' !== typeof tmp) {
-                    throw new TypeError(e + 'initialValue must be an integer >= ' +
-                    this.min + ' and =< ' + this.max + ' or undefined. Found: ' +
-                    opts.initialValue);
+                    throw new TypeError(e + 'initialValue must be an ' +
+                    'integer >= ' + this.min + ' and =< ' + this.max +
+                    ' or undefined. Found: ' + opts.initialValue);
                 }
 
             }
