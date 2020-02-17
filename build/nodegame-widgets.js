@@ -16730,11 +16730,17 @@
          */
         this.scale = 1;
 
-        /** Slider.scale
+        /** Slider.currentValue
          *
-         * The current value of the slider (as well as the initial one)
+         * The current value of the slider
          */
-        this.currentValue = 50;
+        this.currentValue = null;
+
+        /** Slider.initialValue
+        *
+        * The initial value of the slider
+        */
+        this.initialValue = null;
 
         /**
         * ### Slider.mainText
@@ -16900,15 +16906,22 @@
             this.max = tmp;
         }
 
-        if ('undefined' !== typeof opts.initialValue) {
-            tmp = J.isInt(opts.initialValue, this.min, this.max, true, true);
-            if ('number' !== typeof tmp) {
-                throw new TypeError(e + 'initialValue must be an integer >= ' +
-                this.min + ' and =< ' + this.max + ' or undefined. Found: ' +
-                opts.initialValue);
+        tmp = opts.initialValue;
+        if ('undefined' !== typeof tmp) {
+            if (tmp === 'random') {
+                tmp = J.randomInt((this.min-1), this.max);
             }
-            // currentValue is the first update.
-            this.currentValue = tmp;
+            else {
+                tmp = J.isInt(tmp, this.min, this.max, true, true);
+                if ('number' !== typeof tmp) {
+                    throw new TypeError(e + 'initialValue must be an integer >= ' +
+                    this.min + ' and =< ' + this.max + ' or undefined. Found: ' +
+                    opts.initialValue);
+                }
+
+            }
+            // currentValue is used with the first update.
+            this.initialValue = this.currentValue = tmp;
         }
 
         if ('undefined' !== typeof opts.displayValue) {
@@ -17028,6 +17041,7 @@
         }
 
         this.slider.oninput = this.listener;
+        this.slider.value = this.initialValue;
 
         this.slider.oninput();
     };
@@ -17044,8 +17058,9 @@
 
         return {
             value: value,
+            initialValue: this.initialValue,
             totalMove: this.totalMove,
-            isCorrect: res
+            isCorrect: res,
         };
     };
 
