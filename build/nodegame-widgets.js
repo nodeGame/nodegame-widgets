@@ -16833,6 +16833,8 @@
         this.listener = function() {
             if (timeOut) return;
 
+            if (that.isHighlighted()) that.unhighlight();
+
             timeOut = setTimeout(function() {
                 var percent, diffPercent;
 
@@ -16874,6 +16876,17 @@
          * @see Slider.listener
          */
          this.onmove = null;
+
+         /**
+         * ### Slider.timeFrom
+         *
+         * Time event from which measuring time
+         *
+         * Default: 'step'
+         *
+         * @see node.timer.getTimeSince
+         */
+         this.timeFrom = 'step';
 
     }
 
@@ -17048,11 +17061,14 @@
 
     Slider.prototype.getValues = function(opts) {
         var res, value;
+        opts = opts || {};
         res = true;
+        if ('undefined' === typeof opts.highlight) opts.highlight = true;
         value = this.currentValue;
         if ((this.required && this.totalMove === 0) ||
            (null !== this.correctValue && this.correctValue !== value)) {
 
+            if (opts.highlight) this.highlight();
             res = false;
         }
 
@@ -17061,6 +17077,7 @@
             initialValue: this.initialValue,
             totalMove: this.totalMove,
             isCorrect: res,
+            time: node.timer.getTimeSince(this.timeFrom)
         };
     };
 
