@@ -16686,7 +16686,7 @@
 
     // ## Meta-data
 
-    Slider.version = '0.2.0';
+    Slider.version = '0.3.0';
     Slider.description = 'Creates a configurable Slider ';
 
     Slider.title = false;
@@ -16699,7 +16699,9 @@
     };
 
     Slider.texts = {
-        currentValue: 'Value: '
+        currentValue: function(widget, value) {
+            return 'Value: ' + value;
+        }
     };
 
 
@@ -16838,7 +16840,7 @@
             timeOut = setTimeout(function() {
                 var percent, diffPercent;
 
-                percent = that.slider.value * that.scale;
+                percent = (that.slider.value - that.min) * that.scale;
                 diffPercent = percent - that.currentValue;
                 that.currentValue = percent;
 
@@ -16855,8 +16857,8 @@
                 }
 
                 if (that.displayValue) {
-                    that.valueSpan.innerHTML = that.getText('currentValue') +
-                    that.slider.value;
+                    that.valueSpan.innerHTML = that.getText('currentValue',
+                    that.slider.value);
                 }
 
                 that.totalMove += Math.abs(diffPercent);
@@ -16918,6 +16920,8 @@
             }
             this.max = tmp;
         }
+
+        this.scale = 100 / (this.max-this.min);
 
         tmp = opts.initialValue;
         if ('undefined' !== typeof tmp) {
