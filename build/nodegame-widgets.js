@@ -8599,13 +8599,12 @@
 
     // ## Meta-data
 
-    ContentBox.version = '0.1.0';
+    ContentBox.version = '0.2.0';
     ContentBox.description = 'Simply displays some content';
 
     ContentBox.title = false;
     ContentBox.panel = false;
     ContentBox.className = 'contentbox';
-
 
     // ## Dependencies
 
@@ -8622,8 +8621,12 @@
         this.mainText = null;
 
         // ### ContentBox.content
-        // Some Content to be displayed.
+        // Some content to be displayed.
         this.content = null;
+
+        // ### ContentBox.hint
+        // A hint text.
+        this.hint = null;
     }
 
     // ## ContentBox methods
@@ -8646,7 +8649,15 @@
                                 'be string or undefined. Found: ' +
                                 opts.content);
         }
-
+        // Set the content, if any.
+        if ('string' === typeof opts.hint) {
+            this.hint = opts.hint;
+        }
+        else if ('undefined' !== typeof opts.hint) {
+            throw new TypeError('ContentBox.init: hint must ' +
+                                'be string or undefined. Found: ' +
+                                opts.hint);
+        }
     };
 
     ContentBox.prototype.append = function() {
@@ -8662,6 +8673,13 @@
             W.append('div', this.bodyDiv, {
                 className: 'contentbox-content',
                 innerHTML: this.content
+            });
+        }
+        // Hint.
+        if (this.hint) {
+            W.append('span', this.bodyDiv, {
+                className: 'contentbox-hint',
+                innerHTML: this.hint
             });
         }
     };
@@ -16701,7 +16719,8 @@
     Slider.texts = {
         currentValue: function(widget, value) {
             return 'Value: ' + value;
-        }
+        },
+        noChange: 'No change'
     };
 
 
@@ -16803,11 +16822,26 @@
 
         /** Slider.valueSpan
          *
-         * The SPAN element containint the current value
+         * The SPAN element containing the current value
          *
          * @see Slider.displayValue
          */
         this.valueSpan = null;
+
+        /** Slider.displayNoChange
+        *
+        * If TRUE, a checkbox for marking a no-change is added
+        */
+        this.displayNoChange = true;
+
+        /** Slider.noChangeSpan
+        *
+        * The checkbox form marking the no-change
+        *
+        * @see Slider.displayNoChange
+        * @see Slider.noChangeCheckbox
+        */
+        this.noChangeSpan = null;
 
         /** Slider.totalMove
          *
@@ -16829,11 +16863,15 @@
          *
          * Calls user-defined listener oninput
          *
+         * @param {boolean} noChange Optional. The function is invoked
+         *   by the no-change checkbox. Note: when the function is invoked
+         *   by the browser, noChange is the change event.
+         *
          * @see Slider.onmove
          */
         var timeOut = null;
-        this.listener = function() {
-            if (timeOut) return;
+        this.listener = function(noChange) {
+            if (!noChange && timeOut) return;
 
             if (that.isHighlighted()) that.unhighlight();
 
@@ -16859,6 +16897,13 @@
                 if (that.displayValue) {
                     that.valueSpan.innerHTML = that.getText('currentValue',
                     that.slider.value);
+                }
+
+                if (that.displayNoChange && noChange !== true) {
+                    if (that.noChangeCheckbox.checked) {
+                        that.noChangeCheckbox.checked = false;
+                        J.removeClass(that.noChangeSpan, 'italic');
+                    }
                 }
 
                 that.totalMove += Math.abs(diffPercent);
@@ -16921,7 +16966,7 @@
             this.max = tmp;
         }
 
-        this.scale = 100 / (this.max-this.min);
+        this.scale = 100 / (this.max - this.min);
 
         tmp = opts.initialValue;
         if ('undefined' !== typeof tmp) {
@@ -16944,6 +16989,10 @@
         if ('undefined' !== typeof opts.displayValue) {
             this.displayValue = !!opts.displayValue;
         }
+        if ('undefined' !== typeof opts.displayNoChange) {
+            this.displayNoChange = !!opts.displayNoChange;
+        }
+
         if (opts.type) {
             if (opts.type !== 'volume' && opts.type !== 'flat') {
                 throw new TypeError(e + 'type must be "volume", "flat", or ' +
@@ -16984,8 +17033,10 @@
             // this.hint = this.getText('autoHint');
         }
 
-        if (this.required) {
-            if (!this.hint) this.hint = 'Movement required';
+        if (this.required && this.hint !== false) {
+            if ('undefined' === typeof this.hint) {
+                this.hint = 'Movement required';
+            }
             this.hint += ' *';
         }
 
@@ -17015,6 +17066,7 @@
      */
     Slider.prototype.append = function() {
         var container;
+        var that = this;
 
         // MainText.
         if (this.mainText) {
@@ -17054,7 +17106,29 @@
         if (this.displayValue) {
             this.valueSpan = W.add('span', this.bodyDiv, {
                 className: 'slider-display-value'
-            })
+            });
+        }
+
+        if (this.displayNoChange) {
+            this.noChangeSpan = W.add('span', this.bodyDiv, {
+                className: 'slider-display-nochange',
+                innerHTML: this.getText('noChange') + '&nbsp;'
+            });
+            this.noChangeCheckbox = W.add('input', this.noChangeSpan, {
+                type: 'checkbox'
+            });
+            this.noChangeCheckbox.onclick = function() {
+                if (that.noChangeCheckbox.checked) {
+                    if (that.slider.value === that.initialValue) return;
+                    that.slider.value = that.initialValue;
+                    that.listener(true);
+                    J.addClass(that.noChangeSpan, 'italic');
+                }
+                else {
+                    J.removeClass(that.noChangeSpan, 'italic');
+                }
+
+            };
         }
 
         this.slider.oninput = this.listener;
