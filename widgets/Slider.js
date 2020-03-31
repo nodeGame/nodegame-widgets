@@ -451,12 +451,13 @@
     };
 
     Slider.prototype.getValues = function(opts) {
-        var res, value;
+        var res, value, nochange;
         opts = opts || {};
         res = true;
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
         value = this.currentValue;
-        if ((this.required && this.totalMove === 0) ||
+        nochange = this.noChangeCheckbox && this.noChangeCheckbox.checked;
+        if ((this.required && this.totalMove === 0 && !nochange) ||
            (null !== this.correctValue && this.correctValue !== value)) {
 
             if (opts.highlight) this.highlight();
@@ -465,6 +466,7 @@
 
         return {
             value: value,
+            noChange: nochange,
             initialValue: this.initialValue,
             totalMove: this.totalMove,
             isCorrect: res,
