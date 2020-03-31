@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 5.7.1
+- Fixed required Slider and No Change.
+
 ## 5.7.0
 - ContentBox accepts the hint parameter.
 - New Slider widget.
