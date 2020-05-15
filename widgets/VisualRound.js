@@ -998,6 +998,7 @@
      * @param {object} options Additional options, e.g. 'toTotal'
      */
     function generalConstructor(that, visualRound, name, options) {
+        options = options || {};
 
         /**
          * #### visualRound
@@ -1021,7 +1022,7 @@
          *
          * The options for this instance
          */
-        that.options = options || {};
+        that.options = options;
 
         /**
          * #### displayDiv

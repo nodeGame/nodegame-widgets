@@ -415,7 +415,6 @@
          */
         this.selectMultiple = null;
 
-
         /**
         * ### ChoiceTable.oneTimeClick
         *
