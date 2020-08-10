@@ -18652,7 +18652,7 @@
 
     // ## Meta-data
 
-    VisualStage.version = '0.8.0';
+    VisualStage.version = '0.9.0';
     VisualStage.description =
         'Displays the name of the current, previous and next step of the game.';
 
@@ -18704,6 +18704,11 @@
         //
         // If TRUE, the name/id of a step is capitalized. Default: TRUE.
         this.capitalize = true;
+
+        // ### VisualStage.replaceUnderscore
+        //
+        // If TRUE, underscores are replaced with spaces. Default: TRUE.
+        this.replaceUnderscore = true;
 
         // Default display settings.
 
@@ -18763,7 +18768,7 @@
             err = checkOrderOption(opts.order, this.order.slice(0));
             if (err) {
                 throw new TypeError('VisualStage.init: order contains ' +
-                                    'errors: ' + order);
+                                    'errors: ' + opts.order);
             }
             this.order = opts.order;
         }
@@ -18782,6 +18787,10 @@
         }
         if ('undefined' !== typeof opts.capitalize) {
             this.capitalize = !!opts.capitalize;
+        }
+
+        if ('undefined' !== typeof opts.replaceUnderscore) {
+            this.replaceUnderscore = !!opts.replaceUnderscore;
         }
     };
 
@@ -18822,10 +18831,9 @@
      * @see VisualStage.getStepName
      */
     VisualStage.prototype.updateDisplay = function() {
-        var name, str;
         var curStep, nextStep, prevStep;
         var curStepName, nextStepName, prevStepName;
-        var order, t, tmp;
+        var order, t;
 
         order = {};
         curStep = node.game.getCurrentGameStage();
@@ -18876,8 +18884,8 @@
      * Returns the step name of a given step
      *
      * @param {GameStage} gameStage The game stage we want to to get the name
-     * @param {GameStage} gameStage The current game stage
-     * @param {string} A modifier: 'current', 'previous', 'next'.
+     * @param {GameStage} curStage The current game stage
+     * @param {string} mod A modifier: 'current', 'previous', 'next'.
      *
      * @return {string} name The name of the step
      *
@@ -18886,6 +18894,7 @@
     VisualStage.prototype.getStepName = function(gameStage, curStage, mod) {
         var name, round;
         name = getName(gameStage, this.getText('miss'));
+        if (this.replaceUnderscore) name = name.replace(/_/g, " ");
         if (this.capitalize) name = capitalize(name);
         if (this.showRounds) {
             round = getRound(gameStage, curStage, mod);
