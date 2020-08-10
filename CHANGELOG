@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## Current
+- VisualStage option replaceUnderscore (default TRUE) replaces all underscores
+with spaces.
+
 ## 5.7.1
 - Fixed required Slider and No Change.
 
