@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## 5.8.0 (current)
+## 5.8.0 
 - VisualStage option replaceUnderscore (default TRUE) replaces all underscores
 with spaces.
 - ChoiceTable option disableChoices and methods to disable/enable choices.
