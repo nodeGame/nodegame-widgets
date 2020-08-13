@@ -1,8 +1,10 @@
 # nodegame-widgets change log
 
-## Current
+## 5.8.0 (current)
 - VisualStage option replaceUnderscore (default TRUE) replaces all underscores
 with spaces.
+- ChoiceTable option disableChoices and methods to disable/enable choices.
+- Fixed bug in costructor inner mode of VisualRound
 
 ## 5.7.1
 - Fixed required Slider and No Change.
