@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 5.8.1 current
+- Fixed bug with ChoiceTable and correctChoice = 0.
+
 ## 5.8.0 
 - VisualStage option replaceUnderscore (default TRUE) replaces all underscores
 with spaces.
