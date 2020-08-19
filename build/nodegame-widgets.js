@@ -5363,11 +5363,11 @@
     ChoiceManager.prototype.getValues = function(opts) {
         var obj, i, len, form;
         obj = {
-            id: this.id,
             order: this.order,
             forms: {},
             missValues: []
         };
+        if ('undefined' !== typeof this.id) obj.id = this.id;
         opts = opts || {};
         if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
@@ -6827,7 +6827,7 @@
         }
 
         // If no correct choice is set return null.
-        if (!this.correctChoice) return null;
+        if ('undefined' === typeof this.correctChoice) return null;
         // Mark attempt by default.
         markAttempt = 'undefined' === typeof markAttempt ? true : markAttempt;
         if (markAttempt) this.attempts.push(this.currentChoice);
@@ -7113,7 +7113,7 @@
 
         // Value this.correctChoice can undefined, string or array.
         // If no correct choice is set, we simply ignore the correct param.
-        if (options.correct && this.correctChoice) {
+        if (options.correct && 'undefined' !== typeof this.correctChoice) {
 
             // Make it an array (can be a string).
             correctChoice = J.isArray(this.correctChoice) ?

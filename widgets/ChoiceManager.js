@@ -574,11 +574,11 @@
     ChoiceManager.prototype.getValues = function(opts) {
         var obj, i, len, form;
         obj = {
-            id: this.id,
             order: this.order,
             forms: {},
             missValues: []
         };
+        if ('undefined' !== typeof this.id) obj.id = this.id;
         opts = opts || {};
         if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
