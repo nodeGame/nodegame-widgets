@@ -3,6 +3,8 @@
 ## 5.8.2
 - Fixed bug Chat "is typing...".
 - Fixed bug ChoiceTable separator concatened with id matches separator.
+- Error raised if choicesSetSize is specified with left or right in
+ChoiceTable.
 
 ## 5.8.1
 - Fixed bug with ChoiceTable and correctChoice = 0.
