@@ -2405,7 +2405,7 @@
         quit: function(w, data) {
             return (w.senderToNameMap[data.id] || data.id) + ' left the chat';
         },
-        noMoreParticipants: function(w, data) {
+        noMoreParticipants: function(w) {
             return 'No active participant left. Chat disabled.';
         },
         // For both collapse and uncollapse.
@@ -2978,7 +2978,8 @@
         }
         else {
             this.isTypingDivs[id] = this.writeMsg('incoming', {
-                msg: this.getText('isTyping', {id: id })
+                msg: this.getText('isTyping'),
+                id: id
             });
         }
         this.scrollToBottom();

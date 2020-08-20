@@ -1,6 +1,6 @@
 /**
  * # Chat
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -40,7 +40,7 @@
         quit: function(w, data) {
             return (w.senderToNameMap[data.id] || data.id) + ' left the chat';
         },
-        noMoreParticipants: function(w, data) {
+        noMoreParticipants: function() {
             return 'No active participant left. Chat disabled.';
         },
         // For both collapse and uncollapse.
@@ -58,7 +58,7 @@
 
     // ## Meta-data
 
-    Chat.version = '1.2.0';
+    Chat.version = '1.2.1';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the server.';
 
@@ -613,7 +613,8 @@
         }
         else {
             this.isTypingDivs[id] = this.writeMsg('incoming', {
-                msg: this.getText('isTyping', {id: id })
+                msg: this.getText('isTyping'),
+                id: id
             });
         }
         this.scrollToBottom();
