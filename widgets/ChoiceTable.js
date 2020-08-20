@@ -853,6 +853,12 @@
                                 opts.choicesSetSize);
             }
 
+            if (this.left || this.right) {
+                throw new Error('ChoiceTable.init: choicesSetSize option ' +
+                                'cannot be specified when either left or ' +
+                                'right options are set.');
+            }
+
             this.choicesSetSize = opts.choicesSetSize;
         }
 
