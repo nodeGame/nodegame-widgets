@@ -46,7 +46,7 @@
      *   If a `table` option is specified, it sets it as the clickable
      *   table. All other options are passed to the init method.
      */
-    function ChoiceTableGroup(options) {
+    function ChoiceTableGroup() {
         var that;
         that = this;
 
@@ -427,8 +427,7 @@
      * @param {object} opts Configuration options
      */
     ChoiceTableGroup.prototype.init = function(opts) {
-        var tmp, that;
-        that = this;
+        var tmp;
 
         // TODO: many options checking are replicated. Skip them all?
         // Have a method in ChoiceTable?
@@ -599,6 +598,9 @@
         }
 
         if (opts.tabbable !== false) this.tabbable = true;
+
+        // Separator checked by ChoiceTable.
+        if (opts.separator) this.separator = opts.separator;
 
         // After all configuration opts are evaluated, add items.
 
