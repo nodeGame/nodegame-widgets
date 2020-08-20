@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## 5.8.1 current
+## 5.8.1
 - Fixed bug with ChoiceTable and correctChoice = 0.
 
 ## 5.8.0 
