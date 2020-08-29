@@ -1022,8 +1022,6 @@
 
     "use strict";
 
-    var NDDB = window.NDDB;
-
     // ## Widgets constructor
 
     function Widgets() {
@@ -1250,7 +1248,6 @@
      * @see Widgets.instances
      */
     Widgets.prototype.get = function(widgetName, options) {
-        var that;
         var WidgetPrototype, widget, changes;
 
         if ('string' !== typeof widgetName) {
@@ -1272,8 +1269,6 @@
                                     'if options.docked is true.');
             }
         }
-
-        that = this;
 
         WidgetPrototype = J.getNestedValue(widgetName, this.widgets);
 
@@ -1513,8 +1508,7 @@
      * @see Widgets.get
      */
     Widgets.prototype.append = function(w, root, options) {
-        var tmp, lastDocked, right;
-        var dockedMargin;
+        var tmp;
 
         if ('string' !== typeof w && 'object' !== typeof w) {
             throw new TypeError('Widgets.append: w must be string or object. ' +
@@ -16466,7 +16460,9 @@
  * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
- * Displays an interface to measure risk preferences.
+ * Displays an interface to measure risk preferences with different methods
+ *
+ * Available methods: Holt_Laury (default), and Bomb.
  *
  * www.nodegame.org
  */
@@ -16478,17 +16474,53 @@
 
     // ## Meta-data
 
-    RiskGauge.version = '0.4.0';
+    RiskGauge.version = '0.6.0';
     RiskGauge.description = 'Displays an interface to ' +
-        'measure risk preferences.';
+        'measure risk preferences with different methods.';
 
     RiskGauge.title = 'Risk Gauge';
     RiskGauge.className = 'riskgauge';
 
-    RiskGauge.texts.mainText = 'Below you find a series of hypothetical ' +
-        'lotteries. Each row contains two lotteries with different ' +
-        'probabalities of winning. In each row, select the lottery you would ' +
-        'rather take part in.';
+    RiskGauge.texts =  {
+
+        // Holt Laury.
+
+        holt_laury_mainText:
+            'Below you find a series of hypothetical lotteries, each ' +
+            'contains two lotteries with different probabalities of winning. ' +
+            'In each row, select the lottery you would rather take part in.',
+
+        // Risk Bomb.
+
+        bomb_mainText:
+            'Below you see 100 black boxes. '+
+            'All boxes contain a prize.'+
+            'You have to decide how many boxes you want to open. You will ' +
+            'the sum of all prizes that were in the boxes you opened. ' +
+            '<strong>However, in one of these boxes there is a bomb.' +
+            '</strong> If you open the box with the bomb, you get nothing.' +
+            '<br><strong> How many boxes do you want to open?</strong><br>',
+
+        bomb_sliderHint:
+            'Use the slider to change the number of boxes you want to open.',
+
+        bomb_boxValue: 'Each box contains: ',
+
+        bomb_numBoxes: ' Number of boxes to open: ',
+
+        bomb_totalWin: ' You can win: ',
+
+        bomb_openButton: 'Open Boxes',
+
+        bomb_warning: 'You have to open at least one box!',
+
+        bomb_win: 'You did not open the box with the bomb and won.',
+
+        bomb_lose: 'You opened the box with the bomb and lost.'
+    };
+
+    // Backward compatibility.
+    RiskGauge.texts.mainText = RiskGauge.texts.holt_laury_mainText;
 
     // ## Dependencies
     RiskGauge.dependencies = {
@@ -16500,12 +16532,9 @@
      *
      * Creates a new instance of RiskGauge
      *
-     * @param {object} options Optional. Configuration options
-     * which is forwarded to RiskGauge.init.
-     *
      * @see RiskGauge.init
      */
-    function RiskGauge(options) {
+    function RiskGauge() {
 
         /**
          * ### RiskGauge.methods
@@ -16518,8 +16547,7 @@
          * and accepts the `options` parameters passed to constructor.
          * Each method must return widget-like gauge object
          * implementing functions: append, enable, disable, getValues
-         *
-         * or an error will be thrown
+         * or an error will be thrown.
          */
         this.methods = {};
 
@@ -16528,7 +16556,7 @@
          *
          * The method used to measure mood
          *
-         * Available methods: 'Holt_Laury'
+         * Available methods: 'Holt_Laury', 'Bomb'
          *
          * Default method is: 'Holt_Laury'
          *
@@ -16557,6 +16585,7 @@
         this.gauge = null;
 
         this.addMethod('Holt_Laury', holtLaury);
+        this.addMethod('Bomb', bomb);
     }
 
     // ## RiskGauge methods.
@@ -16590,25 +16619,31 @@
         }
         // Call method.
         gauge = this.methods[this.method].call(this, opts);
+
         // Check properties.
-        checkGauge(this.method, gauge);
+        if (!node.widgets.isWidget(gauge)) {
+            throw new Error('RiskGauge.init: method ' + this.method +
+                            ' created invalid gauge: missing default widget ' +
+                            'methods.')
+        }
+
         // Approved.
         this.gauge = gauge;
 
         this.on('enabled', function() {
-            gauge.enable();
+            if (gauge.enable) gauge.enable();
         });
 
         this.on('disabled', function() {
-            gauge.disable();
+            if (gauge.disable) gauge.disable();
         });
 
         this.on('highlighted', function() {
-            gauge.highlight();
+            if (gauge.highlight) gauge.highlight();
         });
 
         this.on('unhighlighted', function() {
-            gauge.unhighlight();
+            if (gauge.unhighlight) gauge.unhighlight();
         });
     };
 
@@ -16626,11 +16661,11 @@
      */
     RiskGauge.prototype.addMethod = function(name, cb) {
         if ('string' !== typeof name) {
-            throw new Error('RiskGauge.addMethod: name must be string: ' +
+            throw new TypeError('RiskGauge.addMethod: name must be string: ' +
                             name);
         }
         if ('function' !== typeof cb) {
-            throw new Error('RiskGauge.addMethod: cb must be function: ' +
+            throw new TypeError('RiskGauge.addMethod: cb must be function: ' +
                             cb);
         }
         if (this.methods[name]) {
@@ -16648,42 +16683,7 @@
         return this.gauge.setValues(opts);
     };
 
-    // ## Helper functions.
-
-    /**
-     * ### checkGauge
-     *
-     * Checks if a gauge is properly constructed, throws an error otherwise
-     *
-     * @param {string} method The name of the method creating it
-     * @param {object} gauge The object to check
-     *
-     * @see ModdGauge.init
-     */
-    function checkGauge(method, gauge) {
-        if (!gauge) {
-            throw new Error('RiskGauge.init: method ' + method +
-                            'did not create element gauge.');
-        }
-        if ('function' !== typeof gauge.getValues) {
-            throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function getValues');
-        }
-        if ('function' !== typeof gauge.enable) {
-            throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function enable');
-        }
-        if ('function' !== typeof gauge.disable) {
-            throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function disable');
-        }
-        if ('function' !== typeof gauge.append) {
-            throw new Error('RiskGauge.init: method ' + method +
-                            ': gauge missing function append');
-        }
-    }
-
-    // ## Available methods.
+    // ## Methods.
 
     // ### Holt and Laury
 
@@ -16734,13 +16734,213 @@
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: options.id || 'holt_laury',
             items: items,
-            mainText: this.mainText || this.getText('mainText'),
+            mainText: this.mainText || this.getText('holt_laury_mainText'),
             title: false,
             requiredChoice: true,
             storeRef: false
         });
 
         return gauge;
+    }
+
+
+    // ### Bomb Risk
+
+    function bomb(opts) {
+        var that = this;
+
+        var prBomb;
+
+        var infoDiv;
+
+        // The slider to select how many boxes.
+        var slider;
+
+        // The open box button.
+        var button;
+
+        // Private variable: the id value of the box with the bomb.
+        var bombBox;
+
+        var currency = opts.currency || 'USD';
+
+        var withPrize;
+
+        //
+        var isWinner;
+
+        var finalValue;
+
+        // The value of each box.
+        var boxValue;
+        boxValue = opts.boxValue || 1;
+
+        // Probability that there is one bomb (default 1).
+        if ('undefined' !== typeof opts.propBomb) {
+            if (false === J.isNumber(opts.propBomb, 0, 1, true)) {
+                throw new TypeError('BombRisk.init: propBomb must be number ' +
+                                    'or undefined. Found: ' + opts.propBomb);
+            }
+            this.propBomb = opts.propBomb;
+        }
+        else {
+            this.propBomb = 1;
+        }
+
+        // Maxi number of boxes to open (default 99 if probBomb = 1, else 100).
+        if ('undefined' !== typeof opts.maxBoxes) {
+            if (!J.isInt(opts.maxBoxes, 0, 100)) {
+                throw new TypeError('BombRisk.init: maxBoxes must be an ' +
+                                    'integer <= 100 or undefined. Found: ' +
+                                    opts.maxBoxes);
+            }
+            this.maxBoxes = opts.maxBoxes;
+        }
+        else {
+            this.maxBoxes = this.propBomb === 1 ? 99 : 100;
+        }
+
+        // Is there going to be an actual prize for it?
+        withPrize = 'undefined' === typeof opts.withPrize ?
+            true : !!opts.withPrize;
+
+        // Pick bomb box id, if probability permits it, else set to 101.
+        bombBox = (prBomb === 0 || Math.random() <= prBomb) ? 101 :
+            Math.ceil(Math.random()*100);
+
+        // Return widget-like object.
+        return {
+            setValues: function() { },
+            getValues: function() {
+                var out;
+                out = {
+                    isCorrect: true,
+                    value: slider.getValues(),
+                    isWinner: isWinner,
+                    payment: 0
+                };
+                if (isWinner === true) out.payment = finalValue * boxValue;
+                return out;
+            },
+            append: function() {
+                // Main text.
+                W.add('div', that.bodyDiv, {
+                    innerHTML: that.getText('mainText')
+                });
+
+                // Table.
+                W.add('div', that.bodyDiv, {
+                    innerHTML: makeTable()
+                });
+
+                // Info div.
+                infoDiv = W.add('div', that.bodyDiv);
+                W.add('p', infoDiv, {
+                    innerHTML: that.getText('bomb_numBoxes') +
+                               ' <span id="bomb_numBoxes">0</span>'
+                });
+
+                if (withPrize) {
+                    W.add('p', infoDiv, {
+                        innerHTML: that.getText('bomb_boxValue') +
+                        ': <span id="bomb_boxValue">' + boxValue + '</span>'
+                    });
+                    W.add('p', infoDiv, {
+                        innerHTML: that.getText('bomb_totalWin') +
+                        ': <span id="bomb_totalWin">0</span>'
+                    });
+                }
+
+                W.add('p', infoDiv, { id: 'bomb_result' });
+
+                // Slider.
+                slider = node.widgets.add('Slider', that.bodyDiv, {
+                    id: opts.id || 'bomb',
+                    min: 0,
+                    max: that.maxBoxes,
+                    hint: that.getText('bomb_sliderHint'),
+                    title: false,
+                    initialValue: 0,
+                    displayValue: false,
+                    displayNoChange: false,
+                    required: true,
+                    // texts: {
+                    //     currentValue: that.getText('sliderValue')
+                    // },
+                    onmove: function(value) {
+                        var i, div;
+                        // Need to do until maxBoxes in case we are reducing the value.
+                        for (i = 0; i < that.maxBoxes; i++) {
+                            if (value > 0) {
+                                // button.style.display = '';
+                                // W.gid('warn').style.display = 'none';
+                            }
+                            div = W.gid(String(i));
+                            if (value > i) div.style.background = '#1be139';
+                            else div.style.background = '#000000';
+                        }
+
+                        // Update display.
+                        W.gid('bomb_numBoxes').innerText = value;
+
+                        if (withPrize) {
+                            W.gid('bomb_boxValue').innerText = (boxValue + currency);
+                            W.gid('bomb_totalWin').innerText =
+                                (value * boxValue) + currency;
+                        }
+                    },
+                    storeRef: false,
+                    width: '100%'
+                });
+
+                button = that.openBtn = W.add('button', that.bodyDiv, {
+                    id: 'openBtn',
+                    className: 'btn-danger'
+                });
+
+                button.onclick = function() {
+                    var res;
+                    // Set global variables.
+                    finalValue = slider.getValues().value;
+                    isWinner = finalValue < bombBox;
+                    // Update display.
+                    if (bombBox < 101) {
+                        W.gid(String(bombBox-1)).style.background = '#fa0404';
+                    }
+                    slider.hide();
+                    W.hide(button);
+                    res = isWinner ? 'won' : 'lost';
+                    W.setInnerHTML('bomb_result', W.getText('bomb_' + res));
+                };
+            }
+        };
+    }
+
+    // Helper methods.
+
+    function makeBoxLine(j) {
+        var i, out, id;
+        out = '<tr>';
+        for (i = 0; i < 10; i++) {
+            id = j > 0 ? String(j) + String(i) : i;
+            out = out + '<td>' +
+            '<div class="square" id="' + id +
+            '" style="height: 50px; width: 50px; background: black">' +
+            '</td>';
+        }
+        out += '</tr>';
+        return out;
+    }
+
+    function makeTable() {
+        var j, out;
+        out = '<table style="width:60%; margin-left:20%; margin-right:20%">';
+        //k=l;
+        for (j = 0; j < 10; j++) {
+            out = out + makeBoxLine(j);
+        }
+        out += '</table><br>';
+        return out;
     }
 
 })(node);

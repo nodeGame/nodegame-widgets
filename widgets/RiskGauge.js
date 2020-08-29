@@ -44,16 +44,14 @@
             '</strong> If you open the box with the bomb, you get nothing.' +
             '<br><strong> How many boxes do you want to open?</strong><br>',
 
-        bomb_hint:
+        bomb_sliderHint:
             'Use the slider to change the number of boxes you want to open.',
 
-        bomb_prize: 'Each box contains: ',
+        bomb_boxValue: 'Each box contains: ',
 
-        bomb_currentValue: ' Number of boxes to open: ',
+        bomb_numBoxes: ' Number of boxes to open: ',
 
-        bomb_currentPrize: ' You can win: ',
-
-        bomb_currency: 'ECU',
+        bomb_totalWin: ' You can win: ',
 
         bomb_openButton: 'Open Boxes',
 
@@ -61,15 +59,7 @@
 
         bomb_win: 'You did not open the box with the bomb and won.',
 
-        bomb_lose: 'You opened the box with the bomb and lost.',
-
-        bomb_sliderValue:  function(widget, value) {
-            return '<p>' + resultMessages.currentValue + value + '</p>' +
-            hider + resultMessages.Prize + scale + currency + '</p>' +
-            hider + resultMessages.currentPrize +
-            value * scale + currency + '</p>';
-        }
-
+        bomb_lose: 'You opened the box with the bomb and lost.'
     };
 
     // Backward compatibility.
@@ -302,11 +292,9 @@
     function bomb(opts) {
         var that = this;
 
-        var currency, prBomb, infoDiv;
-        var resultMessages;
+        var prBomb;
 
-        // The table displaying how many boxes to open.
-        var table;
+        var infoDiv;
 
         // The slider to select how many boxes.
         var slider;
@@ -316,6 +304,19 @@
 
         // Private variable: the id value of the box with the bomb.
         var bombBox;
+
+        var currency = opts.currency || 'USD';
+
+        var withPrize;
+
+        //
+        var isWinner;
+
+        var finalValue;
+
+        // The value of each box.
+        var boxValue;
+        boxValue = opts.boxValue || 1;
 
         // Probability that there is one bomb (default 1).
         if ('undefined' !== typeof opts.propBomb) {
@@ -343,88 +344,121 @@
         }
 
         // Is there going to be an actual prize for it?
-        this.withPrize =
-            'undefined' === typeof opts.withPrize ? true : !!opts.withPrize;
-
+        withPrize = 'undefined' === typeof opts.withPrize ?
+            true : !!opts.withPrize;
 
         // Pick bomb box id, if probability permits it, else set to 101.
         bombBox = (prBomb === 0 || Math.random() <= prBomb) ? 101 :
             Math.ceil(Math.random()*100);
 
-        // Building display.
-
-        // Main text.
-        W.add('div', this.bodyDiv, {
-            innerHTML: this.getText('mainText')
-        });
-
-        // Table.
-        table = makeTable();
-        this.bodyDiv.appendChild(table);
-
-        // Info div.
-        infoDiv = this.infoDiv = W.add('div', this.bodyDiv);
-        W.add('p', infoDiv, {
-            innerHTML: this.getText('bomb_currentValue') +
-                       ' <span id="numboxes">0</span>'
-        });
-        W.add('p', infoDiv, {
-            innerHTML: this.getText('bomb_prize') +
-                       ': <span id="numboxes">1 +</span>'
-        });
-        W.add('p', infoDiv, {
-            innerHTML: this.getText('bomb_prize') +
-                       ': <span id="numboxes">1 +</span>'
-        });
-
-        // Slider.
-        slider = this.slider = node.widgets.get('Slider', {
-            id: opts.id || 'bomb',
-            min: 0,
-            max: this.maxBoxes,
-            mainText: resultMessages.mainText + table,
-            hint: resultMessages.hint,
-            title: false,
-            initialValue: 0,
-            displayNoChange: false,
-            required: true,
-            texts: {
-                currentValue: this.getText('sliderValue')
+        // Return widget-like object.
+        return {
+            setValues: function() { },
+            getValues: function() {
+                var out;
+                out = {
+                    isCorrect: true,
+                    value: slider.getValues(),
+                    isWinner: isWinner,
+                    payment: 0
+                };
+                if (isWinner === true) out.payment = finalValue * boxValue;
+                return out;
             },
-            onmove: function(value) {
-                var i, div;
-                // Need to do until maxBoxes in case we are reducing the value.
-                for (i = 0; i < that.maxBoxes; i++) {
-                    if (value > 0) {
-                        button.style.display = '';
-                        W.gid('warn').style.display = 'none';
-                    }
-                    div = W.gid(String(i));
-                    if (value > i) div.style.background = '#1be139';
-                    else div.style.background = '#000000';
+            append: function() {
+                // Main text.
+                W.add('div', that.bodyDiv, {
+                    innerHTML: that.getText('mainText')
+                });
+
+                // Table.
+                W.add('div', that.bodyDiv, {
+                    innerHTML: makeTable()
+                });
+
+                // Info div.
+                infoDiv = W.add('div', that.bodyDiv);
+                W.add('p', infoDiv, {
+                    innerHTML: that.getText('bomb_numBoxes') +
+                               ' <span id="bomb_numBoxes">0</span>'
+                });
+
+                if (withPrize) {
+                    W.add('p', infoDiv, {
+                        innerHTML: that.getText('bomb_boxValue') +
+                        ': <span id="bomb_boxValue">' + boxValue + '</span>'
+                    });
+                    W.add('p', infoDiv, {
+                        innerHTML: that.getText('bomb_totalWin') +
+                        ': <span id="bomb_totalWin">0</span>'
+                    });
                 }
 
-            },
-            storeRef: false,
-            width: '100%'
-        });
+                W.add('p', infoDiv, { id: 'bomb_result' });
 
-        button = this.openBtn = W.add('button', this.bodyDiv, {
-            id: 'openBtn',
-            className: 'btn-danger'
-        });
+                // Slider.
+                slider = node.widgets.add('Slider', that.bodyDiv, {
+                    id: opts.id || 'bomb',
+                    min: 0,
+                    max: that.maxBoxes,
+                    hint: that.getText('bomb_sliderHint'),
+                    title: false,
+                    initialValue: 0,
+                    displayValue: false,
+                    displayNoChange: false,
+                    required: true,
+                    // texts: {
+                    //     currentValue: that.getText('sliderValue')
+                    // },
+                    onmove: function(value) {
+                        var i, div, c;
 
-        button.onclick = function() {
-            if (bombBox < 101) {
-                W.gid(String(bombBox-1)).style.background = '#fa0404';
+                        // Need to do until maxBoxes
+                        // in case we are reducing the value.
+                        for (i = 0; i < that.maxBoxes; i++) {
+                            if (value > 0) {
+                                // button.style.display = '';
+                                // W.gid('warn').style.display = 'none';
+                            }
+                            div = W.gid(String(i));
+                            if (value > i) div.style.background = '#1be139';
+                            else div.style.background = '#000000';
+                        }
+
+                        // Update display.
+                        W.gid('bomb_numBoxes').innerText = value;
+                        c = currency;
+                        if (withPrize) {
+                            W.gid('bomb_boxValue').innerText = boxValue + c;
+                            W.gid('bomb_totalWin').innerText =
+                                (value * boxValue) + c;
+                        }
+                    },
+                    storeRef: false,
+                    width: '100%'
+                });
+
+                button = that.openBtn = W.add('button', that.bodyDiv, {
+                    id: 'openBtn',
+                    className: 'btn-danger'
+                });
+
+                button.onclick = function() {
+                    var res;
+                    // Set global variables.
+                    finalValue = slider.getValues().value;
+                    isWinner = finalValue < bombBox;
+                    // Update display.
+                    if (bombBox < 101) {
+                        W.gid(String(bombBox-1)).style.background = '#fa0404';
+                    }
+                    slider.hide();
+                    W.hide(button);
+                    res = isWinner ? 'won' : 'lost';
+                    W.setInnerHTML('bomb_result', W.getText('bomb_' + res));
+                };
             }
-            slider.hide();
-            W.hide(button);
-            if (slider.getValues().value < bombBox) W.show('won');
-            else W.show('lost');
         };
-
-        return this;
     }
 
     // Helper methods.
@@ -432,16 +466,14 @@
     function makeBoxLine(j) {
         var i, out, id;
         out = '<tr>';
-
         for (i = 0; i < 10; i++) {
             id = j > 0 ? String(j) + String(i) : i;
             out = out + '<td>' +
             '<div class="square" id="' + id +
             '" style="height: 50px; width: 50px; background: black">' +
             '</td>';
-
-            if (i === 9) this.out = this.out + '</tr>';
         }
+        out += '</tr>';
         return out;
     }
 
@@ -451,10 +483,9 @@
         //k=l;
         for (j = 0; j < 10; j++) {
             out = out + makeBoxLine(j);
-            if (j === 9) this.out = this.out + '</table><br>';
         }
+        out += '</table><br>';
         return out;
     }
-
 
 })(node);
