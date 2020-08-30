@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    RiskGauge.version = '0.6.0';
+    RiskGauge.version = '0.7.0';
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences with different methods.';
 
@@ -33,19 +33,39 @@
             'contains two lotteries with different probabalities of winning. ' +
             'In each row, select the lottery you would rather take part in.',
 
-        // Risk Bomb.
+        // Bomb.
 
-        bomb_mainText:
-            'Below you see 100 black boxes. '+
-            'All boxes contain a prize.'+
-            'You have to decide how many boxes you want to open. You will ' +
-            'the sum of all prizes that were in the boxes you opened. ' +
-            '<strong>However, in one of these boxes there is a bomb.' +
-            '</strong> If you open the box with the bomb, you get nothing.' +
-            '<br><strong> How many boxes do you want to open?</strong><br>',
+        bomb_mainText: function(widget) {
+            var pr, str;
+            str =  'Below there are 100 black boxes. ';
+            str += 'All boxes contain a prize, but ';
+            pr = widget.probBomb;
+            if (pr === 1) {
+                str += 'one box contains a <em>bomb</em>.';
+            }
+            else {
+                if (widget.revealProbBomb) {
+                    str += 'with probability ' + pr +
+                    ' one of those boxes contains a <em>bomb</em>.';
+                }
+                else {
+                    str += 'one of those boxes might contain a <em>bomb</em>.';
+                }
+            }
+            str += 'You have to decide how many boxes you want to open. ';
+            if (widget.withPrize) {
+                str += '<br/><br/>You will receive a prize equal to the ' +
+                       'sum of all the prizes collected from every open box. ' +
+                       'However, if you open the box ' +
+                       'with the bomb, you get nothing. '
+            }
+            str += '<strong>How many boxes do ' +
+                   'you want to open?</strong><br/><br/>';
+            return str;
+        },
 
         bomb_sliderHint:
-            'Use the slider to change the number of boxes you want to open.',
+            'Move the slider below to change the number of boxes to open.',
 
         bomb_boxValue: 'Each box contains: ',
 
@@ -55,11 +75,11 @@
 
         bomb_openButton: 'Open Boxes',
 
-        bomb_warning: 'You have to open at least one box!',
+        bomb_warn: 'Open at least one box.',
 
-        bomb_won: 'You did not open the box with the bomb and won.',
+        bomb_won: 'You won! You did not open the box with the bomb.',
 
-        bomb_lost: 'You opened the box with the bomb and lost.'
+        bomb_lost: 'You lost! You opened the box with the bomb.'
     };
 
     // Backward compatibility.
@@ -314,21 +334,27 @@
 
         var finalValue;
 
+        var bombResult;
+
+        // TODO: add opt.
+        this.revealProbBomb = true;
+
         // The value of each box.
         var boxValue;
         boxValue = opts.boxValue || 1;
 
         // Probability that there is one bomb (default 1).
-        if ('undefined' !== typeof opts.propBomb) {
-            if (false === J.isNumber(opts.propBomb, 0, 1, true)) {
-                throw new TypeError('BombRisk.init: propBomb must be number ' +
-                                    'or undefined. Found: ' + opts.propBomb);
+        if ('undefined' !== typeof opts.probBomb) {
+            if (false === J.isNumber(opts.probBomb, 0, 1, true)) {
+                throw new TypeError('BombRisk.init: probBomb must be number ' +
+                                    'or undefined. Found: ' + opts.probBomb);
             }
-            this.propBomb = opts.propBomb;
+            this.probBomb = opts.probBomb;
         }
         else {
-            this.propBomb = 1;
+            this.probBomb = 1;
         }
+        prBomb = this.probBomb;
 
         // Maxi number of boxes to open (default 99 if probBomb = 1, else 100).
         if ('undefined' !== typeof opts.maxBoxes) {
@@ -344,7 +370,7 @@
         }
 
         // Is there going to be an actual prize for it?
-        withPrize = 'undefined' === typeof opts.withPrize ?
+        that.withPrize = withPrize = 'undefined' === typeof opts.withPrize ?
             true : !!opts.withPrize;
 
         // Pick bomb box id, if probability permits it, else set to 101.
@@ -386,6 +412,7 @@
                     initialValue: 0,
                     displayValue: false,
                     displayNoChange: false,
+                    type: 'flat',
                     required: true,
                     // texts: {
                     //     currentValue: that.getText('sliderValue')
@@ -393,14 +420,19 @@
                     onmove: function(value) {
                         var i, div, c;
 
+                        if (value > 0) {
+                            button.disabled = false;
+                            bombResult.innerHTML = '';
+                        }
+                        else {
+                            bombResult.innerHTML = that.getText('bomb_warn');
+                            button.disabled = true;
+                        }
+
                         // Need to do until maxBoxes
                         // in case we are reducing the value.
                         for (i = 0; i < that.maxBoxes; i++) {
-                            if (value > 0) {
-                                // button.style.display = '';
-                                // W.gid('warn').style.display = 'none';
-                            }
-                            div = W.gid(String(i));
+                            div = W.gid(getBoxId(i));
                             if (value > i) div.style.background = '#1be139';
                             else div.style.background = '#000000';
                         }
@@ -417,8 +449,6 @@
                     storeRef: false,
                     width: '100%'
                 });
-
-
 
                 // Info div.
                 infoDiv = W.add('div', that.bodyDiv);
@@ -438,7 +468,7 @@
                     });
                 }
 
-                W.add('p', infoDiv, { id: 'bomb_result' });
+                bombResult = W.add('p', infoDiv, { id: 'bomb_result' });
 
                 button = W.add('button', that.bodyDiv, {
                     className: 'btn-danger',
@@ -446,34 +476,39 @@
                 });
 
                 button.onclick = function() {
-                    var res;
+                    var cl;
                     // Set global variables.
                     finalValue = slider.getValues().value;
                     isWinner = finalValue < bombBox;
-                    // Update display.
+                    // Update table.
                     if (bombBox < 101) {
-                        W.gid(String(bombBox-1)).style.background = '#fa0404';
+                        W.gid(getBoxId(bombBox)).style.background = '#fa0404';
                     }
+                    // Hide slider and button
                     slider.hide();
                     W.hide(button);
-                    res = isWinner ? 'won' : 'lost';
-                    W.setInnerHTML('bomb_result', that.getText('bomb_' + res));
+                    // Give feedback.
+                    cl = 'bomb_' + (isWinner ? 'won' : 'lost');
+                    bombResult.innerHTML = that.getText(cl);
+                    bombResult.className += (' ' + cl);
                 };
             }
         };
     }
 
-    // Helper methods.
+    // ### Helper methods.
 
-    function makeBoxLine(j) {
-        var i, out, id;
+    // Returns the Bomb Box Id in the HTML from its index.
+    function getBoxId(i) {
+        return 'bc_' + i;
+    }
+
+    function makeBoxRow(j) {
+        var i, out;
         out = '<tr>';
         for (i = 0; i < 10; i++) {
-            id = j > 0 ? String(j) + String(i) : i;
-            out = out + '<td>' +
-            '<div class="square" id="' + id +
-            '" style="height: 50px; width: 50px; background: black">' +
-            '</td>';
+            out = out + '<td><div class="bomb-box square" id="' +
+            getBoxId(i + (10*j)) + '"></td>';
         }
         out += '</tr>';
         return out;
@@ -481,10 +516,9 @@
 
     function makeTable() {
         var j, out;
-        out = '<table style="width:60%; margin-left:20%; margin-right:20%">';
-        //k=l;
+        out = '<table class="bomb-table">';
         for (j = 0; j < 10; j++) {
-            out = out + makeBoxLine(j);
+            out = out + makeBoxRow(j);
         }
         out += '</table><br>';
         return out;
