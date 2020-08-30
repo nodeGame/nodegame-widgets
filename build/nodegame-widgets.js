@@ -16514,9 +16514,9 @@
 
         bomb_warning: 'You have to open at least one box!',
 
-        bomb_win: 'You did not open the box with the bomb and won.',
+        bomb_won: 'You did not open the box with the bomb and won.',
 
-        bomb_lose: 'You opened the box with the bomb and lost.'
+        bomb_lost: 'You opened the box with the bomb and lost.'
     };
 
     // Backward compatibility.
@@ -16825,33 +16825,13 @@
             append: function() {
                 // Main text.
                 W.add('div', that.bodyDiv, {
-                    innerHTML: that.getText('mainText')
+                    innerHTML: that.getText('bomb_mainText')
                 });
 
                 // Table.
                 W.add('div', that.bodyDiv, {
                     innerHTML: makeTable()
                 });
-
-                // Info div.
-                infoDiv = W.add('div', that.bodyDiv);
-                W.add('p', infoDiv, {
-                    innerHTML: that.getText('bomb_numBoxes') +
-                               ' <span id="bomb_numBoxes">0</span>'
-                });
-
-                if (withPrize) {
-                    W.add('p', infoDiv, {
-                        innerHTML: that.getText('bomb_boxValue') +
-                        ': <span id="bomb_boxValue">' + boxValue + '</span>'
-                    });
-                    W.add('p', infoDiv, {
-                        innerHTML: that.getText('bomb_totalWin') +
-                        ': <span id="bomb_totalWin">0</span>'
-                    });
-                }
-
-                W.add('p', infoDiv, { id: 'bomb_result' });
 
                 // Slider.
                 slider = node.widgets.add('Slider', that.bodyDiv, {
@@ -16868,8 +16848,10 @@
                     //     currentValue: that.getText('sliderValue')
                     // },
                     onmove: function(value) {
-                        var i, div;
-                        // Need to do until maxBoxes in case we are reducing the value.
+                        var i, div, c;
+
+                        // Need to do until maxBoxes
+                        // in case we are reducing the value.
                         for (i = 0; i < that.maxBoxes; i++) {
                             if (value > 0) {
                                 // button.style.display = '';
@@ -16882,20 +16864,42 @@
 
                         // Update display.
                         W.gid('bomb_numBoxes').innerText = value;
-
+                        c = currency;
                         if (withPrize) {
-                            W.gid('bomb_boxValue').innerText = (boxValue + currency);
+                            W.gid('bomb_boxValue').innerText = boxValue + c;
                             W.gid('bomb_totalWin').innerText =
-                                (value * boxValue) + currency;
+                                (value * boxValue) + c;
                         }
                     },
                     storeRef: false,
                     width: '100%'
                 });
 
-                button = that.openBtn = W.add('button', that.bodyDiv, {
-                    id: 'openBtn',
-                    className: 'btn-danger'
+
+
+                // Info div.
+                infoDiv = W.add('div', that.bodyDiv);
+                W.add('p', infoDiv, {
+                    innerHTML: that.getText('bomb_numBoxes') +
+                               ' <span id="bomb_numBoxes">0</span>'
+                });
+
+                if (withPrize) {
+                    W.add('p', infoDiv, {
+                        innerHTML: that.getText('bomb_boxValue') +
+                        ' <span id="bomb_boxValue">' + boxValue + '</span>'
+                    });
+                    W.add('p', infoDiv, {
+                        innerHTML: that.getText('bomb_totalWin') +
+                        ' <span id="bomb_totalWin">0</span>'
+                    });
+                }
+
+                W.add('p', infoDiv, { id: 'bomb_result' });
+
+                button = W.add('button', that.bodyDiv, {
+                    className: 'btn-danger',
+                    innerHTML: that.getText('bomb_openButton')
                 });
 
                 button.onclick = function() {
@@ -16910,7 +16914,7 @@
                     slider.hide();
                     W.hide(button);
                     res = isWinner ? 'won' : 'lost';
-                    W.setInnerHTML('bomb_result', W.getText('bomb_' + res));
+                    W.setInnerHTML('bomb_result', that.getText('bomb_' + res));
                 };
             }
         };

@@ -57,9 +57,9 @@
 
         bomb_warning: 'You have to open at least one box!',
 
-        bomb_win: 'You did not open the box with the bomb and won.',
+        bomb_won: 'You did not open the box with the bomb and won.',
 
-        bomb_lose: 'You opened the box with the bomb and lost.'
+        bomb_lost: 'You opened the box with the bomb and lost.'
     };
 
     // Backward compatibility.
@@ -368,33 +368,13 @@
             append: function() {
                 // Main text.
                 W.add('div', that.bodyDiv, {
-                    innerHTML: that.getText('mainText')
+                    innerHTML: that.getText('bomb_mainText')
                 });
 
                 // Table.
                 W.add('div', that.bodyDiv, {
                     innerHTML: makeTable()
                 });
-
-                // Info div.
-                infoDiv = W.add('div', that.bodyDiv);
-                W.add('p', infoDiv, {
-                    innerHTML: that.getText('bomb_numBoxes') +
-                               ' <span id="bomb_numBoxes">0</span>'
-                });
-
-                if (withPrize) {
-                    W.add('p', infoDiv, {
-                        innerHTML: that.getText('bomb_boxValue') +
-                        ': <span id="bomb_boxValue">' + boxValue + '</span>'
-                    });
-                    W.add('p', infoDiv, {
-                        innerHTML: that.getText('bomb_totalWin') +
-                        ': <span id="bomb_totalWin">0</span>'
-                    });
-                }
-
-                W.add('p', infoDiv, { id: 'bomb_result' });
 
                 // Slider.
                 slider = node.widgets.add('Slider', that.bodyDiv, {
@@ -438,9 +418,31 @@
                     width: '100%'
                 });
 
-                button = that.openBtn = W.add('button', that.bodyDiv, {
-                    id: 'openBtn',
-                    className: 'btn-danger'
+
+
+                // Info div.
+                infoDiv = W.add('div', that.bodyDiv);
+                W.add('p', infoDiv, {
+                    innerHTML: that.getText('bomb_numBoxes') +
+                               ' <span id="bomb_numBoxes">0</span>'
+                });
+
+                if (withPrize) {
+                    W.add('p', infoDiv, {
+                        innerHTML: that.getText('bomb_boxValue') +
+                        ' <span id="bomb_boxValue">' + boxValue + '</span>'
+                    });
+                    W.add('p', infoDiv, {
+                        innerHTML: that.getText('bomb_totalWin') +
+                        ' <span id="bomb_totalWin">0</span>'
+                    });
+                }
+
+                W.add('p', infoDiv, { id: 'bomb_result' });
+
+                button = W.add('button', that.bodyDiv, {
+                    className: 'btn-danger',
+                    innerHTML: that.getText('bomb_openButton')
                 });
 
                 button.onclick = function() {
@@ -455,7 +457,7 @@
                     slider.hide();
                     W.hide(button);
                     res = isWinner ? 'won' : 'lost';
-                    W.setInnerHTML('bomb_result', W.getText('bomb_' + res));
+                    W.setInnerHTML('bomb_result', that.getText('bomb_' + res));
                 };
             }
         };
