@@ -16524,11 +16524,11 @@
         bomb_sliderHint:
             'Move the slider below to change the number of boxes to open.',
 
-        bomb_boxValue: 'Each box contains: ',
+        bomb_boxValue: 'Prize in each box: ',
 
         bomb_numBoxes: ' Number of boxes to open: ',
 
-        bomb_totalWin: ' You can win: ',
+        bomb_totalWin: ' Total potential win: ',
 
         bomb_openButton: 'Open Boxes',
 
@@ -17452,7 +17452,7 @@
 
         return {
             value: value,
-            noChange: nochange,
+            noChange: !!nochange,
             initialValue: this.initialValue,
             totalMove: this.totalMove,
             isCorrect: res,
