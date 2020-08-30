@@ -361,7 +361,6 @@
             this.onmove = opts.onmove;
         }
 
-        //TODO: not working
         if (opts.width) {
             if ('string' !== typeof opts.width) {
                 throw new TypeError(e + 'width must be string or ' +
@@ -466,7 +465,7 @@
 
         return {
             value: value,
-            noChange: nochange,
+            noChange: !!nochange,
             initialValue: this.initialValue,
             totalMove: this.totalMove,
             isCorrect: res,
@@ -474,5 +473,10 @@
         };
     };
 
+    Slider.prototype.setValues = function(opts) {
+        opts = opts || {};
+        this.slider.value = opts.value;
+        this.slider.oninput();
+    };
 
 })(node);

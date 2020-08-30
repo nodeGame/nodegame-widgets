@@ -379,7 +379,9 @@
 
         // Return widget-like object.
         return {
-            setValues: function() { },
+            setValues: function(opts) {
+                slider.setValues(opts);
+            },
             getValues: function() {
                 var out;
                 out = {

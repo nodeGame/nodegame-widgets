@@ -16836,7 +16836,9 @@
 
         // Return widget-like object.
         return {
-            setValues: function() { },
+            setValues: function(opts) {
+                slider.setValues(opts);
+            },
             getValues: function() {
                 var out;
                 out = {
@@ -17346,7 +17348,6 @@
             this.onmove = opts.onmove;
         }
 
-        //TODO: not working
         if (opts.width) {
             if ('string' !== typeof opts.width) {
                 throw new TypeError(e + 'width must be string or ' +
@@ -17459,6 +17460,11 @@
         };
     };
 
+    Slider.prototype.setValues = function(opts) {
+        opts = opts || {};
+        this.slider.value = opts.value;
+        this.slider.oninput();
+    };
 
 })(node);
 
