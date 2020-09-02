@@ -16818,6 +16818,10 @@
 
         // Public variables.
 
+        // Store locally because they are overwritten. TODO: check if needed.
+        this._highlight = this.highlight;
+        this._unhighlight = this.unhighlight;
+
         // The value of each box. Default 0.01.
         if ('undefined' !== typeof opts.boxValue) {
             this.boxValue = J.isNumber(opts.boxValue, 0);
@@ -16863,21 +16867,46 @@
                 slider.setValues(opts);
             },
 
-            getValues: function() {
-                var out, values;
+            getValues: function(opts) {
+                var out, values, nb, ic;
+                opts = opts || {};
                 values = slider.getValues();
+                // We use finalValue, because values.value might be manipulated.
+                if ('undefined' !== typeof finalValue) {
+                    nb = finalValue;
+                    ic = true
+                }
+                else {
+                    // TODO: slider.getValues returns non-integers. Check.
+                    nb = parseInt(slider.slider.value, 10);
+                    ic = false;
+                }
                 out = {
-                    isCorrect: 'undefined' !== typeof finalValue,
-                    nBoxes: values.value,
+                    isCorrect: ic,
+                    nBoxes: nb,
                     totalMove: values.totalMove,
                     isWinner: isWinner,
                     time: values.time,
                     payment: 0
                 };
-                // We use finalValue, because values.value might be manipulated.
+                if (!out.isCorrect &&
+                    ('undefined' === typeof opts.highlight || opts.highlight)) {
+
+                        slider.highlight();
+                }
                 if (isWinner === true) out.payment = finalValue * that.boxValue;
                 return out;
             },
+
+            highlight: function() {
+                slider.highlight();
+            },
+
+            unhighlight: function() {
+                slider.unhighlight();
+            },
+
+            // slider: slider,
 
             append: function() {
 
@@ -16908,6 +16937,10 @@
                     // },
                     onmove: function(value) {
                         var i, div, c, v;
+
+                        // TODO: not working.
+                        // if (that.isHighlighted()) that._unhighlight();
+                        that._unhighlight();
 
                         if (value > 0) {
                             button.disabled = false;
@@ -16968,7 +17001,8 @@
                 button.onclick = function() {
                     var cl;
                     // Set global variables.
-                    finalValue = slider.getValues().value;
+                    // slider.getValues().value fails (no int numbers).
+                    finalValue = parseInt(slider.slider.value, 10),
                     isWinner = finalValue < bombBox;
                     // Update table.
                     if (bombBox < 101) {
