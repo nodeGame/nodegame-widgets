@@ -16515,9 +16515,8 @@
             if (widget.withPrize) {
                 str += 'You will receive a prize equal to the ' +
                        'sum of all the prizes collected from every opened ' +
-                       'box. However, if you open ';
-                str += probBomb === 1 ? 'the' : 'a';
-                str += ' box with the bomb, you get nothing. '
+                       'box. However, if you open the box ' +
+                       'with the bomb, you get nothing. '
             }
             str += '<strong>How many boxes do ' +
                    'you want to open?</strong><br/><br/>';
@@ -16777,17 +16776,6 @@
 
         // Probability that there is a bomb. Default 1.
         var probBomb;
-        if ('undefined' !== typeof opts.probBomb) {
-            if (false === J.isNumber(opts.probBomb, 0, 1, true, true)) {
-                throw new Error('Bomb.init: probBomb must be a number ' +
-                                'between 0 and 1 or undefined. Found: ' +
-                                opts.probBomb);
-            }
-            probBomb = opts.probBomb;
-        }
-        else {
-            probBomb = 1;
-        }
 
         // The index of the box with the bomb (0-100), or 101 if no bomb.
         var bombBox;
@@ -16810,12 +16798,29 @@
         // Holds the final number of boxes opened after clicking the button.
         var finalValue;
 
+        // Init private variables.
+
+        if ('undefined' !== typeof opts.probBomb) {
+            if (false === J.isNumber(opts.probBomb, 0, 1, true, true)) {
+                throw new Error('Bomb.init: probBomb must be a number ' +
+                'between 0 and 1 or undefined. Found: ' +
+                opts.probBomb);
+            }
+            probBomb = opts.probBomb;
+        }
+        else {
+            probBomb = 1;
+        }
+
+        // Pick bomb box id, if probability permits it, else set to 101.
+        bombBox = Math.random() >= probBomb ?
+            101 : Math.ceil(Math.random() * 100);
 
         // Public variables.
 
-        // The value of each box. Default 1.
+        // The value of each box. Default 0.01.
         if ('undefined' !== typeof opts.boxValue) {
-            this.boxValue = J.isInt(opts.boxValue, 0);
+            this.boxValue = J.isNumber(opts.boxValue, 0);
             if (!this.boxValue) {
                 throw new TypeError('Bomb.init: boxValue must be an ' +
                                     'a number > 0 or undefined. Found: ' +
@@ -16823,7 +16828,7 @@
             }
         }
         else {
-            this.boxValue = 1;
+            this.boxValue = 0.01;
         }
 
         // The currency of the prize. Default: USD.
@@ -16843,17 +16848,13 @@
             this.maxBoxes = opts.maxBoxes;
         }
         else {
-            this.maxBoxes = this.propBomb === 1 ? 99 : 100;
+            this.maxBoxes = probBomb === 1 ? 99 : 100;
         }
 
         // If TRUE, there is an actual prize for the participant. Default: TRUE.
         this.withPrize = 'undefined' === typeof opts.withPrize ?
                          true : !!opts.withPrize;
 
-
-        // Pick bomb box id, if probability permits it, else set to 101.
-        bombBox = (probBomb === 0 || Math.random() <= probBomb) ? 101 :
-            Math.ceil(Math.random()*100);
 
         // Return widget-like object.
         return {
@@ -16931,7 +16932,8 @@
                         v = that.boxValue;
                         if (that.withPrize) {
                             W.gid('bomb_boxValue').innerText = v + c;
-                            W.gid('bomb_totalWin').innerText = (value * v) + c;
+                            W.gid('bomb_totalWin').innerText =
+                                Number((value * v)).toFixed(2) + c;
                         }
                     },
                     storeRef: false,
