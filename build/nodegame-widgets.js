@@ -16906,7 +16906,7 @@
                 slider.unhighlight();
             },
 
-            // slider: slider,
+            slider: slider,
 
             append: function() {
 
@@ -17069,8 +17069,8 @@
 
     // ## Meta-data
 
-    Slider.version = '0.3.0';
-    Slider.description = 'Creates a configurable Slider ';
+    Slider.version = '0.4.0';
+    Slider.description = 'Creates a configurable slider';
 
     Slider.title = false;
     Slider.className = 'slider';
@@ -17222,6 +17222,12 @@
          */
         this.type = 'volume';
 
+        /** Slider.hoverColor
+         *
+         * The color of the slider on mouse over
+         */
+        this.hoverColor = '#2076ea';
+
         /** Slider.listener
          *
          * The main function listening for slider movement
@@ -17260,8 +17266,8 @@
                 }
 
                 if (that.displayValue) {
-                    that.valueSpan.innerHTML = that.getText('currentValue',
-                    that.slider.value);
+                    that.valueSpan.innerHTML =
+                        that.getText('currentValue', that.slider.value);
                 }
 
                 if (that.displayNoChange && noChange !== true) {
@@ -17420,6 +17426,14 @@
             }
             this.sliderWidth = opts.width;
         }
+
+        if (opts.hoverColor) {
+            if ('string' !== typeof opts.hoverColor) {
+                throw new TypeError(e + 'hoverColor must be string or ' +
+                                    'undefined. Found: ' + opts.hoverColor);
+            }
+            this.hoverColor = opts.hoverColor;
+        }
     };
 
     /**
@@ -17430,6 +17444,12 @@
      */
     Slider.prototype.append = function() {
         var container;
+
+        // The original color of the rangeFill container (default black)
+        // that is replaced upon highlighting.
+        // Need to do js onmouseover because ccs:hover does not work here.
+        var tmpColor;
+
         var that = this;
 
         // MainText.
@@ -17464,6 +17484,14 @@
             min: this.min,
             max: this.max
         });
+
+        this.slider.onmouseover = function() {
+            tmpColor = that.rangeFill.style.background || 'black';
+            that.rangeFill.style.background = that.hoverColor;
+        };
+        this.slider.onmouseout = function() {
+            that.rangeFill.style.background = tmpColor;
+        };
 
         if (this.sliderWidth) this.slider.style.width = this.sliderWidth;
 
