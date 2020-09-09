@@ -16495,7 +16495,8 @@
         // probBomb is passed as input param because it may be hidden.
         bomb_mainText: function(widget, probBomb) {
             var str;
-            str =  'Below there are 100 black boxes. ';
+            str = '<p style="margin-bottom: 0.3em">';
+            str +=  'Below there are 100 black boxes. ';
             str += 'Every box contains a prize of ' +
                     widget.boxValue + ' ' + widget.currency + ', but ';
             if (probBomb === 1) {
@@ -16510,27 +16511,29 @@
                     str += 'one of those boxes might contain a <em>bomb</em>.';
                 }
             }
-            str += '<br/><br/>You must decide how many boxes you want to open';
-            str += ', between 1 and ' + widget.maxBoxes + ' boxes.';
+            str += ' You must decide how many boxes you want to open.';
+            str += '</p>';
             if (widget.withPrize) {
-                str += 'You will receive a prize equal to the ' +
-                       'sum of all the prizes collected from every opened ' +
+                str += '<p style="margin-bottom: 0.3em">';
+                str += 'You will receive a reward equal to the ' +
+                       'sum of all the prizes in every opened ' +
                        'box. However, if you open the box ' +
-                       'with the bomb, you get nothing. '
+                       'with the bomb, you get nothing.</p>'
             }
-            str += '<strong>How many boxes do ' +
-                   'you want to open?</strong><br/><br/>';
+            str += '<p style="margin-bottom: 0.5em">';
+            str += '<strong>How many boxes do you want to open ';
+            str += 'between 1 and ' + widget.maxBoxes + '?</strong></p>';
             return str;
         },
 
         bomb_sliderHint:
             'Move the slider below to change the number of boxes to open.',
 
-        bomb_boxValue: 'Prize in each box: ',
+        bomb_boxValue: 'Prize per box: ',
 
-        bomb_numBoxes: ' Number of boxes to open: ',
+        bomb_numBoxes: 'Number of boxes: ',
 
-        bomb_totalWin: ' Total potential win: ',
+        bomb_totalWin: 'Total reward: ',
 
         bomb_openButton: 'Open Boxes',
 
@@ -16798,7 +16801,18 @@
         // Holds the final number of boxes opened after clicking the button.
         var finalValue;
 
+
         // Init private variables.
+
+        // The height of every box in px (default: 30px in css).
+        if (opts.boxHeight) {
+            if ('string' !== typeof opts.boxHeight) {
+                throw new Error('Bomb.init: boxHeight must be string ' +
+                                'or undefined. Found: ' + opts.boxHeight);
+            }
+            W.cssRule('div.riskgauge .bomb-box { height: ' +
+                      opts.boxHeight + '}');
+        }
 
         if ('undefined' !== typeof opts.probBomb) {
             if (false === J.isNumber(opts.probBomb, 0, 1, true, true)) {
@@ -16906,7 +16920,7 @@
                 slider.unhighlight();
             },
 
-            slider: slider,
+            // slider: slider,
 
             append: function() {
 
@@ -16943,10 +16957,12 @@
                         that._unhighlight();
 
                         if (value > 0) {
+                            button.style.display = '';
                             button.disabled = false;
                             bombResult.innerHTML = '';
                         }
                         else {
+                            button.style.display = 'none';
                             bombResult.innerHTML = that.getText('bomb_warn');
                             button.disabled = true;
                         }
@@ -16974,20 +16990,24 @@
                 });
 
                 // Info div.
-                infoDiv = W.add('div', that.bodyDiv);
+                infoDiv = W.add('div', that.bodyDiv, {
+                    className: 'risk-info',
+                });
+
                 W.add('p', infoDiv, {
                     innerHTML: that.getText('bomb_numBoxes') +
-                               ' <span id="bomb_numBoxes">0</span>'
+                               '&nbsp;<span id="bomb_numBoxes">0</span>'
                 });
 
                 if (that.withPrize) {
                     W.add('p', infoDiv, {
                         innerHTML: that.getText('bomb_boxValue') +
-                        ' <span id="bomb_boxValue">' + this.boxValue + '</span>'
+                        '&nbsp;<span id="bomb_boxValue">' +
+                        this.boxValue + '</span>'
                     });
                     W.add('p', infoDiv, {
                         innerHTML: that.getText('bomb_totalWin') +
-                        ' <span id="bomb_totalWin">0</span>'
+                        '&nbsp;<span id="bomb_totalWin">0</span>'
                     });
                 }
 
@@ -16995,8 +17015,10 @@
 
                 button = W.add('button', that.bodyDiv, {
                     className: 'btn-danger',
-                    innerHTML: that.getText('bomb_openButton')
+                    innerHTML: that.getText('bomb_openButton'),
                 });
+                // Initially hidden.
+                button.style.display = 'none';
 
                 button.onclick = function() {
                     var cl;
