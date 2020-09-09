@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 5.9.0
+- Slider changes color on mouse over (option hoverColor changes default).
+
 ## 5.8.2
 - Fixed bug Chat "is typing...".
 - Fixed bug ChoiceTable separator concatened with id matches separator.
