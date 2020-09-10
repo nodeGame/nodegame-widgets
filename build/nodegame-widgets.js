@@ -17926,7 +17926,7 @@
 
 /**
  * # VisualRound
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -17944,17 +17944,20 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.8.0';
-    VisualRound.description = 'Display number of current round and/or stage.' +
-        'Can also display countdown and total number of rounds and/or stages.';
+    VisualRound.version = '0.9.0';
+    VisualRound.description = 'Displays current/total/left round/stage/step. ';
 
     VisualRound.title = false;
     VisualRound.className = 'visualround';
 
-    VisualRound.texts.round = 'Round';
-    VisualRound.texts.stage = 'Stage';
-    VisualRound.texts.roundLeft = 'Round Left';
-    VisualRound.texts.stageLeft = 'Stage left';
+    VisualRound.texts = {
+        round: 'Round',
+        step: 'Step',
+        stage: 'Stage',
+        roundLeft: 'Rounds Left',
+        stepLeft: 'Steps Left',
+        stageLeft: 'Stages Left'
+    };
 
     // ## Dependencies
 
@@ -17981,9 +17984,6 @@
          * ### VisualRound.displayMode
          *
          * Object which determines what information is displayed
-         *
-         * Set through `VisualRound.setDisplayMode` using a string to describe
-         * the displayMode.
          *
          * @see VisualRound.setDisplayMode
          */
@@ -18199,10 +18199,13 @@
      * The following strings are valid display names:
      *
      * - `COUNT_UP_STAGES`: Display only current stage number.
+     * - `COUNT_UP_STEPS`: Display only current step number.
      * - `COUNT_UP_ROUNDS`: Display only current round number.
      * - `COUNT_UP_STAGES_TO_TOTAL`: Display current and total stage number.
+     * - `COUNT_UP_STEPS_TO_TOTAL`: Display current and total step number.
      * - `COUNT_UP_ROUNDS_TO_TOTAL`: Display current and total round number.
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
+     * - `COUNT_DOWN_STEPS`: Display number of steps left to play.
      * - `COUNT_DOWN_ROUNDS`: Display number of rounds left in this stage.
      *
      * @param {array|string} displayMode Array of strings representing the names
@@ -18246,6 +18249,15 @@
                 break;
             case 'COUNT_DOWN_STAGES':
                 displayModes.push(new CountDownStages(this));
+                break;
+            case 'COUNT_UP_STEPS_TO_TOTAL':
+                displayModes.push(new CountUpSteps(this, { toTotal: true }));
+                break;
+            case 'COUNT_UP_STEPS':
+                displayModes.push(new CountUpSteps(this));
+                break;
+            case 'COUNT_DOWN_STEPS':
+                displayModes.push(new CountDownSteps(this));
                 break;
             case 'COUNT_UP_ROUNDS_TO_TOTAL':
                 displayModes.push(new CountUpRounds(this, { toTotal: true }));
@@ -18337,7 +18349,7 @@
      * @see VisualRound.updateDisplay
      */
     VisualRound.prototype.updateInformation = function() {
-        var stage, len;
+        var stage, len, tmp;
 
         stage = node.player.stage;
 
@@ -18367,7 +18379,10 @@
                     this.gamePlot.normalizeGameStage(stage).stage;
             }
             this.curRound = stage.round;
-            this.totRound = this.stager.sequence[this.curStage -1].num || 1;
+            tmp = this.stager.sequence[this.curStage -1];
+            this.totRound = tmp.num || 1;
+            this.totStep = tmp.steps.length;
+            this.curStep = stage.step;
             this.curStage -= this.stageOffset;
             len = this.stager.sequence.length;
             this.totStage = len - this.totStageOffset;
@@ -18384,7 +18399,7 @@
      *
      * Arranges the relative position of the various elements of VisualRound
      *
-     * @param {string} layout. Admitted values:
+     * @param {string} layout. Valid options:
      *   - 'vertical' (alias: 'multimode_vertical')
      *   - 'horizontal'
      *   - 'multimode_horizontal'
@@ -18404,10 +18419,7 @@
     /**
      * # CountUpStages
      *
-     * Copyright(c) 2017 Stefano Balietti
-     * MIT Licensed
-     *
-     * Display mode for `VisualRound` which with current/total number of stages
+     * Display current/total number of stages
      */
 
     /**
@@ -18422,64 +18434,13 @@
      * @param {object} options Optional. Configuration options.
      *   If `options.toTotal == true`, then the total number of stages is
      *   displayed
-     *
-     * @see VisualRound
      */
     function CountUpStages(visualRound, options) {
-
         generalConstructor(this, visualRound, 'COUNT_UP_STAGES', options);
-
-        /**
-         * ### CountUpStages.curStageNumber
-         *
-         * The span in which the current stage number is displayed
-         */
-        this.curStageNumber = null;
-
-        /**
-         * ### CountUpStages.totStageNumber
-         *
-         * The span in which the total stage number is displayed
-         */
-        this.totStageNumber = null;
-
-        /**
-         * ### CountUpStages.displayDiv
-         *
-         * The span in which the text ` of ` is displayed
-         */
-        this.textDiv = null;
-
-        // Inits it!
-        this.init();
+        generalInit(this, 'stagediv', this.visualRound.getText('stage'));
     }
 
     // ## CountUpStages methods
-
-    /**
-     * ### CountUpStages.init
-     *
-     * Initializes the instance
-     *
-     * @see CountUpStages.updateDisplay
-     */
-    CountUpStages.prototype.init = function() {
-        generalInit(this, 'stagediv', this.visualRound.getText('stage'));
-
-        this.curStageNumber = W.append('span', this.contentDiv, {
-            className: 'number'
-        });
-        if (this.options.toTotal) {
-            this.textDiv = W.append('span', this.contentDiv, {
-                className: 'text',
-                innerHTML: this.visualRound.separator
-            });
-            this.totStageNumber = W.append('span', this.contentDiv, {
-                className: 'number'
-            });
-        }
-        this.updateDisplay();
-    };
 
     /**
      * ### CountUpStages.updateDisplay
@@ -18487,21 +18448,14 @@
      * Updates the content of `curStageNumber` and `totStageNumber`
      *
      * Values are updated according to the state of `visualRound`.
-     *
-     * @see VisualRound.updateDisplay
      */
     CountUpStages.prototype.updateDisplay = function() {
-        this.curStageNumber.innerHTML = this.visualRound.curStage;
-        if (this.options.toTotal) {
-            this.totStageNumber.innerHTML = this.visualRound.totStage || '?';
-        }
+        this.current.innerHTML = this.visualRound.curStage;
+        if (this.total) this.total.innerHTML = this.visualRound.totStage || '?';
     };
 
    /**
      * # CountDownStages
-     *
-     * Copyright(c) 2017 Stefano Balietti
-     * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the remaining
      * number of stages
@@ -18515,66 +18469,104 @@
      * @param {VisualRound} visualRound The `VisualRound` object to which the
      *   displayMode belongs.
      * @param {object} options Optional. Configuration options
-     *
-     * @see VisualRound
      */
     function CountDownStages(visualRound, options) {
-
         generalConstructor(this, visualRound, 'COUNT_DOWN_STAGES', options);
-
-        /**
-         * ### CountDownStages.stagesLeft
-         *
-         * The DIV in which the number stages left is displayed
-         */
-        this.stagesLeft = null;
-
-        this.init();
+        generalInit(this, 'stagediv', visualRound.getText('stageLeft'));
     }
 
     // ## CountDownStages methods
 
     /**
-     * ### CountDownStages.init
-     *
-     * Initializes the instance
-     *
-     * @see CountDownStages.updateDisplay
-     */
-    CountDownStages.prototype.init = function() {
-        generalInit(this, 'stagediv', this.visualRound.getText('stageLeft'));
-        this.stagesLeft = W.add('div', this.contentDiv, {
-            className: 'number'
-        });
-        this.updateDisplay();
-    };
-
-    /**
      * ### CountDownStages.updateDisplay
      *
      * Updates the content of `stagesLeft` according to `visualRound`
-     *
-     * @see VisualRound.updateDisplay
      */
     CountDownStages.prototype.updateDisplay = function() {
         var v;
         v = this.visualRound;
         if (v.totStage === v.curStage) {
-            this.stagesLeft.innerHTML = 0;
+            this.current.innerHTML = 0;
         }
         else {
-            this.stagesLeft.innerHTML = (v.totStage - v.curStage) || '?';
+            this.current.innerHTML = (v.totStage - v.curStage) || '?';
         }
+    };
+
+    /**
+      * # CountUpSteps
+      *
+      * Displays the current/total number of steps
+      */
+
+    /**
+     * ## CountUpSteps constructor
+     *
+     * DisplayMode which displays the current number of stages
+     *
+     * Can be constructed to furthermore display the total number of stages.
+     *
+     * @param {VisualRound} visualRound The `VisualRound` object to which the
+     *   displayMode belongs
+     * @param {object} options Optional. Configuration options.
+     *   If `options.toTotal == true`, then the total number of stages is
+     *   displayed
+     */
+    function CountUpSteps(visualRound, options) {
+        generalConstructor(this, visualRound, 'COUNT_UP_STEPS', options);
+        generalInit(this, 'stepdiv', this.visualRound.getText('step'));
+    }
+
+    /**
+     * ### CountUpSteps.updateDisplay
+     *
+     * Updates the content of `curStageNumber` and `totStageNumber`
+     *
+     * Values are updated according to the state of `visualRound`.
+     */
+    CountUpSteps.prototype.updateDisplay = function() {
+        this.current.innerHTML = this.visualRound.curStage;
+        if (this.total) this.total.innerHTML = this.visualRound.totStage || '?';
+    };
+
+   /**
+     * # CountDownSteps
+     *
+     * DisplayMode which displays the remaining number of steps
+     */
+
+    /**
+     * ## CountDownStages constructor
+     *
+     * Display mode which displays the remaining number of steps
+     *
+     * @param {VisualRound} visualRound The `VisualRound` object to which the
+     *   displayMode belongs.
+     * @param {object} options Optional. Configuration options
+     */
+    function CountDownSteps(visualRound, options) {
+        generalConstructor(this, visualRound, 'COUNT_DOWN_STEPS', options);
+        generalInit(this, 'stepdiv', this.visualRound.getText('stepLeft'));
+    }
+
+    // ## CountDownSteps methods
+
+    /**
+     * ### CountDownSteps.updateDisplay
+     *
+     * Updates the content of `stagesLeft` according to `visualRound`
+     */
+    CountDownSteps.prototype.updateDisplay = function() {
+        var v;
+        v = this.visualRound;
+        if (v.totStep === v.curStep) this.current.innerHTML = 0;
+        else this.current.innerHTML = (v.totStep - v.curStep) || '?';
     };
 
    /**
      * # CountUpRounds
      *
-     * Copyright(c) 2017 Stefano Balietti
-     * MIT Licensed
-     *
-     * Defines a displayMode for the `VisualRound` which displays the current
-     * and possibly the total number of rounds
+     * Displays the current and possibly the total number of rounds
      */
 
     /**
@@ -18588,61 +18580,15 @@
      *   displayMode belongs
      * @param {object} options Optional. Configuration options. If
      *   `options.toTotal == true`, then the total number of rounds is displayed
-     *
-     * @see VisualRound
      */
     function CountUpRounds(visualRound, options) {
 
         generalConstructor(this, visualRound, 'COUNT_UP_ROUNDS', options);
 
-        /**
-         * ### CountUpRounds.curRoundNumber
-         *
-         * The span in which the current round number is displayed
-         */
-        this.curRoundNumber = null;
-
-        /**
-         * ### CountUpRounds.totRoundNumber
-         *
-         * The element in which the total round number is displayed
-         */
-        this.totRoundNumber = null;
-
-        this.init();
+        generalInit(this, 'rounddiv', visualRound.getText('round'));
     }
 
     // ## CountUpRounds methods
-
-    /**
-     * ### CountUpRounds.init
-     *
-     * Initializes the instance
-     *
-     * @param {object} options Optional. Configuration options. If
-     *   `options.toTotal == true`, then the total number of rounds is displayed
-     *
-     * @see CountUpRounds.updateDisplay
-     */
-    CountUpRounds.prototype.init = function() {
-
-        generalInit(this, 'rounddiv', this.visualRound.getText('round'));
-
-        this.curRoundNumber = W.add('span', this.contentDiv, {
-            className: 'number'
-        });
-        if (this.options.toTotal) {
-            this.textDiv = W.add('span', this.contentDiv, {
-                className: 'text',
-                innerHTML: this.visualRound.separator
-            });
-
-            this.totRoundNumber = W.add('span', this.contentDiv,  {
-                className: 'number'
-            });
-        }
-        this.updateDisplay();
-    };
 
     /**
      * ### CountUpRounds.updateDisplay
@@ -18650,18 +18596,15 @@
      * Updates the content of `curRoundNumber` and `totRoundNumber`
      *
      * Values are updated according to the state of `visualRound`.
-     *
-     * @see VisualRound.updateDisplay
      */
     CountUpRounds.prototype.updateDisplay = function() {
         if (this.options.ifNotOne && this.visualRound.totRound === 1) {
             this.displayDiv.style.display = 'none';
         }
         else {
-            this.curRoundNumber.innerHTML = this.visualRound.curRound;
-            if (this.options.toTotal) {
-                this.totRoundNumber.innerHTML =
-                    this.visualRound.totRound || '?';
+            this.current.innerHTML = this.visualRound.curRound;
+            if (this.total) {
+                this.total.innerHTML = this.visualRound.totRound || '?';
             }
             this.displayDiv.style.display = '';
         }
@@ -18671,11 +18614,7 @@
    /**
      * # CountDownRounds
      *
-     * Copyright(c) 2017 Stefano Balietti
-     * MIT Licensed
-     *
-     * Defines a displayMode for the `VisualRound` which displays the remaining
-     * number of rounds
+     * Displays the remaining number of rounds
      */
 
     /**
@@ -18686,64 +18625,32 @@
      * @param {VisualRound} visualRound The `VisualRound` object to which the
      *   displayMode belongs
      * @param {object} options Optional. Configuration options
-     *
-     * @see VisualRound
      */
     function CountDownRounds(visualRound, options) {
-
         generalConstructor(this, visualRound, 'COUNT_DOWN_ROUNDS', options);
-
-        /**
-         * ### CountDownRounds.roundsLeft
-         *
-         * The DIV in which the number rounds left is displayed
-         */
-        this.roundsLeft = null;
-
-        this.init();
+        generalInit(this, 'rounddiv', visualRound.getText('roundLeft'));
     }
 
     // ## CountDownRounds methods
 
     /**
-     * ### CountDownRounds.init
-     *
-     * Initializes the instance
-     *
-     * @see CountDownRounds.updateDisplay
-     */
-    CountDownRounds.prototype.init = function() {
-        generalInit(this, 'rounddiv', this.visualRound.getText('roundLeft'));
-
-        this.roundsLeft = W.add('div', this.displayDiv);
-        this.roundsLeft.className = 'number';
-
-        this.updateDisplay();
-    };
-
-    /**
      * ### CountDownRounds.updateDisplay
      *
      * Updates the content of `roundsLeft` according to `visualRound`
-     *
-     * @see VisualRound.updateDisplay
      */
     CountDownRounds.prototype.updateDisplay = function() {
         var v;
         v = this.visualRound;
         if (v.totRound === v.curRound) {
-            this.roundsLeft.innerHTML = 0;
+            this.current.innerHTML = 0;
         }
         else {
-            this.roundsLeft.innerHTML = (v.totRound - v.curRound) || '?';
+            this.current.innerHTML = (v.totRound - v.curRound) || '?';
         }
     };
 
     /**
      * # CompoundDisplayMode
-     *
-     * Copyright(c) 2017 Stefano Balietti
-     * MIT Licensed
      *
      * Defines a displayMode for the `VisualRound` which displays the
      * information according to multiple displayModes
@@ -18759,8 +18666,6 @@
      * @param {array} displayModes Array of displayModes to be used in
      *   combination
      * @param {object} options Optional. Configuration options
-     *
-     * @see VisualRound
      */
     function CompoundDisplayMode(visualRound, displayModes, options) {
 
@@ -18768,8 +18673,6 @@
          * ### CompoundDisplayMode.visualRound
          *
          * The `VisualRound` object to which the displayMode belongs
-         *
-         * @see VisualRound
          */
         this.visualRound = visualRound;
 
@@ -18815,7 +18718,7 @@
      *
      * @see CompoundDisplayMode.updateDisplay
      */
-     CompoundDisplayMode.prototype.init = function(options) {
+     CompoundDisplayMode.prototype.init = function() {
          var i, len;
          this.displayDiv = W.get('div');
          i = -1, len = this.displayModes.length;
@@ -18829,8 +18732,6 @@
      * ### CompoundDisplayMode.updateDisplay
      *
      * Calls `updateDisplay` for all displayModes in the combination
-     *
-     * @see VisualRound.updateDisplay
      */
     CompoundDisplayMode.prototype.updateDisplay = function() {
         var i, len;
@@ -18930,8 +18831,6 @@
          * #### visualRound
          *
          * The `VisualRound` object to which the displayMode belongs
-         *
-         * @see VisualRound
          */
         that.visualRound = visualRound;
 
@@ -18972,12 +18871,29 @@
         that.contentDiv = null;
 
         /**
+         * #### current
+         *
+         * The span in which the number (of rounds, steps, stages) is displayed
+         */
+        that.current = null;
+
+        /**
          * #### textDiv
          *
          * The span in which the text ` of ` is displayed
+         *
+         * It is created only if the display mode requires it
          */
         that.textDiv = null;
 
+        /**
+         * #### total
+         *
+         * The span in which the total number (of rounds, etc.) is displayed
+         *
+         * It is created only if the display mode requires it
+         */
+        that.total = null;
     }
 
     /**
@@ -18999,6 +18915,19 @@
         that.contentDiv = W.add('div', that.displayDiv, {
             className: 'content'
         });
+        that.current = W.append('span', that.contentDiv, {
+            className: 'number'
+        });
+        if (that.options.toTotal) {
+            that.textDiv = W.append('span', that.contentDiv, {
+                className: 'text',
+                innerHTML: that.visualRound.separator
+            });
+            that.total = W.append('span', that.contentDiv, {
+                className: 'number'
+            });
+        }
+        that.updateDisplay();
     }
 
 })(node);
