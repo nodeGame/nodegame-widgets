@@ -206,9 +206,11 @@
         if (this.options.flexibleMode) {
             this.curStage = this.options.curStage || 1;
             this.curStage -= this.options.stageOffset || 0;
+            this.curStep = this.options.curStep || 1;
             this.curRound = this.options.curRound || 1;
             this.totStage = this.options.totStage;
             this.totRound = this.options.totRound;
+            this.totStep = this.options.totStep;
             this.oldStageId = this.options.oldStageId;
         }
 
@@ -274,10 +276,14 @@
      *
      * - `COUNT_UP_STAGES`: Display only current stage number.
      * - `COUNT_UP_STEPS`: Display only current step number.
+     * - `COUNT_UP_STEPS_IFNOT1`: Skip stages with one step.
      * - `COUNT_UP_ROUNDS`: Display only current round number.
+     * - `COUNT_UP_ROUNDS_IFNOT1`: Skip stages with one round.
      * - `COUNT_UP_STAGES_TO_TOTAL`: Display current and total stage number.
-     * - `COUNT_UP_STEPS_TO_TOTAL`: Display current and total step number.
      * - `COUNT_UP_ROUNDS_TO_TOTAL`: Display current and total round number.
+     * - `COUNT_UP_STEPS_TO_TOTAL`: Display current and total step number.
+     * - `COUNT_UP_STEPS_TO_TOTAL_IFNOT1`: Skip stages with one step.
+     * - `COUNT_UP_ROUNDS_TO_TOTAL_IFNOT1`: Skip stages with one round.
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
      * - `COUNT_DOWN_STEPS`: Display number of steps left to play.
      * - `COUNT_DOWN_ROUNDS`: Display number of rounds left in this stage.
@@ -327,8 +333,17 @@
             case 'COUNT_UP_STEPS_TO_TOTAL':
                 displayModes.push(new CountUpSteps(this, { toTotal: true }));
                 break;
+            case 'COUNT_UP_STEPS_TO_TOTAL_IFNOT1':
+                displayModes.push(new CountUpSteps(this, {
+                    toTotal: true,
+                    ifNotOne: true
+                }));
+                break;
             case 'COUNT_UP_STEPS':
                 displayModes.push(new CountUpSteps(this));
+                break;
+            case 'COUNT_UP_STEPS_IFNOT1':
+                displayModes.push(new CountUpSteps(this, { ifNotOne: true }));
                 break;
             case 'COUNT_DOWN_STEPS':
                 displayModes.push(new CountDownSteps(this));
@@ -599,8 +614,16 @@
      * Values are updated according to the state of `visualRound`.
      */
     CountUpSteps.prototype.updateDisplay = function() {
-        this.current.innerHTML = this.visualRound.curStage;
-        if (this.total) this.total.innerHTML = this.visualRound.totStage || '?';
+        if (this.options.ifNotOne && this.visualRound.totStep === 1) {
+            this.displayDiv.style.display = 'none';
+        }
+        else {
+            this.current.innerHTML = this.visualRound.curStep;
+            if (this.total) {
+                this.total.innerHTML = this.visualRound.totStep || '?';
+            }
+            this.displayDiv.style.display = '';
+        }
     };
 
    /**
@@ -656,9 +679,7 @@
      *   `options.toTotal == true`, then the total number of rounds is displayed
      */
     function CountUpRounds(visualRound, options) {
-
         generalConstructor(this, visualRound, 'COUNT_UP_ROUNDS', options);
-
         generalInit(this, 'rounddiv', visualRound.getText('round'));
     }
 
@@ -715,19 +736,14 @@
     CountDownRounds.prototype.updateDisplay = function() {
         var v;
         v = this.visualRound;
-        if (v.totRound === v.curRound) {
-            this.current.innerHTML = 0;
-        }
-        else {
-            this.current.innerHTML = (v.totRound - v.curRound) || '?';
-        }
+        if (v.totRound === v.curRound) this.current.innerHTML = 0;
+        else this.current.innerHTML = (v.totRound - v.curRound) || '?';
     };
 
     /**
      * # CompoundDisplayMode
      *
-     * Defines a displayMode for the `VisualRound` which displays the
-     * information according to multiple displayModes
+     * Creates a display mode which groups together other display modes
      */
 
     /**
@@ -846,7 +862,6 @@
 
     // ## Helper Methods.
 
-
     function setLayout(d, layout, lastDisplay) {
         if (layout === 'vertical' || layout === 'multimode_vertical' ||
             layout === 'all_vertical') {
@@ -886,7 +901,6 @@
         }
         return false;
     }
-
 
     /**
      * ### generalConstructor
