@@ -253,14 +253,23 @@
      * @param {string} mod A modifier: 'current', 'previous', 'next'.
      *
      * @return {string} name The name of the step
-     *
-     * @see getName
      */
     VisualStage.prototype.getStepName = function(gameStage, curStage, mod) {
         var name, round;
-        name = getName(gameStage, this.getText('miss'));
-        if (this.replaceUnderscore) name = name.replace(/_/g, " ");
-        if (this.capitalize) name = capitalize(name);
+        // Get the name. If no step property is defined, use the id and
+        // do some text replacing.
+        name = node.game.plot.getProperty(gameStage, 'name');
+        if (!name) {
+            name = node.game.plot.getStep(gameStage);
+            if (!name) {
+                name = this.getText('miss');
+            }
+            else {
+                name = name.id;
+                if (this.replaceUnderscore) name = name.replace(/_/g, " ");
+                if (this.capitalize) name = capitalize(name);
+            }
+        }
         if (this.showRounds) {
             round = getRound(gameStage, curStage, mod);
             if (round) name += ' ' + round;
@@ -305,19 +314,6 @@
             round = 1;
         }
         return round;
-    }
-
-    // ### getName
-    //
-    // Returns the name or the id property or miss.
-    function getName(gameStage, miss) {
-        var tmp;
-        tmp = node.game.plot.getProperty(gameStage, 'name');
-        if (!tmp) {
-            tmp = node.game.plot.getStep(gameStage);
-            tmp = tmp ? tmp.id : miss;
-        }
-        return tmp;
     }
 
     function capitalize(str) {

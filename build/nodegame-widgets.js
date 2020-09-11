@@ -18132,9 +18132,11 @@
         if (this.options.flexibleMode) {
             this.curStage = this.options.curStage || 1;
             this.curStage -= this.options.stageOffset || 0;
+            this.curStep = this.options.curStep || 1;
             this.curRound = this.options.curRound || 1;
             this.totStage = this.options.totStage;
             this.totRound = this.options.totRound;
+            this.totStep = this.options.totStep;
             this.oldStageId = this.options.oldStageId;
         }
 
@@ -18200,10 +18202,14 @@
      *
      * - `COUNT_UP_STAGES`: Display only current stage number.
      * - `COUNT_UP_STEPS`: Display only current step number.
+     * - `COUNT_UP_STEPS_IFNOT1`: Skip stages with one step.
      * - `COUNT_UP_ROUNDS`: Display only current round number.
+     * - `COUNT_UP_ROUNDS_IFNOT1`: Skip stages with one round.
      * - `COUNT_UP_STAGES_TO_TOTAL`: Display current and total stage number.
-     * - `COUNT_UP_STEPS_TO_TOTAL`: Display current and total step number.
      * - `COUNT_UP_ROUNDS_TO_TOTAL`: Display current and total round number.
+     * - `COUNT_UP_STEPS_TO_TOTAL`: Display current and total step number.
+     * - `COUNT_UP_STEPS_TO_TOTAL_IFNOT1`: Skip stages with one step.
+     * - `COUNT_UP_ROUNDS_TO_TOTAL_IFNOT1`: Skip stages with one round.
      * - `COUNT_DOWN_STAGES`: Display number of stages left to play.
      * - `COUNT_DOWN_STEPS`: Display number of steps left to play.
      * - `COUNT_DOWN_ROUNDS`: Display number of rounds left in this stage.
@@ -19195,14 +19201,23 @@
      * @param {string} mod A modifier: 'current', 'previous', 'next'.
      *
      * @return {string} name The name of the step
-     *
-     * @see getName
      */
     VisualStage.prototype.getStepName = function(gameStage, curStage, mod) {
         var name, round;
-        name = getName(gameStage, this.getText('miss'));
-        if (this.replaceUnderscore) name = name.replace(/_/g, " ");
-        if (this.capitalize) name = capitalize(name);
+        // Get the name. If no step property is defined, use the id and
+        // do some text replacing.
+        name = node.game.plot.getProperty(gameStage, 'name');
+        if (!name) {
+            name = node.game.plot.getStep(gameStage);
+            if (!name) {
+                name = this.getText('miss');
+            }
+            else {
+                name = name.id;
+                if (this.replaceUnderscore) name = name.replace(/_/g, " ");
+                if (this.capitalize) name = capitalize(name);
+            }
+        }
         if (this.showRounds) {
             round = getRound(gameStage, curStage, mod);
             if (round) name += ' ' + round;
@@ -19247,19 +19262,6 @@
             round = 1;
         }
         return round;
-    }
-
-    // ### getName
-    //
-    // Returns the name or the id property or miss.
-    function getName(gameStage, miss) {
-        var tmp;
-        tmp = node.game.plot.getProperty(gameStage, 'name');
-        if (!tmp) {
-            tmp = node.game.plot.getStep(gameStage);
-            tmp = tmp ? tmp.id : miss;
-        }
-        return tmp;
     }
 
     function capitalize(str) {
