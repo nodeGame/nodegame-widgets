@@ -2,6 +2,8 @@
 
 ## 5.9.0
 - Slider changes color on mouse over (option hoverColor changes default).
+- VisualStage correctly does not process the name of the stage when the step-property 'name' is defined by the user
+- RiskGauge has the Bomb method.
 
 ## 5.8.2
 - Fixed bug Chat "is typing...".
