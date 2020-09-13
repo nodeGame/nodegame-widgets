@@ -612,7 +612,9 @@
             }
         }
         if (lastErrored) {
-            if ('function' === typeof lastErrored.bodyDiv.scrollIntoView) {
+            if (opts.highlight &&
+                'function' === typeof lastErrored.bodyDiv.scrollIntoView) {
+
                 lastErrored.bodyDiv.scrollIntoView({ behavior: 'smooth' });
             }
             obj.isCorrect = false;
