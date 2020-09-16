@@ -5396,7 +5396,9 @@
             }
         }
         if (lastErrored) {
-            if ('function' === typeof lastErrored.bodyDiv.scrollIntoView) {
+            if (opts.highlight &&
+                'function' === typeof lastErrored.bodyDiv.scrollIntoView) {
+
                 lastErrored.bodyDiv.scrollIntoView({ behavior: 'smooth' });
             }
             obj.isCorrect = false;
@@ -16482,7 +16484,7 @@
 
     // ## Meta-data
 
-    RiskGauge.version = '0.7.0';
+    RiskGauge.version = '0.8.0';
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences with different methods.';
 
@@ -16504,7 +16506,7 @@
         bomb_mainText: function(widget, probBomb) {
             var str;
             str = '<p style="margin-bottom: 0.3em">';
-            str +=  'Below there are 100 black boxes. ';
+            str +=  'Below there are ' + widget.totBoxes + ' black boxes. ';
             str += 'Every box contains a prize of ' +
                     widget.boxValue + ' ' + widget.currency + ', but ';
             if (probBomb === 1) {
@@ -16788,7 +16790,7 @@
         // Probability that there is a bomb. Default 1.
         var probBomb;
 
-        // The index of the box with the bomb (0-100), or 101 if no bomb.
+        // The index of the box with the bomb (0 to totBoxes), or -1 if no bomb.
         var bombBox;
 
         // Div containing info about how many boxes to open, etc.
@@ -16808,7 +16810,6 @@
 
         // Holds the final number of boxes opened after clicking the button.
         var finalValue;
-
 
         // Init private variables.
 
@@ -16834,9 +16835,7 @@
             probBomb = 1;
         }
 
-        // Pick bomb box id, if probability permits it, else set to 101.
-        bombBox = Math.random() >= probBomb ?
-            101 : Math.ceil(Math.random() * 100);
+        // Variable bombBox is init after totBoxes is validated.
 
         // Public variables.
 
@@ -16865,22 +16864,56 @@
                               true : !!opts.revealProbBomb;
 
         // Max number of boxes to open (default 99 if probBomb = 1, else 100).
-        if ('undefined' !== typeof opts.maxBoxes) {
-            if (!J.isInt(opts.maxBoxes, 0, 100)) {
+        if ('undefined' !== typeof opts.totBoxes) {
+            if (!J.isInt(opts.totBoxes, 0, 10000, false, true)) {
                 throw new TypeError('Bomb.init: maxBoxes must be an ' +
-                                    'integer <= 100 or undefined. Found: ' +
-                                    opts.maxBoxes);
+                'integer > 0 and <= 10000 or undefined. Found: ' +
+                opts.totBoxes);
+            }
+            this.totBoxes = opts.totBoxes;
+        }
+        else {
+            this.totBoxes = 100;
+        }
+
+        // Max num of boxes to open.
+        // Default totBoxes -1 if probBomb = 1, else this.totBoxes.
+        if ('undefined' !== typeof opts.maxBoxes) {
+            if (!J.isInt(opts.maxBoxes, 0, this.totBoxes)) {
+                throw new TypeError('Bomb.init: maxBoxes must be a positive' +
+                                    ' integer <= ' + this.totBoxes +
+                                    ' or undefined. Found: ' + opts.maxBoxes);
             }
             this.maxBoxes = opts.maxBoxes;
         }
         else {
-            this.maxBoxes = probBomb === 1 ? 99 : 100;
+            this.maxBoxes = probBomb === 1 ? this.totBoxes - 1 : this.totBoxes;
+        }
+
+        // Number of boxes in each row.
+        if ('undefined' !== typeof opts.boxesInRow) {
+            if (!J.isInt(opts.boxesInRow, 0)) {
+                throw new TypeError('Bomb.init: boxesInRow must be a positive' +
+                                    ' integer or undefined. Found: ' +
+                                    opts.boxesInRow);
+            }
+            this.boxesInRow = opts.boxesInRow > this.totBoxes ?
+                                  this.totBoxes : opts.boxesInRow;
+        }
+        else {
+            this.boxesInRow = this.totBoxes < 10 ? this.totBoxes : 10;
         }
 
         // If TRUE, there is an actual prize for the participant. Default: TRUE.
         this.withPrize = 'undefined' === typeof opts.withPrize ?
                          true : !!opts.withPrize;
 
+
+        // Bomb box.
+
+        // Pick bomb box id, if probability permits it, else set to -1.
+        bombBox = Math.random() >= probBomb ?
+                  -1 : Math.ceil(Math.random() * this.totBoxes);
 
         // Return widget-like object.
         return {
@@ -16931,6 +16964,7 @@
             // slider: slider,
 
             append: function() {
+                var nRows;
 
                 // Main text.
                 W.add('div', that.bodyDiv, {
@@ -16939,8 +16973,9 @@
                 });
 
                 // Table.
+                nRows = Math.ceil(that.totBoxes / that.boxesInRow);
                 W.add('div', that.bodyDiv, {
-                    innerHTML: makeTable()
+                    innerHTML: makeTable(nRows, that.boxesInRow, that.totBoxes)
                 });
 
                 // Slider.
@@ -17035,7 +17070,7 @@
                     finalValue = parseInt(slider.slider.value, 10),
                     isWinner = finalValue < bombBox;
                     // Update table.
-                    if (bombBox < 101) {
+                    if (bombBox > -1) {
                         W.gid(getBoxId(bombBox)).style.background = '#fa0404';
                     }
                     // Hide slider and button
@@ -17057,22 +17092,34 @@
         return 'bc_' + i;
     }
 
-    function makeBoxRow(j) {
+    //
+    function makeBoxRow(rowId, boxesInRow, colSpan) {
         var i, out;
         out = '<tr>';
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < boxesInRow; i++) {
+            // If there are not enough boxes in this row, do a long colspan.
+            if (colSpan && i > colSpan) {
+                out = out + '<td colspan="' + (boxesInRow - colSpan) +
+                      '"></td>';
+                break;
+            }
             out = out + '<td><div class="bomb-box square" id="' +
-            getBoxId(i + (10*j)) + '"></td>';
+            getBoxId(i + (boxesInRow * rowId)) + '"></td>';
         }
         out += '</tr>';
         return out;
     }
 
-    function makeTable() {
-        var j, out;
+    function makeTable(nRows, boxesInRow, totBoxes) {
+        var rowId, out, boxCount, colSpan;
         out = '<table class="bomb-table">';
-        for (j = 0; j < 10; j++) {
-            out = out + makeBoxRow(j);
+        for (rowId = 0; rowId < nRows; rowId++) {
+            // Check if the last row has less cells to complete the row.
+            boxCount = (rowId+1) * boxesInRow;
+            if (boxCount > totBoxes) {
+                colSpan = totBoxes - (rowId * boxesInRow) - 1;
+            }
+            out = out + makeBoxRow(rowId, boxesInRow, colSpan);
         }
         out += '</table><br>';
         return out;
