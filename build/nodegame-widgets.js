@@ -16937,19 +16937,19 @@
                     ic = false;
                 }
                 out = {
+                    value: nb,
                     isCorrect: ic,
-                    nBoxes: nb,
                     totalMove: values.totalMove,
                     isWinner: isWinner,
                     time: values.time,
-                    payment: 0
+                    reward: 0
                 };
                 if (!out.isCorrect &&
                     ('undefined' === typeof opts.highlight || opts.highlight)) {
 
                         slider.highlight();
                 }
-                if (isWinner === true) out.payment = finalValue * that.boxValue;
+                if (isWinner === true) out.reward = finalValue * that.boxValue;
                 return out;
             },
 
