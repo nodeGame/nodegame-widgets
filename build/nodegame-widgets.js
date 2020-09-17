@@ -12860,10 +12860,18 @@
         }
 
         this.button.onclick = function() {
-            var res;
-            res = node.done();
-            if (res) that.disable();
+            if (that.onclick && false === that.onclick()) return;
+            if (node.done()) that.disable();
         };
+
+        /**
+         * ### DoneButton.onclick
+         *
+         * A callback executed after the button is clicked
+         *
+         * If it return FALSE, node.done() is not called.
+         */
+        this.onclick = null;
 
         /**
          * ### DoneButton.disableOnDisconnect
@@ -12896,6 +12904,7 @@
      * - className: the className of the button (string, array), or false
      *     to have none. Default bootstrap classes: 'btn btn-lg btn-primary'
      * - text: the text on the button. Default: DoneButton.text
+     * - onclick: a callback executed when the button is clicked. Default: null
      * - disableOnDisconnect: TRUE to disable upon disconnection. Default: TRUE
      * - delayOnPlaying: number of milliseconds to wait to enable after
      *     the `PLAYING` event is fired (e.g., a new step begins). Default: 800
@@ -12958,6 +12967,15 @@
         else if ('undefined' !== typeof tmp) {
             throw new TypeError('DoneButton.init: delayOnPlaying must ' +
                                 'be number or undefined. Found: ' + tmp);
+        }
+
+        tmp = opts.onclick;
+        if (tmp) {
+            if ('function' !== typeof tmp) {
+                throw new TypeError('DoneButton.init: onclick must function ' +
+                                    'or undefined. Found: ' + tmp);
+            }
+            this.onclick = tmp;
         }
     };
 
@@ -13022,6 +13040,27 @@
                 }
             });
         }
+    };
+
+    /**
+     * ### DoneButton.updateText
+     *
+     * Updates the text on the button, possibly for a given duration only
+     *
+     * @param {string} text The new text
+     * @param {number} duration Optional. The number of milliseconds the new
+     *   text is displayed. If undefined, the new text stays indefinitely.
+     */
+    DoneButton.prototype.updateText = function(text, duration) {
+        var oldText, that;
+        if (duration) {
+            that = this;
+            oldText = this.button.value;
+            node.timer.setTimeout(function() {
+                that.button.value = oldText;
+            }, duration);
+        }
+        this.button.value = text;
     };
 
     /**
