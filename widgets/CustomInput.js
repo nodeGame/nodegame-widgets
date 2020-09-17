@@ -237,9 +237,7 @@
             }
             return 'Must follow format ' + w.params.format;
         },
-        emptyErr: function(w) {
-            return 'Cannot be empty';
-        }
+        emptyErr: 'Cannot be empty'
     };
 
     // ## Dependencies
@@ -607,7 +605,7 @@
                         return out;
                     };
 
-                    setValues = function(opts) {
+                    setValues = function() {
                         var a, b;
                         a = 'undefined' !== typeof that.params.lower ?
                             (that.params.lower + 1) : 5;
@@ -634,17 +632,19 @@
                         };
                     })();
 
-                    setValues = function(opts) {
+                    setValues = function() {
                         var p, a, b;
                         p = that.params;
                         if (that.type === 'float') return J.random();
                         a = 0;
-                        b = 10;
                         if ('undefined' !== typeof p.lower) {
                             a = p.leq ? (p.lower - 1) : p.lower;
                         }
                         if ('undefined' !== typeof p.upper) {
                             b = p.ueq ? p.upper : (p.upper - 1);
+                        }
+                        else {
+                            b = 100 + a;
                         }
                         return J.randomInt(a, b);
                     };
@@ -793,7 +793,7 @@
                     return res;
                 };
 
-                setValues = function(opts) {
+                setValues = function() {
                     var p, minD, maxD, d, day, month, year;
                     p = that.params;
                     minD = p.minDate ? p.minDate.obj : new Date('01/01/1900');
@@ -845,7 +845,7 @@
                     return res;
                 };
 
-                setValues = function(opts) {
+                setValues = function() {
                     return J.randomKey(that.params.usStateVal);
                 };
 
@@ -860,7 +860,7 @@
                     return res;
                 };
 
-                setValues = function(opts) {
+                setValues = function() {
                     return Math.floor(Math.random()*90000) + 10000;
                 };
             }
@@ -989,7 +989,7 @@
                 };
 
                 if (this.type === 'us_city_state_zip') {
-                    setValues = function(opts) {
+                    setValues = function() {
                         var sep;
                         sep = that.params.listSep + ' ';
                         return J.randomString(8) + sep +
@@ -1556,13 +1556,13 @@
             return usStatesTerr;
 
         case 'usStatesLow':
-            if (!usStatesLow) usStatesLow = objToLow(usStates, toLK);
+            if (!usStatesLow) usStatesLow = objToLK(usStates);
             return usStatesLow;
         case 'usStates':
             return usStates;
 
         case 'usTerrLow':
-            if (!usTerrLow) usTerrLow = objToLow(usTerr, toLK);
+            if (!usTerrLow) usTerrLow = objToLK(usTerr);
             return usTerrLow;
         case 'usTerr':
             return usTerr;
