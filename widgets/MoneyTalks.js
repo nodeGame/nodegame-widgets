@@ -1,6 +1,6 @@
 /**
  * # MoneyTalks
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
  * Displays a box for formatting earnings ("money") in currency
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    MoneyTalks.version = '0.4.0';
+    MoneyTalks.version = '0.5.0';
     MoneyTalks.description = 'Displays the earnings of a player.';
 
     MoneyTalks.title = 'Earnings';
@@ -30,14 +30,11 @@
     /**
      * ## MoneyTalks constructor
      *
-     * `MoneyTalks` displays the earnings ("money") of the player so far
-     *
-     * @param {object} options Optional. Configuration options
-     * which is forwarded to MoneyTalks.init.
+     * `MoneyTalks` displays the earnings ("money") of players
      *
      * @see MoneyTalks.init
      */
-    function MoneyTalks(options) {
+    function MoneyTalks() {
 
         /**
          * ### MoneyTalks.spanCurrency
@@ -115,6 +112,7 @@
      *   - `showCurrency`: Flag whether the name of currency is to be displayed.
      */
     MoneyTalks.prototype.init = function(options) {
+        options = options || {};
         if ('string' === typeof options.currency) {
             this.currency = options.currency;
         }
@@ -170,6 +168,8 @@
      * @param {boolean} clear Optional. If TRUE, money will be set to 0
      *    before adding the new amount
      *
+     * @return {number} The current value after the update
+     *
      * @see MoneyTalks.money
      * @see MonetyTalks.spanMoney
      */
@@ -183,6 +183,7 @@
         if (clear) this.money = 0;
         this.money += parsedAmount;
         this.spanMoney.innerHTML = this.money.toFixed(this.precision);
+        return this.money;
     };
 
     /**
