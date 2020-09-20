@@ -6,6 +6,7 @@
 - RiskGauge has the Bomb method.
 - ChoiceManager scrolls into last errored form.
 - DoneButton onclick handler and setText method.
+- MoneyTalks small improvements: update method returns current value.
 
 ## 5.8.2
 - Fixed bug Chat "is typing...".
