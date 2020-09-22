@@ -13242,7 +13242,7 @@
             event.preventDefault();
             that.getValues(that.onsubmit);
         }, true);
-        J.addEvent(formElement, 'input', function(event) {
+        J.addEvent(formElement, 'input', function() {
             if (!that.timeInput) that.timeInput = J.now();
             if (that.isHighlighted()) that.unhighlight();
         }, true);
@@ -13932,7 +13932,7 @@
                 // Need to compute total manually.
                 if ('undefined' === typeof totalWin) {
                     totalRaw = J.isNumber(data.totalRaw, 0);
-                    totalWin = parseFloat(ex*data.totalRaw).toFixed(2);
+                    totalWin = parseFloat(ex*totalRaw).toFixed(2);
                     totalWin = J.isNumber(totalWin, 0);
                     if (totalWin === false) {
                         node.err('EndScreen.updateDisplay: invalid : ' +
@@ -14022,7 +14022,7 @@
                 if (w.maxWords > 1) res2 += 's';
             }
             if (res) {
-                res = '(' + res;;
+                res = '(' + res;
                 if (res2) res +=  ', and ' + res2;
                 return res + ')';
             }
@@ -14540,7 +14540,7 @@
      * Appends widget to this.bodyDiv
      */
     Feedback.prototype.append = function() {
-        var that, label;
+        var that;
         that = this;
 
         // this.feedbackForm = W.get('div', { className: 'feedback' });
@@ -14586,11 +14586,11 @@
 
         this.showCounters();
 
-        J.addEvent(this.feedbackForm, 'input', function(event) {
+        J.addEvent(this.feedbackForm, 'input', function() {
             if (that.isHighlighted()) that.unhighlight();
             that.verifyFeedback(false, true);
         });
-        J.addEvent(this.feedbackForm, 'click', function(event) {
+        J.addEvent(this.feedbackForm, 'click', function() {
             if (that.isHighlighted()) that.unhighlight();
         });
 
@@ -14679,7 +14679,7 @@
      * @see getFeedback
      */
     Feedback.prototype.getValues = function(opts) {
-        var feedback, feedbackBr, res;
+        var feedback, res;
 
         opts = opts || {};
 
