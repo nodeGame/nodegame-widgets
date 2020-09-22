@@ -431,7 +431,7 @@
                 // Need to compute total manually.
                 if ('undefined' === typeof totalWin) {
                     totalRaw = J.isNumber(data.totalRaw, 0);
-                    totalWin = parseFloat(ex*data.totalRaw).toFixed(2);
+                    totalWin = parseFloat(ex*totalRaw).toFixed(2);
                     totalWin = J.isNumber(totalWin, 0);
                     if (totalWin === false) {
                         node.err('EndScreen.updateDisplay: invalid : ' +

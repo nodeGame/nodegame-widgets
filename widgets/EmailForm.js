@@ -151,7 +151,7 @@
             event.preventDefault();
             that.getValues(that.onsubmit);
         }, true);
-        J.addEvent(formElement, 'input', function(event) {
+        J.addEvent(formElement, 'input', function() {
             if (!that.timeInput) that.timeInput = J.now();
             if (that.isHighlighted()) that.unhighlight();
         }, true);

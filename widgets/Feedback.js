@@ -53,7 +53,7 @@
                 if (w.maxWords > 1) res2 += 's';
             }
             if (res) {
-                res = '(' + res;;
+                res = '(' + res;
                 if (res2) res +=  ', and ' + res2;
                 return res + ')';
             }
@@ -571,7 +571,7 @@
      * Appends widget to this.bodyDiv
      */
     Feedback.prototype.append = function() {
-        var that, label;
+        var that;
         that = this;
 
         // this.feedbackForm = W.get('div', { className: 'feedback' });
@@ -617,11 +617,11 @@
 
         this.showCounters();
 
-        J.addEvent(this.feedbackForm, 'input', function(event) {
+        J.addEvent(this.feedbackForm, 'input', function() {
             if (that.isHighlighted()) that.unhighlight();
             that.verifyFeedback(false, true);
         });
-        J.addEvent(this.feedbackForm, 'click', function(event) {
+        J.addEvent(this.feedbackForm, 'click', function() {
             if (that.isHighlighted()) that.unhighlight();
         });
 
@@ -710,7 +710,7 @@
      * @see getFeedback
      */
     Feedback.prototype.getValues = function(opts) {
-        var feedback, feedbackBr, res;
+        var feedback, res;
 
         opts = opts || {};
 
