@@ -53,7 +53,6 @@
 
         // #### executionMode
         executionMode: function(w) {
-            var startDate;
             if (w.executionMode === 'WAIT_FOR_N_PLAYERS') {
                 return 'Waiting for All Players to Connect: ';
             }
@@ -166,7 +165,7 @@
      *
      * @param {object} options
      */
-    function WaitingRoom(options) {
+    function WaitingRoom() {
 
         /**
          * ### WaitingRoom.connected
@@ -813,8 +812,7 @@
             }
         });
 
-        node.on.data('TIME', function(msg) {
-            msg = msg || {};
+        node.on.data('TIME', function() {
             node.info('waiting room: TIME IS UP!');
             that.stopTimer();
         });
