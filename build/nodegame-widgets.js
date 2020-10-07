@@ -1744,24 +1744,39 @@
      *
      * @return {array} res List of destroyed widgets
      */
-    Widgets.prototype.garbageCollection = function() {
-        var w, i, fd, res;
-        res = [];
-        fd = W.getFrameDocument();
-        w = node.widgets.instances;
-        for (i = 0; i < w.length; i++) {
-            // Check if widget is not on page any more.
-            if (w[i].isAppended() &&
-                (fd && !fd.contains(w[i].panelDiv)) &&
-                !document.body.contains(w[i].panelDiv)) {
+    Widgets.prototype.garbageCollection = (function() {
 
-                res.push(w[i]);
-                w[i].destroy();
-                i--;
+        // Some IE were missing .contains, so we fallback gracefully.
+        function contains(target, widget) {
+            var parentNode;
+            if (target.contains) return target.contains(widget.panelDiv);
+            parentNode = widget.panelDiv.parentNode;
+            while (parentNode != null) {
+                if (parentNode == target) return true;
+                parentNode = parentNode.parentNode;
             }
+            return false;
         }
-        return res;
-    };
+
+        return function() {
+            var w, i, fd, res;
+            res = [];
+            fd = W.getFrameDocument();
+            w = node.widgets.instances;
+            for (i = 0; i < w.length; i++) {
+                // Check if widget is not on page any more.
+                if (w[i].isAppended() &&
+                (fd && !contains(fd, w[i])) &&
+                !contains(document.body, w[i])) {
+
+                    res.push(w[i]);
+                    w[i].destroy();
+                    i--;
+                }
+            }
+            return res;
+        };
+    })();
 
     /**
      * ### Widgets.isActionRequired
