@@ -85,7 +85,7 @@
         // ### VisualStage.showPrevious
         //
         // If TRUE, the name of the previuos step is displayed.
-        this.showPrevious = true;
+        this.showPrevious = false;
 
         // ### VisualStage.showCurrent
         //
