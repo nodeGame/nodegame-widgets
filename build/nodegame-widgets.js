@@ -1793,22 +1793,22 @@
      * @see Widget.isActionRequired
      */
     Widgets.prototype.isActionRequired = function(opts) {
-        var w, i, lastI, res;
+        var w, i, lastErrored, res;
         w = node.widgets.instances;
         res = false;
         for (i = 0; i < w.length; i++) {
             if (w[i].required) {
                 if (w[i].isActionRequired(opts)) {
                     res = true;
-                    lastI = i;
+                    lastErrored = w[i];
                 }
             }
         }
         // Scroll to error.
-        if (opts.highlight &&
-            'function' === typeof w[lastI].bodyDiv.scrollIntoView) {
+        if (lastErrored && opts.highlight &&
+            'function' === typeof lastErrored.bodyDiv.scrollIntoView) {
 
-            w[lastI].bodyDiv.scrollIntoView({ behavior: 'smooth' });
+            lastErrored.bodyDiv.scrollIntoView({ behavior: 'smooth' });
         }
         return res;
     };
