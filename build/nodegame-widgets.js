@@ -182,6 +182,32 @@
     };
 
     /**
+     * ### Widget.isActionRequired
+     *
+     * Returns TRUE if widget if the widget does not required action from user
+     *
+     * If the widget does not have the `required` flag it returns FALSE,
+     * otherwise it invokes Widget.getValues and looks in the response for
+     * incorrect or missing values.
+     *
+     * @param {object} opts Optional. Options to pass to Widget.getValues.
+     *   Default: { markAttempt: false, highlight: false };
+     *
+     * @return {boolean} TRUE, if widget is currently docked
+     */
+    Widget.prototype.isActionRequired = function(opts) {
+        var values;
+        if (!this.required) return false;
+        opts = opts || {};
+        opts.markAttempt = opts.markAttempt || false;
+        opts.highlight = opts.highlight || false;
+        values = this.getValues(opts);
+        if (!values) return false; // Safety check.
+        return values.missValues === true || values.choice === null ||
+            values.isCorrect === false;
+    };
+
+    /**
      * ### Widget.collapse
      *
      * Collapses the widget (hides the body and footer)
@@ -1348,6 +1374,10 @@
             unhighlighted: []
         };
 
+        // Required widgets require action from user, otherwise they will
+        // block node.done().
+        widget.required = !!(options.required || options.requiredChoice);
+
         // Fixed properties.
 
         // Widget Name.
@@ -1729,6 +1759,30 @@
                 w[i].destroy();
                 i--;
             }
+        }
+        return res;
+    };
+
+    /**
+     * ### Widgets.isActionRequired
+     *
+     * Returns TRUE, if any widget currently requires user action
+     *
+     * Loops trough all widgets that have the `required` flag.
+     *
+     * @param {object} opts Optional. Options to pass to Widget.getValues.
+     *   Default: { markAttempt: false, highlight: false };
+     *
+     * @return {boolean} TRUE, if any widget requires action
+     *
+     * @see Widget.isActionRequired
+     */
+    Widgets.prototype.isActionRequired = function(opts) {
+        var w, i, res;
+        w = node.widgets.instances;
+        res = false;
+        for (i = 0; i < w.length; i++) {
+            if (w[i].required) res = res || w[i].isActionRequired(opts);
         }
         return res;
     };
@@ -19128,7 +19182,7 @@
         // ### VisualStage.showPrevious
         //
         // If TRUE, the name of the previuos step is displayed.
-        this.showPrevious = true;
+        this.showPrevious = false;
 
         // ### VisualStage.showCurrent
         //
@@ -20226,7 +20280,6 @@
 
         // #### executionMode
         executionMode: function(w) {
-            var startDate;
             if (w.executionMode === 'WAIT_FOR_N_PLAYERS') {
                 return 'Waiting for All Players to Connect: ';
             }
@@ -20339,7 +20392,7 @@
      *
      * @param {object} options
      */
-    function WaitingRoom(options) {
+    function WaitingRoom() {
 
         /**
          * ### WaitingRoom.connected
@@ -20986,8 +21039,7 @@
             }
         });
 
-        node.on.data('TIME', function(msg) {
-            msg = msg || {};
+        node.on.data('TIME', function() {
             node.info('waiting room: TIME IS UP!');
             that.stopTimer();
         });
