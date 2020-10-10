@@ -253,7 +253,7 @@
 
         if (this.showFeedbackForm) {
             this.feedback = node.widgets.get('Feedback', J.mixin(
-                { storeRef: false, minChars: 50 },
+                { storeRef: false, minChars: 50, setMsg: true },
                 options.feedback));
         }
     };
