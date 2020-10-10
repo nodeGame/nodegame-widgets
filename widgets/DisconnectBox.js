@@ -74,8 +74,6 @@
 
     // ## DisconnectBox methods
     DisconnectBox.prototype.init = function(opts) {
-        var that;
-        that = this;
 
         if (opts.connectCb) {
             if ('function' !== typeof opts.connectCb) {

@@ -12788,8 +12788,6 @@
 
     // ## DisconnectBox methods
     DisconnectBox.prototype.init = function(opts) {
-        var that;
-        that = this;
 
         if (opts.connectCb) {
             if ('function' !== typeof opts.connectCb) {
@@ -13581,7 +13579,7 @@
 
 /**
  * # EndScreen
- * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -13597,29 +13595,26 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.6.0';
+    EndScreen.version = '0.7.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
-    EndScreen.title = 'End Screen';
+    EndScreen.title = false;
     EndScreen.className = 'endscreen';
 
-    EndScreen.texts.headerMessage = 'Thank you for participating!';
-    EndScreen.texts.message = 'You have now completed this task ' +
-                               'and your data has been saved. ' +
-                               'Please go back to the Amazon Mechanical Turk ' +
-                               'web site and submit the HIT.';
-    EndScreen.texts.contactQuestion = 'Would you like to be contacted again' +
-                                       'for future experiments? If so, leave' +
-                                       'your email here and press submit: ';
-    EndScreen.texts.totalWin = 'Your total win:';
-    EndScreen.texts.exitCode = 'Your exit code:';
-    EndScreen.texts.errTotalWin = 'Error: invalid total win.';
-    EndScreen.texts.errExitCode = 'Error: invalid exit code.';
-    EndScreen.texts.copyButton = 'Copy';
-    EndScreen.texts.exitCopyMsg = 'Exit code copied to clipboard.';
-    EndScreen.texts.exitCopyError = 'Failed to copy exit code. Please copy it' +
-                                    ' manually.';
+    EndScreen.texts = {
+        headerMessage: 'Thank you for participating!',
+        message: 'You have now completed this task and your data has ' +
+                 'been saved. Please go back to the Amazon Mechanical Turk ' +
+                 'web site and submit the HIT.',
+        totalWin: 'Your total win:',
+        exitCode: 'Your exit code:',
+        errTotalWin: 'Error: invalid total win.',
+        errExitCode: 'Error: invalid exit code.',
+        copyButton: 'Copy',
+        exitCopyMsg: 'Exit code copied to clipboard.',
+        exitCopyError: 'Failed to copy exit code. Please copy it manually.'
+    };
 
     // ## Dependencies
 
@@ -13814,17 +13809,30 @@
     }
 
     EndScreen.prototype.init = function(options) {
+
+
+
         if (this.showEmailForm && !this.emailForm) {
+            // TODO: nested properties are overwitten fully. Update.
             this.emailForm = node.widgets.get('EmailForm', J.mixin({
-                label: this.getText('contactQuestion'),
-                onsubmit: { send: true, emailOnly: true, updateUI: true },
-                storeRef: false
+                onsubmit: {
+                    send: true,
+                    emailOnly: true,
+                    updateUI: true
+                },
+                storeRef: false,
+                texts: {
+                    label: 'If you would like to be contacted for future ' +
+                        'studies, please enter your email (optional):',
+                    errString: 'Please enter a valid email and retry'
+                },
+                setMsg: true // Sends a set message for logic's db.
             }, options.email));
         }
 
         if (this.showFeedbackForm) {
             this.feedback = node.widgets.get('Feedback', J.mixin(
-                { storeRef: false },
+                { storeRef: false, minChars: 50 },
                 options.feedback));
         }
     };
