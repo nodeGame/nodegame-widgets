@@ -788,11 +788,14 @@
         if ('undefined' === typeof opts.className) {
             this.className = ChoiceTable.className;
         }
-        else if (opts.className === false ||
-                 'string' === typeof opts.className ||
-                 J.isArray(opts.className)) {
-
-            this.className = opts.className;
+        else if (opts.className === false) {
+            this.className = false;
+        }
+        else if ('string' === typeof opts.className) {
+            this.className =  ChoiceTable.className + ' ' + opts.className;
+        }
+        else if ( J.isArray(opts.className)) {
+            this.className = [ChoiceTable.className].concat(opts.className);
         }
         else {
             throw new TypeError('ChoiceTable.init: opts.' +
@@ -1688,7 +1691,7 @@
 
         // Value this.correctChoice can undefined, string or array.
         // If no correct choice is set, we simply ignore the correct param.
-        if (options.correct && 'undefined' !== typeof this.correctChoice) {
+        if (options.correct && this.correctChoice !== null) {
 
             // Make it an array (can be a string).
             correctChoice = J.isArray(this.correctChoice) ?
