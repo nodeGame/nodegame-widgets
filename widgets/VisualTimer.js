@@ -361,7 +361,8 @@
      *
      * Restarts the timer with new options
      *
-     * @param {object} options Configuration object
+     * @param {object|number} options Configuration object or the number of
+     *     milliseconds
      *
      * @see VisualTimer.init
      * @see VisualTimer.start
@@ -369,6 +370,7 @@
      */
     VisualTimer.prototype.restart = function(options) {
         this.stop();
+        if ('number' === typeof options) options = { milliseconds: options };
         this.init(options);
         this.start();
     };
