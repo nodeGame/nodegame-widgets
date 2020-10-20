@@ -1,6 +1,6 @@
 # nodegame-widgets change log
 
-## 5.9.0
+## 6.0.0
 - Slider changes color on mouse over (option hoverColor changes default).
 - VisualRound can count steps as well.
 - VisualStage correctly does not process the name of the stage when the step-property 'name' is defined by the user
@@ -8,6 +8,11 @@
 - ChoiceManager scrolls into last errored form.
 - DoneButton onclick handler and setText method.
 - MoneyTalks small improvements: update method returns current value.
+- ChoiceTable className option is always added and does not replace choicetable
+- VisualTimer.restart accept only number of milliseconds.
+- Fixed contains method not found in IE.
+- Widget.isActionRequired method added.
+- Auto-scroll for widgets requiring action.
 
 ## 5.8.2
 - Fixed bug Chat "is typing...".
