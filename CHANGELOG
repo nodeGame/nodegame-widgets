@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 6.0.1
+- Fixed null reference with Slider hint and required movement. 
+
 ## 6.0.0
 - Slider changes color on mouse over (option hoverColor changes default).
 - VisualRound can count steps as well.
