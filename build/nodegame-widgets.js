@@ -14391,7 +14391,7 @@
          * @see Feedback.getValues
          */
         if (!options.onsubmit) {
-            this.onsubmit = { feedbackOnly: true, say: true, updateUI: true };
+            this.onsubmit = { feedbackOnly: true, send: true, updateUI: true };
         }
         else if ('object' === typeof options.onsubmit) {
             this.onsubmit = options.onsubmit;
@@ -17613,9 +17613,7 @@
         }
 
         if (this.required && this.hint !== false) {
-            if ('undefined' === typeof this.hint) {
-                this.hint = 'Movement required';
-            }
+            if (!this.hint) this.hint = 'Movement required';
             this.hint += ' *';
         }
 

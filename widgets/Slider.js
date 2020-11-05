@@ -353,9 +353,7 @@
         }
 
         if (this.required && this.hint !== false) {
-            if ('undefined' === typeof this.hint) {
-                this.hint = 'Movement required';
-            }
+            if (!this.hint) this.hint = 'Movement required';
             this.hint += ' *';
         }
 
