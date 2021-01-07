@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## Current
+- Widgets destroyed on exit of exit steps by default
+- Header in ChoiceTableGroup (in progress...).
+
 ## 6.0.1
 - Fixed null reference with Slider hint and required movement. 
 
