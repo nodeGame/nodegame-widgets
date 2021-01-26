@@ -595,7 +595,8 @@
             }
             else {
                 obj.forms[form.id] = form.getValues(opts);
-                if (form.requiredChoice &&
+                // Backward compatible (requiredChoice).
+                if ((form.required || form.requiredChoice) &&
                     (obj.forms[form.id].choice === null ||
                      (form.selectMultiple &&
                       !obj.forms[form.id].choice.length))) {
@@ -617,6 +618,7 @@
 
                 lastErrored.bodyDiv.scrollIntoView({ behavior: 'smooth' });
             }
+            obj._scrolledIntoView = true;
             obj.isCorrect = false;
         }
         // if (obj.missValues.length) obj.isCorrect = false;

@@ -5462,7 +5462,8 @@
             }
             else {
                 obj.forms[form.id] = form.getValues(opts);
-                if (form.requiredChoice &&
+                // Backward compatible (requiredChoice).
+                if ((form.required || form.requiredChoice) &&
                     (obj.forms[form.id].choice === null ||
                      (form.selectMultiple &&
                       !obj.forms[form.id].choice.length))) {
