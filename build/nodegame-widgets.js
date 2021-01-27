@@ -17039,9 +17039,7 @@
         this.withPrize = 'undefined' === typeof opts.withPrize ?
                          true : !!opts.withPrize;
 
-
         // Bomb box.
-        debugger
         // Pick bomb box id, if probability permits it, else set to -1.
         // Resulting id is between 1 and totBoxes.
         bombBox = Math.random() >= probBomb ?
@@ -18282,6 +18280,19 @@
      *
      *   - `stageOffset`:
      *     Stage displayed is the actual stage minus stageOffset
+     *   - `preprocess`: a function that may modify information about
+     *     steps, rounds and stages before they are displayed; its context
+     *     is the current widget and it receives an object to modify:
+     *     ```js
+     *     {
+     *       totRound: 1,
+     *       totStep: 2,
+     *       totStage: 5,
+     *       curStep: 1,
+     *       curStage: 1,
+     *       curRound: 1
+     *     }
+     *   ```
      *   - `flexibleMode`:
      *     Set `true`, if number of rounds and/or stages can change dynamically
      *   - `curStage`:
@@ -18296,9 +18307,6 @@
      *   - `oldStageId`:
      *     When (re)starting in `flexibleMode`, sets the id of the current
      *     stage
-     *   - `displayMode`:
-     *     Array of strings which determines the display style of the widget
-     *   - `displayModeNames`: alias of displayMode, deprecated
      *
      *
      * @see VisualRound.setDisplayMode
@@ -18355,6 +18363,17 @@
 
         if ('undefined' !== typeof options.layout) {
             this.layout = options.layout;
+        }
+
+        if ('undefined' !== typeof options.preprocess) {
+            if ('function' === typeof options.preprocess) {
+                this.preprocess = options.preprocess;
+            }
+            else {
+                throw new TypeError('VisualRound.init: preprocess must ' +
+                                    'function or undefined. Found: ' +
+                                    options.preprocess);
+            }
         }
 
         this.updateDisplay();
@@ -18574,22 +18593,49 @@
         }
         // Normal mode.
         else {
+
+            // Compute current values.
+
             this.curStage = stage.stage;
             // Stage can be indexed by id or number in the sequence.
             if ('string' === typeof this.curStage) {
                 this.curStage =
                     this.gamePlot.normalizeGameStage(stage).stage;
             }
-            this.curRound = stage.round;
-            tmp = this.stager.sequence[this.curStage -1];
-            this.totRound = tmp.num || 1;
-            this.totStep = tmp.steps.length;
-            this.curStep = stage.step;
             this.curStage -= this.stageOffset;
+            this.curStep = stage.step;
+            this.curRound = stage.round;
+
+            // Compute total values.
+
             len = this.stager.sequence.length;
             this.totStage = len - this.totStageOffset;
             if (this.stager.sequence[(len-1)].type === 'gameover') {
                 this.totStage--;
+            }
+
+            tmp = this.stager.sequence[this.curStage -1];
+            this.totRound = tmp.num || 1;
+            this.totStep = tmp.steps.length;
+
+            // Let user preprocess.
+            if (this.preprocess) {
+                tmp = {
+                    totRound: this.totRound,
+                    totStep: this.totStep,
+                    totStage: this.totStage,
+                    curStep: this.curStep,
+                    curStage: this.curStage,
+                    curRound: this.curRound,
+                };
+                this.preprocess(tmp);
+
+                this.curRound = tmp.curRound
+                this.curStep = tmp.curStep;
+                this.curStage = tmp.curStage
+                this.totStage = tmp.totStage;
+                this.totStep = tmp.totStep;
+                this.totRound = tmp.totRound;
             }
         }
         // Update display.
