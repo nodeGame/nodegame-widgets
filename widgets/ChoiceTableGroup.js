@@ -313,6 +313,8 @@
         * ### ChoiceTableGroup.header
         *
         * Header to be displayed above the table
+        *
+        * @experimental
         */
         this.header = null;
 
@@ -745,6 +747,7 @@
         else {
 
             // Add new TR.
+            // TODO: rename, this is not the header as from options.
             tr = createTR(this, 'header');
 
             // Build all items first.
