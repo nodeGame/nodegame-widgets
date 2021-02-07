@@ -1,6 +1,6 @@
 /**
  * # EndScreen
- * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -16,7 +16,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.7.0';
+    EndScreen.version = '0.7.1';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
@@ -64,21 +64,7 @@
          *
          * Default: true
          */
-        if (options.email === false) {
-            options.showEmailForm = false;
-        }
-        else if ('undefined' === typeof options.showEmailForm) {
-            this.showEmailForm = true;
-        }
-        else if ('boolean' === typeof options.showEmailForm) {
-            this.showEmailForm = options.showEmailForm;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.showEmailForm ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showEmailForm);
-        }
+        this.showEmailForm = true;
 
         /**
          * ### EndScreen.showFeedbackForm
@@ -87,21 +73,7 @@
          *
          * Default: true
          */
-        if (options.feedback === false) {
-            options.showFeedbackForm = false;
-        }
-        else if ('undefined' === typeof options.showFeedbackForm) {
-            this.showFeedbackForm = true;
-        }
-        else if ('boolean' === typeof options.showFeedbackForm) {
-            this.showFeedbackForm = options.showFeedbackForm;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.showFeedbackForm ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showFeedbackForm);
-        }
+        this.showFeedbackForm = true;
 
         /**
          * ### EndScreen.showTotalWin
@@ -110,21 +82,7 @@
          *
          * Default: true
          */
-        if (options.totalWin === false) {
-            options.showTotalWin = false;
-        }
-        else if ('undefined' === typeof options.showTotalWin) {
-            this.showTotalWin = true;
-        }
-        else if ('boolean' === typeof options.showTotalWin) {
-            this.showTotalWin = options.showTotalWin;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.showTotalWin ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showTotalWin);
-        }
+         this.showTotalWin = true;
 
         /**
          * ### EndScreen.showExitCode
@@ -133,21 +91,7 @@
          *
          * Default: true
          */
-        if (options.exitCode === false) {
-            options.showExitCode !== false
-        }
-        else if ('undefined' === typeof options.showExitCode) {
-            this.showExitCode = true;
-        }
-        else if ('boolean' === typeof options.showExitCode) {
-            this.showExitCode = options.showExitCode;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.showExitCode ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showExitCode);
-        }
+        this.showExitCode = true;
 
         /**
          * ### EndScreen.totalWinCurrency
@@ -156,20 +100,7 @@
          *
          * Default: 'USD'
          */
-        if ('undefined' === typeof options.totalWinCurrency) {
-            this.totalWinCurrency = 'USD';
-        }
-        else if ('string' === typeof options.totalWinCurrency &&
-                 options.totalWinCurrency.trim() !== '') {
-
-            this.totalWinCurrency = options.totalWinCurrency;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.totalWinCurrency must be undefined ' +
-                                'or a non-empty string. Found: ' +
-                                options.totalWinCurrency);
-        }
+         this.totalWinCurrency = 'USD';
 
         /**
          * ### EndScreen.totalWinCb
@@ -179,17 +110,7 @@
          * Accepts two parameters: a data object (as sent from server), and
          * the reference to the EndScreen.
          */
-        if (options.totalWinCb) {
-            if ('function' === typeof options.totalWinCb) {
-                this.totalWinCb = options.totalWinCb;
-            }
-            else {
-                throw new TypeError('EndScreen constructor: ' +
-                                    'options.totalWinCb ' +
-                                    'must be function or undefined. ' +
-                                    'Found: ' + options.totalWinCb);
-            }
-        }
+        this.totalWinCb = null;
 
         /**
          * ### EndScreen.emailForm
@@ -231,7 +152,81 @@
 
     EndScreen.prototype.init = function(options) {
 
+        if (options.email === false) {
+            this.showEmailForm = false;
+        }
+        else if ('boolean' === typeof options.showEmailForm) {
+            this.showEmailForm = options.showEmailForm;
+        }
+        else if ('undefined' !== typeof options.showEmailForm) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.showEmailForm ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showEmailForm);
+        }
 
+        if (options.feedback === false) {
+            this.showFeedbackForm = false;
+        }
+        else if ('boolean' === typeof options.showFeedbackForm) {
+            this.showFeedbackForm = options.showFeedbackForm;
+        }
+        else if ('undefined' !== typeof options.showFeedbackForm) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.showFeedbackForm ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showFeedbackForm);
+        }
+
+        if (options.totalWin === false) {
+            this.showTotalWin = false;
+        }
+        else if ('boolean' === typeof options.showTotalWin) {
+            this.showTotalWin = options.showTotalWin;
+        }
+        else if ('undefined' !== typeof options.showTotalWin) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.showTotalWin ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showTotalWin);
+        }
+
+        if (options.exitCode === false) {
+            options.showExitCode !== false
+        }
+        else if ('boolean' === typeof options.showExitCode) {
+            this.showExitCode = options.showExitCode;
+        }
+        else if ('undefined' !== typeof options.showExitCode) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.showExitCode ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showExitCode);
+        }
+
+        if ('string' === typeof options.totalWinCurrency &&
+                 options.totalWinCurrency.trim() !== '') {
+
+            this.totalWinCurrency = options.totalWinCurrency;
+        }
+        else if ('undefined' !== typeof options.totalWinCurrency) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.totalWinCurrency must be undefined ' +
+                                'or a non-empty string. Found: ' +
+                                options.totalWinCurrency);
+        }
+
+        if (options.totalWinCb) {
+            if ('function' === typeof options.totalWinCb) {
+                this.totalWinCb = options.totalWinCb;
+            }
+            else {
+                throw new TypeError('EndScreen.init: ' +
+                                    'options.totalWinCb ' +
+                                    'must be function or undefined. ' +
+                                    'Found: ' + options.totalWinCb);
+            }
+        }
 
         if (this.showEmailForm && !this.emailForm) {
             // TODO: nested properties are overwitten fully. Update.

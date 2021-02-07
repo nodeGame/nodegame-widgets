@@ -599,13 +599,17 @@
                     var cl;
                     // Set global variables.
                     // slider.getValues().value fails (no int numbers).
-                    finalValue = parseInt(slider.slider.value, 10),
-                    isWinner = finalValue < bombBox;
+                    finalValue = parseInt(slider.slider.value, 10);
+
                     // Update table.
                     if (bombBox > -1) {
                         // Variable bombBox is between 1 and totBoxes.
                         // Cells in table are 0-indexed.
                         W.gid(getBoxId(bombBox-1)).style.background = '#fa0404';
+                        isWinner = finalValue < bombBox;
+                    }
+                    else {
+                        isWinner = true;
                     }
                     // Hide slider and button
                     slider.hide();

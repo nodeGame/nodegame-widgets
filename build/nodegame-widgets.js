@@ -1315,7 +1315,7 @@
 
         // Set ID.
         if ('undefined' !== typeof options.id) {
-            if ('number' === typeof options.id) options.id = '' + options.id;
+            if ('number' === typeof options.id) options.id += '';
             if ('string' === typeof options.id) {
                 widget.id = options.id;
             }
@@ -1373,6 +1373,9 @@
             highlighted: [],
             unhighlighted: []
         };
+
+        // By default destroy widget on exit step.
+        widget.destroyOnExit = options.destroyOnExit !== false;
 
         // Required widgets require action from user, otherwise they will
         // block node.done().
@@ -5459,7 +5462,8 @@
             }
             else {
                 obj.forms[form.id] = form.getValues(opts);
-                if (form.requiredChoice &&
+                // Backward compatible (requiredChoice).
+                if ((form.required || form.requiredChoice) &&
                     (obj.forms[form.id].choice === null ||
                      (form.selectMultiple &&
                       !obj.forms[form.id].choice.length))) {
@@ -5481,6 +5485,7 @@
 
                 lastErrored.bodyDiv.scrollIntoView({ behavior: 'smooth' });
             }
+            obj._scrolledIntoView = true;
             obj.isCorrect = false;
         }
         // if (obj.missValues.length) obj.isCorrect = false;
@@ -7764,6 +7769,13 @@
          */
         this.textarea = null;
 
+        /**
+        * ### ChoiceTableGroup.header
+        *
+        * Header to be displayed above the table
+        */
+        this.header = null;
+
         // Options passed to each individual item.
 
         /**
@@ -7888,7 +7900,7 @@
         // Have a method in ChoiceTable?
 
         if (!this.id) {
-            throw new TypeError('ChoiceTableGroup.init: opts.id ' +
+            throw new TypeError('ChoiceTableGroup.init: id ' +
                                 'is missing.');
         }
 
@@ -7897,7 +7909,7 @@
             tmp = 'H';
         }
         else if ('string' !== typeof opts.orientation) {
-            throw new TypeError('ChoiceTableGroup.init: opts.orientation ' +
+            throw new TypeError('ChoiceTableGroup.init: orientation ' +
                                 'must be string, or undefined. Found: ' +
                                 opts.orientation);
         }
@@ -7910,7 +7922,7 @@
                 tmp = 'V';
             }
             else {
-                throw new Error('ChoiceTableGroup.init: opts.orientation ' +
+                throw new Error('ChoiceTableGroup.init: orientation ' +
                                 'is invalid: ' + tmp);
             }
         }
@@ -7942,7 +7954,7 @@
             this.group = opts.group;
         }
         else if ('undefined' !== typeof opts.group) {
-            throw new TypeError('ChoiceTableGroup.init: opts.group must ' +
+            throw new TypeError('ChoiceTableGroup.init: group must ' +
                                 'be string, number or undefined. Found: ' +
                                 opts.group);
         }
@@ -7953,7 +7965,7 @@
             this.groupOrder = opts.groupOrder;
         }
         else if ('undefined' !== typeof opts.group) {
-            throw new TypeError('ChoiceTableGroup.init: opts.groupOrder ' +
+            throw new TypeError('ChoiceTableGroup.init: groupOrder ' +
                                 'must be number or undefined. Found: ' +
                                 opts.groupOrder);
         }
@@ -7965,7 +7977,7 @@
             };
         }
         else if ('undefined' !== typeof opts.listener) {
-            throw new TypeError('ChoiceTableGroup.init: opts.listener ' +
+            throw new TypeError('ChoiceTableGroup.init: listener ' +
                                 'must be function or undefined. Found: ' +
                                 opts.listener);
         }
@@ -7975,7 +7987,7 @@
             this.onclick = opts.onclick;
         }
         else if ('undefined' !== typeof opts.onclick) {
-            throw new TypeError('ChoiceTableGroup.init: opts.onclick must ' +
+            throw new TypeError('ChoiceTableGroup.init: onclick must ' +
                                 'be function or undefined. Found: ' +
                                 opts.onclick);
         }
@@ -7985,7 +7997,7 @@
             this.mainText = opts.mainText;
         }
         else if ('undefined' !== typeof opts.mainText) {
-            throw new TypeError('ChoiceTableGroup.init: opts.mainText ' +
+            throw new TypeError('ChoiceTableGroup.init: mainText ' +
                                 'must be string or undefined. Found: ' +
                                 opts.mainText);
         }
@@ -7995,7 +8007,7 @@
             this.hint = opts.hint;
         }
         else if ('undefined' !== typeof opts.hint) {
-            throw new TypeError('ChoiceTableGroup.init: opts.hint must ' +
+            throw new TypeError('ChoiceTableGroup.init: hint must ' +
                                 'be a string, false, or undefined. Found: ' +
                                 opts.hint);
         }
@@ -8011,7 +8023,7 @@
             this.timeFrom = opts.timeFrom;
         }
         else if ('undefined' !== typeof opts.timeFrom) {
-            throw new TypeError('ChoiceTableGroup.init: opts.timeFrom ' +
+            throw new TypeError('ChoiceTableGroup.init: timeFrom ' +
                                 'must be string, false, or undefined. Found: ' +
                                 opts.timeFrom);
         }
@@ -8026,7 +8038,7 @@
             this.renderer = opts.renderer;
         }
         else if ('undefined' !== typeof opts.renderer) {
-            throw new TypeError('ChoiceTableGroup.init: opts.renderer ' +
+            throw new TypeError('ChoiceTableGroup.init: renderer ' +
                                 'must be function or undefined. Found: ' +
                                 opts.renderer);
         }
@@ -8047,7 +8059,7 @@
             this.className = opts.className;
         }
         else {
-            throw new TypeError('ChoiceTableGroup.init: opts.' +
+            throw new TypeError('ChoiceTableGroup.init: ' +
                                 'className must be string, array, ' +
                                 'or undefined. Found: ' + opts.className);
         }
@@ -8065,7 +8077,7 @@
         else if ('undefined' !== typeof opts.table &&
                  false !== opts.table) {
 
-            throw new TypeError('ChoiceTableGroup.init: opts.table ' +
+            throw new TypeError('ChoiceTableGroup.init: table ' +
                                 'must be object, false or undefined. ' +
                                 'Found: ' + opts.table);
         }
@@ -8074,6 +8086,20 @@
 
         this.freeText = 'string' === typeof opts.freeText ?
             opts.freeText : !!opts.freeText;
+
+        if (opts.header) {
+            if (!J.isArray(opts.header) ||
+                opts.header.length !== opts.items.length - 1) {
+
+                throw new Error('ChoiceTableGroup.init: header ' +
+                                'must be an array of length ' +
+                                (opts.items.length - 1) +
+                                ' or undefined. Found: ' + opts.header);
+            }
+
+            this.header = opts.header;
+        }
+
 
         // Add the items.
         if ('undefined' !== typeof opts.items) this.setItems(opts.items);
@@ -8133,6 +8159,21 @@
         H = this.orientation === 'H';
         i = -1, len = this.itemsSettings.length;
         if (H) {
+
+            if (this.header) {
+                tr = W.add('tr', this.table);
+                W.add('td', tr, {
+                    className: 'header'
+                });
+                for ( ; ++i < this.header.length ; ) {
+                    W.add('td', tr, {
+                        innerHTML: this.header[i],
+                        className: 'header'
+                    });
+                }
+                i = -1;
+            }
+
             for ( ; ++i < len ; ) {
                 // Get item.
                 ct = getChoiceTable(this, i);
@@ -13582,7 +13623,7 @@
 
 /**
  * # EndScreen
- * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -13598,7 +13639,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.7.0';
+    EndScreen.version = '0.7.1';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
@@ -13646,21 +13687,7 @@
          *
          * Default: true
          */
-        if (options.email === false) {
-            options.showEmailForm = false;
-        }
-        else if ('undefined' === typeof options.showEmailForm) {
-            this.showEmailForm = true;
-        }
-        else if ('boolean' === typeof options.showEmailForm) {
-            this.showEmailForm = options.showEmailForm;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.showEmailForm ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showEmailForm);
-        }
+        this.showEmailForm = true;
 
         /**
          * ### EndScreen.showFeedbackForm
@@ -13669,21 +13696,7 @@
          *
          * Default: true
          */
-        if (options.feedback === false) {
-            options.showFeedbackForm = false;
-        }
-        else if ('undefined' === typeof options.showFeedbackForm) {
-            this.showFeedbackForm = true;
-        }
-        else if ('boolean' === typeof options.showFeedbackForm) {
-            this.showFeedbackForm = options.showFeedbackForm;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.showFeedbackForm ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showFeedbackForm);
-        }
+        this.showFeedbackForm = true;
 
         /**
          * ### EndScreen.showTotalWin
@@ -13692,21 +13705,7 @@
          *
          * Default: true
          */
-        if (options.totalWin === false) {
-            options.showTotalWin = false;
-        }
-        else if ('undefined' === typeof options.showTotalWin) {
-            this.showTotalWin = true;
-        }
-        else if ('boolean' === typeof options.showTotalWin) {
-            this.showTotalWin = options.showTotalWin;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.showTotalWin ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showTotalWin);
-        }
+         this.showTotalWin = true;
 
         /**
          * ### EndScreen.showExitCode
@@ -13715,21 +13714,7 @@
          *
          * Default: true
          */
-        if (options.exitCode === false) {
-            options.showExitCode !== false
-        }
-        else if ('undefined' === typeof options.showExitCode) {
-            this.showExitCode = true;
-        }
-        else if ('boolean' === typeof options.showExitCode) {
-            this.showExitCode = options.showExitCode;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.showExitCode ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showExitCode);
-        }
+        this.showExitCode = true;
 
         /**
          * ### EndScreen.totalWinCurrency
@@ -13738,20 +13723,7 @@
          *
          * Default: 'USD'
          */
-        if ('undefined' === typeof options.totalWinCurrency) {
-            this.totalWinCurrency = 'USD';
-        }
-        else if ('string' === typeof options.totalWinCurrency &&
-                 options.totalWinCurrency.trim() !== '') {
-
-            this.totalWinCurrency = options.totalWinCurrency;
-        }
-        else {
-            throw new TypeError('EndScreen constructor: ' +
-                                'options.totalWinCurrency must be undefined ' +
-                                'or a non-empty string. Found: ' +
-                                options.totalWinCurrency);
-        }
+         this.totalWinCurrency = 'USD';
 
         /**
          * ### EndScreen.totalWinCb
@@ -13761,17 +13733,7 @@
          * Accepts two parameters: a data object (as sent from server), and
          * the reference to the EndScreen.
          */
-        if (options.totalWinCb) {
-            if ('function' === typeof options.totalWinCb) {
-                this.totalWinCb = options.totalWinCb;
-            }
-            else {
-                throw new TypeError('EndScreen constructor: ' +
-                                    'options.totalWinCb ' +
-                                    'must be function or undefined. ' +
-                                    'Found: ' + options.totalWinCb);
-            }
-        }
+        this.totalWinCb = null;
 
         /**
          * ### EndScreen.emailForm
@@ -13813,7 +13775,81 @@
 
     EndScreen.prototype.init = function(options) {
 
+        if (options.email === false) {
+            this.showEmailForm = false;
+        }
+        else if ('boolean' === typeof options.showEmailForm) {
+            this.showEmailForm = options.showEmailForm;
+        }
+        else if ('undefined' !== typeof options.showEmailForm) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.showEmailForm ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showEmailForm);
+        }
 
+        if (options.feedback === false) {
+            this.showFeedbackForm = false;
+        }
+        else if ('boolean' === typeof options.showFeedbackForm) {
+            this.showFeedbackForm = options.showFeedbackForm;
+        }
+        else if ('undefined' !== typeof options.showFeedbackForm) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.showFeedbackForm ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showFeedbackForm);
+        }
+
+        if (options.totalWin === false) {
+            this.showTotalWin = false;
+        }
+        else if ('boolean' === typeof options.showTotalWin) {
+            this.showTotalWin = options.showTotalWin;
+        }
+        else if ('undefined' !== typeof options.showTotalWin) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.showTotalWin ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showTotalWin);
+        }
+
+        if (options.exitCode === false) {
+            options.showExitCode !== false
+        }
+        else if ('boolean' === typeof options.showExitCode) {
+            this.showExitCode = options.showExitCode;
+        }
+        else if ('undefined' !== typeof options.showExitCode) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.showExitCode ' +
+                                'must be boolean or undefined. ' +
+                                'Found: ' + options.showExitCode);
+        }
+
+        if ('string' === typeof options.totalWinCurrency &&
+                 options.totalWinCurrency.trim() !== '') {
+
+            this.totalWinCurrency = options.totalWinCurrency;
+        }
+        else if ('undefined' !== typeof options.totalWinCurrency) {
+            throw new TypeError('EndScreen.init: ' +
+                                'options.totalWinCurrency must be undefined ' +
+                                'or a non-empty string. Found: ' +
+                                options.totalWinCurrency);
+        }
+
+        if (options.totalWinCb) {
+            if ('function' === typeof options.totalWinCb) {
+                this.totalWinCb = options.totalWinCb;
+            }
+            else {
+                throw new TypeError('EndScreen.init: ' +
+                                    'options.totalWinCb ' +
+                                    'must be function or undefined. ' +
+                                    'Found: ' + options.totalWinCb);
+            }
+        }
 
         if (this.showEmailForm && !this.emailForm) {
             // TODO: nested properties are overwitten fully. Update.
@@ -17197,13 +17233,17 @@
                     var cl;
                     // Set global variables.
                     // slider.getValues().value fails (no int numbers).
-                    finalValue = parseInt(slider.slider.value, 10),
-                    isWinner = finalValue < bombBox;
+                    finalValue = parseInt(slider.slider.value, 10);
+
                     // Update table.
                     if (bombBox > -1) {
                         // Variable bombBox is between 1 and totBoxes.
                         // Cells in table are 0-indexed.
                         W.gid(getBoxId(bombBox-1)).style.background = '#fa0404';
+                        isWinner = finalValue < bombBox;
+                    }
+                    else {
+                        isWinner = true;
                     }
                     // Hide slider and button
                     slider.hide();
