@@ -1,6 +1,6 @@
 /**
  * # CustomInput
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2020 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable input form with validation
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.10.0';
+    CustomInput.version = '0.11.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -311,6 +311,23 @@
         this.validation = null;
 
         /**
+         * ### CustomInput.userValidation
+         *
+         * An additional validation executed after the main validation function
+         *
+         * Executes only if validation does not fail, takes as input the return
+         * value from the validation function which can be modified accordingly.
+         *
+         * ```javascript
+         *  {
+         *    value: 'validvalue',
+         *    err:   'This error occurred' // If invalid.
+         *  }
+         * ```
+         */
+        this.userValidation = null;
+
+        /**
          * ### CustomInput.validationSpeed
          *
          * How often (in milliseconds) the validation function is called
@@ -324,7 +341,7 @@
          *
          * The function that postprocess the input after validation
          *
-         * The function returns the postprocessed valued
+         * The function returns the postprocessed value
          */
         this.postprocess = null;
 
@@ -466,6 +483,15 @@
         this.orientation = tmp;
 
         this.requiredChoice = !!opts.requiredChoice;
+
+        if (opts.userValidation) {
+            if ('function' !== typeof opts.userValidation) {
+                throw new TypeError('CustomInput.init: userValidation must ' +
+                                    'be function or undefined. Found: ' +
+                                    opts.userValidation);
+            }
+            this.userValidation = opts.userValidation;
+        }
 
         if (opts.type) {
             if (!CustomInput.types[opts.type]) {
@@ -1027,7 +1053,7 @@
 
             // US_Town,State, Zip Code
 
-            // TODO: add other types, e.g.int and email.
+            // TODO: add other types, e.g., email.
         }
 
         // Variable tmp contains a validation function, either from
@@ -1042,6 +1068,7 @@
             else if (tmp) {
                 res = tmp(value);
             }
+            if (that.userValidation) that.userValidation(res);
             return res;
         };
 

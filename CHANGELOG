@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 6.2.0 (current)
+- CustomInput has a userValidation function.
+
 ## 6.1.1
 - ChoiceManager sets itself to "required" if any form requires user action.
 - Widgets.js does not set required=false, leave it undefined.
