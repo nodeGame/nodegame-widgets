@@ -193,7 +193,7 @@
      * @param {object} opts Optional. Options to pass to Widget.getValues.
      *   Default: { markAttempt: false, highlight: false };
      *
-     * @return {boolean} TRUE, if widget is currently docked
+     * @return {boolean} TRUE, if action is required
      */
     Widget.prototype.isActionRequired = function(opts) {
         var values;
@@ -203,8 +203,8 @@
         opts.highlight = opts.highlight || false;
         values = this.getValues(opts);
         if (!values) return false; // Safety check.
-        return values.missValues === true || values.choice === null ||
-            values.isCorrect === false;
+        // TODO: check removed: values.missValues === true ||
+        return values.choice === null || values.isCorrect === false;
     };
 
     /**

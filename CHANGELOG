@@ -2,6 +2,8 @@
 
 ## 6.2.0 (current)
 - CustomInput has a userValidation function.
+- Return value "missValues" is non-blocking for step advancing (only for
+information).
 
 ## 6.1.1
 - ChoiceManager sets itself to "required" if any form requires user action.
