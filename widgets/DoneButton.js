@@ -183,6 +183,12 @@
     };
 
     DoneButton.prototype.append = function() {
+        // If added in init, it must stay disabled until the step property
+        // of first step is evaluated.
+        if (!node.game.isReady()) {
+            this.disabled = true;
+            this.button.disabled = true;
+        }
         this.bodyDiv.appendChild(this.button);
     };
 
