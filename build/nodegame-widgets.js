@@ -2023,8 +2023,9 @@
 
         this.button.onclick = function() {
             var res;
+            that.disable();
             res = node.game.stepBack(that.stepOptions);
-            if (res) that.disable();
+            if (res === false) that.enable();
         };
 
         this.stepOptions = {
@@ -2127,11 +2128,16 @@
     };
 
     BackButton.prototype.append = function() {
+        if (!node.game.getPreviousStep(1, this.stepOptions)) this.disable();
         this.bodyDiv.appendChild(this.button);
     };
 
     BackButton.prototype.listeners = function() {
         var that = this;
+
+        node.events.game.on('DONE', function() {
+            that.disable();
+        });
 
         // Locks the back button in case of a timeout.
         node.events.game.on('PLAYING', function() {
@@ -5104,7 +5110,6 @@
         this.freeText = 'string' === typeof options.freeText ?
             options.freeText : !!options.freeText;
 
-        // formsOptions.
         if ('undefined' !== typeof options.required) {
             this.required = !!options.required;
         }
@@ -10976,7 +10981,7 @@
 
 /**
  * # CustomInputGroup
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several custom input widgets
@@ -10993,7 +10998,7 @@
 
     // ## Meta-data
 
-    CustomInputGroup.version = '0.1.0';
+    CustomInputGroup.version = '0.2.0';
     CustomInputGroup.description = 'Groups together and manages sets of ' +
         'CustomInput widgets.';
 
@@ -11151,6 +11156,15 @@
          * The number of required choices.
          */
         this.requiredChoice = null;
+
+        /**
+         * ### ChoiceManager.required
+         *
+         * TRUE if widget should be checked upon node.done.
+         *
+         * TODO: Harmonize required and requiredChoice
+         */
+        this.required = null;
 
         /**
          * ### CustomInputGroup.orientation
@@ -11398,6 +11412,10 @@
                                 'requiredChoice ' +
                                 'be number or boolean or undefined. Found: ' +
                                 opts.requiredChoice);
+        }
+
+        if ('undefined' !== typeof opts.required) {
+            this.required = !!opts.required;
         }
 
         // Set the group, if any.
@@ -11828,6 +11846,9 @@
             isCorrect: true
         };
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
+        // TODO: do we need markAttempt?
+        // if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
+
         // Make sure reset is done only at the end.
         toReset = opts.reset;
         opts.reset = false;
@@ -11839,7 +11860,10 @@
             // TODO is null or empty?
             if (res.items[input.id].value === "") {
                 res.missValues = true;
-                if (input.requiredChoice) {
+                // TODO: check do we need to check for correctChoice?
+                if (input.requiredChoice || input.required ||
+                    input.correctChoice) {
+
                     res.err = true;
                     res.isCorrect = false;
                 }
@@ -11856,7 +11880,11 @@
 
         }
         else if (toReset) this.reset(toReset);
+        if (!res.isCorrect && opts.highlight) this.highlight();
+
+        // Restore opts.reset.
         opts.reset = toReset;
+        
         if (this.textarea) res.freetext = this.textarea.value;
         return res;
     };
@@ -12051,6 +12079,17 @@
         that.itemsById[ci.id] = ci;
         that.items[idx] = ci;
         that.itemsMap[ci.id] = idx;
+
+        if (s.required || s.requiredChoice || s.correctChoice) {
+            // False is set manually, otherwise undefined.
+            if (that.required === false) {
+                throw new Error('CustomInputGroup.buildTable: required is ' +
+                                'false, but item "' + s.id +
+                                '" has required truthy');
+            }
+            that.required = true;
+        }
+
         return ci;
     }
 
@@ -13159,6 +13198,12 @@
     };
 
     DoneButton.prototype.append = function() {
+        // If added in init, it must stay disabled until the step property
+        // of first step is evaluated.
+        if (!node.game.isReady()) {
+            this.disabled = true;
+            this.button.disabled = true;
+        }
         this.bodyDiv.appendChild(this.button);
     };
 
