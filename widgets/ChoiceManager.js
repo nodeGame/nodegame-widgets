@@ -231,7 +231,6 @@
         this.freeText = 'string' === typeof options.freeText ?
             options.freeText : !!options.freeText;
 
-        // formsOptions.
         if ('undefined' !== typeof options.required) {
             this.required = !!options.required;
         }
