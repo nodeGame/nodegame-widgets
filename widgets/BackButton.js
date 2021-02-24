@@ -64,8 +64,9 @@
 
         this.button.onclick = function() {
             var res;
+            that.disable();
             res = node.game.stepBack(that.stepOptions);
-            if (res) that.disable();
+            if (res === false) that.enable();
         };
 
         this.stepOptions = {
@@ -168,11 +169,16 @@
     };
 
     BackButton.prototype.append = function() {
+        if (!node.game.getPreviousStep(1, this.stepOptions)) this.disable();
         this.bodyDiv.appendChild(this.button);
     };
 
     BackButton.prototype.listeners = function() {
         var that = this;
+
+        node.events.game.on('DONE', function() {
+            that.disable();
+        });
 
         // Locks the back button in case of a timeout.
         node.events.game.on('PLAYING', function() {
