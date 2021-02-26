@@ -7492,7 +7492,7 @@
 
 /**
  * # ChoiceTableGroup
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several choice tables widgets
@@ -11884,7 +11884,7 @@
 
         // Restore opts.reset.
         opts.reset = toReset;
-        
+
         if (this.textarea) res.freetext = this.textarea.value;
         return res;
     };
@@ -16779,15 +16779,15 @@
             str += 'Every box contains a prize of ' +
                     widget.boxValue + ' ' + widget.currency + ', but ';
             if (probBomb === 1) {
-                str += 'one box contains a <em>bomb</em>.';
+                str += 'one random box contains a <em>bomb</em>.';
             }
             else {
                 if (widget.revealProbBomb) {
                     str += 'with probability ' + probBomb +
-                    ' one of those boxes contains a <em>bomb</em>.';
+                    ' one random box contains a <em>bomb</em>.';
                 }
                 else {
-                    str += 'one of those boxes might contain a <em>bomb</em>.';
+                    str += 'one random box might contain a <em>bomb</em>.';
                 }
             }
             str += ' You must decide how many boxes you want to open.';
@@ -17912,7 +17912,7 @@
 
 /**
  * # SVOGauge
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure users' social value orientation (S.V.O.)
@@ -17927,16 +17927,24 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.7.0';
+    SVOGauge.version = '0.8.0';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
     SVOGauge.title = 'SVO Gauge';
     SVOGauge.className = 'svogauge';
 
-    SVOGauge.texts.mainText = 'Select your preferred option among those' +
-                               ' available below:';
-    SVOGauge.texts.left = 'You:<hr/>Other:';
+    SVOGauge.texts = {
+        mainText: 'You and another randomly selected participant ' +
+        'will receive an <em>extra bonus</em>.<br/>' +
+        'Choose the preferred bonus amounts (in cents) for you ' +
+        'and the other participant in each row.<br/>' +
+        'At the end of the experiment, <em>one of your six choices</em> will ' +
+        'be chosen at random, and the bonus added to your and the ' +
+        'other participant\'s payment.',
+
+        left: 'Your Bonus:<hr/>Other\'s Bonus:'
+    };
 
     // ## Dependencies
 
@@ -18242,7 +18250,7 @@
             mainText: this.mainText || this.getText('mainText'),
             title: false,
             renderer: renderer,
-            requiredChoice: true,
+            requiredChoice: this.required,
             storeRef: false
         });
 

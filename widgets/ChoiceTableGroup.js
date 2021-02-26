@@ -1,6 +1,6 @@
 /**
  * # ChoiceTableGroup
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several choice tables widgets
