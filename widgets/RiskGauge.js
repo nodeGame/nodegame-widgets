@@ -43,15 +43,15 @@
             str += 'Every box contains a prize of ' +
                     widget.boxValue + ' ' + widget.currency + ', but ';
             if (probBomb === 1) {
-                str += 'one box contains a <em>bomb</em>.';
+                str += 'one random box contains a <em>bomb</em>.';
             }
             else {
                 if (widget.revealProbBomb) {
                     str += 'with probability ' + probBomb +
-                    ' one of those boxes contains a <em>bomb</em>.';
+                    ' one random box contains a <em>bomb</em>.';
                 }
                 else {
-                    str += 'one of those boxes might contain a <em>bomb</em>.';
+                    str += 'one random box might contain a <em>bomb</em>.';
                 }
             }
             str += ' You must decide how many boxes you want to open.';
