@@ -896,7 +896,7 @@
             // res.err = this.getText('inputErr');
             this.validation(res, values);
             if (opts.highlight && res.err) this.setError(res.err);
-
+            if (res.err) res.isCorrect = false;
         }
         else if (toReset) this.reset(toReset);
         if (!res.isCorrect && opts.highlight) this.highlight();
