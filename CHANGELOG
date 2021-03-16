@@ -4,6 +4,9 @@
 - CustomInput has a userValidation function.
 - Return value "missValues" is non-blocking for step advancing (only for
 information).
+- Fixed non-assignment of required flag when widgets have correctChoice =
+zero.
+- SVO main text updated.
 
 ## 6.1.1
 - ChoiceManager sets itself to "required" if any form requires user action.
