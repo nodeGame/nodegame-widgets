@@ -1527,8 +1527,8 @@
      *
      * @param {string|number} i The numeric position of a choice in display
      *
-     * @return {string|undefined} The value associated the numeric position.
-     *   If no value is found, returns undefined
+     * @return {string|undefined} The value associated with the numeric
+     *   position. If no value is found, returns undefined
      *
      * @see ChoiceTable.order
      * @see ChoiceTable.choices
@@ -1751,7 +1751,7 @@
                 // This is the positional index.
                 j = J.randomInt(-1, (this.choicesCells.length-1));
                 // If shuffled, we need to resolve it.
-                choice = this.shuffleChoices ? this.getChoiceAtPosition(j) : j;
+                choice = this.shuffleChoices ? this.choicesValues[j] : j;
                 // Do not click it again if it is already selected.
                 if (!this.isChoiceCurrent(choice)) this.choicesCells[j].click();
             }
