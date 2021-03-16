@@ -1381,7 +1381,7 @@
         // block node.done().
         if (options.required ||
             options.requiredChoice ||
-            options.correctChoice) {
+            'undefined' !== typeof options.correctChoice) {
 
             // Flag required is undefined, if not set to false explicitely.
             widget.required = true;
@@ -17927,7 +17927,7 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.8.0';
+    SVOGauge.version = '0.8.1';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
@@ -17939,9 +17939,10 @@
         'will receive an <em>extra bonus</em>.<br/>' +
         'Choose the preferred bonus amounts (in cents) for you ' +
         'and the other participant in each row.<br/>' +
-        'At the end of the experiment, <em>one of your six choices</em> will ' +
-        'be chosen at random, and the bonus added to your and the ' +
-        'other participant\'s payment.',
+        'We will select <em>one row at random</em> ' +
+        'and add the bonus to your and the ' +
+        'other participant\'s payment. Your choice will remain '  +
+        '<em>anonymous</em>.',
 
         left: 'Your Bonus:<hr/>Other\'s Bonus:'
     };
@@ -18037,10 +18038,11 @@
             }
             this.method = opts.method;
         }
-        if (opts.mainText) {
-            if ('string' !== typeof opts.mainText) {
+        if ('undefined' !== typeof opts.mainText) {
+            if (opts.mainText !== false && 'string' !== typeof opts.mainText) {
                 throw new TypeError('SVOGauge.init: mainText must be string ' +
-                                    'or undefined. Found: ' + opts.mainText);
+                                    'false, or undefined. Found: ' +
+                                     opts.mainText);
             }
             this.mainText = opts.mainText;
         }
@@ -18151,7 +18153,7 @@
 
     // ### SVO_Slider
     function SVO_Slider(options) {
-        var items, sliders;
+        var items, sliders, mainText;
         var gauge, i, len;
         var renderer;
 
@@ -18243,11 +18245,16 @@
             };
         }
 
+        if (this.mainText) {
+            mainText = this.mainText;
+        }
+        else if ('undefined' === typeof this.mainText) {
+            mainText = this.getText('mainText');
+        }
         gauge = node.widgets.get('ChoiceTableGroup', {
             id: options.id || 'svo_slider',
             items: items,
-            // TODO: should it be on getText at all?
-            mainText: this.mainText || this.getText('mainText'),
+            mainText: mainText,
             title: false,
             renderer: renderer,
             requiredChoice: this.required,
