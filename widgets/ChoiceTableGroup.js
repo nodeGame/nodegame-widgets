@@ -631,11 +631,11 @@
 
         if (opts.header) {
             if (!J.isArray(opts.header) ||
-                opts.header.length !== opts.items.length - 1) {
+                opts.header.length !== opts.choices.length) {
 
                 throw new Error('ChoiceTableGroup.init: header ' +
                                 'must be an array of length ' +
-                                (opts.items.length - 1) +
+                                opts.choices.length +
                                 ' or undefined. Found: ' + opts.header);
             }
 
