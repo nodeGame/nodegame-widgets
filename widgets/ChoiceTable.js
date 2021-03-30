@@ -1,6 +1,6 @@
 /**
  * # ChoiceTable
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.7.0';
+    ChoiceTable.version = '1.8.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -1296,7 +1296,10 @@
             }
             // Set table id.
             this.table.id = this.id;
-            if (this.className) J.addClass(this.table, this.className);
+            // Class.
+            tmp = this.className ? [ this.className ] : [];
+            if (this.orientation !== 'H') tmp.push('choicetable-vertical');
+            if (tmp.length) J.addClass(this.table, tmp);
             else this.table.className = '';
             // Append table.
             this.bodyDiv.appendChild(this.table);
