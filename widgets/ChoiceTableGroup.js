@@ -17,12 +17,12 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.6.1';
+    ChoiceTableGroup.version = '1.7.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
     ChoiceTableGroup.title = 'Make your choice';
-    ChoiceTableGroup.className = 'choicetable'; // TODO: choicetablegroup?
+    ChoiceTableGroup.className = 'choicetable choicetablegroup';
 
     ChoiceTableGroup.separator = '::';
 
