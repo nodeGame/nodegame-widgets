@@ -17,12 +17,12 @@
 
     // ## Meta-data
 
-    CustomInputGroup.version = '0.2.0';
+    CustomInputGroup.version = '0.3.0';
     CustomInputGroup.description = 'Groups together and manages sets of ' +
         'CustomInput widgets.';
 
     CustomInputGroup.title = false;
-    CustomInputGroup.className = 'custominputgroup';
+    CustomInputGroup.className = 'custominput custominputgroup';
 
     CustomInputGroup.separator = '::';
 
@@ -47,9 +47,7 @@
      *   If a `table` option is specified, it sets it as main
      *   table. All other options are passed to the init method.
      */
-    function CustomInputGroup(options) {
-        var that;
-        that = this;
+    function CustomInputGroup() {
 
         /**
          * ### CustomInputGroup.dl
