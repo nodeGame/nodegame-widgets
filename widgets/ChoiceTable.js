@@ -323,6 +323,20 @@
         this.rightCell = null;
 
         /**
+         * ### CustomInput.errorBox
+         *
+         * An HTML element displayed when a validation error occurs
+         */
+        this.errorBox = null;
+
+        /**
+        * ### CustomInput.successBox
+        *
+        * An HTML element displayed when a validation error occurs
+        */
+        this.successBox = null;
+
+        /**
          * ### ChoiceTable.timeCurrentChoice
          *
          * Time when the last choice was made

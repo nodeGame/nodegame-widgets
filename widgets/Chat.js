@@ -1,6 +1,6 @@
 /**
  * # Chat
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -443,7 +443,7 @@
                     innerHTML: this.getText('submitButton')
                 });
                 this.submitButton.onclick = function() {
-                    sendMsg(that);
+                    that.sendMsg();
                     if ('function' === typeof that.textarea.focus) {
                         that.textarea.focus();
                     }
@@ -454,7 +454,7 @@
                 this.textarea.onkeydown = function(e) {
                     if (that.useSubmitEnter) {
                         e = e || window.event;
-                        if ((e.keyCode || e.which) === 13) sendMsg(that);
+                        if ((e.keyCode || e.which) === 13) that.sendMsg();
                         else sendAmTyping(that);
                     }
                     else if (that.showIsTyping) {
@@ -692,21 +692,32 @@
             totUnread: this.stats.unread,
             initialMsg: this.initialMsg
         };
-        if (this.db) out.msgs = db.fetch();
+        if (this.db) out.msgs = this.db.fetch();
         return out;
     };
 
-    // ## Helper functions.
-
-    // ### sendMsg
+    // ### Chat.sendMsg
     // Reads the textarea and delivers the msg to the server.
-    function sendMsg(that) {
-        var msg, to, ids;
+    Chat.prototype.sendMsg = function(msg, opts) {
+        var to, ids, that;
+        opts = opts || {};
 
         // No msg sent.
-        if (that.isDisabled()) return;
+        if (this.isDisabled()) {
+            node.warn('Chat is disable, msg not sent.');
+            return;
+        }
 
-        msg = that.readTextarea();
+        if ('undefined' !== typeof msg) {
+            msg += '';
+            if ('string' !== typeof msg) {
+                throw new TypeError('Chat.sendMsg: msg must be string, ' +
+                                    'number, or undefined. Found: ' + msg);
+            }
+        }
+        else {
+            msg = this.readTextarea();
+        }
 
         // Move cursor at the beginning.
         if (msg === '') {
@@ -714,22 +725,33 @@
             return;
         }
         // Simplify things, if there is only one recipient.
-        ids = that.recipientsIds;
+        ids = opts.recipients || this.recipientsIds;
         if (ids.length === 0) {
             node.warn('Chat: empty recipient list, message not sent.');
             return;
         }
+        // Make it a number if array of size 1, so it is faster.
         to = ids.length === 1 ? ids[0] : ids;
-        that.writeMsg('outgoing', { msg: msg }); // to not used now.
-        node.say(that.chatEvent, to, msg);
-        // Make sure the cursor goes back to top.
-        setTimeout(function() { that.textarea.value = ''; });
-        // Clear any typing timeout.
-        if (that.amTypingTimeout) {
-            clearTimeout(that.amTypingTimeout);
-            that.amTypingTimeout = null;
+
+        node.say(this.chatEvent, to, msg);
+
+        if (!opts.silent) {
+            that = this;
+            // TODO: check the comment: // to not used now.
+            this.writeMsg('outgoing', { msg: msg });
+
+            // Make sure the cursor goes back to top.
+            setTimeout(function() { that.textarea.value = ''; });
+            // Clear any typing timeout.
+            if (this.amTypingTimeout) {
+                clearTimeout(this.amTypingTimeout);
+                this.amTypingTimeout = null;
+            }
         }
     }
+
+    // ## Helper functions.
+
     // ### sendMsg
     // Reads the textarea and delivers the msg to the server.
     function sendAmTyping(that) {

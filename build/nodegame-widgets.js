@@ -2454,7 +2454,7 @@
 
 /**
  * # Chat
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -2897,7 +2897,7 @@
                     innerHTML: this.getText('submitButton')
                 });
                 this.submitButton.onclick = function() {
-                    sendMsg(that);
+                    that.sendMsg();
                     if ('function' === typeof that.textarea.focus) {
                         that.textarea.focus();
                     }
@@ -2908,7 +2908,7 @@
                 this.textarea.onkeydown = function(e) {
                     if (that.useSubmitEnter) {
                         e = e || window.event;
-                        if ((e.keyCode || e.which) === 13) sendMsg(that);
+                        if ((e.keyCode || e.which) === 13) that.sendMsg();
                         else sendAmTyping(that);
                     }
                     else if (that.showIsTyping) {
@@ -3146,21 +3146,32 @@
             totUnread: this.stats.unread,
             initialMsg: this.initialMsg
         };
-        if (this.db) out.msgs = db.fetch();
+        if (this.db) out.msgs = this.db.fetch();
         return out;
     };
 
-    // ## Helper functions.
-
-    // ### sendMsg
+    // ### Chat.sendMsg
     // Reads the textarea and delivers the msg to the server.
-    function sendMsg(that) {
-        var msg, to, ids;
+    Chat.prototype.sendMsg = function(msg, opts) {
+        var to, ids, that;
+        opts = opts || {};
 
         // No msg sent.
-        if (that.isDisabled()) return;
+        if (this.isDisabled()) {
+            node.warn('Chat is disable, msg not sent.');
+            return;
+        }
 
-        msg = that.readTextarea();
+        if ('undefined' !== typeof msg) {
+            msg += '';
+            if ('string' !== typeof msg) {
+                throw new TypeError('Chat.sendMsg: msg must be string, ' +
+                                    'number, or undefined. Found: ' + msg);
+            }
+        }
+        else {
+            msg = this.readTextarea();
+        }
 
         // Move cursor at the beginning.
         if (msg === '') {
@@ -3168,22 +3179,33 @@
             return;
         }
         // Simplify things, if there is only one recipient.
-        ids = that.recipientsIds;
+        ids = opts.recipients || this.recipientsIds;
         if (ids.length === 0) {
             node.warn('Chat: empty recipient list, message not sent.');
             return;
         }
+        // Make it a number if array of size 1, so it is faster.
         to = ids.length === 1 ? ids[0] : ids;
-        that.writeMsg('outgoing', { msg: msg }); // to not used now.
-        node.say(that.chatEvent, to, msg);
-        // Make sure the cursor goes back to top.
-        setTimeout(function() { that.textarea.value = ''; });
-        // Clear any typing timeout.
-        if (that.amTypingTimeout) {
-            clearTimeout(that.amTypingTimeout);
-            that.amTypingTimeout = null;
+
+        node.say(this.chatEvent, to, msg);
+
+        if (!opts.silent) {
+            that = this;
+            // TODO: check the comment: // to not used now.
+            this.writeMsg('outgoing', { msg: msg });
+
+            // Make sure the cursor goes back to top.
+            setTimeout(function() { that.textarea.value = ''; });
+            // Clear any typing timeout.
+            if (this.amTypingTimeout) {
+                clearTimeout(this.amTypingTimeout);
+                this.amTypingTimeout = null;
+            }
         }
     }
+
+    // ## Helper functions.
+
     // ### sendMsg
     // Reads the textarea and delivers the msg to the server.
     function sendAmTyping(that) {
@@ -5878,6 +5900,20 @@
         this.rightCell = null;
 
         /**
+         * ### CustomInput.errorBox
+         *
+         * An HTML element displayed when a validation error occurs
+         */
+        this.errorBox = null;
+
+        /**
+        * ### CustomInput.successBox
+        *
+        * An HTML element displayed when a validation error occurs
+        */
+        this.successBox = null;
+
+        /**
          * ### ChoiceTable.timeCurrentChoice
          *
          * Time when the last choice was made
@@ -6852,7 +6888,6 @@
             // Set table id.
             this.table.id = this.id;
             // Class.
-            debugger
             tmp = this.className ? [ this.className ] : [];
             if (this.orientation !== 'H') tmp.push('choicetable-vertical');
             if (tmp.length) J.addClass(this.table, tmp);
@@ -7513,12 +7548,12 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.7.1';
+    ChoiceTableGroup.version = '1.7.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
     ChoiceTableGroup.title = 'Make your choice';
-    ChoiceTableGroup.className = 'choicetable choicetablegroup'; // TODO: choicetablegroup?
+    ChoiceTableGroup.className = 'choicetable choicetablegroup';
 
     ChoiceTableGroup.separator = '::';
 
@@ -11002,12 +11037,12 @@
 
     // ## Meta-data
 
-    CustomInputGroup.version = '0.2.0';
+    CustomInputGroup.version = '0.3.0';
     CustomInputGroup.description = 'Groups together and manages sets of ' +
         'CustomInput widgets.';
 
     CustomInputGroup.title = false;
-    CustomInputGroup.className = 'custominputgroup';
+    CustomInputGroup.className = 'custominput custominputgroup';
 
     CustomInputGroup.separator = '::';
 
@@ -11032,9 +11067,7 @@
      *   If a `table` option is specified, it sets it as main
      *   table. All other options are passed to the init method.
      */
-    function CustomInputGroup(options) {
-        var that;
-        that = this;
+    function CustomInputGroup() {
 
         /**
          * ### CustomInputGroup.dl
