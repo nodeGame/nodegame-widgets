@@ -5601,36 +5601,41 @@
     ChoiceTable.title = 'Make your choice';
     ChoiceTable.className = 'choicetable';
 
-    ChoiceTable.texts.autoHint = function(w) {
-        var res;
-        if (!w.requiredChoice && !w.selectMultiple) return false;
-        if (!w.selectMultiple) return '*';
-        res = '(';
-        if (!w.requiredChoice) {
-            if ('number' === typeof w.selectMultiple) {
-                res += 'select up to ' + w.selectMultiple;
-            }
-            else {
-                res += 'multiple selection allowed';
-            }
-        }
-        else {
-            if ('number' === typeof w.selectMultiple) {
-                if (w.selectMultiple === w.requiredChoice) {
-                    res += 'select ' + w.requiredChoice;
+    ChoiceTable.texts = {
+
+        autoHint: function(w) {
+            var res;
+            if (!w.requiredChoice && !w.selectMultiple) return false;
+            if (!w.selectMultiple) return '*';
+            res = '(';
+            if (!w.requiredChoice) {
+                if ('number' === typeof w.selectMultiple) {
+                    res += 'select up to ' + w.selectMultiple;
                 }
                 else {
-                    res += 'select between ' + w.requiredChoice +
-                        ' and ' + w.selectMultiple;
+                    res += 'multiple selection allowed';
                 }
             }
             else {
-                res += 'select at least ' + w.requiredChoice;
+                if ('number' === typeof w.selectMultiple) {
+                    if (w.selectMultiple === w.requiredChoice) {
+                        res += 'select ' + w.requiredChoice;
+                    }
+                    else {
+                        res += 'select between ' + w.requiredChoice +
+                        ' and ' + w.selectMultiple;
+                    }
+                }
+                else {
+                    res += 'select at least ' + w.requiredChoice;
+                }
             }
-        }
-        res += ')';
-        if (w.requiredChoice) res += ' *';
-        return res;
+            res += ')';
+            if (w.requiredChoice) res += ' *';
+            return res;
+        },
+        error: 'Not correct, try again.',
+        correct: 'Correct.'
     };
 
     ChoiceTable.separator = '::';
@@ -6896,6 +6901,9 @@
             this.bodyDiv.appendChild(this.table);
         }
 
+        this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
+
+
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
@@ -6908,6 +6916,22 @@
             // Append textarea.
             this.bodyDiv.appendChild(this.textarea);
         }
+    };
+
+    /**
+     * ### ChoiceTable.setError
+     *
+     * Set the error msg inside the errorBox and call highlight
+     *
+     * @param {string} The error msg (can contain HTML)
+     *
+     * @see ChoiceTable.highlight
+     * @see ChoiceTable.errorBox
+     */
+    ChoiceTable.prototype.setError = function(err) {
+        this.errorBox.innerHTML = err || '';
+        if (err) this.highlight();
+        else this.unhighlight();
     };
 
     /**
@@ -7164,6 +7188,7 @@
         if (!this.table || this.highlighted !== true) return;
         this.table.style.border = '';
         this.highlighted = false;
+        this.setError();
         this.emit('unhighlighted');
     };
 
@@ -7245,7 +7270,10 @@
             if (!obj.isCorrect && opts.highlight) this.highlight();
         }
         if (this.textarea) obj.freetext = this.textarea.value;
-        if (obj.isCorrect !== false && opts.reset) {
+        if (obj.isCorrect === false) {
+            this.setError(this.getText('error', obj.value));
+        }
+        else if (opts.reset) {
             resetOpts = 'object' !== typeof opts.reset ? {} : opts.reset;
             this.reset(resetOpts);
         }
