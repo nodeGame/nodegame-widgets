@@ -5634,8 +5634,16 @@
             if (w.requiredChoice) res += ' *';
             return res;
         },
-        error: 'Not correct, try again.',
-        correct: 'Correct.'
+        error: function(w, value) {
+            if (value !== null &&
+                ('number' === typeof w.correctChoice ||
+                'string' === typeof w.correctChoice)) {
+
+                return 'Not correct, try again.';
+            }
+            return 'Selection required.';
+        }
+        // correct: 'Correct.'
     };
 
     ChoiceTable.separator = '::';
@@ -5949,7 +5957,7 @@
         /**
          * ### ChoiceTable.correctChoice
          *
-         * The array of correct choice/s
+         * The correct choice/s
          *
          * The field is an array or number|string depending
          * on the value of ChoiceTable.selectMultiple
