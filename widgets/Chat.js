@@ -24,7 +24,7 @@
 
     Chat.texts = {
         outgoing: function(w, data) {
-            return w.renderMsg(data, 'outgoing');
+            return data.msg;
             // return '<span class="chat_msg_me">' + data.msg + '</span>';
         },
         incoming: function(w, data) {
@@ -34,7 +34,7 @@
                 str += '<span class="chat_id_other">' +
                     (w.senderToNameMap[data.id] || data.id) + '</span>: ';
             }
-            str += w.renderMsg(data, 'incoming') + '</span>';
+            str += data.msg + '</span>';
             return str;
         },
         quit: function(w, data) {
@@ -58,7 +58,7 @@
 
     // ## Meta-data
 
-    Chat.version = '1.2.1';
+    Chat.version = '1.5.0';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the server.';
 
@@ -275,13 +275,16 @@
         /**
          * ### Chat.preprocessMsg
          *
-         * A function that process the msg before being displayed.
+         * A function that process the msg before being displayed
+         *
+         * It does not preprocess the initial message
+         * and "is typing" notifications.
          *
          * Example:
          *
          * ```js
          * function(data, code) {
-         *     return data.msg;
+         *     data.msg += '!';
          * }
          * ```
          */
@@ -327,6 +330,15 @@
 
         // Receiver Only.
         this.receiverOnly = !!opts.receiverOnly;
+
+        tmp = opts.preprocessMsg;
+        if ('function' === typeof tmp) {
+            this.preprocessMsg = tmp;
+        }
+        else if (tmp) {
+            throw new TypeError('Chat.init: preprocessMsg must be function ' +
+                                'or undefined. Found: ' + tmp);
+        }
 
         // Chat id.
         tmp = opts.chatEvent;
@@ -511,7 +523,7 @@
 
         if (this.initialMsg) {
             this.writeMsg(this.initialMsg.id ? 'incoming' : 'outgoing',
-                          { msg: this.initialMsg });
+                          this.initialMsg);
         }
     };
 
@@ -555,13 +567,28 @@
         return c;
     };
 
+    /**
+     * ### Chat.writeMsg
+     *
+     * It calls preprocess and renders a msg from data
+     *
+     * If msg is a function it executes it to render it.
+     *
+     * @param {object} data The content of the message
+     * @param {string} code A value indicating the the type of msg. Available:
+     *   'incoming', 'outgoing', and anything else.
+     *
+     * @return {string} msg The rendered msg
+     *
+     * @see Chat.chatDiv
+     */
     Chat.prototype.renderMsg = function(data, code) {
         var msg;
+        if ('function' === typeof this.preprocessMsg) {
+            this.preprocessMsg(data, code);
+        }
         if ('function' === typeof data.msg) {
             msg = data.msg(data, code);
-        }
-        else if ('function' === typeof this.preprocessMsg) {
-            msg = this.preprocessMsg(data, code);
         }
         else {
             msg = data.msg;
@@ -596,7 +623,11 @@
             }
             // Remove is typing sign, if any.
             that.clearIsTyping(msg.from);
-            that.writeMsg('incoming', { msg: msg.data, id: msg.from });
+            msg = {
+                msg: that.renderMsg(msg.data, 'incoming'),
+                id: msg.from
+            };
+            that.writeMsg('incoming', msg);
         });
 
         node.on.data(this.chatEvent + '_QUIT', function(msg) {
@@ -771,6 +802,9 @@
                                      opts);
             }
         }
+
+        // Calls preprocessMsg and if opts.msg is function, executes it.
+        opts.msg = this.renderMsg(opts, 'outgoing');
 
         // Move cursor at the beginning.
         if (opts.msg === '') {
