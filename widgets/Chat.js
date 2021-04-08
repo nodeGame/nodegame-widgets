@@ -24,7 +24,7 @@
 
     Chat.texts = {
         outgoing: function(w, data) {
-            return data.msg;
+            return w.renderMsg(data, 'outgoing');
             // return '<span class="chat_msg_me">' + data.msg + '</span>';
         },
         incoming: function(w, data) {
@@ -34,7 +34,7 @@
                 str += '<span class="chat_id_other">' +
                     (w.senderToNameMap[data.id] || data.id) + '</span>: ';
             }
-            str += data.msg + '</span>';
+            str += w.renderMsg(data, 'incoming') + '</span>';
             return str;
         },
         quit: function(w, data) {
@@ -272,6 +272,21 @@
          */
         this.isTypingDivs = {};
 
+        /**
+         * ### Chat.preprocessMsg
+         *
+         * A function that process the msg before being displayed.
+         *
+         * Example:
+         *
+         * ```js
+         * function(data, code) {
+         *     return data.msg;
+         * }
+         * ```
+         */
+        this.preprocessMsg = null;
+
     }
 
     // ## Chat methods
@@ -496,7 +511,7 @@
 
         if (this.initialMsg) {
             this.writeMsg(this.initialMsg.id ? 'incoming' : 'outgoing',
-                          this.initialMsg);
+                          { msg: this.initialMsg });
         }
     };
 
@@ -538,6 +553,20 @@
         });
         this.scrollToBottom();
         return c;
+    };
+
+    Chat.prototype.renderMsg = function(data, code) {
+        var msg;
+        if ('function' === typeof data.msg) {
+            msg = data.msg(data, code);
+        }
+        else if ('function' === typeof this.preprocessMsg) {
+            msg = this.preprocessMsg(data, code);
+        }
+        else {
+            msg = data.msg;
+        }
+        return msg;
     };
 
     /**
@@ -700,11 +729,20 @@
         return out;
     };
 
-    // ### Chat.sendMsg
-    // Reads the textarea and delivers the msg to the server.
-    Chat.prototype.sendMsg = function(msg, opts) {
+    /* ### Chat.sendMsg
+     *
+     * Delivers a msg to the server
+     *
+     * If no options are specified, it reads the textarea.
+     *
+     * @param {object} opts Optional. Configutation options:
+     *   - msg: the msg to send. If undefined, it reads the value from textarea;
+     *          if function it executes it and uses the return value.
+     *   - recipients: array of recipients. Default: this.recipientsIds.
+     *   - silent: does not write the msg on the chat.
+     */
+    Chat.prototype.sendMsg = function(opts) {
         var to, ids, that;
-        opts = opts || {};
 
         // No msg sent.
         if (this.isDisabled()) {
@@ -712,19 +750,30 @@
             return;
         }
 
-        if ('undefined' !== typeof msg) {
-            msg += '';
-            if ('string' !== typeof msg) {
-                throw new TypeError('Chat.sendMsg: msg must be string, ' +
-                                    'number, or undefined. Found: ' + msg);
+        if ('object' === typeof opts) {
+            if ('undefined' !== typeof opts.msg) {
+                if ('object' === typeof opts.msg) {
+                    throw new TypeError('Chat.sendMsg: opts.msg cannot be ' +
+                                        'object. Found: ' + opts.msg);
+                }
             }
         }
         else {
-            msg = this.readTextarea();
+            if ('undefined' === typeof opts) {
+                opts = { msg: this.readTextarea() };
+            }
+            else if ('string' === typeof opts || 'number' === typeof opts) {
+                opts = { msg: opts };
+            }
+            else {
+                throw new TypeError('Chat.sendMsg: opts must be string, ' +
+                                    'number, object, or undefined. Found: ' +
+                                     opts);
+            }
         }
 
         // Move cursor at the beginning.
-        if (msg === '') {
+        if (opts.msg === '') {
             node.warn('Chat: message has no text, not sent.');
             return;
         }
@@ -737,20 +786,21 @@
         // Make it a number if array of size 1, so it is faster.
         to = ids.length === 1 ? ids[0] : ids;
 
-        node.say(this.chatEvent, to, msg);
+        node.say(this.chatEvent, to, opts);
 
         if (!opts.silent) {
             that = this;
             // TODO: check the comment: // to not used now.
-            this.writeMsg('outgoing', { msg: msg });
+            this.writeMsg('outgoing', opts);
 
             // Make sure the cursor goes back to top.
             setTimeout(function() { that.textarea.value = ''; });
-            // Clear any typing timeout.
-            if (this.amTypingTimeout) {
-                clearTimeout(this.amTypingTimeout);
-                this.amTypingTimeout = null;
-            }
+        }
+
+        // Clear any typing timeout.
+        if (this.amTypingTimeout) {
+            clearTimeout(this.amTypingTimeout);
+            this.amTypingTimeout = null;
         }
     }
 
