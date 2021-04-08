@@ -1,12 +1,21 @@
 # nodegame-widgets change log
 
-## 6.2.0 (current)
+## 6.2.0
 - CustomInput has a userValidation function.
 - Return value "missValues" is non-blocking for step advancing (only for
 information).
 - Fixed non-assignment of required flag when widgets have correctChoice =
 zero.
 - SVO main text updated.
+- Chat widget improved, fixed receiverOnly option not read, sendMsg method is
+public, structured msgs can be rendered.
+- ChoiceTable: Fixed setValue with no values and some choices are
+non-primitives.
+- CustomInputGroup supports only some items required.
+- Improved BackButton in response to events and first step.
+- DoneButton added in init stays disabled until PLAYING.
+- Added classes: choicetable-vertical, choicetablegroup.
+- New method setError in ChoiceTable.
 
 ## 6.1.1
 - ChoiceManager sets itself to "required" if any form requires user action.
@@ -17,7 +26,7 @@ zero.
 - Header in ChoiceTableGroup (experimental, in progress...).
 
 ## 6.0.1
-- Fixed null reference with Slider hint and required movement. 
+- Fixed null reference with Slider hint and required movement.
 
 ## 6.0.0
 - Slider changes color on mouse over (option hoverColor changes default).
