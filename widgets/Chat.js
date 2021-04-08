@@ -271,6 +271,7 @@
          * Once created
          */
         this.isTypingDivs = {};
+
     }
 
     // ## Chat methods
@@ -306,8 +307,11 @@
      */
     Chat.prototype.init = function(opts) {
         var tmp, i, rec, sender, that;
-
+        opts = opts || {};
         that = this;
+
+        // Receiver Only.
+        this.receiverOnly = !!opts.receiverOnly;
 
         // Chat id.
         tmp = opts.chatEvent;
@@ -623,7 +627,7 @@
         this.isTypingTimeouts[id] = setTimeout(function() {
             that.clearIsTyping(id);
             that.isTypingTimeouts[id] = null;
-        }, 5000);
+        }, 3000);
     };
 
     Chat.prototype.clearIsTyping = function(id) {
@@ -652,7 +656,7 @@
      * @see Chat.chatDiv
      */
     Chat.prototype.handleMsg = function(msg) {
-        var from, args;
+        var from;
         from = msg.from;
         if (from === node.player.id || from === node.player.sid) {
             node.warn('Chat: your own message came back: ' + msg.id);
