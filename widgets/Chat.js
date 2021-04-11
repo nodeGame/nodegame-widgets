@@ -828,7 +828,9 @@
             this.writeMsg('outgoing', opts);
 
             // Make sure the cursor goes back to top.
-            setTimeout(function() { that.textarea.value = ''; });
+            if (that.textarea) {
+                setTimeout(function() { that.textarea.value = ''; });
+            }
         }
 
         // Clear any typing timeout.

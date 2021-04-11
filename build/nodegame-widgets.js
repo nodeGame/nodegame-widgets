@@ -2512,7 +2512,7 @@
 
     // ## Meta-data
 
-    Chat.version = '1.3.0';
+    Chat.version = '1.5.0';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the server.';
 
@@ -2729,7 +2729,10 @@
         /**
          * ### Chat.preprocessMsg
          *
-         * A function that process the msg before being displayed.
+         * A function that process the msg before being displayed
+         *
+         * It does not preprocess the initial message
+         * and "is typing" notifications.
          *
          * Example:
          *
@@ -3018,6 +3021,21 @@
         return c;
     };
 
+    /**
+     * ### Chat.writeMsg
+     *
+     * It calls preprocess and renders a msg from data
+     *
+     * If msg is a function it executes it to render it.
+     *
+     * @param {object} data The content of the message
+     * @param {string} code A value indicating the the type of msg. Available:
+     *   'incoming', 'outgoing', and anything else.
+     *
+     * @return {string} msg The rendered msg
+     *
+     * @see Chat.chatDiv
+     */
     Chat.prototype.renderMsg = function(data, code) {
         var msg;
         if ('function' === typeof this.preprocessMsg) {
@@ -3264,7 +3282,9 @@
             this.writeMsg('outgoing', opts);
 
             // Make sure the cursor goes back to top.
-            setTimeout(function() { that.textarea.value = ''; });
+            if (that.textarea) {
+                setTimeout(function() { that.textarea.value = ''; });
+            }
         }
 
         // Clear any typing timeout.
