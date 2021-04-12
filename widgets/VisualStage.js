@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    VisualStage.version = '0.9.0';
+    VisualStage.version = '0.10.0';
     VisualStage.description =
         'Displays the name of the current, previous and next step of the game.';
 
@@ -270,6 +270,10 @@
                 if (this.capitalize) name = capitalize(name);
             }
         }
+
+        // If function, executes it.
+        if ('function' === typeof name) name = name.call(node.game);
+
         if (this.showRounds) {
             round = getRound(gameStage, curStage, mod);
             if (round) name += ' ' + round;
