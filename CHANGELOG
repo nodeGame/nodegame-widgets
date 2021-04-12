@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## 6.3.0 ## current
+- VisualStage supports functions as 'name' step-property.
+- Fixed bug in Chat when receiverOnly is true.
+
 ## 6.2.0
 - CustomInput has a userValidation function.
 - Return value "missValues" is non-blocking for step advancing (only for
