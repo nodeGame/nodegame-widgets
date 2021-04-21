@@ -1,6 +1,6 @@
 /**
  * # EmailForm
- * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays a form to input email
@@ -15,50 +15,47 @@
 
     // ## Meta-data
 
-    EmailForm.version = '0.12.0';
+    EmailForm.version = '0.13.0';
     EmailForm.description = 'Displays a configurable email form.';
 
-    EmailForm.title = 'Email';
+    EmailForm.title = false;
     EmailForm.className = 'emailform';
 
-    EmailForm.texts.label = 'Enter your email:';
-    EmailForm.texts.errString = 'Not a valid email address, ' +
-        'please correct it and submit it again.';
-
-    // ## Dependencies
-
-    EmailForm.dependencies = { JSUS: {} };
+    EmailForm.texts = {
+        label: 'Enter your email:',
+        errString: 'Not a valid email address, ' +
+                   'please correct it and submit it again.',
+        sent: 'Sent!'
+    };
 
     /**
      * ## EmailForm constructor
      *
-     * `EmailForm` sends a feedback message to the server
-     *
      * @param {object} options configuration option
      */
-    function EmailForm(options) {
+    function EmailForm(opts) {
 
         /**
          * ### EmailForm.onsubmit
          *
          * Options passed to `getValues` when the submit button is pressed
          *
-         * @see Feedback.getValues
+         * @see EmailForm.getValues
          */
-        if (!options.onsubmit) {
+        if (!opts.onsubmit) {
             this.onsubmit = {
                 emailOnly: true,
                 send: true,
                 updateUI: true
             };
         }
-        else if ('object' === typeof options.onsubmit) {
-            this.onsubmit = options.onsubmit;
+        else if ('object' === typeof opts.onsubmit) {
+            this.onsubmit = opts.onsubmit;
         }
         else {
-            throw new TypeError('EmailForm constructor: options.onsubmit ' +
-                                'must be string or object. Found: ' +
-                                options.onsubmit);
+            throw new TypeError('EmailForm constructor: opts.onsubmit ' +
+                                'must be object or undefined. Found: ' +
+                                opts.onsubmit);
         }
 
         /**
@@ -70,7 +67,7 @@
          *
          * @see EmailForm.createForm
          */
-        this._email = options.email || null;
+        this._email = opts.email || null;
 
         /**
          * ### EmailForm.attempts
@@ -114,7 +111,17 @@
          *
          * Default: FALSE
          */
-        this.setMsg = !!options.setMsg || false;
+        this.setMsg = !!opts.setMsg || false;
+
+        /**
+         * ### EmailForm.showSubmitBtn
+         *
+         * If TRUE, a set message is sent instead of a data msg
+         *
+         * Default: FALSE
+         */
+        this.showSubmitBtn = 'undefined' === typeof opts.showSubmitBtn ?
+            true : !!opts.showSubmitBtn;
     }
 
     // ## EmailForm methods
@@ -136,31 +143,34 @@
         inputElement.setAttribute('placeholder', 'Email');
         inputElement.className = 'emailform-input form-control';
 
-        buttonElement = document.createElement('input');
-        buttonElement.setAttribute('type', 'submit');
-        buttonElement.setAttribute('value', 'Submit email');
-        buttonElement.className = 'btn btn-lg btn-primary ' +
-            'emailform-submit';
-
         formElement.appendChild(labelElement);
         formElement.appendChild(inputElement);
-        formElement.appendChild(buttonElement);
-
-        // Add listeners on input form.
-        J.addEvent(formElement, 'submit', function(event) {
-            event.preventDefault();
-            that.getValues(that.onsubmit);
-        }, true);
-        J.addEvent(formElement, 'input', function() {
-            if (!that.timeInput) that.timeInput = J.now();
-            if (that.isHighlighted()) that.unhighlight();
-        }, true);
-
 
         // Store references.
         this.formElement = formElement;
         this.inputElement = inputElement;
-        this.buttonElement = buttonElement;
+
+        if (this.showSubmitBtn) {
+            buttonElement = document.createElement('input');
+            buttonElement.setAttribute('type', 'submit');
+            buttonElement.setAttribute('value', 'Submit email');
+            buttonElement.className = 'btn btn-lg btn-primary ' +
+            'emailform-submit';
+            formElement.appendChild(buttonElement);
+
+            // Add listeners on input form.
+            J.addEvent(formElement, 'submit', function(event) {
+                event.preventDefault();
+                that.getValues(that.onsubmit);
+            }, true);
+            J.addEvent(formElement, 'input', function() {
+                if (!that.timeInput) that.timeInput = J.now();
+                if (that.isHighlighted()) that.unhighlight();
+            }, true);
+
+            // Store reference.
+            this.buttonElement = buttonElement;
+        }
 
         // If a value was previously set, insert it in the form.
         if (this._email) this.formElement.value = this._email;
@@ -192,7 +202,7 @@
             if (this.inputElement) this.inputElement.disabled = true;
             if (this.buttonElement) {
                 this.buttonElement.disabled = true;
-                this.buttonElement.value = 'Sent!';
+                this.buttonElement.value = this.getText('sent');
             }
         }
         else {
@@ -295,8 +305,9 @@
                 email: email,
                 attempts: this.attempts,
             };
-            if (opts.markAttempt) email.isCorrect = res;
         }
+
+        if (opts.markAttempt) email.isCorrect = res;
 
         if (res === false) {
             if (opts.updateUI || opts.highlight) this.highlight();
