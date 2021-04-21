@@ -9514,7 +9514,7 @@
 
 /**
  * # CustomInput
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable input form with validation
@@ -9529,7 +9529,7 @@
 
     // ## Meta-data
 
-    CustomInput.version = '0.11.0';
+    CustomInput.version = '0.12.0';
     CustomInput.description = 'Creates a configurable input form';
 
     CustomInput.title = false;
@@ -9694,7 +9694,7 @@
                     res = '(Must be before ' + w.params.max + ')';
                 }
             }
-            return w.requiredChoice ? ((res || '') + ' *') : (res || false);
+            return w.required ? ((res || '') + ' *') : (res || false);
         },
         numericErr: function(w) {
             var str, p;
@@ -9909,8 +9909,19 @@
          * If TRUE, the input form cannot be left empty
          *
          * Default: TRUE
+         *
+         * @deprecated Use CustomInput.required
          */
         this.requiredChoice = null;
+
+        /**
+         * ### CustomInput.required
+         *
+         * If TRUE, the input form cannot be left empty
+         *
+         * Default: TRUE
+         */
+        this.required = null;
 
         /**
          * ### CustomInput.timeBegin
@@ -9996,7 +10007,22 @@
         }
         this.orientation = tmp;
 
-        this.requiredChoice = !!opts.requiredChoice;
+        // Backward compatible checks.
+        // Option required will be used in the future.
+        if ('undefined' !== typeof opts.required) {
+            this.required = this.requiredChoice = !!opts.required;
+        }
+        if ('undefined' !== typeof opts.requiredChoice) {
+            if (this.required !== !! opts.requiredChoice) {
+                throw new TypeError('CustomInput.init: required and ' +
+                                    'requiredChoice are incompatible. Option ' +
+                                    'requiredChoice will be deprecated.');
+            }
+            this.required = this.requiredChoice = !!opts.required;
+        }
+        if ('undefined' === typeof this.required) {
+            this.required = this.requiredChoice = !!opts.required;
+        }
 
         if (opts.userValidation) {
             if ('function' !== typeof opts.userValidation) {
@@ -10453,7 +10479,7 @@
                         }
                         this.params.minItems = tmp;
                     }
-                    else if (this.requiredChoice) {
+                    else if (this.required) {
                         this.params.minItems = 1;
                     }
                     if ('undefined' !== typeof opts.maxItems) {
@@ -10577,7 +10603,7 @@
             var res;
             res = { value: value };
             if (value.trim() === '') {
-                if (that.requiredChoice) res.err = that.getText('emptyErr');
+                if (that.required) res.err = that.getText('emptyErr');
             }
             else if (tmp) {
                 res = tmp(value);
@@ -10696,7 +10722,7 @@
                                     'undefined. Found: ' + opts.hint);
             }
             this.hint = opts.hint;
-            if (this.requiredChoice) this.hint += ' *';
+            if (this.required) this.hint += ' *';
         }
         else {
             this.hint = this.getText('autoHint');
