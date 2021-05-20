@@ -17028,7 +17028,8 @@
         },
 
         bomb_sliderHint:
-            'Move the slider below to change the number of boxes to open.',
+            'Move the slider to choose the number of boxes to open, ' +
+            'then click "Open Boxes"',
 
         bomb_boxValue: 'Prize per box: ',
 
@@ -17462,12 +17463,6 @@
                                that.getText('bomb_mainText', probBomb)
                 });
 
-                // Table.
-                nRows = Math.ceil(that.totBoxes / that.boxesInRow);
-                W.add('div', that.bodyDiv, {
-                    innerHTML: makeTable(nRows, that.boxesInRow, that.totBoxes)
-                });
-
                 // Slider.
                 slider = node.widgets.add('Slider', that.bodyDiv, {
                     min: 0,
@@ -17479,6 +17474,7 @@
                     displayNoChange: false,
                     type: 'flat',
                     required: true,
+                    panel: false,
                     // texts: {
                     //     currentValue: that.getText('sliderValue')
                     // },
@@ -17520,6 +17516,12 @@
                     },
                     storeRef: false,
                     width: '100%'
+                });
+
+                // Table.
+                nRows = Math.ceil(that.totBoxes / that.boxesInRow);
+                W.add('div', that.bodyDiv, {
+                    innerHTML: makeTable(nRows, that.boxesInRow, that.totBoxes)
                 });
 
                 // Info div.
