@@ -6214,6 +6214,14 @@
          * An object containing the list of disabled values
          */
         this.disabledChoices = {};
+
+
+        /**
+        * ### ChoiceTable.sameWidthCells
+        *
+        * If TRUE, cells have same width regardless of content
+        */
+        this.sameWidthCells = true;
     }
 
     // ## ChoiceTable methods
@@ -6528,19 +6536,6 @@
         this.freeText = 'string' === typeof opts.freeText ?
             opts.freeText : !!opts.freeText;
 
-        // Add the choices.
-        if ('undefined' !== typeof opts.choices) {
-            this.setChoices(opts.choices);
-        }
-
-        // Add the correct choices.
-        if ('undefined' !== typeof opts.correctChoice) {
-            if (this.requiredChoice) {
-                throw new Error('ChoiceTable.init: cannot specify both ' +
-                                'opts requiredChoice and correctChoice');
-            }
-            this.setCorrectChoice(opts.correctChoice);
-        }
 
         // Add the correct choices.
         if ('undefined' !== typeof opts.choicesSetSize) {
@@ -6558,6 +6553,21 @@
 
             this.choicesSetSize = opts.choicesSetSize;
         }
+
+        // Add the choices.
+        if ('undefined' !== typeof opts.choices) {
+            this.setChoices(opts.choices);
+        }
+
+        // Add the correct choices.
+        if ('undefined' !== typeof opts.correctChoice) {
+            if (this.requiredChoice) {
+                throw new Error('ChoiceTable.init: cannot specify both ' +
+                                'opts requiredChoice and correctChoice');
+            }
+            this.setCorrectChoice(opts.correctChoice);
+        }
+
 
         // Add the correct choices.
         if ('undefined' !== typeof opts.disabledChoices) {
@@ -6577,6 +6587,10 @@
                     }
                 })();
             }
+        }
+
+        if ('undefined' === typeof opts.sameWidthCells) {
+            this.sameWidthCells = !!opts.sameWidthCells;
         }
     };
 
@@ -6853,9 +6867,17 @@
      * @see ChoiceTable.choicesCells
      */
     ChoiceTable.prototype.renderChoice = function(choice, idx) {
-        var td, shortValue, value;
+        var td, shortValue, value, width;
         td = document.createElement('td');
         if (this.tabbable) J.makeTabbable(td);
+
+        // Forces equal width.
+        if (this.sameWidthCells) {
+            width = this.left ? 70 : 100;
+            if (this.right) width = width - 30;
+            width = width / (this.choicesSetSize || this.choices.length);
+            td.style.width = width.toFixed(2) + '%';
+        }
 
         // Use custom renderer.
         if (this.renderer) {
@@ -10013,7 +10035,7 @@
             this.required = this.requiredChoice = !!opts.required;
         }
         if ('undefined' !== typeof opts.requiredChoice) {
-            if (this.required !== !! opts.requiredChoice) {
+            if (!!this.required !== !!opts.requiredChoice) {
                 throw new TypeError('CustomInput.init: required and ' +
                                     'requiredChoice are incompatible. Option ' +
                                     'requiredChoice will be deprecated.');
