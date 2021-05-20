@@ -499,7 +499,7 @@
             this.required = this.requiredChoice = !!opts.required;
         }
         if ('undefined' !== typeof opts.requiredChoice) {
-            if (this.required !== !! opts.requiredChoice) {
+            if (!!this.required !== !!opts.requiredChoice) {
                 throw new TypeError('CustomInput.init: required and ' +
                                     'requiredChoice are incompatible. Option ' +
                                     'requiredChoice will be deprecated.');
