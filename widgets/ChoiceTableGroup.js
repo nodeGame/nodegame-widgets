@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.7.0';
+    ChoiceTableGroup.version = '1.8.0';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -26,9 +26,14 @@
 
     ChoiceTableGroup.separator = '::';
 
-    ChoiceTableGroup.texts.autoHint = function(w) {
-        if (w.requiredChoice) return '*';
-        else return false;
+    ChoiceTableGroup.texts = {
+
+        autoHint: function(w) {
+            if (w.requiredChoice) return '*';
+            else return false;
+        },
+
+        error: 'Selection required.'
     };
 
     // ## Dependencies
@@ -189,6 +194,13 @@
          * @see Feedback.texts.autoHint
          */
         this.hint = null;
+
+        /**
+         * ### ChoiceTableGroup.errorBox
+         *
+         * An HTML element displayed when a validation error occurs
+         */
+        this.errorBox = null;
 
         /**
          * ### ChoiceTableGroup.items
@@ -860,6 +872,8 @@
             this.bodyDiv.appendChild(this.table);
         }
 
+        this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
+
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
             this.textarea = document.createElement('textarea');
@@ -1028,6 +1042,7 @@
         if (!this.table || this.highlighted !== true) return;
         this.table.style.border = '';
         this.highlighted = false;
+        this.setError();
         this.emit('unhighlighted');
     };
 
@@ -1082,12 +1097,34 @@
                 toHighlight = true;
             }
         }
-        if (opts.highlight && toHighlight) this.highlight();
-        else if (toReset) this.reset(toReset);
+        if (opts.highlight && toHighlight) {
+            this.setError(this.getText('error'));
+        }
+        else if (toReset) {
+            this.reset(toReset);
+        }
         opts.reset = toReset;
         if (this.textarea) obj.freetext = this.textarea.value;
         return obj;
     };
+
+
+    /**
+     * ### ChoiceTableGroup.setError
+     *
+     * Set the error msg inside the errorBox and call highlight
+     *
+     * @param {string} The error msg (can contain HTML)
+     *
+     * @see ChoiceTableGroup.highlight
+     * @see ChoiceTableGroup.errorBox
+     */
+    ChoiceTableGroup.prototype.setError = function(err) {
+        this.errorBox.innerHTML = err || '';
+        if (err) this.highlight();
+        else this.unhighlight();
+    };
+
 
     /**
      * ### ChoiceTableGroup.setValues

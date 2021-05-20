@@ -336,7 +336,7 @@
         this.rightCell = null;
 
         /**
-         * ### CustomInput.errorBox
+         * ### ChoiceTable.errorBox
          *
          * An HTML element displayed when a validation error occurs
          */
@@ -1382,7 +1382,9 @@
      * @see ChoiceTable.errorBox
      */
     ChoiceTable.prototype.setError = function(err) {
-        this.errorBox.innerHTML = err || '';
+        // TODO: the errorBox is added only if .append() is called.
+        // However, ChoiceTableGroup use the table without calling .append().
+        if (this.errorBox) this.errorBox.innerHTML = err || '';
         if (err) this.highlight();
         else this.unhighlight();
     };

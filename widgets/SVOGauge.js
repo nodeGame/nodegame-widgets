@@ -336,7 +336,7 @@
         if (this.mainText) {
             mainText = this.mainText;
         }
-        else if ('undefined' === typeof this.mainText) {
+        else if (this.mainText !== false) {
             mainText = this.getText('mainText');
         }
         gauge = node.widgets.get('ChoiceTableGroup', {
