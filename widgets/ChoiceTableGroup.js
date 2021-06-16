@@ -1248,6 +1248,9 @@
         if ('string' === typeof s) {
             s = { id: s };
         }
+        else if (J.isArray(s)) {
+            s = { id: s[0], left: s[1] };
+        }
         else if ('object' !== typeof s) {
             throw new TypeError('ChoiceTableGroup.buildTable: item must be ' +
                                 'string or object. Found: ' + s);

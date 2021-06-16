@@ -183,17 +183,22 @@
         // Locks the back button in case of a timeout.
         node.events.game.on('PLAYING', function() {
             var prop, step;
-            step = node.game.getPreviousStep(1, that.stepOptions);
-            // It might be enabled already, but we do it again.
-            if (step) that.enable();
+
             // Check options.
+            step = node.game.getPreviousStep(1, that.stepOptions);
             prop = node.game.getProperty('backbutton');
+
             if (!step || prop === false ||
                 (prop && prop.enableOnPlaying === false)) {
 
                 // It might be disabled already, but we do it again.
                 that.disable();
             }
+            else {
+                // It might be enabled already, but we do it again.
+                if (step) that.enable();
+            }
+
             if ('string' === typeof prop) that.button.value = prop;
             else if (prop && prop.text) that.button.value = prop.text;
         });

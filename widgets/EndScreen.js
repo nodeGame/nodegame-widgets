@@ -41,7 +41,6 @@
 
     // Checked when the widget is created.
     EndScreen.dependencies = {
-        JSUS: {},
         Feedback: {},
         EmailForm: {}
     };
@@ -99,6 +98,8 @@
          * The currency displayed after totalWin
          *
          * Default: 'USD'
+         *
+         * // TODO: deprecate and rename to currency.
          */
          this.totalWinCurrency = 'USD';
 
@@ -411,13 +412,20 @@
                 }
             }
 
+            preWin = '';
+            if ('undefined' !== typeof data.basePay) {
+                preWin = data.basePay + ' + ' + data.bonus;
+            }
+
             if (data.partials) {
                 if (!J.isArray(data.partials)) {
                     node.err('EndScreen error, invalid partials win: ' +
                              data.partials);
                 }
                 else {
-                    preWin = data.partials.join(' + ');
+                    // If there is a basePay we already have a preWin.
+                    if (preWin !== '') preWin += ' + ';
+                    preWin += data.partials.join(' + ');
                 }
             }
 
@@ -445,10 +453,12 @@
                         err = true;
                     }
                 }
-                if (!err) totalWin = preWin + ' = ' + totalWin;
             }
 
-            if (!err) totalWin += ' ' + this.totalWinCurrency;
+            if (!err) {
+                totalWin = preWin + ' = ' + totalWin;
+                totalWin += ' ' + this.totalWinCurrency;
+            }
         }
 
         exitCode = data.exit;

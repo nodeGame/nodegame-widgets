@@ -640,6 +640,9 @@
             }
             obj._scrolledIntoView = true;
             obj.isCorrect = false;
+            // Adjust frame heights because of error msgs.
+            // TODO: error msgs should not change the height.
+            W.adjustFrameHeight();
         }
         // if (obj.missValues.length) obj.isCorrect = false;
         if (this.textarea) obj.freetext = this.textarea.value;

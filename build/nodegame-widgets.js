@@ -2142,17 +2142,22 @@
         // Locks the back button in case of a timeout.
         node.events.game.on('PLAYING', function() {
             var prop, step;
-            step = node.game.getPreviousStep(1, that.stepOptions);
-            // It might be enabled already, but we do it again.
-            if (step) that.enable();
+
             // Check options.
+            step = node.game.getPreviousStep(1, that.stepOptions);
             prop = node.game.getProperty('backbutton');
+
             if (!step || prop === false ||
                 (prop && prop.enableOnPlaying === false)) {
 
                 // It might be disabled already, but we do it again.
                 that.disable();
             }
+            else {
+                // It might be enabled already, but we do it again.
+                if (step) that.enable();
+            }
+
             if ('string' === typeof prop) that.button.value = prop;
             else if (prop && prop.text) that.button.value = prop.text;
         });
@@ -5631,6 +5636,9 @@
             }
             obj._scrolledIntoView = true;
             obj.isCorrect = false;
+            // Adjust frame heights because of error msgs.
+            // TODO: error msgs should not change the height.
+            W.adjustFrameHeight();
         }
         // if (obj.missValues.length) obj.isCorrect = false;
         if (this.textarea) obj.freetext = this.textarea.value;
@@ -8928,6 +8936,9 @@
     function mixinSettings(that, s, i) {
         if ('string' === typeof s) {
             s = { id: s };
+        }
+        else if (J.isArray(s)) {
+            s = { id: s[0], left: s[1] };
         }
         else if ('object' !== typeof s) {
             throw new TypeError('ChoiceTableGroup.buildTable: item must be ' +
@@ -14027,7 +14038,6 @@
 
     // Checked when the widget is created.
     EndScreen.dependencies = {
-        JSUS: {},
         Feedback: {},
         EmailForm: {}
     };
@@ -14085,6 +14095,8 @@
          * The currency displayed after totalWin
          *
          * Default: 'USD'
+         *
+         * // TODO: deprecate and rename to currency.
          */
          this.totalWinCurrency = 'USD';
 
@@ -14397,13 +14409,20 @@
                 }
             }
 
+            preWin = '';
+            if ('undefined' !== typeof data.basePay) {
+                preWin = data.basePay + ' + ' + data.bonus;
+            }
+
             if (data.partials) {
                 if (!J.isArray(data.partials)) {
                     node.err('EndScreen error, invalid partials win: ' +
                              data.partials);
                 }
                 else {
-                    preWin = data.partials.join(' + ');
+                    // If there is a basePay we already have a preWin.
+                    if (preWin !== '') preWin += ' + ';
+                    preWin += data.partials.join(' + ');
                 }
             }
 
@@ -14431,10 +14450,12 @@
                         err = true;
                     }
                 }
-                if (!err) totalWin = preWin + ' = ' + totalWin;
             }
 
-            if (!err) totalWin += ' ' + this.totalWinCurrency;
+            if (!err) {
+                totalWin = preWin + ' = ' + totalWin;
+                totalWin += ' ' + this.totalWinCurrency;
+            }
         }
 
         exitCode = data.exit;

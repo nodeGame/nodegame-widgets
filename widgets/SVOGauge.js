@@ -51,7 +51,7 @@
      *
      * @see SVOGauge.init
      */
-    function SVOGauge(options) {
+    function SVOGauge() {
 
         /**
          * ### SVOGauge.methods
