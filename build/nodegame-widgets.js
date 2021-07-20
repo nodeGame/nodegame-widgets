@@ -14410,8 +14410,15 @@
             }
 
             preWin = '';
+
             if ('undefined' !== typeof data.basePay) {
-                preWin = data.basePay + ' + ' + data.bonus;
+                preWin = data.basePay;
+
+            }
+
+            if (data.showBonus !== false) {
+                if (preWin !== '') preWin += ' + ';
+                preWin += data.bonus;
             }
 
             if (data.partials) {
@@ -14453,7 +14460,7 @@
             }
 
             if (!err) {
-                totalWin = preWin + ' = ' + totalWin;
+                if (totalWin !== preWin) totalWin = preWin + ' = ' + totalWin;
                 totalWin += ' ' + this.totalWinCurrency;
             }
         }
@@ -18247,7 +18254,7 @@
      *
      * @see SVOGauge.init
      */
-    function SVOGauge(options) {
+    function SVOGauge() {
 
         /**
          * ### SVOGauge.methods
