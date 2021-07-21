@@ -10090,10 +10090,10 @@
                                     'requiredChoice are incompatible. Option ' +
                                     'requiredChoice will be deprecated.');
             }
-            this.required = this.requiredChoice = !!opts.required;
+            this.required = this.requiredChoice = !!opts.requiredChoice;
         }
         if ('undefined' === typeof this.required) {
-            this.required = this.requiredChoice = !!opts.required;
+            this.required = this.requiredChoice = false;
         }
 
         if (opts.userValidation) {
