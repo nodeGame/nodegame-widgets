@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    EmailForm.version = '0.13.0';
+    EmailForm.version = '0.13.1';
     EmailForm.description = 'Displays a configurable email form.';
 
     EmailForm.title = false;
@@ -305,9 +305,8 @@
                 email: email,
                 attempts: this.attempts,
             };
+            if (opts.markAttempt) email.isCorrect = res;
         }
-
-        if (opts.markAttempt) email.isCorrect = res;
 
         if (res === false) {
             if (opts.updateUI || opts.highlight) this.highlight();
