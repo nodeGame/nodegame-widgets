@@ -21276,7 +21276,7 @@
                     ul.className = 'dropdown-menu';
                     ul.style['text-align'] = 'left';
 
-                    var li, a, t, liT1, liT2;
+                    var li, a, t, liT1, liT2, liT3;
                     if (conf.availableTreatments) {
                         li = document.createElement('li');
                         li.innerHTML = w.getText('gameTreatments');
@@ -21291,7 +21291,8 @@
                                 a.innerHTML = '<strong>' + t + '</strong>: ' +
                                     conf.availableTreatments[t];
                                 li.appendChild(a);
-                                if (t === 'treatment_rotate') liT1 = li;
+                                if (t === 'treatment_latin_square') liT3 = li;
+                                else if (t === 'treatment_rotate') liT1 = li;
                                 else if (t === 'treatment_random') liT2 = li;
                                 else ul.appendChild(li);
                             }
@@ -21306,6 +21307,7 @@
                         ul.appendChild(li);
                         ul.appendChild(liT1);
                         ul.appendChild(liT2);
+                        ul.appendChild(liT3);
                     }
 
                     btnGroupTreatments.appendChild(btnTreatment);
