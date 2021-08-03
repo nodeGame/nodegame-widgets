@@ -7441,7 +7441,7 @@
                             'built yet.');
         }
 
-        // Value this.correctChoice can undefined, string or array.
+        // Value this.correctChoice can be undefined, string or array.
         // If no correct choice is set, we simply ignore the correct param.
         if (options.correct && this.correctChoice !== null) {
 
@@ -7496,16 +7496,35 @@
         }
         else {
             // How many random choices?
-            if (!this.selectMultiple) len = 1;
-            else len = J.randomInt(0, this.choicesCells.length);
+            len = 1;
+            if (this.selectMultiple) {
+                // Max random cells.
+                len = 'number' === typeof this.selectMultiple ?
+                    this.selectMultiple : this.choicesCells.length;
+                // Min random cells.
+                tmp = this.requiredChoice;
+                len = J.randomInt('number' === typeof tmp ? (tmp-1) : 0, len);
+            }
 
             for ( ; ++i < len ; ) {
                 // This is the positional index.
-                j = J.randomInt(-1, (this.choicesCells.length-1));
-                // If shuffled, we need to resolve it.
-                choice = this.shuffleChoices ? this.choicesValues[j] : j;
+                choice = J.randomInt(-1, (this.choicesCells.length-1));
+                console.log();
+                console.log('----AUTOCHOICE  ', choice, j);
+                console.log();
                 // Do not click it again if it is already selected.
-                if (!this.isChoiceCurrent(choice)) this.choicesCells[j].click();
+                // Else increment len and try again (until 300 failsafe).
+                if (this.disabledChoices[choice] ||
+                    this.isChoiceCurrent(choice)) {
+                    // Failsafe.
+                    if (len < 300) len++;
+                }
+                else {
+                    // J and not choice here.
+                    // Resolve to cell idx (might differ if shuffled).
+                    j =  this.choicesValues[choice];
+                    this.choicesCells[j].click();
+                }
             }
         }
 
