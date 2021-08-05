@@ -380,6 +380,17 @@
             }
             this.hoverColor = opts.hoverColor;
         }
+
+        if ('undefined' !== typeof opts.correctValue) {
+            if (false === J.isNumber(opts.correctValue,
+                                     this.min, this.max, true, true)) {
+
+                throw new Error(e + 'correctValue must be a number between ' +
+                                this.min + ' and ' + this.max + '. Found: ' +
+                                opts.correctValue);
+            }
+            this.correctValue = opts.correctValue;
+        }
     };
 
     /**

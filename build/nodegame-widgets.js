@@ -7507,11 +7507,9 @@
             }
 
             for ( ; ++i < len ; ) {
-                // This is the positional index.
+                // This is the choice idx.
                 choice = J.randomInt(-1, (this.choicesCells.length-1));
-                console.log();
-                console.log('----AUTOCHOICE  ', choice, j);
-                console.log();
+
                 // Do not click it again if it is already selected.
                 // Else increment len and try again (until 300 failsafe).
                 if (this.disabledChoices[choice] ||
@@ -7520,7 +7518,6 @@
                     if (len < 300) len++;
                 }
                 else {
-                    // J and not choice here.
                     // Resolve to cell idx (might differ if shuffled).
                     j =  this.choicesValues[choice];
                     this.choicesCells[j].click();
@@ -18091,6 +18088,17 @@
                                     'undefined. Found: ' + opts.hoverColor);
             }
             this.hoverColor = opts.hoverColor;
+        }
+
+        if ('undefined' !== typeof opts.correctValue) {
+            if (false === J.isNumber(opts.correctValue,
+                                     this.min, this.max, true, true)) {
+
+                throw new Error(e + 'correctValue must be a number between ' +
+                                this.min + ' and ' + this.max + '. Found: ' +
+                                opts.correctValue);
+            }
+            this.correctValue = opts.correctValue;
         }
     };
 
