@@ -479,6 +479,23 @@
                     that.headingDiv.appendChild(link);
                 })(this);
             }
+            if (this.info) {
+                (function(that) {
+                    var link, img, a;
+
+                    link = W.add('span', that.headingDiv);
+                    link.className = 'panel-collapse-link';
+
+                    // link.style['margin-right'] = '8px';
+                    a = W.add('a', link);
+                    a.href = that.info;
+                    a.target = '_blank';
+
+                    img = W.add('img', a);
+                    img.src = '/images/info.png';
+
+                })(this);
+            }
         }
     };
 
@@ -1358,6 +1375,8 @@
         widget.closable = options.closable || false;
         widget.collapseTarget =
             options.collapseTarget || this.collapseTarget || null;
+        widget.info = options.info || false;
+
         widget.hooks = {
             hidden: [],
             shown: [],
@@ -1396,7 +1415,7 @@
         widget.highlighted = null;
         widget.collapsed = null;
         widget.hidden = null;
-        widget.docked = null
+        widget.docked = null;
 
         // Properties that will modify the UI of the widget once appended.
 
