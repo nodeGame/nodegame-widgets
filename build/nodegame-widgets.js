@@ -419,7 +419,9 @@
             if (!this.headingDiv) {
                 // Add heading.
                 if (!options) {
-                    options = { className: 'panel-heading' };
+                    // Bootstrap 3
+                    // options = { className: 'panel-heading' };
+                    options = { className: 'card-header' };
                 }
                 else if ('object' !== typeof options) {
                     throw new TypeError('Widget.setTitle: options must ' +
@@ -511,7 +513,10 @@
             if (!this.footerDiv) {
                 // Add footer.
                 if (!options) {
-                    options = { className: 'panel-footer' };
+                    // Bootstrap 3.
+                    // options = { className: 'panel-footer' };
+                    // Bootstrap 5.
+                    options = { className: 'card-footer' };
                 }
                 else if ('object' !== typeof options) {
                     throw new TypeError('Widget.setFooter: options must ' +
@@ -533,7 +538,7 @@
             else {
                 throw new TypeError(J.funcName(this.constructor) +
                                     '.setFooter: footer must be string, ' +
-                                    'HTML element or falsy. Found: ' + title);
+                                    'HTML element or falsy. Found: ' + footer);
             }
         }
     };
@@ -541,20 +546,11 @@
     /**
      * ### Widget.setContext
      *
-     * Changes the default context of the class 'panel-' + context
-     *
-     * Context are defined in Bootstrap framework.
-     *
-     * @param {string} context The type of the context
+     * @deprecated
      */
-    Widget.prototype.setContext = function(context) {
-        if ('string' !== typeof context) {
-            throw new TypeError(J.funcName(this.constructor) + '.setContext: ' +
-                                'context must be string. Found: ' + context);
-
-        }
-        W.removeClass(this.panelDiv, 'panel-[a-z]*');
-        W.addClass(this.panelDiv, 'panel-' + context);
+    Widget.prototype.setContext = function() {
+        console.log('*** Deprecation warning: setContext no longer ' +
+                    'available in Bootstrap5.');
     };
 
     /**
@@ -1037,7 +1033,7 @@
 
 /**
  * # Widgets
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Helper class to interact with nodeGame widgets
@@ -1592,10 +1588,21 @@
 
         // Add panelDiv (with or without panel).
         tmp = options.panel === false ? true : w.panel === false;
-        tmp = {
-            className: tmp ? [ 'ng_widget',  'no-panel', w.className ] :
-                [ 'ng_widget', 'panel', 'panel-default', w.className ]
-        };
+
+        if (options.bootstrap5) {
+            // Bootstrap 5
+            tmp = {
+                className: tmp ? [ 'ng_widget', 'no-panel', w.className ] :
+                    [ 'ng_widget', 'card', w.className ]
+            };
+        }
+        else {
+            // Bootstrap 3
+            tmp = {
+                className: tmp ? [ 'ng_widget',  'no-panel', w.className ] :
+                    [ 'ng_widget', 'panel', 'panel-default', w.className ]
+            };
+        }
 
         // Dock it.
         if (options.docked || w._docked) {
@@ -1609,19 +1616,46 @@
 
         // Optionally add title (and div).
         if (options.title !== false && w.title) {
-            tmp = options.panel === false ?
-                'no-panel-heading' : 'panel-heading';
+
+            if (options.bootstrap5) {
+                // Bootstrap 5.
+                tmp = options.panel === false ?
+                    'no-panel-heading' : 'card-header';
+            }
+            else {
+                // Bootstrap 3.
+                tmp = options.panel === false ?
+                    'no-panel-heading' : 'panel-heading';
+            }
+
             w.setTitle(w.title, { className: tmp });
         }
 
         // Add body (with or without panel).
-        tmp = options.panel !== false ? 'panel-body' : 'no-panel-body';
+        if (options.bootstrap5) {
+            // Bootstrap 5.
+            tmp = options.panel !== false ? 'card-body' : 'no-panel-body';
+        }
+        else {
+            // Bootstrap 3.
+            tmp = options.panel !== false ? 'panel-body' : 'no-panel-body';
+        }
+
         w.bodyDiv = W.append('div', w.panelDiv, { className: tmp });
 
         // Optionally add footer.
         if (w.footer) {
-            tmp = options.panel === false ?
-                'no-panel-heading' : 'panel-heading';
+            if (options.bootstrap5) {
+                // Bootstrap 5.
+                tmp = options.panel === false ?
+                    'no-panel-heading' : 'card-footer';
+            }
+            else {
+                    // Bootstrap 3.
+                    tmp = options.panel === false ?
+                        'no-panel-heading' : 'panel-heading';
+            }
+
             w.setFooter(w.footer);
         }
 
@@ -12811,7 +12845,7 @@
 
 /**
  * # DebugWall
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a wall where all incoming and outgoing messages are printed
@@ -12826,7 +12860,7 @@
 
     // ## Meta-data
 
-    DebugWall.version = '1.0.0';
+    DebugWall.version = '1.1.0';
     DebugWall.description = 'Intercepts incoming and outgoing messages, and ' +
         'logs and prints them numbered and timestamped. Warning! Modifies ' +
         'core functions, therefore its usage in production is ' +
@@ -12926,7 +12960,7 @@
      *
      * Initializes the instance
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} opts Optional. Configuration options
      *
      *  - msgIn: If FALSE, incoming messages are ignored.
      *  - msgOut: If FALSE, outgoing  messages are ignored.
@@ -12934,24 +12968,24 @@
      *  - hiddenTypes: An object containing what is currently hidden
      *     in the wall.
      */
-    DebugWall.prototype.init = function(options) {
+    DebugWall.prototype.init = function(opts) {
         var that;
         that = this;
-        if (options.msgIn !== false) {
+        if (opts.msgIn !== false) {
             this.origMsgInCb = node.socket.onMessage;
             node.socket.onMessage = function(msg) {
                 that.write('in', that.makeTextIn(msg));
                 that.origMsgInCb.call(node.socket, msg);
             };
         }
-        if (options.msgOut !== false) {
+        if (opts.msgOut !== false) {
             this.origMsgOutCb = node.socket.send;
             node.socket.send = function(msg) {
                 that.write('out', that.makeTextOut(msg));
                 that.origMsgOutCb.call(node.socket, msg);
             };
         }
-        if (options.log !== false) {
+        if (opts.log !== false) {
             this.origLogCb = node.log;
             node.log = function(txt, level, prefix) {
                 that.write(level || 'info',
@@ -12960,12 +12994,12 @@
             };
         }
 
-        if (options.hiddenTypes) {
-            if ('object' !== typeof hiddenTypes) {
+        if (opts.hiddenTypes) {
+            if ('object' !== typeof opts.hiddenTypes) {
                 throw new TypeError('DebugWall.init: hiddenTypes must be ' +
-                                    'object. Found: ' + hiddenTypes);
+                                    'object. Found: ' + opts.hiddenTypes);
             }
-            this.hiddenTypes = hiddenTypes;
+            this.hiddenTypes = opts.hiddenTypes;
         }
 
         this.on('destroyed', function() {
@@ -12978,37 +13012,76 @@
 
     DebugWall.prototype.append = function() {
         var displayIn, displayOut, displayLog, that;
-        var btnGroup, cb, div;
+        var btnGroup, cb;
+
         this.buttonsDiv = W.add('div', this.bodyDiv, {
             className: 'wallbuttonsdiv'
         });
 
-        btnGroup = document.createElement('div');
-        btnGroup.role = 'group';
-        btnGroup['aria-label'] = 'Toggle visibility';
-        btnGroup.className = 'btn-group';
-
-        displayIn = W.add('button', btnGroup, {
-            innerHTML: 'Incoming',
-            className: 'btn btn-secondary'
-        });
-        displayOut = W.add('button', btnGroup, {
-            innerHTML: 'Outgoing',
-            className: 'btn btn-secondary'
-        });
-        displayLog = W.add('button', btnGroup, {
-            innerHTML: 'Log',
-            className: 'btn btn-secondary'
+        btnGroup = W.add('div', this.buttonsDiv, {
+            className: 'btn-group',
+            role: 'group',
+            'aria-label': 'Toggle visibility of messages on wall'
         });
 
-        this.buttonsDiv.appendChild(btnGroup);
+        // Incoming.
+        W.add('input', btnGroup, {
+            id: 'debug-wall-incoming',
+            // name: 'debug-wall-check',
+            className: 'btn-check',
+            autocomplete: "off",
+            checked: true,
+            type: 'checkbox'
+        });
+        displayIn = W.add('label', btnGroup, {
+            className: "btn btn-outline-primary",
+            'for': "debug-wall-incoming",
+            innerHTML: 'Incoming'
+        });
+        // Outgoing.
+        W.add('input', btnGroup, {
+            id: 'debug-wall-outgoing',
+            className: 'btn-check',
+            // name: 'debug-wall-check',
+            autocomplete: "off",
+            checked: true,
+            type: 'checkbox'
+        });
+        displayOut = W.add('label', btnGroup, {
+            className: "btn btn-outline-primary",
+            'for': "debug-wall-outgoing",
+            innerHTML: 'Outgoing'
+        });
+        // Log.
+        W.add('input', btnGroup, {
+            id: 'debug-wall-log',
+            className: 'btn-check',
+            // name: 'debug-wall-check',
+            autocomplete: "off",
+            checked: true,
+            type: 'checkbox'
+        });
+        displayLog = W.add('label', btnGroup, {
+            className: "btn btn-outline-primary",
+            'for': "debug-wall-log",
+            innerHTML: 'Log'
+        });
 
         that = this;
+
+        W.add('button', this.buttonsDiv, {
+            className: "btn btn-outline-danger me-2",
+            innerHTML: 'Clear'
+        })
+        .onclick = function() { that.clear(); };
+
+        this.buttonsDiv.appendChild(btnGroup);
 
         cb = function(type) {
             var items, i, vis, className;
             className = 'wall_' + type;
             items = that.wall.getElementsByClassName(className);
+            if (!items || !items.length) return;
             vis = items[0].style.display === '' ? 'none' : '';
             for (i = 0; i < items.length; i++) {
                 items[i].style.display = vis;
@@ -13032,9 +13105,22 @@
      * @param {string} type 'in', 'out', or 'log' (different levels)
      * @param {string} text The text to write
      */
-    DebugWall.prototype.shouldHide = function(type, text) {
+    DebugWall.prototype.shouldHide = function(type) {
         return this.hiddenTypes[type];
     };
+
+    /**
+     * ### DebugWall.write
+     *
+     * Writes argument as first entry of this.wall if document is fully loaded
+     *
+     * @param {string} type 'in', 'out', or 'log' (different levels)
+     * @param {string} text The text to write
+     */
+    DebugWall.prototype.clear = function() {
+        this.wall.innerHTML = '';
+    };
+
     /**
      * ### DebugWall.write
      *
@@ -13123,7 +13209,7 @@
         return text;
     };
 
-    DebugWall.prototype.makeTextLog = function(text, level, prefix) {
+    DebugWall.prototype.makeTextLog = function(text) {
         return text;
     };
 
