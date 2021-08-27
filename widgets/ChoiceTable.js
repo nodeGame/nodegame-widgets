@@ -1205,7 +1205,7 @@
         if (this.tabbable) J.makeTabbable(td);
 
         // Forces equal width.
-        if (this.sameWidthCells) {
+        if (this.sameWidthCells && this.orientation === 'H') {
             width = this.left ? 70 : 100;
             if (this.right) width = width - 30;
             width = width / (this.choicesSetSize || this.choices.length);
