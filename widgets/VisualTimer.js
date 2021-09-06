@@ -1,6 +1,6 @@
 /**
  * # VisualTimer
- * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.9.2';
+    VisualTimer.version = '0.9.3';
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
@@ -307,13 +307,7 @@
         options = options || {};
         oldOptions = this.options;
 
-        if (this.internalTimer) {
-            node.timer.destroyTimer(this.gameTimer);
-            this.internalTimer = null;
-        }
-        else {
-            this.gameTimer.removeHook(this.updateHookName);
-        }
+        destroyTimer(this);
 
         this.gameTimer = null;
         this.activeBox = null;
@@ -380,12 +374,10 @@
      *
      * Stops the timer display and stores the time left in `activeBox.timeLeft`
      *
-     * @param {object} options Configuration object
-     *
      * @see GameTimer.isStopped
      * @see GameTimer.stop
      */
-    VisualTimer.prototype.stop = function(options) {
+    VisualTimer.prototype.stop = function() {
         if (!this.gameTimer.isStopped()) {
             this.activeBox.timeLeft = this.gameTimer.timeLeft;
             this.gameTimer.stop();
@@ -557,13 +549,7 @@
 
         // Handle destroy.
         this.on('destroyed', function() {
-            if (that.internalTimer) {
-                node.timer.destroyTimer(that.gameTimer);
-                that.internalTimer = null;
-            }
-            else {
-                that.gameTimer.removeHook('VisualTimer_' + that.wid);
-            }
+            destroyTimer(that);
             that.bodyDiv.removeChild(that.mainBox.boxDiv);
             that.bodyDiv.removeChild(that.waitBox.boxDiv);
         });
@@ -742,5 +728,29 @@
     TimerBox.prototype.setClassNameBody = function(className) {
         this.bodyDiv.className = className;
     };
+
+    // Helper function.
+
+    function destroyTimer(that) {
+        if (that.internalTimer) {
+            if (!that.gameTimer.isDestroyed()) {
+                node.timer.destroyTimer(that.gameTimer);
+            }
+            that.internalTimer = null;
+        }
+        else {
+            that.gameTimer.removeHook('VisualTimer_' + that.wid);
+        }
+    }
+
+    // if (this.internalTimer) {
+    //     if (!this.gameTimer.isDestroyed()) {
+    //         node.timer.destroyTimer(this.gameTimer);
+    //     }
+    //     this.internalTimer = null;
+    // }
+    // else {
+    //     this.gameTimer.removeHook(this.updateHookName);
+    // }
 
 })(node);

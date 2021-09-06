@@ -1287,7 +1287,7 @@
      * @see Widgets.instances
      */
     Widgets.prototype.get = function(widgetName, options) {
-        var WidgetPrototype, widget, changes;
+        var WidgetPrototype, widget, changes, tmp;
 
         if ('string' !== typeof widgetName) {
             throw new TypeError('Widgets.get: widgetName must be string.' +
@@ -1327,16 +1327,36 @@
         widget = new WidgetPrototype(options);
 
         // Set ID.
-        if ('undefined' !== typeof options.id) {
-            if ('number' === typeof options.id) options.id += '';
-            if ('string' === typeof options.id) {
-                widget.id = options.id;
+        tmp = options.id;
+        if ('undefined' !== typeof tmp) {
+            if ('number' === typeof tmp) tmp += '';
+            if ('string' === typeof tmp) {
+
+                if ('undefined' !== typeof options.idPrefix) {
+                    if ('string' === typeof options.idPrefix &&
+                        'number' !== typeof options.idPrefix) {
+
+                        tmp = options.idPrefix + tmp;
+                    }
+                    else {
+                        throw new TypeError('Widgets.get: options.idPrefix ' +
+                                            'must be string, number or ' +
+                                            'undefined. Found: ' +
+                                            options.idPrefix);
+                    }
+                }
+
+                widget.id = tmp;
             }
             else {
                 throw new TypeError('Widgets.get: options.id must be ' +
                                     'string, number or undefined. Found: ' +
-                                    options.id);
+                                    tmp);
             }
+        }
+        // Assign step id as widget id, if widget step and no custom id.
+        else if (options.widgetStep) {
+            widget.id = node.game.getStepId();
         }
 
         // Set prototype values or options values.
@@ -5054,7 +5074,7 @@
 
 /**
  * # ChoiceManager
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g., ChoiceTable).
@@ -5069,18 +5089,16 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.2.1';
+    ChoiceManager.version = '1.4.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
-        'selectable choices forms (e.g. ChoiceTable).';
+        'survey forms (e.g., ChoiceTable).';
 
     ChoiceManager.title = false;
     ChoiceManager.className = 'choicemanager';
 
     // ## Dependencies
 
-    ChoiceManager.dependencies = {
-        JSUS: {}
-    };
+    ChoiceManager.dependencies = {};
 
     /**
      * ## ChoiceManager constructor
@@ -5173,6 +5191,16 @@
             frame: false,
             storeRef: false
         };
+
+
+        /**
+         * ### ChoiceManager.simplify
+         *
+         * If TRUE, it returns getValues() returns forms.values
+         *
+         * @see ChoiceManager.getValue
+         */
+        this.simplify = null;
 
         /**
          * ### ChoiceManager.freeText
@@ -5289,6 +5317,9 @@
             this.required = !!options.required;
         }
 
+        // If TRUE, it returns getValues returns forms.values.
+        this.simplify = !!options.simplify;
+
         // After all configuration options are evaluated, add forms.
 
         if ('undefined' !== typeof options.forms) this.setForms(options.forms);
@@ -5323,7 +5354,7 @@
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
-        var form, formsById, i, len, parsedForms;
+        var form, formsById, i, len, parsedForms, name;
         if ('function' === typeof forms) {
             parsedForms = forms.call(node.game);
             if (!J.isArray(parsedForms)) {
@@ -5352,16 +5383,11 @@
         for ( ; ++i < len ; ) {
             form = parsedForms[i];
             if (!node.widgets.isWidget(form)) {
-                if ('string' === typeof form.name) {
-                    // Add defaults.
-                    J.mixout(form, this.formsOptions);
-                    form = node.widgets.get(form.name, form);
-                }
-                if (!node.widgets.isWidget(form)) {
-                    throw new Error('ChoiceManager.setForms: one of the ' +
-                                    'forms is not a widget-like element: ' +
-                                    form);
-                }
+                // TODO: smart checking form name. Maybe in Stager already?
+                name = form.name || 'ChoiceTable';
+                // Add defaults.
+                J.mixout(form, this.formsOptions);
+                form = node.widgets.get(name, form);
             }
 
             if (form.id) {
@@ -5700,6 +5726,9 @@
         }
         // if (obj.missValues.length) obj.isCorrect = false;
         if (this.textarea) obj.freetext = this.textarea.value;
+
+        // Simplify everything, if requested.
+        if (opts.simplify || this.simplify) obj = obj.forms;
         return obj;
     };
 
@@ -20631,7 +20660,7 @@
 
 /**
  * # VisualTimer
- * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display a configurable timer for the game
@@ -20648,7 +20677,7 @@
 
     // ## Meta-data
 
-    VisualTimer.version = '0.9.2';
+    VisualTimer.version = '0.9.3';
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
@@ -20938,13 +20967,7 @@
         options = options || {};
         oldOptions = this.options;
 
-        if (this.internalTimer) {
-            node.timer.destroyTimer(this.gameTimer);
-            this.internalTimer = null;
-        }
-        else {
-            this.gameTimer.removeHook(this.updateHookName);
-        }
+        destroyTimer(this);
 
         this.gameTimer = null;
         this.activeBox = null;
@@ -21011,12 +21034,10 @@
      *
      * Stops the timer display and stores the time left in `activeBox.timeLeft`
      *
-     * @param {object} options Configuration object
-     *
      * @see GameTimer.isStopped
      * @see GameTimer.stop
      */
-    VisualTimer.prototype.stop = function(options) {
+    VisualTimer.prototype.stop = function() {
         if (!this.gameTimer.isStopped()) {
             this.activeBox.timeLeft = this.gameTimer.timeLeft;
             this.gameTimer.stop();
@@ -21188,13 +21209,7 @@
 
         // Handle destroy.
         this.on('destroyed', function() {
-            if (that.internalTimer) {
-                node.timer.destroyTimer(that.gameTimer);
-                that.internalTimer = null;
-            }
-            else {
-                that.gameTimer.removeHook('VisualTimer_' + that.wid);
-            }
+            destroyTimer(that);
             that.bodyDiv.removeChild(that.mainBox.boxDiv);
             that.bodyDiv.removeChild(that.waitBox.boxDiv);
         });
@@ -21373,6 +21388,30 @@
     TimerBox.prototype.setClassNameBody = function(className) {
         this.bodyDiv.className = className;
     };
+
+    // Helper function.
+
+    function destroyTimer(that) {
+        if (that.internalTimer) {
+            if (!that.gameTimer.isDestroyed()) {
+                node.timer.destroyTimer(that.gameTimer);
+            }
+            that.internalTimer = null;
+        }
+        else {
+            that.gameTimer.removeHook('VisualTimer_' + that.wid);
+        }
+    }
+
+    // if (this.internalTimer) {
+    //     if (!this.gameTimer.isDestroyed()) {
+    //         node.timer.destroyTimer(this.gameTimer);
+    //     }
+    //     this.internalTimer = null;
+    // }
+    // else {
+    //     this.gameTimer.removeHook(this.updateHookName);
+    // }
 
 })(node);
 
