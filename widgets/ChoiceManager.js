@@ -1,6 +1,6 @@
 /**
  * # ChoiceManager
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g., ChoiceTable).
@@ -15,18 +15,16 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.2.1';
+    ChoiceManager.version = '1.4.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
-        'selectable choices forms (e.g. ChoiceTable).';
+        'survey forms (e.g., ChoiceTable).';
 
     ChoiceManager.title = false;
     ChoiceManager.className = 'choicemanager';
 
     // ## Dependencies
 
-    ChoiceManager.dependencies = {
-        JSUS: {}
-    };
+    ChoiceManager.dependencies = {};
 
     /**
      * ## ChoiceManager constructor
@@ -119,6 +117,16 @@
             frame: false,
             storeRef: false
         };
+
+
+        /**
+         * ### ChoiceManager.simplify
+         *
+         * If TRUE, it returns getValues() returns forms.values
+         *
+         * @see ChoiceManager.getValue
+         */
+        this.simplify = null;
 
         /**
          * ### ChoiceManager.freeText
@@ -235,6 +243,9 @@
             this.required = !!options.required;
         }
 
+        // If TRUE, it returns getValues returns forms.values.
+        this.simplify = !!options.simplify;
+
         // After all configuration options are evaluated, add forms.
 
         if ('undefined' !== typeof options.forms) this.setForms(options.forms);
@@ -269,7 +280,7 @@
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
-        var form, formsById, i, len, parsedForms;
+        var form, formsById, i, len, parsedForms, name;
         if ('function' === typeof forms) {
             parsedForms = forms.call(node.game);
             if (!J.isArray(parsedForms)) {
@@ -298,16 +309,11 @@
         for ( ; ++i < len ; ) {
             form = parsedForms[i];
             if (!node.widgets.isWidget(form)) {
-                if ('string' === typeof form.name) {
-                    // Add defaults.
-                    J.mixout(form, this.formsOptions);
-                    form = node.widgets.get(form.name, form);
-                }
-                if (!node.widgets.isWidget(form)) {
-                    throw new Error('ChoiceManager.setForms: one of the ' +
-                                    'forms is not a widget-like element: ' +
-                                    form);
-                }
+                // TODO: smart checking form name. Maybe in Stager already?
+                name = form.name || 'ChoiceTable';
+                // Add defaults.
+                J.mixout(form, this.formsOptions);
+                form = node.widgets.get(name, form);
             }
 
             if (form.id) {
@@ -646,6 +652,9 @@
         }
         // if (obj.missValues.length) obj.isCorrect = false;
         if (this.textarea) obj.freetext = this.textarea.value;
+
+        // Simplify everything, if requested.
+        if (opts.simplify || this.simplify) obj = obj.forms;
         return obj;
     };
 
