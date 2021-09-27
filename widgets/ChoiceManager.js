@@ -614,10 +614,11 @@
             form = this.forms[i];
             // If it is hidden or disabled we do not do validation.
             if (form.isHidden() || form.isDisabled()) {
-                obj.forms[form.id] = form.getValues({
+                res = form.getValues({
                     markAttempt: false,
                     highlight: false
                 });
+                if (res) obj.forms[form.id] = res;
             }
             else {
                 // ContentBox does not return a value.

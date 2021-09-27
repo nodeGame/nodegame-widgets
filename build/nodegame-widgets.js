@@ -5089,7 +5089,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.4.0';
+    ChoiceManager.version = '1.4.1';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -5672,7 +5672,7 @@
      * @see ChoiceManager.verifyChoice
      */
     ChoiceManager.prototype.getValues = function(opts) {
-        var obj, i, len, form, lastErrored;
+        var obj, i, len, form, lastErrored, res;
         obj = {
             order: this.order,
             forms: {},
@@ -5694,7 +5694,10 @@
                 });
             }
             else {
-                obj.forms[form.id] = form.getValues(opts);
+                // ContentBox does not return a value.
+                res = form.getValues(opts);
+                if (!res) continue;
+                obj.forms[form.id] = res;
                 // Backward compatible (requiredChoice).
                 if ((form.required || form.requiredChoice) &&
                     (obj.forms[form.id].choice === null ||
