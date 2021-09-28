@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.8.0';
+    ChoiceTable.version = '1.8.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -152,7 +152,8 @@
             if (value.length === 1) return;
 
             name = value[0];
-            value = value[1];
+            value = parseInt(value[1], 10);
+            // value = value[1];
 
             // Choice disabled.
             // console.log('VALUE: ', value);
@@ -1578,10 +1579,10 @@
      */
     ChoiceTable.prototype.isChoiceCurrent = function(choice) {
         var i, len;
-        if ('number' === typeof choice) {
-            choice = '' + choice;
+        if ('string' === typeof choice) {
+            choice = parseInt(choice, 10);
         }
-        else if ('string' !== typeof choice) {
+        else if ('number' !== typeof choice) {
             throw new TypeError('ChoiceTable.isChoiceCurrent: choice ' +
                                 'must be string or number. Found: ' + choice);
         }
