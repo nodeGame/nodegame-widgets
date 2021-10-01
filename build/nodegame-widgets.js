@@ -7345,13 +7345,6 @@
      */
     ChoiceTable.prototype.isChoiceCurrent = function(choice) {
         var i, len;
-        // if ('number' === typeof choice) {
-        //     choice = '' + choice;
-        // }
-        // else if ('string' !== typeof choice) {
-        //     throw new TypeError('ChoiceTable.isChoiceCurrent: choice ' +
-        //                         'must be string or number. Found: ' + choice);
-        // }
         if ('string' === typeof choice) {
             choice = parseInt(choice, 10);
         }
@@ -7733,8 +7726,8 @@
      * @return {string} The checked choice
      */
     function checkCorrectChoiceParam(that, choice) {
-        if ('number' === typeof choice) choice = '' + choice;
-        if ('string' !== typeof choice) {
+        if ('string' === typeof choice) choice = parseInt(choice, 10);
+        if ('number' !== typeof choice) {
             throw new TypeError('ChoiceTable.setCorrectChoice: each choice ' +
                                 'must be number or string. Found: ' + choice);
         }
