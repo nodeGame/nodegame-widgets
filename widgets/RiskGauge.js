@@ -167,7 +167,7 @@
      * @param {object} opts Optional. Configuration options.
      */
     RiskGauge.prototype.init = function(opts) {
-        var gauge;
+        var gauge, that;
         if ('undefined' !== typeof opts.method) {
             if ('string' !== typeof opts.method) {
                 throw new TypeError('RiskGauge.init: method must be string ' +
@@ -188,6 +188,11 @@
         }
         // Call method.
         gauge = this.methods[this.method].call(this, opts);
+
+        // Add defaults.
+        that = this;
+        gauge.isHidden = function() { return that.isHidden(); };
+        gauge.isCollapsed = function() { return that.isCollapsed(); };
 
         // Check properties.
         if (!node.widgets.isWidget(gauge)) {

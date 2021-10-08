@@ -114,7 +114,7 @@
      * @param {object} opts Optional. Configuration options.
      */
     SVOGauge.prototype.init = function(opts) {
-        var gauge;
+        var gauge, that;
         if ('undefined' !== typeof opts.method) {
             if ('string' !== typeof opts.method) {
                 throw new TypeError('SVOGauge.init: method must be string ' +
@@ -137,8 +137,18 @@
 
         // Call method.
         gauge = this.methods[this.method].call(this, opts);
+
+        // Add defaults.
+        that = this;
+        gauge.isHidden = function() { return that.isHidden(); };
+        gauge.isCollapsed = function() { return that.isCollapsed(); };
+
         // Check properties.
-        checkGauge(this.method, gauge);
+        if (!node.widgets.isWidget(gauge)) {
+            throw new Error('SVOGauge.init: method ' + this.method +
+                            ' created invalid gauge: missing default widget ' +
+                            'methods.')
+        }
         // Approved.
         this.gauge = gauge;
 
@@ -201,41 +211,6 @@
     SVOGauge.prototype.setValues = function(opts) {
         return this.gauge.setValues(opts);
     };
-
-    // ## Helper functions.
-
-    /**
-     * ### checkGauge
-     *
-     * Checks if a gauge is properly constructed, throws an error otherwise
-     *
-     * @param {string} method The name of the method creating it
-     * @param {object} gauge The object to check
-     *
-     * @see ModdGauge.init
-     */
-    function checkGauge(method, gauge) {
-        if (!gauge) {
-            throw new Error('SVOGauge.init: method ' + method +
-                            'did not create element gauge.');
-        }
-        if ('function' !== typeof gauge.getValues) {
-            throw new Error('SVOGauge.init: method ' + method +
-                            ': gauge missing function getValues.');
-        }
-        if ('function' !== typeof gauge.enable) {
-            throw new Error('SVOGauge.init: method ' + method +
-                            ': gauge missing function enable.');
-        }
-        if ('function' !== typeof gauge.disable) {
-            throw new Error('SVOGauge.init: method ' + method +
-                            ': gauge missing function disable.');
-        }
-        if ('function' !== typeof gauge.append) {
-            throw new Error('SVOGauge.init: method ' + method +
-                            ': gauge missing function append.');
-        }
-    }
 
     // ## Available methods.
 
