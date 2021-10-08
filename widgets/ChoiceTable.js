@@ -120,7 +120,7 @@
          * @see ChoiceTable.onclick
          */
         this.listener = function(e) {
-            var name, value, td;
+            var name, value, td, tr;
             var i, len, removed;
 
             e = e || window.event;
@@ -131,6 +131,9 @@
                 // It might be a nested element, try the parent.
                 td = td.parentNode;
                 if (!td || 'undefined' === typeof that.choicesIds[td.id]) {
+
+
+
                     return;
                 }
             }
@@ -1236,6 +1239,9 @@
             }
             else if (J.isElement(choice) || J.isNode(choice)) {
                 td.appendChild(choice);
+            }
+            else if (node.widgets.isWidget(choice)) {
+                node.widgets.append(choice, td);
             }
             else {
                 throw new Error('ChoiceTable.renderChoice: invalid choice: ' +
