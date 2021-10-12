@@ -1715,17 +1715,12 @@
         if (options.highlighted || w._highlighted) w.highlight();
         if (options.disabled || w._disabled) w.disable();
 
-        try {
         if (w.docked) {
             // Make sure the distance from the right side is correct.
             setRightStyle(w);
         }
         else if (!w.isHidden() && !w.isCollapsed()) {
             W.adjustFrameHeight(undefined, 150);
-        }
-        }
-        catch(e) {
-            debugger
         }
 
         // Store reference of last appended widget (.get method set storeRef).
@@ -5895,7 +5890,7 @@
          * @see ChoiceTable.onclick
          */
         this.listener = function(e) {
-            var name, value, td;
+            var name, value, td, tr;
             var i, len, removed;
 
             e = e || window.event;
@@ -5905,8 +5900,12 @@
             if ('undefined' === typeof that.choicesIds[td.id]) {
                 // It might be a nested element, try the parent.
                 td = td.parentNode;
-                if (!td || 'undefined' === typeof that.choicesIds[td.id]) {
-                    return;
+                if (!td) return;
+                if ('undefined' === typeof that.choicesIds[td.id]) {
+                    td = td.parentNode;
+                    if (!td || 'undefined' === typeof that.choicesIds[td.id]) {
+                        return;
+                    }
                 }
             }
 

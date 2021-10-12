@@ -130,11 +130,12 @@
             if ('undefined' === typeof that.choicesIds[td.id]) {
                 // It might be a nested element, try the parent.
                 td = td.parentNode;
-                if (!td || 'undefined' === typeof that.choicesIds[td.id]) {
-
-
-
-                    return;
+                if (!td) return;
+                if ('undefined' === typeof that.choicesIds[td.id]) {
+                    td = td.parentNode;
+                    if (!td || 'undefined' === typeof that.choicesIds[td.id]) {
+                        return;
+                    }
                 }
             }
 
