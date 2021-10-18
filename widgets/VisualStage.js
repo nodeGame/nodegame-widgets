@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    VisualStage.version = '0.10.0';
+    VisualStage.version = '0.11.0';
     VisualStage.description =
         'Displays the name of the current, previous and next step of the game.';
 

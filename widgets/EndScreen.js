@@ -16,7 +16,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.7.1';
+    EndScreen.version = '0.7.2';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
@@ -419,7 +419,9 @@
 
             }
 
-            if (data.showBonus !== false) {
+            if ('undefined' !== typeof data.bonus &&
+                data.showBonus !== false) {
+
                 if (preWin !== '') preWin += ' + ';
                 preWin += data.bonus;
             }
@@ -463,7 +465,9 @@
             }
 
             if (!err) {
-                if (totalWin !== preWin) totalWin = preWin + ' = ' + totalWin;
+                if (totalWin !== preWin & preWin !== '') {
+                    totalWin = preWin + ' = ' + totalWin;
+                }
                 totalWin += ' ' + this.totalWinCurrency;
             }
         }

@@ -9187,11 +9187,12 @@
 
     Consent.texts = {
 
-        areYouSure: 'You did not consent and are about to leave the study. Are you sure?',
+        areYouSure: 'You did not consent and are about to leave the ' +
+                    'study. Are you sure?',
 
         printText:
-        '<br/><p>If you need a copy of this consent form, you may print a copy of ' +
-        'this page for your records.</p>',
+        '<br/><p>If you need a copy of this consent form, you may ' +
+        'print a copy of this page for your records.</p>',
 
         printBtn: 'Print this page',
 
@@ -14389,7 +14390,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.7.1';
+    EndScreen.version = '0.7.2';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
@@ -14792,7 +14793,9 @@
 
             }
 
-            if (data.showBonus !== false) {
+            if ('undefined' !== typeof data.bonus &&
+                data.showBonus !== false) {
+
                 if (preWin !== '') preWin += ' + ';
                 preWin += data.bonus;
             }
@@ -14836,7 +14839,9 @@
             }
 
             if (!err) {
-                if (totalWin !== preWin) totalWin = preWin + ' = ' + totalWin;
+                if (totalWin !== preWin & preWin !== '') {
+                    totalWin = preWin + ' = ' + totalWin;
+                }
                 totalWin += ' ' + this.totalWinCurrency;
             }
         }
@@ -20490,7 +20495,7 @@
 
     // ## Meta-data
 
-    VisualStage.version = '0.10.0';
+    VisualStage.version = '0.11.0';
     VisualStage.description =
         'Displays the name of the current, previous and next step of the game.';
 
