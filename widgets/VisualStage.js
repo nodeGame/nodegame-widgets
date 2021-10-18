@@ -77,10 +77,10 @@
 
         // Default display settings.
 
-        // ### VisualStage.showRounds
+        // ### VisualStage.addRound
         //
         // If TRUE, round number is added to the name of steps in repeat stages
-        this.showRounds = true;
+        this.addRound = true;
 
         // ### VisualStage.showPrevious
         //
@@ -112,8 +112,8 @@
             }
             this.displayMode = opts.displayMode;
         }
-        if ('undefined' !== typeof opts.rounds) {
-            this.showRounds = !!opts.rounds;
+        if ('undefined' !== typeof opts.addRound) {
+            this.addRound = !!opts.addRound;
         }
         if ('undefined' !== typeof opts.previous) {
             this.showPrevious = !!opts.previous;
@@ -255,10 +255,19 @@
      * @return {string} name The name of the step
      */
     VisualStage.prototype.getStepName = function(gameStage, curStage, mod) {
-        var name, round;
+        var name, round, preprocess, addRound;
         // Get the name. If no step property is defined, use the id and
         // do some text replacing.
         name = node.game.plot.getProperty(gameStage, 'name');
+        if ('function' === typeof name) {
+            preprocess = name;
+            name = null;
+        }
+        else if ('object' === typeof name && name !== null) {
+            preprocess = name.preprocess;
+            addRound = name.addRound;
+            name = name.name;
+        }
         if (!name) {
             name = node.game.plot.getStep(gameStage);
             if (!name) {
@@ -270,15 +279,15 @@
                 if (this.capitalize) name = capitalize(name);
             }
         }
+        if (!preprocess) preprocess = this.preprocess;
+        if ('undefined' === typeof addRound) addRound = this.addRound;
+
+        round = getRound(gameStage, curStage, mod);
 
         // If function, executes it.
-        if ('function' === typeof name) name = name.call(node.game);
+        if (preprocess) name = preprocess.call(node.game, name, mod, round);
+        if (addRound && round) name += ' ' + round;
 
-        if (this.showRounds) {
-            round = getRound(gameStage, curStage, mod);
-            if (round) name += ' ' + round;
-        }
-        if (this.preprocess) name = this.preprocess(name, mod, round);
         return name;
     };
 
