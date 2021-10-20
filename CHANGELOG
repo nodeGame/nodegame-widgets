@@ -15,7 +15,6 @@ sameWidthCell option to control.
 - Widgets.append(): call W.adjustFrameHeight with some delay.
 - bootstrap5 option for all widgets.
 - WaitingRoom: new treatment "treatment_latin_square"
-- WaitingRoom: REMOTE_DISPATCH option.
 - ChoiceTable and ChoiceTableGroup: errorBox to display error messages.
 - Several minor fixes.
 
