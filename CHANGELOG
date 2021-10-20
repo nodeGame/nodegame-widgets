@@ -1,6 +1,25 @@
 # nodegame-widgets change log
 
-## 6.3.0 ## current
+## 7.0.0
+- New widgets: Consent, SDO, GroupMalleability.
+- VisualStage: improved support for reading step property.
+- ChoiceTable: supports adding widgets as choices.
+- ChoiceTable: checks 2 levels up for the TD id.
+- ChoiceTable: choice is saved as number (no longer as string), so onclick and
+getValues will return that number.
+- ChoiceManager: skips widgets that do not return values.
+- ChoiceManager: default widget for forms is ChoiceTable.
+- ChoiceManager: simplify option returns only forms @experimental.
+- ChoiceTable: choices have all same width when they are horizontal.
+sameWidthCell option to control.
+- Widgets.append(): call W.adjustFrameHeight with some delay.
+- bootstrap5 option for all widgets.
+- WaitingRoom: new treatment "treatment_latin_square"
+- WaitingRoom: REMOTE_DISPATCH option.
+- ChoiceTable and ChoiceTableGroup: errorBox to display error messages.
+- Several minor fixes.
+
+## 6.3.0
 - VisualStage supports functions as 'name' step-property.
 - Fixed bug in Chat when receiverOnly is true.
 
