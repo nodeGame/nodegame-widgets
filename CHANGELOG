@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 7.0.1
+- Consent form fix show/hide button.
+
 ## 7.0.0
 - New widgets: Consent, SDO, GroupMalleability.
 - VisualStage: improved support for reading step property.
