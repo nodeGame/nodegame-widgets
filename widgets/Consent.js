@@ -163,7 +163,7 @@
             if (!na) throw new Error('Consent: notAgree button not found');
 
 
-            a.onclick = function() { node.done(); };
+            a.onclick = function() { node.done({ consent: true }); };
             na.onclick = function() {
                 var showIt, confirmed;
 
