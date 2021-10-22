@@ -39,6 +39,10 @@
 
         notAgree: 'No, I do not agree',
 
+        showHideConsent: function(w, s) {
+            return (s === 'hide' ? 'Hide' : 'Show') + ' Consent Form';
+        }
+
     };
 
     /**

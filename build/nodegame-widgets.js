@@ -41,11 +41,11 @@
      *
      * Inits the widget after constructor and default properties are added
      *
-     * @param {object} options Configuration options
+     * @param {object} opts Configuration options
      *
      * @see Widgets.get
      */
-    Widget.prototype.init = function(options) {};
+    Widget.prototype.init = function(opts) {};
 
     /**
      * ### Widget.listeners
@@ -89,14 +89,14 @@
      *
      * Returns the values currently stored by the widget
      *
-     * @param {mixed} options Settings controlling the content of return value
+     * @param {mixed} opts Settings controlling the content of return value
      *
      * @return {mixed} The values of the widget
      */
-    Widget.prototype.getValues = function(options) {};
+    Widget.prototype.getValues = function(opts) {};
 
     /**
-     * ### Widget.getValues
+     * ### Widget.setValues
      *
      * Set the stored values directly
      *
@@ -114,7 +114,7 @@
      * Deletes current selection, any highlighting, and other data
      * that the widget might have collected to far.
      */
-    Widget.prototype.reset = function(options) {};
+    Widget.prototype.reset = function(opts) {};
 
     /**
      * ### Widget.highlight
@@ -9202,6 +9202,10 @@
 
         notAgree: 'No, I do not agree',
 
+        showHideConsent: function(w, s) {
+            return (s === 'hide' ? 'Hide' : 'Show') + ' Consent Form';
+        }
+
     };
 
     /**
@@ -9326,7 +9330,7 @@
             if (!na) throw new Error('Consent: notAgree button not found');
 
 
-            a.onclick = function() { node.done(); };
+            a.onclick = function() { node.done({ consent: true }); };
             na.onclick = function() {
                 var showIt, confirmed;
 
