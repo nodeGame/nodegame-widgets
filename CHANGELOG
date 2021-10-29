@@ -1,5 +1,8 @@
 # nodegame-widgets change log
 
+## 7.0.2
+- Simplify option in ChoiceManager adds isCorrect only if FALSE.
+
 ## 7.0.1
 - Consent form fix show/hide button.
 
