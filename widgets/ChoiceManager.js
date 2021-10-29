@@ -658,7 +658,11 @@
         if (this.textarea) obj.freetext = this.textarea.value;
 
         // Simplify everything, if requested.
-        if (opts.simplify || this.simplify) obj = obj.forms;
+        if (opts.simplify || this.simplify) {
+            res = obj;
+            obj = obj.forms;
+            if (res.isCorrect === false) obj.isCorrect = false;
+        }
         return obj;
     };
 
