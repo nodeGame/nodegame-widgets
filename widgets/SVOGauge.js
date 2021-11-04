@@ -37,9 +37,7 @@
 
     // ## Dependencies
 
-    SVOGauge.dependencies = {
-        JSUS: {}
-    };
+    SVOGauge.dependencies = {};
 
     /**
      * ## SVOGauge constructor

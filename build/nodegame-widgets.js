@@ -5740,6 +5740,7 @@
             res = obj;
             obj = obj.forms;
             if (res.isCorrect === false) obj.isCorrect = false;
+            if (res.freetext) obj.freetext = res.freetext;
         }
         return obj;
     };
@@ -9257,9 +9258,9 @@
 
         this.consent = opts.consent || node.game.settings.CONSENT;
 
-        if ('object' !== typeof this.consent) {
-            throw new TypeError('Consent: consent must be object. Found: ' +
-                                this.consent);
+        if (this.consent && 'object' !== typeof this.consent) {
+            throw new TypeError('Consent: consent must be object or ' +
+                                'undefined. Found: ' + this.consent);
         }
 
         this.showPrint = opts.showPrint === false ? false : true;
@@ -9285,6 +9286,9 @@
 
     Consent.prototype.append = function() {
         var consent, html;
+        // Hide not agreed div.
+        W.hide('notAgreed');
+
         consent = W.gid('consent');
         html = '';
 
@@ -9317,12 +9321,15 @@
             var a, na, p, id;
 
             // Replace all texts.
-            for (p in consent) {
-                if (consent.hasOwnProperty(p)) {
-                    // Making lower-case and replacing underscores with dashes.
-                    id = p.toLowerCase();
-                    id = id.replace(new RegExp("_", 'g'), "-");
-                    W.setInnerHTML(id, consent[p]);
+            if (consent) {
+                for (p in consent) {
+                    if (consent.hasOwnProperty(p)) {
+                        // Making lower-case and replacing underscore
+                        // s with dashes.
+                        id = p.toLowerCase();
+                        id = id.replace(new RegExp("_", 'g'), "-");
+                        W.setInnerHTML(id, consent[p]);
+                    }
                 }
             }
 
@@ -19122,9 +19129,7 @@
 
     // ## Dependencies
 
-    SVOGauge.dependencies = {
-        JSUS: {}
-    };
+    SVOGauge.dependencies = {};
 
     /**
      * ## SVOGauge constructor

@@ -662,6 +662,7 @@
             res = obj;
             obj = obj.forms;
             if (res.isCorrect === false) obj.isCorrect = false;
+            if (res.freetext) obj.freetext = res.freetext;
         }
         return obj;
     };
