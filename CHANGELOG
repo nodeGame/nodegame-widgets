@@ -1,5 +1,9 @@
 # nodegame-widgets change log
 
+## 7.0.3
+- Fixed Consent form not receiving a consent object.
+- ChoiceManager adds freetext on simplify, if available.
+
 ## 7.0.2
 - Simplify option in ChoiceManager adds isCorrect only if FALSE.
 
