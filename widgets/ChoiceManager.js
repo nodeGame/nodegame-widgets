@@ -693,4 +693,22 @@
 
     // ## Helper methods.
 
+// In progress.
+//     const createOnClick = (choice, question) => {
+//     return function(value, removed, td) {
+//         var w, hide;
+//         w = node.widgets.lastAppended.formsById[question];
+//         if (J.isArray(choice)) {
+//             hide = !J.inArray(this.currentChoice, choice);
+//         }
+//         else {
+//             hide = this.currentChoice !== choice;
+//         }
+//         if (hide) w.hide();
+//         else w.show();
+//         W.adjustFrameHeight();
+//     };
+// };
+// onclick: createOnClick([0, 1], 'crypto_occupation')
+
 })(node);

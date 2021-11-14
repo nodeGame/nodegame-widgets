@@ -23,7 +23,6 @@
     // ## Dependencies
 
     WaitingRoom.dependencies = {
-        JSUS: {},
         VisualTimer: {}
     };
 

@@ -27,8 +27,7 @@
     // ## Dependencies
 
     VisualTimer.dependencies = {
-        GameTimer: {},
-        JSUS: {}
+        GameTimer: {}
     };
 
     /**

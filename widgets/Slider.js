@@ -25,10 +25,6 @@
 
     // ## Dependencies
 
-    Slider.dependencies = {
-        JSUS: {}
-    };
-
     Slider.texts = {
         currentValue: function(widget, value) {
             return 'Value: ' + value;

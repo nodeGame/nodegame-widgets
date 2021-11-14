@@ -34,7 +34,6 @@
     // ## Dependencies
 
     VisualStage.dependencies = {
-        JSUS: {},
         Table: {}
     };
 

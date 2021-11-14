@@ -36,8 +36,7 @@
     // ## Dependencies
 
     VisualRound.dependencies = {
-        GamePlot: {},
-        JSUS: {}
+        GamePlot: {}
     };
 
     /**
@@ -486,12 +485,16 @@
             // Compute current values.
 
             this.curStage = stage.stage;
+
             // Stage can be indexed by id or number in the sequence.
             if ('string' === typeof this.curStage) {
                 this.curStage =
                     this.gamePlot.normalizeGameStage(stage).stage;
             }
             this.curStage -= this.stageOffset;
+            // 0.0.0
+            if (this.curStage < 1) return;
+
             this.curStep = stage.step;
             this.curRound = stage.round;
 
