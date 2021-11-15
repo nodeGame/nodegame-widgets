@@ -441,26 +441,23 @@
 
 
     Dropdown.prototype.setChoices = function (choices, append) {
-        var tag = this.tag;
-        var option = this.option;
-        var placeHolder = this.placeHolder;
-        var order = this.order;
+        var tag, option, order, placeHolder;
+        var select, datalist, input, create;
+        var i, len;
 
         // TODO validate choices.
         this.choices = choices;
 
         if (!append) return;
 
-        var create = false;
+        create = false;
         if (this.menu) this.menu.innerHTML = '';
         else create = true;
 
         if (create) {
+            placeHolder = this.placeHolder;
             tag = this.tag;
             if (tag === "datalist" || "undefined" === typeof tag) {
-
-                var datalist = this.datalist;
-                var input = this.input;
 
                 datalist = W.get('datalist');
                 datalist.id = "dropdown";
@@ -477,8 +474,6 @@
 
             }
             else if (tag === "select") {
-
-                var select = this.select;
 
                 select = W.get('select');
                 select.id = this.id;
@@ -497,24 +492,16 @@
                 this.menu = select;
             }
         }
-        var len = choices.length;
+
+        len = choices.length;
         order = J.seq(0, len - 1);
         if (this.shuffleChoices) order = J.shuffle(order);
 
-        for (var i = 0; i < len; i++) {
-
+        for (i = 0; i < len; i++) {
             option = W.get('option');
             option.value = choices[order[i]];
             option.innerHTML = choices[order[i]];
-
-            if (tag === "datalist" || "undefined" === typeof tag) {
-
-                datalist.appendChild(option);
-            }
-            else if (tag === "select") {
-
-                select.appendChild(option);
-            }
+            this.menu.appendChild(option);
         }
 
         this.enable();
