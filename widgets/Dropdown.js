@@ -575,7 +575,7 @@
     };
 
     /**
-     * ### ChoiceTable.setError
+     * ### Dropdown.setError
      *
      * Set the error msg inside the errorBox
      *
@@ -585,7 +585,7 @@
      */
     Dropdown.prototype.setError = function (err) {
         // TODO: the errorBox is added only if .append() is called.
-        // However, ChoiceTableGroup use the table without calling .append().
+        // However, DropdownGroup use the table without calling .append().
         if (this.errorBox) this.errorBox.innerHTML = err || '';
         if (err) this.highlight();
         else this.unhighlight();
@@ -670,7 +670,7 @@
     };
 
     /**
-     * ### ChoiceTable.listeners
+     * ### Dropdown.listeners
      *
      * Implements Widget.listeners
      *
@@ -690,7 +690,7 @@
     };
 
     /**
-     * ### ChoiceTable.disable
+     * ### Dropdown.disable
      *
      * Enables the dropdown menu
      */
@@ -702,7 +702,7 @@
     };
 
     /**
-     * ### ChoiceTable.enable
+     * ### Dropdown.enable
      *
      * Enables the dropdown menu
      */
