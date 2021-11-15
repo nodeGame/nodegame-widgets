@@ -4,7 +4,7 @@
 
     // Meta-data.
 
-    Dropdown.version = '0.1.0';
+    Dropdown.version = '0.2.0';
     Dropdown.description = 'Creates a configurable dropdown menu.';
 
     Dropdown.texts = {
@@ -56,11 +56,11 @@
         this.labelText = null;
 
         /**
-         * ### Dropdown.placeHolder
+         * ### Dropdown.placeholder
          *
-         * A placeHolder text for the input
+         * A placeholder text for the input
          */
-        this.placeHolder = null;
+        this.placeholder = null;
 
         /**
          * ### Dropdown.choices
@@ -127,8 +127,6 @@
 
             // Call onchange, if any.
             if (that.onchange) {
-
-
                 that.onchange(that.currentChoice, that);
             }
 
@@ -288,14 +286,14 @@
                 options.labelText);
         }
 
-        // Set the placeHolder text, if any.
-        if ('string' === typeof options.placeHolder) {
-            this.placeHolder = options.placeHolder;
+        // Set the placeholder text, if any.
+        if ('string' === typeof options.placeholder) {
+            this.placeholder = options.placeholder;
         }
-        else if ('undefined' !== typeof options.placeHolder) {
-            throw new TypeError('Dropdown.init: options.placeHolder must ' +
+        else if ('undefined' !== typeof options.placeholder) {
+            throw new TypeError('Dropdown.init: options.placeholder must ' +
                 'be string or undefined. Found: ' +
-                options.placeHolder);
+                options.placeholder);
         }
 
         // Add the choices.
@@ -339,8 +337,6 @@
                 'be boolean or undefined. Found: ' +
                 options.fixedChoice);
         }
-
-
 
         if ("undefined" === typeof options.tag ||
             "datalist" === options.tag ||
@@ -411,7 +407,6 @@
             this.validationSpeed = tmp;
         }
 
-
     }
 
     // Implements the Widget.append method.
@@ -441,7 +436,7 @@
 
 
     Dropdown.prototype.setChoices = function (choices, append) {
-        var tag, option, order, placeHolder;
+        var tag, option, order;
         var select, datalist, input, create;
         var i, len;
 
@@ -455,7 +450,6 @@
         else create = true;
 
         if (create) {
-            placeHolder = this.placeHolder;
             tag = this.tag;
             if (tag === "datalist" || "undefined" === typeof tag) {
 
@@ -466,37 +460,45 @@
                 input.setAttribute('list', datalist.id);
                 input.id = this.id;
                 input.autocomplete = "off";
-                if (placeHolder) { input.placeholder = placeHolder; }
-                if (this.inputWidth) input.style.width = this.inputWidth;
+
                 this.bodyDiv.appendChild(input);
                 this.bodyDiv.appendChild(datalist);
                 this.menu = input;
 
             }
-            else if (tag === "select") {
+            else {
 
                 select = W.get('select');
                 select.id = this.id;
-                if (this.inputWidth) select.style.width = this.inputWidth;
-                if (placeHolder) {
-                    option = W.get('option');
-                    option.value = "";
-                    option.innerHTML = placeHolder;
-                    option.setAttribute("disabled", "");
-                    option.setAttribute("selected", "");
-                    option.setAttribute("hidden", "");
-                    select.appendChild(option);
-                }
 
                 this.bodyDiv.appendChild(select);
                 this.menu = select;
             }
         }
 
+        // Set width.
+        if (this.inputWidth) this.menu.style.width = this.inputWidth;
+
+        // Adding placeholder.
+        if (this.placeholder) {
+            if (tag === "datalist") {
+                this.menu.placeholder = this.placeholder;
+            }
+            else {
+                option = W.get('option');
+                option.value = "";
+                option.innerHTML = this.placeholder;
+                option.setAttribute("disabled", "");
+                option.setAttribute("selected", "");
+                option.setAttribute("hidden", "");
+                this.menu.appendChild(option);
+            }
+        }
+
+        // Adding all options.
         len = choices.length;
         order = J.seq(0, len - 1);
         if (this.shuffleChoices) order = J.shuffle(order);
-
         for (i = 0; i < len; i++) {
             option = W.get('option');
             option.value = choices[order[i]];
@@ -618,7 +620,6 @@
      * @see Dropdown.highlighted
      */
     Dropdown.prototype.unhighlight = function () {
-
         if (this.highlighted !== true) return;
         this.menu.style.border = '';
         this.highlighted = false;
@@ -691,28 +692,24 @@
     /**
      * ### ChoiceTable.disable
      *
-     * Disables clicking on the table and removes CSS 'clicklable' class
+     * Enables the dropdown menu
      */
     Dropdown.prototype.disable = function () {
         if (this.disabled === true) return;
         this.disabled = true;
-        if (this.menu) {
-            this.menu.removeEventListener('change', this.listener);
-        }
+        if (this.menu) this.menu.removeEventListener('change', this.listener);
         this.emit('disabled');
     };
 
     /**
      * ### ChoiceTable.enable
      *
-     * Enables clicking on the table and adds CSS 'clicklable' class
-     *
-     * @return {function} cb The event listener function
+     * Enables the dropdown menu
      */
     Dropdown.prototype.enable = function () {
         if (this.disabled === false) return;
         if (!this.menu) {
-            throw new Error('Dropdown.enable: menu is not defined');
+            throw new Error('Dropdown.enable: dropdown menu not found.');
         }
         this.disabled = false;
         this.menu.addEventListener('change', this.listener);
