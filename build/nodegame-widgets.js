@@ -5725,7 +5725,8 @@
         // Only one form displayed.
         if (this.oneByOne) {
 
-            if (this.oneByOneCounter <= (len-1)) {
+            // Evaluate one-by-one and store partial results.
+            if (this.oneByOneCounter < (len-1)) {
                 form = this.forms[this.oneByOneCounter];
                 res = form.getValues(opts);
                 if (res) {
@@ -5737,18 +5738,17 @@
                         this.oneByOneCounter++;
                         this.forms[this.oneByOneCounter].show();
                         W.adjustFrameHeight();
-                        // Prevent stepping or copy all partial results in the
-                        // obj returning the
-                        if (this.oneByOneCounter === len) {
-                            obj.forms = this.oneByOneResults;
-                        }
-                        else {
-                            obj.isCorrect = false;
-                        }
-
+                        // Prevent stepping.
+                        obj.isCorrect = false;
                     }
                 }
             }
+            // All one-by-one pages executed.
+            else {
+                // Copy all partial results in the obj returning the
+                obj.forms = this.oneByOneResults;
+            }
+
         }
         // All forms on the page.
         else {
