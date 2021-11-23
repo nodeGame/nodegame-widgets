@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.4.1';
+    ChoiceManager.version = '1.5.1';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -147,9 +147,32 @@
         /**
          * ### ChoiceManager.required
          *
-         * TRUE if widget should be checked upon node.done.
+         * If TRUE, the widget is checked upon node.done.
          */
         this.required = null;
+
+        /**
+         * ### ChoiceManager.oneByOne
+         *
+         * If, TRUE the widget displays only one form at the time
+         *
+         * Calling node.done will display the next form.
+         */
+        this.oneByOne = null;
+
+        /**
+         * ### ChoiceManager.oneByOneCounter
+         *
+         * Index the currently displayed form if oneByOne is TRUE
+         */
+        this.oneByOneCounter = 0;
+
+        /**
+         * ### ChoiceManager.oneByOneResults
+         *
+         * Contains partial results from forms if OneByOne is true
+         */
+        this.oneByOneResults = {};
     }
 
     // ## ChoiceManager methods
@@ -246,6 +269,9 @@
         // If TRUE, it returns getValues returns forms.values.
         this.simplify = !!options.simplify;
 
+        // If TRUE, forms are displayed one by one.
+        this.oneByOne = !!options.oneByOne;
+
         // After all configuration options are evaluated, add forms.
 
         if ('undefined' !== typeof options.forms) this.setForms(options.forms);
@@ -313,6 +339,12 @@
                 name = form.name || 'ChoiceTable';
                 // Add defaults.
                 J.mixout(form, this.formsOptions);
+
+                // Display forms one by one.
+                if (this.oneByOne && this.oneByOneCounter !== i) {
+                    form.hidden = true;
+                }
+
                 form = node.widgets.get(name, form);
             }
 
@@ -609,39 +641,64 @@
         if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
         if (opts.markAttempt) obj.isCorrect = true;
-        i = -1, len = this.forms.length;
-        for ( ; ++i < len ; ) {
-            form = this.forms[i];
-            // If it is hidden or disabled we do not do validation.
-            if (form.isHidden() || form.isDisabled()) {
-                res = form.getValues({
-                    markAttempt: false,
-                    highlight: false
-                });
-                if (res) obj.forms[form.id] = res;
-            }
-            else {
-                // ContentBox does not return a value.
+
+        len = this.forms.length;
+
+        // Only one form displayed.
+        if (this.oneByOne) {
+
+            if (this.oneByOneCounter <= (len-1)) {
+                form = this.forms[this.oneByOneCounter];
                 res = form.getValues(opts);
-                if (!res) continue;
-                obj.forms[form.id] = res;
-                // Backward compatible (requiredChoice).
-                if ((form.required || form.requiredChoice) &&
-                    (obj.forms[form.id].choice === null ||
-                     (form.selectMultiple &&
-                      !obj.forms[form.id].choice.length))) {
+                if (res) {
+                    this.oneByOneResults[form.id] = res;
+                    lastErrored = checkFormResult(res, form, opts);
 
-                    obj.missValues.push(form.id);
-                    lastErrored = form;
-                }
-                if (opts.markAttempt &&
-                    obj.forms[form.id].isCorrect === false) {
+                    if (!lastErrored) {
+                        this.forms[this.oneByOneCounter].hide();
+                        this.oneByOneCounter++;
+                        this.forms[this.oneByOneCounter].show();
+                        W.adjustFrameHeight();
+                        // Prevent stepping or copy all partial results in the
+                        // obj returning the
 
-                    // obj.isCorrect = false;
-                    lastErrored = form;
+                        // TODO: here. Last form not displayed.
+
+                        if (this.oneByOneCounter === (len-1)) {
+                            obj.forms = this.oneByOneResults;
+                        }
+                        else {
+                            obj.isCorrect = false;
+                        }
+
+                    }
                 }
             }
         }
+        // All forms on the page.
+        else {
+            i = -1;
+            for ( ; ++i < len ; ) {
+                form = this.forms[i];
+                // If it is hidden or disabled we do not do validation.
+                if (form.isHidden() || form.isDisabled()) {
+                    res = form.getValues({
+                        markAttempt: false,
+                        highlight: false
+                    });
+                    if (res) obj.forms[form.id] = res;
+                }
+                else {
+                    // ContentBox does not return a value.
+                    res = form.getValues(opts);
+                    if (!res) continue;
+                    obj.forms[form.id] = res;
+
+                    lastErrored = checkFormResult(res, form, opts, obj);
+                }
+            }
+        }
+
         if (lastErrored) {
             if (opts.highlight &&
                 'function' === typeof lastErrored.bodyDiv.scrollIntoView) {
@@ -692,6 +749,24 @@
     };
 
     // ## Helper methods.
+
+    function checkFormResult(res, form, opts, out) {
+        var err;
+        // Backward compatible (requiredChoice).
+        if ((form.required || form.requiredChoice) &&
+            (res.choice === null ||
+            (form.selectMultiple && !res.choice.length))) {
+
+            if (out) out.missValues.push(form.id);
+            err = form;
+        }
+        if (opts.markAttempt && res.isCorrect === false) {
+            // out.isCorrect = false;
+            err = form;
+        }
+
+        return err;
+    }
 
 // In progress.
 //     const createOnClick = (choice, question) => {

@@ -5093,7 +5093,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.4.1';
+    ChoiceManager.version = '1.5.1';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -5225,9 +5225,32 @@
         /**
          * ### ChoiceManager.required
          *
-         * TRUE if widget should be checked upon node.done.
+         * If TRUE, the widget is checked upon node.done.
          */
         this.required = null;
+
+        /**
+         * ### ChoiceManager.oneByOne
+         *
+         * If, TRUE the widget displays only one form at the time
+         *
+         * Calling node.done will display the next form.
+         */
+        this.oneByOne = null;
+
+        /**
+         * ### ChoiceManager.oneByOneCounter
+         *
+         * Index the currently displayed form if oneByOne is TRUE
+         */
+        this.oneByOneCounter = 0;
+
+        /**
+         * ### ChoiceManager.oneByOneResults
+         *
+         * Contains partial results from forms if OneByOne is true
+         */
+        this.oneByOneResults = {};
     }
 
     // ## ChoiceManager methods
@@ -5324,6 +5347,9 @@
         // If TRUE, it returns getValues returns forms.values.
         this.simplify = !!options.simplify;
 
+        // If TRUE, forms are displayed one by one.
+        this.oneByOne = !!options.oneByOne;
+
         // After all configuration options are evaluated, add forms.
 
         if ('undefined' !== typeof options.forms) this.setForms(options.forms);
@@ -5391,6 +5417,12 @@
                 name = form.name || 'ChoiceTable';
                 // Add defaults.
                 J.mixout(form, this.formsOptions);
+
+                // Display forms one by one.
+                if (this.oneByOne && this.oneByOneCounter !== i) {
+                    form.hidden = true;
+                }
+
                 form = node.widgets.get(name, form);
             }
 
@@ -5687,39 +5719,61 @@
         if ('undefined' === typeof opts.markAttempt) opts.markAttempt = true;
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
         if (opts.markAttempt) obj.isCorrect = true;
-        i = -1, len = this.forms.length;
-        for ( ; ++i < len ; ) {
-            form = this.forms[i];
-            // If it is hidden or disabled we do not do validation.
-            if (form.isHidden() || form.isDisabled()) {
-                res = form.getValues({
-                    markAttempt: false,
-                    highlight: false
-                });
-                if (res) obj.forms[form.id] = res;
-            }
-            else {
-                // ContentBox does not return a value.
+
+        len = this.forms.length;
+
+        // Only one form displayed.
+        if (this.oneByOne) {
+
+            if (this.oneByOneCounter <= (len-1)) {
+                form = this.forms[this.oneByOneCounter];
                 res = form.getValues(opts);
-                if (!res) continue;
-                obj.forms[form.id] = res;
-                // Backward compatible (requiredChoice).
-                if ((form.required || form.requiredChoice) &&
-                    (obj.forms[form.id].choice === null ||
-                     (form.selectMultiple &&
-                      !obj.forms[form.id].choice.length))) {
+                if (res) {
+                    this.oneByOneResults[form.id] = res;
+                    lastErrored = checkFormResult(res, form, opts);
 
-                    obj.missValues.push(form.id);
-                    lastErrored = form;
-                }
-                if (opts.markAttempt &&
-                    obj.forms[form.id].isCorrect === false) {
+                    if (!lastErrored) {
+                        this.forms[this.oneByOneCounter].hide();
+                        this.oneByOneCounter++;
+                        this.forms[this.oneByOneCounter].show();
+                        W.adjustFrameHeight();
+                        // Prevent stepping or copy all partial results in the
+                        // obj returning the
+                        if (this.oneByOneCounter === len) {
+                            obj.forms = this.oneByOneResults;
+                        }
+                        else {
+                            obj.isCorrect = false;
+                        }
 
-                    // obj.isCorrect = false;
-                    lastErrored = form;
+                    }
                 }
             }
         }
+        // All forms on the page.
+        else {
+            i = -1;
+            for ( ; ++i < len ; ) {
+                form = this.forms[i];
+                // If it is hidden or disabled we do not do validation.
+                if (form.isHidden() || form.isDisabled()) {
+                    res = form.getValues({
+                        markAttempt: false,
+                        highlight: false
+                    });
+                    if (res) obj.forms[form.id] = res;
+                }
+                else {
+                    // ContentBox does not return a value.
+                    res = form.getValues(opts);
+                    if (!res) continue;
+                    obj.forms[form.id] = res;
+
+                    lastErrored = checkFormResult(res, form, opts, obj);
+                }
+            }
+        }
+
         if (lastErrored) {
             if (opts.highlight &&
                 'function' === typeof lastErrored.bodyDiv.scrollIntoView) {
@@ -5770,6 +5824,24 @@
     };
 
     // ## Helper methods.
+
+    function checkFormResult(res, form, opts, out) {
+        var err;
+        // Backward compatible (requiredChoice).
+        if ((form.required || form.requiredChoice) &&
+            (res.choice === null ||
+            (form.selectMultiple && !res.choice.length))) {
+
+            if (out) out.missValues.push(form.id);
+            err = form;
+        }
+        if (opts.markAttempt && res.isCorrect === false) {
+            // out.isCorrect = false;
+            err = form;
+        }
+
+        return err;
+    }
 
 // In progress.
 //     const createOnClick = (choice, question) => {
@@ -13991,7 +14063,7 @@
 
     // Meta-data.
 
-    Dropdown.version = '0.1.0';
+    Dropdown.version = '0.3.0';
     Dropdown.description = 'Creates a configurable dropdown menu.';
 
     Dropdown.texts = {
@@ -14043,11 +14115,11 @@
         this.labelText = null;
 
         /**
-         * ### Dropdown.placeHolder
+         * ### Dropdown.placeholder
          *
-         * A placeHolder text for the input
+         * A placeholder text for the input
          */
-        this.placeHolder = null;
+        this.placeholder = null;
 
         /**
          * ### Dropdown.choices
@@ -14114,8 +14186,6 @@
 
             // Call onchange, if any.
             if (that.onchange) {
-
-
                 that.onchange(that.currentChoice, that);
             }
 
@@ -14275,14 +14345,14 @@
                 options.labelText);
         }
 
-        // Set the placeHolder text, if any.
-        if ('string' === typeof options.placeHolder) {
-            this.placeHolder = options.placeHolder;
+        // Set the placeholder text, if any.
+        if ('string' === typeof options.placeholder) {
+            this.placeholder = options.placeholder;
         }
-        else if ('undefined' !== typeof options.placeHolder) {
-            throw new TypeError('Dropdown.init: options.placeHolder must ' +
+        else if ('undefined' !== typeof options.placeholder) {
+            throw new TypeError('Dropdown.init: options.placeholder must ' +
                 'be string or undefined. Found: ' +
-                options.placeHolder);
+                options.placeholder);
         }
 
         // Add the choices.
@@ -14326,8 +14396,6 @@
                 'be boolean or undefined. Found: ' +
                 options.fixedChoice);
         }
-
-
 
         if ("undefined" === typeof options.tag ||
             "datalist" === options.tag ||
@@ -14398,7 +14466,6 @@
             this.validationSpeed = tmp;
         }
 
-
     }
 
     // Implements the Widget.append method.
@@ -14428,7 +14495,7 @@
 
 
     Dropdown.prototype.setChoices = function (choices, append) {
-        var tag, option, order, placeHolder;
+        var tag, option, order;
         var select, datalist, input, create;
         var i, len;
 
@@ -14442,7 +14509,6 @@
         else create = true;
 
         if (create) {
-            placeHolder = this.placeHolder;
             tag = this.tag;
             if (tag === "datalist" || "undefined" === typeof tag) {
 
@@ -14453,37 +14519,45 @@
                 input.setAttribute('list', datalist.id);
                 input.id = this.id;
                 input.autocomplete = "off";
-                if (placeHolder) { input.placeholder = placeHolder; }
-                if (this.inputWidth) input.style.width = this.inputWidth;
+
                 this.bodyDiv.appendChild(input);
                 this.bodyDiv.appendChild(datalist);
                 this.menu = input;
 
             }
-            else if (tag === "select") {
+            else {
 
                 select = W.get('select');
                 select.id = this.id;
-                if (this.inputWidth) select.style.width = this.inputWidth;
-                if (placeHolder) {
-                    option = W.get('option');
-                    option.value = "";
-                    option.innerHTML = placeHolder;
-                    option.setAttribute("disabled", "");
-                    option.setAttribute("selected", "");
-                    option.setAttribute("hidden", "");
-                    select.appendChild(option);
-                }
 
                 this.bodyDiv.appendChild(select);
                 this.menu = select;
             }
         }
 
+        // Set width.
+        if (this.inputWidth) this.menu.style.width = this.inputWidth;
+
+        // Adding placeholder.
+        if (this.placeholder) {
+            if (tag === "datalist") {
+                this.menu.placeholder = this.placeholder;
+            }
+            else {
+                option = W.get('option');
+                option.value = "";
+                option.innerHTML = this.placeholder;
+                option.setAttribute("disabled", "");
+                option.setAttribute("selected", "");
+                option.setAttribute("hidden", "");
+                this.menu.appendChild(option);
+            }
+        }
+
+        // Adding all options.
         len = choices.length;
         order = J.seq(0, len - 1);
         if (this.shuffleChoices) order = J.shuffle(order);
-
         for (i = 0; i < len; i++) {
             option = W.get('option');
             option.value = choices[order[i]];
@@ -14516,17 +14590,16 @@
         var that = this;
         var correct = this.correctChoice;
         var current = this.currentChoice;
+        var correctOptions;
         var res = { value: '' };
 
 
         if (this.tag === "select" && this.numberOfChanges === 0) {
-
             current = this.currentChoice = this.menu.value;
-
         }
 
         if (this.requiredChoice) {
-            res.value = current !== null;
+            res.value = current !== null && current !== this.placeholder;
         }
 
         // If no correct choice is set return null.
@@ -14538,7 +14611,7 @@
             res.value = current === this.choices[correct];
         }
         if (J.isArray(correct)) {
-            var correctOptions = correct.map(function (x) {
+            correctOptions = correct.map(function (x) {
                 return that.choices[x];
             });
             res.value = correctOptions.indexOf(current) >= 0;
@@ -14548,19 +14621,13 @@
             if (this.choices.indexOf(current) < 0) res.value = false;
         }
 
-        if (this.validation) {
-            if (undefined === typeof res) {
-                throw new TypeError('something');
-            }
-
-            this.validation(this.currentChoice, res);
-        }
+        if (this.validation) this.validation(this.currentChoice, res);
 
         return res;
     };
 
     /**
-     * ### ChoiceTable.setError
+     * ### Dropdown.setError
      *
      * Set the error msg inside the errorBox
      *
@@ -14570,7 +14637,7 @@
      */
     Dropdown.prototype.setError = function (err) {
         // TODO: the errorBox is added only if .append() is called.
-        // However, ChoiceTableGroup use the table without calling .append().
+        // However, DropdownGroup use the table without calling .append().
         if (this.errorBox) this.errorBox.innerHTML = err || '';
         if (err) this.highlight();
         else this.unhighlight();
@@ -14605,7 +14672,6 @@
      * @see Dropdown.highlighted
      */
     Dropdown.prototype.unhighlight = function () {
-
         if (this.highlighted !== true) return;
         this.menu.style.border = '';
         this.highlighted = false;
@@ -14656,7 +14722,7 @@
     };
 
     /**
-     * ### ChoiceTable.listeners
+     * ### Dropdown.listeners
      *
      * Implements Widget.listeners
      *
@@ -14676,30 +14742,26 @@
     };
 
     /**
-     * ### ChoiceTable.disable
+     * ### Dropdown.disable
      *
-     * Disables clicking on the table and removes CSS 'clicklable' class
+     * Enables the dropdown menu
      */
     Dropdown.prototype.disable = function () {
         if (this.disabled === true) return;
         this.disabled = true;
-        if (this.menu) {
-            this.menu.removeEventListener('change', this.listener);
-        }
+        if (this.menu) this.menu.removeEventListener('change', this.listener);
         this.emit('disabled');
     };
 
     /**
-     * ### ChoiceTable.enable
+     * ### Dropdown.enable
      *
-     * Enables clicking on the table and adds CSS 'clicklable' class
-     *
-     * @return {function} cb The event listener function
+     * Enables the dropdown menu
      */
     Dropdown.prototype.enable = function () {
         if (this.disabled === false) return;
         if (!this.menu) {
-            throw new Error('Dropdown.enable: menu is not defined');
+            throw new Error('Dropdown.enable: dropdown menu not found.');
         }
         this.disabled = false;
         this.menu.addEventListener('change', this.listener);
