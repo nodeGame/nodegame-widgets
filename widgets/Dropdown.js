@@ -4,7 +4,7 @@
 
     // Meta-data.
 
-    Dropdown.version = '0.2.0';
+    Dropdown.version = '0.3.0';
     Dropdown.description = 'Creates a configurable dropdown menu.';
 
     Dropdown.texts = {
@@ -531,17 +531,16 @@
         var that = this;
         var correct = this.correctChoice;
         var current = this.currentChoice;
+        var correctOptions;
         var res = { value: '' };
 
 
         if (this.tag === "select" && this.numberOfChanges === 0) {
-
             current = this.currentChoice = this.menu.value;
-
         }
 
         if (this.requiredChoice) {
-            res.value = current !== null;
+            res.value = current !== null && current !== this.placeholder;
         }
 
         // If no correct choice is set return null.
@@ -553,7 +552,7 @@
             res.value = current === this.choices[correct];
         }
         if (J.isArray(correct)) {
-            var correctOptions = correct.map(function (x) {
+            correctOptions = correct.map(function (x) {
                 return that.choices[x];
             });
             res.value = correctOptions.indexOf(current) >= 0;
@@ -563,13 +562,7 @@
             if (this.choices.indexOf(current) < 0) res.value = false;
         }
 
-        if (this.validation) {
-            if (undefined === typeof res) {
-                throw new TypeError('something');
-            }
-
-            this.validation(this.currentChoice, res);
-        }
+        if (this.validation) this.validation(this.currentChoice, res);
 
         return res;
     };
