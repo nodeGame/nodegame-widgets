@@ -16,7 +16,7 @@
 
     // ## Add Meta-data
 
-    EndScreen.version = '0.7.2';
+    EndScreen.version = '0.8.0';
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
@@ -272,6 +272,7 @@
         var totalWinElement, totalWinParaElement, totalWinInputElement;
         var exitCodeElement, exitCodeParaElement, exitCodeInputElement;
         var exitCodeBtn, exitCodeGroup;
+        var basePay;
         var that = this;
 
         endScreenElement = document.createElement('div');
@@ -338,6 +339,11 @@
             this.exitCodeInputElement = exitCodeInputElement;
         }
 
+        basePay = node.game.settings.BASE_PAY;
+        if ('undefined' !== typeof basePay) {
+            this.updateDisplay({ basePay: basePay, total: basePay });
+        }
+
         if (this.showEmailForm) {
             node.widgets.append(this.emailForm, endScreenElement, {
                 title: false,
@@ -373,7 +379,8 @@
             document.execCommand('copy', false);
             inp.remove();
             alert(this.getText('exitCopyMsg'));
-        } catch (err) {
+        }
+        catch (err) {
             alert(this.getText('exitCopyError'));
         }
     };
@@ -416,7 +423,6 @@
 
             if ('undefined' !== typeof data.basePay) {
                 preWin = data.basePay;
-
             }
 
             if ('undefined' !== typeof data.bonus &&
