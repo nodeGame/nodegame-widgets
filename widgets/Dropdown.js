@@ -411,7 +411,6 @@
 
     // Implements the Widget.append method.
     Dropdown.prototype.append = function () {
-
         if (W.gid(this.id)) {
             throw new Error('Dropdown.append: id is not unique: ' + this.id);
         }
@@ -438,7 +437,7 @@
     Dropdown.prototype.setChoices = function (choices, append) {
         var tag, option, order;
         var select, datalist, input, create;
-        var i, len;
+        var i, len, value, name;
 
         // TODO validate choices.
         this.choices = choices;
@@ -485,12 +484,13 @@
                 this.menu.placeholder = this.placeholder;
             }
             else {
-                option = W.get('option');
-                option.value = "";
-                option.innerHTML = this.placeholder;
-                option.setAttribute("disabled", "");
-                option.setAttribute("selected", "");
-                option.setAttribute("hidden", "");
+                option = W.get('option', {
+                    value: '',
+                    innerHTML: this.placeholder
+                });
+                // option.setAttribute("disabled", "");
+                // option.setAttribute("selected", "");
+                // option.setAttribute("hidden", "");
                 this.menu.appendChild(option);
             }
         }
@@ -501,13 +501,24 @@
         if (this.shuffleChoices) order = J.shuffle(order);
         for (i = 0; i < len; i++) {
             option = W.get('option');
-            option.value = choices[order[i]];
-            option.innerHTML = choices[order[i]];
+            value = name = choices[order[i]];
+            if ('object' === typeof value) {
+                if ('undefined' !== typeof value.value) {
+                    name = value.name;
+                    value = value.value;
+                }
+                else if (J.isArray(value)) {
+                    name = value[1];
+                    value = value[0];
+                }
+            }
+            option.value = value;
+            option.innerHTML = name;
             this.menu.appendChild(option);
         }
 
         this.enable();
-    }
+    };
 
     /**
      * ### Dropdown.verifyChoice
