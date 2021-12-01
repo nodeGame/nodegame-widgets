@@ -79,9 +79,16 @@
         /**
          * ### Dropdown.menu
          *
-         * Holder of the HTML element (datalist or select)
+         * Holder of the selected value (input or select)
          */
         this.menu = null;
+
+        /**
+         * ### Dropdown.datalist
+         *
+         * Holder of the options for the datalist element
+         */
+        this.datalist = null;
 
         /**
          * ### Dropdown.listener
@@ -338,15 +345,15 @@
                 options.fixedChoice);
         }
 
-        if ("undefined" === typeof options.tag ||
-            "datalist" === options.tag ||
-            "select" === options.tag) {
+        if ("undefined" === typeof options.tag) {
+            this.tag = "datalist";
+        }
+        else if ("datalist" === options.tag || "select" === options.tag) {
             this.tag = options.tag;
         }
         else {
             throw new TypeError('Dropdown.init: options.tag must ' +
-                'be "datalist" or "select". Found: ' +
-                options.tag);
+                'be "datalist", "select" or undefined. Found: ' + options.tag);
         }
 
         // Set the main onchange listener, if any.
@@ -435,8 +442,8 @@
 
 
     Dropdown.prototype.setChoices = function (choices, append) {
-        var tag, option, order;
-        var select, datalist, input, create;
+        var isDatalist, order;
+        var select;
         var i, len, value, name;
 
         // TODO validate choices.
@@ -444,26 +451,26 @@
 
         if (!append) return;
 
-        create = false;
-        if (this.menu) this.menu.innerHTML = '';
-        else create = true;
+        isDatalist = this.tag === 'datalist';
 
-        if (create) {
-            tag = this.tag;
-            if (tag === "datalist" || "undefined" === typeof tag) {
+        // Create the structure from scratch or just clear all options.
+        if (this.menu) {
+            select = isDatalist ? this.datalist : this.menu;
+            select.innerHTML = '';
+        }
+        else {
+            if (isDatalist) {
 
-                datalist = W.get('datalist');
-                datalist.id = "dropdown";
+                this.menu = W.add('input', this.bodyDiv, {
+                    id: this.id,
+                    autocomplete: 'off'
+                });
 
-                input = W.get('input');
-                input.setAttribute('list', datalist.id);
-                input.id = this.id;
-                input.autocomplete = "off";
+                this.datalist = select = W.add('datalist', this.bodyDiv, {
+                    id: this.id + "_datalist"
+                });
 
-                this.bodyDiv.appendChild(input);
-                this.bodyDiv.appendChild(datalist);
-                this.menu = input;
-
+                this.menu.setAttribute('list', this.datalist.id);
             }
             else {
 
@@ -480,18 +487,19 @@
 
         // Adding placeholder.
         if (this.placeholder) {
-            if (tag === "datalist") {
+            if (isDatalist) {
                 this.menu.placeholder = this.placeholder;
             }
             else {
-                option = W.get('option', {
+
+                W.add('option', this.menu, {
                     value: '',
-                    innerHTML: this.placeholder
+                    innerHTML: this.placeholder,
+                    // Makes the placeholder unselectable after first click.
+                    disabled: '',
+                    selected: '',
+                    hidden: ''
                 });
-                // option.setAttribute("disabled", "");
-                // option.setAttribute("selected", "");
-                // option.setAttribute("hidden", "");
-                this.menu.appendChild(option);
             }
         }
 
@@ -500,7 +508,8 @@
         order = J.seq(0, len - 1);
         if (this.shuffleChoices) order = J.shuffle(order);
         for (i = 0; i < len; i++) {
-            option = W.get('option');
+
+            // Determining value and name of choice.
             value = name = choices[order[i]];
             if ('object' === typeof value) {
                 if ('undefined' !== typeof value.value) {
@@ -512,9 +521,12 @@
                     value = value[0];
                 }
             }
-            option.value = value;
-            option.innerHTML = name;
-            this.menu.appendChild(option);
+
+            // select is a datalist element if tag is "datalist".
+            W.add('option', select, {
+                value: value,
+                innerHTML: name
+            });
         }
 
         this.enable();
@@ -632,6 +644,125 @@
     };
 
     /**
+     * ### Dropdown.selectChoice
+     *
+     * Select a given choice in the datalist or select tag.
+     *
+     * @param {string|number} choice. Its value depends on the tag.
+     *
+     *   - "datalist": a string, if number it is resolved to the name of
+     *     the choice at idx === choice.
+     *   - "select": a number, if string it is resolved to the idx of
+     *     the choice name === choice. Value -1 will unselect all choices.
+     *
+     * @return {string|number} idx The resolved name or index
+     */
+    Dropdown.prototype.selectChoice = function (choice) {
+        // idx is a number if tag is select and a string if tag is datalist.
+        var idx;
+
+        if (!this.choices || !this.choices.length) return;
+        if ('undefined' === typeof choice) return;
+
+        idx = choice;
+
+        if (this.tag === 'select') {
+            if ('string' === typeof choice) {
+                idx = getIdxOfChoice(this, choice);
+                if (idx === -1) {
+                    node.warn('Dropdown.selectChoice: choice not found: ' +
+                               choice);
+                    return;
+                }
+            }
+            else if ('number' !== typeof choice) {
+                throw new TypeError('Dropdown.selectChoice: invalid choice: ' +
+                                    choice);
+            }
+
+            // Set the choice.
+            this.menu.selectedIndex = idx;
+        }
+        else {
+
+            if ('number' === typeof choice) {
+                idx = getChoiceOfIdx(this, choice);
+                if ('undefined' === typeof idx) {
+                    node.warn('Dropdown.selectChoice: choice not found: ' +
+                               choice);
+                    return;
+                }
+            }
+            else if ('string' !== typeof choice) {
+                throw new TypeError('Dropdown.selectChoice: invalid choice: ' +
+                                    choice);
+            }
+
+            this.menu.value = idx;
+        }
+
+        // Simulate event.
+        this.listener({ target: this.menu });
+
+        return idx;
+    };
+
+    /**
+     * ### Dropdown.setValues
+     *
+     * Set the values on the dropdown menu
+     *
+     * @param {object} opts Optional. Configuration options.
+     *
+     * @see Dropdown.verifyChoice
+     */
+    Dropdown.prototype.setValues = function(opts) {
+        var choice, correctChoice;
+        var i, len, j, lenJ;
+
+        if (!this.choices || !this.choices.length) {
+            throw new Error('Dropdown.setValues: no choices found.');
+        }
+        opts = opts || {};
+
+        // TODO: this code is duplicated from ChoiceTable.
+        if (opts.correct && this.correctChoice !== null) {
+
+            // Make it an array (can be a string).
+            correctChoice = J.isArray(this.correctChoice) ?
+                this.correctChoice : [this.correctChoice];
+
+            i = -1, len = correctChoice.length;
+            for ( ; ++i < len ; ) {
+                choice = parseInt(correctChoice[i], 10);
+                if (this.shuffleChoices) {
+                    j = -1, lenJ = this.order.length;
+                    for ( ; ++j < lenJ ; ) {
+                        if (this.order[j] === choice) {
+                            choice = j;
+                            break;
+                        }
+                    }
+                }
+
+                this.selectChoice(choice);
+            }
+            return;
+        }
+
+        // Set values, random or pre-set.
+        if ('number' === typeof opts || 'string' === typeof opts) {
+            opts = { values: opts };
+        }
+        else if (opts && 'undefined' === typeof opts.values) {
+            opts.values = J.randomInt(this.choices.length) -1;
+        }
+
+        this.selectChoice(opts.values);
+
+    };
+
+    /**
      * ### Dropdown.getValues
      *
      * Returns the values for current selection and other paradata
@@ -719,5 +850,37 @@
         this.menu.addEventListener('change', this.listener);
         this.emit('enabled');
     };
+
+    // ## Helper methods.
+
+
+    function getChoiceOfIdx(that, idx) {
+        return extractChoice(that.choices[idx]);
+
+    }
+
+    function extractChoice(c) {
+        if ('object' === typeof c) {
+            if ('undefined' !== typeof c.name) c = c.name;
+            else c = c[1];
+        }
+        return c;
+    }
+
+    function getIdxOfChoice(that, choice) {
+        var i, len, c;
+        len = this.choices.length;
+        for (i = 0; i < len; i++) {
+            c = that.choices[i];
+            // c can be string, object, or array.
+            if ('object' === typeof c) {
+                if ('undefined' !== typeof c.name) c = c.name;
+                else c = c[1];
+            }
+            if (c === choice) return i;
+        }
+        return -1;
+    }
+
 
 })(node);
