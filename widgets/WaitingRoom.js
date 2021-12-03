@@ -850,8 +850,8 @@
 
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
-            node.info('waiting room: STOPPING TIMER');
-            this.timer.destroy();
+            node.info('waiting room: PAUSING TIMER');
+            this.timer.stop();
         }
     };
 

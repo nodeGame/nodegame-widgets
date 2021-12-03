@@ -132,7 +132,7 @@
      * @see GameTimer
      */
     VisualTimer.prototype.init = function(options) {
-        var t, gameTimerOptions;
+        var gameTimerOptions;
 
         // We keep the check for object, because this widget is often
         // called by users and the restart methods does not guarantee
@@ -219,7 +219,7 @@
         // Init the gameTimer, regardless of the source (internal vs external).
         this.gameTimer.init(gameTimerOptions);
 
-        t = this.gameTimer;
+        // var t = this.gameTimer;
 
 // TODO: not using session for now.
 //         node.session.register('visualtimer', {

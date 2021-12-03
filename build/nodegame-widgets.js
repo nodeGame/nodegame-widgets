@@ -15866,7 +15866,7 @@
 
 /**
  * # Feedback
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -15947,12 +15947,6 @@
     colNeeded = '#a32020'; // #f2dede';
     colOver = '#a32020'; // #f2dede';
     colRemain = '#78b360'; // '#dff0d8';
-
-    // ## Dependencies
-
-    Feedback.dependencies = {
-        JSUS: {}
-    };
 
     /**
      * ## Feedback constructor
@@ -16129,6 +16123,13 @@
                                     this.maxWords);
             }
         }
+
+        // TODO: check this.
+        // if (this.minWords || this.minChars || this.maxWords ||
+        //     this.maxChars) {
+        //
+        //     this.required = true;
+        // }
 
         /**
          * ### Feedback.rows
@@ -22002,7 +22003,7 @@
      * @see GameTimer
      */
     VisualTimer.prototype.init = function(options) {
-        var t, gameTimerOptions;
+        var gameTimerOptions;
 
         // We keep the check for object, because this widget is often
         // called by users and the restart methods does not guarantee
@@ -22089,7 +22090,7 @@
         // Init the gameTimer, regardless of the source (internal vs external).
         this.gameTimer.init(gameTimerOptions);
 
-        t = this.gameTimer;
+        // var t = this.gameTimer;
 
 // TODO: not using session for now.
 //         node.session.register('visualtimer', {
@@ -23476,8 +23477,8 @@
 
     WaitingRoom.prototype.stopTimer = function() {
         if (this.timer) {
-            node.info('waiting room: STOPPING TIMER');
-            this.timer.destroy();
+            node.info('waiting room: PAUSING TIMER');
+            this.timer.stop();
         }
     };
 

@@ -1,6 +1,6 @@
 /**
  * # Feedback
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -81,12 +81,6 @@
     colNeeded = '#a32020'; // #f2dede';
     colOver = '#a32020'; // #f2dede';
     colRemain = '#78b360'; // '#dff0d8';
-
-    // ## Dependencies
-
-    Feedback.dependencies = {
-        JSUS: {}
-    };
 
     /**
      * ## Feedback constructor
@@ -263,6 +257,13 @@
                                     this.maxWords);
             }
         }
+
+        // TODO: check this.
+        // if (this.minWords || this.minChars || this.maxWords ||
+        //     this.maxChars) {
+        //
+        //     this.required = true;
+        // }
 
         /**
          * ### Feedback.rows
