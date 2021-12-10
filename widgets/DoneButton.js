@@ -23,12 +23,6 @@
     DoneButton.className = 'donebutton';
     DoneButton.texts.done = 'Done';
 
-    // ## Dependencies
-
-    DoneButton.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## DoneButton constructor
      *
@@ -64,6 +58,10 @@
 
         this.button.onclick = function() {
             if (that.onclick && false === that.onclick()) return;
+            if (node.game.isWidgetStep()) {
+                // Widget has a next visualization in the same step.
+                if (node.widgets.last.next() !== false) return;
+            }
             if (node.done()) that.disable();
         };
 
@@ -172,14 +170,7 @@
                                 'be number or undefined. Found: ' + tmp);
         }
 
-        tmp = opts.onclick;
-        if (tmp) {
-            if ('function' !== typeof tmp) {
-                throw new TypeError('DoneButton.init: onclick must function ' +
-                                    'or undefined. Found: ' + tmp);
-            }
-            this.onclick = tmp;
-        }
+        setOnClick(this, opts.onclick);
     };
 
     DoneButton.prototype.append = function() {
@@ -232,6 +223,8 @@
             }
             if ('string' === typeof prop) that.button.value = prop;
             else if (prop && prop.text) that.button.value = prop.text;
+
+            if (prop) setOnClick(this, prop.onclick, true);
         });
 
         if (this.disableOnDisconnect) {
@@ -295,5 +288,22 @@
         this.button.disabled = false;
         this.emit('enabled', opts);
     };
+
+
+    // ## Helper functions.
+
+    // Checks and sets the onclick function.
+    function setOnClick(that, onclick, step) {
+        var str;
+        if ('undefined' !== typeof onclick) {
+            if ('function' !== typeof onclick && onclick !== null) {
+                str = 'DoneButton.init';
+                if (step) str += ' (step property)';
+                throw new TypeError(str + ': onclick must be function, null,' +
+                                    ' or undefined. Found: ' + onclick);
+            }
+            that.onclick = onclick;
+        }
+    }
 
 })(node);

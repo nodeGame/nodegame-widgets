@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.5.1';
+    ChoiceManager.version = '1.6.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -744,6 +744,42 @@
 
         // Make a random comment.
         if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
+    };
+
+    /**
+     * ### ChoiceManager.setValues
+     *
+     * Sets values for forms in manager as specified by the options
+     *
+     * @param {object} options Optional. Options specifying how to set
+     *   the values. If no parameter is specified, random values will
+     *   be set.
+     */
+    ChoiceManager.prototype.next = function() {
+        if (!this.oneByOne) return false;
+        if (!this.forms || !this.forms.length) {
+            throw new Error('ChoiceManager.setValues: no forms found.');
+        }
+        if (this.oneByOneCounter >= (this.forms.length-1)) return false;
+        this.forms[this.oneByOneCounter].hide();
+        this.oneByOneCounter++;
+        this.forms[this.oneByOneCounter].show();
+        W.adjustFrameHeight();
+
+        node.emit('WIDGET_NEXT', this);
+    };
+
+    ChoiceManager.prototype.prev = function() {
+        if (!this.oneByOne) return false;
+        if (!this.forms || !this.forms.length) {
+            throw new Error('ChoiceManager.setValues: no forms found.');
+        }
+        if (this.oneByOneCounter <= 1) return false;
+        this.forms[this.oneByOneCounter].hide();
+        this.oneByOneCounter--;
+        this.forms[this.oneByOneCounter].show();
+        W.adjustFrameHeight();
+        node.emit('WIDGET_PREV', this);
     };
 
     // ## Helper methods.

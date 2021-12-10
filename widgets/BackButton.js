@@ -15,19 +15,13 @@
 
     // ## Meta-data
 
-    BackButton.version = '0.4.0';
+    BackButton.version = '0.5.0';
     BackButton.description = 'Creates a button that if ' +
         'pressed goes to the previous step.';
 
     BackButton.title = false;
     BackButton.className = 'backbutton';
     BackButton.texts.back = 'Back';
-
-    // ## Dependencies
-
-    BackButton.dependencies = {
-        JSUS: {}
-    };
 
     /**
      * ## BackButton constructor
@@ -65,6 +59,11 @@
         this.button.onclick = function() {
             var res;
             that.disable();
+            if (that.onclick && false === that.onclick()) return;
+            if (node.game.isWidgetStep()) {
+                // Widget has a next visualization in the same step.
+                if (node.widgets.last.prev() !== false) return;
+            }
             res = node.game.stepBack(that.stepOptions);
             if (res === false) that.enable();
         };
@@ -93,6 +92,18 @@
             // ## @api: private.
             noZeroStep: true
         };
+
+
+        /**
+         * #### BackButton.onclick
+         *
+         * A callback function executed when the button is clicked
+         *
+         * If the function returns FALSE, the procedure is aborted.
+         *
+         * Default: TRUE
+         */
+        this.onclick = null;
     }
 
     // ## BackButton methods
@@ -166,6 +177,8 @@
         this.stepOptions.acrossRounds =
             'undefined' === typeof opts.acrossRounds ?
             true : !!opts.acrossRounds;
+
+        setOnClick(this, opts.onclick);
     };
 
     BackButton.prototype.append = function() {
@@ -188,19 +201,30 @@
             step = node.game.getPreviousStep(1, that.stepOptions);
             prop = node.game.getProperty('backbutton');
 
-            if (!step || prop === false ||
-                (prop && prop.enableOnPlaying === false)) {
+            if (prop !== true &&
+                (!step || prop === false ||
+                (prop && prop.enableOnPlaying === false))) {
 
                 // It might be disabled already, but we do it again.
                 that.disable();
             }
             else {
                 // It might be enabled already, but we do it again.
-                if (step) that.enable();
+                if (prop === true || step) that.enable();
             }
 
             if ('string' === typeof prop) that.button.value = prop;
             else if (prop && prop.text) that.button.value = prop.text;
+
+            if (prop) {
+                setOnClick(that, prop.onclick, true);
+                if (prop.enable) that.enable();
+            }
+        });
+
+        // Catch those events.
+        node.events.game.on('WIDGET_NEXT', function() {
+            that.enable();
         });
     };
 
@@ -221,5 +245,21 @@
     BackButton.prototype.enable = function() {
         this.button.disabled = false;
     };
+
+    // ## Helper functions.
+
+    // Checks and sets the onclick function.
+    function setOnClick(that, onclick, step) {
+        var str;
+        if ('undefined' !== typeof onclick) {
+            if ('function' !== typeof onclick && onclick !== null) {
+                str = 'BackButton.init';
+                if (step) str += ' (step property)';
+                throw new TypeError(str + ': onclick must be function, null,' +
+                                    ' or undefined. Found: ' + onclick);
+            }
+            that.onclick = onclick;
+        }
+    }
 
 })(node);
