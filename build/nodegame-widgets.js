@@ -5708,7 +5708,7 @@
      * @see ChoiceManager.verifyChoice
      */
     ChoiceManager.prototype.getValues = function(opts) {
-        var obj, i, len, form, errored, lastErrored, res;
+        var obj, i, len, form, lastErrored, res;
         obj = {
             order: this.order,
             forms: {},
@@ -5769,8 +5769,8 @@
                     if (!res) continue;
                     obj.forms[form.id] = res;
 
-                    errored = checkFormResult(res, form, opts, obj);
-                    if (errored) lastErrored = errored;
+                    res = checkFormResult(res, form, opts, obj);
+                    if (res) lastErrored = res;
                 }
             }
         }
