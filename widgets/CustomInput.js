@@ -1444,7 +1444,6 @@
      *
      * @return {mixed} The value in the input
      *
-     * @see CustomInput.verifyChoice
      * @see CustomInput.reset
      */
     CustomInput.prototype.getValues = function(opts) {

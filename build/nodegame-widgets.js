@@ -5708,7 +5708,7 @@
      * @see ChoiceManager.verifyChoice
      */
     ChoiceManager.prototype.getValues = function(opts) {
-        var obj, i, len, form, lastErrored, res;
+        var obj, i, len, form, errored, lastErrored, res;
         obj = {
             order: this.order,
             forms: {},
@@ -5769,7 +5769,8 @@
                     if (!res) continue;
                     obj.forms[form.id] = res;
 
-                    lastErrored = checkFormResult(res, form, opts, obj);
+                    errored = checkFormResult(res, form, opts, obj);
+                    if (errored) lastErrored = errored;
                 }
             }
         }
@@ -11461,7 +11462,6 @@
      *
      * @return {mixed} The value in the input
      *
-     * @see CustomInput.verifyChoice
      * @see CustomInput.reset
      */
     CustomInput.prototype.getValues = function(opts) {
