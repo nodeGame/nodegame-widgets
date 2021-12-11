@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.9.0';
+    ChoiceTable.version = '1.10.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -607,6 +607,26 @@
         */
         this.doneOnClick = null;
 
+        /**
+        * ### ChoiceTable.solution
+        *
+        * Additional information to be displayed after a selection is confirmed
+        */
+        this.solution = null;
+
+        /**
+        * ### ChoiceTable.solutionDisplayed
+        *
+        * TRUE, if the solution is currently displayed
+        */
+        this.solutionDisplayed = false;
+
+        /**
+        * ### ChoiceTable.solutionDiv
+        *
+        * The <div> element containing the solution
+        */
+        this.solutionDiv = null;
     }
 
     // ## ChoiceTable methods
@@ -962,9 +982,9 @@
         // Add the correct choices.
         if ('undefined' !== typeof opts.disabledChoices) {
             if (!J.isArray(opts.disabledChoices)) {
-                throw new Error('ChoiceTable.init: disabledChoices must be ' +
-                                'undefined or array. Found: ' +
-                                opts.disabledChoices);
+                throw new TypeError('ChoiceTable.init: disabledChoices ' +
+                                    'must be undefined or array. Found: ' +
+                                    opts.disabledChoices);
             }
 
             // TODO: check if values of disabled choices are correct?
@@ -985,6 +1005,15 @@
 
         if ('undefined' !== typeof opts.doneOnClick) {
             this.doneOnClick = !!opts.doneOnClick;
+        }
+
+        if ('undefined' !== typeof opts.solution) {
+            if ('string' !== typeof opts.solution) {
+                throw new TypeError('ChoiceTable.init: solution must be ' +
+                                    'string or undefined. Found: ' +
+                                    opts.solution);
+            }
+            this.solution = opts.solution;
         }
     };
 
@@ -1426,6 +1455,10 @@
         this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
 
         this.setCustomInput(this.other, this.bodyDiv);
+
+        if (this.solution) {
+            this.solutionDiv = W.append('div', this.bodyDiv);
+        }
 
         // Creates a free-text textarea, possibly with placeholder text.
         if (this.freeText) {
@@ -2099,6 +2132,33 @@
         this.order = order;
         this.choicesCells = choicesCells;
         this.choicesValues = choicesValues;
+    };
+
+    /**
+     * ### ChoiceManager.setValues
+     *
+     * Sets values for forms in manager as specified by the options
+     *
+     * @param {object} options Optional. Options specifying how to set
+     *   the values. If no parameter is specified, random values will
+     *   be set.
+     */
+    ChoiceTable.prototype.next = function() {
+        if (!this.solution) return false;
+        this.solutionDisplayed = true;
+        this.solutionDiv.innerHTML = this.solution;
+        W.adjustFrameHeight();
+        node.emit('WIDGET_NEXT', this);
+        return true;
+    };
+
+    ChoiceTable.prototype.prev = function() {
+        if (!this.solutionDisplayed) return false;
+        this.solutionDisplayed = false;
+        this.solutionDiv.innerHTML = '';
+        W.adjustFrameHeight();
+        node.emit('WIDGET_NEXT', this);
+        return true;
     };
 
     // ## Helper methods.

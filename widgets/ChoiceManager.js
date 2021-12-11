@@ -756,12 +756,15 @@
      *   be set.
      */
     ChoiceManager.prototype.next = function() {
+        var form;
         if (!this.oneByOne) return false;
         if (!this.forms || !this.forms.length) {
-            throw new Error('ChoiceManager.setValues: no forms found.');
+            throw new Error('ChoiceManager.next: no forms found.');
         }
+        form = this.forms[this.oneByOneCounter];
+        if (form.next()) return false;
         if (this.oneByOneCounter >= (this.forms.length-1)) return false;
-        this.forms[this.oneByOneCounter].hide();
+        form.hide();
         this.oneByOneCounter++;
         this.forms[this.oneByOneCounter].show();
         W.adjustFrameHeight();
@@ -770,12 +773,15 @@
     };
 
     ChoiceManager.prototype.prev = function() {
+        var form;
         if (!this.oneByOne) return false;
         if (!this.forms || !this.forms.length) {
-            throw new Error('ChoiceManager.setValues: no forms found.');
+            throw new Error('ChoiceManager.prev: no forms found.');
         }
+        form = this.forms[this.oneByOneCounter];
+        if (form.prev()) return false;
         if (this.oneByOneCounter <= 1) return false;
-        this.forms[this.oneByOneCounter].hide();
+        form.hide();
         this.oneByOneCounter--;
         this.forms[this.oneByOneCounter].show();
         W.adjustFrameHeight();
