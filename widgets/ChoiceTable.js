@@ -2145,13 +2145,14 @@
      */
     ChoiceTable.prototype.next = function() {
         var sol;
-        if (!this.solution) return false;
+        if (!this.solution || this.solutionDisplayed) return false;
         this.solutionDisplayed = true;
         sol = this.solution;
         if ('function' === typeof sol) {
             sol = this.solution(this.verifyChoice(false), this);
         }
         this.solutionDiv.innerHTML = sol;
+        this.disable();
         W.adjustFrameHeight();
         node.emit('WIDGET_NEXT', this);
         return true;
@@ -2161,6 +2162,7 @@
         if (!this.solutionDisplayed) return false;
         this.solutionDisplayed = false;
         this.solutionDiv.innerHTML = '';
+        this.enable();
         W.adjustFrameHeight();
         node.emit('WIDGET_NEXT', this);
         return true;

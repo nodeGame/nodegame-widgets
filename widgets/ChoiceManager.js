@@ -779,7 +779,7 @@
             throw new Error('ChoiceManager.prev: no forms found.');
         }
         form = this.forms[this.oneByOneCounter];
-        if (form.prev()) return false;
+        if (form.prev()) return true;
         if (this.oneByOneCounter <= 1) return false;
         form.hide();
         this.oneByOneCounter--;

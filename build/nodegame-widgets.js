@@ -948,11 +948,12 @@
      */
     function strGetter(that, name, collection, method, param) {
         var res;
-        if (!that.constructor[collection].hasOwnProperty(name)) {
-            throw new Error(method + ': name not found: ' + name);
-        }
         res = 'undefined' !== typeof that[collection][name] ?
             that[collection][name] : that.constructor[collection][name];
+        if ('undefined' === typeof res) {
+            throw new Error(method + ': name not found: ' + name);
+        }
+
         if ('function' === typeof res) {
             res = res(that, param);
             if ('string' !== typeof res && res !== false) {
@@ -2124,6 +2125,7 @@
             that.disable();
             if (that.onclick && false === that.onclick()) return;
             if (node.game.isWidgetStep()) {
+                debugger
                 // Widget has a next visualization in the same step.
                 if (node.widgets.last.prev() !== false) return;
             }
@@ -5919,7 +5921,7 @@
             throw new Error('ChoiceManager.prev: no forms found.');
         }
         form = this.forms[this.oneByOneCounter];
-        if (form.prev()) return false;
+        if (form.prev()) return true;
         if (this.oneByOneCounter <= 1) return false;
         form.hide();
         this.oneByOneCounter--;
@@ -8115,13 +8117,14 @@
      */
     ChoiceTable.prototype.next = function() {
         var sol;
-        if (!this.solution) return false;
+        if (!this.solution || this.solutionDisplayed) return false;
         this.solutionDisplayed = true;
         sol = this.solution;
         if ('function' === typeof sol) {
             sol = this.solution(this.verifyChoice(false), this);
         }
         this.solutionDiv.innerHTML = sol;
+        this.disable();
         W.adjustFrameHeight();
         node.emit('WIDGET_NEXT', this);
         return true;
@@ -8131,6 +8134,7 @@
         if (!this.solutionDisplayed) return false;
         this.solutionDisplayed = false;
         this.solutionDiv.innerHTML = '';
+        this.enable();
         W.adjustFrameHeight();
         node.emit('WIDGET_NEXT', this);
         return true;
