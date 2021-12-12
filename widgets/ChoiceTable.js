@@ -1007,13 +1007,13 @@
             this.doneOnClick = !!opts.doneOnClick;
         }
 
-        if ('undefined' !== typeof opts.solution) {
-            if ('string' !== typeof opts.solution) {
+        tmp = opts.solution;
+        if ('undefined' !== typeof tmp) {
+            if ('string' !== typeof tmp && 'function' !== typeof tmp) {
                 throw new TypeError('ChoiceTable.init: solution must be ' +
-                                    'string or undefined. Found: ' +
-                                    opts.solution);
+                                    'string or undefined. Found: ' + tmp);
             }
-            this.solution = opts.solution;
+            this.solution = tmp;
         }
     };
 
@@ -1611,7 +1611,7 @@
              if (ciCorrect === false) return false;
              // Set it to null so it is returned correctly, later below.
              if ('undefined' === typeof ciCorrect) ciCorrect = null;
-         };
+         }
 
         // Check the number of choices.
         if (this.requiredChoice !== null) {
@@ -2144,9 +2144,14 @@
      *   be set.
      */
     ChoiceTable.prototype.next = function() {
+        var sol;
         if (!this.solution) return false;
         this.solutionDisplayed = true;
-        this.solutionDiv.innerHTML = this.solution;
+        sol = this.solution;
+        if ('function' === typeof sol) {
+            sol = this.solution(this.verifyChoice(false), this);
+        }
+        this.solutionDiv.innerHTML = sol;
         W.adjustFrameHeight();
         node.emit('WIDGET_NEXT', this);
         return true;
