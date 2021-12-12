@@ -91,10 +91,6 @@
     // Backward compatibility.
     RiskGauge.texts.mainText = RiskGauge.texts.holt_laury_mainText;
 
-    // ## Dependencies
-    RiskGauge.dependencies = {
-        JSUS: {}
-    };
 
     /**
      * ## RiskGauge constructor
@@ -447,6 +443,15 @@
         this.withPrize = 'undefined' === typeof opts.withPrize ?
                          true : !!opts.withPrize;
 
+        this.onopen = null;
+        if (opts.onopen) {
+            if ('function' !== typeof opts.onopen) {
+                throw new TypeError('Bomb: onopen must be function or ' +
+                                    'undefined. Found: ' + opts.onopen);
+            }
+            this.onopen = opts.onopen;
+        }
+
         // Bomb box.
         // Pick bomb box id, if probability permits it, else set to -1.
         // Resulting id is between 1 and totBoxes.
@@ -507,7 +512,8 @@
                 // Main text.
                 W.add('div', that.bodyDiv, {
                     innerHTML: that.mainText ||
-                               that.getText('bomb_mainText', probBomb)
+                               that.getText('bomb_mainText', probBomb),
+                    className: 'bomb-maintext'
                 });
 
                 // Slider.
@@ -625,6 +631,8 @@
                     cl = 'bomb_' + (isWinner ? 'won' : 'lost');
                     bombResult.innerHTML = that.getText(cl);
                     bombResult.className += (' ' + cl);
+
+                    if (that.onopen) that.onopen(isWinner, that);
                 };
             }
         };
