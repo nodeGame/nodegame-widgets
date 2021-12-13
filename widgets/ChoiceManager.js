@@ -173,6 +173,13 @@
          * Contains partial results from forms if OneByOne is true
          */
         this.oneByOneResults = {};
+
+        /**
+         * ### ChoiceManager.conditionals
+         *
+         * Contains conditions to display or hide forms based on other forms
+         */
+        this.conditionals = {};
     }
 
     // ## ChoiceManager methods
@@ -345,7 +352,12 @@
                     form.hidden = true;
                 }
 
+                if (form.conditional) {
+                    this.conditionals[form.id] = form.conditional;
+                }
+
                 form = node.widgets.get(name, form);
+
             }
 
             if (form.id) {
@@ -756,17 +768,23 @@
      *   be set.
      */
     ChoiceManager.prototype.next = function() {
-        var form;
+        var form, conditional, failsafe;
         if (!this.oneByOne) return false;
         if (!this.forms || !this.forms.length) {
             throw new Error('ChoiceManager.next: no forms found.');
         }
         form = this.forms[this.oneByOneCounter];
-        if (form.next()) return false;
+        if (!form || form.next()) return false;
         if (this.oneByOneCounter >= (this.forms.length-1)) return false;
         form.hide();
-        this.oneByOneCounter++;
-        this.forms[this.oneByOneCounter].show();
+
+        failsafe = 500;
+        while (form && !conditional && this.oneByOneCounter < failsafe) {
+            form = this.forms[++this.oneByOneCounter];
+            if (!form) return false;
+            conditional = checkConditional(this, form.id);
+        }
+        form.show();
         W.adjustFrameHeight();
 
         node.emit('WIDGET_NEXT', this);
@@ -806,6 +824,21 @@
         }
 
         return err;
+    }
+
+    function checkConditional(that, id) {
+        var f, c, form;
+        f = that.conditionals[id];
+        if (f) {
+            for (c in f) {
+                if (f.hasOwnProperty(c)) {
+                    form = that.formsById[c];
+                    // No multiple choice allowed.
+                    if (form && form.currentChoice !== f[c]) return false;
+                }
+            }
+        }
+        return true;
     }
 
 // In progress.
