@@ -7802,6 +7802,7 @@
      */
     ChoiceTable.prototype.unhighlight = function(opts) {
         var ci;
+        opts = opts || {};
         if (!this.table || this.highlighted !== true) return;
         this.table.style.border = '';
         ci = this.customInput;
