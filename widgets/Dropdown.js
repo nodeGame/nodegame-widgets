@@ -755,9 +755,11 @@
             opts = { values: opts };
         }
         else if (opts && 'undefined' === typeof opts.values) {
-            opts.values = J.randomInt(this.choices.length) -1;
+            // TODO: merge other options if they are used by selectChoice.
+            opts = { values: J.randomInt(this.choices.length) -1 };
         }
 
+        // If other options are used (rather than values) change TODO above.
         this.selectChoice(opts.values);
 
     };
