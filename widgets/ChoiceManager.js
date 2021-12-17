@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.6.0';
+    ChoiceManager.version = '1.7.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -24,7 +24,9 @@
 
     // ## Dependencies
 
-    ChoiceManager.dependencies = {};
+    ChoiceManager.dependencies = {
+        BackButton: {}, DoneButton: {}
+    };
 
     /**
      * ## ChoiceManager constructor
@@ -180,6 +182,21 @@
          * Contains conditions to display or hide forms based on other forms
          */
         this.conditionals = {};
+
+        /**
+         * ### ChoiceManager.doneBtn
+         *
+         * Button to go to the next visualization/step
+         */
+        this.doneBtn = null;
+
+        /**
+         * ### ChoiceManager.backBtn
+         *
+         * Button to go to the previous visualization/step
+         */
+        this.backBtn = null;
+
     }
 
     // ## ChoiceManager methods
@@ -278,6 +295,14 @@
 
         // If TRUE, forms are displayed one by one.
         this.oneByOne = !!options.oneByOne;
+
+        // If truthy, a next button is added at the bottom. If object, it
+        // is passed as conf object to DoneButton.
+        this.doneBtn = options.doneBtn;
+
+        // If truthy, a back button is added at the bottom. If object, it
+        // is passed as conf object to BackButton.
+        this.backBtn = options.backBtn;
 
         // After all configuration options are evaluated, add forms.
 
@@ -417,6 +442,8 @@
     };
 
     ChoiceManager.prototype.append = function() {
+        var div, opts;
+
         // Id must be unique.
         if (W.getElementById(this.id)) {
             throw new Error('ChoiceManager.append: id is not ' +
@@ -448,6 +475,21 @@
             this.textarea.className = ChoiceManager.className + '-freetext';
             // Append textarea.
             this.bodyDiv.appendChild(this.textarea);
+        }
+
+        if (this.backBtn || this.doneBtn) {
+            div = W.append('div', this.bodyDiv);
+            div.className = 'choicemanager-buttons';
+
+            if (this.backBtn) {
+                opts = J.mixin({ text: 'Next' }, this.backBtn);
+                this.backBtn = node.widgets.append('BackButton', div, opts);
+            }
+
+            if (this.doneBtn) {
+                opts = J.mixin({ text: 'Next' }, this.doneBtn);
+                this.doneBtn = node.widgets.append('DoneButton', div, opts);
+            }
         }
     };
 

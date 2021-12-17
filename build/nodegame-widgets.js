@@ -2084,6 +2084,7 @@
         'pressed goes to the previous step.';
 
     BackButton.title = false;
+    BackButton.panel = false;
     BackButton.className = 'backbutton';
     BackButton.texts.back = 'Back';
 
@@ -5156,7 +5157,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.6.0';
+    ChoiceManager.version = '1.7.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -5165,7 +5166,9 @@
 
     // ## Dependencies
 
-    ChoiceManager.dependencies = {};
+    ChoiceManager.dependencies = {
+        BackButton: {}, DoneButton: {}
+    };
 
     /**
      * ## ChoiceManager constructor
@@ -5321,6 +5324,21 @@
          * Contains conditions to display or hide forms based on other forms
          */
         this.conditionals = {};
+
+        /**
+         * ### ChoiceManager.doneBtn
+         *
+         * Button to go to the next visualization/step
+         */
+        this.doneBtn = null;
+
+        /**
+         * ### ChoiceManager.backBtn
+         *
+         * Button to go to the previous visualization/step
+         */
+        this.backBtn = null;
+
     }
 
     // ## ChoiceManager methods
@@ -5419,6 +5437,14 @@
 
         // If TRUE, forms are displayed one by one.
         this.oneByOne = !!options.oneByOne;
+
+        // If truthy, a next button is added at the bottom. If object, it
+        // is passed as conf object to DoneButton.
+        this.doneBtn = options.doneBtn;
+
+        // If truthy, a back button is added at the bottom. If object, it
+        // is passed as conf object to BackButton.
+        this.backBtn = options.backBtn;
 
         // After all configuration options are evaluated, add forms.
 
@@ -5558,6 +5584,8 @@
     };
 
     ChoiceManager.prototype.append = function() {
+        var div, opts;
+
         // Id must be unique.
         if (W.getElementById(this.id)) {
             throw new Error('ChoiceManager.append: id is not ' +
@@ -5589,6 +5617,21 @@
             this.textarea.className = ChoiceManager.className + '-freetext';
             // Append textarea.
             this.bodyDiv.appendChild(this.textarea);
+        }
+
+        if (this.backBtn || this.doneBtn) {
+            div = W.append('div', this.bodyDiv);
+            div.className = 'choicemanager-buttons';
+
+            if (this.backBtn) {
+                opts = J.mixin({ text: 'Next' }, this.backBtn);
+                this.backBtn = node.widgets.append('BackButton', div, opts);
+            }
+
+            if (this.doneBtn) {
+                opts = J.mixin({ text: 'Next' }, this.doneBtn);
+                this.doneBtn = node.widgets.append('DoneButton', div, opts);
+            }
         }
     };
 
@@ -7641,7 +7684,7 @@
         // Multiple selections allowed.
 
         // Make it an array (can be a string).
-        if (J.isArray(correctChoice)) correctChoice = [correctChoice];
+        if (!J.isArray(correctChoice)) correctChoice = [correctChoice];
 
         len = correctChoice.length;
         lenJ = this.currentChoice.length;
@@ -8312,7 +8355,7 @@
     // ## Dependencies
 
     ChoiceTableGroup.dependencies = {
-        JSUS: {}
+        ChoiceTable: {}
     };
 
     /**
@@ -14148,6 +14191,7 @@
         'pressed emits node.done().';
 
     DoneButton.title = false;
+    DoneButton.panel = false;
     DoneButton.className = 'donebutton';
     DoneButton.texts.done = 'Done';
 
@@ -15193,9 +15237,11 @@
             opts = { values: opts };
         }
         else if (opts && 'undefined' === typeof opts.values) {
-            opts.values = J.randomInt(this.choices.length) -1;
+            // TODO: merge other options if they are used by selectChoice.
+            opts = { values: J.randomInt(this.choices.length) -1 };
         }
 
+        // If other options are used (rather than values) change TODO above.
         this.selectChoice(opts.values);
 
     };
@@ -20493,10 +20539,6 @@
 
         left: 'Your Bonus:<hr/>Other\'s Bonus:'
     };
-
-    // ## Dependencies
-
-    SVOGauge.dependencies = {};
 
     /**
      * ## SVOGauge constructor
