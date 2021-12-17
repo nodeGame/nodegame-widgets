@@ -39,7 +39,7 @@
     // ## Dependencies
 
     ChoiceTableGroup.dependencies = {
-        JSUS: {}
+        ChoiceTable: {}
     };
 
     /**

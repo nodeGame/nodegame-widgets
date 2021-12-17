@@ -20,6 +20,7 @@
         'pressed goes to the previous step.';
 
     BackButton.title = false;
+    BackButton.panel = false;
     BackButton.className = 'backbutton';
     BackButton.texts.back = 'Back';
 

@@ -35,10 +35,6 @@
         left: 'Your Bonus:<hr/>Other\'s Bonus:'
     };
 
-    // ## Dependencies
-
-    SVOGauge.dependencies = {};
-
     /**
      * ## SVOGauge constructor
      *
