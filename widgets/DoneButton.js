@@ -20,6 +20,7 @@
         'pressed emits node.done().';
 
     DoneButton.title = false;
+    DoneButton.panel = false;
     DoneButton.className = 'donebutton';
     DoneButton.texts.done = 'Done';
 
