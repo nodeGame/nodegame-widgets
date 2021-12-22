@@ -675,7 +675,14 @@
                     return;
                 }
             }
-            else if ('number' !== typeof choice) {
+            else if (null === choice || false === choice) {
+                idx = 0;
+            }
+            else if ('number' === typeof choice) {
+                // 1-based. 0 is for deselecting everything.
+                idx++;
+            }
+            else {
                 throw new TypeError('Dropdown.selectChoice: invalid choice: ' +
                                     choice);
             }
@@ -755,8 +762,9 @@
             opts = { values: opts };
         }
         else if (opts && 'undefined' === typeof opts.values) {
-            // TODO: merge other options if they are used by selectChoice.
+            // Select has index 0 for deselecting
             opts = { values: J.randomInt(this.choices.length) -1 };
+            // TODO: merge other options if they are used by selectChoice.
         }
 
         // If other options are used (rather than values) change TODO above.
