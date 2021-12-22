@@ -63,7 +63,10 @@
             if (that.onclick && false === that.onclick()) return;
             if (node.game.isWidgetStep()) {
                 // Widget has a next visualization in the same step.
-                if (node.widgets.last.prev() !== false) return;
+                if (node.widgets.last.prev() !== false) {
+                    that.enable();
+                    return;
+                }
             }
             res = node.game.stepBack(that.stepOptions);
             if (res === false) that.enable();

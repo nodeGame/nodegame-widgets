@@ -339,10 +339,26 @@
      * @see Widget.hide
      * @see Widget.toggle
      */
-    Widget.prototype.show = function(display) {
+    Widget.prototype.show = function(opts) {
         if (this.panelDiv && this.panelDiv.style.display === 'none') {
-            this.panelDiv.style.display = display || '';
+            // Backward compatible.
+            opts = opts || {};
+            if ('string' === typeof opts) opts = { display: opts };
+            this.panelDiv.style.display = opts.display || '';
             this.hidden = false;
+
+            W.adjustFrameHeight();
+            if (opts.scrollIntoView !== false) {
+                // Scroll into the slider.
+                if ('function' === typeof this.bodyDiv.scrollIntoView) {
+                    this.bodyDiv.scrollIntoView({ behavior: 'smooth' });
+                }
+                else if (window.scrollTo) {
+                    // Scroll to bottom of page.
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+            }
+
             this.emit('shown');
         }
     };
@@ -2127,7 +2143,10 @@
             if (that.onclick && false === that.onclick()) return;
             if (node.game.isWidgetStep()) {
                 // Widget has a next visualization in the same step.
-                if (node.widgets.last.prev() !== false) return;
+                if (node.widgets.last.prev() !== false) {
+                    that.enable();
+                    return;
+                }
             }
             res = node.game.stepBack(that.stepOptions);
             if (res === false) that.enable();
@@ -5480,7 +5499,7 @@
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
-        var form, formsById, i, len, parsedForms, name;
+        var i, len, parsedForms;
         if ('function' === typeof forms) {
             parsedForms = forms.call(node.game);
             if (!J.isArray(parsedForms)) {
@@ -5503,59 +5522,17 @@
         }
 
         // Manual clone forms.
-        formsById = {};
-        forms = new Array(len);
+        this.formsById = {};
+        this.order = new Array(len);
+        this.forms = new Array(len);
         i = -1;
         for ( ; ++i < len ; ) {
-            form = parsedForms[i];
-            if (!node.widgets.isWidget(form)) {
-                // TODO: smart checking form name. Maybe in Stager already?
-                name = form.name || 'ChoiceTable';
-                // Add defaults.
-                J.mixout(form, this.formsOptions);
-
-                // Display forms one by one.
-                if (this.oneByOne && this.oneByOneCounter !== i) {
-                    form.hidden = true;
-                }
-
-                if (form.conditional) {
-                    this.conditionals[form.id] = form.conditional;
-                }
-
-                form = node.widgets.get(name, form);
-
-            }
-
-            if (form.id) {
-                if (formsById[form.id]) {
-                    throw new Error('ChoiceManager.setForms: duplicated ' +
-                                    'form id: ' + form.id);
-                }
-
-            }
-            else {
-                form.id = form.className + '_' + i;
-            }
-            forms[i] = form;
-            formsById[form.id] = forms[i];
-
-            if (form.required || form.requiredChoice || form.correctChoice) {
-                // False is set manually, otherwise undefined.
-                if (this.required === false) {
-                    throw new Error('ChoiceManager.setForms: required is ' +
-                                    'false, but form "' + form.id +
-                                    '" has required truthy');
-                }
-                this.required = true;
-            }
+            this.addForm(parsedForms[i], false, i);
+            // Save the order in which the choices will be added.
+            this.order[i] = i;
         }
-        // Assigned verified forms.
-        this.forms = forms;
-        this.formsById = formsById;
 
-        // Save the order in which the choices will be added.
-        this.order = J.seq(0, len-1);
+        // Shuffle, if needed.
         if (this.shuffleForms) this.order = J.shuffle(this.order);
     };
 
@@ -5570,16 +5547,13 @@
      * @see ChoiceManager.order
      */
     ChoiceManager.prototype.buildDl = function() {
-        var i, len, dt;
+        var i, len;
         var form;
 
         i = -1, len = this.forms.length;
         for ( ; ++i < len ; ) {
-            dt = document.createElement('dt');
-            dt.className = 'question';
             form = this.forms[this.order[i]];
-            node.widgets.append(form, dt);
-            this.dl.appendChild(dt);
+            appendDT(this.dl, form);
         }
     };
 
@@ -5624,12 +5598,16 @@
             div.className = 'choicemanager-buttons';
 
             if (this.backBtn) {
-                opts = J.mixin({ text: 'Next' }, this.backBtn);
+                opts = this.backBtn;
+                if ('string' === typeof opts) opts = { text: opts };
+                else opts = J.mixin({ text: 'Back' }, opts);
                 this.backBtn = node.widgets.append('BackButton', div, opts);
             }
 
             if (this.doneBtn) {
-                opts = J.mixin({ text: 'Next' }, this.doneBtn);
+                opts = this.doneBtn;
+                if ('string' === typeof opts) opts = { text: opts };
+                opts = J.mixin({ text: 'Next' }, opts);
                 this.doneBtn = node.widgets.append('DoneButton', div, opts);
             }
         }
@@ -5669,6 +5647,78 @@
         }
         this.disabled = true;
         this.emit('disabled');
+    };
+
+    /**
+     * ### ChoiceManager.addForm
+     *
+     * Adds a new form at the bottom.
+     */
+    ChoiceManager.prototype.addForm = function(form, scrollIntoView, idx) {
+        var name;
+
+        if (form.required || form.requiredChoice || form.correctChoice) {
+            // False is set manually, otherwise undefined.
+            if (this.required === false) {
+                throw new Error('ChoiceManager.setForms: required is ' +
+                                'false, but form "' + form.id +
+                                '" has required truthy');
+            }
+            this.required = true;
+        }
+
+        if ('undefined' === typeof idx) idx = this.forms.length;
+        if ('undefined' === typeof scrollIntoView) scrollIntoView = true;
+
+        if (!node.widgets.isWidget(form)) {
+            // TODO: smart checking form name. Maybe in Stager already?
+            name = form.name || 'ChoiceTable';
+            // Add defaults.
+            J.mixout(form, this.formsOptions);
+
+            // Display forms one by one.
+            if (this.oneByOne && this.oneByOneCounter !== idx) {
+                form.hidden = true;
+            }
+
+            if (form.conditional) {
+                this.conditionals[form.id] = form.conditional;
+            }
+
+            form = node.widgets.get(name, form);
+
+        }
+
+        if (form.id) {
+            if (this.formsById[form.id]) {
+                throw new Error('ChoiceManager.setForms: duplicated ' +
+                                'form id: ' + form.id);
+            }
+
+        }
+        else {
+            form.id = form.className + '_' + idx;
+        }
+        this.forms[idx] = form;
+        this.formsById[form.id] = form;
+
+        if (this.dl) {
+
+            // Add the last added form to the order array.
+            this.order.push(this.order.length);
+
+            appendDT(this.dl, form);
+            W.adjustFrameHeight();
+            if (!scrollIntoView) return;
+            // Scroll into the slider.
+            if ('function' === typeof form.bodyDiv.scrollIntoView) {
+                form.bodyDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+            else if (window.scrollTo) {
+                // Scroll to bottom of page.
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        }
     };
 
     /**
@@ -5959,6 +6009,12 @@
         if (!form) return false;
         if (form.next()) return true;
         if (this.oneByOneCounter >= (this.forms.length-1)) return false;
+        // if ('undefined' !== typeof $) {
+        //     $(form.panelDiv).fadeOut();
+        // }
+        // else {
+        //     form.hide();
+        // }
         form.hide();
 
         failsafe = 500;
@@ -5967,7 +6023,14 @@
             if (!form) return false;
             conditional = checkConditional(this, form.id);
         }
-        form.show();
+
+        if ('undefined' !== typeof $) {
+            $(form.panelDiv).fadeIn();
+            form.hidden = false; // for nodeGame.
+        }
+        else {
+            form.show();
+        }
         W.adjustFrameHeight();
 
         node.emit('WIDGET_NEXT', this);
@@ -5976,19 +6039,35 @@
     };
 
     ChoiceManager.prototype.prev = function() {
-        var form;
+        var form, conditional, failsafe;
         if (!this.oneByOne) return false;
         if (!this.forms || !this.forms.length) {
             throw new Error('ChoiceManager.prev: no forms found.');
         }
         form = this.forms[this.oneByOneCounter];
+        if (!form) return false;
         if (form.prev()) return true;
-        if (this.oneByOneCounter <= 1) return false;
+        if (this.oneByOneCounter <= 0) return false;
         form.hide();
-        this.oneByOneCounter--;
-        this.forms[this.oneByOneCounter].show();
+
+        failsafe = 500;
+        while (form && !conditional && this.oneByOneCounter < failsafe) {
+            form = this.forms[--this.oneByOneCounter];
+            if (!form) return false;
+            conditional = checkConditional(this, form.id);
+        }
+
+        if ('undefined' !== typeof $) {
+            $(form.panelDiv).fadeIn();
+            form.hidden = false; // for nodeGame.
+        }
+        else {
+            form.show();
+        }
         W.adjustFrameHeight();
         node.emit('WIDGET_PREV', this);
+
+        return true;
     };
 
     // ## Helper methods.
@@ -6030,6 +6109,14 @@
             }
         }
         return true;
+    }
+
+    function appendDT(dl, form) {
+        var dt;
+        dt = document.createElement('dt');
+        dt.className = 'question';
+        node.widgets.append(form, dt);
+        dl.appendChild(dt);
     }
 
 // In progress.
@@ -14616,7 +14703,7 @@
 
             // Call onchange, if any.
             if (that.onchange) {
-                that.onchange(that.currentChoice, that);
+                that.onchange(that.currentChoice, menu, that);
             }
 
         };
@@ -15311,7 +15398,7 @@
     /**
      * ### Dropdown.disable
      *
-     * Enables the dropdown menu
+     * Disables the dropdown menu
      */
     Dropdown.prototype.disable = function () {
         if (this.disabled === true) return;
@@ -19989,7 +20076,7 @@
 
 /**
  * # Slider
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable slider.
@@ -20006,7 +20093,7 @@
 
     // ## Meta-data
 
-    Slider.version = '0.4.0';
+    Slider.version = '0.5.0';
     Slider.description = 'Creates a configurable slider';
 
     Slider.title = false;
@@ -20160,6 +20247,18 @@
          * The color of the slider on mouse over
          */
         this.hoverColor = '#2076ea';
+
+        /** Slider.left
+         *
+         * A text to be displayed at the leftmost position
+         */
+        this.left = null;
+
+        /** Slider.right
+         *
+         * A text to be displayed at the righttmost position
+         */
+        this.right = null;
 
         /** Slider.listener
          *
@@ -20376,6 +20475,23 @@
             }
             this.correctValue = opts.correctValue;
         }
+
+        tmp = opts.left;
+        if ('undefined' !== typeof tmp) {
+            if ('string' !== typeof tmp && 'number' !== typeof tmp) {
+                throw new TypeError(e + 'left must be string, number or ' +
+                                    'undefined. Found: ' + tmp);
+            }
+            this.left = '' + tmp;
+        }
+        tmp = opts.right;
+        if ('undefined' !== typeof tmp) {
+            if ('string' !== typeof tmp && 'number' !== typeof tmp) {
+                throw new TypeError(e + 'right must be string, number or ' +
+                                    'undefined. Found: ' + tmp);
+            }
+            this.right = '' + tmp;
+        }
     };
 
     /**
@@ -20385,7 +20501,7 @@
      * @param {object} opts Configuration options
      */
     Slider.prototype.append = function() {
-        var container;
+        var container, tmp;
 
         // The original color of the rangeFill container (default black)
         // that is replaced upon highlighting.
@@ -20413,6 +20529,14 @@
             className: 'container-slider'
         });
 
+        if (this.left) {
+            tmp = W.add('span', container);
+            tmp.innerHTML = this.left;
+            tmp.style.position = 'relative';
+            tmp.style.top = '-20px';
+            tmp.style.float = 'left';
+        }
+
         this.rangeFill = W.add('div', container, {
             className: 'fill-slider',
             // id: 'range-fill'
@@ -20436,6 +20560,15 @@
         };
 
         if (this.sliderWidth) this.slider.style.width = this.sliderWidth;
+
+
+        if (this.right) {
+            tmp = W.add('span', container);
+            tmp.innerHTML = this.right;
+            tmp.style.position = 'relative';
+            tmp.style.top = '-20px';
+            tmp.style.float = 'right';
+        }
 
         if (this.displayValue) {
             this.valueSpan = W.add('span', this.bodyDiv, {
@@ -20499,6 +20632,30 @@
         opts = opts || {};
         this.slider.value = opts.value;
         this.slider.oninput();
+    };
+
+    /**
+     * ### Slider.disable
+     *
+     * Disables the slider
+     */
+    Slider.prototype.disable = function () {
+        if (this.disabled === true) return;
+        this.disabled = true;
+        this.slider.disabled = true;
+        this.emit('disabled');
+    };
+
+    /**
+     * ### Slider.enable
+     *
+     * Enables the dropdown menu
+     */
+    Slider.prototype.enable = function () {
+        if (this.disabled === false) return;
+        this.disabled = false;
+        this.slider.disabled = false;
+        this.emit('enabled');
     };
 
 })(node);
