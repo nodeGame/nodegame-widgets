@@ -1,6 +1,6 @@
 /**
  * # Slider
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2021 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable slider.
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    Slider.version = '0.4.0';
+    Slider.version = '0.5.0';
     Slider.description = 'Creates a configurable slider';
 
     Slider.title = false;
@@ -171,6 +171,18 @@
          * The color of the slider on mouse over
          */
         this.hoverColor = '#2076ea';
+
+        /** Slider.left
+         *
+         * A text to be displayed at the leftmost position
+         */
+        this.left = null;
+
+        /** Slider.right
+         *
+         * A text to be displayed at the righttmost position
+         */
+        this.right = null;
 
         /** Slider.listener
          *
@@ -387,6 +399,23 @@
             }
             this.correctValue = opts.correctValue;
         }
+
+        tmp = opts.left;
+        if ('undefined' !== typeof tmp) {
+            if ('string' !== typeof tmp && 'number' !== typeof tmp) {
+                throw new TypeError(e + 'left must be string, number or ' +
+                                    'undefined. Found: ' + tmp);
+            }
+            this.left = '' + tmp;
+        }
+        tmp = opts.right;
+        if ('undefined' !== typeof tmp) {
+            if ('string' !== typeof tmp && 'number' !== typeof tmp) {
+                throw new TypeError(e + 'right must be string, number or ' +
+                                    'undefined. Found: ' + tmp);
+            }
+            this.right = '' + tmp;
+        }
     };
 
     /**
@@ -396,7 +425,7 @@
      * @param {object} opts Configuration options
      */
     Slider.prototype.append = function() {
-        var container;
+        var container, tmp;
 
         // The original color of the rangeFill container (default black)
         // that is replaced upon highlighting.
@@ -424,6 +453,14 @@
             className: 'container-slider'
         });
 
+        if (this.left) {
+            tmp = W.add('span', container);
+            tmp.innerHTML = this.left;
+            tmp.style.position = 'relative';
+            tmp.style.top = '-20px';
+            tmp.style.float = 'left';
+        }
+
         this.rangeFill = W.add('div', container, {
             className: 'fill-slider',
             // id: 'range-fill'
@@ -447,6 +484,15 @@
         };
 
         if (this.sliderWidth) this.slider.style.width = this.sliderWidth;
+
+
+        if (this.right) {
+            tmp = W.add('span', container);
+            tmp.innerHTML = this.right;
+            tmp.style.position = 'relative';
+            tmp.style.top = '-20px';
+            tmp.style.float = 'right';
+        }
 
         if (this.displayValue) {
             this.valueSpan = W.add('span', this.bodyDiv, {
@@ -510,6 +556,30 @@
         opts = opts || {};
         this.slider.value = opts.value;
         this.slider.oninput();
+    };
+
+    /**
+     * ### Slider.disable
+     *
+     * Disables the slider
+     */
+    Slider.prototype.disable = function () {
+        if (this.disabled === true) return;
+        this.disabled = true;
+        this.slider.disabled = true;
+        this.emit('disabled');
+    };
+
+    /**
+     * ### Slider.enable
+     *
+     * Enables the dropdown menu
+     */
+    Slider.prototype.enable = function () {
+        if (this.disabled === false) return;
+        this.disabled = false;
+        this.slider.disabled = false;
+        this.emit('enabled');
     };
 
 })(node);
