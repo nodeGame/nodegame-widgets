@@ -134,7 +134,7 @@
 
             // Call onchange, if any.
             if (that.onchange) {
-                that.onchange(that.currentChoice, that);
+                that.onchange(that.currentChoice, menu, that);
             }
 
         };
@@ -829,7 +829,7 @@
     /**
      * ### Dropdown.disable
      *
-     * Enables the dropdown menu
+     * Disables the dropdown menu
      */
     Dropdown.prototype.disable = function () {
         if (this.disabled === true) return;
