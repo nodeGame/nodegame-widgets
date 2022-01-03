@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    Consent.version = '0.3.0';
+    Consent.version = '0.4.0';
     Consent.description = 'Displays a configurable consent form.';
 
     Consent.title = false;
@@ -136,9 +136,9 @@
         html += '<strong>' + this.getText('consentTerms') + '</strong><br/>';
 
         // Buttons.
-        html += '<div style="margin-top: 20px;">' +
+        html += '<div style="margin-top: 30px; text-align: center;">' +
         '<button class="btn btn-lg btn-info" id="agree" ' +
-        'style="margin-right: 30px">' + this.getText('agree') +
+        'style="margin: 0px 30px">' + this.getText('agree') +
         '</button><button class="btn btn-lg btn-danger" id="notAgree">' +
         this.getText('notAgree') + '</button></div>';
 
