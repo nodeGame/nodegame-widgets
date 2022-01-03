@@ -2145,7 +2145,15 @@
      *   be set.
      */
     ChoiceTable.prototype.next = function() {
-        var sol;
+        var sol, mul, len;
+        mul = this.selectMultiple;
+
+        // Multiple choices allowed?
+        if (J.isArray(this.currentChoice)) len = this.currentChoice.length;
+        if (mul === true && len !== this.choices.length) return true;
+        if ('number' === typeof mul && len < mul) return true;
+
+        // Solution to display?
         if (!this.solution || this.solutionDisplayed) return false;
         this.solutionDisplayed = true;
         sol = this.solution;
