@@ -2145,15 +2145,7 @@
      *   be set.
      */
     ChoiceTable.prototype.next = function() {
-        var sol, mul, len;
-        mul = this.selectMultiple;
-
-        // Multiple choices allowed?
-        if (J.isArray(this.currentChoice)) len = this.currentChoice.length;
-        if (mul === true && len !== this.choices.length) return true;
-        if ('number' === typeof mul && len < mul) return true;
-
-        // Solution to display?
+        var sol;
         if (!this.solution || this.solutionDisplayed) return false;
         this.solutionDisplayed = true;
         sol = this.solution;
@@ -2173,9 +2165,25 @@
         this.solutionDiv.innerHTML = '';
         this.enable();
         W.adjustFrameHeight();
-        node.emit('WIDGET_NEXT', this);
+        node.emit('WIDGET_PREV', this);
         return true;
     };
+
+    ChoiceTable.prototype.isChoiceDone = function(complete) {
+        var cho, mul, len;
+        cho = this.currentChoice;
+        mul = this.selectMultiple;
+        // Single choice.
+        if ((!complete || !mul) && cho) return true;
+        // Multiple choices.
+        if (J.isArray(cho)) len = cho.length;
+        if (mul === true && len === this.choices.length) return true;
+        if ('number' === typeof mul && len === mul) return true;
+        // Not done.
+        return false;
+    };
+
+
 
     // ## Helper methods.
 

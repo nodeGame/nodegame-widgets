@@ -5161,7 +5161,7 @@
 
 /**
  * # ChoiceManager
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2022 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g., ChoiceTable).
@@ -6007,14 +6007,10 @@
         }
         form = this.forms[this.oneByOneCounter];
         if (!form) return false;
+
         if (form.next()) return true;
         if (this.oneByOneCounter >= (this.forms.length-1)) return false;
-        // if ('undefined' !== typeof $) {
-        //     $(form.panelDiv).fadeOut();
-        // }
-        // else {
-        //     form.hide();
-        // }
+
         form.hide();
 
         failsafe = 500;
@@ -6068,6 +6064,11 @@
         node.emit('WIDGET_PREV', this);
 
         return true;
+    };
+
+    ChoiceManager.prototype.getVisibleForms = function() {
+        if (this.oneByOne) return [this.forms[this.oneByOneCounter]];
+        return this.forms.map(function(f) { if (!f.isHidden()) return f; });
     };
 
     // ## Helper methods.
@@ -8286,13 +8287,7 @@
      *   be set.
      */
     ChoiceTable.prototype.next = function() {
-        var sol, mul, len;
-        mul = this.selectMultiple;
-        len = 0;
-        if (J.isArray(this.currentChoice)) len = this.currentChoice.length;
-        if (mul === true && len !== this.choices.length) return true;
-        if ('number' === typeof mul && len < mul) return true;
-
+        var sol;
         if (!this.solution || this.solutionDisplayed) return false;
         this.solutionDisplayed = true;
         sol = this.solution;
@@ -8312,9 +8307,25 @@
         this.solutionDiv.innerHTML = '';
         this.enable();
         W.adjustFrameHeight();
-        node.emit('WIDGET_NEXT', this);
+        node.emit('WIDGET_PREV', this);
         return true;
     };
+
+    ChoiceTable.prototype.isChoiceDone = function(complete) {
+        var cho, mul, len;
+        cho = this.currentChoice;
+        mul = this.selectMultiple;
+        // Single choice.
+        if ((!complete || !mul) && cho) return true;
+        // Multiple choices.
+        if (J.isArray(cho)) len = cho.length;
+        if (mul === true && len === this.choices.length) return true;
+        if ('number' === typeof mul && len === mul) return true;
+        // Not done.
+        return false;
+    };
+
+
 
     // ## Helper methods.
 

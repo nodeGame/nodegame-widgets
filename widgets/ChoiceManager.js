@@ -1,6 +1,6 @@
 /**
  * # ChoiceManager
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2022 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g., ChoiceTable).
@@ -846,14 +846,10 @@
         }
         form = this.forms[this.oneByOneCounter];
         if (!form) return false;
+
         if (form.next()) return true;
         if (this.oneByOneCounter >= (this.forms.length-1)) return false;
-        // if ('undefined' !== typeof $) {
-        //     $(form.panelDiv).fadeOut();
-        // }
-        // else {
-        //     form.hide();
-        // }
+
         form.hide();
 
         failsafe = 500;
@@ -907,6 +903,11 @@
         node.emit('WIDGET_PREV', this);
 
         return true;
+    };
+
+    ChoiceManager.prototype.getVisibleForms = function() {
+        if (this.oneByOne) return [this.forms[this.oneByOneCounter]];
+        return this.forms.map(function(f) { if (!f.isHidden()) return f; });
     };
 
     // ## Helper methods.
