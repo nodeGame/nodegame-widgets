@@ -730,7 +730,7 @@
         if (!this.choices || !this.choices.length) {
             throw new Error('Dropdown.setValues: no choices found.');
         }
-        opts = opts || {};
+        if ('undefined' === typeof opts) opts = {};
 
         // TODO: this code is duplicated from ChoiceTable.
         if (opts.correct && this.correctChoice !== null) {
