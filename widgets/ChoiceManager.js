@@ -905,6 +905,7 @@
         return true;
     };
 
+    // TODO: better to have .getForms({ hidden: false }); or similar
     ChoiceManager.prototype.getVisibleForms = function() {
         if (this.oneByOne) return [this.forms[this.oneByOneCounter]];
         return this.forms.map(function(f) { if (!f.isHidden()) return f; });

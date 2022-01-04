@@ -6066,6 +6066,7 @@
         return true;
     };
 
+    // TODO: better to have .getForms({ hidden: false }); or similar
     ChoiceManager.prototype.getVisibleForms = function() {
         if (this.oneByOne) return [this.forms[this.oneByOneCounter]];
         return this.forms.map(function(f) { if (!f.isHidden()) return f; });
@@ -6753,6 +6754,12 @@
         * ### ChoiceTable.solution
         *
         * Additional information to be displayed after a selection is confirmed
+        *
+        * If no answer is provided and the next method is triggered, the
+        * solution is displayed only if solutionNoChoice is TRUE
+        *
+        * @see ChoiceTable.solutionNoChoice
+        * @see ChoiceTable.next
         */
         this.solution = null;
 
@@ -6762,6 +6769,13 @@
         * TRUE, if the solution is currently displayed
         */
         this.solutionDisplayed = false;
+
+        /**
+        * ### ChoiceTable.solutionNoChoice
+        *
+        * TRUE, he solution is displayed upon trigger even with no choice
+        */
+        this.solutionNoChoice = false;
 
         /**
         * ### ChoiceTable.solutionDiv
@@ -8288,9 +8302,12 @@
      */
     ChoiceTable.prototype.next = function() {
         var sol;
-        if (!this.solution || this.solutionDisplayed) return false;
-        this.solutionDisplayed = true;
         sol = this.solution;
+        // No solution or solution already displayed.
+        if (!sol || this.solutionDisplayed) return false;
+        // Solution, but no answer provided.
+        if (sol && !this.isChoiceDone() && !this.solutionNoChoice) return false;
+        this.solutionDisplayed = true;
         if ('function' === typeof sol) {
             sol = this.solution(this.verifyChoice(false), this);
         }
@@ -15316,7 +15333,7 @@
         if (!this.choices || !this.choices.length) {
             throw new Error('Dropdown.setValues: no choices found.');
         }
-        opts = opts || {};
+        if ('undefined' === typeof opts) opts = {};
 
         // TODO: this code is duplicated from ChoiceTable.
         if (opts.correct && this.correctChoice !== null) {
