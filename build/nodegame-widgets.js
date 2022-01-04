@@ -7212,7 +7212,7 @@
      * @see ChoiceTable.buildTableAndChoices
      */
     ChoiceTable.prototype.setChoices = function(choices) {
-        var len;
+        var len, idxOther;
         if (!J.isArray(choices)) {
             throw new TypeError('ChoiceTable.setChoices: choices ' +
                                 'must be array');
@@ -7220,6 +7220,9 @@
         if (!choices.length) {
             throw new Error('ChoiceTable.setChoices: choices array is empty');
         }
+        // Check and drop previous "other" choices.
+        idxOther = choices.indexOf(this.getText('other'));
+        if (this.other && idxOther >= 0) choices.splice(idxOther, 1);
         this.choices = choices;
         len = choices.length;
 
