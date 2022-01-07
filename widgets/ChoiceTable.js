@@ -1088,8 +1088,8 @@
         if (this.shuffleChoices) this.order = J.shuffle(this.order);
 
         if (this.other) {
-          this.choices[len] = this.getText('other');
-          this.order[len] = len
+            this.choices[len] = this.getText('other');
+            this.order[len] = len
         }
 
         // Build the table and choices at once (faster).
