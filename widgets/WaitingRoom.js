@@ -1,6 +1,6 @@
 /**
  * # WaitingRoom
- * Copyright(c) 2019 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2022 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays the number of connected/required players to start a game
@@ -14,7 +14,7 @@
     node.widgets.register('WaitingRoom', WaitingRoom);
     // ## Meta-data
 
-    WaitingRoom.version = '1.3.0';
+    WaitingRoom.version = '1.4.0';
     WaitingRoom.description = 'Displays a waiting room for clients.';
 
     WaitingRoom.title = 'Waiting Room';
@@ -153,7 +153,6 @@
 
         // #### defaultTreatments
         defaultTreatments: 'Defaults:'
-
 
     };
 
@@ -339,6 +338,20 @@
          */
         this.selectedTreatment = null;
 
+
+        /**
+         * ### WaitingRoom.addDefaultTreatments
+         *
+         * If TRUE, after the user defined treatments, it adds default ones
+         *
+         * It has effect only if WaitingRoom.selectTreatmentOption is TRUE.
+         *
+         * Default: TRUE
+         *
+         * @see WaitingRoom.selectTreatmentOption
+         */
+        this.addDefaultTreatments = null;
+
     }
 
     // ## WaitingRoom methods
@@ -363,7 +376,8 @@
      * @param {object} conf Configuration object.
      */
     WaitingRoom.prototype.init = function(conf) {
-        var that = this;
+        var t, that;
+        that = this;
 
         if ('object' !== typeof conf) {
             throw new TypeError('WaitingRoom.init: conf must be object. ' +
@@ -452,12 +466,34 @@
         else this.playWithBotOption = false;
         if (conf.selectTreatmentOption) this.selectTreatmentOption = true;
         else this.selectTreatmentOption = false;
+        if ('undefined' === typeof conf.addDefaultTreatments) {
+            this.addDefaultTreatments = !!conf.addDefaultTreatments;
+        }
+        else {
+            this.addDefaultTreatments = true;
+        }
+
+        // Button for bots and treatments.
+        if (conf.queryStringDispatch) {
+            this.queryStringTreatmentVariable = 'lang';
+            t = J.getQueryString(this.queryStringTreatmentVariable);
+
+            if (t) {
+                if (!conf.availableTreatments[t]) {
+                    alert('Unknown t', t);
+                }
+                else {
+                    node.say('PLAYWITHBOT', 'SERVER', t);
+                    return;
+                }
+            }
+        }
 
 
         // Display Exec Mode.
         this.displayExecMode();
 
-        // Button for bots and treatments.
+
 
         if (this.playWithBotOption && !document.getElementById('bot_btn')) {
             // Closure to create button group.
@@ -532,17 +568,21 @@
                                 else ul.appendChild(li);
                             }
                         }
-                        li = document.createElement('li');
-                        li.role = 'separator';
-                        li.className = 'divider';
-                        ul.appendChild(li);
-                        li = document.createElement('li');
-                        li.innerHTML = w.getText('defaultTreatments');
-                        li.className = 'dropdown-header';
-                        ul.appendChild(li);
-                        ul.appendChild(liT1);
-                        ul.appendChild(liT2);
-                        ul.appendChild(liT3);
+
+                        if (w.addDefaultTreatments !== false) {
+                            li = document.createElement('li');
+                            li.role = 'separator';
+                            li.className = 'divider';
+                            ul.appendChild(li);
+                            li = document.createElement('li');
+                            li.innerHTML = w.getText('defaultTreatments');
+                            li.className = 'dropdown-header';
+                            ul.appendChild(li);
+                            ul.appendChild(liT1);
+                            ul.appendChild(liT2);
+                            ul.appendChild(liT3);
+                        }
+
                     }
 
                     btnGroupTreatments.appendChild(btnTreatment);
