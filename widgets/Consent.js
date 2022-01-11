@@ -122,6 +122,10 @@
         W.hide('notAgreed');
 
         consent = W.gid('consent');
+        if (!consent) {
+            throw new Error('Consent.append: the page does not contain an ' +
+                            'element with id "consent"');
+        }
         html = '';
 
         // Print.
