@@ -9917,6 +9917,10 @@
         W.hide('notAgreed');
 
         consent = W.gid('consent');
+        if (!consent) {
+            throw new Error('Consent.append: the page does not contain an ' +
+                            'element with id "consent"');
+        }
         html = '';
 
         // Print.
@@ -11646,9 +11650,9 @@
                 if (that.required) res.err = that.getText('emptyErr');
             }
             else if (tmp) {
-                res = tmp(value);
+                res = tmp.call(this, value);
             }
-            if (that.userValidation) that.userValidation(res);
+            if (that.userValidation) that.userValidation.call(this, res);
             return res;
         };
 

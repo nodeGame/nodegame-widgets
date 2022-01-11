@@ -1092,9 +1092,9 @@
                 if (that.required) res.err = that.getText('emptyErr');
             }
             else if (tmp) {
-                res = tmp(value);
+                res = tmp.call(this, value);
             }
-            if (that.userValidation) that.userValidation(res);
+            if (that.userValidation) that.userValidation.call(this, res);
             return res;
         };
 
