@@ -238,7 +238,10 @@
      * Disables the back button
      */
     BackButton.prototype.disable = function() {
-        this.button.disabled = 'disabled';
+        if (this.disabled) return;
+        this.disabled = true;
+        this.button.disabled = true;
+        this.emit('disabled');
     };
 
     /**
@@ -247,7 +250,10 @@
      * Enables the back button
      */
     BackButton.prototype.enable = function() {
+        if (!this.disabled) return;
+        this.disabled = false;
         this.button.disabled = false;
+        this.emit('enabled');
     };
 
     // ## Helper functions.
