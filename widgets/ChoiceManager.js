@@ -839,7 +839,7 @@
      * @return {boolean} FALSE, if there is not another visualization.
      */
     ChoiceManager.prototype.next = function() {
-        var form, conditional, failsafe;
+        var form, conditional, failsafe, that;
         if (!this.oneByOne) return false;
         if (!this.forms || !this.forms.length) {
             throw new Error('ChoiceManager.next: no forms found.');
@@ -851,6 +851,8 @@
         if (this.oneByOneCounter >= (this.forms.length-1)) return false;
 
         form.hide();
+        if (this.backBtn) this.backBtn.disable();
+        if (this.doneBtn) this.doneBtn.disable();
 
         failsafe = 500;
         while (form && !conditional && this.oneByOneCounter < failsafe) {
@@ -866,6 +868,14 @@
         else {
             form.show();
         }
+        that = this;
+        setTimeout(function() {
+            if (node.game.isPaused()) return;
+            if (that.backBtn) that.backBtn.enable();
+            if (that.doneBtn) that.doneBtn.enable();
+        }, 250);
+
+
         W.adjustFrameHeight();
 
         node.emit('WIDGET_NEXT', this);
