@@ -2318,7 +2318,10 @@
      * Disables the back button
      */
     BackButton.prototype.disable = function() {
-        this.button.disabled = 'disabled';
+        if (this.disabled) return;
+        this.disabled = true;
+        this.button.disabled = true;
+        this.emit('disabled');
     };
 
     /**
@@ -2327,7 +2330,10 @@
      * Enables the back button
      */
     BackButton.prototype.enable = function() {
+        if (!this.disabled) return;
+        this.disabled = false;
         this.button.disabled = false;
+        this.emit('enabled');
     };
 
     // ## Helper functions.
@@ -6000,7 +6006,7 @@
      * @return {boolean} FALSE, if there is not another visualization.
      */
     ChoiceManager.prototype.next = function() {
-        var form, conditional, failsafe;
+        var form, conditional, failsafe, that;
         if (!this.oneByOne) return false;
         if (!this.forms || !this.forms.length) {
             throw new Error('ChoiceManager.next: no forms found.');
@@ -6012,6 +6018,8 @@
         if (this.oneByOneCounter >= (this.forms.length-1)) return false;
 
         form.hide();
+        if (this.backBtn) this.backBtn.disable();
+        if (this.doneBtn) this.doneBtn.disable();
 
         failsafe = 500;
         while (form && !conditional && this.oneByOneCounter < failsafe) {
@@ -6027,6 +6035,14 @@
         else {
             form.show();
         }
+        that = this;
+        setTimeout(function() {
+            if (node.game.isPaused()) return;
+            if (that.backBtn) that.backBtn.enable();
+            if (that.doneBtn) that.doneBtn.enable();
+        }, 250);
+
+
         W.adjustFrameHeight();
 
         node.emit('WIDGET_NEXT', this);
@@ -6308,21 +6324,21 @@
             // One more click.
             that.numberOfClicks++;
 
+            removed = that.isChoiceCurrent(value);
             len = that.choices.length;
 
             if (that.customInput) {
                 // Is "Other" currently selected?
-                other = value === (len - 1);
-                if (that.customInput.isHidden()) {
-                    if (other) that.customInput.show();
+                if (value === (len - 1) && !removed) {
+                    that.customInput.show();
                 }
                 else {
-                    if (other) that.customInput.hide();
+                    that.customInput.hide();
                 }
             }
 
             // Click on an already selected choice.
-            if (that.isChoiceCurrent(value)) {
+            if (removed) {
                 that.unsetCurrentChoice(value);
                 J.removeClass(td, 'selected');
 
@@ -6339,7 +6355,6 @@
                 else {
                     that.selected = null;
                 }
-                removed = true;
             }
             // Click on a new choice.
             else {
@@ -8332,11 +8347,14 @@
     };
 
     ChoiceTable.prototype.isChoiceDone = function(complete) {
-        var cho, mul, len;
+        var cho, mul, len, ci;
+        ci = this.customInput;
         cho = this.currentChoice;
         mul = this.selectMultiple;
+        // Selected "Other, Specify"
+        if (ci && this.isChoiceCurrent(this.choices.length-1)) return false;
         // Single choice.
-        if ((!complete || !mul) && cho) return true;
+        if ((!complete || !mul) && null !== cho) return true;
         // Multiple choices.
         if (J.isArray(cho)) len = cho.length;
         if (mul === true && len === this.choices.length) return true;
@@ -23924,12 +23942,12 @@
                 if (w.selectTreatmentOption) {
 
 
-                    var flexBox = W.add('div', w.panelDiv);
+                    var flexBox = W.add('div', w.bodyDiv);
                     flexBox.style.display = 'flex';
                     flexBox.style['flex-wrap'] = 'wrap';
                     flexBox.style['column-gap'] = '20px';
                     flexBox.style['justify-content'] = 'space-between';
-                    flexBox.style['margin'] = '0 100px 30px 150px';
+                    flexBox.style['margin'] = '50px 100px 30px 150px';
                     flexBox.style['text-align'] = 'center';
 
                     var li, a, t, liT1, liT2, liT3, display, counter;
