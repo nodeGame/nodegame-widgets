@@ -659,12 +659,12 @@
                 if (w.selectTreatmentOption) {
 
 
-                    var flexBox = W.add('div', w.panelDiv);
+                    var flexBox = W.add('div', w.bodyDiv);
                     flexBox.style.display = 'flex';
                     flexBox.style['flex-wrap'] = 'wrap';
                     flexBox.style['column-gap'] = '20px';
                     flexBox.style['justify-content'] = 'space-between';
-                    flexBox.style['margin'] = '0 100px 30px 150px';
+                    flexBox.style['margin'] = '50px 100px 30px 150px';
                     flexBox.style['text-align'] = 'center';
 
                     var li, a, t, liT1, liT2, liT3, display, counter;
