@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.7.0';
+    ChoiceManager.version = '1.8.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -197,6 +197,13 @@
          */
         this.backBtn = null;
 
+        /**
+         * ### ChoiceManager.honeypot
+         *
+         * Array of unused input forms to detect bots.
+         */
+        this.honeypot = null;
+
     }
 
     // ## ChoiceManager methods
@@ -304,9 +311,13 @@
         // is passed as conf object to BackButton.
         this.backBtn = options.backBtn;
 
+        // If truthy a useless form is added to detect bots.
+        this.honeypot = options.honeypot;
+
         // After all configuration options are evaluated, add forms.
 
         if ('undefined' !== typeof options.forms) this.setForms(options.forms);
+
     };
 
     /**
@@ -450,6 +461,9 @@
                 this.doneBtn = node.widgets.append('DoneButton', div, opts);
             }
         }
+
+
+        if (this.honeypot) this.addHoneypot(this.honeypot);
     };
 
     /**
@@ -804,6 +818,14 @@
             if (res.isCorrect === false) obj.isCorrect = false;
             if (res.freetext) obj.freetext = res.freetext;
         }
+
+        if (this.honeypot) {
+            obj.honeypotHit = 0;
+            obj.honeypot = this.honeypot.map(function(h) {
+                if (h.value) obj.honeypotHit++;
+                return h.value || false;
+            });
+        }
         return obj;
     };
 
@@ -829,6 +851,68 @@
 
         // Make a random comment.
         if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
+    };
+
+    /**
+     * ### ChoiceManager.addHoneypot
+     *
+     * Adds a hidden <form> tag with nested <input> that bots should fill
+     *
+     * The inputs created are added under ChoiceManager.honeypot
+     *
+     * @param {object} opts Optional. Options to configure the honeypot.
+     *  - id: id of the <form> tag
+     *  - action: action attribute of the <form> tag
+     *  - forms: array of forms to add to the <form> tag. Format:
+     *      - id: id of input and "for" attribute of the label
+     *      - label: text of the label
+     *      - placeholder: placeholder for the input
+     *      - type: type of input (default 'text')
+     */
+    ChoiceManager.prototype.addHoneypot = function(opts) {
+        var h, forms, that;
+        if (!this.isAppended()) {
+            node.warn('ChoiceManager.addHoneypot: not appended yet');
+            return;
+        }
+        if ('object' !== typeof opts) opts = {};
+        h = W.add('form', this.panelDiv, {
+            id: opts.id || (this.id + 'form'),
+            action: opts.action || ('/' + this.id + 'receive')
+        });
+
+        h.style.opacity = 0;
+        h.style.position = 'absolute';
+        h.style.top = 0;
+        h.style.left = 0;
+        h.style.height = 0;
+        h.style.width = 0;
+        h.style['z-index'] = -1;
+
+        if (!opts.forms) {
+            forms = [
+                { id: 'name', label: 'Your name',
+                  placeholder: 'Enter your name' },
+                { id: 'email', label: 'Your email',
+                  placeholder: 'Type your email', type: 'email' }
+            ];
+        }
+
+        // Change from options to array linking to honeypot inputs.
+        this.honeypot = [];
+
+        that = this;
+        forms.forEach(function(f) {
+            var hh;
+            W.add('label', h, { 'for': f.id });
+            hh = W.add('input', h, {
+                id: f.id,
+                type: f.type || 'text',
+                placeholder: f.placeholder,
+                required: true
+            });
+            that.honeypot.push(hh);
+        });
     };
 
     /**
