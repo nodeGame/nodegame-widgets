@@ -538,6 +538,10 @@
                 this.conditionals[form.id] = form.conditional;
             }
 
+            if (this._bootstrap5 && 'undefined' === typeof form.bootstrap5) {
+                form.bootstrap5 = true;
+            }
+
             form = node.widgets.get(name, form);
 
         }
@@ -909,7 +913,8 @@
                 id: f.id,
                 type: f.type || 'text',
                 placeholder: f.placeholder,
-                required: true
+                required: true,
+                autocomplete: 'off'
             });
             that.honeypot.push(hh);
         });

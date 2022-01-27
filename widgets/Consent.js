@@ -117,7 +117,7 @@
     };
 
     Consent.prototype.append = function() {
-        var consent, html;
+        var consent, html, btn1, btn2, st1, st2;
         // Hide not agreed div.
         W.hide('notAgreed');
 
@@ -140,11 +140,27 @@
         html += '<strong>' + this.getText('consentTerms') + '</strong><br/>';
 
         // Buttons.
-        html += '<div style="margin-top: 30px; text-align: center;">' +
-        '<button class="btn btn-lg btn-info" id="agree" ' +
-        'style="margin: 0px 30px">' + this.getText('agree') +
-        '</button><button class="btn btn-lg btn-danger" id="notAgree">' +
-        this.getText('notAgree') + '</button></div>';
+        html += '<div style="margin-top: 30px; text-align: center;">';
+
+        if (document.querySelector('html').dir === 'rtl') {
+            btn1 = 'agree';
+            btn2 = 'notAgree';
+            st1 = 'info';
+            st2 = 'danger';
+        }
+        else {
+            btn1 = 'notAgree';
+            btn2 = 'agree';
+            st1 = 'danger';
+            st2 = 'info';
+        }
+
+        html += '<button class="btn btn-lg btn-' + st1 +
+              '" style="margin: 0px 30px" id="' + btn1 + '">' +
+              this.getText(btn1) + '</button>';
+
+        html += '<button class="btn btn-lg btn-' + st2 + '" id="' +
+                 btn2 + '">' + this.getText(btn2) + '</button></div>';
 
         consent.innerHTML += html;
         setTimeout(function() { W.adjustFrameHeight(); });
