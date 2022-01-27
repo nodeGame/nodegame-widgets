@@ -674,6 +674,7 @@
                             if (conf.availableTreatments.hasOwnProperty(t)) {
                                 li = document.createElement('div');
                                 li.style.flex = '200px';
+                                li.style['margin-top'] = '10px';
                                 // li.style.display = 'flex';
                                 a = document.createElement('a');
                                 a.className =
@@ -708,6 +709,11 @@
 
                             }
                         }
+                        li = document.createElement('div');
+                        li.style.flex = '200px';
+                        li.style['margin-top'] = '10px';
+                        // Hack to fit nicely the treatments.
+                        flexBox.appendChild(li);
 
                         if (w.addDefaultTreatments !== false) {
                             flexBox.appendChild(liT1);
