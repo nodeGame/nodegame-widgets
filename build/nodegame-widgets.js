@@ -551,7 +551,7 @@
                     // Bootstrap 5.
                     options = { className: 'card-footer' };
                 }
-                else if ('object' !== typeof options) {
+                else if ('object' !== typeof options && 'function') {
                     throw new TypeError('Widget.setFooter: options must ' +
                                         'be object or undefined. Found: ' +
                                         options);
@@ -567,6 +567,9 @@
             }
             else if ('string' === typeof footer) {
                 this.footerDiv.innerHTML = footer;
+            }
+            else if ('function' === typeof footer) {
+                footer.call(this, this.footerDiv);
             }
             else {
                 throw new TypeError(J.funcName(this.constructor) +
@@ -1478,6 +1481,7 @@
 
         // Properties that will modify the UI of the widget once appended.
 
+        if (options.bootstrap5) widget._bootstrap5 = true;
         if (options.disabled) widget._disabled = true;
         if (options.highlighted) widget._highlighted = true;
         if (options.collapsed) widget._collapsed = true;
@@ -1667,7 +1671,7 @@
         // Add panelDiv (with or without panel).
         tmp = options.panel === false ? true : w.panel === false;
 
-        if (options.bootstrap5) {
+        if (w._bootstrap5) {
             // Bootstrap 5
             tmp = {
                 className: tmp ? [ 'ng_widget', 'no-panel', w.className ] :
@@ -1695,7 +1699,7 @@
         // Optionally add title (and div).
         if (options.title !== false && w.title) {
 
-            if (options.bootstrap5) {
+            if (w._bootstrap5) {
                 // Bootstrap 5.
                 tmp = options.panel === false ?
                     'no-panel-heading' : 'card-header';
@@ -1710,7 +1714,7 @@
         }
 
         // Add body (with or without panel).
-        if (options.bootstrap5) {
+        if (w._bootstrap5) {
             // Bootstrap 5.
             tmp = options.panel !== false ? 'card-body' : 'no-panel-body';
         }
@@ -1723,7 +1727,7 @@
 
         // Optionally add footer.
         if (w.footer) {
-            if (options.bootstrap5) {
+            if (w._bootstrap5) {
                 // Bootstrap 5.
                 tmp = options.panel === false ?
                     'no-panel-heading' : 'card-footer';
@@ -5182,7 +5186,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.7.0';
+    ChoiceManager.version = '1.8.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -5364,6 +5368,13 @@
          */
         this.backBtn = null;
 
+        /**
+         * ### ChoiceManager.honeypot
+         *
+         * Array of unused input forms to detect bots.
+         */
+        this.honeypot = null;
+
     }
 
     // ## ChoiceManager methods
@@ -5471,9 +5482,13 @@
         // is passed as conf object to BackButton.
         this.backBtn = options.backBtn;
 
+        // If truthy a useless form is added to detect bots.
+        this.honeypot = options.honeypot;
+
         // After all configuration options are evaluated, add forms.
 
         if ('undefined' !== typeof options.forms) this.setForms(options.forms);
+
     };
 
     /**
@@ -5617,6 +5632,9 @@
                 this.doneBtn = node.widgets.append('DoneButton', div, opts);
             }
         }
+
+
+        if (this.honeypot) this.addHoneypot(this.honeypot);
     };
 
     /**
@@ -5689,6 +5707,10 @@
 
             if (form.conditional) {
                 this.conditionals[form.id] = form.conditional;
+            }
+
+            if (this._bootstrap5 && 'undefined' === typeof form.bootstrap5) {
+                form.bootstrap5 = true;
             }
 
             form = node.widgets.get(name, form);
@@ -5971,6 +5993,14 @@
             if (res.isCorrect === false) obj.isCorrect = false;
             if (res.freetext) obj.freetext = res.freetext;
         }
+
+        if (this.honeypot) {
+            obj.honeypotHit = 0;
+            obj.honeypot = this.honeypot.map(function(h) {
+                if (h.value) obj.honeypotHit++;
+                return h.value || false;
+            });
+        }
         return obj;
     };
 
@@ -5996,6 +6026,69 @@
 
         // Make a random comment.
         if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
+    };
+
+    /**
+     * ### ChoiceManager.addHoneypot
+     *
+     * Adds a hidden <form> tag with nested <input> that bots should fill
+     *
+     * The inputs created are added under ChoiceManager.honeypot
+     *
+     * @param {object} opts Optional. Options to configure the honeypot.
+     *  - id: id of the <form> tag
+     *  - action: action attribute of the <form> tag
+     *  - forms: array of forms to add to the <form> tag. Format:
+     *      - id: id of input and "for" attribute of the label
+     *      - label: text of the label
+     *      - placeholder: placeholder for the input
+     *      - type: type of input (default 'text')
+     */
+    ChoiceManager.prototype.addHoneypot = function(opts) {
+        var h, forms, that;
+        if (!this.isAppended()) {
+            node.warn('ChoiceManager.addHoneypot: not appended yet');
+            return;
+        }
+        if ('object' !== typeof opts) opts = {};
+        h = W.add('form', this.panelDiv, {
+            id: opts.id || (this.id + 'form'),
+            action: opts.action || ('/' + this.id + 'receive')
+        });
+
+        h.style.opacity = 0;
+        h.style.position = 'absolute';
+        h.style.top = 0;
+        h.style.left = 0;
+        h.style.height = 0;
+        h.style.width = 0;
+        h.style['z-index'] = -1;
+
+        if (!opts.forms) {
+            forms = [
+                { id: 'name', label: 'Your name',
+                  placeholder: 'Enter your name' },
+                { id: 'email', label: 'Your email',
+                  placeholder: 'Type your email', type: 'email' }
+            ];
+        }
+
+        // Change from options to array linking to honeypot inputs.
+        this.honeypot = [];
+
+        that = this;
+        forms.forEach(function(f) {
+            var hh;
+            W.add('label', h, { 'for': f.id });
+            hh = W.add('input', h, {
+                id: f.id,
+                type: f.type || 'text',
+                placeholder: f.placeholder,
+                required: true,
+                autocomplete: 'off'
+            });
+            that.honeypot.push(hh);
+        });
     };
 
     /**
@@ -8337,6 +8430,7 @@
     };
 
     ChoiceTable.prototype.prev = function() {
+        return false;
         if (!this.solutionDisplayed) return false;
         this.solutionDisplayed = false;
         this.solutionDiv.innerHTML = '';
@@ -9930,7 +10024,7 @@
     };
 
     Consent.prototype.append = function() {
-        var consent, html;
+        var consent, html, btn1, btn2, st1, st2;
         // Hide not agreed div.
         W.hide('notAgreed');
 
@@ -9953,11 +10047,27 @@
         html += '<strong>' + this.getText('consentTerms') + '</strong><br/>';
 
         // Buttons.
-        html += '<div style="margin-top: 30px; text-align: center;">' +
-        '<button class="btn btn-lg btn-info" id="agree" ' +
-        'style="margin: 0px 30px">' + this.getText('agree') +
-        '</button><button class="btn btn-lg btn-danger" id="notAgree">' +
-        this.getText('notAgree') + '</button></div>';
+        html += '<div style="margin-top: 30px; text-align: center;">';
+
+        if (document.querySelector('html').dir === 'rtl') {
+            btn1 = 'agree';
+            btn2 = 'notAgree';
+            st1 = 'info';
+            st2 = 'danger';
+        }
+        else {
+            btn1 = 'notAgree';
+            btn2 = 'agree';
+            st1 = 'danger';
+            st2 = 'info';
+        }
+
+        html += '<button class="btn btn-lg btn-' + st1 +
+              '" style="margin: 0px 30px" id="' + btn1 + '">' +
+              this.getText(btn1) + '</button>';
+
+        html += '<button class="btn btn-lg btn-' + st2 + '" id="' +
+                 btn2 + '">' + this.getText(btn2) + '</button></div>';
 
         consent.innerHTML += html;
         setTimeout(function() { W.adjustFrameHeight(); });
@@ -23957,6 +24067,7 @@
                             if (conf.availableTreatments.hasOwnProperty(t)) {
                                 li = document.createElement('div');
                                 li.style.flex = '200px';
+                                li.style['margin-top'] = '10px';
                                 // li.style.display = 'flex';
                                 a = document.createElement('a');
                                 a.className =
@@ -23991,6 +24102,11 @@
 
                             }
                         }
+                        li = document.createElement('div');
+                        li.style.flex = '200px';
+                        li.style['margin-top'] = '10px';
+                        // Hack to fit nicely the treatments.
+                        flexBox.appendChild(li);
 
                         if (w.addDefaultTreatments !== false) {
                             flexBox.appendChild(liT1);

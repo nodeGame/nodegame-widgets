@@ -2178,6 +2178,7 @@
     };
 
     ChoiceTable.prototype.prev = function() {
+        return false;
         if (!this.solutionDisplayed) return false;
         this.solutionDisplayed = false;
         this.solutionDiv.innerHTML = '';
