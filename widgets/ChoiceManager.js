@@ -1034,6 +1034,9 @@
         var f, c, form;
         f = that.conditionals[id];
         if (f) {
+            if ('function' === typeof f) {
+                return f.call(that, that.formsById);
+            }
             for (c in f) {
                 if (f.hasOwnProperty(c)) {
                     form = that.formsById[c];

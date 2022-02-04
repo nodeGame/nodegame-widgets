@@ -2165,12 +2165,14 @@
         // No solution or solution already displayed.
         if (!sol || this.solutionDisplayed) return false;
         // Solution, but no answer provided.
-        if (sol && !this.isChoiceDone() && !this.solutionNoChoice) return false;
-        this.solutionDisplayed = true;
-        if ('function' === typeof sol) {
-            sol = this.solution(this.verifyChoice(false), this);
+        if (sol) {
+            if (!this.isChoiceDone() && !this.solutionNoChoice) return false;
+            this.solutionDisplayed = true;
+            if ('function' === typeof sol) {
+                sol = this.solution(this.verifyChoice(false), this);
+            }
+            this.solutionDiv.innerHTML = sol;
         }
-        this.solutionDiv.innerHTML = sol;
         this.disable();
         W.adjustFrameHeight();
         node.emit('WIDGET_NEXT', this);

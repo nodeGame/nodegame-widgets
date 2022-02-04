@@ -1600,7 +1600,7 @@
     };
 
     /**
-     * ### Widgets.append
+     * ### Widgets.append|add
      *
      * Appends a widget to the specified root element
      *
@@ -1624,7 +1624,7 @@
      *
      * @see Widgets.get
      */
-    Widgets.prototype.append = function(w, root, options) {
+    Widgets.prototype.add = Widgets.prototype.append = function(w, root, options) {
         var tmp;
 
         if ('string' !== typeof w && 'object' !== typeof w) {
@@ -1770,12 +1770,6 @@
         if (w.storeRef !== false) this.lastAppended = this.last = w;
 
         return w;
-    };
-
-    Widgets.prototype.add = function(w, root, options) {
-        console.log('***Widgets.add is deprecated. Use ' +
-                    'Widgets.append instead.***');
-        return this.append(w, root, options);
     };
 
     /**
@@ -6205,6 +6199,9 @@
         var f, c, form;
         f = that.conditionals[id];
         if (f) {
+            if ('function' === typeof f) {
+                return f.call(that, that.formsById);
+            }
             for (c in f) {
                 if (f.hasOwnProperty(c)) {
                     form = that.formsById[c];
@@ -8417,12 +8414,14 @@
         // No solution or solution already displayed.
         if (!sol || this.solutionDisplayed) return false;
         // Solution, but no answer provided.
-        if (sol && !this.isChoiceDone() && !this.solutionNoChoice) return false;
-        this.solutionDisplayed = true;
-        if ('function' === typeof sol) {
-            sol = this.solution(this.verifyChoice(false), this);
+        if (sol) {
+            if (!this.isChoiceDone() && !this.solutionNoChoice) return false;
+            this.solutionDisplayed = true;
+            if ('function' === typeof sol) {
+                sol = this.solution(this.verifyChoice(false), this);
+            }
+            this.solutionDiv.innerHTML = sol;
         }
-        this.solutionDiv.innerHTML = sol;
         this.disable();
         W.adjustFrameHeight();
         node.emit('WIDGET_NEXT', this);
