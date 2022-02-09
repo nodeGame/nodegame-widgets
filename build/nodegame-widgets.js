@@ -6166,6 +6166,8 @@
         else {
             form.show();
         }
+        window.scrollTo(0,0);
+
         W.adjustFrameHeight();
         node.emit('WIDGET_PREV', this);
 
