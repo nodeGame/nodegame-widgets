@@ -1624,7 +1624,8 @@
      *
      * @see Widgets.get
      */
-    Widgets.prototype.add = Widgets.prototype.append = function(w, root, options) {
+    Widgets.prototype.add =
+    Widgets.prototype.append = function(w, root, options) {
         var tmp;
 
         if ('string' !== typeof w && 'object' !== typeof w) {
@@ -6122,6 +6123,8 @@
         else {
             form.show();
         }
+        window.scrollTo(0,0);
+
         that = this;
         setTimeout(function() {
             if (node.game.isPaused()) return;

@@ -957,6 +957,8 @@
         else {
             form.show();
         }
+        window.scrollTo(0,0);
+
         that = this;
         setTimeout(function() {
             if (node.game.isPaused()) return;
