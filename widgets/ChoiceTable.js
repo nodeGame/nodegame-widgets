@@ -1951,8 +1951,9 @@
         }
 
         ci = this.customInput;
-        if (null !== this.correctChoice || null !== this.requiredChoice ||
-            (ci && !ci.isHidden())) {
+        if (this.required !== false &&
+            (null !== this.correctChoice || null !== this.requiredChoice ||
+            (ci && !ci.isHidden()))) {
 
             obj.isCorrect = this.verifyChoice(opts.markAttempt);
             obj.attempts = this.attempts;

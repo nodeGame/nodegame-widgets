@@ -519,7 +519,14 @@
             // Add defaults.
             J.mixout(form, this.formsOptions);
 
-            if (form.required || form.requiredChoice || form.correctChoice) {
+            // By default correctChoice means required.
+            // However, it is possible to add required = false and correctChoice
+            // truthy, for instance if there is a solution to display.
+            if ((form.required !== false && form.requiredChoice !== false) &&
+                (form.required || form.requiredChoice ||
+                ('undefined' !== typeof form.correctChoice &&
+                form.correctChoice !== false))) {
+
                 // False is set manually, otherwise undefined.
                 if (this.required === false) {
                     throw new Error('ChoiceManager.setForms: required is ' +
@@ -733,7 +740,7 @@
      * @see ChoiceManager.verifyChoice
      */
     ChoiceManager.prototype.getValues = function(opts) {
-        var obj, i, len, form, lastErrored, res;
+        var obj, i, len, form, lastErrored, res, toCheck;
         obj = {
             order: this.order,
             forms: {},
@@ -746,6 +753,7 @@
         if (opts.markAttempt) obj.isCorrect = true;
 
         len = this.forms.length;
+
 
         // TODO: we could save the results when #next() is called or
         // have an option to get the values of current form or a specific form.
@@ -783,15 +791,14 @@
             i = -1;
             for ( ; ++i < len ; ) {
                 form = this.forms[i];
+
+                // Not one-by-one because there could be many hidden.
                 // If it is hidden or disabled we do not do validation.
-                if (form.isHidden() || form.isDisabled()) {
-                    res = form.getValues({
-                        markAttempt: false,
-                        highlight: false
-                    });
-                    if (res) obj.forms[form.id] = res;
-                }
-                else {
+
+                if (this.oneByOne) toCheck = form._shown && form.required;
+                else toCheck = !(form.isDisabled() || form.isHidden());
+
+                if (toCheck) {
                     // ContentBox does not return a value.
                     res = form.getValues(opts);
                     if (!res) continue;
@@ -799,6 +806,13 @@
 
                     res = checkFormResult(res, form, opts, obj);
                     if (res) lastErrored = res;
+                }
+                else {
+                    res = form.getValues({
+                        markAttempt: false,
+                        highlight: false
+                    });
+                    if (res) obj.forms[form.id] = res;
                 }
             }
         // }
@@ -904,6 +918,9 @@
                   placeholder: 'Type your email', type: 'email' }
             ];
         }
+        else {
+            forms = opts.forms;
+        }
 
         // Change from options to array linking to honeypot inputs.
         this.honeypot = [];
@@ -952,6 +969,9 @@
             if (!form) return false;
             conditional = checkConditional(this, form.id);
         }
+
+        // TODO: make this property a reserved keyword.
+        form._shown = true;
 
         if ('undefined' !== typeof $) {
             $(form.panelDiv).fadeIn();
