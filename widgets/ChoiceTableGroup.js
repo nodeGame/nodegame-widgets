@@ -642,16 +642,21 @@
             opts.freeText : !!opts.freeText;
 
         if (opts.header) {
-            if (!J.isArray(opts.header) ||
-                opts.header.length !== opts.choices.length) {
+            tmp = opts.header;
+            // One td will colspan all choices.
+            if ('string' === typeof tmp) {
+                tmp = [ tmp ];
+            }
+            else if (!J.isArray(tmp) ||
+                    (tmp.length !== 1 && tmp.length !== opts.choices.length)) {
 
                 throw new Error('ChoiceTableGroup.init: header ' +
-                                'must be an array of length ' +
+                                'must be string, array (size ' +
                                 opts.choices.length +
-                                ' or undefined. Found: ' + opts.header);
+                                '), or undefined. Found: ' + tmp);
             }
 
-            this.header = opts.header;
+            this.header = tmp;
         }
 
 
@@ -707,7 +712,7 @@
      * @see ChoiceTableGroup.order
      */
     ChoiceTableGroup.prototype.buildTable = function() {
-        var i, len, tr, H, ct;
+        var i, len, td, tr, H, ct;
         var j, lenJ, lenJOld, hasRight, cell;
 
         H = this.orientation === 'H';
@@ -720,11 +725,13 @@
                     className: 'header'
                 });
                 for ( ; ++i < this.header.length ; ) {
-                    W.add('td', tr, {
+                    td = W.add('td', tr, {
                         innerHTML: this.header[i],
                         className: 'header'
                     });
                 }
+                // Only one element, header spans throughout.
+                if (i === 1) td.setAttribute('colspan', this.choices.length);
                 i = -1;
             }
 
