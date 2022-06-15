@@ -126,21 +126,21 @@
      * - waitBoxOptions: an option object to be passed to `TimerBox`
      * - mainBoxOptions: an option object to be passed to `TimerBox`
      *
-     * @param {object} options Optional. Configuration options
+     * @param {object} opts Optional. Configuration options
      *
      * @see TimerBox
      * @see GameTimer
      */
-    VisualTimer.prototype.init = function(options) {
+    VisualTimer.prototype.init = function(opts) {
         var gameTimerOptions;
 
         // We keep the check for object, because this widget is often
         // called by users and the restart methods does not guarantee
         // an object.
-        options = options || {};
-        if ('object' !== typeof options) {
-            throw new TypeError('VisualTimer.init: options must be ' +
-                                'object or undefined. Found: ' + options);
+        opts = opts || {};
+        if ('object' !== typeof opts) {
+            throw new TypeError('VisualTimer.init: opts must be ' +
+                                'object or undefined. Found: ' + opts);
         }
 
         // Important! Do not modify directly options, because it might
@@ -149,36 +149,36 @@
 
         // If gameTimer is not already set, check options, then
         // try to use node.game.timer, if defined, otherwise crete a new timer.
-        if ('undefined' !== typeof options.gameTimer) {
+        if ('undefined' !== typeof opts.gameTimer) {
 
             if (this.gameTimer) {
-                throw new Error('GameTimer.init: options.gameTimer cannot ' +
+                throw new Error('GameTimer.init: opts.gameTimer cannot ' +
                                 'be set if a gameTimer is already existing: ' +
                                 this.name);
             }
-            if ('object' !== typeof options.gameTimer) {
-                throw new TypeError('VisualTimer.init: options.' +
+            if ('object' !== typeof opts.gameTimer) {
+                throw new TypeError('VisualTimer.init: opts.' +
                                     'gameTimer must be object or ' +
-                                    'undefined. Found: ' + options.gameTimer);
+                                    'undefined. Found: ' + opts.gameTimer);
             }
-            this.gameTimer = options.gameTimer;
+            this.gameTimer = opts.gameTimer;
         }
         else {
             if (!this.isInitialized) {
                 this.internalTimer = true;
                 this.gameTimer = node.timer.createTimer({
-                    name: options.name || 'VisualTimer_' + J.randomInt(10000000)
+                    name: opts.name || 'VisualTimer_' + J.randomInt(10000000)
                 });
             }
         }
 
-        if (options.hooks) {
+        if (opts.hooks) {
             if (!this.internalTimer) {
                 throw new Error('VisualTimer.init: cannot add hooks on ' +
                                 'external gameTimer.');
             }
-            if (!J.isArray(options.hooks)) {
-                gameTimerOptions.hooks = [ options.hooks ];
+            if (!J.isArray(opts.hooks)) {
+                gameTimerOptions.hooks = [ opts.hooks ];
             }
         }
         else {
@@ -197,23 +197,23 @@
         // Important! Manual clone must be done after hooks and gameTimer.
 
         // Parse milliseconds option.
-        if ('undefined' !== typeof options.milliseconds) {
+        if ('undefined' !== typeof opts.milliseconds) {
             gameTimerOptions.milliseconds =
-                node.timer.parseInput('milliseconds', options.milliseconds);
+                node.timer.parseInput('milliseconds', opts.milliseconds);
         }
 
         // Parse update option.
-        if ('undefined' !== typeof options.update) {
+        if ('undefined' !== typeof opts.update) {
             gameTimerOptions.update =
-                node.timer.parseInput('update', options.update);
+                node.timer.parseInput('update', opts.update);
         }
         else {
             gameTimerOptions.update = 1000;
         }
 
         // Parse timeup option.
-        if ('undefined' !== typeof options.timeup) {
-            gameTimerOptions.timeup = options.timeup;
+        if ('undefined' !== typeof opts.timeup) {
+            gameTimerOptions.timeup = opts.timeup;
         }
 
         // Init the gameTimer, regardless of the source (internal vs external).
@@ -242,10 +242,17 @@
         this.options = gameTimerOptions;
 
         // Must be after this.options is assigned.
-        if ('undefined' === typeof this.options.stopOnDone) {
+        if ('undefined' === typeof opts.stopOnDone) {
+            this.options.stopOnDone = !!opts.stopOnDone;
+        }
+        else if ('undefined' === typeof this.options.stopOnDone) {
             this.options.stopOnDone = true;
         }
-        if ('undefined' === typeof this.options.startOnPlaying) {
+
+        if ('undefined' === typeof opts.startOnPlaying) {
+            this.options.startOnPlaying = !!opts.startOnPlaying;
+        }
+        else if ('undefined' === typeof this.options.startOnPlaying) {
             this.options.startOnPlaying = true;
         }
 
@@ -257,7 +264,7 @@
         }
 
         J.mixout(this.options.mainBoxOptions,
-                {classNameBody: options.className, hideTitle: true});
+                {classNameBody: opts.className, hideTitle: true});
         J.mixout(this.options.waitBoxOptions,
                 {title: 'Max. wait timer',
                 classNameTitle: 'waitTimerTitle',
