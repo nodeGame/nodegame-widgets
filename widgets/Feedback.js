@@ -258,12 +258,11 @@
             }
         }
 
-        // TODO: check this.
-        // if (this.minWords || this.minChars || this.maxWords ||
-        //     this.maxChars) {
-        //
-        //     this.required = true;
-        // }
+        if (this.minWords || this.minChars || this.maxWords ||
+            this.maxChars) {
+
+            this.required = true;
+        }
 
         /**
          * ### Feedback.rows
