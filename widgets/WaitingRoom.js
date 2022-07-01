@@ -667,32 +667,46 @@
                     flexBox.style['margin'] = '50px 100px 30px 150px';
                     flexBox.style['text-align'] = 'center';
 
-                    var li, a, t, liT1, liT2, liT3, display, counter;
+                    // border: 1px solid #CCC;
+                    //     border-radius: 10px;
+                    //     box-shadow: 2px 2px 10px;
+                    //     FONT-WEIGHT: 200;
+                    //     padding: 10px;
+
+                    var div, a, t, T, divT1, divT2, divT3, display, counter;
                     counter = 0;
                     if (conf.availableTreatments) {
                         for (t in conf.availableTreatments) {
                             if (conf.availableTreatments.hasOwnProperty(t)) {
-                                li = document.createElement('div');
-                                li.style.flex = '200px';
-                                li.style['margin-top'] = '10px';
-                                // li.style.display = 'flex';
-                                a = document.createElement('a');
-                                a.className =
-                                'btn-default btn-large round btn-icon';
-                                a.href = '#';
+                                div = document.createElement('div');
+                                div.id = t;
+                                div.style.flex = '200px';
+                                div.style['margin-top'] = '10px';
+                                div.className = 'treatment';
+                                // div.style.display = 'flex';
+                                a = document.createElement('span');
+                                // a.className =
+                                // 'btn btn-default btn-large round btn-icon';
+                                // a.href = '#';
                                 if (w.treatmentDisplayCb) {
                                     display = w.treatmentDisplayCb(t,
                                     conf.availableTreatments[t], ++counter, w);
                                 }
                                 else {
-                                    display = '<strong>' + t + '</strong>: ' +
-                                        conf.availableTreatments[t];
+                                    T = t;
+                                    if (t.length > 16) {
+                                        T = '<span title="' + t + '">' +
+                                        t.substr(0,13) + '...</span>';
+                                    }
+                                    display = '<strong>' + T + '</strong><br>' +
+                                        '<span style="font-size: smaller">' +
+                                        conf.availableTreatments[t] + '</span>';
                                 }
                                 a.innerHTML = display;
-                                a.id = t;
-                                li.appendChild(a);
 
-                                a.onclick = function() {
+                                div.appendChild(a);
+
+                                div.onclick = function() {
                                     var t;
                                     t = this.id;
                                     // Clicked on description?
@@ -702,23 +716,23 @@
                                     w.selectedTreatment);
                                 };
 
-                                if (t === 'treatment_latin_square') liT3 = li;
-                                else if (t === 'treatment_rotate') liT1 = li;
-                                else if (t === 'treatment_random') liT2 = li;
-                                else flexBox.appendChild(li);
+                                if (t === 'treatment_latin_square') divT3 = div;
+                                else if (t === 'treatment_rotate') divT1 = div;
+                                else if (t === 'treatment_random') divT2 = div;
+                                else flexBox.appendChild(div);
 
                             }
                         }
-                        li = document.createElement('div');
-                        li.style.flex = '200px';
-                        li.style['margin-top'] = '10px';
+                        div = document.createElement('div');
+                        div.style.flex = '200px';
+                        div.style['margin-top'] = '10px';
                         // Hack to fit nicely the treatments.
-                        flexBox.appendChild(li);
+                        flexBox.appendChild(div);
 
                         if (w.addDefaultTreatments !== false) {
-                            flexBox.appendChild(liT1);
-                            flexBox.appendChild(liT2);
-                            flexBox.appendChild(liT3);
+                            flexBox.appendChild(divT1);
+                            flexBox.appendChild(divT2);
+                            flexBox.appendChild(divT3);
                         }
                     }
 

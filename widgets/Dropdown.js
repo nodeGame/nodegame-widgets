@@ -920,7 +920,7 @@
 
     function getIdxOfChoice(that, choice) {
         var i, len, c;
-        len = this.choices.length;
+        len = that.choices.length;
         for (i = 0; i < len; i++) {
             c = that.choices[i];
             // c can be string, object, or array.
