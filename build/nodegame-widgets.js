@@ -24221,7 +24221,8 @@
                     //     FONT-WEIGHT: 200;
                     //     padding: 10px;
 
-                    var div, a, t, T, divT1, divT2, divT3, display, counter;
+                    var div, a, t, T, display, counter;
+                    var divT1, divT2, divT3, divT4;
                     counter = 0;
                     if (conf.availableTreatments) {
                         for (t in conf.availableTreatments) {
@@ -24264,9 +24265,11 @@
                                     w.selectedTreatment);
                                 };
 
-                                if (t === 'treatment_latin_square') divT3 = div;
-                                else if (t === 'treatment_rotate') divT1 = div;
-                                else if (t === 'treatment_random') divT2 = div;
+                                t = t.substring(10);
+                                if (t === 'latin_square') divT3 = div;
+                                else if (t === 'rotate') divT1 = div;
+                                else if (t === 'random') divT2 = div;
+                                else if (t === 'weighted_random') divT4 = div;
                                 else flexBox.appendChild(div);
 
                             }
@@ -24281,6 +24284,7 @@
                             flexBox.appendChild(divT1);
                             flexBox.appendChild(divT2);
                             flexBox.appendChild(divT3);
+                            flexBox.appendChild(divT4);
                         }
                     }
 
