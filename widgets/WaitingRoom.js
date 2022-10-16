@@ -675,7 +675,7 @@
 
                     // --- CAN - SOC waitroom modification --- //
 
-                    flexBox.className = 'soc-waitroom-listContainer';
+                    flexBox.className = 'waitroom-listContainer';
 
                     // -------------- //
 
@@ -694,7 +694,7 @@
 
                                 // --- CAN - SOC waitroom modification --- //
 
-                                li.className = 'soc-waitroom-list';
+                                li.className = 'waitroom-list';
 
                                 // -------------- //
 
@@ -745,7 +745,7 @@
 
                         // --- CAN - SOC waitroom modification --- //
 
-                        li.className = 'soc-waitroom-list';
+                        li.className = 'waitroom-list';
 
                         // -------------- //
 
