@@ -673,6 +673,12 @@
                     //     FONT-WEIGHT: 200;
                     //     padding: 10px;
 
+                    // --- CAN - SOC waitroom modification --- //
+
+                    flexBox.className = 'waitroom-listContainer';
+
+                    // -------------- //
+
                     var div, a, t, T, display, counter;
                     var divT1, divT2, divT3, divT4;
                     counter = 0;
@@ -685,6 +691,13 @@
                                 div.style['margin-top'] = '10px';
                                 div.className = 'treatment';
                                 // div.style.display = 'flex';
+
+                                // --- CAN - SOC waitroom modification --- //
+
+                                li.className = 'waitroom-list';
+
+                                // -------------- //
+
                                 a = document.createElement('span');
                                 // a.className =
                                 // 'btn btn-default btn-large round btn-icon';
@@ -729,6 +742,13 @@
                         div = document.createElement('div');
                         div.style.flex = '200px';
                         div.style['margin-top'] = '10px';
+
+                        // --- CAN - SOC waitroom modification --- //
+
+                        li.className = 'waitroom-list';
+
+                        // -------------- //
+
                         // Hack to fit nicely the treatments.
                         flexBox.appendChild(div);
 
