@@ -694,7 +694,7 @@
 
                                 // --- CAN - SOC waitroom modification --- //
 
-                                li.className = 'waitroom-list';
+                                // li.className = 'waitroom-list';
 
                                 // -------------- //
 
@@ -745,7 +745,7 @@
 
                         // --- CAN - SOC waitroom modification --- //
 
-                        li.className = 'waitroom-list';
+                        // li.className = 'waitroom-list';
 
                         // -------------- //
 
