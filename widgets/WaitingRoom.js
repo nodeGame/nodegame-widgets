@@ -689,14 +689,8 @@
                                 div.id = t;
                                 div.style.flex = '200px';
                                 div.style['margin-top'] = '10px';
-                                div.className = 'treatment';
+                                div.className = 'treatment waitroom-list';
                                 // div.style.display = 'flex';
-
-                                // --- CAN - SOC waitroom modification --- //
-
-                                // li.className = 'waitroom-list';
-
-                                // -------------- //
 
                                 a = document.createElement('span');
                                 // a.className =
@@ -743,11 +737,7 @@
                         div.style.flex = '200px';
                         div.style['margin-top'] = '10px';
 
-                        // --- CAN - SOC waitroom modification --- //
-
-                        // li.className = 'waitroom-list';
-
-                        // -------------- //
+                        div.className = 'waitroom-list';
 
                         // Hack to fit nicely the treatments.
                         flexBox.appendChild(div);
