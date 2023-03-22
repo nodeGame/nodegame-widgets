@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    Slider.version = '0.5.0';
+    Slider.version = '0.5.1';
     Slider.description = 'Creates a configurable slider';
 
     Slider.title = false;
