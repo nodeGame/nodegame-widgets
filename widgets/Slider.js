@@ -72,6 +72,12 @@
         */
         this.initialValue = 50;
 
+        /** Slider.step
+        *
+        * Legal increments for the slider
+        */
+        this.step = 1;
+
         /**
         * ### Slider.mainText
         *
@@ -194,10 +200,14 @@
          *   by the no-change checkbox. Note: when the function is invoked
          *   by the browser, noChange is the change event.
          *
+         * @param {boolean} init Optional If true, the function is called
+         *   by the init method, and some operations (e.g., updating totalMove)
+         *   are not executed.
+         *
          * @see Slider.onmove
          */
         var timeOut = null;
-        this.listener = function(noChange) {
+        this.listener = function(noChange, init) {
             if (!noChange && timeOut) return;
 
             if (that.isHighlighted()) that.unhighlight();
@@ -233,10 +243,11 @@
                     }
                 }
 
-                that.totalMove += Math.abs(diffPercent);
-
-                if (that.onmove) {
-                    that.onmove.call(that, that.slider.value, diffPercent);
+                if (!init) {
+                    that.totalMove += Math.abs(diffPercent);
+                    if (that.onmove) {
+                        that.onmove.call(that, that.slider.value, diffPercent);
+                    }
                 }
 
                 timeOut = null;
@@ -311,6 +322,15 @@
             }
             // currentValue is used with the first update.
             this.initialValue = this.currentValue = tmp;
+        }
+
+        if ('undefined' !== typeof opts.step) {
+            tmp = J.isInt(opts.step);
+            if ('number' !== typeof tmp) {
+                throw new TypeError(e + 'step must be an integer or ' +
+                'undefined. Found: ' + opts.step);
+            }
+            this.step = tmp;
         }
 
         if ('undefined' !== typeof opts.displayValue) {
@@ -472,7 +492,8 @@
             name: 'rangeslider',
             type: 'range',
             min: this.min,
-            max: this.max
+            max: this.max,
+            step: this.step
         });
 
         this.slider.onmouseover = function() {
@@ -522,10 +543,10 @@
             };
         }
 
-        this.slider.oninput = this.listener;
         this.slider.value = this.initialValue;
+        this.slider.oninput = this.listener;
 
-        this.slider.oninput();
+        this.slider.oninput(false, true);
     };
 
     Slider.prototype.getValues = function(opts) {
