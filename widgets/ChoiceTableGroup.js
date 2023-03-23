@@ -1,6 +1,6 @@
 /**
  * # ChoiceTableGroup
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several choice tables widgets
@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.8.0';
+    ChoiceTableGroup.version = '1.8.1';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
