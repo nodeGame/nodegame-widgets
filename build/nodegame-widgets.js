@@ -156,6 +156,7 @@
         if (!this.isHighlighted()) return;
         this.highlighted = false;
         this.bodyDiv.style.border = '';
+        if (this.setError) this.setError(); 
         this.emit('unhighlighted');
     };
 
@@ -17672,7 +17673,7 @@
  *
  *
  * Style from state-of-crypto.
- 
+
  <style>
 .goto {
     padding: 0 !important;
@@ -20543,7 +20544,7 @@
 
 /**
  * # Slider
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable slider.
@@ -20560,19 +20561,18 @@
 
     // ## Meta-data
 
-    Slider.version = '0.5.0';
+    Slider.version = '0.7.0';
     Slider.description = 'Creates a configurable slider';
 
     Slider.title = false;
     Slider.className = 'slider';
 
-    // ## Dependencies
-
     Slider.texts = {
         currentValue: function(widget, value) {
             return 'Value: ' + value;
         },
-        noChange: 'No change'
+        noChange: 'No change',
+        error: 'Movement required.',
     };
 
 
@@ -20701,6 +20701,13 @@
         */
         this.noChangeSpan = null;
 
+        /**
+         * ### Slider.errorBox
+         *
+         * An HTML element displayed when a validation error occurs
+         */
+        this.errorBox = null;
+
         /** Slider.totalMove
          *
          * The total movement of the slider
@@ -20742,7 +20749,7 @@
          * @param {boolean} noChange Optional. The function is invoked
          *   by the no-change checkbox. Note: when the function is invoked
          *   by the browser, noChange is the change event.
-         * 
+         *
          * @param {boolean} init Optional If true, the function is called
          *   by the init method, and some operations (e.g., updating totalMove)
          *   are not executed.
@@ -20786,7 +20793,7 @@
                     }
                 }
 
-                if (!init) {    
+                if (!init) {
                     that.totalMove += Math.abs(diffPercent);
                     if (that.onmove) {
                         that.onmove.call(that, that.slider.value, diffPercent);
@@ -20925,7 +20932,7 @@
 
         if (this.required && this.hint !== false) {
             if (!this.hint) this.hint = 'Movement required';
-            this.hint += ' *';
+            if (opts.displayRequired !== false) this.hint += ' *';
         }
 
         if (opts.onmove) {
@@ -21086,6 +21093,8 @@
             };
         }
 
+        this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
+
         this.slider.value = this.initialValue;
         this.slider.oninput = this.listener;
 
@@ -21102,7 +21111,10 @@
         if ((this.required && this.totalMove === 0 && !nochange) ||
            (null !== this.correctValue && this.correctValue !== value)) {
 
-            if (opts.highlight) this.highlight();
+            if (opts.highlight) {
+                this.highlight();
+                this.setError(this.getText('error'));
+            }
             res = false;
         }
 
@@ -21145,6 +21157,22 @@
         this.disabled = false;
         this.slider.disabled = false;
         this.emit('enabled');
+    };
+
+    /**
+     * ### Slider.setError
+     *
+     * Set the error msg inside the errorBox and call highlight
+     *
+     * @param {string} The error msg (can contain HTML)
+     *
+     * @see Slider.highlight
+     * @see Slider.errorBox
+     */
+    Slider.prototype.setError = function(err) {
+        this.errorBox.innerHTML = err || '';
+        if (err) this.highlight();
+        else this.unhighlight();
     };
 
 })(node);

@@ -1,6 +1,6 @@
 /**
  * # Slider
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable slider.
@@ -17,19 +17,18 @@
 
     // ## Meta-data
 
-    Slider.version = '0.5.1';
+    Slider.version = '0.7.0';
     Slider.description = 'Creates a configurable slider';
 
     Slider.title = false;
     Slider.className = 'slider';
 
-    // ## Dependencies
-
     Slider.texts = {
         currentValue: function(widget, value) {
             return 'Value: ' + value;
         },
-        noChange: 'No change'
+        noChange: 'No change',
+        error: 'Movement required.',
     };
 
 
@@ -157,6 +156,13 @@
         * @see Slider.noChangeCheckbox
         */
         this.noChangeSpan = null;
+
+        /**
+         * ### Slider.errorBox
+         *
+         * An HTML element displayed when a validation error occurs
+         */
+        this.errorBox = null;
 
         /** Slider.totalMove
          *
@@ -382,7 +388,7 @@
 
         if (this.required && this.hint !== false) {
             if (!this.hint) this.hint = 'Movement required';
-            this.hint += ' *';
+            if (opts.displayRequired !== false) this.hint += ' *';
         }
 
         if (opts.onmove) {
@@ -543,6 +549,8 @@
             };
         }
 
+        this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
+
         this.slider.value = this.initialValue;
         this.slider.oninput = this.listener;
 
@@ -559,7 +567,10 @@
         if ((this.required && this.totalMove === 0 && !nochange) ||
            (null !== this.correctValue && this.correctValue !== value)) {
 
-            if (opts.highlight) this.highlight();
+            if (opts.highlight) {
+                this.highlight();
+                this.setError(this.getText('error'));
+            }
             res = false;
         }
 
@@ -602,6 +613,22 @@
         this.disabled = false;
         this.slider.disabled = false;
         this.emit('enabled');
+    };
+
+    /**
+     * ### Slider.setError
+     *
+     * Set the error msg inside the errorBox and call highlight
+     *
+     * @param {string} The error msg (can contain HTML)
+     *
+     * @see Slider.highlight
+     * @see Slider.errorBox
+     */
+    Slider.prototype.setError = function(err) {
+        this.errorBox.innerHTML = err || '';
+        if (err) this.highlight();
+        else this.unhighlight();
     };
 
 })(node);
