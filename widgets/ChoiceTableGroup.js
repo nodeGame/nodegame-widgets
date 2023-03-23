@@ -1095,7 +1095,7 @@
             obj.items[tbl.id] = tbl.getValues(opts);
             if (obj.items[tbl.id].choice === null) {
                 obj.missValues = true;
-                if (tbl.requiredChoice) {
+                if (this.required || tbl.requiredChoice) {
                     toHighlight = true;
                     obj.isCorrect = false;
                 }
