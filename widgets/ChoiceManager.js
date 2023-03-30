@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    ChoiceManager.version = '1.8.0';
+    ChoiceManager.version = '1.9.0';
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
@@ -734,6 +734,9 @@
      *      to find the correct answer. Default: TRUE.
      *   - highlight:   If TRUE, forms that do not have a correct value
      *      will be highlighted. Default: TRUE.
+     *   - simplify:    If TRUE, forms are not nested under `.forms`, but
+     *      available at the first level. Duplicated keys will be overwritten.
+     *      TODO: rename "flatten."
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -833,7 +836,7 @@
         if (this.textarea) obj.freetext = this.textarea.value;
 
         // Simplify everything, if requested.
-        if (opts.simplify || this.simplify) {
+        if (opts.simplify === true || this.simplify) {
             res = obj;
             obj = obj.forms;
             if (res.isCorrect === false) obj.isCorrect = false;

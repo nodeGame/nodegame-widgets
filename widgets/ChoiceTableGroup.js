@@ -415,6 +415,17 @@
          * @see ChoiceTable.tabbable
          */
         this.tabbable = null;
+
+        /**
+         * ### ChoiceTableGroup.valueOnly
+         *
+         * If TRUE, `getValues` returns only the field `value` from ChoiceTable
+         *
+         * Default FALSE
+         *
+         * @see ChoiceTableGroup.getValues
+         */
+        this.valueOnly = null;
     }
 
     // ## ChoiceTableGroup methods
@@ -619,6 +630,8 @@
         }
 
         if (opts.tabbable !== false) this.tabbable = true;
+
+        if (opts.valueOnly === true) this.valueOnly = true;
 
         // Separator checked by ChoiceTable.
         if (opts.separator) this.separator = opts.separator;
@@ -1070,6 +1083,8 @@
      *   - reset:    If TRUTHY and no item raises an error,
      *       then it resets the state of all items before
      *       returning it. Default: FALSE.
+     *   - valueOnly: If TRUE it returns only the value of each ChoiceTable
+     *       instead of the all object from .getValues(). Experimental.
      *
      * @return {object} Object containing the choice and paradata
      *
@@ -1077,7 +1092,7 @@
      * @see ChoiceTableGroup.reset
      */
     ChoiceTableGroup.prototype.getValues = function(opts) {
-        var obj, i, len, tbl, toHighlight, toReset, res;
+        var obj, i, len, tbl, toHighlight, toReset, res, valueOnly;
         obj = {
             id: this.id,
             order: this.order,
@@ -1090,11 +1105,12 @@
         // Make sure reset is done only at the end.
         toReset = opts.reset;
         opts.reset = false;
+        valueOnly = opts.valueOnly === true || this.valueOnly;
         i = -1, len = this.items.length;
         for ( ; ++i < len ; ) {
             tbl = this.items[i];
             res = tbl.getValues(opts);
-            obj.items[tbl.id] = opts.simplify ? res.value : res;
+            obj.items[tbl.id] = valueOnly ? res.value : res;
             if (res.choice === null) {
                 obj.missValues = true;
                 if (this.required || tbl.requiredChoice) {
