@@ -29,6 +29,10 @@
         },
         noChange: 'No change',
         error: 'Movement required.',
+        autoHint: function(w) {
+            if (w.requiredChoice) return 'Movement required.';
+            else return false;
+        }
     };
 
 
@@ -382,12 +386,10 @@
             this.hint = opts.hint;
         }
         else {
-            // TODO: Do we need it?
-            // this.hint = this.getText('autoHint');
+            this.hint = this.getText('autoHint');
         }
 
         if (this.required && this.hint !== false) {
-            if (!this.hint) this.hint = 'Movement required';
             if (opts.displayRequired !== false) this.hint += ' *';
         }
 
