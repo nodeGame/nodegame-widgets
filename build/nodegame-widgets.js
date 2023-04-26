@@ -20789,12 +20789,13 @@
          * @see Slider.onmove
          */
         var timeOut = null;
-        this.listener = function(noChange, init) {
+        this.listener = function(noChange, init, sync) {
+            var _listener;
             if (!noChange && timeOut) return;
 
             if (that.isHighlighted()) that.unhighlight();
 
-            timeOut = setTimeout(function() {
+            _listener = function() {
                 var percent, diffPercent;
 
                 percent = (that.slider.value - that.min) * that.scale;
@@ -20833,7 +20834,10 @@
                 }
 
                 timeOut = null;
-            }, 0);
+            };
+            
+            if (sync) _listener();
+            else timeOut = setTimeout(_listener, 0);
         }
 
         /** Slider.onmove
@@ -21159,10 +21163,22 @@
     };
 
     Slider.prototype.setValues = function(opts) {
+        var value;
         if ('undefined' === typeof opts) opts = {};
         else if ('number' === typeof opts) opts = { value: opts };
-        this.slider.value = opts.value;
-        this.slider.oninput();
+
+        if (opts.correct && this.correctValue !== null) {
+            value = this.correctValue;
+        }
+        else if ('number' !== typeof opts.value) {
+            value = J.randomInt(0, 101)-1;
+        }
+        else {
+            value = opts.value;
+        }
+
+        this.slider.value = value;
+        this.slider.oninput(false, false, true);
     };
 
     /**
