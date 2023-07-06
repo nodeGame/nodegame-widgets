@@ -2390,12 +2390,6 @@
     BoxSelector.title = false;
     BoxSelector.className = 'boxselector';
 
-    // ## Dependencies
-
-    BoxSelector.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## BoxSelector constructor
      *
@@ -2705,12 +2699,6 @@
     Chat.className = 'chat';
 
     Chat.panel = false;
-
-    // ## Dependencies
-
-    Chat.dependencies = {
-        JSUS: {}
-    };
 
     /**
      * ## Chat constructor
@@ -3529,7 +3517,6 @@
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
-        JSUS: {},
         Table: {},
         Canvas: {},
         SliderControls: {}
@@ -4545,7 +4532,6 @@
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
-        JSUS: {},
         Table: {},
         Canvas: {},
         'Controls.Slider': {}
@@ -6866,11 +6852,11 @@
         * ### ChoiceTable.sameWidthCells
         *
         * If truthy, it forces cells to have same width regardless of content
-        * 
+        *
         *  - If TRUE, it automatically computes the equal size of the cells
         *      (options `left` and `right` affect computation).
-        *  - If string, it is the value of width for all cells  
-        * 
+        *  - If string, it is the value of width for all cells
+        *
         * Only applies in horizontal mode.
         */
         this.sameWidthCells = true;
@@ -9242,8 +9228,11 @@
             this.hint = this.getText('autoHint');
         }
 
-        if (this.required && this.hint !== false) {
-            if (opts.displayRequired !== false) this.hint += ' *';
+        if (this.required && this.hint !== false &&
+            this.hint.charAt(this.hint.length-1) != '*' &&
+            opts.displayRequired !== false) {
+                
+                this.hint += ' *';
         }
 
         // Set the timeFrom, if any.
@@ -10322,10 +10311,6 @@
     ContentBox.panel = false;
     ContentBox.className = 'contentbox';
 
-    // ## Dependencies
-
-    ContentBox.dependencies = {};
-
     /**
      * ## ContentBox constructor
      *
@@ -11080,12 +11065,6 @@
             return 'Must follow format ' + w.params.format;
         },
         emptyErr: 'Cannot be empty'
-    };
-
-    // ## Dependencies
-
-    CustomInput.dependencies = {
-        JSUS: {}
     };
 
     /**
@@ -12540,12 +12519,6 @@
     };
     CustomInputGroup.texts.inputErr = 'One or more errors detected.';
 
-    // ## Dependencies
-
-    CustomInputGroup.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## CustomInputGroup constructor
      *
@@ -13715,8 +13688,7 @@
     // ## Dependencies
 
     D3.dependencies = {
-        d3: {},
-        JSUS: {}
+        d3: {}
     };
 
     function D3 (options) {
@@ -14082,12 +14054,6 @@
 
     DebugWall.title = 'Debug Wall';
     DebugWall.className = 'debugwall';
-
-    // ## Dependencies
-
-    DebugWall.dependencies = {
-        JSUS: {}
-    };
 
     /**
      * ## DebugWall constructor
@@ -17713,7 +17679,7 @@
  * www.nodegame.org
  *
  *
- * Style from state-of-crypto.
+ * TODO: Update Style:
 
  <style>
 .goto {
@@ -17725,7 +17691,6 @@
     margin-left: 0 !important;
     margin-top: 0 !important;
 }
-
 </style>
 
 
@@ -18046,12 +18011,6 @@
     LanguageSelector.className = 'languageselector';
 
     LanguageSelector.texts.loading = 'Loading language information...';
-
-    // ## Dependencies
-
-    LanguageSelector.dependencies = {
-        JSUS: {}
-    };
 
     /**
      * ## LanguageSelector constructor
@@ -18483,12 +18442,6 @@
     MoneyTalks.title = 'Earnings';
     MoneyTalks.className = 'moneytalks';
 
-    // ## Dependencies
-
-    MoneyTalks.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## MoneyTalks constructor
      *
@@ -18687,11 +18640,6 @@
 
     MoodGauge.texts.mainText = 'Thinking about yourself and how you normally' +
                 ' feel, to what extent do you generally feel: ';
-
-    // ## Dependencies
-    MoodGauge.dependencies = {
-        JSUS: {}
-    };
 
     /**
      * ## MoodGauge constructor
@@ -18972,7 +18920,6 @@
     // ## Dependencies
 
     Requirements.dependencies = {
-        JSUS: {},
         List: {}
     };
 
@@ -21188,7 +21135,7 @@
 
             // Check if movement is required and no movement was done and
             // the random value is equal to the current value. If so, add 1.
-            if (this.required && this.totalMove === 0 && 
+            if (this.required && this.totalMove === 0 &&
                 value === this.slider.value) {
 
                     value++;

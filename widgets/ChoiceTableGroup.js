@@ -581,8 +581,11 @@
             this.hint = this.getText('autoHint');
         }
 
-        if (this.required && this.hint !== false) {
-            if (opts.displayRequired !== false) this.hint += ' *';
+        if (this.required && this.hint !== false &&
+            this.hint.charAt(this.hint.length-1) != '*' &&
+            opts.displayRequired !== false) {
+
+                this.hint += ' *';
         }
 
         // Set the timeFrom, if any.
