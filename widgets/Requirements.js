@@ -34,7 +34,6 @@
     // ## Dependencies
 
     Requirements.dependencies = {
-        JSUS: {},
         List: {}
     };
 

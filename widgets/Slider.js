@@ -600,6 +600,14 @@
         }
         else if ('number' !== typeof opts.value) {
             value = J.randomInt(0, 101)-1;
+
+            // Check if movement is required and no movement was done and
+            // the random value is equal to the current value. If so, add 1.
+            if (this.required && this.totalMove === 0 &&
+                value === this.slider.value) {
+
+                    value++;
+            }
         }
         else {
             value = opts.value;

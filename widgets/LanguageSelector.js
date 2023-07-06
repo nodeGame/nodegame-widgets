@@ -25,12 +25,6 @@
 
     LanguageSelector.texts.loading = 'Loading language information...';
 
-    // ## Dependencies
-
-    LanguageSelector.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## LanguageSelector constructor
      *

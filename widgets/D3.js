@@ -34,8 +34,7 @@
     // ## Dependencies
 
     D3.dependencies = {
-        d3: {},
-        JSUS: {}
+        d3: {}
     };
 
     function D3 (options) {

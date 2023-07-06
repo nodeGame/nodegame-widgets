@@ -24,12 +24,6 @@
     DebugWall.title = 'Debug Wall';
     DebugWall.className = 'debugwall';
 
-    // ## Dependencies
-
-    DebugWall.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## DebugWall constructor
      *

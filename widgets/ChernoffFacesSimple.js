@@ -31,7 +31,6 @@
 
     // ## Dependencies
     ChernoffFaces.dependencies = {
-        JSUS: {},
         Table: {},
         Canvas: {},
         'Controls.Slider': {}

@@ -25,12 +25,6 @@
     BoxSelector.title = false;
     BoxSelector.className = 'boxselector';
 
-    // ## Dependencies
-
-    BoxSelector.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## BoxSelector constructor
      *

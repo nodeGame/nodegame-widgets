@@ -21,12 +21,6 @@
     MoneyTalks.title = 'Earnings';
     MoneyTalks.className = 'moneytalks';
 
-    // ## Dependencies
-
-    MoneyTalks.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## MoneyTalks constructor
      *

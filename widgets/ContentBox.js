@@ -22,10 +22,6 @@
     ContentBox.panel = false;
     ContentBox.className = 'contentbox';
 
-    // ## Dependencies
-
-    ContentBox.dependencies = {};
-
     /**
      * ## ContentBox constructor
      *

@@ -25,11 +25,6 @@
     MoodGauge.texts.mainText = 'Thinking about yourself and how you normally' +
                 ' feel, to what extent do you generally feel: ';
 
-    // ## Dependencies
-    MoodGauge.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## MoodGauge constructor
      *

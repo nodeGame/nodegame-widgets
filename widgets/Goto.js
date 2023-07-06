@@ -8,7 +8,7 @@
  * www.nodegame.org
  *
  *
- * Style from state-of-crypto.
+ * TODO: Update Style:
 
  <style>
 .goto {
@@ -20,7 +20,6 @@
     margin-left: 0 !important;
     margin-top: 0 !important;
 }
-
 </style>
 
 

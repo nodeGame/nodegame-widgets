@@ -67,12 +67,6 @@
 
     Chat.panel = false;
 
-    // ## Dependencies
-
-    Chat.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## Chat constructor
      *

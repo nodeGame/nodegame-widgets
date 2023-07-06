@@ -240,12 +240,6 @@
         emptyErr: 'Cannot be empty'
     };
 
-    // ## Dependencies
-
-    CustomInput.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## CustomInput constructor
      *

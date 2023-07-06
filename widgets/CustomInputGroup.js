@@ -32,12 +32,6 @@
     };
     CustomInputGroup.texts.inputErr = 'One or more errors detected.';
 
-    // ## Dependencies
-
-    CustomInputGroup.dependencies = {
-        JSUS: {}
-    };
-
     /**
      * ## CustomInputGroup constructor
      *
