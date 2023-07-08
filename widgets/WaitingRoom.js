@@ -510,8 +510,13 @@
 
         // Displays treatments.
         if (this.playWithBotOption) {
-            if (this.treatmentTiles === false) dropdownDisplay(this, conf);
-            else tilesDisplay(this, conf);
+            if (this.selectTreatmentOption) {
+                this.treatmentTiles ? buildTreatDropdown(this, conf) :
+                                        buildTreatTiles(this, conf)
+            }
+            else {
+                addPlayWithBotsBtn(this);
+            }
         }
 
         // Handle destroy.
@@ -848,17 +853,16 @@
 
     // ### Helper functions.
 
-    // TODO HERE: we might need to add a button if display tiles is ON, but
-    // allow_treatment is off. So we create a separate method for the btn.
-    // Might need to return the btn for the dropdown.
-
-    function addPlayWithBotsBtn(w, conf) {
+    function addPlayWithBotsBtn(w) {
         var btnGroup, playBotBtn;
+
         // Already added.
-        if (document.getElementById('bot_btn')) return;
+        btnGroup = document.getElementById('bot_btn_group');
+        if (btnGroup) return btnGroup;
 
         // Add button to start game.
         btnGroup = document.createElement('div');
+        btnGroup.id = 'bot_btn_group';
         btnGroup.role = 'group';
         btnGroup['aria-label'] = 'Play Buttons';
         btnGroup.className = 'btn-group';
@@ -882,150 +886,120 @@
 
         // Store reference in widget.
         w.playBotBtn = playBotBtn;
-    }
 
-    function dropdownDisplay(w, conf) {
-
-        // Already added.
-        if (document.getElementById('bot_btn')) return;
-
-        // Add button to start game.
-        var btnGroup = document.createElement('div');
-        btnGroup.role = 'group';
-        btnGroup['aria-label'] = 'Play Buttons';
-        btnGroup.className = 'btn-group';
-
-        var playBotBtn = document.createElement('input');
-        playBotBtn.className = 'btn btn-primary btn-lg';
-        playBotBtn.value = w.getText('playBot');
-        playBotBtn.id = 'bot_btn';
-        playBotBtn.type = 'button';
-        playBotBtn.onclick = function() {
-            w.playBotBtn.value = w.getText('connectingBots');
-            w.playBotBtn.disabled = true;
-            node.say('PLAYWITHBOT', 'SERVER', w.selectedTreatment);
-            setTimeout(function() {
-                w.playBotBtn.value = w.getText('playBot');
-                w.playBotBtn.disabled = false;
-            }, 5000);
-        };
-
-        btnGroup.appendChild(playBotBtn);
-
-        // Store reference in widget.
-        w.playBotBtn = playBotBtn;
-
-        // Add Dropdown with treatments.
-        if (w.selectTreatmentOption) {
-
-            var btnGroupTreatments = document.createElement('div');
-            btnGroupTreatments.role = 'group';
-            btnGroupTreatments['aria-label'] = 'Select Treatment';
-            btnGroupTreatments.className = 'btn-group';
-
-            var btnTreatment = document.createElement('button');
-            btnTreatment.className = 'btn btn-default btn-lg ' +
-                'dropdown-toggle';
-            btnTreatment['data-toggle'] = 'dropdown';
-            btnTreatment['aria-haspopup'] = 'true';
-            btnTreatment['aria-expanded'] = 'false';
-            btnTreatment.innerHTML = w.getText('selectTreatment');
-
-            var span = document.createElement('span');
-            span.className = 'caret';
-
-            btnTreatment.appendChild(span);
-
-            var ul = document.createElement('ul');
-            ul.className = 'dropdown-menu';
-            ul.style['text-align'] = 'left';
-
-            var li, a, t, liT1, liT2, liT3, liT4;
-            if (conf.availableTreatments) {
-                li = document.createElement('li');
-                li.innerHTML = w.getText('gameTreatments');
-                li.className = 'dropdown-header';
-                ul.appendChild(li);
-                for (t in conf.availableTreatments) {
-                    if (conf.availableTreatments.hasOwnProperty(t)) {
-                        li = document.createElement('li');
-                        li.id = t;
-                        a = document.createElement('a');
-                        a.href = '#';
-                        a.innerHTML = '<strong>' + t + '</strong>: ' +
-                            conf.availableTreatments[t];
-                        li.appendChild(a);
-                        if (t === 'treatment_latin_square') liT3 = li;
-                        else if (t === 'treatment_rotate') liT1 = li;
-                        else if (t === 'treatment_random') liT2 = li;
-                        else if (t === 'treatment_weighted_random') liT4 = li;
-                        else ul.appendChild(li);
-                    }
-                }
-
-                if (w.addDefaultTreatments !== false) {
-                    li = document.createElement('li');
-                    li.role = 'separator';
-                    li.className = 'divider';
-                    ul.appendChild(li);
-                    li = document.createElement('li');
-                    li.innerHTML = w.getText('defaultTreatments');
-                    li.className = 'dropdown-header';
-                    ul.appendChild(li);
-                    ul.appendChild(liT1);
-                    ul.appendChild(liT2);
-                    ul.appendChild(liT3);
-                    ul.appendChild(liT4);
-                }
-            }
-
-            btnGroupTreatments.appendChild(btnTreatment);
-            btnGroupTreatments.appendChild(ul);
-
-            btnGroup.appendChild(btnGroupTreatments);
-
-            // We are not using bootstrap js files
-            // and we redo the job manually here.
-            btnTreatment.onclick = function() {
-                // When '' is hidden by bootstrap class.
-                if (ul.style.display === '') {
-                    ul.style.display = 'block';
-                }
-                else {
-                    ul.style.display = '';
-                }
-            };
-
-            ul.onclick = function(eventData) {
-                var t;
-                t = eventData.target;
-                // When '' is hidden by bootstrap class.
-                ul.style.display = '';
-                t = t.parentNode.id;
-                // Clicked on description?
-                if (!t) t = eventData.target.parentNode.parentNode.id;
-                // Nothing relevant clicked (e.g., header).
-                if (!t) return;
-                btnTreatment.innerHTML = t + ' ';
-                btnTreatment.appendChild(span);
-                w.selectedTreatment = t;
-            };
-
-            // Store Reference in widget.
-            w.treatmentBtn = btnTreatment;
-        }
         // Append button group.
         w.bodyDiv.appendChild(document.createElement('br'));
         w.bodyDiv.appendChild(btnGroup);
+
+        return btnGroup;
     }
 
-    // Closure to create button group.
-    function tilesDisplay(w, conf) {
+    function buildTreatDropdown(w, conf) {
+
+        var btnGroup;
+        btnGroup = addPlayWithBotsBtn(w);
+
+        var btnGroupTreatments = document.createElement('div');
+        btnGroupTreatments.role = 'group';
+        btnGroupTreatments['aria-label'] = 'Select Treatment';
+        btnGroupTreatments.className = 'btn-group';
+
+        var btnTreatment = document.createElement('button');
+        btnTreatment.className = 'btn btn-default btn-lg ' +
+            'dropdown-toggle';
+        btnTreatment['data-toggle'] = 'dropdown';
+        btnTreatment['aria-haspopup'] = 'true';
+        btnTreatment['aria-expanded'] = 'false';
+        btnTreatment.innerHTML = w.getText('selectTreatment');
+
+        var span = document.createElement('span');
+        span.className = 'caret';
+
+        btnTreatment.appendChild(span);
+
+        var ul = document.createElement('ul');
+        ul.className = 'dropdown-menu';
+        ul.style['text-align'] = 'left';
+
+        var li, a, t, liT1, liT2, liT3, liT4;
+        if (conf.availableTreatments) {
+            li = document.createElement('li');
+            li.innerHTML = w.getText('gameTreatments');
+            li.className = 'dropdown-header';
+            ul.appendChild(li);
+            for (t in conf.availableTreatments) {
+                if (conf.availableTreatments.hasOwnProperty(t)) {
+                    li = document.createElement('li');
+                    li.id = t;
+                    a = document.createElement('a');
+                    a.href = '#';
+                    a.innerHTML = '<strong>' + t + '</strong>: ' +
+                        conf.availableTreatments[t];
+                    li.appendChild(a);
+                    if (t === 'treatment_latin_square') liT3 = li;
+                    else if (t === 'treatment_rotate') liT1 = li;
+                    else if (t === 'treatment_random') liT2 = li;
+                    else if (t === 'treatment_weighted_random') liT4 = li;
+                    else ul.appendChild(li);
+                }
+            }
+
+            if (w.addDefaultTreatments !== false) {
+                li = document.createElement('li');
+                li.role = 'separator';
+                li.className = 'divider';
+                ul.appendChild(li);
+                li = document.createElement('li');
+                li.innerHTML = w.getText('defaultTreatments');
+                li.className = 'dropdown-header';
+                ul.appendChild(li);
+                ul.appendChild(liT1);
+                ul.appendChild(liT2);
+                ul.appendChild(liT3);
+                ul.appendChild(liT4);
+            }
+        }
+
+        btnGroupTreatments.appendChild(btnTreatment);
+        btnGroupTreatments.appendChild(ul);
+
+        btnGroup.appendChild(btnGroupTreatments);
+
+        // We are not using bootstrap js files
+        // and we redo the job manually here.
+        btnTreatment.onclick = function() {
+            // When '' is hidden by bootstrap class.
+            if (ul.style.display === '') {
+                ul.style.display = 'block';
+            }
+            else {
+                ul.style.display = '';
+            }
+        };
+
+        ul.onclick = function(eventData) {
+            var t;
+            t = eventData.target;
+            // When '' is hidden by bootstrap class.
+            ul.style.display = '';
+            t = t.parentNode.id;
+            // Clicked on description?
+            if (!t) t = eventData.target.parentNode.parentNode.id;
+            // Nothing relevant clicked (e.g., header).
+            if (!t) return;
+            btnTreatment.innerHTML = t + ' ';
+            btnTreatment.appendChild(span);
+            w.selectedTreatment = t;
+        };
+
+        // Store Reference in widget.
+        w.treatmentBtn = btnTreatment;
+    }
+
+    function buildTreatTiles(w, conf) {
         var div, a, t, T, display, counter;
         var divT1, divT2, divT3, divT4;
         var flexBox;
-
-        if (!w.selectTreatmentOption) return;
 
         flexBox = W.add('div', w.bodyDiv);
         flexBox.style.display = 'flex';
@@ -1116,8 +1090,6 @@
                 flexBox.appendChild(divT4);
             }
         }
-
-
     }
 
 })(node);
