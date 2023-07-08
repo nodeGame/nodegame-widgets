@@ -1491,7 +1491,9 @@
         // Option already checked.
         if (widget.docked) widget._docked = true;
 
-        if (opts.bootstrap5) widget._bootstrap5 = true;
+        // Bootstrap 5 by default.
+        if (opts.bootstrap5 !== false) widget._bootstrap5 = true;
+        
         if (opts.disabled) widget._disabled = true;
         if (opts.highlighted) widget._highlighted = true;
         if (opts.collapsed) widget._collapsed = true;
@@ -24248,8 +24250,8 @@
             }
         }
 
-        if (conf.treatmentDisplayCb) {
-            this.treatmentDisplayCb = conf.treatmentDisplayCb;
+        if (conf.treatmentTileCb) {
+            this.treatmentTileCb = conf.treatmentTileCb;
         }
 
         if ('undefined' !== typeof conf.treatmentTiles) {
@@ -24262,8 +24264,8 @@
         // Displays treatments / play btn.
         if (this.playWithBotOption) {
             if (this.selectTreatmentOption) {
-                this.treatmentTiles ? buildTreatDropdown(this, conf) :
-                                        buildTreatTiles(this, conf)
+                this.treatmentTiles ? buildTreatTiles(this, conf) :
+                     buildTreatDropdown(this, conf)               
             }
             else {
                 addPlayWithBotsBtn(this);
@@ -24355,7 +24357,7 @@
      */
     WaitingRoom.prototype.updateDisplay = function() {
         var numberOfGameSlots, numberOfGames;
-        
+
         if (!this.execModeDiv) {
             node.warn('WaitingRoom: cannot update display, inteface not ready');
             return;
@@ -24794,8 +24796,8 @@
                     // a.className =
                     // 'btn btn-default btn-large round btn-icon';
                     // a.href = '#';
-                    if (w.treatmentDisplayCb) {
-                        display = w.treatmentDisplayCb(t,
+                    if (w.treatmentTileCb) {
+                        display = w.treatmentTileCb(t,
                         conf.availableTreatments[t], ++counter, w);
                     }
                     else {
@@ -24831,14 +24833,13 @@
 
                 }
             }
-            div = document.createElement('div');
-            div.style.flex = '200px';
-            div.style['margin-top'] = '10px';
-
-            div.className = 'waitroom-list';
-
+            
             // Hack to fit nicely the treatments.
-            flexBox.appendChild(div);
+            // div = document.createElement('div');
+            // div.style.flex = '200px';
+            // div.style['margin-top'] = '10px';
+            // div.className = 'waitroom-list';
+            // flexBox.appendChild(div);
 
             if (w.addDefaultTreatments !== false) {
                 flexBox.appendChild(divT1);
