@@ -24234,12 +24234,12 @@
 
         // Button for bots and treatments.
         if (conf.queryStringDispatch) {
-            this.queryStringTreatmentVariable = 'lang';
+            this.queryStringTreatmentVariable = 'treat';
             t = J.getQueryString(this.queryStringTreatmentVariable);
 
             if (t) {
                 if (!conf.availableTreatments[t]) {
-                    alert('Unknown t', t);
+                    alert('Unknown treatment: ' + t);
                 }
                 else {
                     node.say('PLAYWITHBOT', 'SERVER', t);
@@ -24259,11 +24259,11 @@
         // Display Exec Mode.
         this.displayExecMode();
 
-        // Displays treatments.
+        // Displays treatments / play btn.
         if (this.playWithBotOption) {
             if (this.selectTreatmentOption) {
-                this.treatmentTiles ?
-                    buildTreatmentDropdown(this, conf) : buildTreatmentTiles(this, conf)
+                this.treatmentTiles ? buildTreatDropdown(this, conf) :
+                                        buildTreatTiles(this, conf)
             }
             else {
                 addPlayWithBotsBtn(this);
@@ -24355,6 +24355,12 @@
      */
     WaitingRoom.prototype.updateDisplay = function() {
         var numberOfGameSlots, numberOfGames;
+        
+        if (!this.execModeDiv) {
+            node.warn('WaitingRoom: cannot update display, inteface not ready');
+            return;
+        }
+
         if (this.connected > this.poolSize) {
             numberOfGames = Math.floor(this.connected / this.groupSize);
             if ('undefined' !== typeof this.nGames) {
@@ -24645,7 +24651,7 @@
         return btnGroup;
     }
 
-    function buildTreatmentDropdown(w, conf) {
+    function buildTreatDropdown(w, conf) {
 
         var btnGroup;
         btnGroup = addPlayWithBotsBtn(w);
@@ -24747,7 +24753,7 @@
         w.treatmentBtn = btnTreatment;
     }
 
-    function buildTreatmentTiles(w, conf) {
+    function buildTreatTiles(w, conf) {
         var div, a, t, T, display, counter;
         var divT1, divT2, divT3, divT4;
         var flexBox;

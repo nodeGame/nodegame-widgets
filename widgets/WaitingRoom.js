@@ -483,12 +483,12 @@
 
         // Button for bots and treatments.
         if (conf.queryStringDispatch) {
-            this.queryStringTreatmentVariable = 'lang';
+            this.queryStringTreatmentVariable = 'treat';
             t = J.getQueryString(this.queryStringTreatmentVariable);
 
             if (t) {
                 if (!conf.availableTreatments[t]) {
-                    alert('Unknown t', t);
+                    alert('Unknown treatment: ' + t);
                 }
                 else {
                     node.say('PLAYWITHBOT', 'SERVER', t);
@@ -508,7 +508,7 @@
         // Display Exec Mode.
         this.displayExecMode();
 
-        // Displays treatments.
+        // Displays treatments / play btn.
         if (this.playWithBotOption) {
             if (this.selectTreatmentOption) {
                 this.treatmentTiles ? buildTreatDropdown(this, conf) :
@@ -604,6 +604,12 @@
      */
     WaitingRoom.prototype.updateDisplay = function() {
         var numberOfGameSlots, numberOfGames;
+
+        if (!this.execModeDiv) {
+            node.warn('WaitingRoom: cannot update display, inteface not ready');
+            return;
+        }
+
         if (this.connected > this.poolSize) {
             numberOfGames = Math.floor(this.connected / this.groupSize);
             if ('undefined' !== typeof this.nGames) {
