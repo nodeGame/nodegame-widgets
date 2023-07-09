@@ -1493,7 +1493,7 @@
 
         // Bootstrap 5 by default.
         if (opts.bootstrap5 !== false) widget._bootstrap5 = true;
-        
+
         if (opts.disabled) widget._disabled = true;
         if (opts.highlighted) widget._highlighted = true;
         if (opts.collapsed) widget._collapsed = true;
@@ -24048,27 +24048,27 @@
         this.disconnectIfNotSelected = null;
 
         /**
-         * ### WaitingRoom.playWithBotOption
+         * ### WaitingRoom.userDispatch
          *
-         * If TRUE, it displays a button to begin the game with bots
+         * If TRUE, the interface allows to start a new game
          *
          * This option is set by the server, local modifications will
          * not have an effect if server does not allow it
          *
-         * @see WaitingRoom.playBotBtn
+         * @see WaitingRoom.playBtn
          */
-        this.playWithBotOption = null;
+        this.userDispatch = null;
 
         /**
-         * ### WaitingRoom.playBotBtn
+         * ### WaitingRoom.playBtn
          *
-         * Reference to the button to play with bots
+         * Reference to the button to play a new game
          *
          * Will be created if requested by options.
          *
-         * @see WaitingRoom.playWithBotOption
+         * @see WaitingRoom.userDispatch
          */
-        this.playBotBtn = null;
+        this.playBtn = null;
 
         /**
          * ### WaitingRoom.selectTreatmentOption
@@ -24131,7 +24131,7 @@
      *   - onSuccess: function executed when all tests succeed
      *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *   - startDate: max waiting time to execute all tests (in milliseconds)
-     *   - playWithBotOption: displays button to dispatch players with bots
+     *   - userDispatch: displays button to dispatch a new game
      *   - selectTreatmentOption: displays treatment selector
      *
      * @param {object} conf Configuration object.
@@ -24223,8 +24223,8 @@
         }
 
 
-        if (conf.playWithBotOption) this.playWithBotOption = true;
-        else this.playWithBotOption = false;
+        if (conf.userDispatch) this.userDispatch = true;
+        else this.userDispatch = false;
         if (conf.selectTreatmentOption) this.selectTreatmentOption = true;
         else this.selectTreatmentOption = false;
         if ('undefined' !== typeof conf.addDefaultTreatments) {
@@ -24234,17 +24234,16 @@
             this.addDefaultTreatments = true;
         }
 
-        // Button for bots and treatments.
-        if (conf.queryStringDispatch) {
-            this.queryStringTreatmentVariable = 'treat';
-            t = J.getQueryString(this.queryStringTreatmentVariable);
+        // Button to start a new game and select treatments.
+        if (conf.queryStringTreatVar) {
+            t = J.getQueryString(conf.queryStringTreatVar);
 
             if (t) {
                 if (!conf.availableTreatments[t]) {
                     alert('Unknown treatment: ' + t);
                 }
                 else {
-                    node.say('PLAYWITHBOT', 'SERVER', t);
+                    node.say('DISPATCH', 'SERVER', t);
                     return;
                 }
             }
@@ -24262,13 +24261,13 @@
         this.displayExecMode();
 
         // Displays treatments / play btn.
-        if (this.playWithBotOption) {
+        if (this.userDispatch) {
             if (this.selectTreatmentOption) {
                 this.treatmentTiles ? buildTreatTiles(this, conf) :
-                     buildTreatDropdown(this, conf)               
+                     buildTreatDropdown(this, conf)
             }
             else {
-                addPlayWithBotsBtn(this);
+                addPlayBtn(this);
             }
         }
 
@@ -24612,39 +24611,39 @@
 
     // ### Helper functions.
 
-    function addPlayWithBotsBtn(w) {
-        var btnGroup, playBotBtn;
+    function addPlayBtn(w) {
+        var btnGroup, playBtn;
 
         // Already added.
-        btnGroup = document.getElementById('bot_btn_group');
+        btnGroup = document.getElementById('play_btn_group');
         if (btnGroup) return btnGroup;
 
         // Add button to start game.
         btnGroup = document.createElement('div');
-        btnGroup.id = 'bot_btn_group';
+        btnGroup.id = 'play_btn_group';
         btnGroup.role = 'group';
         btnGroup['aria-label'] = 'Play Buttons';
         btnGroup.className = 'btn-group';
 
-        playBotBtn = document.createElement('input');
-        playBotBtn.className = 'btn btn-primary btn-lg';
-        playBotBtn.value = w.getText('playBot');
-        playBotBtn.id = 'bot_btn';
-        playBotBtn.type = 'button';
-        playBotBtn.onclick = function() {
-            w.playBotBtn.value = w.getText('connectingBots');
-            w.playBotBtn.disabled = true;
-            node.say('PLAYWITHBOT', 'SERVER', w.selectedTreatment);
+        playBtn = document.createElement('input');
+        playBtn.className = 'btn btn-primary btn-lg';
+        playBtn.value = w.getText('playBot');
+        playBtn.id = 'play_btn';
+        playBtn.type = 'button';
+        playBtn.onclick = function() {
+            w.playBtn.value = w.getText('connectingBots');
+            w.playBtn.disabled = true;
+            node.say('DISPATCH', 'SERVER', w.selectedTreatment);
             setTimeout(function() {
-                w.playBotBtn.value = w.getText('playBot');
-                w.playBotBtn.disabled = false;
+                w.playBtn.value = w.getText('playBot');
+                w.playBtn.disabled = false;
             }, 5000);
         };
 
-        btnGroup.appendChild(playBotBtn);
+        btnGroup.appendChild(playBtn);
 
         // Store reference in widget.
-        w.playBotBtn = playBotBtn;
+        w.playBtn = playBtn;
 
         // Append button group.
         w.bodyDiv.appendChild(document.createElement('br'));
@@ -24656,7 +24655,7 @@
     function buildTreatDropdown(w, conf) {
 
         var btnGroup;
-        btnGroup = addPlayWithBotsBtn(w);
+        btnGroup = addPlayBtn(w);
 
         var btnGroupTreatments = document.createElement('div');
         btnGroupTreatments.role = 'group';
@@ -24820,7 +24819,7 @@
                         // Clicked on description?
                         // btnTreatment.innerHTML = t + ' ';
                         w.selectedTreatment = t;
-                        node.say('PLAYWITHBOT', 'SERVER',
+                        node.say('DISPATCH', 'SERVER',
                         w.selectedTreatment);
                     };
 
@@ -24833,7 +24832,7 @@
 
                 }
             }
-            
+
             // Hack to fit nicely the treatments.
             // div = document.createElement('div');
             // div.style.flex = '200px';

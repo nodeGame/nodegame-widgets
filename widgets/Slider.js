@@ -564,15 +564,11 @@
     };
 
     Slider.prototype.getValues = function(opts) {
-        var res, value, nochange;
+        var res, nochange;
         opts = opts || {};
         res = true;
         if ('undefined' === typeof opts.highlight) opts.highlight = true;
-        value = this.currentValue;
-        nochange = this.noChangeCheckbox && this.noChangeCheckbox.checked;
-        if ((this.required && this.totalMove === 0 && !nochange) ||
-           (null !== this.correctValue && this.correctValue !== value)) {
-
+        if (!this.isChoiceDone()) {
             if (opts.highlight) {
                 this.highlight();
                 this.setError(this.getText('error'));
@@ -580,8 +576,10 @@
             res = false;
         }
 
+        nochange = this.noChangeCheckbox && this.noChangeCheckbox.checked;
+
         return {
-            value: value,
+            value: this.currentValue,
             noChange: !!nochange,
             initialValue: this.initialValue,
             totalMove: this.totalMove,
@@ -655,6 +653,21 @@
         this.errorBox.innerHTML = err || '';
         if (err) this.highlight();
         else this.unhighlight();
+    };
+
+    /**
+     * ### Slider.isChoiceDone
+     *
+     * Returns TRUE if the slider has been moved (if requested)
+     *
+     * @return {boolean} TRUE if the choice is done
+     */
+    Slider.prototype.isChoiceDone = function() {
+        var value, nochange;
+        value = this.currentValue;
+        nochange = this.noChangeCheckbox && this.noChangeCheckbox.checked;
+        return !((this.required && this.totalMove === 0 && !nochange) ||
+                (null !== this.correctValue && this.correctValue !== value));
     };
 
 })(node);

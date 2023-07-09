@@ -566,6 +566,17 @@
     };
 
     /**
+     * ### Feedback.isChoiceDone
+     *
+     * Returns TRUE if the feedback was filled as requested
+     *
+     * @return {boolean} TRUE if the feedback was filled as requested
+     */
+    Feedback.prototype.isChoiceDone = function() {
+        return this.verifyFeedback();
+     };
+
+    /**
      * ### Feedback.append
      *
      * Appends widget to this.bodyDiv

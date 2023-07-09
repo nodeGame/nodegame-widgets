@@ -585,10 +585,22 @@
      *    - correctChoice:  the choices are compared against correct ones.
      *    - fixedChoice: compares the choice with given choices.
      *
-     * @return {boolean|null} TRUE if current choice is correct,
-     *   FALSE if it is not correct, or NULL if no correct choice
-     *   was set
+     * If a custom validation is set, it will executed with the current
+     * result of the validation.
      *
+     * @return {object} res The result of the verification and validation.
+     *   The object is of the type:
+     *   ```js
+     *        {
+     *          value: boolean/null // TRUE if current choice is correct,
+     *                              // FALSE if it is not correct,
+     *                              // or NULL if no correct choice was set.
+     *        }
+     *   ```
+     *   The custom validation function, if any is set, can add
+     *   information to the return object.
+     *
+     * @see Dropdown.validation
      */
     Dropdown.prototype.verifyChoice = function () {
 
@@ -825,9 +837,9 @@
      * @see Dropdown.verifyChoice
      */
     Dropdown.prototype.getValues = function (opts) {
-        var obj;
+        var obj, verif;
         opts = opts || {};
-        var verif = this.verifyChoice().value;
+        verif = this.verifyChoice().value;
 
         obj = {
             id: this.id,
@@ -846,6 +858,7 @@
 
         if (null !== this.correctChoice || null !== this.requiredChoice ||
             null !== this.fixedChoice) {
+
             obj.isCorrect = verif;
             if (!obj.isCorrect && opts.highlight) this.highlight();
         }
@@ -853,6 +866,17 @@
             this.setError(this.getText('error', obj.value));
         }
         return obj;
+    };
+
+    /**
+     * ### Dropdown.isChoiceDone
+     *
+     * Returns TRUE if the choice/s has been done, if requested
+     *
+     * @return {boolean} TRUE if the choice is done
+     */
+    Dropdown.prototype.isChoiceDone = function() {
+        return this.verifyChoice().value !== false;
     };
 
     /**
