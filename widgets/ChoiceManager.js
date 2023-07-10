@@ -106,7 +106,6 @@
          */
         this.groupOrder = null;
 
-        // TODO: rename in sharedOptions.
         /**
          * ### ChoiceManager.formsOptions
          *
@@ -121,13 +120,12 @@
             storeRef: false
         };
 
-
         /**
          * ### ChoiceManager.simplify
          *
-         * If TRUE, it returns getValues() returns forms.values
+         * If TRUE, method `ChoiceManager.getValues()` returns only forms.values
          *
-         * @see ChoiceManager.getValue
+         * @see ChoiceManager.getValues
          */
         this.simplify = null;
 
@@ -439,7 +437,6 @@
                 this.doneBtn = node.widgets.append('DoneButton', div, opts);
             }
         }
-
 
         if (this.honeypot) this.addHoneypot(this.honeypot);
     };
@@ -1020,6 +1017,21 @@
 
     // ## Helper methods.
 
+    /**
+     * ### checkFormResult
+     *
+     * Checks if the values returned by a form are valid
+     *
+     * @param {object} res The values returned by a form
+     * @param {object} form The form object
+     * @param {object} opts Configuration options changing the checking behavior
+     * @param {object} out Optional The object returned by
+     *     `ChoiceManager.getValues()`
+     *
+     * @return {bool} TRUE, if conditions for display are met
+     *
+     * @see ChoiceManager.getValues
+     */
     function checkFormResult(res, form, opts, out) {
         var err;
         // Backward compatible (requiredChoice).
@@ -1038,16 +1050,28 @@
         return err;
     }
 
-    function checkConditional(that, id) {
+    /**
+     * ### checkConditional
+     *
+     * Checks if the conditions for the display of a form are met
+     *
+     * @param {ChoiceManager} w This widget instance
+     * @param {string} form The id of the conditional to check
+     *
+     * @return {bool} TRUE, if conditions for display are met
+     *
+     * @see ChoiceManager.conditionals
+     */
+    function checkConditional(w, id) {
         var f, c, form;
-        f = that.conditionals[id];
+        f = w.conditionals[id];
         if (f) {
             if ('function' === typeof f) {
-                return f.call(that, that.formsById);
+                return f.call(w, w.formsById);
             }
             for (c in f) {
                 if (f.hasOwnProperty(c)) {
-                    form = that.formsById[c];
+                    form = w.formsById[c];
                     if (!form) continue;
                     // No multiple choice allowed.
                     if (J.isArray(f[c])) {
@@ -1069,6 +1093,10 @@
      *
      * Must be called after forms have been set already.
      *
+     * @param {ChoiceManager} w This widget instance
+     *
+     * @return {HTMLElement} The <DL> HTML element
+     *
      * @see ChoiceManager.setForms
      * @see ChoiceManager.order
      * @see appendDT
@@ -1088,6 +1116,9 @@
      * ### appendDT
      *
      * Creates a <DT>, adds a widget to it, and <DT> to a <DL>
+     *
+     * @param {HTMLElement} dl The <DL> HTML element
+     * @param {object} form The widget settings to create a new form
      *
      * @see buildDL
      */
