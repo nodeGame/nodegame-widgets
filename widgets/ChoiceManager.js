@@ -1,6 +1,6 @@
 /**
  * # ChoiceManager
- * Copyright(c) 2022 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g., ChoiceTable).
@@ -34,6 +34,7 @@
      * Creates a new instance of ChoiceManager
      */
     function ChoiceManager() {
+
         /**
          * ### ChoiceManager.dl
          *
@@ -240,7 +241,6 @@
         else tmp = !!options.shuffleForms;
         this.shuffleForms = tmp;
 
-
         // Set the group, if any.
         if ('string' === typeof options.group ||
             'number' === typeof options.group) {
@@ -386,27 +386,6 @@
         if (this.shuffleForms) this.order = J.shuffle(this.order);
     };
 
-    /**
-     * ### ChoiceManager.buildDl
-     *
-     * Builds the list of all forms
-     *
-     * Must be called after forms have been set already.
-     *
-     * @see ChoiceManager.setForms
-     * @see ChoiceManager.order
-     */
-    ChoiceManager.prototype.buildDl = function() {
-        var i, len;
-        var form;
-
-        i = -1, len = this.forms.length;
-        for ( ; ++i < len ; ) {
-            form = this.forms[this.order[i]];
-            appendDT(this.dl, form);
-        }
-    };
-
     ChoiceManager.prototype.append = function() {
         var div, opts;
 
@@ -426,9 +405,8 @@
         }
 
         // Dl.
-        this.dl = document.createElement('dl');
-        this.buildDl();
-        // Append Dl.
+        this.dl = buildDL(this);
+        // Append it.
         this.bodyDiv.appendChild(this.dl);
 
         // Creates a free-text textarea, possibly with placeholder text.
@@ -1084,11 +1062,40 @@
         return true;
     }
 
+    /**
+     * ### buildDL
+     *
+     * Builds the list of all forms
+     *
+     * Must be called after forms have been set already.
+     *
+     * @see ChoiceManager.setForms
+     * @see ChoiceManager.order
+     * @see appendDT
+     */
+    function buildDL(w) {
+        var i, len, form, dl;
+        dl = document.createElement('dl');
+        i = -1, len = w.forms.length;
+        for ( ; ++i < len ; ) {
+            form = w.forms[w.order[i]];
+            appendDT(w.dl, form);
+        }
+        return dl;
+    }
+
+     /**
+     * ### appendDT
+     *
+     * Creates a <DT>, adds a widget to it, and <DT> to a <DL>
+     *
+     * @see buildDL
+     */
     function appendDT(dl, form) {
         var dt;
         dt = document.createElement('dt');
         dt.className = 'question';
-        node.widgets.append(form, dt);
+        node.widgets.add(form, dt);
         dl.appendChild(dt);
     }
 
