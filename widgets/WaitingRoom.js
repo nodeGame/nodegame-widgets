@@ -1,6 +1,6 @@
 /**
  * # WaitingRoom
- * Copyright(c) 2022 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays the number of connected/required players to start a game
@@ -295,7 +295,7 @@
         this.disconnectIfNotSelected = null;
 
         /**
-         * ### WaitingRoom.userDispatch
+         * ### WaitingRoom.userCanDispatch
          *
          * If TRUE, the interface allows to start a new game
          *
@@ -304,7 +304,7 @@
          *
          * @see WaitingRoom.playBtn
          */
-        this.userDispatch = null;
+        this.userCanDispatch = null;
 
         /**
          * ### WaitingRoom.playBtn
@@ -313,28 +313,28 @@
          *
          * Will be created if requested by options.
          *
-         * @see WaitingRoom.userDispatch
+         * @see WaitingRoom.userCanDispatch
          */
         this.playBtn = null;
 
         /**
-         * ### WaitingRoom.selectTreatmentOption
+         * ### WaitingRoom.userCanSelectTreat
          *
          * If TRUE, it displays a selector to choose the treatment of the game
          *
          * This option is set by the server, local modifications will
          * not have an effect if server does not allow it
          */
-        this.selectTreatmentOption = null;
+        this.userCanSelectTreat = null;
 
         /**
          * ### WaitingRoom.treatmentBtn
          *
          * Holds the name of selected treatment
          *
-         * Only used if `selectTreatmentOption` is enabled
+         * Only used if `userCanSelectTreat` is enabled
          *
-         * @see WaitingRoom.selectTreatmentOption
+         * @see WaitingRoom.userCanSelectTreat
          */
         this.selectedTreatment = null;
 
@@ -343,11 +343,11 @@
          *
          * If TRUE, after the user defined treatments, it adds default ones
          *
-         * It has effect only if WaitingRoom.selectTreatmentOption is TRUE.
+         * It has effect only if WaitingRoom.userCanSelectTreat is TRUE.
          *
          * Default: TRUE
          *
-         * @see WaitingRoom.selectTreatmentOption
+         * @see WaitingRoom.userCanSelectTreat
          */
         this.addDefaultTreatments = null;
 
@@ -378,8 +378,8 @@
      *   - onSuccess: function executed when all tests succeed
      *   - waitTime: max waiting time to execute all tests (in milliseconds)
      *   - startDate: max waiting time to execute all tests (in milliseconds)
-     *   - userDispatch: displays button to dispatch a new game
-     *   - selectTreatmentOption: displays treatment selector
+     *   - userCanDispatch: displays button to dispatch a new game
+     *   - userCanSelectTreat: displays treatment selector
      *
      * @param {object} conf Configuration object.
      */
@@ -470,10 +470,10 @@
         }
 
 
-        if (conf.userDispatch) this.userDispatch = true;
-        else this.userDispatch = false;
-        if (conf.selectTreatmentOption) this.selectTreatmentOption = true;
-        else this.selectTreatmentOption = false;
+        if (conf.userCanDispatch) this.userCanDispatch = true;
+        else this.userCanDispatch = false;
+        if (conf.userCanSelectTreat) this.userCanSelectTreat = true;
+        else this.userCanSelectTreat = false;
         if ('undefined' !== typeof conf.addDefaultTreatments) {
             this.addDefaultTreatments = !!conf.addDefaultTreatments;
         }
@@ -508,8 +508,8 @@
         this.displayExecMode();
 
         // Displays treatments / play btn.
-        if (this.userDispatch) {
-            if (this.selectTreatmentOption) {
+        if (this.userCanDispatch) {
+            if (this.userCanSelectTreat) {
                 this.treatmentTiles ? buildTreatTiles(this, conf) :
                      buildTreatDropdown(this, conf)
             }
