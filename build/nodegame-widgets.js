@@ -7486,7 +7486,7 @@
                     allFixedPos.push({ fixed: fixedPos, pos: i, idx: idxOrder});
                 }
             }
-            // All fixed position collected, we need to sort them from 
+            // All fixed position collected, we need to sort them from
             // lowest to highest, then we can do the placing.
             if (allFixedPos.length) {
                 allFixedPos.sort(function(a, b) { return a.fixed < b.fixed });
@@ -16378,11 +16378,11 @@
      *
      * Creates a new instance of EndScreen
      *
-     * @param {object} options Configuration options
+     * @param {object} opts Configuration options
      *
      * @see EndScreen.init
      */
-    function EndScreen(options) {
+    function EndScreen(opts) {
 
         /**
          * ### EndScreen.showEmailForm
@@ -16474,86 +16474,85 @@
          *
          * If TRUE, after being appended it sends a 'WIN' message to server
          *
-         * Default: FALSE
+         * Default: TRUE
          */
-        this.askServer = options.askServer || false;
+        this.askServer = true;
     }
 
-    EndScreen.prototype.init = function(options) {
+    EndScreen.prototype.init = function(opts) {
 
-        if (options.email === false) {
+        if ('undefined' !== typeof opts.askServer) {
+            this.askServer = !!opts.askServer;
+        }
+
+        if (opts.email === false) {
             this.showEmailForm = false;
         }
-        else if ('boolean' === typeof options.showEmailForm) {
-            this.showEmailForm = options.showEmailForm;
+        else if ('boolean' === typeof opts.showEmailForm) {
+            this.showEmailForm = opts.showEmailForm;
         }
-        else if ('undefined' !== typeof options.showEmailForm) {
-            throw new TypeError('EndScreen.init: ' +
-                                'options.showEmailForm ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showEmailForm);
+        else if ('undefined' !== typeof opts.showEmailForm) {
+            throw new TypeError('EndScreen.init: opts.showEmailForm ' +
+                                'must be boolean or undefined. Found: ' +
+                                opts.showEmailForm);
         }
 
-        if (options.feedback === false) {
+        if (opts.feedback === false) {
             this.showFeedbackForm = false;
         }
-        else if ('boolean' === typeof options.showFeedbackForm) {
-            this.showFeedbackForm = options.showFeedbackForm;
+        else if ('boolean' === typeof opts.showFeedbackForm) {
+            this.showFeedbackForm = opts.showFeedbackForm;
         }
-        else if ('undefined' !== typeof options.showFeedbackForm) {
-            throw new TypeError('EndScreen.init: ' +
-                                'options.showFeedbackForm ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showFeedbackForm);
+        else if ('undefined' !== typeof opts.showFeedbackForm) {
+            throw new TypeError('EndScreen.init: opts.showFeedbackForm ' +
+                                'must be boolean or undefined. Found: ' + 
+                                opts.showFeedbackForm);
         }
 
-        if (options.totalWin === false) {
+        if (opts.totalWin === false) {
             this.showTotalWin = false;
         }
-        else if ('boolean' === typeof options.showTotalWin) {
-            this.showTotalWin = options.showTotalWin;
+        else if ('boolean' === typeof opts.showTotalWin) {
+            this.showTotalWin = opts.showTotalWin;
         }
-        else if ('undefined' !== typeof options.showTotalWin) {
-            throw new TypeError('EndScreen.init: ' +
-                                'options.showTotalWin ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showTotalWin);
-        }
-
-        if (options.exitCode === false) {
-            options.showExitCode !== false
-        }
-        else if ('boolean' === typeof options.showExitCode) {
-            this.showExitCode = options.showExitCode;
-        }
-        else if ('undefined' !== typeof options.showExitCode) {
-            throw new TypeError('EndScreen.init: ' +
-                                'options.showExitCode ' +
-                                'must be boolean or undefined. ' +
-                                'Found: ' + options.showExitCode);
+        else if ('undefined' !== typeof opts.showTotalWin) {
+            throw new TypeError('EndScreen.init: opts.showTotalWin ' +
+                                'must be boolean or undefined. Found: ' +
+                                opts.showTotalWin);
         }
 
-        if ('string' === typeof options.totalWinCurrency &&
-                 options.totalWinCurrency.trim() !== '') {
-
-            this.totalWinCurrency = options.totalWinCurrency;
+        if (opts.exitCode === false) {
+            opts.showExitCode !== false
         }
-        else if ('undefined' !== typeof options.totalWinCurrency) {
+        else if ('boolean' === typeof opts.showExitCode) {
+            this.showExitCode = opts.showExitCode;
+        }
+        else if ('undefined' !== typeof opts.showExitCode) {
+            throw new TypeError('EndScreen.init: opts.showExitCode ' +
+                                'must be boolean or undefined. Found: ' +
+                                 opts.showExitCode);
+        }
+
+        if ('string' === typeof opts.totalWinCurrency &&
+                 opts.totalWinCurrency.trim() !== '') {
+
+            this.totalWinCurrency = opts.totalWinCurrency;
+        }
+        else if ('undefined' !== typeof opts.totalWinCurrency) {
             throw new TypeError('EndScreen.init: ' +
-                                'options.totalWinCurrency must be undefined ' +
+                                'opts.totalWinCurrency must be undefined ' +
                                 'or a non-empty string. Found: ' +
-                                options.totalWinCurrency);
+                                opts.totalWinCurrency);
         }
 
-        if (options.totalWinCb) {
-            if ('function' === typeof options.totalWinCb) {
-                this.totalWinCb = options.totalWinCb;
+        if (opts.totalWinCb) {
+            if ('function' === typeof opts.totalWinCb) {
+                this.totalWinCb = opts.totalWinCb;
             }
             else {
-                throw new TypeError('EndScreen.init: ' +
-                                    'options.totalWinCb ' +
-                                    'must be function or undefined. ' +
-                                    'Found: ' + options.totalWinCb);
+                throw new TypeError('EndScreen.init: opts.totalWinCb ' +
+                                    'must be function or undefined. Found: ' +
+                                     opts.totalWinCb);
             }
         }
 
@@ -16572,13 +16571,13 @@
                     errString: 'Please enter a valid email and retry'
                 },
                 setMsg: true // Sends a set message for logic's db.
-            }, options.email));
+            }, opts.email));
         }
 
         if (this.showFeedbackForm) {
             this.feedback = node.widgets.get('Feedback', J.mixin(
                 { storeRef: false, minChars: 50, setMsg: true },
-                options.feedback));
+                opts.feedback));
         }
     };
 
