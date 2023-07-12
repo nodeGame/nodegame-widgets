@@ -1,6 +1,6 @@
 /**
  * # SVOGauge
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure users' social value orientation (S.V.O.)
@@ -19,7 +19,6 @@
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
-    SVOGauge.title = 'SVO Gauge';
     SVOGauge.className = 'svogauge';
 
     SVOGauge.texts = {

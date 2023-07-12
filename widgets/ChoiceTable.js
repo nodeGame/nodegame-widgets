@@ -21,7 +21,6 @@
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
-    ChoiceTable.title = 'Make your choice';
     ChoiceTable.className = 'choicetable';
 
     ChoiceTable.texts = {

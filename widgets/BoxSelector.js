@@ -1,6 +1,6 @@
 /**
  * # BoxSelector
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple box that opens a menu of items to choose from
@@ -22,7 +22,6 @@
         'of items to choose from.';
 
     BoxSelector.panel = false;
-    BoxSelector.title = false;
     BoxSelector.className = 'boxselector';
 
     /**

@@ -1,6 +1,6 @@
 /**
  * # Goto
- * Copyright(c) 2022 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a simple interface to go to a step in the sequence.
@@ -36,7 +36,6 @@
     Goto.description = 'Creates a simple interface to move across ' +
                        'steps in the sequence.';
 
-    Goto.title = false;
     Goto.panel = false;
     Goto.className = 'goto';
 

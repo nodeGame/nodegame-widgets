@@ -1,6 +1,6 @@
 /**
  * # ChernoffFaces
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -21,7 +21,6 @@
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
-    ChernoffFaces.title = 'ChernoffFaces';
     ChernoffFaces.className = 'chernofffaces';
 
     // ## Dependencies

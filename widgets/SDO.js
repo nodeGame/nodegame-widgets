@@ -1,6 +1,6 @@
 /**
  * # SDO
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure users' social dominance orientation (S.D.O.)
@@ -19,7 +19,6 @@
     SDO.description = 'Displays an interface to measure Social ' +
         'Dominance Orientation (S.D.O.).';
 
-    SDO.title = 'SDO';
     SDO.className = 'SDO';
 
 

@@ -16505,7 +16505,7 @@
         }
         else if ('undefined' !== typeof opts.showFeedbackForm) {
             throw new TypeError('EndScreen.init: opts.showFeedbackForm ' +
-                                'must be boolean or undefined. Found: ' + 
+                                'must be boolean or undefined. Found: ' +
                                 opts.showFeedbackForm);
         }
 
@@ -18746,7 +18746,6 @@
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
-    MoodGauge.title = 'Mood Gauge';
     MoodGauge.className = 'moodgauge';
 
     MoodGauge.texts.mainText = 'Thinking about yourself and how you normally' +

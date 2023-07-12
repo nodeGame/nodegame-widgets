@@ -1,3 +1,12 @@
+/**
+ * # DropDown
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
+ * MIT Licensed
+ *
+ * Creates a customizable dropdown menu
+ *
+ * www.nodegame.org
+ */
 (function(node) {
 
     node.widgets.register('Dropdown', Dropdown);
@@ -26,8 +35,6 @@
         }
     };
 
-    // Title is displayed in the header.
-    Dropdown.title = false;
     // Classname is added to the widgets.
     Dropdown.className = 'dropdown';
 

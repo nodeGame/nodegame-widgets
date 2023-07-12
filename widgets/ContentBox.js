@@ -1,6 +1,6 @@
 /**
  * # ContentBox
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays some content.
@@ -18,7 +18,6 @@
     ContentBox.version = '0.2.0';
     ContentBox.description = 'Simply displays some content';
 
-    ContentBox.title = false;
     ContentBox.panel = false;
     ContentBox.className = 'contentbox';
 

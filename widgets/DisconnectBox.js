@@ -1,6 +1,6 @@
 /**
  * # DisconnectBox
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Shows a disconnect button
@@ -18,7 +18,6 @@
     DisconnectBox.version = '0.4.0';
     DisconnectBox.description = 'Monitors and handles disconnections';
 
-    DisconnectBox.title = false;
     DisconnectBox.panel = false;
     DisconnectBox.className = 'disconnectbox';
 

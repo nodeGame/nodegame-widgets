@@ -1,6 +1,6 @@
 /**
  * # CustomInputGroup
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several custom input widgets
@@ -21,7 +21,6 @@
     CustomInputGroup.description = 'Groups together and manages sets of ' +
         'CustomInput widgets.';
 
-    CustomInputGroup.title = false;
     CustomInputGroup.className = 'custominput custominputgroup';
 
     CustomInputGroup.separator = '::';

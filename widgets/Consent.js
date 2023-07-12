@@ -1,6 +1,6 @@
 /**
  * # Consent
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays a consent form with buttons to accept/reject it
@@ -18,7 +18,6 @@
     Consent.version = '0.4.0';
     Consent.description = 'Displays a configurable consent form.';
 
-    Consent.title = false;
     Consent.panel = false;
     Consent.className = 'consent';
 

@@ -1,6 +1,6 @@
 /**
  * # RiskGauge
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure risk preferences with different methods
@@ -21,7 +21,6 @@
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences with different methods.';
 
-    RiskGauge.title = 'Risk Gauge';
     RiskGauge.className = 'riskgauge';
 
     RiskGauge.texts =  {

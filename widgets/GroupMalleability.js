@@ -1,6 +1,6 @@
 /**
  * # GroupMalleability
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure users' perception of group malleability.
@@ -56,10 +56,6 @@
             'selecting a number from 1 to 7 on the scale below. <em>You ' +
             'can work quickly, your first feeling is generally best.</em>'
     };
-
-    // ## Dependencies
-
-    GroupMalleability.dependencies = {};
 
     /**
      * ## GroupMalleability constructor

@@ -1,6 +1,6 @@
 /**
  * # VisualRound
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -21,7 +21,6 @@
     VisualRound.version = '0.9.0';
     VisualRound.description = 'Displays current/total/left round/stage/step. ';
 
-    VisualRound.title = false;
     VisualRound.className = 'visualround';
 
     VisualRound.texts = {

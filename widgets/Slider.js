@@ -20,7 +20,6 @@
     Slider.version = '0.7.0';
     Slider.description = 'Creates a configurable slider';
 
-    Slider.title = false;
     Slider.className = 'slider';
 
     Slider.texts = {

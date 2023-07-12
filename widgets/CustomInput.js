@@ -1,6 +1,6 @@
 /**
  * # CustomInput
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable input form with validation
@@ -18,7 +18,6 @@
     CustomInput.version = '0.12.0';
     CustomInput.description = 'Creates a configurable input form';
 
-    CustomInput.title = false;
     CustomInput.panel = false;
     CustomInput.className = 'custominput';
 

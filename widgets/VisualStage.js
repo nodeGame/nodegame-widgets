@@ -1,6 +1,6 @@
 /**
  * # VisualStage
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Shows the name of the current, previous and next step.
@@ -21,7 +21,6 @@
     VisualStage.description =
         'Displays the name of the current, previous and next step of the game.';
 
-    VisualStage.title = false;
     VisualStage.className = 'visualstage';
 
     VisualStage.texts = {

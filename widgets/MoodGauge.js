@@ -19,7 +19,6 @@
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
-    MoodGauge.title = 'Mood Gauge';
     MoodGauge.className = 'moodgauge';
 
     MoodGauge.texts.mainText = 'Thinking about yourself and how you normally' +

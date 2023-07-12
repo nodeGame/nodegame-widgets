@@ -1,6 +1,6 @@
 /**
  * # Chat
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -62,7 +62,6 @@
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the server.';
 
-    Chat.title = 'Chat';
     Chat.className = 'chat';
 
     Chat.panel = false;

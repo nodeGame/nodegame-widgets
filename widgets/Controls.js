@@ -1,6 +1,6 @@
 /**
  * # Controls
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -20,7 +20,6 @@
     Controls.version = '0.5.1';
     Controls.description = 'Wraps a collection of user-inputs controls.';
 
-    Controls.title = 'Controls';
     Controls.className = 'controls';
 
     /**
@@ -77,7 +76,7 @@
     }
 
     Controls.prototype.add = function(root, id, attributes) {
-        // TODO: replace W.addTextInput 
+        // TODO: replace W.addTextInput
         //return W.addTextInput(root, id, attributes);
     };
 
@@ -193,7 +192,7 @@
                     };
                 }
 
-                if (attributes.label) {                    
+                if (attributes.label) {
                     W.add('label', container, {
                         'for': elem.id,
                         innerHTML: attributes.label
@@ -428,7 +427,7 @@
         for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
                 el = W.getElementById(key);
-                if (el.checked) return el.value;                
+                if (el.checked) return el.value;
             }
         }
         return false;

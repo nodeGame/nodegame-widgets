@@ -1,6 +1,6 @@
 /**
  * # EmailForm
- * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays a form to input email
@@ -18,7 +18,6 @@
     EmailForm.version = '0.13.1';
     EmailForm.description = 'Displays a configurable email form.';
 
-    EmailForm.title = false;
     EmailForm.className = 'emailform';
 
     EmailForm.texts = {

@@ -1,6 +1,6 @@
 /**
  * # BackButton
- * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed goes to the previous step
@@ -19,7 +19,6 @@
     BackButton.description = 'Creates a button that if ' +
         'pressed goes to the previous step.';
 
-    BackButton.title = false;
     BackButton.panel = false;
     BackButton.className = 'backbutton';
     BackButton.texts.back = 'Back';

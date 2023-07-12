@@ -1,6 +1,6 @@
 /**
  * # Feedback
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -22,7 +22,7 @@
     Feedback.version = '1.6.0';
     Feedback.description = 'Displays a configurable feedback form';
 
-    Feedback.title = 'Feedback';
+    Feedback.title = false;
     Feedback.className = 'feedback';
 
     Feedback.texts = {

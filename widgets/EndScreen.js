@@ -1,6 +1,6 @@
 /**
  * # EndScreen
- * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -20,7 +20,6 @@
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
-    EndScreen.title = false;
     EndScreen.className = 'endscreen';
 
     EndScreen.texts = {
