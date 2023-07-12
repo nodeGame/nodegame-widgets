@@ -50,11 +50,11 @@
      *
      * Creates a new instance of EndScreen
      *
-     * @param {object} options Configuration options
+     * @param {object} opts Configuration options
      *
      * @see EndScreen.init
      */
-    function EndScreen(options) {
+    function EndScreen(opts) {
 
         /**
          * ### EndScreen.showEmailForm
@@ -146,12 +146,16 @@
          *
          * If TRUE, after being appended it sends a 'WIN' message to server
          *
-         * Default: FALSE
+         * Default: TRUE
          */
-        this.askServer = options.askServer || false;
+        this.askServer = true;
     }
 
     EndScreen.prototype.init = function(options) {
+
+        if ('undefined' !== typeof opts.askServer) {
+            this.askServer = !!opts.askServer;
+        }
 
         if (options.email === false) {
             this.showEmailForm = false;
