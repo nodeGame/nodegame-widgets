@@ -2091,7 +2091,7 @@
 
 /**
  * # BackButton
- * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed goes to the previous step
@@ -2110,7 +2110,6 @@
     BackButton.description = 'Creates a button that if ' +
         'pressed goes to the previous step.';
 
-    BackButton.title = false;
     BackButton.panel = false;
     BackButton.className = 'backbutton';
     BackButton.texts.back = 'Back';
@@ -2367,7 +2366,7 @@
 
 /**
  * # BoxSelector
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple box that opens a menu of items to choose from
@@ -2389,7 +2388,6 @@
         'of items to choose from.';
 
     BoxSelector.panel = false;
-    BoxSelector.title = false;
     BoxSelector.className = 'boxselector';
 
     /**
@@ -2635,7 +2633,7 @@
 
 /**
  * # Chat
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -2697,7 +2695,6 @@
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the server.';
 
-    Chat.title = 'Chat';
     Chat.className = 'chat';
 
     Chat.panel = false;
@@ -3493,7 +3490,7 @@
 
 /**
  * # ChernoffFaces
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -3514,7 +3511,6 @@
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
-    ChernoffFaces.title = 'ChernoffFaces';
     ChernoffFaces.className = 'chernofffaces';
 
     // ## Dependencies
@@ -5183,7 +5179,6 @@
     ChoiceManager.description = 'Groups together and manages a set of ' +
         'survey forms (e.g., ChoiceTable).';
 
-    ChoiceManager.title = false;
     ChoiceManager.className = 'choicemanager';
 
     // ## Dependencies
@@ -6337,7 +6332,6 @@
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
-    ChoiceTable.title = 'Make your choice';
     ChoiceTable.className = 'choicetable';
 
     ChoiceTable.texts = {
@@ -10114,7 +10108,7 @@
 
 /**
  * # Consent
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays a consent form with buttons to accept/reject it
@@ -10132,7 +10126,6 @@
     Consent.version = '0.4.0';
     Consent.description = 'Displays a configurable consent form.';
 
-    Consent.title = false;
     Consent.panel = false;
     Consent.className = 'consent';
 
@@ -10366,7 +10359,7 @@
 
 /**
  * # ContentBox
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays some content.
@@ -10384,7 +10377,6 @@
     ContentBox.version = '0.2.0';
     ContentBox.description = 'Simply displays some content';
 
-    ContentBox.title = false;
     ContentBox.panel = false;
     ContentBox.className = 'contentbox';
 
@@ -10466,7 +10458,7 @@
 
 /**
  * # Controls
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates and manipulates a set of forms
@@ -10486,7 +10478,6 @@
     Controls.version = '0.5.1';
     Controls.description = 'Wraps a collection of user-inputs controls.';
 
-    Controls.title = 'Controls';
     Controls.className = 'controls';
 
     /**
@@ -10543,7 +10534,7 @@
     }
 
     Controls.prototype.add = function(root, id, attributes) {
-        // TODO: replace W.addTextInput 
+        // TODO: replace W.addTextInput
         //return W.addTextInput(root, id, attributes);
     };
 
@@ -10659,7 +10650,7 @@
                     };
                 }
 
-                if (attributes.label) {                    
+                if (attributes.label) {
                     W.add('label', container, {
                         'for': elem.id,
                         innerHTML: attributes.label
@@ -10894,7 +10885,7 @@
         for (key in this.features) {
             if (this.features.hasOwnProperty(key)) {
                 el = W.getElementById(key);
-                if (el.checked) return el.value;                
+                if (el.checked) return el.value;
             }
         }
         return false;
@@ -10904,7 +10895,7 @@
 
 /**
  * # CustomInput
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable input form with validation
@@ -10922,7 +10913,6 @@
     CustomInput.version = '0.12.0';
     CustomInput.description = 'Creates a configurable input form';
 
-    CustomInput.title = false;
     CustomInput.panel = false;
     CustomInput.className = 'custominput';
 
@@ -12564,7 +12554,7 @@
 
 /**
  * # CustomInputGroup
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a table that groups together several custom input widgets
@@ -12585,7 +12575,6 @@
     CustomInputGroup.description = 'Groups together and manages sets of ' +
         'CustomInput widgets.';
 
-    CustomInputGroup.title = false;
     CustomInputGroup.className = 'custominput custominputgroup';
 
     CustomInputGroup.separator = '::';
@@ -14474,7 +14463,7 @@
 
 /**
  * # DisconnectBox
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Shows a disconnect button
@@ -14492,7 +14481,6 @@
     DisconnectBox.version = '0.4.0';
     DisconnectBox.description = 'Monitors and handles disconnections';
 
-    DisconnectBox.title = false;
     DisconnectBox.panel = false;
     DisconnectBox.className = 'disconnectbox';
 
@@ -14635,7 +14623,7 @@
 
 /**
  * # DoneButton
- * Copyright(c) 2020 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a button that if pressed emits node.done()
@@ -14654,7 +14642,6 @@
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
-    DoneButton.title = false;
     DoneButton.panel = false;
     DoneButton.className = 'donebutton';
     DoneButton.texts.done = 'Done';
@@ -14944,6 +14931,15 @@
 
 })(node);
 
+/**
+ * # DropDown
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
+ * MIT Licensed
+ *
+ * Creates a customizable dropdown menu
+ *
+ * www.nodegame.org
+ */
 (function(node) {
 
     node.widgets.register('Dropdown', Dropdown);
@@ -14972,8 +14968,6 @@
         }
     };
 
-    // Title is displayed in the header.
-    Dropdown.title = false;
     // Classname is added to the widgets.
     Dropdown.className = 'dropdown';
 
@@ -15908,7 +15902,7 @@
 
 /**
  * # EmailForm
- * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays a form to input email
@@ -15926,7 +15920,6 @@
     EmailForm.version = '0.13.1';
     EmailForm.description = 'Displays a configurable email form.';
 
-    EmailForm.title = false;
     EmailForm.className = 'emailform';
 
     EmailForm.texts = {
@@ -16328,7 +16321,7 @@
 
 /**
  * # EndScreen
- * Copyright(c) 2021 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates an interface to display final earnings, exit code, etc.
@@ -16348,7 +16341,6 @@
     EndScreen.description = 'Game end screen. With end game message, ' +
                             'email form, and exit code.';
 
-    EndScreen.title = false;
     EndScreen.className = 'endscreen';
 
     EndScreen.texts = {
@@ -16829,7 +16821,7 @@
 
 /**
  * # Feedback
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -16851,7 +16843,7 @@
     Feedback.version = '1.6.0';
     Feedback.description = 'Displays a configurable feedback form';
 
-    Feedback.title = 'Feedback';
+    Feedback.title = false;
     Feedback.className = 'feedback';
 
     Feedback.texts = {
@@ -17782,7 +17774,7 @@
 
 /**
  * # Goto
- * Copyright(c) 2022 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a simple interface to go to a step in the sequence.
@@ -17818,7 +17810,6 @@
     Goto.description = 'Creates a simple interface to move across ' +
                        'steps in the sequence.';
 
-    Goto.title = false;
     Goto.panel = false;
     Goto.className = 'goto';
 
@@ -17906,7 +17897,7 @@
 
 /**
  * # GroupMalleability
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure users' perception of group malleability.
@@ -17962,10 +17953,6 @@
             'selecting a number from 1 to 7 on the scale below. <em>You ' +
             'can work quickly, your first feeling is generally best.</em>'
     };
-
-    // ## Dependencies
-
-    GroupMalleability.dependencies = {};
 
     /**
      * ## GroupMalleability constructor
@@ -18118,7 +18105,7 @@
     LanguageSelector.version = '0.6.2';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
-    LanguageSelector.title = 'Language';
+
     LanguageSelector.className = 'languageselector';
 
     LanguageSelector.texts.loading = 'Loading language information...';
@@ -19675,7 +19662,7 @@
 
 /**
  * # RiskGauge
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure risk preferences with different methods
@@ -19696,7 +19683,6 @@
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences with different methods.';
 
-    RiskGauge.title = 'Risk Gauge';
     RiskGauge.className = 'riskgauge';
 
     RiskGauge.texts =  {
@@ -20357,7 +20343,7 @@
 
 /**
  * # SDO
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure users' social dominance orientation (S.D.O.)
@@ -20376,7 +20362,6 @@
     SDO.description = 'Displays an interface to measure Social ' +
         'Dominance Orientation (S.D.O.).';
 
-    SDO.title = 'SDO';
     SDO.className = 'SDO';
 
 
@@ -20662,7 +20647,6 @@
     Slider.version = '0.7.0';
     Slider.description = 'Creates a configurable slider';
 
-    Slider.title = false;
     Slider.className = 'slider';
 
     Slider.texts = {
@@ -21316,7 +21300,7 @@
 
 /**
  * # SVOGauge
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to measure users' social value orientation (S.V.O.)
@@ -21335,7 +21319,6 @@
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
-    SVOGauge.title = 'SVO Gauge';
     SVOGauge.className = 'svogauge';
 
     SVOGauge.texts = {
@@ -21641,7 +21624,7 @@
 
 /**
  * # VisualRound
- * Copyright(c) 2020 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -21662,7 +21645,6 @@
     VisualRound.version = '0.9.0';
     VisualRound.description = 'Displays current/total/left round/stage/step. ';
 
-    VisualRound.title = false;
     VisualRound.className = 'visualround';
 
     VisualRound.texts = {
@@ -22714,7 +22696,7 @@
 
 /**
  * # VisualStage
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Shows the name of the current, previous and next step.
@@ -22735,7 +22717,6 @@
     VisualStage.description =
         'Displays the name of the current, previous and next step of the game.';
 
-    VisualStage.title = false;
     VisualStage.className = 'visualstage';
 
     VisualStage.texts = {
