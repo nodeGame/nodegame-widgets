@@ -1,6 +1,6 @@
 /**
  * # ChoiceTable
- * Copyright(c) 2021 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
@@ -1139,8 +1139,10 @@
             throw new Error('ChoiceTable.setChoices: choices array is empty');
         }
         // Check and drop previous "other" choices.
-        idxOther = choices.indexOf(this.getText('other'));
-        if (this.other && idxOther >= 0) choices.splice(idxOther, 1);
+        if (this.other) {
+            idxOther = choices.indexOf(this.getText('other'));
+            if (idxOther >= 0) choices.splice(idxOther, 1);
+        }
         this.choices = choices;
         len = choices.length;
 
@@ -1148,6 +1150,41 @@
         this.order = J.seq(0, len-1);
         if (this.shuffleChoices) this.order = J.shuffle(this.order);
 
+        // Loop through all choices and see if there is any fixed position.
+        // TODO: we could add validation here.
+        (function(w) {
+            var i, c, fixedPos, idxOrder,allFixedPos = [];
+            // See if there is any fixed-choice.
+            for (i = -1 ; ++i < len ; ) {
+                fixedPos = undefined;
+                idxOrder = w.order[i];
+                c = choices[idxOrder];
+                if (J.isArray(c)) {
+                    // Third position after id and text is fixedPos.
+                    fixedPos = c[2];
+                }
+                else if ('object' === typeof choices[i]) {
+                    fixedPos = c.fixedPos;
+                }
+                if ('undefined' !== typeof fixedPos) {
+                    allFixedPos.push({ fixed: fixedPos, pos: i, idx: idxOrder});
+                }
+            }
+            // All fixed position collected, we need to sort them from
+            // lowest to highest, then we can do the placing.
+            if (allFixedPos.length) {
+                allFixedPos.sort(function(a, b) { return a.fixed < b.fixed });
+                len = allFixedPos.length;
+                for (i = -1 ; ++i < len ; ) {
+                    c = allFixedPos[i];
+                    // Remove from old position and place it in new one.
+                    w.order.splice(c.pos, 1);
+                    w.order.splice(c.fixed, 0, c.idx);
+                }
+            }
+        })(this)
+
+        // Add 'Other' field at the end.
         if (this.other) {
             this.choices[len] = this.getText('other');
             this.order[len] = len
