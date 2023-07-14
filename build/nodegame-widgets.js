@@ -10010,7 +10010,6 @@
         s.group = that.id;
         s.groupOrder = i+1;
         s.orientation = that.orientation;
-        s.title = false;
         s.listeners = false;
         s.separator = that.separator;
 
@@ -16842,7 +16841,6 @@
     Feedback.version = '1.6.0';
     Feedback.description = 'Displays a configurable feedback form';
 
-    Feedback.title = false;
     Feedback.className = 'feedback';
 
     Feedback.texts = {
