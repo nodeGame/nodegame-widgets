@@ -8739,7 +8739,6 @@
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
-    ChoiceTableGroup.title = 'Make your choice';
     ChoiceTableGroup.className = 'choicetable choicetablegroup';
 
     ChoiceTableGroup.separator = '::';
@@ -18714,7 +18713,7 @@
 
 /**
  * # MoodGauge
- * Copyright(c) 2019 Stefano Balietti
+ * Copyright(c) 2023 Stefano Balietti
  * MIT Licensed
  *
  * Displays an interface to query users about mood, emotions and well-being
@@ -18729,7 +18728,7 @@
 
     // ## Meta-data
 
-    MoodGauge.version = '0.4.0';
+    MoodGauge.version = '0.5.0';
     MoodGauge.description = 'Displays an interface to measure mood ' +
         'and emotions.';
 
@@ -18929,14 +18928,13 @@
     // ## Available methods.
 
     // ### I_PANAS_SF
-    function I_PANAS_SF(options) {
-        var items, emotions, choices, left, right;
+    function I_PANAS_SF(opts) {
+        var items, emotions, choices, left, right, l;
         var gauge, i, len;
 
-        choices = options.choices ||
-            [ '1', '2', '3', '4', '5' ];
+        choices = opts.choices || [ '1', '2', '3', '4', '5' ];
 
-        emotions = options.emotions || [
+        emotions = opts.emotions || [
             'Upset',
             'Hostile',
             'Alert',
@@ -18948,32 +18946,32 @@
             'Afraid',
             'Active'
         ];
-
-        left = options.left || 'never';
-
-        right = options.right || 'always';
-
         len = emotions.length;
+
+        left = opts.left || 'never';
+        right = opts.right || 'always';
 
         items = new Array(len);
 
         i = -1;
         for ( ; ++i < len ; ) {
+            l = '<span class="emotion">' + emotions[i] + ':</span> ' + left;
             items[i] = {
                 id: emotions[i],
-                left: '<span class="emotion">' + emotions[i] + ':</span> never',
+                left: l,
                 right: right,
-                choices: choices
+                sameCellWidth: '200px'
             };
         }
 
         gauge = node.widgets.get('ChoiceTableGroup', {
-            id: options.id || 'ipnassf',
+            id: opts.id || 'ipnassf',
             items: items,
             mainText: this.mainText || this.getText('mainText'),
-            title: false,
             requiredChoice: true,
-            storeRef: false
+            storeRef: false,
+            header: opts.header,
+            choices: choices,
         });
 
         return gauge;
