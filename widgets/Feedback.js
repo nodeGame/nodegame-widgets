@@ -22,7 +22,6 @@
     Feedback.version = '1.6.0';
     Feedback.description = 'Displays a configurable feedback form';
 
-    Feedback.title = false;
     Feedback.className = 'feedback';
 
     Feedback.texts = {

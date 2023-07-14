@@ -21,7 +21,6 @@
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
-    ChoiceTableGroup.title = 'Make your choice';
     ChoiceTableGroup.className = 'choicetable choicetablegroup';
 
     ChoiceTableGroup.separator = '::';
@@ -1293,7 +1292,6 @@
         s.group = that.id;
         s.groupOrder = i+1;
         s.orientation = that.orientation;
-        s.title = false;
         s.listeners = false;
         s.separator = that.separator;
 
