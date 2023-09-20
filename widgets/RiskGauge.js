@@ -527,9 +527,6 @@
                     type: 'flat',
                     required: true,
                     panel: false,
-                    // texts: {
-                    //     currentValue: that.getText('sliderValue')
-                    // },
                     onmove: function(value) {
                         var i, div, c, v;
 
