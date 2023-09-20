@@ -20216,9 +20216,9 @@
 
                         // Update display.
                         W.gid('bomb_numBoxes').innerText = value;
-                        c = that.currency;
-                        v = that.boxValue;
                         if (that.withPrize) {
+                            c = that.currency;
+                            v = that.boxValue;
                             W.gid('bomb_boxValue').innerText = v + c;
                             W.gid('bomb_totalWin').innerText =
                                 Number((value * v)).toFixed(2) + c;
@@ -20248,7 +20248,7 @@
                     W.add('p', infoDiv, {
                         innerHTML: that.getText('bomb_boxValue') +
                         '&nbsp;<span id="bomb_boxValue">' +
-                        this.boxValue + '</span>'
+                        that.boxValue + '</span>'
                     });
                     W.add('p', infoDiv, {
                         innerHTML: that.getText('bomb_totalWin') +
