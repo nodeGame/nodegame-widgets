@@ -1409,9 +1409,7 @@
         else if ('undefined' !== typeof WidgetProto.title) {
             widget.title = WidgetProto.title;
         }
-        else {
-            widget.title = '&nbsp;';
-        }
+
         widget.panel = 'undefined' === typeof opts.panel ?
             WidgetProto.panel : opts.panel;
         widget.footer = 'undefined' === typeof opts.footer ?
@@ -18082,7 +18080,7 @@
 
 /**
  * # LanguageSelector
- * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
+ * Copyright(c) 2023 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Manages and displays information about languages available and selected
@@ -18099,13 +18097,16 @@
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.6.2';
+    LanguageSelector.version = '0.6.3';
     LanguageSelector.description = 'Display information about the current ' +
-        'language and allows to change language.';
+        'language and allows users to change it.';
+
+    LanguageSelector.title = 'Select Language';
+
 
     LanguageSelector.className = 'languageselector';
 
-    LanguageSelector.texts.loading = 'Loading language information...';
+    LanguageSelector.texts.loading = 'Loading...';
 
     /**
      * ## LanguageSelector constructor
@@ -18257,13 +18258,14 @@
          * @see LanguageSelector.setLanguage
          */
         this.onLangCallback = function(msg) {
-            var language;
+            var language, label, display, counter;
 
             // Clear display.
             while (that.displayForm.firstChild) {
                 that.displayForm.removeChild(that.displayForm.firstChild);
             }
 
+            counter = 0;
             // Initialize widget.
             that.availableLanguages = msg.data;
             if (that.usingButtons) {
@@ -18271,31 +18273,32 @@
                 // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
-                        that.optionsLabel[language] = W.get('label', {
+                        label = W.get('label', {
                             id: language + 'Label',
                             'for': language + 'RadioButton'
                         });
 
-                        that.optionsDisplay[language] = W.get('input', {
+                        display = W.get('input', {
                             id: language + 'RadioButton',
                             type: 'radio',
                             name: 'languageButton',
                             value: msg.data[language].name
                         });
 
-                        that.optionsDisplay[language].onclick =
-                            makeSetLanguageOnClick(language);
+                        display.onclick = makeOnClick(language);
 
-                        that.optionsLabel[language].appendChild(
-                            that.optionsDisplay[language]);
-                        that.optionsLabel[language].appendChild(
-                            document.createTextNode(
-                                msg.data[language].nativeName));
-                        W.add('br', that.displayForm);
-                        that.optionsLabel[language].className =
-                            'unselectedButtonLabel';
-                        that.displayForm.appendChild(
-                            that.optionsLabel[language]);
+                        label.appendChild(display);
+
+                        label.appendChild(document.createTextNode(
+                            msg.data[language].nativeName));
+
+                        if (++counter !== 1) W.add('br', that.displayForm);
+                        label.className = 'unselected';
+                        that.displayForm.appendChild(label);
+
+                        that.optionsLabel[language] = label;
+                        that.optionsDisplay[language] = display;
+
                     }
                 }
             }
@@ -18303,18 +18306,19 @@
 
                 that.displaySelection = W.get('select', 'selectLanguage');
                 for (language in msg.data) {
-                    that.optionsLabel[language] =
+                    label =
                         document.createTextNode(msg.data[language].nativeName);
-                    that.optionsDisplay[language] = W.get('option', {
+                    display = W.get('option', {
                         id: language + 'Option',
                         value: language
                     });
-                    that.optionsDisplay[language].appendChild(
-                        that.optionsLabel[language]);
-                    that.displaySelection.appendChild(
-                        that.optionsDisplay[language]);
+                    display.appendChild(label);
+                    that.displaySelection.appendChild(display);
 
+                    that.optionsLabel[language] = label;
+                    that.optionsDisplay[language] = display
                 }
+
                 that.displayForm.appendChild(that.displaySelection);
                 that.displayForm.onchange = function() {
                     that.setLanguage(that.displaySelection.value,
@@ -18335,7 +18339,7 @@
                 that.onLangCallbackExtension = null;
             }
 
-            function makeSetLanguageOnClick(langStr) {
+            function makeOnClick(langStr) {
                 return function() {
                     that.setLanguage(langStr, that.updatePlayer === 'onselect');
                 };
@@ -18440,7 +18444,7 @@
                 this.optionsDisplay[this.currentLanguage].checked =
                     'unchecked';
                 this.optionsLabel[this.currentLanguage].className =
-                    'unselectedButtonLabel';
+                    'unselected';
             }
         }
 
@@ -18450,8 +18454,7 @@
         if (this.usingButtons) {
             // Check language button and change className of label.
             this.optionsDisplay[this.currentLanguage].checked = 'checked';
-            this.optionsLabel[this.currentLanguage].className =
-                'selectedButtonLabel';
+            this.optionsLabel[this.currentLanguage].className = 'selected';
         }
         else {
             this.displaySelection.value = this.currentLanguage;
