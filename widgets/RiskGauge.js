@@ -373,6 +373,10 @@
 
         // Public variables.
 
+        // Enables done button on open (only if DoneButton is found under
+        // node.game.doneButton).
+        this.enableDoneBtn = opts.enableDoneButton !== false;
+
         // Store locally because they are overwritten. TODO: check if needed.
         this._highlight = this.highlight;
         this._unhighlight = this.unhighlight;
@@ -628,6 +632,12 @@
                     bombResult.innerHTML = that.getText(cl);
                     bombResult.className += (' ' + cl);
 
+                    // Enable done button, if found and disabled.
+                    if (that.enableDoneBtn && node.game.doneButton &&
+                        node.game.doneButton.isDisabled()) {
+
+                        node.game.doneButton.enable();
+                    }
                     if (that.onopen) that.onopen(isWinner, that);
                 };
             }
