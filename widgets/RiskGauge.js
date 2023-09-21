@@ -602,7 +602,7 @@
                 bombResult = W.add('p', infoDiv, { id: 'bomb_result' });
 
                 button = W.add('button', that.bodyDiv, {
-                    className: 'btn-danger',
+                    className: 'btn btn-danger',
                     innerHTML: that.getText('bomb_openButton'),
                 });
                 // Initially hidden.

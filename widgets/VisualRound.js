@@ -18,7 +18,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.9.0';
+    VisualRound.version = '0.9.1';
     VisualRound.description = 'Displays current/total/left round/stage/step. ';
 
     VisualRound.className = 'visualround';
@@ -227,12 +227,6 @@
         if (!this.stager) this.stager = this.gamePlot.stager;
 
         this.updateInformation();
-
-        if (!this.options.displayMode && this.options.displayModeNames) {
-            console.log('***VisualTimer.init: options.displayModeNames is ' +
-                        'deprecated. Use options.displayMode instead.***');
-            this.options.displayMode = this.options.displayModeNames;
-        }
 
         if (!this.options.displayMode) {
             this.setDisplayMode([
