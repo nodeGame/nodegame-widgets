@@ -227,7 +227,11 @@
                 na.onclick = null;
 
                 // Disconnect, if requested.
-                if (that.disconnect) node.socket.disconnect();
+                if (that.disconnect) {
+                    // Destroy disconnectBox (if found) before disconnecting.
+                    if (node.game.discBox) node.game.discBox.destroy();
+                    node.socket.disconnect();
+                }
 
                 W.hide('consent');
                 W.show('notAgreed');
