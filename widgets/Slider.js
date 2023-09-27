@@ -223,13 +223,9 @@
             if (that.isHighlighted()) that.unhighlight();
 
             _listener = function() {
-                var percent, diffPercent;
+                var percent, diff;
 
                 percent = (that.slider.value - that.min) * that.scale;
-                diffPercent = percent - that.currentValue;
-                that.currentValue = percent;
-
-                // console.log(diffPercent);
                 // console.log(that.slider.value, percent);
 
                 if (that.type === 'volume') {
@@ -243,7 +239,7 @@
 
                 if (that.displayValue) {
                     that.valueSpan.innerHTML =
-                        that.getText('currentValue', that.slider.value);
+                    that.getText('currentValue', that.slider.value);
                 }
 
                 if (that.displayNoChange && noChange !== true) {
@@ -254,11 +250,21 @@
                 }
 
                 if (!init) {
-                    that.totalMove += Math.abs(diffPercent);
+                    // Old (currentValue was a percent).
+                    // diffPercent = percent - that.currentValue;
+                    // that.totalMove += Math.abs(diffPercent);
+                    diff = that.slider.value - that.currentValue;
+                    // console.log(diff);
+                    that.totalMove += Math.abs(diff);
                     if (that.onmove) {
-                        that.onmove.call(that, that.slider.value, diffPercent);
+                        that.onmove.call(that, that.slider.value, diff);
                     }
                 }
+
+                // Update currentValue.
+                // Change: vefore currentValue was equal to percent.
+                that.currentValue = that.slider.value;
+
 
                 timeOut = null;
             };
