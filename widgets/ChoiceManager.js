@@ -27,6 +27,8 @@
         BackButton: {}, DoneButton: {}
     };
 
+    var C = 'ChoiceManager.';
+
     /**
      * ## ChoiceManager constructor
      *
@@ -202,6 +204,22 @@
          */
         this.honeypot = null;
 
+        /**
+         * ### ChoiceManager.qCounter
+         *
+         * Adds question number starting from the integer.
+         *
+         * If FALSE, no question number is added.
+         */
+        this.qCounter = 0;
+
+        /**
+         * ### ChoiceManager.qCounterSymbol
+         *
+         * The symbol used to count the questions.
+         */
+        this.qCounterSymbol = 'Q';
+
     }
 
     // ## ChoiceManager methods
@@ -245,7 +263,7 @@
             this.group = options.group;
         }
         else if ('undefined' !== typeof options.group) {
-            throw new TypeError('ChoiceManager.init: options.group must ' +
+            throw new TypeError(C + 'init: options.group must ' +
                                 'be string, number or undefined. Found: ' +
                                 options.group);
         }
@@ -256,7 +274,7 @@
             this.groupOrder = options.groupOrder;
         }
         else if ('undefined' !== typeof options.group) {
-            throw new TypeError('ChoiceManager.init: options.groupOrder must ' +
+            throw new TypeError(C + 'init: options.groupOrder must ' +
                                 'be number or undefined. Found: ' +
                                 options.groupOrder);
         }
@@ -266,7 +284,7 @@
             this.mainText = options.mainText;
         }
         else if ('undefined' !== typeof options.mainText) {
-            throw new TypeError('ChoiceManager.init: options.mainText must ' +
+            throw new TypeError(C + 'init: options.mainText must ' +
                                 'be string or undefined. Found: ' +
                                 options.mainText);
         }
@@ -274,12 +292,12 @@
         // formsOptions.
         if ('undefined' !== typeof options.formsOptions) {
             if ('object' !== typeof options.formsOptions) {
-                throw new TypeError('ChoiceManager.init: options.formsOptions' +
+                throw new TypeError(C + 'init: options.formsOptions' +
                                     ' must be object or undefined. Found: ' +
                                     options.formsOptions);
             }
             if (options.formsOptions.hasOwnProperty('name')) {
-                throw new Error('ChoiceManager.init: options.formsOptions ' +
+                throw new Error(C + 'init: options.formsOptions ' +
                                 'cannot contain property name. Found: ' +
                                 options.formsOptions);
             }
@@ -310,6 +328,14 @@
 
         // If truthy a useless form is added to detect bots.
         this.honeypot = options.honeypot;
+
+        if ('undefined' !== typeof options.qCounter) {
+            this.qCounter = options.qCounter;
+        }
+
+        if ('undefined' !== typeof options.qCounterSymbol) {
+            this.qCounterSymbol = options.qCounterSymbol;
+        }
 
         // After all configuration options are evaluated, add forms.
 
@@ -350,7 +376,7 @@
         if ('function' === typeof forms) {
             parsedForms = forms.call(node.game);
             if (!J.isArray(parsedForms)) {
-                throw new TypeError('ChoiceManager.setForms: forms is a ' +
+                throw new TypeError(C + 'setForms: forms is a ' +
                                     'callback, but did not returned an ' +
                                     'array. Found: ' + parsedForms);
             }
@@ -359,13 +385,13 @@
             parsedForms = forms;
         }
         else {
-            throw new TypeError('ChoiceManager.setForms: forms must be array ' +
+            throw new TypeError(C + 'setForms: forms must be array ' +
                                 'or function. Found: ' + forms);
         }
 
         len = parsedForms.length;
         if (!len) {
-            throw new Error('ChoiceManager.setForms: forms is an empty array.');
+            throw new Error(C + 'setForms: forms is an empty array.');
         }
 
         // Manual clone forms.
@@ -388,7 +414,7 @@
 
         // Id must be unique.
         if (W.getElementById(this.id)) {
-            throw new Error('ChoiceManager.append: id is not ' +
+            throw new Error(C + 'append: id is not ' +
                             'unique: ' + this.id);
         }
 
@@ -503,7 +529,7 @@
 
                 // False is set manually, otherwise undefined.
                 if (this.required === false) {
-                    throw new Error('ChoiceManager.setForms: required is ' +
+                    throw new Error(C + 'setForms: required is ' +
                                     'false, but form "' + form.id +
                                     '" has required truthy');
                 }
@@ -523,14 +549,22 @@
                 form.bootstrap5 = true;
             }
 
+            if (this.qCounter !== false) {
+                if (form.mainText) {
+                    form.mainText = '<span style="font-weight: normal; ' +
+                        'color:gray;">'
+                         + this.qCounterSymbol +
+                         ++this.qCounter + '</span> ' + form.mainText;
+                }
+            }
+
             form = node.widgets.get(name, form);
 
         }
 
         if (form.id) {
             if (this.formsById[form.id]) {
-                throw new Error('ChoiceManager.setForms: duplicated ' +
-                                'form id: ' + form.id);
+                throw new Error(C + 'setForms: duplicated form id: ' + form.id);
             }
 
         }
@@ -655,7 +689,7 @@
      */
     ChoiceManager.prototype.highlight = function(border) {
         if (border && 'string' !== typeof border) {
-            throw new TypeError('ChoiceManager.highlight: border must be ' +
+            throw new TypeError(C + 'highlight: border must be ' +
                                 'string or undefined. Found: ' + border);
         }
         if (!this.dl || this.highlighted === true) return;
@@ -839,7 +873,7 @@
     ChoiceManager.prototype.setValues = function(opts) {
         var i, len;
         if (!this.forms || !this.forms.length) {
-            throw new Error('ChoiceManager.setValues: no forms found.');
+            throw new Error(C + 'setValues: no forms found.');
         }
         opts = opts || {};
         i = -1, len = this.forms.length;
@@ -870,7 +904,7 @@
     ChoiceManager.prototype.addHoneypot = function(opts) {
         var h, forms, that;
         if (!this.isAppended()) {
-            node.warn('ChoiceManager.addHoneypot: not appended yet');
+            node.warn(C + 'addHoneypot: not appended yet');
             return;
         }
         if ('object' !== typeof opts) opts = {};
@@ -928,7 +962,7 @@
         var form, conditional, failsafe, that;
         if (!this.oneByOne) return false;
         if (!this.forms || !this.forms.length) {
-            throw new Error('ChoiceManager.next: no forms found.');
+            throw new Error(C + 'next: no forms found.');
         }
         form = this.forms[this.oneByOneCounter];
         if (!form) return false;
@@ -978,7 +1012,7 @@
         var form, conditional, failsafe;
         if (!this.oneByOne) return false;
         if (!this.forms || !this.forms.length) {
-            throw new Error('ChoiceManager.prev: no forms found.');
+            throw new Error(C + 'prev: no forms found.');
         }
         form = this.forms[this.oneByOneCounter];
         if (!form) return false;
