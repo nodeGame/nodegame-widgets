@@ -21191,15 +21191,15 @@
             type: 'range',
             min: this.min,
             max: this.max,
-            step: this.step,            
+            step: this.step,
         };
-        if (this.hideKnob) tmp.style = { opacity: 0 };            
+        if (this.hideKnob) tmp.style = { opacity: 0 };
         this.slider = W.add('input', container, tmp);
         if (this.hideKnob) {
             this.slider.onclick = function() {
                 that.slider.style.opacity = 1;
                 that.slider.onclick = null;
-            };            
+            };
         }
 
         this.slider.onmouseover = function() {
