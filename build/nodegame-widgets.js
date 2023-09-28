@@ -20963,6 +20963,13 @@
          */
          this.timeFrom = 'step';
 
+         /**
+         * ### Slider.hideKnob
+         *
+         * If TRUE, the knob of the slider is hidden before interaction
+         */
+         this.hideKnob = false;
+
     }
 
     // ## Slider methods
@@ -21124,6 +21131,10 @@
             }
             this.right = '' + tmp;
         }
+
+        if ('undefined' !== typeof opts.hideKnob) {
+            this.hideKnob = !!opts.hideKnob;
+        }
     };
 
     /**
@@ -21174,15 +21185,22 @@
             // id: 'range-fill'
         });
 
-        this.slider = W.add('input', container, {
+        tmp = {
             className: 'volume-slider',
-            // id: 'range-slider-input',
             name: 'rangeslider',
             type: 'range',
             min: this.min,
             max: this.max,
-            step: this.step
-        });
+            step: this.step,            
+        };
+        if (this.hideKnob) tmp.style = { opacity: 0 };            
+        this.slider = W.add('input', container, tmp);
+        if (this.hideKnob) {
+            this.slider.onclick = function() {
+                that.slider.style.opacity = 1;
+                that.slider.onclick = null;
+            };            
+        }
 
         this.slider.onmouseover = function() {
             tmpColor = that.rangeFill.style.background || 'black';
@@ -21193,7 +21211,6 @@
         };
 
         if (this.sliderWidth) this.slider.style.width = this.sliderWidth;
-
 
         if (this.right) {
             tmp = W.add('span', container);
