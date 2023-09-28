@@ -211,7 +211,7 @@
          *
          * If FALSE, no question number is added.
          */
-        this.qCounter = 0;
+        this.qCounter = 1;
 
         /**
          * ### ChoiceManager.qCounterSymbol
@@ -554,7 +554,7 @@
                     form.mainText = '<span style="font-weight: normal; ' +
                         'color:gray;">'
                          + this.qCounterSymbol +
-                         ++this.qCounter + '</span> ' + form.mainText;
+                         this.qCounter++ + '</span> ' + form.mainText;
                 }
             }
 
