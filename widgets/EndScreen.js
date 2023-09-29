@@ -321,7 +321,8 @@
             exitCodeGroup.className = 'input-group-btn';
 
             exitCodeBtn = document.createElement('button');
-            exitCodeBtn.className = 'btn btn-default endscreen-copy-btn';
+            exitCodeBtn.className =
+                'btn btn-outline-secondary endscreen-copy-btn';
             exitCodeBtn.innerHTML = this.getText('copyButton');
             exitCodeBtn.type = 'button';
             exitCodeBtn.onclick = function() {

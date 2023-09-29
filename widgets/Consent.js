@@ -143,9 +143,9 @@
         // Print.
         if (this.showPrint) {
             html = this.getText('printText');
-            html += '<input class="btn" type="button" value="' +
-            this.getText('printBtn') +
-            '" onclick="window.print()" /><br/><br/>';
+            html += '<input class="btn btn-outline-secondary" ' +
+                'type="button" value="' + this.getText('printBtn') +
+                '" onclick="window.print()" /><br/><br/>';
         }
 
         // Header for buttons.

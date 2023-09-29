@@ -10281,7 +10281,7 @@
         // Print.
         if (this.showPrint) {
             html = this.getText('printText');
-            html += '<input class="btn" type="button" value="' +
+            html += '<input class="btn btn-outline-secondary" type="button" value="' +
             this.getText('printBtn') +
             '" onclick="window.print()" /><br/><br/>';
         }
@@ -16676,7 +16676,7 @@
             exitCodeGroup.className = 'input-group-btn';
 
             exitCodeBtn = document.createElement('button');
-            exitCodeBtn.className = 'btn btn-default endscreen-copy-btn';
+            exitCodeBtn.className = 'btn btn-outline-secondary endscreen-copy-btn';
             exitCodeBtn.innerHTML = this.getText('copyButton');
             exitCodeBtn.type = 'button';
             exitCodeBtn.onclick = function() {
@@ -20698,10 +20698,15 @@
             return 'Value: ' + value;
         },
         noChange: 'No change',
-        error: 'Movement required.',
+        error: '<em>Movement required</em>. If you agree with the current ' +
+        'value, move the slider away and then back to this position.',
         autoHint: function(w) {
-            if (w.requiredChoice) return 'Movement required.';
-            else return false;
+            var h = '';
+            if (w.hideKnob) {
+                h += 'The slider knob will be shown after the first click. ';
+            }
+            if (w.required) h += 'Movement required.';
+            return h || false;
         }
     };
 
@@ -21021,6 +21026,11 @@
             this.initialValue = this.currentValue = tmp;
         }
 
+        // Must be before auto-hint.
+        if ('undefined' !== typeof opts.hideKnob) {
+            this.hideKnob = !!opts.hideKnob;
+        }
+
         if ('undefined' !== typeof opts.step) {
             tmp = J.isInt(opts.step);
             if ('number' !== typeof tmp) {
@@ -21130,10 +21140,6 @@
                                     'undefined. Found: ' + tmp);
             }
             this.right = '' + tmp;
-        }
-
-        if ('undefined' !== typeof opts.hideKnob) {
-            this.hideKnob = !!opts.hideKnob;
         }
     };
 
