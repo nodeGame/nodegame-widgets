@@ -27,10 +27,16 @@
             return 'Value: ' + value;
         },
         noChange: 'No change',
-        error: 'Movement required.',
+        // TODO: if the knob is hidden, the message is a bit unclear.
+        error: '<em>Movement required</em>. If you agree with the current ' +
+        'value, move the slider away and then back to this position.',
         autoHint: function(w) {
-            if (w.requiredChoice) return 'Movement required.';
-            else return false;
+            var h = '';
+            if (w.hideKnob) {
+                h += 'The slider knob will be shown after the first click. ';
+            }
+            if (w.required) h += 'Movement required.';
+            return h || false;
         }
     };
 
@@ -350,6 +356,11 @@
             this.initialValue = this.currentValue = tmp;
         }
 
+        // Must be before auto-hint.
+        if ('undefined' !== typeof opts.hideKnob) {
+            this.hideKnob = !!opts.hideKnob;
+        }
+
         if ('undefined' !== typeof opts.step) {
             tmp = J.isInt(opts.step);
             if ('number' !== typeof tmp) {
@@ -459,10 +470,6 @@
                                     'undefined. Found: ' + tmp);
             }
             this.right = '' + tmp;
-        }
-
-        if ('undefined' !== typeof opts.hideKnob) {
-            this.hideKnob = !!opts.hideKnob;
         }
     };
 
