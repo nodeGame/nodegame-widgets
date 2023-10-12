@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.10.0';
+    ChoiceTable.version = '1.11.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -28,7 +28,9 @@
         autoHint: function(w) {
             var res;
             if (!w.requiredChoice && !w.selectMultiple) return false;
-            if (!w.selectMultiple) return '*';
+            if (!w.selectMultiple) {
+                return w.displayRequired ? w.requiredMark : false;
+            }
             res = '(';
             if (!w.requiredChoice) {
                 if ('number' === typeof w.selectMultiple) {
@@ -53,7 +55,9 @@
                 }
             }
             res += ')';
-            if (w.requiredChoice) res += ' *';
+            if (w.requiredChoice && w.displayRequired) {
+                res += ' ' + w.requiredMark;
+            }
             return res;
         },
 
@@ -853,7 +857,9 @@
         }
         if ('string' === typeof tmp || false === tmp) {
             this.hint = tmp;
-            if (this.requiredChoice && tmp !== false) this.hint += ' *';
+            if (this.requiredChoice && tmp !== false && this.displayRequired) {
+                this.hint += ' ' + this.requiredMark;
+            }
         }
         else if ('undefined' !== typeof tmp) {
             throw new TypeError('ChoiceTable.init: opts.hint must ' +

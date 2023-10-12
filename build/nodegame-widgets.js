@@ -1470,6 +1470,11 @@
             widget.required = true;
         }
 
+        // Display required mark (in some widgets).
+        widget.displayRequired = opts.displayRequired === false ? false : true;
+        widget.requiredMark = 'undefined' !== typeof opts.requiredMark ?
+            opts.requiredMark : '✳️';
+        
         // Fixed properties.
 
         // Widget Name.
@@ -5708,11 +5713,12 @@
             }
 
             if (this.qCounter !== false) {
-                if (form.mainText) {
+                if (form.mainText && !form.qCounterAdded) {
                     form.mainText = '<span style="font-weight: normal; ' +
                         'color:gray;">'
                          + this.qCounterSymbol +
                          this.qCounter++ + '</span> ' + form.mainText;
+                    form.qCounterAdded = true;
                 }
             }
 
@@ -6360,7 +6366,7 @@
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.10.0';
+    ChoiceTable.version = '1.11.0';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -6371,7 +6377,9 @@
         autoHint: function(w) {
             var res;
             if (!w.requiredChoice && !w.selectMultiple) return false;
-            if (!w.selectMultiple) return '*';
+            if (!w.selectMultiple) {
+                return w.displayRequired ? w.requiredMark : false;
+            }
             res = '(';
             if (!w.requiredChoice) {
                 if ('number' === typeof w.selectMultiple) {
@@ -6396,7 +6404,9 @@
                 }
             }
             res += ')';
-            if (w.requiredChoice) res += ' *';
+            if (w.requiredChoice && w.displayRequired) {
+                res += ' ' + w.requiredMark;
+            }
             return res;
         },
 
@@ -7196,7 +7206,9 @@
         }
         if ('string' === typeof tmp || false === tmp) {
             this.hint = tmp;
-            if (this.requiredChoice && tmp !== false) this.hint += ' *';
+            if (this.requiredChoice && tmp !== false && this.displayRequired) {
+                this.hint += ' ' + this.requiredMark;
+            }
         }
         else if ('undefined' !== typeof tmp) {
             throw new TypeError('ChoiceTable.init: opts.hint must ' +
@@ -8778,7 +8790,7 @@
     ChoiceTableGroup.texts = {
 
         autoHint: function(w) {
-            if (w.requiredChoice) return '*';
+            if (w.requiredChoice && w.displayRequired) return w.requiredMark;
             else return false;
         },
 
@@ -9331,11 +9343,13 @@
         }
 
         if (this.required && this.hint !== false &&
-            this.hint.charAt(this.hint.length-1) != '*' &&
+            this.hint.charAt(this.hint.length-1) !== this.requiredMark &&
             opts.displayRequired !== false) {
 
-                this.hint += ' *';
+            this.hint += ' ' + this.requiredMark;
         }
+
+        this.hint = node.widgets.utils.processHints(opts.hint);
 
         // Set the timeFrom, if any.
         if (opts.timeFrom === false ||
@@ -10281,9 +10295,9 @@
         // Print.
         if (this.showPrint) {
             html = this.getText('printText');
-            html += '<input class="btn btn-outline-secondary" type="button" value="' +
-            this.getText('printBtn') +
-            '" onclick="window.print()" /><br/><br/>';
+            html += '<input class="btn btn-outline-secondary" ' +
+                'type="button" value="' + this.getText('printBtn') +
+                '" onclick="window.print()" /><br/><br/>';
         }
 
         // Header for buttons.
@@ -11108,7 +11122,8 @@
                     res = '(Must be before ' + w.params.max + ')';
                 }
             }
-            return w.required ? ((res || '') + ' *') : (res || false);
+            return w.required && w.displayRequired ?
+                ((res || '') + ' ' + w.requiredMark) : (res || false);
         },
         numericErr: function(w) {
             var str, p;
@@ -12139,7 +12154,9 @@
                                     'undefined. Found: ' + opts.hint);
             }
             this.hint = opts.hint;
-            if (this.required) this.hint += ' *';
+            if (this.required && this.displayRequired) {
+                this.hint += ' ' + this.requiredMark;
+            }
         }
         else {
             this.hint = this.getText('autoHint');
@@ -12614,7 +12631,7 @@
     CustomInputGroup.separator = '::';
 
     CustomInputGroup.texts.autoHint = function(w) {
-        if (w.requiredChoice) return '*';
+        if (w.requiredChoice && w.displayRequired) return w.requiredMark;
         else return false;
     };
     CustomInputGroup.texts.inputErr = 'One or more errors detected.';
@@ -13081,7 +13098,9 @@
         // Set the hint, if any.
         if ('string' === typeof opts.hint) {
             this.hint = opts.hint;
-            if (this.requiredChoice) this.hint += ' *';
+            if (this.requiredChoice && this.displayRequired) {
+                this.hint += ' ' + this.requiredMark;
+            }
         }
         else if ('undefined' !== typeof opts.hint) {
             throw new TypeError('CustomInputGroup.init: hint must ' +
@@ -15414,8 +15433,11 @@
                                 'be a string, false, or undefined. Found: ' +
                                 tmp);
         }
-        if (this.requiredChoice && tmp !== false) {
-            this.hint = tmp ? this.hint + ' *' : ' *';
+        if (this.requiredChoice && tmp !== false &&
+            opts.displayRequired !== false) {
+            
+            this.hint = tmp ?
+                (this.hint + ' ' + this.requiredMark) : ' ' + this.requiredMark;
         }
 
     }
@@ -16676,7 +16698,8 @@
             exitCodeGroup.className = 'input-group-btn';
 
             exitCodeBtn = document.createElement('button');
-            exitCodeBtn.className = 'btn btn-outline-secondary endscreen-copy-btn';
+            exitCodeBtn.className =
+                'btn btn-outline-secondary endscreen-copy-btn';
             exitCodeBtn.innerHTML = this.getText('copyButton');
             exitCodeBtn.type = 'button';
             exitCodeBtn.onclick = function() {
@@ -20698,6 +20721,7 @@
             return 'Value: ' + value;
         },
         noChange: 'No change',
+        // TODO: if the knob is hidden, the message is a bit unclear.
         error: '<em>Movement required</em>. If you agree with the current ' +
         'value, move the slider away and then back to this position.',
         autoHint: function(w) {
@@ -21087,7 +21111,9 @@
         }
 
         if (this.required && this.hint !== false) {
-            if (opts.displayRequired !== false) this.hint += ' *';
+            if (opts.displayRequired !== false) {
+                this.hint += ' ' + this.requiredMark;
+            }
         }
 
         if (opts.onmove) {

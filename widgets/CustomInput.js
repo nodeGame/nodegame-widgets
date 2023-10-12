@@ -179,7 +179,8 @@
                     res = '(Must be before ' + w.params.max + ')';
                 }
             }
-            return w.required ? ((res || '') + ' *') : (res || false);
+            return w.required && w.displayRequired ?
+                ((res || '') + ' ' + w.requiredMark) : (res || false);
         },
         numericErr: function(w) {
             var str, p;
@@ -1210,7 +1211,9 @@
                                     'undefined. Found: ' + opts.hint);
             }
             this.hint = opts.hint;
-            if (this.required) this.hint += ' *';
+            if (this.required && this.displayRequired) {
+                this.hint += ' ' + this.requiredMark;
+            }
         }
         else {
             this.hint = this.getText('autoHint');

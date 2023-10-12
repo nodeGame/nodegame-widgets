@@ -26,7 +26,7 @@
     CustomInputGroup.separator = '::';
 
     CustomInputGroup.texts.autoHint = function(w) {
-        if (w.requiredChoice) return '*';
+        if (w.requiredChoice && w.displayRequired) return w.requiredMark;
         else return false;
     };
     CustomInputGroup.texts.inputErr = 'One or more errors detected.';
@@ -493,7 +493,9 @@
         // Set the hint, if any.
         if ('string' === typeof opts.hint) {
             this.hint = opts.hint;
-            if (this.requiredChoice) this.hint += ' *';
+            if (this.requiredChoice && this.displayRequired) {
+                this.hint += ' ' + this.requiredMark;
+            }
         }
         else if ('undefined' !== typeof opts.hint) {
             throw new TypeError('CustomInputGroup.init: hint must ' +

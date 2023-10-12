@@ -550,11 +550,12 @@
             }
 
             if (this.qCounter !== false) {
-                if (form.mainText) {
+                if (form.mainText && !form.qCounterAdded) {
                     form.mainText = '<span style="font-weight: normal; ' +
                         'color:gray;">'
                          + this.qCounterSymbol +
                          this.qCounter++ + '</span> ' + form.mainText;
+                    form.qCounterAdded = true;
                 }
             }
 

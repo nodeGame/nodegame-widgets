@@ -417,7 +417,9 @@
         }
 
         if (this.required && this.hint !== false) {
-            if (opts.displayRequired !== false) this.hint += ' *';
+            if (opts.displayRequired !== false) {
+                this.hint += ' ' + this.requiredMark;
+            }
         }
 
         if (opts.onmove) {

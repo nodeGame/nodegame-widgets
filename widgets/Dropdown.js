@@ -447,8 +447,11 @@
                                 'be a string, false, or undefined. Found: ' +
                                 tmp);
         }
-        if (this.requiredChoice && tmp !== false) {
-            this.hint = tmp ? this.hint + ' *' : ' *';
+        if (this.requiredChoice && tmp !== false &&
+            opts.displayRequired !== false) {
+
+            this.hint = tmp ?
+                (this.hint + ' ' + this.requiredMark) : ' ' + this.requiredMark;
         }
 
     }

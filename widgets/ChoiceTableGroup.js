@@ -28,7 +28,7 @@
     ChoiceTableGroup.texts = {
 
         autoHint: function(w) {
-            if (w.requiredChoice) return '*';
+            if (w.requiredChoice && w.displayRequired) return w.requiredMark;
             else return false;
         },
 
@@ -581,11 +581,13 @@
         }
 
         if (this.required && this.hint !== false &&
-            this.hint.charAt(this.hint.length-1) != '*' &&
+            this.hint.charAt(this.hint.length-1) !== this.requiredMark &&
             opts.displayRequired !== false) {
 
-                this.hint += ' *';
+            this.hint += ' ' + this.requiredMark;
         }
+
+        this.hint = node.widgets.utils.processHints(opts.hint);
 
         // Set the timeFrom, if any.
         if (opts.timeFrom === false ||
