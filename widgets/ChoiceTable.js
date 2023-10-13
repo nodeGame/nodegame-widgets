@@ -1048,8 +1048,11 @@
         tmp = opts.correctChoice;
         if ('undefined' !== typeof tmp) {
             if (this.requiredChoice) {
-                throw new Error('ChoiceTable.init: cannot specify both ' +
-                                'opts requiredChoice and correctChoice');
+                this.requiredChoice = null;
+                this.required = null;
+                node.warn('ChoiceTable.init: requiredChoice and ' +
+                          'correctChoice are both set; requiredChoice ignored.'
+                );
             }
             if ('function' === typeof tmp) {
                 tmp = tmp.call(this);
