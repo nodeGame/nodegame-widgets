@@ -220,6 +220,13 @@
          */
         this.qCounterSymbol = 'Q';
 
+        /**
+         * ### ChoiceManager.autoId
+         *
+         * If TRUE, id forms are auto-assigned if undefined
+         */
+        this.autoId = true;
+
     }
 
     // ## ChoiceManager methods
@@ -296,11 +303,7 @@
                                     ' must be object or undefined. Found: ' +
                                     options.formsOptions);
             }
-            if (options.formsOptions.hasOwnProperty('name')) {
-                throw new Error(C + 'init: options.formsOptions ' +
-                                'cannot contain property name. Found: ' +
-                                options.formsOptions);
-            }
+
             this.formsOptions = J.mixin(this.formsOptions,
                                         options.formsOptions);
         }
@@ -335,6 +338,10 @@
 
         if ('undefined' !== typeof options.qCounterSymbol) {
             this.qCounterSymbol = options.qCounterSymbol;
+        }
+
+        if ('undefined' !== typeof options.autoId) {
+            this.autoId = options.autoId;
         }
 
         // After all configuration options are evaluated, add forms.
@@ -514,10 +521,16 @@
         if ('undefined' === typeof scrollIntoView) scrollIntoView = true;
 
         if (!node.widgets.isWidget(form)) {
-            // TODO: smart checking form name. Maybe in Stager already?
-            name = form.name || 'ChoiceTable';
+
             // Add defaults.
             J.mixout(form, this.formsOptions);
+
+
+            if (!form.id && this.autoId) {
+                name = this.autoId === true ?
+                    node.game.getStepId() : this.autoId;
+                form.id =  name + '_' + (idx + 1);
+            }
 
             // By default correctChoice means required.
             // However, it is possible to add required = false and correctChoice
@@ -558,6 +571,9 @@
                     form.qCounterAdded = true;
                 }
             }
+
+            // TODO: smart checking form name. Maybe in Stager already?
+            name = form.name || 'ChoiceTable';
 
             form = node.widgets.get(name, form);
 
