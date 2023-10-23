@@ -193,10 +193,9 @@
         // then unlocked by GameWindow, but otherwise it must be
         // done here.
         node.on('PLAYING', function() {
-            var prop, step, delay;
+            var prop, delay;
 
-            step = node.game.getCurrentGameStage();
-            prop = node.game.plot.getProperty(step, 'donebutton');
+            prop = node.game.getProperty('donebutton');
             if (prop === false || (prop && prop.enableOnPlaying === false)) {
                 // It might be disabled already, but we do it again.
                 that.disable();
@@ -221,10 +220,15 @@
                     that.enable();
                 }
             }
-            if ('string' === typeof prop) that.button.value = prop;
-            else if (prop && prop.text) that.button.value = prop.text;
+            if ('string' === typeof prop) {
+                that.button.value = prop;
+            }
+            else if (prop) {
+                if (prop.text) that.button.value = prop.text;
+                if (prop.onclick) setOnClick(that, prop.onclick, true);
+            }  
 
-            if (prop) setOnClick(this, prop.onclick, true);
+            
         });
 
         if (this.disableOnDisconnect) {
@@ -303,6 +307,11 @@
                                     ' or undefined. Found: ' + onclick);
             }
             that.onclick = onclick;
+        }
+        if (step) {
+            node.once('REALLY_DONE', function() {
+                that.onclick = null;
+            });
         }
     }
 
