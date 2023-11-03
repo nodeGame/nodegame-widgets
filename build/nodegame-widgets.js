@@ -6520,7 +6520,7 @@
          */
         this.listener = function(e) {
             var name, value, td, ci;
-            var i, len, removed, other;
+            var i, len, removed, otherSel;
 
             e = e || window.event;
             td = e.target || e.srcElement;
@@ -6575,10 +6575,11 @@
 
             if (that.customInput) {
                 // Is "Other" currently selected?
-                if (value === (len - 1) && !removed) {
+                otherSel = value === (len - 1);
+                if (otherSel && !removed) {
                     that.customInput.show();
                 }
-                else {
+                else if (!that.selectMultiple || otherSel) {
                     that.customInput.hide();
                 }
             }
@@ -8011,8 +8012,10 @@
         opts = {
             id: 'other' + this.id,
             mainText: this.getText('customInput'),
-            requiredChoice: this.requiredChoice
-        }
+            requiredChoice: this.requiredChoice,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
+        };
         // other is the string 'CustomInput' or a conf object.
         if ('object' === typeof other) J.mixin(opts, other);
         // Force initially hidden.
