@@ -8843,11 +8843,6 @@
 
     ChoiceTableGroup.texts = {
 
-        autoHint: function(w) {
-            if (w.requiredChoice && w.displayRequired) return w.requiredMark;
-            else return false;
-        },
-
         error: 'Selection required.'
     };
 
@@ -9391,19 +9386,24 @@
                                 'be a string, false, or undefined. Found: ' +
                                 opts.hint);
         }
-        else {
-            // Returns undefined if there are no constraints.
-            this.hint = this.getText('autoHint');
-        }
 
-        if (this.required && this.hint !== false &&
-            this.hint.charAt(this.hint.length-1) !== this.requiredMark &&
+        if (this.required && this.hint !== false && 
             opts.displayRequired !== false) {
+            
+            tmp = this.requiredMark;
 
-            this.hint += ' ' + this.requiredMark;
+            if (this.hint) {
+                if (this.hint.charAt(this.hint.length-1) !== tmp) {
+                    this.hint += ' ' + tmp;
+                }
+            }
+            else {
+                this.hint = tmp;
+            }
+
         }
 
-        this.hint = node.widgets.utils.processHints(opts.hint);
+        // this.hint = node.widgets.utils.processHints(opts.hint);
 
         // Set the timeFrom, if any.
         if (opts.timeFrom === false ||
