@@ -1049,6 +1049,14 @@
         if ('undefined' === typeof s.requiredChoice && that.requiredChoice) {
             s.requiredChoice = that.requiredChoice;
         }
+        
+        if ('undefined' === typeof s.displayRequired) {
+            s.displayRequired = that.displayRequired;
+        }
+
+        if ('undefined' === typeof s.requiredMark) {
+            s.requiredMark = that.requiredMark;
+        }
 
         if ('undefined' === typeof s.timeFrom) s.timeFrom = that.timeFrom;
 

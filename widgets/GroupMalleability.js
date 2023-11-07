@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    GroupMalleability.version = '0.1.0';
+    GroupMalleability.version = '0.2.0';
     GroupMalleability.description = 'Displays an interface to measure ' +
         'perception for group malleability.';
 
@@ -141,6 +141,11 @@
         else if (opts.mainText !== false) {
              this.mainText = this.getText('mainText');
         }
+
+        // Keep reference to pass to ChoiceTableGroup on creation.
+        this.requiredMark = opts.requiredMark;
+        this.displayRequired = opts.displayRequired;
+
     };
 
     GroupMalleability.prototype.append = function() {
@@ -154,7 +159,9 @@
             title: false,
             panel: false,
             requiredChoice: this.required,
-            header: this.header
+            header: this.header,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
         });
     };
 

@@ -17,7 +17,7 @@
 
     // ## Meta-data
 
-    RiskGauge.version = '0.8.0';
+    RiskGauge.version = '0.9.0';
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences with different methods.';
 
@@ -214,6 +214,9 @@
         this.on('unhighlighted', function() {
             if (gauge.unhighlight) gauge.unhighlight();
         });
+
+        this.displayRequired = opts.displayRequired;
+        this.requiredMark = opts.requiredMark;
     };
 
     RiskGauge.prototype.append = function() {
@@ -306,7 +309,9 @@
             mainText: this.mainText || this.getText('holt_laury_mainText'),
             title: false,
             requiredChoice: true,
-            storeRef: false
+            storeRef: false,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
         });
 
         return gauge;
@@ -528,6 +533,8 @@
                     initialValue: 0,
                     displayValue: false,
                     displayNoChange: false,
+                    displayRequired: that.displayRequired,
+                    requiredMark: that.requiredMark,
                     type: 'flat',
                     required: true,
                     panel: false,

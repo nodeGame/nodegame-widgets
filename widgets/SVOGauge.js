@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.8.1';
+    SVOGauge.version = '0.9.0';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
@@ -23,7 +23,7 @@
 
     SVOGauge.texts = {
         mainText: 'You and another randomly selected participant ' +
-        'will receive an <em>extra bonus</em>.<br/>' +
+        'will receive an <em>extra bonus</em>.  ' +
         'Choose the preferred bonus amounts (in cents) for you ' +
         'and the other participant in each row.<br/>' +
         'We will select <em>one row at random</em> ' +
@@ -160,6 +160,9 @@
         this.on('unhighlighted', function() {
             gauge.unhighlight();
         });
+
+        this.displayRequired = opts.displayRequired;
+        this.requiredMark = opts.requiredMark;
     };
 
     SVOGauge.prototype.append = function() {
@@ -314,7 +317,9 @@
             title: false,
             renderer: renderer,
             requiredChoice: this.required,
-            storeRef: false
+            storeRef: false,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
         });
 
         return gauge;

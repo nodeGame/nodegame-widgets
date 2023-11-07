@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    SDO.version = '0.3.0';
+    SDO.version = '0.4.0';
     SDO.description = 'Displays an interface to measure Social ' +
         'Dominance Orientation (S.D.O.).';
 
@@ -231,6 +231,10 @@
             }
             this.mainText = opts.mainText;
         }
+
+        // Keep reference to pass to ChoiceTableGroup on creation.
+        this.requiredMark = opts.requiredMark;
+        this.displayRequired = opts.displayRequired;
     };
 
     SDO.prototype.append = function() {
@@ -242,7 +246,9 @@
             title: false,
             panel: false,
             requiredChoice: this.required,
-            header: this.header
+            header: this.header,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
         });
     };
 

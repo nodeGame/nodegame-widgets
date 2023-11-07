@@ -13708,6 +13708,14 @@
         if ('undefined' === typeof s.requiredChoice && that.requiredChoice) {
             s.requiredChoice = that.requiredChoice;
         }
+        
+        if ('undefined' === typeof s.displayRequired) {
+            s.displayRequired = that.displayRequired;
+        }
+
+        if ('undefined' === typeof s.requiredMark) {
+            s.requiredMark = that.requiredMark;
+        }
 
         if ('undefined' === typeof s.timeFrom) s.timeFrom = that.timeFrom;
 
@@ -18031,7 +18039,7 @@
 
     // ## Meta-data
 
-    GroupMalleability.version = '0.1.0';
+    GroupMalleability.version = '0.2.0';
     GroupMalleability.description = 'Displays an interface to measure ' +
         'perception for group malleability.';
 
@@ -18157,6 +18165,11 @@
         else if (opts.mainText !== false) {
              this.mainText = this.getText('mainText');
         }
+
+        // Keep reference to pass to ChoiceTableGroup on creation.
+        this.requiredMark = opts.requiredMark;
+        this.displayRequired = opts.displayRequired;
+
     };
 
     GroupMalleability.prototype.append = function() {
@@ -18170,7 +18183,9 @@
             title: false,
             panel: false,
             requiredChoice: this.required,
-            header: this.header
+            header: this.header,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
         });
     };
 
@@ -19802,7 +19817,7 @@
 
     // ## Meta-data
 
-    RiskGauge.version = '0.8.0';
+    RiskGauge.version = '0.9.0';
     RiskGauge.description = 'Displays an interface to ' +
         'measure risk preferences with different methods.';
 
@@ -19999,6 +20014,9 @@
         this.on('unhighlighted', function() {
             if (gauge.unhighlight) gauge.unhighlight();
         });
+
+        this.displayRequired = opts.displayRequired;
+        this.requiredMark = opts.requiredMark;
     };
 
     RiskGauge.prototype.append = function() {
@@ -20091,7 +20109,9 @@
             mainText: this.mainText || this.getText('holt_laury_mainText'),
             title: false,
             requiredChoice: true,
-            storeRef: false
+            storeRef: false,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
         });
 
         return gauge;
@@ -20313,6 +20333,8 @@
                     initialValue: 0,
                     displayValue: false,
                     displayNoChange: false,
+                    displayRequired: that.displayRequired,
+                    requiredMark: that.requiredMark,
                     type: 'flat',
                     required: true,
                     panel: false,
@@ -20488,7 +20510,7 @@
 
     // ## Meta-data
 
-    SDO.version = '0.3.0';
+    SDO.version = '0.4.0';
     SDO.description = 'Displays an interface to measure Social ' +
         'Dominance Orientation (S.D.O.).';
 
@@ -20704,6 +20726,10 @@
             }
             this.mainText = opts.mainText;
         }
+
+        // Keep reference to pass to ChoiceTableGroup on creation.
+        this.requiredMark = opts.requiredMark;
+        this.displayRequired = opts.displayRequired;
     };
 
     SDO.prototype.append = function() {
@@ -20715,7 +20741,9 @@
             title: false,
             panel: false,
             requiredChoice: this.required,
-            header: this.header
+            header: this.header,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
         });
     };
 
@@ -21477,7 +21505,7 @@
 
     // ## Meta-data
 
-    SVOGauge.version = '0.8.1';
+    SVOGauge.version = '0.9.0';
     SVOGauge.description = 'Displays an interface to measure social ' +
         'value orientation (S.V.O.).';
 
@@ -21485,7 +21513,7 @@
 
     SVOGauge.texts = {
         mainText: 'You and another randomly selected participant ' +
-        'will receive an <em>extra bonus</em>.<br/>' +
+        'will receive an <em>extra bonus</em>.  ' +
         'Choose the preferred bonus amounts (in cents) for you ' +
         'and the other participant in each row.<br/>' +
         'We will select <em>one row at random</em> ' +
@@ -21622,6 +21650,9 @@
         this.on('unhighlighted', function() {
             gauge.unhighlight();
         });
+
+        this.displayRequired = opts.displayRequired;
+        this.requiredMark = opts.requiredMark;
     };
 
     SVOGauge.prototype.append = function() {
@@ -21776,7 +21807,9 @@
             title: false,
             renderer: renderer,
             requiredChoice: this.required,
-            storeRef: false
+            storeRef: false,
+            displayRequired: this.displayRequired,
+            requiredMark: this.requiredMark
         });
 
         return gauge;
