@@ -221,6 +221,16 @@
         this.qCounterSymbol = 'Q';
 
         /**
+         * ### ChoiceManager.qCounterCb
+         *
+         * The callback creating the question counter.
+         */
+        this.qCounterCb = function(w, mainText, form, idx) {
+            return '<span style="font-weight: normal; color:gray;">' +
+                w.qCounterSymbol + w.qCounter++ + '</span> ' + mainText;
+        };
+
+        /**
          * ### ChoiceManager.autoId
          *
          * If TRUE, id forms are auto-assigned if undefined
@@ -338,6 +348,10 @@
 
         if ('undefined' !== typeof options.qCounterSymbol) {
             this.qCounterSymbol = options.qCounterSymbol;
+        }
+
+        if ('undefined' !== typeof options.qCounterCb) {
+            this.qCounterCb = options.qCounterCb;
         }
 
         if ('undefined' !== typeof options.autoId) {
@@ -564,10 +578,8 @@
 
             if (this.qCounter !== false) {
                 if (form.mainText && !form.qCounterAdded) {
-                    form.mainText = '<span style="font-weight: normal; ' +
-                        'color:gray;">'
-                         + this.qCounterSymbol +
-                         this.qCounter++ + '</span> ' + form.mainText;
+                    form.mainText =
+                        this.qCounterCb(this, form.mainText, form, idx);
                     form.qCounterAdded = true;
                 }
             }
