@@ -5588,7 +5588,7 @@
      * @see ChoiceManager.buildTableAndForms
      */
     ChoiceManager.prototype.setForms = function(forms) {
-        var i, len, parsedForms;
+        var i, formIdx, len, parsedForms;
         if ('function' === typeof forms) {
             parsedForms = forms.call(node.game);
             if (!J.isArray(parsedForms)) {
@@ -5612,17 +5612,18 @@
 
         // Manual clone forms.
         this.formsById = {};
-        this.order = new Array(len);
         this.forms = new Array(len);
-        i = -1;
-        for ( ; ++i < len ; ) {
-            this.addForm(parsedForms[i], false, i);
-            // Save the order in which the choices will be added.
-            this.order[i] = i;
-        }
 
         // Shuffle, if needed.
+        this.order = J.seq(0, len-1);
         if (this.shuffleForms) this.order = J.shuffle(this.order);
+
+        i = -1;
+        for ( ; ++i < len ; ) {
+            formIdx = this.order[i];
+            this.addForm(parsedForms[formIdx], false, i);
+            // Save the order in which the choices will be added.
+        }
     };
 
     ChoiceManager.prototype.append = function() {
@@ -6363,7 +6364,9 @@
         dl = document.createElement('dl');
         i = -1, len = w.forms.length;
         for ( ; ++i < len ; ) {
-            form = w.forms[w.order[i]];
+            // If shuffled, w.forms already follows the shuffled order.
+            form = w.forms[i];
+            // form = w.forms[w.order[i]];
             appendDT(dl, form);
         }
         return dl;
