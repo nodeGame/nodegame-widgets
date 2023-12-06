@@ -8522,6 +8522,7 @@
 
         // Set values, random or pre-set.
         i = -1;
+        // Pre-set.
         if ('undefined' !== typeof options.values) {
             if (!J.isArray(options.values)) tmp = [ options.values ];
             len = tmp.length;
@@ -8580,8 +8581,8 @@
 
         // Make a random comment.
         if (this.textarea) this.textarea.value = J.randomString(100, '!Aa0');
-        if (this.custominput && !this.custominput.isHidden()) {
-            this.custominput.setValues();
+        if (this.customInput && !this.customInput.isHidden()) {
+            this.customInput.setValues();
         }
     };
 
