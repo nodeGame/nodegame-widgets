@@ -1162,7 +1162,7 @@
         // Loop through all choices and see if there is any fixed position.
         // TODO: we could add validation here.
         (function(w) {
-            var i, c, fixedPos, idxOrder,allFixedPos = [];
+            var i, c, fixedPos, idxOrder, allFixedPos = [], allFixedLen;
             // See if there is any fixed-choice.
             for (i = -1 ; ++i < len ; ) {
                 fixedPos = undefined;
@@ -1181,10 +1181,12 @@
             }
             // All fixed position collected, we need to sort them from
             // lowest to highest, then we can do the placing.
-            if (allFixedPos.length) {
-                allFixedPos.sort(function(a, b) { return a.fixed < b.fixed });
-                len = allFixedPos.length;
-                for (i = -1 ; ++i < len ; ) {
+            allFixedLen = allFixedPos.length; 
+            if (allFixedLen) {
+                if (allFixedLen > 1) {
+                    allFixedPos.sort(function(a, b) {return a.fixed < b.fixed});
+                }
+                for (i = -1 ; ++i < allFixedLen ; ) {
                     c = allFixedPos[i];
                     // Remove from old position and place it in new one.
                     w.order.splice(c.pos, 1);

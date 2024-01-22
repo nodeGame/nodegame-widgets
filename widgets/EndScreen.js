@@ -341,7 +341,7 @@
         basePay = node.game.settings.BASE_PAY;
         if ('undefined' !== typeof basePay) {
             this.updateDisplay({
-                basePay: basePay, total: basePay, exitCode: ''
+                basePay: basePay, total: basePay, exitCode: 'N/A'
             });
         }
 
