@@ -6412,7 +6412,7 @@
 
 /**
  * # ChoiceTable
- * Copyright(c) 2023 Stefano Balietti
+ * Copyright(c) 2024 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
@@ -6534,7 +6534,7 @@
          * @see ChoiceTable.onclick
          */
         this.listener = function(e) {
-            var name, value, td, ci;
+            var name, value, td, ci, lastClicked;
             var i, len, removed, otherSel;
 
             e = e || window.event;
@@ -6659,6 +6659,8 @@
                 value = parseInt(value, 10);
                 that.onclick.call(that, value, removed, td);
             }
+
+            that.lastClicked = value;
 
             if (that.doneOnClick) node.done();
         };
@@ -7025,6 +7027,13 @@
         * @see ChoiceTable.other
         */
         this.customInput = null;
+
+        /**
+        * ### ChoiceTable.lastClicked
+        *
+        * The idx of the last selected choice
+        */
+        this.lastClicked = null;
 
         /**
         * ### ChoiceTable.doneOnClick
@@ -7517,10 +7526,13 @@
      *
      * Marks a choice as disabled (will not be clickable)
      *
-     * @param {string|number} value The value of the choice to disable`
+     * @param {string|number} idx The idx of the choice to disable
      */
-    ChoiceTable.prototype.disableChoice = function(value) {
-        this.disabledChoices[value] = true;
+    ChoiceTable.prototype.disableChoice = function(idx) {
+        if (!this.disabledChoices[idx]) {
+            this.disabledChoices[idx] = true;
+            J.addClass(this.choicesCells[idx], 'disabled');
+        }
     };
 
     /**
@@ -7528,10 +7540,13 @@
      *
      * Enables a choice (will be clickable again if previously disabled)
      *
-     * @param {string|number} value The value of the choice to disable`
+     * @param {string|number} idx The value of the choice to disable
      */
-    ChoiceTable.prototype.enableChoice = function(value) {
-        this.disabledChoices[value] = null;
+    ChoiceTable.prototype.enableChoice = function(idx) {
+        if (this.disabledChoices[idx]) {
+            this.disabledChoices[idx] = null;
+            J.removeClass(this.choicesCells[idx], 'disabled');
+        }
     };
 
     /**
@@ -7633,12 +7648,13 @@
      * @see ChoiceTable.renderSpecial
      */
     ChoiceTable.prototype.buildChoices = function() {
-        var i, len;
-        i = -1, len = this.choices.length;
+        var len, pos, idx;
+        pos = -1, len = this.choices.length;
         // Pre-allocate the choicesCells array.
         this.choicesCells = new Array(len);
-        for ( ; ++i < len ; ) {
-            this.renderChoice(this.choices[this.order[i]], i);
+        for ( ; ++pos < len ; ) {
+            idx = this.order[pos];
+            this.renderChoice(this.choices[idx], idx, pos);
         }
         if (this.left) this.renderSpecial('left', this.left);
         if (this.right) this.renderSpecial('right', this.right);
@@ -7660,7 +7676,7 @@
     ChoiceTable.prototype.buildTable = (function() {
 
         function makeSet(i, len, H, doSets) {
-            var tr, counter;
+            var tr, counter, pos;
             counter = 0;
             // Start adding tr/s and tds based on the orientation.
             if (H) {
@@ -7679,7 +7695,8 @@
                     }
                 }
                 // Clickable cell.
-                tr.appendChild(this.choicesCells[i]);
+                pos = this.order[i];
+                tr.appendChild(this.choicesCells[pos]);
                 // Stop if we reached set size (still need to add the right).
                 if (doSets && ++counter >= this.choicesSetSize) break;
             }
@@ -7723,7 +7740,7 @@
      * @see ChoiceTable.orientation
      */
     ChoiceTable.prototype.buildTableAndChoices = function() {
-        var i, len, tr, td, H;
+        var i, idx, len, tr, td, H;
 
         len = this.choices.length;
         // Pre-allocate the choicesCells array.
@@ -7752,7 +7769,8 @@
                 }
             }
             // Clickable cell.
-            td = this.renderChoice(this.choices[this.order[i]], i);
+            idx = this.order[i];
+            td = this.renderChoice(this.choices[idx], idx, i);
             tr.appendChild(td);
         }
         if (this.right) {
@@ -7823,7 +7841,7 @@
      *   text to display as choice, or an object with properties value and
      *   display. If a renderer function is defined there are no restriction
      *   on the format of choice.
-     * @param {number} idx The position of the choice within the choice array
+     * @param {number} idx The position of the choice within the choices array
      *
      * @return {HTMLElement} td The newly created cell of the table
      *
@@ -7831,7 +7849,7 @@
      * @see ChoiceTable.separator
      * @see ChoiceTable.choicesCells
      */
-    ChoiceTable.prototype.renderChoice = function(choice, idx) {
+    ChoiceTable.prototype.renderChoice = function(choice, idx, pos) {
         var td, shortValue, value, width;
         td = document.createElement('td');
         if (this.tabbable) J.makeTabbable(td);
@@ -7866,7 +7884,8 @@
                 choice = choice.display;
             }
 
-            value = this.shuffleChoices ? this.order[idx] : idx;
+            // value = this.shuffleChoices ? this.order[idx] : idx;
+            value = idx;
 
             if ('string' === typeof choice || 'number' === typeof choice) {
                 td.innerHTML = choice;
@@ -7895,7 +7914,7 @@
         }
 
         // All fine, updates global variables.
-        this.choicesValues[value] = idx;
+        this.choicesValues[value] = pos;
         this.choicesCells[idx] = td;
         this.choicesIds[td.id] = td;
 
