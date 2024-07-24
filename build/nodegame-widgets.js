@@ -6875,6 +6875,28 @@
         this.currentChoice = null;
 
         /**
+         * ### ChoiceTable.defaultChoice
+         *
+         * Choice/s initially selected when the widget is inited
+         *
+         * @see ChoiceTable.selectMultiple
+         *
+         * @see ChoiceTable.selected
+         */
+        this.defaultChoice = null;
+
+        /**
+         * ### ChoiceTable._initDefaultChoice
+         *
+         * Flags that default choices still need to be added
+         *
+         * @see ChoiceTable.defaultChoice
+         *
+         * @api private
+         */
+        this._initDefaultChoice = null;
+
+        /**
          * ### ChoiceTable.selectMultiple
          *
          * The number of maximum simulataneous selections (>1), or false
@@ -7119,7 +7141,7 @@
      * @param {object} opts Configuration options
      */
     ChoiceTable.prototype.init = function(opts) {
-        var tmp, that;
+        var tmp, that, i;
         that = this;
 
         if (!this.id) {
@@ -7500,7 +7522,7 @@
             // Do we have the choices now, or can they be added later?
             if (tmp) {
                 (function() {
-                    for (var i = 0; i < tmp.length; i++) {
+                    for (i = 0; i < tmp.length; i++) {
                         that.disableChoice(tmp[i]);
                     }
                 })();
@@ -7519,6 +7541,34 @@
             }
             this.solution = tmp;
         }
+
+        tmp = opts.defaultChoice;
+        if (tmp) {
+            this.defaultChoice = tmp;
+            initDefaultChoice(this);
+        }
+    };
+
+    /**
+     * ### ChoiceTable.clickChoice
+     *
+     * Clicks on a choice
+     *
+     * @param {string|number} idx The idx of the choice to click on
+     */
+    ChoiceTable.prototype.clickChoice = function(idx) {
+        if (!this.choicesCells) {
+            throw new Error('ChoiceTable.clickChoice: choicesCells not ' +
+                'initialized.');
+        }
+        if (!J.isInt(idx)) {
+            throw new TypeError('ChoiceTable.clickChoice: idx must be ' +
+                            'integer. Found: ' + idx);
+        }
+        if (!this.choicesCells[idx]) {
+            throw new Error('ChoiceTable.clickChoice: idx not found: ' + idx);
+        }
+        this.choicesCells[idx].click();
     };
 
     /**
@@ -7976,7 +8026,7 @@
     ChoiceTable.prototype.append = function() {
         var tmp;
         // Id must be unique.
-        if (W.getElementById(this.id)) {
+        if (W.gid(this.id)) {
             throw new Error('ChoiceTable.append: id is not ' +
                             'unique: ' + this.id);
         }
@@ -8034,6 +8084,9 @@
             // Append textarea.
             this.bodyDiv.appendChild(this.textarea);
         }
+
+        // Inits default choices, if necessary.
+        if (this._initDefaultChoice) initDefaultChoice(this);
     };
 
     /**
@@ -8824,6 +8877,7 @@
      * The value is either the text displayed or short value specified
      * by the choice.
      *
+     * @param {ChoiceTable} that This instance
      * @param {mixed} choice
      * @param {boolean} display TRUE to return the display value instead
      *   one. Default: FALSE.
@@ -8847,6 +8901,36 @@
         }
         if (J.isElement(choice) || J.isNode(choice)) return choice.innerHTML;
         return null;
+    }
+
+    /**
+     * ### initDefaultChoice
+     *
+     * Clicks on the default choices if they exist, or mark it as todo
+     *
+     * @param {ChoiceTable} that This instance
+     *
+     * @see ChoiceTable._initDefaultChoice
+     */
+    function initDefaultChoice(that) {
+        var choice;
+        choice = that.defaultChoice;
+        // Already appended.
+        if (that.table) {
+            if (J.isArray(choice)) {
+                for (i = 0; i < choice.length; i++) {
+                    that.clickChoice(i);
+                }
+            }
+            else {
+                that.clickChoice(choice);
+            }
+            that._initDefaultChoice = false;
+        }
+        else {
+            // Mark the choice to be inited as soon as possible.
+            that._initDefaultChoice = true;
+        }
     }
 
 })(node);
