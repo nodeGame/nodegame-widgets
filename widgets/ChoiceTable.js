@@ -1131,7 +1131,7 @@
         }
 
         tmp = opts.defaultChoice;
-        if (tmp) {
+        if ('undefined' !== typeof tmp) {
             this.defaultChoice = tmp;
             initDefaultChoice(this);
         }
