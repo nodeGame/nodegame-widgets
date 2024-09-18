@@ -534,9 +534,9 @@
         if (this.hideKnob) tmp.style = { opacity: 0 };
         this.slider = W.add('input', container, tmp);
         if (this.hideKnob) {
-            this.slider.onclick = function() {
+            this.slider.onmousedown = function() {
                 that.slider.style.opacity = 1;
-                that.slider.onclick = null;
+                that.slider.onmousedown = null;
             };
         }
 
