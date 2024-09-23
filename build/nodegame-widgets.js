@@ -1705,7 +1705,7 @@
         if (w._bootstrap5) {
             // Bootstrap 5
             tmp = {
-                className: tmp ? [ 'ng_widget', 'no-panel', w.className ] :
+                className: tmp ? [ 'ng_widget', w.className ] :
                     [ 'ng_widget', 'card', w.className ]
             };
         }
@@ -13916,7 +13916,7 @@
             id: that.id + '_summary',
             storeRef: false,
             title: false,
-            panel: false,
+            // panel: false,
             className: 'custominputgroup-summary',
             disabled: true
         }, that.sharedOptions);

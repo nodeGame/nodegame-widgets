@@ -1136,7 +1136,7 @@
             id: that.id + '_summary',
             storeRef: false,
             title: false,
-            panel: false,
+            // panel: false,
             className: 'custominputgroup-summary',
             disabled: true
         }, that.sharedOptions);
