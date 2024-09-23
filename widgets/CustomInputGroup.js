@@ -325,6 +325,8 @@
          * - res: the validation result of the single input
          * - input: the custom input that fired oninput
          * - widget: a reference to this widget
+         * 
+         * @see addCustomInput
          */
         this.oninput = null;
 
@@ -466,7 +468,7 @@
                                 opts.validation);
         }
 
-        // Set the validation function.
+        // Set the oninput function.
         if ('function' === typeof opts.oninput) {
             this._oninput = opts.oninput;
 
