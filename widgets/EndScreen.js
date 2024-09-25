@@ -520,6 +520,7 @@
     };
 
     /**
+     * #### enforceDecimals
      * 
      * @param {number|string} num The number or string to enforce 
      * @param {number|bool} nDec Number of decimals, or FALSE to not enforce 
