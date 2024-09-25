@@ -13105,6 +13105,8 @@
          * - res: the validation result of the single input
          * - input: the custom input that fired oninput
          * - widget: a reference to this widget
+         * 
+         * @see addCustomInput
          */
         this.oninput = null;
 
@@ -13246,7 +13248,7 @@
                                 opts.validation);
         }
 
-        // Set the validation function.
+        // Set the oninput function.
         if ('function' === typeof opts.oninput) {
             this._oninput = opts.oninput;
 
@@ -16717,6 +16719,22 @@
          * Default: TRUE
          */
         this.askServer = true;
+
+        /**
+         * ### EndScreen.maxDecimals
+         *
+         * The max number of decimals in each number in the win field
+         * 
+         * Decimals are not enforceed, i.e., if a number has no decimals,
+         * it will be left as is. 
+         * 
+         * FALSE to allow for any number of decimals.
+         * 
+         * It only applies to incoming data from server.
+         *
+         * Default: 2
+         */
+        this.maxDec = 2;
     }
 
     EndScreen.prototype.init = function(opts) {
@@ -16966,7 +16984,7 @@
      */
     EndScreen.prototype.updateDisplay = function(data) {
         var preWin, totalWin, totalRaw, exitCode;
-        var totalHTML, exitCodeHTML, ex, err;
+        var totalHTML, exitCodeHTML, ex, err, i, len;
 
         if (this.totalWinCb) {
             totalWin = this.totalWinCb(data, this);
@@ -16992,36 +17010,39 @@
             preWin = '';
 
             if ('undefined' !== typeof data.basePay) {
-                preWin = data.basePay;
+                preWin = enforceDecimals(data.basePay, this.maxDec);
             }
 
             if ('undefined' !== typeof data.bonus &&
                 data.showBonus !== false) {
 
                 if (preWin !== '') preWin += ' + ';
-                preWin += data.bonus;
+                preWin += enforceDecimals(data.bonus, this.maxDec);
             }
 
             if (data.partials) {
                 if (!J.isArray(data.partials)) {
-                    node.err('EndScreen error, invalid partials win: ' +
-                             data.partials);
+                    node.err('EndScreen error, partials must be array. ' +
+                             'Found: ' + data.partials);
                 }
                 else {
-                    // If there is a basePay we already have a preWin.
-                    if (preWin !== '') preWin += ' + ';
-                    preWin += data.partials.join(' + ');
+                    len = data.partials.length;
+                    for (i = 0; i < len; i++) {
+                        preWin += ' + ' + enforceDecimals(data.partials[i], 
+                                                          this.maxDec);
+                    }
                 }
             }
 
             if ('undefined' !== typeof data.totalRaw) {
                 if (preWin) preWin += ' = ';
                 else preWin = '';
-                preWin += data.totalRaw;
+                preWin += enforceDecimals(data.totalRaw, this.maxDec);
 
                 // Get Exchange Rate.
                 ex = 'undefined' !== typeof data.exchangeRate ?
-                    data.exchangeRate : node.game.settings.EXCHANGE_RATE;
+                    enforceDecimals(data.exchangeRate, this.maxDec) :
+                         node.game.settings.EXCHANGE_RATE;
 
                 // If we have an exchange rate, check if we have a totalRaw.
                 if ('undefined' !== typeof ex) preWin += '*' + ex;
@@ -17036,6 +17057,9 @@
                                  'totalWin calculation from totalRaw.');
                         totalWin = this.getText('errTotalWin');
                         err = true;
+                    }
+                    else {
+                        totalWin = enforceDecimals(totalWin, this.maxDec);
                     }
                 }
             }
@@ -17065,6 +17089,25 @@
             exitCodeHTML.value = exitCode;
         }
     };
+
+    /**
+     * #### enforceDecimals
+     * 
+     * @param {number|string} num The number or string to enforce 
+     * @param {number|bool} nDec Number of decimals, or FALSE to not enforce 
+     * @param {boolean} forceNum If TRUE, it forces the return of a number.
+     * 
+     * @returns The number with at most the specified num of decimals
+     */
+    function enforceDecimals(num, nDec, forceNum) {
+        var idx;
+        if (nDec !== false) {
+            num = '' + num;
+            idx = num.lastIndexOf('.');
+            if (idx > num.length - 3) num = num.substring(0, idx+3);
+        }
+        return forceNum ? Number(num) : num;
+    }
 
 })(node);
 
