@@ -536,7 +536,9 @@
         if (this.hideKnob) {
             this.slider.onmousedown = function() {
                 that.slider.style.opacity = 1;
+                that.listener(true, false, true);
                 that.slider.onmousedown = null;
+                // that.onmove.call(that, that.slider.value, 0);
             };
         }
 
