@@ -163,8 +163,16 @@
         *
         * @see Slider.displayNoChange
         * @see Slider.noChangeCheckbox
+        * @see Slider.noChangeCb
         */
         this.noChangeSpan = null;
+
+        /**
+         * ### Slider.noChangeCb
+         *
+         * If a callback executed when the noChangeSpan is clicked
+         */
+        this.noChangeCb = null;
 
         /**
          * ### Slider.errorBox
@@ -382,6 +390,14 @@
         if ('undefined' !== typeof opts.displayNoChange) {
             this.displayNoChange = !!opts.displayNoChange;
         }
+        if ('undefined' !== typeof opts.noChangeCb) {
+            if ('function' !== typeof opts.noChangeCb) {
+                throw new TypeError(e + 'noChangeCb must be function or ' +
+                    'undefined. Found: ' + opts.noChangeCb);
+
+            }
+            this.noChangeCb = opts.noChangeCb;
+        }
 
         if (opts.type) {
             if (opts.type !== 'volume' && opts.type !== 'flat') {
@@ -569,32 +585,46 @@
             tmp.style.float = 'right';
         }
 
-        if (this.displayValue) {
-            this.valueSpan = W.add('span', this.bodyDiv, {
-                className: 'slider-display-value'
-            });
-        }
-
         if (this.displayNoChange) {
             this.noChangeSpan = W.add('span', this.bodyDiv, {
-                className: 'slider-display-nochange',
+                className: 'slider-display-nochange btn btn-danger',
                 innerHTML: this.getText('noChange') + '&nbsp;'
             });
             this.noChangeCheckbox = W.add('input', this.noChangeSpan, {
                 type: 'checkbox'
             });
-            this.noChangeCheckbox.onclick = function() {
-                if (that.noChangeCheckbox.checked) {
-                    if (that.slider.value === that.initialValue) return;
-                    that.slider.value = that.initialValue;
-                    that.listener(true);
-                    J.addClass(that.noChangeSpan, 'italic');
+
+            this.noChangeSpan.onclick = function(event) {
+                var c;
+                c = that.noChangeCheckbox;
+                if (c.checked) {
+                    J.removeClass(that.noChangeSpan, 'italic');             
+                    // Click the checkbox (unless already clicked).       
+                    if (!event.target || event.target.type !== 'checkbox') {
+                        c.checked = false;
+                    }
+                    that.noChange = true;
                 }
                 else {
-                    J.removeClass(that.noChangeSpan, 'italic');
+                    if (that.slider.value !== that.initialValue) {
+                        that.slider.value = that.initialValue;
+                        that.listener(true);
+                        J.addClass(that.noChangeSpan, 'italic');
+                    }
+                    // Click the checkbox (unless already clicked).       
+                    if (!event.target || event.target.type !== 'checkbox') {
+                        c.checked = true;
+                    }                    
                 }
 
+                if (that.noChangeCb) that.noChangeCb(that, c.checked);
             };
+        }
+
+        if (this.displayValue) {
+            this.valueSpan = W.add('span', this.bodyDiv, {
+                className: 'slider-display-value'
+            });
         }
 
         this.errorBox = W.append('div', this.bodyDiv, { className: 'errbox' });
