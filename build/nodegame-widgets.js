@@ -20949,7 +20949,7 @@
 
 /**
  * # Slider
- * Copyright(c) 2023 Stefano Balietti
+ * Copyright(c) 2024 Stefano Balietti
  * MIT Licensed
  *
  * Creates a configurable slider.
@@ -21127,6 +21127,12 @@
          * The total movement of the slider
          */
         this.totalMove = 0;
+
+        /** Slider.nClicks
+         *
+         * Counts onmousedown events on the slider
+         */
+        this.nClicks = 0;
 
         /** Slider.volumeSlider
          *
@@ -21482,14 +21488,17 @@
         };
         if (this.hideKnob) tmp.style = { opacity: 0 };
         this.slider = W.add('input', container, tmp);
-        if (this.hideKnob) {
-            this.slider.onmousedown = function() {
+        
+        // Count nClicks
+        this.slider.onmousedown = function() {
+            // Important that it is not three equals here.
+            if (that.hideKnob && that.slider.style.opacity == 0) {
                 that.slider.style.opacity = 1;
                 that.listener(true, false, true);
-                that.slider.onmousedown = null;
-                // that.onmove.call(that, that.slider.value, 0);
-            };
-        }
+            } 
+            that.nClicks++;
+            // that.slider.onmousedown = null;
+        };
 
         this.slider.onmouseover = function() {
             tmpColor = that.rangeFill.style.background || 'black';
@@ -21565,9 +21574,10 @@
             noChange: !!nochange,
             initialValue: this.initialValue,
             totalMove: this.totalMove,
+            nClicks: this.nClicks,
             isCorrect: res,
             time: node.timer.getTimeSince(this.timeFrom)
-        };
+        };        
     };
 
     Slider.prototype.setValues = function(opts) {
