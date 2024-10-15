@@ -32,7 +32,7 @@
         'value, move the slider away and then back to this position.',
         autoHint: function(w) {
             var h = '';
-            if (w.hideKnob) {
+            if (w.knobHiddenFirst) {
                 h += 'The slider knob will be shown after the first click. ';
             }
             if (w.required) h += 'Movement required.';
@@ -313,11 +313,11 @@
          this.timeFrom = 'step';
 
          /**
-         * ### Slider.hideKnob
+         * ### Slider.knobHiddenFirst
          *
          * If TRUE, the knob of the slider is hidden before interaction
          */
-         this.hideKnob = false;
+         this.knobHiddenFirst = false;
 
 
         /**
@@ -384,7 +384,7 @@
 
         // Must be before auto-hint.
         if ('undefined' !== typeof opts.hideKnob) {
-            this.hideKnob = !!opts.hideKnob;
+            this.knobHiddenFirst = !!opts.hideKnob;
         }
 
         if ('undefined' !== typeof opts.step) {
@@ -560,14 +560,14 @@
             max: this.max,
             step: this.step,
         };
-        if (this.hideKnob) tmp.style = { opacity: 0 };
+        if (this.knobHiddenFirst) tmp.style = { opacity: 0 };
         this.slider = W.add('input', container, tmp);
         
         // Count nClicks.
         this.slider.onmousedown = function() {
             // Important that it is not three equals here.
-            if (that.hideKnob && that.slider.style.opacity == 0) {
-                that.slider.style.opacity = 1;
+            if (that.knobHiddenFirst && that.isKnobHidden()) {
+                that.showKnob();
                 that.listener(true, false, true);
             } 
             that.nClicks++;
@@ -618,11 +618,7 @@
                 }
                 // Activated no-change.
                 else {
-                    if (that.slider.value !== that.initialValue) {
-                        that.slider.value = that.initialValue;
-                        that.listener(true);
-                        J.addClass(that.noChangeBtn, 'italic');
-                    }
+                    J.addClass(that.noChangeBtn, 'italic');                    
                     // Update state.
                     that.noChange = true;
                     // Click the checkbox (unless already clicked).       
@@ -709,12 +705,13 @@
      *
      * Disables the slider only
      */
-    Slider.prototype.disableSlider = function () {
+    Slider.prototype.disableSlider = function (hideKnob) {
         W.addClass(this.rangeFill, 'disabled');
         W.addClass(this.slider, 'disabled');
         this._tmpColor = this.rangeFill.style.background || 'black';
         this.rangeFill.style.background = 'grey';
         this.slider.disabled = true;
+        if (hideKnob !== false) this.hideKnob();
     };
 
     /**
@@ -722,11 +719,40 @@
      *
      * Enables the slider only
      */
-    Slider.prototype.enableSlider = function () {
+    Slider.prototype.enableSlider = function (showKnob) {
         W.removeClass(this.rangeFill, 'disabled');
         W.removeClass(this.slider, 'disabled');
         this.rangeFill.style.background = this._tmpColor;
         this.slider.disabled = false;
+        if (showKnob !== false) this.showKnob();
+    };
+
+    /**
+     * ### Slider.hideKnob
+     *
+     * Hides the knob
+     */
+    Slider.prototype.hideKnob = function () {
+       this.slider.style.opacity = 0;
+    };
+
+    /**
+     * ### Slider.showKnob
+     *
+     * Hides the knob
+     */
+    Slider.prototype.showKnob = function () {
+        this.slider.style.opacity = 1;
+    };
+
+    /**
+     * ### Slider.isKnobHidden
+     *
+     * Hides the knob
+     */
+    Slider.prototype.isKnobHidden = function () {
+        // Two equals important.
+        return this.slider.style.opacity == 0;
     };
 
     /**
