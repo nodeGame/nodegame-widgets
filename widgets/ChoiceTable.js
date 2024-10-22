@@ -365,6 +365,15 @@
         this.rightCell = null;
 
         /**
+        * ### ChoiceTable.header
+        *
+        * Header to be displayed above the table
+        *
+        * @experimental
+        */
+        this.header = null;
+
+        /**
          * ### ChoiceTable.errorBox
          *
          * An HTML element displayed when a validation error occurs
@@ -1135,6 +1144,25 @@
             this.defaultChoice = tmp;
             initDefaultChoice(this);
         }
+
+        if (opts.header) {
+            tmp = opts.header;
+            // One td will colspan all choices.
+            if ('string' === typeof tmp) {
+                tmp = [ tmp ];
+            }
+            else if (!J.isArray(tmp) ||
+                    (tmp.length !== 1 && tmp.length !== opts.choices.length)) {
+
+                throw new Error('ChoiceTableGroup.init: header ' +
+                                'must be string, array (size ' +
+                                opts.choices.length +
+                                '), or undefined. Found: ' + tmp);
+            }
+
+            this.header = tmp;
+        }
+
     };
 
     /**
@@ -1314,10 +1342,33 @@
     ChoiceTable.prototype.buildTable = (function() {
 
         function makeSet(i, len, H, doSets) {
-            var tr, counter, pos;
+            var tr, td, counter, pos;
             counter = 0;
             // Start adding tr/s and tds based on the orientation.
             if (H) {
+
+                if (this.header) {
+                    tr = W.add('tr', this.table);
+                    
+                    // Add empty left header cell, if needed.
+                    if (this.left) W.add('td', tr, { className: 'header' });
+                    
+                    for ( ; ++i < this.header.length ; ) {
+                        td = W.add('td', tr, {
+                            innerHTML: this.header[i],
+                            className: 'header'
+                        });
+                    }
+
+                    // Only one element, header spans throughout.
+                    if (i === 1) td.setAttribute('colspan', this.choices.length);
+
+                    // Add empty right header cell, if needed.
+                    if (this.right) W.add('td', tr, { className: 'header' });
+                    
+                    i = -1;
+                }
+
                 tr = createTR(this, 'main');
                 // Add horizontal choices title.
                 if (this.leftCell) tr.appendChild(this.leftCell);
