@@ -6208,6 +6208,8 @@
 
         // TODO: make this property a reserved keyword.
         form._shown = true;
+        debugger
+        form.disable();
 
         if ('undefined' !== typeof $) {
             $(form.panelDiv).fadeIn();
@@ -6221,9 +6223,10 @@
         that = this;
         setTimeout(function() {
             if (node.game.isPaused()) return;
+            form.enable();
             if (that.backBtn) that.backBtn.enable();
             if (that.doneBtn) that.doneBtn.enable();
-        }, 250);
+        }, 400);
 
 
         W.adjustFrameHeight();
@@ -6534,7 +6537,7 @@
          * @see ChoiceTable.onclick
          */
         this.listener = function(e) {
-            var name, value, td, ci, lastClicked;
+            var value, td, ci;
             var i, len, removed, otherSel;
 
             e = e || window.event;

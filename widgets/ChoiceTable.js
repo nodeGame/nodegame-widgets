@@ -122,7 +122,7 @@
          * @see ChoiceTable.onclick
          */
         this.listener = function(e) {
-            var name, value, td, ci, lastClicked;
+            var value, td, ci;
             var i, len, removed, otherSel;
 
             e = e || window.event;

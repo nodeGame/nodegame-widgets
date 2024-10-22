@@ -237,6 +237,21 @@
          */
         this.autoId = true;
 
+        /**
+         * ### ChoiceManager.delayOnNext
+         *
+         * The number of milliseconds the _next_ form is initially disabled
+         * 
+         * Next and back buttons are also disabled in the process.
+         * 
+         * Set to falsy to prevent this default behavior.
+         * 
+         * @see ChoiceManager.next
+         * @see ChoiceManager.doneBtn
+         * @see ChoiceManager.backBtn
+         */
+        this.delayOnNext = 350;
+
     }
 
     // ## ChoiceManager methods
@@ -356,6 +371,15 @@
 
         if ('undefined' !== typeof options.autoId) {
             this.autoId = options.autoId;
+        }
+
+        tmp = options.delayOnNext;
+        if ('undefined' !== typeof tmp) {
+            if (J.isNumber(tmp, 0)) {
+                throw new TypeError('ChoiceManager.init: delayOnNext must ' +
+                    'be a positive number or undefined. Found: ' + tmp);
+            }
+            this.delayOnNext = tmp;
         }
 
         // After all configuration options are evaluated, add forms.
@@ -1014,6 +1038,9 @@
         // TODO: make this property a reserved keyword.
         form._shown = true;
 
+        // Delay the activation of the form to prevent accidental clicking.
+        if (this.delayOnNext) form.disable();
+        
         if ('undefined' !== typeof $) {
             $(form.panelDiv).fadeIn();
             form.hidden = false; // for nodeGame.
@@ -1023,14 +1050,16 @@
         }
         window.scrollTo(0,0);
 
-        that = this;
-        setTimeout(function() {
-            if (node.game.isPaused()) return;
-            if (that.backBtn) that.backBtn.enable();
-            if (that.doneBtn) that.doneBtn.enable();
-        }, 250);
-
-
+        if (this.delayOnNext) {
+            that = this;
+            setTimeout(function() {
+                if (node.game.isPaused()) return;
+                form.enable();
+                if (that.backBtn) that.backBtn.enable();
+                if (that.doneBtn) that.doneBtn.enable();
+            }, this.delayOnNext);
+        }
+        
         W.adjustFrameHeight();
 
         node.emit('WIDGET_NEXT', this);
