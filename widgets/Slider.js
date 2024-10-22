@@ -189,7 +189,7 @@
 
         /** Slider.nClicks
          *
-         * Counts onmousedown events on the slider
+         * Counts onmousedown/touchstart events on the slider
          */
         this.nClicks = 0;
 
@@ -572,6 +572,8 @@
             } 
             that.nClicks++;
         };
+        // For mobile.
+        this.slider.ontouchstart = this.slider.onmousedown;
 
         // TODO: we should use a CSS class.
         this.slider.onmouseover = function() {
