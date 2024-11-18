@@ -83,6 +83,20 @@
          */
         this.disconnect = null;
 
+        /**
+         * ## Consent.checkboxes
+         *
+         * Checkboxes that need to checked to consent
+         */
+        this.checkboxes = [];
+
+        /**
+         * ## Consent.fineprint
+         *
+         * Additional text displayed in a small font under the checkboxes
+         */
+        this.fineprint = null;
+
 
     }
 
@@ -101,31 +115,38 @@
         this.consent = opts.consent || node.game.settings.CONSENT;
 
         if (this.consent && 'object' !== typeof this.consent) {
-            throw new TypeError('Consent: consent must be object or ' +
+            throw new TypeError('Consent.init: consent must be object or ' +
                                 'undefined. Found: ' + this.consent);
         }
 
         this.showPrint = opts.showPrint === false ? false : true;
 
         this.disconnect = opts.disconnect === false ? false : true;
+
+        if (J.isArray(opts.checkboxes)) {
+            this.checkboxes = opts.checkboxes;
+        }
+        else if (opts.checkboxes) {
+            throw new TypeError('Consent.init: checkboxes must be array or ' +
+                                'undefined. Found: ' + this.checkboxes);
+        }
+        if ('string' === typeof opts.fineprint) {
+            this.fineprint = opts.fineprint;
+        }
+        else if (opts.fineprint) {
+            throw new TypeError('Consent.init: fineprint must be string or ' +
+                                'undefined. Found: ' + this.fineprint);
+        }
+
     };
 
     Consent.prototype.enable = function() {
-        var a, na;
         if (this.notAgreed) return;
-        a = W.gid('agree');
-        if (a) a.disabled = false;
-        na = W.gid('notAgree');
-        if (na) na.disabled = false;
+        _toggleEnable(true);
     };
 
     Consent.prototype.disable = function() {
-        var a, na;
-        if (this.notAgreed) return;
-        a = W.gid('agree');
-        if (a) a.disabled = true;
-        na = W.gid('notAgree');
-        if (na) na.disabled = true;
+        _toggleEnable(false);
     };
 
     Consent.prototype.append = function() {
@@ -139,6 +160,35 @@
                             'element with id "consent"');
         }
         html = '';
+
+
+        // Checkboxes.
+
+        if (this.checkboxes.length) {
+    
+        
+            html += '<div class="gdpr-checkboxes"><dl>';
+            
+            this.checkboxes.forEach(function(c, idx) {
+                var id = _getCbxId(idx+1);
+                html += '<dt>';
+                html += '<div class="form-check form-switch">'
+                html += '<input class="form-check-input" type="checkbox" ' +
+                    'role="switch" id="' + id + '">';
+                html += '<label class="form-check-label" for="' + id + '">';
+                html += c;
+                html += '</label></div></dt>';
+            });
+     
+            if (this.fineprint) {
+                html += '<p class="gdpr-fineprint" style="font-size: small; margin-top: 20px;">';
+                html += this.fineprint;
+                html += '</p>';
+            }
+            
+            html += '</div>';
+
+        }
 
         // Print.
         if (this.showPrint) {
@@ -204,8 +254,25 @@
             if (!a) throw new Error('Consent: agree button not found');
             if (!na) throw new Error('Consent: notAgree button not found');
 
-
-            a.onclick = function() { node.done({ consent: true }); };
+            a.onclick = function() { 
+                var res = true;
+                if (that.checkboxes.length) {
+                    that.checkboxes.forEach(function(c, idx) {
+                        var cbx, id;
+                        id = _getCbxId(idx+1);
+                        cbx = W.gid(id);
+                        if (!cbx) {
+                            node.warn('Consent: could not find checkbox ' + id);
+                        }
+                        else if (!cbx.checked) {
+                            res = false;
+                            W.shake(cbx);
+                        }
+                    });
+                    if (!res) return;
+                }
+                node.done({ consent: true }); 
+            };
             na.onclick = function() {
                 var showIt, confirmed;
 
@@ -250,5 +317,39 @@
             };
        });
     };
+
+    // ### Helper functions
+
+
+    /** ### _toggleEnable
+     * 
+     * Enables/disables inputs in the widget
+     * 
+     * @param {boolean} state True or false
+     */
+    function _toggleEnable(state) {
+        var elem, i;
+        elem = W.gid('agree');
+        if (elem) elem.disabled = state;
+        elem = W.gid('notAgree');
+        if (elem) elem.disabled = state;
+        if (this.checkboxes && this.checkboxes.length) {
+            for (i = 0; i < this.checkboxes.length; i++) {
+                elem = W.gid(_getCbxId(i+1));
+                if (elem) elem.disabled = state;
+            }
+        }
+    }
+
+    /**
+     * Returns a standardized id for a chekbox based on its index.
+     * 
+     * @param {number} idx The id of the checkbox
+     * 
+     * @returns {string} The id of the checkbox at a given index
+     */
+    function _getCbxId(idx) {
+        return 'consent_checkbox_' + idx; 
+    }
 
 })(node);
