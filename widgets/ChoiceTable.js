@@ -179,7 +179,12 @@
             if (that.customInput) {
                 // Is "Other" currently selected?
                 otherSel = value === (len - 1);
-                if (otherSel && !removed) {
+
+                if (otherSel && !removed &&
+                    // Fixed Select multiple (not all max choices selected).
+                    ('number' !== typeof that.selectMultiple || 
+                        (that.selectMultiple > that.currentChoice.length))
+                ) {
                     that.customInput.show();
                 }
                 else if (!that.selectMultiple || otherSel) {
