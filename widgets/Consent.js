@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    Consent.version = '0.7.0';
+    Consent.version = '0.8.0';
     Consent.description = 'Displays a configurable consent form.';
 
     Consent.panel = false;
@@ -49,21 +49,25 @@
      *
      * Creates a new instance of Consent
      *
-     * @param {object} options Optional. Configuration options
-     * which is forwarded to Consent.init.
-     *
      * @see Consent.init
      */
     function Consent() {
 
         /**
-         * ## Consent.consent
+         * ## Consent.consentTexts
          *
          * The object containing the variables to substitute
          *
          * Default: node.game.settings.CONSENT
          */
-        this.consent = null;
+        this.consentTexts = null;
+
+        /**
+         * ## Consent.agreed
+         *
+         * If TRUE, consent has been given
+         */
+        this.agreed = null;
 
         /**
          * ## Consent.showPrint
@@ -109,7 +113,7 @@
          * }
          * ```
          * 
-         * They can also be functions, that either return strings or objects,
+         * They can also be functions that either return strings or objects,
          * or FALSE, if the checkbox should not be added.
          * 
          */
@@ -142,6 +146,15 @@
          */
         this.consentId = 'consent';
 
+        /**
+         * ## Consent.doneOnAgree
+         *
+         * If TRUE, `node.done` is called upon agreeing to consent form
+         * 
+         * Default: TRUE
+         */
+        this.doneOnAgree;
+
     }
 
     // ## Consent methods.
@@ -157,11 +170,11 @@
         var that;
         opts = opts || {};
 
-        this.consent = opts.consent || node.game.settings.CONSENT;
+        this.consentTexts = opts.consent || node.game.settings.CONSENT;
 
-        if (this.consent && 'object' !== typeof this.consent) {
+        if (this.consentTexts && 'object' !== typeof this.consentTexts) {
             throw new TypeError('Consent.init: consent must be object or ' +
-                                'undefined. Found: ' + this.consent);
+                                'undefined. Found: ' + this.consentTexts);
         }
 
         this.showPrint = opts.showPrint === false ? false : true;
@@ -170,9 +183,11 @@
         
         this.disconnect = opts.disconnect === false ? false : true;
 
+        this.doneOnAgree = opts.doneOnAgree === false ? false : true;
+
         if (J.isArray(opts.checkboxes)) {
             that = this;
-            opts.checkboxes.forEach(item => {
+            opts.checkboxes.forEach(function(item) {
                 if ('function' === typeof item) {
                     item = item();
                     if (item === false) return;
@@ -195,7 +210,7 @@
     };
 
     Consent.prototype.enable = function() {
-        if (this.notAgreed) return;
+        if (this.agreed !== null) return;
         _toggleEnable(true);
     };
 
@@ -252,7 +267,7 @@
                         'for="' + id + '">' + label + '</label>';
                         
                     html += '<dt>';
-                    html += '<div class="' + className + '">'
+                    html += '<div class="' + className + '">';
                     html += isRtl ? label + btn : btn + label;
                     html += '</div></dt>';
                 });
@@ -280,7 +295,7 @@
         
         if (this.showBtns !== false) {
             // Header for buttons.
-            html += '<strong>' + this.getText('consentTerms') + '</strong><br/>';
+            html += '<strong>' + this.getText('consentTerms') + '</strong><br>';
 
             // Buttons.
             html += '<div class="consent-btn-container">';
@@ -312,7 +327,7 @@
 
     Consent.prototype.listeners = function() {
         var that = this;
-        var consent = this.consent;
+        var consent = this.consentTexts;
         node.on('FRAME_LOADED', function() {
             var a, na, p, id;
 
@@ -330,36 +345,18 @@
             }
 
             // Add listeners on buttons.
-            if (!this.showBtns) return;
+            if (!that.showBtns) return;
 
             a = W.gid(_addPrefix(this, 'agree'));
             na = W.gid(_addPrefix(this, 'notAgree'));
 
             a.onclick = function() { 
-                var res = true;
-                if (that.checkboxes.length) {
-                    that.checkboxes.forEach(function(c, idx) {
-                        var cbx, id, req;
-                        id = _getCbxId(that, idx+1);
-                        cbx = W.gid(id);
-                        if (!cbx) {
-                            node.warn('Consent: could not find checkbox ' + id);
-                        }
-                        else {
-                            req = that.checkboxes[idx];
-                            if ('string' === typeof req ||
-                                req.required !== false) {
-                                
-                                if (!cbx.checked) {
-                                    res = false;
-                                    W.shake(cbx);
-                                }
-                            }
-                        }
-                    });
-                    if (!res) return;
-                }
-                node.done({ consent: true }); 
+                var consent;
+                consent = that.getValues({ agreed: true });
+                if (!consent.consent) return;
+                this.agreed = true;
+                node.emit('CONSENT_ACCEPTED', consent);
+                if (that.doneOnAgree) node.done(consent); 
             };
             na.onclick = function() {
                 var showIt, confirmed;
@@ -369,7 +366,7 @@
 
                 node.emit('CONSENT_REJECTING');
 
-                that.notAgreed = true;
+                that.agreed = false;
                 node.set({
                     consent: false,
                     // Need to send these two because it's not a DONE msg.
@@ -404,6 +401,60 @@
                 node.emit('CONSENT_REJECTED');
             };
        });
+    };
+
+    /**
+     * ## Consent.getValues
+     * 
+     * Returns the current selection on Consent
+     * 
+     * @param {object} opts Configuration object. Options:
+     *   - highlight: if TRUE, missing consents on checkboxes are highlighted.
+     *       Default: TRUE.
+     *   - agreed: TRUE to flag that the user has already clicked on agree 
+     * @returns {object} consent Values of consent.
+     * 
+     * ```js
+     * { 
+     *   consent: true, // if all consent conditions are fullfilled  
+     *   checkboxes: true // if all required checkboxes are checked
+     *   [checkbox_ID1...IDN]: true // one property per checkbox 
+     * }
+     */
+    Consent.prototype.getValues = function(opts) {
+        var consent, that;
+        that = this;
+        consent = { consent: true };
+        opts = opts || {};
+        if (this.checkboxes.length) {
+            consent.checkboxes = true;
+            this.checkboxes.forEach(function(c, idx) {
+                var cbx, id, req;
+                id = _getCbxId(that, idx+1);
+                cbx = W.gid(id);
+                if (!cbx) {
+                    node.warn('Consent: could not find checkbox ' + id);
+                }
+                else {
+                    req = that.checkboxes[idx];
+                    consent[id] = cbx.checked;
+
+                    if ('string' === typeof req ||
+                        req.required !== false) {
+                    
+                        if (!cbx.checked) {
+                            // At least one is needed to deny consent.
+                            consent.checkboxes = consent.consent = false;
+                            if (opts.highlight !== false) W.shake(cbx);
+                        }
+                    }
+                }
+            });
+        }
+        if (this.agreed !== true && this.showBtns && !opts.agree) {
+            consent.consent = false;
+        }
+        return consent;
     };
 
     // ### Helper functions
