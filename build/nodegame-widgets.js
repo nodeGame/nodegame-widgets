@@ -2173,8 +2173,9 @@
             this.button = options.button;
         }
         else if ('undefined' === typeof options.button) {
-            this.button = document.createElement('input');
-            this.button.type = 'button';
+            // this.button = document.createElement('input');
+            this.button = document.createElement('button');
+            // this.button.type = 'button';
         }
         else {
             throw new TypeError('BackButton constructor: options.button must ' +
@@ -2277,28 +2278,30 @@
         }
         this.button.id = tmp;
 
-        if ('undefined' === typeof opts.className) {
+        if ('undefined' === typeof opts.classNameBtn) {
             tmp  = 'btn btn-lg btn-secondary';
         }
-        else if (opts.className === false) {
+        else if (opts.classNameBtn === false) {
             tmp = '';
         }
-        else if ('string' === typeof opts.className) {
-            tmp = opts.className;
+        else if ('string' === typeof opts.classNameBtn) {
+            tmp = opts.classNameBtn;
         }
-        else if (J.isArray(opts.className)) {
-            tmp = opts.className.join(' ');
+        else if (J.isArray(opts.classNameBtn)) {
+            tmp = opts.classNameBtn.join(' ');
         }
         else  {
-            throw new TypeError('BackButton.init: opts.className must ' +
+            throw new TypeError('BackButton.init: classNameBtn must ' +
                                 'be string, array, or undefined. Found: ' +
-                                opts.className);
+                                opts.classNameBtn);
         }
         this.button.className = tmp;
 
         // Button text.
-        this.button.value = 'string' === typeof opts.text ?
-            opts.text : this.getText('back');
+        // this.button.value = 'string' === typeof opts.text ?
+        //     opts.text : this.getText('back');
+        this.button.innerHTML = 'string' === typeof opts.text ?
+        opts.text : this.getText('back');
 
         this.stepOptions.acrossStages =
             'undefined' === typeof opts.acrossStages ?
@@ -2342,8 +2345,10 @@
                 if (prop === true || step) that.enable();
             }
 
-            if ('string' === typeof prop) that.button.value = prop;
-            else if (prop && prop.text) that.button.value = prop.text;
+            // if ('string' === typeof prop) that.button.value = prop;
+            // else if (prop && prop.text) that.button.value = prop.text;
+            if ('string' === typeof prop) that.button.innerHTML = prop;
+            else if (prop && prop.text) that.button.innerHTML = prop.text;
 
             if (prop) {
                 setOnClick(that, prop.onclick, true);
@@ -10427,7 +10432,7 @@
 
     // ## Meta-data
 
-    Consent.version = '0.7.0';
+    Consent.version = '0.8.0';
     Consent.description = 'Displays a configurable consent form.';
 
     Consent.panel = false;
@@ -10460,9 +10465,6 @@
      * ## Consent constructor
      *
      * Creates a new instance of Consent
-     *
-     * @param {object} options Optional. Configuration options
-     * which is forwarded to Consent.init.
      *
      * @see Consent.init
      */
@@ -10528,7 +10530,7 @@
          * }
          * ```
          * 
-         * They can also be functions, that either return strings or objects,
+         * They can also be functions that either return strings or objects,
          * or FALSE, if the checkbox should not be added.
          * 
          */
@@ -10564,7 +10566,7 @@
         /**
          * ## Consent.doneOnAgree
          *
-         * If TRUE, `node.done` is called upon agreeing to consent
+         * If TRUE, `node.done` is called upon agreeing to consent form
          * 
          * Default: TRUE
          */
@@ -10767,6 +10769,7 @@
 
             a.onclick = function() { 
                 var consent;
+                node.emit('CONSENT_ACCEPTING');
                 consent = that.getValues({ agreed: true });
                 if (!consent.consent) return;
                 this.agreed = true;
@@ -10866,7 +10869,7 @@
                 }
             });
         }
-        if (this.agreed !== true && this.showBtns && !opts.agree) {
+        if (this.agreed !== true && this.showBtns && !opts.agreed) {
             consent.consent = false;
         }
         return consent;
@@ -15274,8 +15277,8 @@
             this.button = options.button;
         }
         else if ('undefined' === typeof options.button) {
-            this.button = document.createElement('input');
-            this.button.type = 'button';
+            this.button = document.createElement('button');
+            // this.button.type = 'button';
         }
         else {
             throw new TypeError('DoneButton constructor: options.button must ' +
@@ -15361,28 +15364,30 @@
         if (tmp) this.button.id = tmp;
 
         // Button className.
-        if ('undefined' === typeof opts.className) {
+        if ('undefined' === typeof opts.classNameBtn) {
             tmp  = 'btn btn-lg btn-primary';
         }
-        else if (opts.className === false) {
+        else if (opts.classNameBtn === false) {
             tmp = '';
         }
-        else if ('string' === typeof opts.className) {
-            tmp = opts.className;
+        else if ('string' === typeof opts.classNameBtn) {
+            tmp = opts.classNameBtn;
         }
-        else if (J.isArray(opts.className)) {
-            tmp = opts.className.join(' ');
+        else if (J.isArray(opts.classNameBtn)) {
+            tmp = opts.classNameBtn.join(' ');
         }
         else  {
-            throw new TypeError('DoneButton.init: className must ' +
+            throw new TypeError('DoneButton.init: classNameBtn must ' +
                                 'be string, array, or undefined. Found: ' +
-                                opts.className);
+                                opts.classNameBtn);
         }
         this.button.className = tmp;
 
         // Button text.
-        this.button.value = 'string' === typeof opts.text ?
-            opts.text : this.getText('done');
+        // this.button.value = 'string' === typeof opts.text ?
+        //     opts.text : this.getText('done');
+        this.button.innerHTML = 'string' === typeof opts.text ?
+        opts.text : this.getText('done');
 
         this.disableOnDisconnect =
             'undefined' === typeof opts.disableOnDisconnect ?
@@ -15448,10 +15453,12 @@
                 }
             }
             if ('string' === typeof prop) {
-                that.button.value = prop;
+                // that.button.value = prop;
+                that.button.innerHTML = prop;
             }
             else if (prop) {
-                if (prop.text) that.button.value = prop.text;
+                // if (prop.text) that.button.value = prop.text;
+                if (prop.text) that.button.innerHTML = prop.text;
                 if (prop.onclick) setOnClick(that, prop.onclick, true);
             }  
 
@@ -15488,12 +15495,15 @@
         var oldText, that;
         if (duration) {
             that = this;
-            oldText = this.button.value;
+            // oldText = this.button.value;
+            oldText = this.button.innerHTML;
             node.timer.setTimeout(function() {
-                that.button.value = oldText;
+                // that.button.value = oldText;
+                that.button.innerHTML = oldText;
             }, duration);
         }
-        this.button.value = text;
+        // this.button.value = text;
+        this.button.innerHTML = text;
     };
 
     /**
@@ -20939,7 +20949,7 @@
                 bombResult = W.add('p', infoDiv, { id: 'bomb_result' });
 
                 button = W.add('button', that.bodyDiv, {
-                    className: 'btn btn-danger',
+                    className: 'btn btn-lg btn-danger',
                     innerHTML: that.getText('bomb_openButton'),
                 });
                 // Initially hidden.

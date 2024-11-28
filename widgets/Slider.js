@@ -598,7 +598,7 @@
 
         if (this.displayNoChange) {
             this.noChangeBtn = W.add('button', this.bodyDiv, {
-                className: 'btn btn-danger btn-sm slider-display-nochange',
+            className: 'btn btn-danger btn-sm slider-display-nochange',
                 innerHTML: this.getText('noChange') + '&nbsp;'
             });
             this.noChangeCheckbox = W.add('input', this.noChangeBtn, {
