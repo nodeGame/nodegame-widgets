@@ -352,6 +352,7 @@
 
             a.onclick = function() { 
                 var consent;
+                node.emit('CONSENT_ACCEPTING');
                 consent = that.getValues({ agreed: true });
                 if (!consent.consent) return;
                 this.agreed = true;
@@ -451,7 +452,7 @@
                 }
             });
         }
-        if (this.agreed !== true && this.showBtns && !opts.agree) {
+        if (this.agreed !== true && this.showBtns && !opts.agreed) {
             consent.consent = false;
         }
         return consent;
