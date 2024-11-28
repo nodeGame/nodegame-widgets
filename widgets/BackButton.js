@@ -47,8 +47,9 @@
             this.button = options.button;
         }
         else if ('undefined' === typeof options.button) {
-            this.button = document.createElement('input');
-            this.button.type = 'button';
+            // this.button = document.createElement('input');
+            this.button = document.createElement('button');
+            // this.button.type = 'button';
         }
         else {
             throw new TypeError('BackButton constructor: options.button must ' +
@@ -151,28 +152,30 @@
         }
         this.button.id = tmp;
 
-        if ('undefined' === typeof opts.className) {
+        if ('undefined' === typeof opts.classNameBtn) {
             tmp  = 'btn btn-lg btn-secondary';
         }
-        else if (opts.className === false) {
+        else if (opts.classNameBtn === false) {
             tmp = '';
         }
-        else if ('string' === typeof opts.className) {
-            tmp = opts.className;
+        else if ('string' === typeof opts.classNameBtn) {
+            tmp = opts.classNameBtn;
         }
-        else if (J.isArray(opts.className)) {
-            tmp = opts.className.join(' ');
+        else if (J.isArray(opts.classNameBtn)) {
+            tmp = opts.classNameBtn.join(' ');
         }
         else  {
-            throw new TypeError('BackButton.init: opts.className must ' +
+            throw new TypeError('BackButton.init: classNameBtn must ' +
                                 'be string, array, or undefined. Found: ' +
-                                opts.className);
+                                opts.classNameBtn);
         }
         this.button.className = tmp;
 
         // Button text.
-        this.button.value = 'string' === typeof opts.text ?
-            opts.text : this.getText('back');
+        // this.button.value = 'string' === typeof opts.text ?
+        //     opts.text : this.getText('back');
+        this.button.innerHTML = 'string' === typeof opts.text ?
+        opts.text : this.getText('back');
 
         this.stepOptions.acrossStages =
             'undefined' === typeof opts.acrossStages ?
@@ -216,8 +219,10 @@
                 if (prop === true || step) that.enable();
             }
 
-            if ('string' === typeof prop) that.button.value = prop;
-            else if (prop && prop.text) that.button.value = prop.text;
+            // if ('string' === typeof prop) that.button.value = prop;
+            // else if (prop && prop.text) that.button.value = prop.text;
+            if ('string' === typeof prop) that.button.innerHTML = prop;
+            else if (prop && prop.text) that.button.innerHTML = prop.text;
 
             if (prop) {
                 setOnClick(that, prop.onclick, true);
