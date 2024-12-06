@@ -268,7 +268,9 @@
                         
                     html += '<dt>';
                     html += '<div class="' + className + '">';
-                    html += isRtl ? label + btn : btn + label;
+                    // The reverse class takes care of switching the order 
+                    // of btn and label.
+                    html += btn + label; 
                     html += '</div></dt>';
                 });
                 html += '</dl>';
